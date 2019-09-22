@@ -88,7 +88,7 @@ public class AssertionBuilderNullImpl extends AbstractAssertionBuilderImpl imple
 	
 	@Override
 	public AssertionBuilderNull setFieldValueGetter(Object object, String... names) {
-		setFieldValueGetter(FieldHelperImpl.__read__(object,names));
+		setFieldValueGetter(org.cyk.utility.__kernel__.field.FieldHelper.read(object,names));
 		getAssertedValue(Boolean.TRUE).setFieldValueGetter(object, names);
 		return this;
 	}

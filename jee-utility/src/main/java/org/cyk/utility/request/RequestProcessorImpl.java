@@ -34,7 +34,7 @@ public class RequestProcessorImpl extends AbstractFunctionWithPropertiesAsInputI
 		if(uniformResourceIdentifierString == null) {
 			String uniformResourceIdentifierStringFormat = __injectValueHelper__().returnOrThrowIfBlank("request processor uniform resource locator string format", getUniformResourceIdentifierStringFormat());
 			if( Boolean.TRUE.equals(__inject__(StringHelper.class).isNotBlank(uniformResourceIdentifierStringFormat)) && responseEntity!=null ) {
-				uniformResourceIdentifier = String.format(uniformResourceIdentifierStringFormat, __injectFieldHelper__().getFieldValueSystemIdentifier(responseEntity));
+				uniformResourceIdentifier = String.format(uniformResourceIdentifierStringFormat, org.cyk.utility.__kernel__.field.FieldHelper.readSystemIdentifier(responseEntity));
 			}
 		}else {
 			uniformResourceIdentifier = uniformResourceIdentifierString.execute().getOutput();

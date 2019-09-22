@@ -28,7 +28,7 @@ public class AssertionValueImpl extends AbstractObject implements AssertionValue
 	
 	@Override
 	public AssertionValue setFieldValueGetter(Object object, String... names) {
-		setFieldValueGetter(FieldHelperImpl.__read__(object,names));
+		setFieldValueGetter(org.cyk.utility.__kernel__.field.FieldHelper.read(object,names));
 		return this;
 	}
 	

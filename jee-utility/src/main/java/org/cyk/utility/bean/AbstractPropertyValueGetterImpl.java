@@ -24,7 +24,7 @@ public abstract class AbstractPropertyValueGetterImpl extends AbstractFunctionWi
 		if(property == null) {
 			Strings pathStrings = getPathStrings();
 			if(CollectionHelperImpl.__isNotEmpty__(pathStrings)) {
-				property = (Property) FieldHelperImpl.__read__(object,pathStrings.get());
+				property = (Property) org.cyk.utility.__kernel__.field.FieldHelper.read(object,pathStrings.get());
 			}
 		}
 		if(property!=null) {

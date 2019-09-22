@@ -39,10 +39,10 @@ public class FieldValueCopyUnitTest extends AbstractWeldUnitTest {
 	@Override
 	protected void __listenBefore__()  {
 		super.__listenBefore__();
-		FieldHelperImpl.__setName__(MyPersistenceType.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "id");
-		FieldHelperImpl.__setName__(MyDataTransferObjectType.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "id");
-		FieldHelperImpl.__setName__(MyPersistenceReflexive.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "id");
-		FieldHelperImpl.__setName__(MyDataTransferObjectReflexive.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "id");
+		org.cyk.utility.__kernel__.field.FieldHelper.setName(MyPersistenceType.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "id");
+		org.cyk.utility.__kernel__.field.FieldHelper.setName(MyDataTransferObjectType.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "id");
+		org.cyk.utility.__kernel__.field.FieldHelper.setName(MyPersistenceReflexive.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "id");
+		org.cyk.utility.__kernel__.field.FieldHelper.setName(MyDataTransferObjectReflexive.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "id");
 		__inject__(FunctionRunnableMap.class).set(InstanceGetterImpl.class, InstanceGetterFunctionRunnableImpl.class);
 	}
 	
@@ -129,8 +129,8 @@ public class FieldValueCopyUnitTest extends AbstractWeldUnitTest {
 	
 	@Test
 	public void myData_to_string(){
-		FieldHelperImpl.__setName__(MyData.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "id");
-		FieldHelperImpl.__setName__(MyData.class, FieldName.IDENTIFIER, ValueUsageType.BUSINESS, "num");
+		org.cyk.utility.__kernel__.field.FieldHelper.setName(MyData.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "id");
+		org.cyk.utility.__kernel__.field.FieldHelper.setName(MyData.class, FieldName.IDENTIFIER, ValueUsageType.BUSINESS, "num");
 		MyClass01 instance01 = new MyClass01().setMyData(new MyData().setId("159").setNum("a001"));
 		MyClass02 instance02 = new MyClass02();
 		__inject__(FieldValueCopy.class).setSource(instance01).setDestination(instance02).setFieldName("myData").execute();

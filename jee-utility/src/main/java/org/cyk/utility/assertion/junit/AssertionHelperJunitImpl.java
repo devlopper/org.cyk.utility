@@ -86,7 +86,7 @@ public class AssertionHelperJunitImpl extends AbstractAssertionHelperImpl implem
 		}else {
 			for(Map.Entry<Object, Object> entry : expected.__getMap__().entrySet()){
 				String fieldName = (String) entry.getKey();
-				Object actualFieldValue = FieldHelperImpl.__read__(actual,fieldName);
+				Object actualFieldValue = org.cyk.utility.__kernel__.field.FieldHelper.read(actual,fieldName);
 				assertEquals(entry.getValue(), actualFieldValue);
 			}	
 		}

@@ -48,7 +48,7 @@ public abstract class AbstractQueryPredicateStringBuilderImpl extends AbstractFu
 			
 			String fieldNameAsString = criteria.getFieldNameAsString();
 			if(__inject__(StringHelper.class).isBlank(fieldNameAsString)){				
-				fieldNameAsString = FieldHelperImpl.__getName__(criteria.getClazz(), fieldName, valueUsageType);
+				fieldNameAsString = org.cyk.utility.__kernel__.field.FieldHelper.getName(criteria.getClazz(), fieldName, valueUsageType);
 			}
 			
 			addOperandStringBuilderAttributeName(fieldNameAsString, tuple);
@@ -83,7 +83,7 @@ public abstract class AbstractQueryPredicateStringBuilderImpl extends AbstractFu
 			
 			String fieldNameAsString = criteria.getFieldNameAsString();
 			if(__inject__(StringHelper.class).isBlank(fieldNameAsString)){				
-				fieldNameAsString = FieldHelperImpl.__getName__(criteria.getClazz(), fieldName, valueUsageType);
+				fieldNameAsString = org.cyk.utility.__kernel__.field.FieldHelper.getName(criteria.getClazz(), fieldName, valueUsageType);
 			}
 			
 			addOperandStringBuilderAttributeName(fieldNameAsString, tuple);

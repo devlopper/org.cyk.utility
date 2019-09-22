@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.assertj.core.util.diff.Delta.TYPE;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 import lombok.AllArgsConstructor;
@@ -213,16 +214,6 @@ public interface FieldHelper {
 	
 	/* get set type */
 	
-	static Class<?> getFieldType(Class<?> aClass, String fieldName) {
-		Class<?> clazz = null;
-		if(fieldName!=null && fieldName.length()>0) {
-			Field field = FieldUtils.getField(aClass, fieldName, Boolean.TRUE);
-			if(field!=null)
-				clazz = field.getType();
-		}
-		return clazz;
-	}
-	
 	static Type getType(Field field,Class<?> klass) {
 		if(field == null)
 			return null;
@@ -294,6 +285,11 @@ public interface FieldHelper {
 		if(field == null)
 			return null;
 		return getType(field,klass);
+	}
+	
+	static Class<?> getParameterAt(Field field,Class<?> klass, Integer index) {
+		ParameterizedType type = (ParameterizedType) field.getGenericType();
+		return (Class<TYPE>) type.getActualTypeArguments()[index];
 	}
 	
 	static void setType(Class<?> klass,Field field,Type type) {
@@ -407,6 +403,59 @@ public interface FieldHelper {
 	
 	static Object readBusinessIdentifier(Object object) {
 		return read(object, FieldName.IDENTIFIER, ValueUsageType.BUSINESS);
+	}
+	
+	static Object readSystemIdentifierOrBusinessIdentifier(Object object) {
+		Object identifier = readSystemIdentifier(object);
+		if(object == null)
+			return identifier;
+		return readBusinessIdentifier(object);
+	}
+	
+	static Collection<Object> readMany(Collection<?> objects,Field field,Boolean isGettable) {
+		if(objects == null || objects.isEmpty() || field == null)
+			return null;
+		return objects.stream().map(x -> read(x, field)).collect(Collectors.toList());
+	}
+	
+	static Collection<Object> readMany(Collection<?> objects,Field field) {
+		return readMany(objects,field,null);
+	}
+	
+	static Collection<Object> readMany(Collection<?> objects,String fieldName,Boolean isGettable) {
+		if(objects == null || objects.isEmpty() || fieldName == null || fieldName.isBlank())
+			return null;
+		return objects.stream().map(x -> read(x, fieldName)).collect(Collectors.toList());
+	}
+	
+	static Collection<Object> readMany(Collection<?> objects,String fieldName) {
+		if(objects == null || objects.isEmpty() || fieldName == null || fieldName.isBlank())
+			return null;
+		return readMany(objects,fieldName);
+	}
+	
+	static Collection<Object> readMany(Collection<?> objects,FieldName fieldName,ValueUsageType valueUsageType,Boolean isGettable) {
+		if(objects == null || objects.isEmpty() || fieldName == null || valueUsageType == null)
+			return null;
+		return readMany(objects, getName(objects.iterator().next().getClass(), fieldName, valueUsageType), isGettable);
+	}
+	
+	static Collection<Object> readMany(Collection<?> objects,FieldName fieldName,ValueUsageType valueUsageType) {
+		if(objects == null || objects.isEmpty() || fieldName == null || valueUsageType == null)
+			return null;
+		return readMany(objects, fieldName, valueUsageType, null);
+	}
+	
+	static Collection<Object> readSystemIdentifiers(Collection<?> objects) {
+		if(objects == null || objects.isEmpty())
+			return null;
+		return readMany(objects, FieldName.IDENTIFIER, ValueUsageType.SYSTEM);
+	}
+	
+	static Collection<Object> readBusinessIdentifiers(Collection<?> objects) {
+		if(objects == null || objects.isEmpty())
+			return null;
+		return readMany(objects, FieldName.IDENTIFIER, ValueUsageType.BUSINESS);
 	}
 	
 	/* write value*/

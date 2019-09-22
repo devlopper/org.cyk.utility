@@ -69,9 +69,9 @@ public class InstanceHelperImpl extends AbstractHelper implements InstanceHelper
 	public <INSTANCE> INSTANCE getBySystemIdentifierOrBusinessIdentifier(INSTANCE instance) {
 		INSTANCE result = null;
 		if(instance != null) {
-			Object identifier = __inject__(FieldHelper.class).getFieldValueSystemIdentifier(instance);
+			Object identifier = org.cyk.utility.__kernel__.field.FieldHelper.readSystemIdentifier(instance);
 			if(identifier == null) {
-				identifier = __inject__(FieldHelper.class).getFieldValueBusinessIdentifier(instance);
+				identifier = org.cyk.utility.__kernel__.field.FieldHelper.readBusinessIdentifier(instance);
 				if(identifier != null)
 					result = (INSTANCE) getByIdentifierBusiness(instance.getClass(), identifier);
 			}else {
@@ -128,7 +128,7 @@ public class InstanceHelperImpl extends AbstractHelper implements InstanceHelper
 	
 	@Override
 	public Boolean isPersisted(Object instance) {
-		return ValueHelper.isNotBlank(__inject__(FieldHelper.class).getFieldValueSystemIdentifier(instance));
+		return ValueHelper.isNotBlank(org.cyk.utility.__kernel__.field.FieldHelper.readSystemIdentifier(instance));
 	}
 
 }

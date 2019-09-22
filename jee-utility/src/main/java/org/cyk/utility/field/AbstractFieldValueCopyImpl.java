@@ -101,15 +101,15 @@ public abstract class AbstractFieldValueCopyImpl extends AbstractFunctionWithPro
 		if(!classHelper.isBelongsToJavaPackages(sourceType)) {
 			if(classHelper.isNumberOrStringOrEnum(destinationType)) {
 				//get value business identifier
-				return __inject__(FieldHelper.class).getFieldValueBusinessIdentifier(value);
+				return org.cyk.utility.__kernel__.field.FieldHelper.readBusinessIdentifier(value);
 			}
 			if(!classHelper.isBelongsToJavaPackages(destinationType)) {
 				if(Boolean.TRUE.equals(classInstancesRuntime.get(destinationType).getIsPersistable())) {
 					if(destination.isAnnotationPresent(javax.persistence.ManyToOne.class)) {
 						//Find the object to be linked by its identifier (system and/or business)
-						Object identifier = __inject__(FieldHelper.class).getFieldValueSystemIdentifier(value);
+						Object identifier = org.cyk.utility.__kernel__.field.FieldHelper.readSystemIdentifier(value);
 						if(identifier == null) {
-							identifier = __inject__(FieldHelper.class).getFieldValueBusinessIdentifier(value);
+							identifier = org.cyk.utility.__kernel__.field.FieldHelper.readBusinessIdentifier(value);
 							return __inject__(InstanceHelper.class).getByIdentifierBusiness(destinationType, identifier,properties);
 						}else {
 							Fields fields =  __inject__(FieldsGetter.class).setClazz(destinationType).setFieldName(FieldName.IDENTIFIER).setValueUsageType(ValueUsageType.SYSTEM)

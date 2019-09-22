@@ -34,7 +34,7 @@ public class ValueImpl extends AbstractObject implements Value, Serializable {
 	public Object get() {
 		if(Boolean.TRUE.equals(__isValueHashBeenSet__) || fieldInstance == null)
 			return __value__;
-		__value__ = FieldHelperImpl.__read__(object, fieldInstance.getPath());
+		__value__ =org.cyk.utility.__kernel__.field.FieldHelper.read(object, fieldInstance.getPath());
 		return __value__;
 	}
 	

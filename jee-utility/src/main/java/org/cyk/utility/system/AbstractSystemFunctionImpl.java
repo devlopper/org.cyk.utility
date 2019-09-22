@@ -209,10 +209,10 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 			Object identifier = null;
 			for(Object index : __entities__) {
 				if(ValueUsageType.SYSTEM.equals(valueUsageType) && __entityClassSystemIdentifierField__ != null)
-					identifier = FieldHelperImpl.__read__(index, __entityClassSystemIdentifierField__);
+					identifier = org.cyk.utility.__kernel__.field.FieldHelper.read(index, __entityClassSystemIdentifierField__);
 				
 				if(identifier == null && ValueUsageType.BUSINESS.equals(valueUsageType) && __entityClassBusinessIdentifierField__ != null)
-					identifier = FieldHelperImpl.__read__(index, __entityClassBusinessIdentifierField__);
+					identifier = org.cyk.utility.__kernel__.field.FieldHelper.read(index, __entityClassBusinessIdentifierField__);
 				
 				if(identifier != null)
 					identifiers.add(identifier);

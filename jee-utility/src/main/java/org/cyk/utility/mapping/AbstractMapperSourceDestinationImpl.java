@@ -82,11 +82,11 @@ public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> ex
 	protected void __processPersistableFields__(SOURCE source,DESTINATION destination,Collection<Field> fields) {
 		if(Boolean.TRUE.equals(DependencyInjection.inject(CollectionHelper.class).isNotEmpty(fields))) {
 			for(Field index : fields) {
-				Object value = FieldHelperImpl.__read__(destination, index);
+				Object value = org.cyk.utility.__kernel__.field.FieldHelper.read(destination, index);
 				if(value != null) {
 					Object persisted = DependencyInjection.inject(InstanceHelper.class).getBySystemIdentifierOrBusinessIdentifier(value);
 					if(persisted != null)
-						FieldHelperImpl.__write__(destination, index, persisted);
+						org.cyk.utility.__kernel__.field.FieldHelper.write(destination, index, persisted);
 				}
 			}
 		}

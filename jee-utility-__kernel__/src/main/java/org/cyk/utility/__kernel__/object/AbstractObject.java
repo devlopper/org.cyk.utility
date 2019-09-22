@@ -36,7 +36,7 @@ public abstract class AbstractObject implements Objectable,Serializable {
 	protected Object __getInjectOrInstanciateIfNull__(String fieldName,Boolean injectableIfNull,Boolean instanciatableIfNull) {
 		Object object = InstanceHelper.executeMethodGetter(this, fieldName);
 		if(object == null && (Boolean.TRUE.equals(injectableIfNull) || Boolean.TRUE.equals(instanciatableIfNull))) {
-			Class<?> fieldType = FieldHelper.getFieldType(getClass(),fieldName);
+			Class<?> fieldType = (Class<?>) FieldHelper.getType(getClass(),fieldName);
 			object = Boolean.TRUE.equals(injectableIfNull) ? DependencyInjection.inject(fieldType) 
 					: (ClassHelper.instanciate(fieldType));
 			InstanceHelper.executeMethodSetter(this, fieldName, object);

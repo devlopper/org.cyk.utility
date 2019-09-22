@@ -7,9 +7,9 @@ import java.lang.reflect.Field;
 
 import org.cyk.utility.__kernel__.assertion.Assertion;
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
-import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.field.FieldHelperImpl;
 import org.cyk.utility.__kernel__.field.FieldName;
+import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.internationalization.InternationalizationHelperImpl;
 import org.cyk.utility.log.LogEventEntityRepository;
@@ -18,7 +18,6 @@ import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.number.NumberHelperImpl;
 import org.cyk.utility.value.Value;
 import org.cyk.utility.value.ValueHelperImpl;
-import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 public abstract class AbstractAssertionHelperImpl extends AbstractHelper implements AssertionHelper, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -70,9 +69,9 @@ public abstract class AbstractAssertionHelperImpl extends AbstractHelper impleme
 	
 	@Override
 	public AssertionHelper assertNotNull(String message, Object object,FieldName fieldName, ValueUsageType valueUsageType) {
-		Field field = FieldHelperImpl.__getByName__(object.getClass(), fieldName, valueUsageType);
+		Field field = org.cyk.utility.__kernel__.field.FieldHelper.getByName(object.getClass(), fieldName, valueUsageType);
 		if(field != null)
-			assertNotNull(message, FieldHelperImpl.__read__(object, field));
+			assertNotNull(message, org.cyk.utility.__kernel__.field.FieldHelper.read(object, field));
 		return this;
 	}
 	

@@ -60,7 +60,7 @@ public abstract class AbstractInstanceRepositoryImpl<INSTANCE> extends AbstractR
 		}else{
 			if(__inject__(CollectionHelper.class).isNotEmpty(instances)){
 				for(INSTANCE index : instances){
-					Object indexSystemIdentifier = FieldHelperImpl.__readSystemIdentifier__(index);
+					Object indexSystemIdentifier = org.cyk.utility.__kernel__.field.FieldHelper.readSystemIdentifier(index);
 					if(identifier.equals(indexSystemIdentifier)){
 						instance = index;
 						break;

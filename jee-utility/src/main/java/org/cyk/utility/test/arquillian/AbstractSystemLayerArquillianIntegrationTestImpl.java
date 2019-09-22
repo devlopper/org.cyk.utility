@@ -46,7 +46,7 @@ public abstract class AbstractSystemLayerArquillianIntegrationTestImpl<LAYER_ENT
 	
 	protected <ENTITY> void ____assertThatLogSaysEntityHasBeen____(Class<? extends SystemAction> systemActionClass,ENTITY entity,LAYER_ENTITY_INTERFACE layerEntityInterface) {
 		assertionHelper.assertStartsWithLastLogEventMessage(__getLogMessageStart__(__inject__(systemActionClass),entity.getClass()))
-		.assertContainsLastLogEventMessage("code="+FieldHelperImpl.__read__(entity,FieldName.IDENTIFIER,ValueUsageType.BUSINESS));
+		.assertContainsLastLogEventMessage("code="+org.cyk.utility.__kernel__.field.FieldHelper.read(entity,FieldName.IDENTIFIER,ValueUsageType.BUSINESS));
 	}
 	
 	public <ENTITY> void __createEntity__(ENTITY entity){
@@ -212,11 +212,11 @@ public abstract class AbstractSystemLayerArquillianIntegrationTestImpl<LAYER_ENT
 	protected void __setFieldValues__(Object object) {
 		super.__setFieldValues__(object);
 		if(object != null) {
-			__inject__(FieldHelper.class).setFieldValueSystemIdentifier(object, __getRandomIdentifier__());
+			org.cyk.utility.__kernel__.field.FieldHelper.writeSystemIdentifier(object, __getRandomIdentifier__());
 			
 			Fields fields = __inject__(FieldsGetter.class).setFieldName(FieldName.IDENTIFIER).setValueUsageType(ValueUsageType.BUSINESS).setClazz(object.getClass()).execute().getOutput();
 			if(__inject__(CollectionHelper.class).isNotEmpty(fields))
-				__inject__(FieldHelper.class).setFieldValueBusinessIdentifier(object, __getRandomCode__());
+				org.cyk.utility.__kernel__.field.FieldHelper.writeBusinessIdentifier(object, __getRandomCode__());
 		}
 	}
 	

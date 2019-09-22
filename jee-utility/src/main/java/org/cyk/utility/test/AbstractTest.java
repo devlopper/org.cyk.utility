@@ -9,7 +9,6 @@ import javax.inject.Inject;
 import org.cyk.utility.ApplicationScopeLifeCycleListener;
 import org.cyk.utility.assertion.AssertionHelper;
 import org.cyk.utility.clazz.ClassHelper;
-import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.log.LogEventEntityRepository;
 import org.cyk.utility.random.RandomHelper;
 import org.cyk.utility.system.OperatingSystemCommandExecutor;
@@ -72,15 +71,15 @@ public abstract class AbstractTest extends org.cyk.utility.__kernel__.test.Abstr
 	}
 	
 	protected void __setFieldValueBusinessIdentifier__(Object object,Object value){
-		__inject__(FieldHelper.class).setFieldValueBusinessIdentifier(object,value);
+		org.cyk.utility.__kernel__.field.FieldHelper.writeBusinessIdentifier(object,value);
 	}
 	
 	protected Object __getFieldValueSystemIdentifier__(Object object) {
-		return __inject__(FieldHelper.class).getFieldValueSystemIdentifier(object);
+		return org.cyk.utility.__kernel__.field.FieldHelper.readSystemIdentifier(object);
 	}
 	
 	protected Object __getFieldValueBusinessIdentifier__(Object object) {
-		return __inject__(FieldHelper.class).getFieldValueBusinessIdentifier(object);
+		return org.cyk.utility.__kernel__.field.FieldHelper.readBusinessIdentifier(object);
 	}
 	
 	/**/

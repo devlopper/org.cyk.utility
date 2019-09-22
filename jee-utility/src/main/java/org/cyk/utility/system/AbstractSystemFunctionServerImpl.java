@@ -32,9 +32,9 @@ public abstract class AbstractSystemFunctionServerImpl extends AbstractSystemFun
 					Collection<ValueUsageType> valueUsageTypes = getValueUsageTypes(index);
 					if(valueUsageTypes!=null && !valueUsageTypes.isEmpty())
 						for(ValueUsageType indexValueUsageType : valueUsageTypes){
-							Field field = FieldHelperImpl.__getByName__(getEntityClass(), index, indexValueUsageType);
+							Field field = org.cyk.utility.__kernel__.field.FieldHelper.getByName(getEntityClass(), index, indexValueUsageType);
 							if(field!=null)
-								addLogMessageBuilderParameter(field.getName(), FieldHelperImpl.__read__(entity, field));	
+								addLogMessageBuilderParameter(field.getName(), org.cyk.utility.__kernel__.field.FieldHelper.read(entity, field));	
 						}
 				}
 			}	
