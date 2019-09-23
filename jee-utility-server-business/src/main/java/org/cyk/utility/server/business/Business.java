@@ -5,7 +5,7 @@ import java.util.Collection;
 import javax.transaction.Transactional;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 /**
  * 

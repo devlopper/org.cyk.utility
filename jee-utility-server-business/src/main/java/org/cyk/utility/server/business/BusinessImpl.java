@@ -2,14 +2,16 @@ package org.cyk.utility.server.business;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.server.persistence.Persistence;
-import org.cyk.utility.value.ValueUsageType;
 
 @ApplicationScoped
 public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> implements Business,Serializable {
@@ -19,7 +21,7 @@ public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> im
 	
 	@Override
 	public BusinessServiceProvider<Object> createMany(Collection<Object> objects, Properties properties) {
-		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(objects))) {
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(objects))) {
 			@SuppressWarnings("unchecked")
 			Class<Object> aClass = (Class<Object>) objects.iterator().next().getClass();
 			BusinessEntity<Object> business = (BusinessEntity<Object>)  __injectBusinessLayer__().injectInterfaceClassFromPersistenceEntityClass(aClass);
@@ -149,7 +151,7 @@ public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> im
 	
 	@Override
 	public BusinessServiceProvider<Object> deleteMany(Collection<Object> objects, Properties properties) {
-		BusinessEntity<Object> business = (BusinessEntity<Object>)  __injectBusinessLayer__().injectInterfaceClassFromPersistenceEntity(__injectCollectionHelper__().isEmpty(objects) ? null : objects.iterator().next());
+		BusinessEntity<Object> business = (BusinessEntity<Object>)  __injectBusinessLayer__().injectInterfaceClassFromPersistenceEntity(CollectionHelper.isEmpty(objects) ? null : objects.iterator().next());
 		if(business == null){
 			super.deleteMany(objects, properties);
 		}else{
@@ -160,7 +162,7 @@ public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> im
 
 	@Override @Transactional
 	public Business deleteByClasses(Collection<Class<?>> classes) {
-		if(__injectCollectionHelper__().isNotEmpty(classes)) {
+		if(CollectionHelper.isNotEmpty(classes)) {
 			for(Class<?> index : classes) {
 				@SuppressWarnings("unchecked")
 				BusinessEntity<Object> business = (BusinessEntity<Object>)  __injectBusinessLayer__().injectInterfaceClassFromPersistenceEntityClass(index);
@@ -177,7 +179,7 @@ public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> im
 	@Override @Transactional
 	public Business deleteByClasses(Class<?>... classes) {
 		if(__inject__(ArrayHelper.class).isNotEmpty(classes))
-			deleteByClasses(__injectCollectionHelper__().instanciate(classes));
+			deleteByClasses(List.of(classes));
 		return this;
 	}
 	

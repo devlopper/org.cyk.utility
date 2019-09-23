@@ -2,12 +2,12 @@ package org.cyk.utility.server.business.test;
 
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.field.FieldName;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.server.business.Business;
-import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractTestBusinessReadIntegrationImpl extends AbstractTestBusinessFunctionIntegrationImpl implements TestBusinessReadIntegration {
 	private static final long serialVersionUID = 1L;
@@ -25,7 +25,7 @@ public abstract class AbstractTestBusinessReadIntegrationImpl extends AbstractTe
 	
 	@Override
 	protected void __perform__(Object object) throws Exception {
-		Boolean mustUnexist =  Boolean.TRUE.equals(__inject__(CollectionHelper.class).contains(getUnexistingObjectIdentifiers(), object));
+		Boolean mustUnexist =  Boolean.TRUE.equals(CollectionHelper.contains(getUnexistingObjectIdentifiers(), object));
 		ValueUsageType valueUsageType = getIdentifierValueUsageType();
 		Object one = __inject__(Business.class).findByIdentifier(getObjectClass(),object,valueUsageType,new Properties().setValueUsageType(valueUsageType));
 		assertionHelper.assertEquals(getObjectClass()+" with "+valueUsageType+" identifier <"+object+">"+(mustUnexist ? "" : " not")+" found", !mustUnexist,one!=null);

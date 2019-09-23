@@ -3,6 +3,7 @@ package org.cyk.utility.server.business.hierarchy;
 import java.io.Serializable;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.server.business.AbstractBusinessEntityImpl;
 import org.cyk.utility.server.persistence.jpa.hierarchy.AbstractHierarchy;
 import org.cyk.utility.server.persistence.jpa.hierarchy.AbstractIdentifiedByString;
@@ -22,10 +23,10 @@ public abstract class AbstractBusinessIdentifiedByStringImpl<ENTITY extends Abst
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
 		String name = __persistenceEntityClass__.getName();
-		__hierarchyClass__ = (Class<HIERARCHY>) __injectClassHelper__().getByName(name+"Hierarchy");
+		__hierarchyClass__ = (Class<HIERARCHY>) ClassHelper.getByName(name+"Hierarchy");
 		name = StringUtils.replaceOnce(name, ".entities.", ".api.");
-		__hierarchyPersistenceClass__ = (Class<HIERARCHY_PERSISTENCE>) __injectClassHelper__().getByName(name+"HierarchyPersistence");
+		__hierarchyPersistenceClass__ = (Class<HIERARCHY_PERSISTENCE>) ClassHelper.getByName(name+"HierarchyPersistence");
 		name = StringUtils.replaceOnce(name, ".persistence.", ".business.");
-		__hierarchyBusinessClass__ = (Class<HIERARCHY_BUSINESS>) __injectClassHelper__().getByName(name+"HierarchyBusiness");
+		__hierarchyBusinessClass__ = (Class<HIERARCHY_BUSINESS>) ClassHelper.getByName(name+"HierarchyBusiness");
 	}
 }

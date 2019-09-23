@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.transaction.Transactional;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.server.persistence.Persistence;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionUpdate;
@@ -19,7 +20,7 @@ public abstract class AbstractBusinessFunctionModifierImpl extends AbstractBusin
 
 	@Override
 	protected void __execute__(SystemAction action) {
-		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(__entities__))) {
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(__entities__))) {
 			__inject__(Persistence.class).updateMany(__entities__);
 		}
 	}

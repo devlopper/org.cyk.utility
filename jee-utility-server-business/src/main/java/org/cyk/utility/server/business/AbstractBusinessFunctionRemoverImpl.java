@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.transaction.Transactional;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.server.persistence.Persistence;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionDelete;
@@ -19,10 +20,10 @@ public abstract class AbstractBusinessFunctionRemoverImpl extends AbstractBusine
 	
 	@Override
 	protected void __execute__(SystemAction action) {
-		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(__entitiesSystemIdentifiers__)))
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(__entitiesSystemIdentifiers__)))
 			__inject__(Persistence.class).deleteBySystemIdentifiers(getEntityClass(), __entitiesSystemIdentifiers__);
 		
-		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(__entitiesBusinessIdentifiers__)))
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(__entitiesBusinessIdentifiers__)))
 			__inject__(Persistence.class).deleteByBusinessIdentifiers(getEntityClass(), __entitiesBusinessIdentifiers__);
 	}
 	/*
@@ -30,7 +31,7 @@ public abstract class AbstractBusinessFunctionRemoverImpl extends AbstractBusine
 	protected void __execute__(SystemAction action) {
 		//Delete by identifiers
 		Integer count = 0;
-		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(getAction().getEntitiesIdentifiers()))) {
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(getAction().getEntitiesIdentifiers()))) {
 			__inject__(Persistence.class).deleteByIdentifiers(getEntityClass(), getAction().getEntitiesIdentifiers().get(), getEntityIdentifierValueUsageType());
 			count = count + getAction().getEntitiesIdentifiers().get().size();
 		}

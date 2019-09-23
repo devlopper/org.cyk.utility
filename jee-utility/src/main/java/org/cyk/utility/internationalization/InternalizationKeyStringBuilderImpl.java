@@ -51,7 +51,7 @@ public class InternalizationKeyStringBuilderImpl extends AbstractStringFunctionI
 				else
 					key = StringHelper.applyCase(clazz.getSimpleName(),Case.FIRST_CHARACTER_LOWER);
 				
-				//if(__injectClassHelper__().isInstanceOf(clazz, AbstractSystemActionImpl.class))
+				//if(ClassHelper.isInstanceOf(clazz, AbstractSystemActionImpl.class))
 					key = StringUtils.substringBeforeLast(key.toString(), "Impl");
 			}
 			

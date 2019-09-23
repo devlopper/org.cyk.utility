@@ -6,6 +6,7 @@ import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.function.Function;
 import org.cyk.utility.assertion.AbstractAssertionsProviderForImpl;
 import org.cyk.utility.assertion.AssertionBuilderComparison;
+import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.server.business.BusinessFunctionCreator;
 import org.cyk.utility.server.persistence.entities.MyEntity;
 
@@ -19,7 +20,7 @@ public class MyEntityAssertionsProviderImpl extends AbstractAssertionsProviderFo
 				if(myEntity.getLong1() != null) {
 					//assert long1 > -1
 					__injectAssertionBuilderComparison__()
-					.getAssertedValue1(Boolean.TRUE).setFieldValueGetter(__injectFieldValueGetter__().setObject(myEntity).setField("long1")).getParentAs(AssertionBuilderComparison.class)
+					.getAssertedValue1(Boolean.TRUE).setFieldValueGetter(__inject__(FieldValueGetter.class).setObject(myEntity).setField("long1")).getParentAs(AssertionBuilderComparison.class)
 					.getAssertedValue2(Boolean.TRUE).setValue(-1).getParentAs(AssertionBuilderComparison.class).setOperator(ComparisonOperator.GT).setIsThrownWhenValueIsNotTrue(Boolean.TRUE)
 					.execute()
 					;

@@ -12,9 +12,8 @@ import javax.validation.ConstraintViolationException;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.assertion.AssertionsProviderClassMap;
-import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.server.business.api.MyEntityAssertionsProvider;
 import org.cyk.utility.server.business.api.MyEntityBusiness;
 import org.cyk.utility.server.business.api.NodeBusiness;
@@ -26,7 +25,6 @@ import org.cyk.utility.server.persistence.entities.MyEntity;
 import org.cyk.utility.server.persistence.entities.Node;
 import org.cyk.utility.server.persistence.query.filter.Filter;
 import org.cyk.utility.throwable.ThrowableHelper;
-import org.cyk.utility.value.ValueUsageType;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -406,38 +404,38 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 		for(Integer index = 0 ; index < 10 ; index = index + 1)
 			__inject__(MyEntityBusiness.class).create(new MyEntity().setIdentifier(index.toString()).setCode(index.toString()));
 				
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityBusiness.class).find()))
+		assertThat(org.cyk.utility.__kernel__.field.FieldHelper.readSystemIdentifiers(__inject__(MyEntityBusiness.class).find()))
 			.containsExactly("0","1","2","3","4","5","6","7","8","9");
 		
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityBusiness.class).find(null)))
+		assertThat(org.cyk.utility.__kernel__.field.FieldHelper.readSystemIdentifiers(__inject__(MyEntityBusiness.class).find(null)))
 		.containsExactly("0","1","2","3","4","5","6","7","8","9");
 		
 		Properties properties = new Properties();
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityBusiness.class).find(properties)))
+		assertThat(org.cyk.utility.__kernel__.field.FieldHelper.readSystemIdentifiers(__inject__(MyEntityBusiness.class).find(properties)))
 			.containsExactly("0","1","2","3","4","5","6","7","8","9");
 		
 		properties = new Properties();
 		properties.setQueryFirstTupleIndex(0);
 		properties.setQueryNumberOfTuple(1);
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityBusiness.class).find(properties)))
+		assertThat(org.cyk.utility.__kernel__.field.FieldHelper.readSystemIdentifiers(__inject__(MyEntityBusiness.class).find(properties)))
 			.containsExactly("0");
 		
 		properties = new Properties();
 		properties.setQueryFirstTupleIndex(1);
 		properties.setQueryNumberOfTuple(1);
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityBusiness.class).find(properties)))
+		assertThat(org.cyk.utility.__kernel__.field.FieldHelper.readSystemIdentifiers(__inject__(MyEntityBusiness.class).find(properties)))
 			.containsExactly("1");
 		
 		properties = new Properties();
 		properties.setQueryFirstTupleIndex(0);
 		properties.setQueryNumberOfTuple(3);
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityBusiness.class).find(properties)))
+		assertThat(org.cyk.utility.__kernel__.field.FieldHelper.readSystemIdentifiers(__inject__(MyEntityBusiness.class).find(properties)))
 			.containsExactly("0","1","2");
 		
 		properties = new Properties();
 		properties.setQueryFirstTupleIndex(4);
 		properties.setQueryNumberOfTuple(3);
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityBusiness.class).find(properties)))
+		assertThat(org.cyk.utility.__kernel__.field.FieldHelper.readSystemIdentifiers(__inject__(MyEntityBusiness.class).find(properties)))
 			.containsExactly("4","5","6");
 	}
 	
@@ -445,7 +443,7 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 	
 	@Test
 	public void save_many() {
-		List<MyEntity> list = (List<MyEntity>) __inject__(CollectionHelper.class).instanciate(List.class,new MyEntity().setCode("a").setTimestamp(1l));
+		List<MyEntity> list = List.of(new MyEntity().setCode("a").setTimestamp(1l));
 		assertThat(__inject__(MyEntityBusiness.class).count()).isEqualTo(0);
 		__inject__(MyEntityBusiness.class).saveMany(list);
 		assertThat(__inject__(MyEntityBusiness.class).count()).isEqualTo(1);
@@ -453,7 +451,7 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 	
 	@Test
 	public void save_many_twice() {
-		List<MyEntity> list = (List<MyEntity>) __inject__(CollectionHelper.class).instanciate(List.class,new MyEntity().setCode("a").setTimestamp(1l));
+		List<MyEntity> list = List.of(new MyEntity().setCode("a").setTimestamp(1l));
 		assertThat(__inject__(MyEntityBusiness.class).count()).isEqualTo(0);
 		__inject__(MyEntityBusiness.class).saveMany(list);
 		assertThat(__inject__(MyEntityBusiness.class).count()).isEqualTo(1);
@@ -512,7 +510,7 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 		Node nodeService = new Node().setCode("service").setName(__getRandomName__()).addParents(nodeModule);
 		Node nodeMenu = new Node().setCode("menu").setName(__getRandomName__()).addParents(nodeService);
 		Node nodeAction = new Node().setCode("action").setName(__getRandomName__()).addParents(nodeMenu);
-		__inject__(NodeBusiness.class).createMany(__inject__(CollectionHelper.class).instanciate(nodeModule,nodeService,nodeMenu
+		__inject__(NodeBusiness.class).createMany(List.of(nodeModule,nodeService,nodeMenu
 				,nodeAction));
 		Node node;
 		node = __inject__(NodeBusiness.class).findByBusinessIdentifier("module");
@@ -579,7 +577,7 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 		Node nodeService = new Node().setCode("service").setName(__getRandomName__()).addParents(nodeModule);
 		Node nodeMenu = new Node().setCode("menu").setName(__getRandomName__()).addParents(nodeService);
 		Node nodeAction = new Node().setCode("action").setName(__getRandomName__()).addParents(nodeMenu);
-		__inject__(NodeBusiness.class).createMany(__inject__(CollectionHelper.class).instanciate(nodeModule,nodeService,nodeMenu
+		__inject__(NodeBusiness.class).createMany(List.of(nodeModule,nodeService,nodeMenu
 				,nodeAction));
 		Node node;
 		node = __inject__(NodeBusiness.class).findByBusinessIdentifier("module");
@@ -644,7 +642,7 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 		Node nodeService = new Node().setIdentifier("S").setCode("service").setName(__getRandomName__()).addParents(nodeModule);
 		Node nodeMenu = new Node().setIdentifier("ME").setCode("menu").setName(__getRandomName__()).addParents(nodeService);
 		Node nodeAction = new Node().setIdentifier("A").setCode("action").setName(__getRandomName__()).addParents(nodeMenu);
-		__inject__(NodeBusiness.class).createMany(__inject__(CollectionHelper.class).instanciate(nodeModule,nodeService,nodeMenu
+		__inject__(NodeBusiness.class).createMany(List.of(nodeModule,nodeService,nodeMenu
 				,nodeAction));
 		Filter filters = __inject__(Filter.class).setKlass(Node.class);
 		filters.addField(Node.FIELD_PARENTS, Arrays.asList("module"),ValueUsageType.BUSINESS);
@@ -659,7 +657,7 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 		Node nodeService = new Node().setIdentifier("S").setCode("service").setName(__getRandomName__()).addParents(nodeModule);
 		Node nodeMenu = new Node().setIdentifier("ME").setCode("menu").setName(__getRandomName__()).addParents(nodeService);
 		Node nodeAction = new Node().setIdentifier("A").setCode("action").setName(__getRandomName__()).addParents(nodeMenu);
-		__inject__(NodeBusiness.class).createMany(__inject__(CollectionHelper.class).instanciate(nodeModule,nodeService,nodeMenu
+		__inject__(NodeBusiness.class).createMany(List.of(nodeModule,nodeService,nodeMenu
 				,nodeAction));
 		Filter filters = __inject__(Filter.class).setKlass(Node.class);
 		filters.addField(Node.FIELD_PARENTS, Arrays.asList("MO"),ValueUsageType.SYSTEM);

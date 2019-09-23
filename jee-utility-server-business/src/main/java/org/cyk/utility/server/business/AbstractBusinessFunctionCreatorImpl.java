@@ -7,7 +7,8 @@ import java.util.Collection;
 import javax.transaction.Transactional;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.server.persistence.Persistence;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
@@ -25,7 +26,7 @@ public abstract class AbstractBusinessFunctionCreatorImpl extends AbstractBusine
 
 	@Override
 	protected void __execute__(SystemAction action) {
-		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(__entities__))) {
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(__entities__))) {
 			__inject__(Persistence.class).createMany(__entities__);
 		}
 	}
@@ -34,7 +35,7 @@ public abstract class AbstractBusinessFunctionCreatorImpl extends AbstractBusine
 	protected Collection<Object> __getEntities__() {
 		Collection<Object> collection = super.__getEntities__();
 		Collection<Object> entities = null;
-		if(Boolean.TRUE.equals(__inject__(CollectionHelper.class).isNotEmpty(collection)))
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(collection)))
 			for(Object index : collection) {
 				Object isCreateIfSystemIdentifierIsBlank = Properties.getFromPath(getProperties(), Properties.IS_CREATE_IF_SYSTEM_IDENTIFIER_IS_BLANK);
 				if(isCreateIfSystemIdentifierIsBlank == null) {
@@ -43,7 +44,7 @@ public abstract class AbstractBusinessFunctionCreatorImpl extends AbstractBusine
 					entities.add(index);
 				}else {
 					if(Boolean.TRUE.equals(BooleanHelper.get(isCreateIfSystemIdentifierIsBlank))) {
-						Object identifier = __injectFieldHelper__().getFieldValueSystemIdentifier(index);
+						Object identifier = FieldHelper.readSystemIdentifier(index);
 						if(ValueHelper.isBlank(identifier)) {
 							if(entities == null)
 								entities = new ArrayList<>();

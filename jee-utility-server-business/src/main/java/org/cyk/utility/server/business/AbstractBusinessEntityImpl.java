@@ -9,16 +9,18 @@ import java.util.Map;
 
 import javax.transaction.Transactional;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionInstance;
+import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.array.ArrayInstanceTwoDimensionString;
 import org.cyk.utility.clazz.ClassNameBuilder;
-import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.collection.CollectionInstance;
 import org.cyk.utility.file.excel.FileExcelSheetDataArrayReader;
 import org.cyk.utility.map.MapInstanceIntegerToString;
 import org.cyk.utility.server.persistence.PersistenceEntity;
 import org.cyk.utility.server.persistence.PersistenceLayer;
-import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends PersistenceEntity<ENTITY>> extends AbstractBusinessServiceProviderImpl<ENTITY> implements BusinessEntity<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -34,7 +36,7 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 			ClassNameBuilder classNameBuilder = __inject__(ClassNameBuilder.class).setKlass(getClass());
 			classNameBuilder.getSourceNamingModel(Boolean.TRUE).server().business().impl().suffix();
 			classNameBuilder.getDestinationNamingModel(Boolean.TRUE).server().persistence().entities();
-			__persistenceEntityClass__ = __injectValueHelper__().returnOrThrowIfBlank("persistence entity class",(Class<ENTITY>) __injectClassHelper__().getByName(classNameBuilder));
+			__persistenceEntityClass__ = __injectValueHelper__().returnOrThrowIfBlank("persistence entity class",(Class<ENTITY>) ClassHelper.getByName(classNameBuilder.execute().getOutput()));
 		}
 		if(__persistence__ == null)
 			__persistence__ = (PERSISTENCE) __injectValueHelper__().returnOrThrowIfBlank("persistence",__inject__(PersistenceLayer.class).injectInterfaceClassFromEntityClass(__persistenceEntityClass__));	
@@ -46,7 +48,7 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 		__throwRuntimeExceptionIfEmpty__(arrayInstanceTwoDimensionString, "save from array : array instance");
 		Collection<ENTITY> entities = null;
 		for(Integer index  = 0; index < arrayInstanceTwoDimensionString.getFirstDimensionElementCount(); index = index + 1) {
-			ENTITY entitiy = __injectClassHelper__().instanciate(__persistenceEntityClass__);
+			ENTITY entitiy = ClassHelper.instanciate(__persistenceEntityClass__);
 			for(Map.Entry<Integer, String> indexEntry : columnIndexFieldNameMap.getEntries()) {
 				__injectFieldValueSetter__().execute(entitiy, indexEntry.getValue(), arrayInstanceTwoDimensionString.get(index, indexEntry.getKey()));
 			}
@@ -54,7 +56,7 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 				entities = new ArrayList<ENTITY>();
 			entities.add(entitiy);
 		}
-		if(__injectCollectionHelper__().isNotEmpty(entities)) {
+		if(CollectionHelper.isNotEmpty(entities)) {
 			__logInfo__("Saving "+entities.size()+" "+__persistenceEntityClass__.getSimpleName());
 			saveMany(entities);		
 		}
@@ -128,7 +130,7 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 	@Override
 	public ENTITY findByIdentifier(Object identifier,ValueUsageType valueUsageType, Properties properties) {
 		//TODO add logic to confirm that only one result has been found otherwise throw an exception
-		return __injectCollectionHelper__().getFirst(findByIdentifiers(Arrays.asList(identifier), valueUsageType, properties));
+		return CollectionHelper.getFirst(findByIdentifiers(Arrays.asList(identifier), valueUsageType, properties));
 	}
 
 	@Override
@@ -205,7 +207,7 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 	}
 
 	protected void __listenFindManyAfter__(Collection<ENTITY> entities,Properties properties) {
-		if(__injectCollectionHelper__().isNotEmpty(entities)) {
+		if(CollectionHelper.isNotEmpty(entities)) {
 			for(ENTITY index : entities)
 				__processAfterRead__(index,properties);	
 		}
@@ -241,7 +243,7 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 	public BusinessEntity<ENTITY> deleteByIdentifiers(Collection<Object> identifiers, ValueUsageType valueUsageType,Properties properties) {
 		if(Boolean.TRUE.equals(__isCallDeleteByInstanceOnDeleteByIdentifier__())) {
 			Collection<ENTITY> entities = __persistence__.readByIdentifiers(identifiers, valueUsageType, properties);
-			if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(entities))) {
+			if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(entities))) {
 				deleteMany(entities, properties);
 			}
 		}else {
@@ -317,7 +319,7 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 	@Override @Transactional
 	public BusinessEntity<ENTITY> deleteAll(Properties properties) {
 		Collection<ENTITY> entities = find();
-		if(__injectCollectionHelper__().isNotEmpty(entities))
+		if(CollectionHelper.isNotEmpty(entities))
 			deleteMany(entities,properties);
 		return this;
 	}
@@ -337,7 +339,7 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 	
 	@SuppressWarnings("unchecked")
 	protected static void __createMany__(Collection<?> objects) {
-		if(Boolean.TRUE.equals(__inject__(CollectionHelper.class).isNotEmpty(objects)))
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(objects)))
 			__inject__(Business.class).createMany((Collection<Object>) objects);
 	}
 	
@@ -353,7 +355,7 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 	
 	@SuppressWarnings("unchecked")
 	protected static void __updateMany__(Collection<?> objects) {
-		if(Boolean.TRUE.equals(__inject__(CollectionHelper.class).isNotEmpty(objects)))
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(objects)))
 			__inject__(Business.class).updateMany((Collection<Object>) objects);
 	}
 	
@@ -364,7 +366,7 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 	
 	@SuppressWarnings("unchecked")
 	protected static void __saveMany__(Collection<?> objects) {
-		if(Boolean.TRUE.equals(__inject__(CollectionHelper.class).isNotEmpty(objects)))
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(objects)))
 			__inject__(Business.class).saveMany((Collection<Object>) objects);
 	}
 	
@@ -375,15 +377,15 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 	
 	@SuppressWarnings("unchecked")
 	protected static void __deleteMany__(Collection<?> objects) {
-		if(Boolean.TRUE.equals(__inject__(CollectionHelper.class).isNotEmpty(objects)))
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(objects)))
 			__inject__(Business.class).deleteMany((Collection<Object>) objects);
 	}
 	
 	protected <T> Collection<T> __getDeletableInstances__(CollectionInstance<?> finalInstances,Collection<T> persistedInstances,String fieldName) {
 		Collection<T> collection = null;
-		if(__injectCollectionHelper__().isNotEmpty(persistedInstances))
+		if(CollectionHelper.isNotEmpty(persistedInstances))
 			for(T index : persistedInstances) {
-				if(!Boolean.TRUE.equals(__injectCollectionHelper__().contains(finalInstances, __injectFieldValueGetter__().execute(index, fieldName).getOutput()))) {
+				if(!Boolean.TRUE.equals(CollectionHelper.contains(finalInstances, FieldHelper.read(index, fieldName)))) {
 					if(collection == null)
 						collection = new ArrayList<>();
 					collection.add(index);
@@ -395,19 +397,19 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 	@SuppressWarnings("unchecked")
 	protected <T> void __delete__(CollectionInstance<?> finalInstances,Collection<T> persistedInstances,String fieldName) {
 		Collection<T> collection = __getDeletableInstances__(finalInstances, persistedInstances, fieldName);
-		if(__injectCollectionHelper__().isNotEmpty(collection))
+		if(CollectionHelper.isNotEmpty(collection))
 			__inject__(Business.class).deleteMany((Collection<Object>) collection);
 	}
 	
 	protected <M,D> Collection<D> __getSavableInstances__(Class<D> klass,CollectionInstance<M> finalInstances,Collection<M> persistedInstances,String fieldName,Object master,String masterFieldName) {
 		Collection<D> collection = null;
-		if(__injectCollectionHelper__().isNotEmpty(finalInstances)) {
+		if(CollectionHelper.isNotEmpty(finalInstances)) {
 			for(Object index : finalInstances.get()) {
 				//check if not yet created
-				if(!Boolean.TRUE.equals(__injectCollectionHelper__().contains(persistedInstances, index))) {
+				if(!Boolean.TRUE.equals(CollectionHelper.contains(persistedInstances, index))) {
 					if(collection == null)
 						collection = new ArrayList<>();
-					D instance = __injectClassHelper__().instanciateOne(klass);
+					D instance = ClassHelper.instanciate(klass);
 					__injectFieldValueSetter__().execute(instance, masterFieldName, master);
 					__injectFieldValueSetter__().execute(instance, fieldName, index);
 					collection.add(instance);	
@@ -420,7 +422,7 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 	@SuppressWarnings("unchecked")
 	protected <M,D> void __save__(Class<D> klass,CollectionInstance<M> finalInstances,Collection<M> persistedInstances,String fieldName,Object master,String masterFieldName) {
 		Collection<D> collection = __getSavableInstances__(klass, finalInstances, persistedInstances, fieldName, master, masterFieldName);
-		if(__injectCollectionHelper__().isNotEmpty(collection))
+		if(CollectionHelper.isNotEmpty(collection))
 			__inject__(Business.class).saveMany((Collection<Object>) collection);
 	}
 	

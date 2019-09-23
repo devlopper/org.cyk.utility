@@ -4,11 +4,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.server.persistence.Persistence;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionRead;
-import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractBusinessFunctionReaderImpl extends AbstractBusinessFunctionImpl implements BusinessFunctionReader, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -28,11 +29,11 @@ public abstract class AbstractBusinessFunctionReaderImpl extends AbstractBusines
 	}
 	
 	private Collection<Object> __execute__(Collection<Object> identifiers,ValueUsageType valueUsageType,Collection<Object> entities) {
-		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(identifiers))) {
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(identifiers))) {
 			Properties properties = new Properties();
 			properties.copyFrom(getProperties(), Properties.FIELDS);
 			Collection<?> collection = __inject__(Persistence.class).readByIdentifiers(getEntityClass(),identifiers,valueUsageType,properties);
-			if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(collection))) {
+			if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(collection))) {
 				if(entities == null)
 					entities = new ArrayList<>();
 				entities.addAll(collection);

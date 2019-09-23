@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.assertion.AssertionBuilderNull;
 import org.cyk.utility.server.persistence.PersistenceEntity;
@@ -21,7 +22,7 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 	
 	@Override  @Transactional
 	public BusinessServiceProvider<OBJECT> createMany(Collection<OBJECT> objects, Properties properties) {
-		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(objects))) {
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(objects))) {
 			BusinessFunctionCreator function = ____inject____(BusinessFunctionCreator.class);
 			__copyCommonProperties__(function, properties);
 			function.setEntities(objects);
@@ -53,9 +54,9 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 	
 	@Override
 	public BusinessServiceProvider<OBJECT> createByBatch(Collection<OBJECT> objects, Object batchSize,Properties properties) {
-		if(__injectCollectionHelper__().isNotEmpty(objects)) {
-			List<List<OBJECT>> lists = __injectCollectionHelper__().getBatches((List<OBJECT>) objects, batchSize);	
-			if(__injectCollectionHelper__().isNotEmpty(lists)) {
+		if(CollectionHelper.isNotEmpty(objects)) {
+			List<List<OBJECT>> lists = CollectionHelper.getBatches((List<OBJECT>) objects, batchSize);	
+			if(CollectionHelper.isNotEmpty(lists)) {
 				for(List<OBJECT> index : lists) {
 					createMany(index,properties);
 				}
@@ -71,13 +72,13 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 	}
 
 	protected void __listenExecuteCreateBefore__(Collection<OBJECT> objects, Properties properties,BusinessFunctionCreator function){
-		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(objects)))
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(objects)))
 			for(OBJECT index : objects)
 				__listenExecuteCreateBefore__(index, properties, function);
 	}
 	
 	protected void __listenExecuteCreateAfter__(Collection<OBJECT> objects, Properties properties,BusinessFunctionCreator function){
-		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(objects)))
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(objects)))
 			for(OBJECT index : objects)
 				__listenExecuteCreateAfter__(index, properties, function);
 	}
@@ -90,7 +91,7 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 	
 	@Override @Transactional
 	public BusinessServiceProvider<OBJECT> updateMany(Collection<OBJECT> objects, Properties properties) {
-		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(objects))) {
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(objects))) {
 			BusinessFunctionModifier function = ____inject____(BusinessFunctionModifier.class);
 			__copyCommonProperties__(function, properties);
 			function.setEntities(objects);
@@ -120,9 +121,9 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 	
 	@Override
 	public BusinessServiceProvider<OBJECT> updateByBatch(Collection<OBJECT> objects, Object batchSize,Properties properties) {
-		if(__injectCollectionHelper__().isNotEmpty(objects)) {
-			List<List<OBJECT>> lists = __injectCollectionHelper__().getBatches((List<OBJECT>) objects, batchSize);	
-			if(__injectCollectionHelper__().isNotEmpty(lists)) {
+		if(CollectionHelper.isNotEmpty(objects)) {
+			List<List<OBJECT>> lists = CollectionHelper.getBatches((List<OBJECT>) objects, batchSize);	
+			if(CollectionHelper.isNotEmpty(lists)) {
 				for(List<OBJECT> index : lists) {
 					updateMany(index,properties);
 				}
@@ -138,13 +139,13 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 	}
 	
 	protected void __listenExecuteUpdateBefore__(Collection<OBJECT> objects, Properties properties,BusinessFunctionModifier function){
-		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(objects)))
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(objects)))
 			for(OBJECT index : objects)
 				__listenExecuteUpdateBefore__(index, properties, function);
 	}
 	
 	protected void __listenExecuteUpdateAfter__(Collection<OBJECT> objects, Properties properties,BusinessFunctionModifier function){
-		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(objects)))
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(objects)))
 			for(OBJECT index : objects)
 				__listenExecuteUpdateAfter__(index, properties, function);
 	}
@@ -157,7 +158,7 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 	
 	@Override @Transactional
 	public BusinessServiceProvider<OBJECT> deleteMany(Collection<OBJECT> objects, Properties properties) {
-		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(objects))) {
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(objects))) {
 			BusinessFunctionRemover function =  ____inject____(BusinessFunctionRemover.class);
 			__copyCommonProperties__(function, properties);
 			function.setEntities(objects);
@@ -187,9 +188,9 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 	
 	@Override
 	public BusinessServiceProvider<OBJECT> deleteByBatch(Collection<OBJECT> objects, Object batchSize,Properties properties) {
-		if(__injectCollectionHelper__().isNotEmpty(objects)) {
-			List<List<OBJECT>> lists = __injectCollectionHelper__().getBatches((List<OBJECT>) objects, batchSize);	
-			if(__injectCollectionHelper__().isNotEmpty(lists)) {
+		if(CollectionHelper.isNotEmpty(objects)) {
+			List<List<OBJECT>> lists = CollectionHelper.getBatches((List<OBJECT>) objects, batchSize);	
+			if(CollectionHelper.isNotEmpty(lists)) {
 				for(List<OBJECT> index : lists) {
 					deleteMany(index,properties);
 				}
@@ -205,13 +206,13 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 	}
 	
 	protected void __listenExecuteDeleteBefore__(Collection<OBJECT> objects, Properties properties,BusinessFunctionRemover function){
-		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(objects)))
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(objects)))
 			for(OBJECT index : objects)
 				__listenExecuteDeleteBefore__(index, properties, function);
 	}
 	
 	protected void __listenExecuteDeleteAfter__(Collection<OBJECT> objects, Properties properties,BusinessFunctionRemover function){
-		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(objects)))
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(objects)))
 			for(OBJECT index : objects)
 				__listenExecuteDeleteAfter__(index, properties, function);
 	}
@@ -238,7 +239,7 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 
 	@Override @Transactional
 	public BusinessServiceProvider<OBJECT> saveMany(Collection<OBJECT> objects, Properties properties) {
-		if(__injectCollectionHelper__().isNotEmpty(objects))
+		if(CollectionHelper.isNotEmpty(objects))
 			for(OBJECT index : objects)
 				save(index,properties);
 		return this;
@@ -251,9 +252,9 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 
 	@Override
 	public BusinessServiceProvider<OBJECT> saveByBatch(Collection<OBJECT> objects, Object batchSize,Properties properties) {
-		if(__injectCollectionHelper__().isNotEmpty(objects)) {
-			List<List<OBJECT>> lists = __injectCollectionHelper__().getBatches((List<OBJECT>) objects, batchSize);	
-			if(__injectCollectionHelper__().isNotEmpty(lists)) {
+		if(CollectionHelper.isNotEmpty(objects)) {
+			List<List<OBJECT>> lists = CollectionHelper.getBatches((List<OBJECT>) objects, batchSize);	
+			if(CollectionHelper.isNotEmpty(lists)) {
 				for(List<OBJECT> index : lists) {
 					saveMany(index,properties);
 				}

@@ -9,7 +9,7 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.array.ArrayInstanceTwoDimensionString;
 import org.cyk.utility.file.excel.FileExcelSheetDataArrayReader;
 import org.cyk.utility.map.MapInstanceIntegerToString;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 /**
  * 
