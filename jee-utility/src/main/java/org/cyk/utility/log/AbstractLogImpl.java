@@ -9,9 +9,10 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.function.AbstractFunctionImpl;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.stacktrace.StackTraceHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.log.message.LogMessage;
 import org.cyk.utility.log.message.LogMessageBuilder;
-import org.cyk.utility.string.StringHelper;
+
 
 public abstract class AbstractLogImpl<LEVEL> extends AbstractFunctionImpl<LogMessage,Void> implements Log,Serializable {
 	private static final long serialVersionUID = 8661933611010350759L;
@@ -24,15 +25,15 @@ public abstract class AbstractLogImpl<LEVEL> extends AbstractFunctionImpl<LogMes
 		if(aClass == null)
 			aClass = getClass();
 		String sourceClassName = getSourceClassName();
-		if(__inject__(StringHelper.class).isBlank(sourceClassName)){
+		if(StringHelper.isBlank(sourceClassName)){
 			if(aClass != null)
 				sourceClassName = aClass.getName();
-			if(__inject__(StringHelper.class).isBlank(sourceClassName)){
+			if(StringHelper.isBlank(sourceClassName)){
 				sourceClassName = sourceStackTraceElement.getClassName();
 			}
 		}
 		String sourceMethodName = getSourceMethodName();
-		if(__inject__(StringHelper.class).isBlank(sourceMethodName)){
+		if(StringHelper.isBlank(sourceMethodName)){
 			sourceMethodName = sourceStackTraceElement.getMethodName();
 		}
 		LogMessage message = null;

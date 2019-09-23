@@ -8,7 +8,7 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.function.Function;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.string.Strings;
+import org.cyk.utility.__kernel__.string.Strings;
 
 @Dependent @Deprecated
 public class StyleBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Style> implements StyleBuilder,Serializable {

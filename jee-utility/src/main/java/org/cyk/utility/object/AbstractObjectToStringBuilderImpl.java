@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.field.FieldInstanceValue;
 import org.cyk.utility.field.FieldInstanceValues;
 import org.cyk.utility.field.FieldInstancesRuntime;
-import org.cyk.utility.string.Strings;
 @Deprecated
 public abstract class AbstractObjectToStringBuilderImpl extends AbstractObjectToOrFromStringBuilderImpl<String> implements ObjectToStringBuilder,Serializable {
 	private static final long serialVersionUID = 1L;

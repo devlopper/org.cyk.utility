@@ -16,6 +16,8 @@ import org.cyk.utility.__kernel__.function.FunctionExecutionPhaseMoment;
 import org.cyk.utility.__kernel__.function.FunctionExecutionPhaseMomentBegin;
 import org.cyk.utility.__kernel__.function.FunctionExecutionPhaseTry;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.assertion.AssertionsProvider;
 import org.cyk.utility.assertion.AssertionsProviderClassMap;
@@ -31,8 +33,6 @@ import org.cyk.utility.notification.NotificationBuilders;
 import org.cyk.utility.notification.Notifications;
 import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.object.Objects;
-import org.cyk.utility.string.StringHelper;
-import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
@@ -86,7 +86,7 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 		super.__executePhaseMoment__(executionPhase, momentClass);
 		if(executionPhase instanceof FunctionExecutionPhaseTry && FunctionExecutionPhaseMomentBegin.class.equals(momentClass)) {
 			//we put markers in message to support those logging framework which do not handle markers
-			addLogMessageBuilderParameter(__inject__(StringHelper.class).concatenate(CollectionHelper.cast(String.class, getLog(Boolean.TRUE).getMarkers())
+			addLogMessageBuilderParameter(StringHelper.concatenate(CollectionHelper.cast(String.class, getLog(Boolean.TRUE).getMarkers())
 					,ConstantCharacter.SPACE.toString()));
 		}
 	}

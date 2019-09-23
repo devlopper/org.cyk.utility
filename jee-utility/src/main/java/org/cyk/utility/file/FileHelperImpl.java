@@ -26,17 +26,16 @@ import javax.ws.rs.core.MediaType;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantSeparator;
+import org.cyk.utility.__kernel__.string.RegularExpressionHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.array.ArrayHelperImpl;
 import org.cyk.utility.byte_.ByteHelperImpl;
-import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.number.Intervals;
-import org.cyk.utility.regularexpression.RegularExpressionHelperImpl;
 import org.cyk.utility.runnable.RunnableHelperImpl;
-import org.cyk.utility.string.StringHelper;
-import org.cyk.utility.string.StringHelperImpl;
-import org.cyk.utility.string.Strings;
 import org.cyk.utility.value.ValueHelperImpl;
 
 @ApplicationScoped
@@ -66,7 +65,7 @@ public class FileHelperImpl extends AbstractHelper implements FileHelper,Seriali
 	@Override
 	public String concatenateNameAndExtension(String name, String extension) {
 		String nameAndExtension = StringUtils.defaultIfBlank(name,"");
-		if(__inject__(StringHelper.class).isNotBlank(extension))
+		if(StringHelper.isNotBlank(extension))
 			nameAndExtension += "."+extension;
 		return nameAndExtension;
 	}
@@ -102,39 +101,39 @@ public class FileHelperImpl extends AbstractHelper implements FileHelper,Seriali
 	/**/
 	
 	public static String __getName__(String string) {
-		return StringHelperImpl.__isBlank__(string) ? null : StringUtils.defaultIfBlank(FilenameUtils.getBaseName(string),null);
+		return StringHelper.isBlank(string) ? null : StringUtils.defaultIfBlank(FilenameUtils.getBaseName(string),null);
 	}
 
 	public static String __getExtension__(String string) {
-		return StringHelperImpl.__isBlank__(string) ? null : StringUtils.defaultIfBlank(FilenameUtils.getExtension(string),null);
+		return StringHelper.isBlank(string) ? null : StringUtils.defaultIfBlank(FilenameUtils.getExtension(string),null);
 	}
 
 	public static String __getMimeTypeByExtension__(String extension) {
-		if(StringHelperImpl.__isBlank__(extension))
+		if(StringHelper.isBlank(extension))
 			return null;
 		String mime = null;
         String fileName = ConstantSeparator.FILE_NAME_EXTENSION+extension;        
         try {
             mime = java.nio.file.Files.probeContentType(java.nio.file.Paths.get(fileName));
         } catch (IOException e) {}        
-        if(__inject__(StringHelper.class).isBlank(mime) || mime.equalsIgnoreCase(MediaType.APPLICATION_OCTET_STREAM))
+        if(StringHelper.isBlank(mime) || mime.equalsIgnoreCase(MediaType.APPLICATION_OCTET_STREAM))
         	mime = MimetypesFileTypeMap.getDefaultFileTypeMap().getContentType(fileName);
-        if(__inject__(StringHelper.class).isBlank(mime) || mime.equalsIgnoreCase(MediaType.APPLICATION_OCTET_STREAM))
+        if(StringHelper.isBlank(mime) || mime.equalsIgnoreCase(MediaType.APPLICATION_OCTET_STREAM))
         	mime = URLConnection.guessContentTypeFromName(fileName);        
         return mime;
 	}
 	
 	public static String __getMimeTypeByNameAndExtension__(String nameAndExtension) {
-		if(StringHelperImpl.__isBlank__(nameAndExtension))
+		if(StringHelper.isBlank(nameAndExtension))
 			return null;
 		return __getMimeTypeByExtension__(__getExtension__(nameAndExtension));
 	}
 	
 	public static String __concatenateNameAndExtension__(String name, String extension) {
-		if(StringHelperImpl.__isBlank__(name) && StringHelperImpl.__isBlank__(extension))
+		if(StringHelper.isBlank(name) && StringHelper.isBlank(extension))
 			return null;
 		String nameAndExtension = StringUtils.defaultIfBlank(name,"");
-		if(__inject__(StringHelper.class).isNotBlank(extension))
+		if(StringHelper.isNotBlank(extension))
 			nameAndExtension += "."+extension;
 		return nameAndExtension;
 	}
@@ -205,7 +204,7 @@ public class FileHelperImpl extends AbstractHelper implements FileHelper,Seriali
 	}
 	
 	private static Boolean __addAndReturn__(Paths paths,Path path,String nameRegularExpression,Integer maximalNumberOfPath) {
-		if(nameRegularExpression == null || RegularExpressionHelperImpl.__match__(path.toFile().getName(), nameRegularExpression))
+		if(nameRegularExpression == null || RegularExpressionHelper.match(path.toFile().getName(), nameRegularExpression))
 			paths.add(path);
 		if(maximalNumberOfPath != null && maximalNumberOfPath == paths.getSize())
 			return Boolean.TRUE;
@@ -238,14 +237,14 @@ public class FileHelperImpl extends AbstractHelper implements FileHelper,Seriali
 	public static File __build__(String uniformResourceLocator,String path,String name,String extension,String mimeType,byte[] bytes,InputStream inputStream,Class<?> klass,Long size,String checksum,Boolean isChecksumComputable) {
 		File file = __inject__(File.class);
 		file.setUniformResourceLocator(uniformResourceLocator);
-		if(StringHelperImpl.__isNotBlank__(path))
-			path = StringHelperImpl.__addToEndIfDoesNotEndWith__(path, "/");
+		if(StringHelper.isNotBlank(path))
+			path = StringHelper.addToEndIfDoesNotEndWith(path, "/");
 		file.setPath(path);
 		file.setName(__getName__(name));
-		if(StringHelperImpl.__isBlank__(extension))
+		if(StringHelper.isBlank(extension))
 			extension = __getExtension__(name);
 		file.setExtension(extension);		
-		if(StringHelperImpl.__isBlank__(mimeType))
+		if(StringHelper.isBlank(mimeType))
 			mimeType = __getMimeTypeByExtension__(file.getExtension());
 		file.setMimeType(mimeType);
 		file.setBytes(bytes);
@@ -263,10 +262,10 @@ public class FileHelperImpl extends AbstractHelper implements FileHelper,Seriali
 		}
 		if(size == null) {
 			if(file.getBytes()!=null)
-				size = new Long(file.getBytes().length);
+				size = Long.valueOf(file.getBytes().length);
 		}
 		file.setSize(size);
-		if(StringHelperImpl.__isBlank__(checksum)) {
+		if(StringHelper.isBlank(checksum)) {
 			if(Boolean.TRUE.equals(isChecksumComputable)) {
 				byte[] __bytes__ = file.getBytes();
 				if(__bytes__ == null && file.getUniformResourceLocator()!=null) {
@@ -286,7 +285,7 @@ public class FileHelperImpl extends AbstractHelper implements FileHelper,Seriali
 				}	
 			}	
 		}
-		if(StringHelperImpl.__isNotBlank__(checksum))
+		if(StringHelper.isNotBlank(checksum))
 			file.setChecksum(new String(checksum));		
 		return file;
 	}

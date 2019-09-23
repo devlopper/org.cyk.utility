@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.function.Function;
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
 import org.cyk.utility.system.action.SystemAction;
 
@@ -53,7 +54,7 @@ public class UniformResourceIdentifierParameterValueStringBuilderImpl extends Ab
 				if(StringUtils.isNotBlank(key))
 					VALUES_MAP.put(key, _value);
 			}
-			if(__injectStringHelper__().isBlank(_value))
+			if(StringHelper.isBlank(_value))
 				__injectThrowableHelper__().throwRuntimeException("Parameter value cannot be found for <<"+value+">>");
 		}
 		setProperty(Properties.OUTPUT, _value);
@@ -88,7 +89,7 @@ public class UniformResourceIdentifierParameterValueStringBuilderImpl extends Ab
 				if(StringUtils.isNotBlank(key))
 					VALUES_MAP.put(key, _value);
 			}
-			if(__injectStringHelper__().isBlank(_value))
+			if(StringHelper.isBlank(_value))
 				__injectThrowableHelper__().throwRuntimeException("Parameter value cannot be found for <<"+value+">>");
 		}
 		return _value;

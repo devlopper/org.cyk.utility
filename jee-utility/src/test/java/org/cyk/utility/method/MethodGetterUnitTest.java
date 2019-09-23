@@ -2,7 +2,7 @@ package org.cyk.utility.method;
 
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
-import org.cyk.utility.string.StringLocation;
+import org.cyk.utility.__kernel__.string.StringLocation;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 

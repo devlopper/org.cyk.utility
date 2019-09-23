@@ -4,15 +4,15 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.criteria.Criteria;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl;
-import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.value.ValueHelper;
 
 public abstract class AbstractQueryPredicateStringBuilderImpl extends AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl implements QueryPredicateStringBuilder, Serializable {
@@ -31,12 +31,12 @@ public abstract class AbstractQueryPredicateStringBuilderImpl extends AbstractFu
 		if(criteria!=null){
 			Class<?> clazz = criteria.getClazz();
 			/*String className = criteria.getClassName();
-			if(__inject__(StringHelper.class).isBlank(className)){
+			if(StringHelper.isBlank(className)){
 				if(clazz != null)
 					className = clazz.getSimpleName();
 			}*/
 			String classSimpleName = ClassHelper.getSimpleName(criteria.getClassName());
-			if(__inject__(StringHelper.class).isBlank(classSimpleName)){
+			if(StringHelper.isBlank(classSimpleName)){
 				if(clazz!=null)
 					classSimpleName = clazz.getSimpleName();
 			}
@@ -46,7 +46,7 @@ public abstract class AbstractQueryPredicateStringBuilderImpl extends AbstractFu
 			ValueUsageType valueUsageType = __inject__(ValueHelper.class).defaultToIfNull(criteria.getFieldValueUsageType(),ValueUsageType.BUSINESS);
 			
 			String fieldNameAsString = criteria.getFieldNameAsString();
-			if(__inject__(StringHelper.class).isBlank(fieldNameAsString)){				
+			if(StringHelper.isBlank(fieldNameAsString)){				
 				fieldNameAsString = org.cyk.utility.__kernel__.field.FieldHelper.getName(criteria.getClazz(), fieldName, valueUsageType);
 			}
 			
@@ -66,12 +66,12 @@ public abstract class AbstractQueryPredicateStringBuilderImpl extends AbstractFu
 		if(CollectionHelper.isEmpty(children)){
 			Class<?> clazz = criteria.getClazz();
 			/*String className = criteria.getClassName();
-			if(__inject__(StringHelper.class).isBlank(className)){
+			if(StringHelper.isBlank(className)){
 				if(clazz != null)
 					className = clazz.getSimpleName();
 			}*/
 			String classSimpleName = ClassHelper.getSimpleName(criteria.getClassName());
-			if(__inject__(StringHelper.class).isBlank(classSimpleName)){
+			if(StringHelper.isBlank(classSimpleName)){
 				if(clazz!=null)
 					classSimpleName = clazz.getSimpleName();
 			}
@@ -81,7 +81,7 @@ public abstract class AbstractQueryPredicateStringBuilderImpl extends AbstractFu
 			ValueUsageType valueUsageType = __inject__(ValueHelper.class).defaultToIfNull(criteria.getFieldValueUsageType(),ValueUsageType.BUSINESS);
 			
 			String fieldNameAsString = criteria.getFieldNameAsString();
-			if(__inject__(StringHelper.class).isBlank(fieldNameAsString)){				
+			if(StringHelper.isBlank(fieldNameAsString)){				
 				fieldNameAsString = org.cyk.utility.__kernel__.field.FieldHelper.getName(criteria.getClazz(), fieldName, valueUsageType);
 			}
 			

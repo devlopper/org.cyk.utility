@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Set;
 
+import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
-import org.cyk.utility.string.Strings;
 
 public abstract class AbstractProducerConsumerImpl extends AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl implements ProducerConsumer,Serializable {
 	private static final long serialVersionUID = 1L;

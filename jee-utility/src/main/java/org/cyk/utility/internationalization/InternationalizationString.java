@@ -3,7 +3,7 @@ package org.cyk.utility.internationalization;
 import java.io.Serializable;
 import java.util.Locale;
 
-import org.cyk.utility.string.Case;
+import org.cyk.utility.__kernel__.string.Case;
 
 import lombok.Getter;
 import lombok.Setter;

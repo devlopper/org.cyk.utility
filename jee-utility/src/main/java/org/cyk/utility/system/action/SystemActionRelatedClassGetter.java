@@ -1,7 +1,7 @@
 package org.cyk.utility.system.action;
 
 import org.cyk.utility.clazz.ClassFunction;
-import org.cyk.utility.string.Strings;
+import org.cyk.utility.__kernel__.string.Strings;
 
 public interface SystemActionRelatedClassGetter extends ClassFunction {
 

@@ -4,9 +4,10 @@ import java.io.Serializable;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.internationalization.InternalizationStringBuilder;
-import org.cyk.utility.string.StringHelper;
+
 
 @Dependent
 public class NotificationBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Notification> implements NotificationBuilder,Serializable {
@@ -33,7 +34,7 @@ public class NotificationBuilderImpl extends AbstractFunctionWithPropertiesAsInp
 		notification.setSeverity(severity);
 		
 		String summary = getSummary();
-		if(__inject__(StringHelper.class).isBlank(summary)) {
+		if(StringHelper.isBlank(summary)) {
 			InternalizationStringBuilder summaryInternalizationString = getSummaryInternalizationString();
 			if(summaryInternalizationString==null) {
 				if(throwable!=null) {
@@ -46,7 +47,7 @@ public class NotificationBuilderImpl extends AbstractFunctionWithPropertiesAsInp
 		notification.setSummary(summary);
 		
 		String details = getDetails();
-		if(__inject__(StringHelper.class).isBlank(details)) {
+		if(StringHelper.isBlank(details)) {
 			InternalizationStringBuilder detailsInternalizationString = getDetailsInternalizationString();
 			if(detailsInternalizationString==null) {
 				if(throwable!=null) {

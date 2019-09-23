@@ -1,7 +1,7 @@
 package org.cyk.utility.regularexpression;
 
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
-import org.cyk.utility.string.Strings;
+import org.cyk.utility.__kernel__.string.Strings;
 
 public interface RegularExpressionInstance extends Objectable {
 

@@ -8,9 +8,8 @@ import javax.enterprise.context.ApplicationScoped;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.collection.CollectionInstance;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.helper.AbstractHelper;
-import org.cyk.utility.string.StringHelper;
-import org.cyk.utility.string.StringHelperImpl;
 import org.cyk.utility.throwable.ThrowableHelper;
 import org.cyk.utility.throwable.ThrowableHelperImpl;
 
@@ -48,7 +47,7 @@ public class ValueHelperImpl extends AbstractHelper implements ValueHelper,Seria
 		//TODO use isBlank method
 		Boolean isThrow = value == null;
 		if(!Boolean.TRUE.equals(isThrow))
-			isThrow = (value instanceof String) && __inject__(StringHelper.class).isBlank((String) value);
+			isThrow = (value instanceof String) &&StringHelper.isBlank((String) value);
 		if(!Boolean.TRUE.equals(isThrow))
 			isThrow = (value instanceof Collection) && CollectionHelper.isEmpty((Collection<?>)value);
 		if(!Boolean.TRUE.equals(isThrow))
@@ -80,7 +79,7 @@ public class ValueHelperImpl extends AbstractHelper implements ValueHelper,Seria
 	public static Boolean __isEmpty__(Object value) {
 		Boolean isEmpty = value == null;
 		if(!Boolean.TRUE.equals(isEmpty))
-			isEmpty = (value instanceof String) && StringHelperImpl.__isEmpty__((String) value);
+			isEmpty = (value instanceof String) && StringHelper.isEmpty((String) value);
 		if(!Boolean.TRUE.equals(isEmpty))
 			isEmpty = (value instanceof Collection) && CollectionHelper.isEmpty((Collection<?>)value);
 		if(!Boolean.TRUE.equals(isEmpty))
@@ -96,7 +95,7 @@ public class ValueHelperImpl extends AbstractHelper implements ValueHelper,Seria
 	public static Boolean __isBlank__(Object value) {
 		Boolean isBlank = __isEmpty__(value);
 		if(!Boolean.TRUE.equals(isBlank))
-			isBlank = (value instanceof String) && __inject__(StringHelper.class).isBlank((String) value);
+			isBlank = (value instanceof String) && StringHelper.isBlank((String) value);
 		return Boolean.TRUE.equals(isBlank);
 	}
 

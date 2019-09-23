@@ -9,6 +9,7 @@ import java.util.Collection;
 import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.constant.ConstantSeparator;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
 import org.cyk.utility.time.TimeHelper;
 
@@ -41,7 +42,7 @@ public class OperatingSystemCommandExecutorImpl extends AbstractFunctionWithProp
         while ((line = input.readLine()) != null)
         	lines.add(line);
         
-        setResult(__injectStringHelper__().concatenate(lines,ConstantSeparator.LINE_WITH_LINE_FEED));
+        setResult(StringHelper.concatenate(lines,ConstantSeparator.LINE_WITH_LINE_FEED));
         
 		Long numberOfMillisecondToWait = getNumberOfMillisecondToWait();
 		if(numberOfMillisecondToWait!=null && numberOfMillisecondToWait>0)

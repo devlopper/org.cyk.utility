@@ -19,12 +19,12 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.string.Case;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.array.ArrayHelperImpl;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.locale.LocaleHelper;
-import org.cyk.utility.string.Case;
-import org.cyk.utility.string.StringHelperImpl;
-import org.cyk.utility.string.Strings;
 import org.cyk.utility.string.repository.ResourceBundle;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.exception.EntityNotFoundException;
@@ -90,7 +90,7 @@ public class InternationalizationHelperImpl extends AbstractHelper implements In
 				key = ((SystemAction)key).getIdentifier();
 		}
 		if(key instanceof String) {
-			if(StringHelperImpl.__isBlank__((String) key))
+			if(StringHelper.isBlank((String) key))
 				return null;
 		}
 		if(key instanceof Class) {
@@ -98,7 +98,7 @@ public class InternationalizationHelperImpl extends AbstractHelper implements In
 			if(ClassHelper.isInstanceOf(clazz, SystemAction.class))
 				key = StringUtils.substringAfter(clazz.getSimpleName(), SystemAction.class.getSimpleName());
 			else
-				key = StringHelperImpl.__applyCase__(clazz.getSimpleName(),Case.FIRST_CHARACTER_LOWER);
+				key = StringHelper.applyCase(clazz.getSimpleName(),Case.FIRST_CHARACTER_LOWER);
 			key = StringUtils.substringBeforeLast(key.toString(), "Impl");
 		}
 		
@@ -108,9 +108,9 @@ public class InternationalizationHelperImpl extends AbstractHelper implements In
 		if(ArrayHelperImpl.__isNotEmpty__(strings)) {
 			tokens = new ArrayList<>();
 			for(String index : strings) {
-				tokens.addAll(StringHelperImpl.__splitByCharacterTypeCamelCase__(index));
+				tokens.addAll(StringHelper.splitByCharacterTypeCamelCase(index));
 			}
-			internalizationKey = new InternationalizationKey().setValue(StringHelperImpl.__concatenate__(tokens,DOT).toLowerCase());
+			internalizationKey = new InternationalizationKey().setValue(StringHelper.concatenate(tokens,DOT).toLowerCase());
 		}
 				
 		if(internalizationKey != null) {
@@ -153,23 +153,23 @@ public class InternationalizationHelperImpl extends AbstractHelper implements In
 		String cacheEntityIdentifier = key.buildCacheEntryIdentifier(locale,kase);
 		//get it from cache
 		String result = INTERNALIZATION_STRINGS_MAP.get(cacheEntityIdentifier);
-		if(StringHelperImpl.__isNotBlank__(result))
+		if(StringHelper.isNotBlank(result))
 			return result;
 		//get it from resource bundles
 		result = __getFromResourceBundles__(key.getValue(), arguments == null ? key.getArguments() : arguments, locale, kase, null);
-		if(StringHelperImpl.__isBlank__(result)) {
+		if(StringHelper.isBlank(result)) {
 			//derive it from related
 			Collection<Strings> related = __deriveKeys__(key.getValue());
 			if(CollectionHelper.isNotEmpty(related)) {
 				for(Strings index : related) {
 					result = __buildPhraseFromKeysValues__(index.get(),ValueHelperImpl.__defaultToIfBlank__(kase, Case.NONE));
-					if(StringHelperImpl.__isNotBlank__(result))
+					if(StringHelper.isNotBlank(result))
 						break;
 				}
 			}
 		}
 		
-		if(StringHelperImpl.__isBlank__(result)) {
+		if(StringHelper.isBlank(result)) {
 			//mark it as not found
 			result = UNKNOWN_MARKER_START+key.getValue()+UNKNOWN_MARKER_END;
 		}
@@ -178,12 +178,12 @@ public class InternationalizationHelperImpl extends AbstractHelper implements In
 	}
 	
 	public static List<Strings> __deriveKeys__(String key) {
-		if(StringHelperImpl.__isBlank__(key))
+		if(StringHelper.isBlank(key))
 			return null;
 		List<Strings> collection = new ArrayList<Strings>();
 		if(key != null) {
 			String keyAsString = __buildKey__(key).getValue();
-			if(StringHelperImpl.__isNotBlank__(keyAsString)) {
+			if(StringHelper.isNotBlank(keyAsString)) {
 				if(StringUtils.contains(keyAsString, ConstantCharacter.DOT)) {
 					//y.x => x of y
 					for(String index : X_OF_Y) {
@@ -218,7 +218,7 @@ public class InternationalizationHelperImpl extends AbstractHelper implements In
 		kase = ValueHelperImpl.__defaultToIfNull__(kase,Case.FIRST_CHARACTER_UPPER_REMAINDER_LOWER);
 		//String cacheEntityIdentifier = InternationalizationKey.__buildCacheEntryIdentifier__(keys,locale,kase);
 		//String result = INTERNALIZATION_STRINGS_MAP.get(cacheEntityIdentifier);
-		//if(StringHelperImpl.__isNotBlank__(result))
+		//if(StringHelper.isNotBlank(result))
 		//	return result;
 		Collection<String> phraseStrings = new ArrayList<>();
 		for(InternationalizationKey index : keys)
@@ -229,7 +229,7 @@ public class InternationalizationHelperImpl extends AbstractHelper implements In
 	}
 	
 	private static String ____buildPhrase____(Collection<String> strings,Case kase) {
-		return CollectionHelper.isEmpty(strings) ? null : StringHelperImpl.__applyCase__(StringHelperImpl.__concatenate__(strings, SEPARATOR), kase);
+		return CollectionHelper.isEmpty(strings) ? null : StringHelper.applyCase(StringHelper.concatenate(strings, SEPARATOR), kase);
 	}
 	
 	public static String __buildPhrase__(Collection<InternationalizationKey> keys) {
@@ -360,7 +360,7 @@ public class InternationalizationHelperImpl extends AbstractHelper implements In
 					if(StringUtils.startsWith(value,DO_NOT_PROCESS_TAG_START) && StringUtils.endsWith(value,DO_NOT_PROCESS_TAG_END)){
 						value = StringUtils.substringBetween(value, DO_NOT_PROCESS_TAG_START, DO_NOT_PROCESS_TAG_END);
 					}else{
-						value = StringHelperImpl.__applyCase__(value, aCase);
+						value = StringHelper.applyCase(value, aCase);
 					}
 					return value;
 				} catch (Exception e) {

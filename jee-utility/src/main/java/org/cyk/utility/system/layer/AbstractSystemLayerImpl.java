@@ -3,10 +3,11 @@ package org.cyk.utility.system.layer;
 import java.io.Serializable;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractSingleton;
-import org.cyk.utility.__kernel__.collection.CollectionHelper;
-import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
+
 
 public abstract class AbstractSystemLayerImpl extends AbstractSingleton implements SystemLayer, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -87,11 +88,11 @@ public abstract class AbstractSystemLayerImpl extends AbstractSingleton implemen
 		String replacement = getInterfaceLayer()!=null && getInterfaceLayer().getParent()!=null && getInterfaceLayer().getParent().getIdentifier()!=null 
 				? getInterfaceLayer().getParent().getIdentifier().toString().toLowerCase() : null;
 		
-		subString = __inject__(StringHelper.class).addToBeginIfDoesNotStartWith(subString, ConstantCharacter.DOT);		
-		subString = __inject__(StringHelper.class).addToEndIfDoesNotEndWith(subString, ConstantCharacter.DOT);
+		subString =StringHelper.addToBeginIfDoesNotStartWith(subString, ConstantCharacter.DOT);		
+		subString =StringHelper.addToEndIfDoesNotEndWith(subString, ConstantCharacter.DOT);
 		
-		replacement = __inject__(StringHelper.class).addToBeginIfDoesNotStartWith(replacement, ConstantCharacter.DOT);		
-		replacement = __inject__(StringHelper.class).addToEndIfDoesNotEndWith(replacement, ConstantCharacter.DOT);
+		replacement =StringHelper.addToBeginIfDoesNotStartWith(replacement, ConstantCharacter.DOT);		
+		replacement =StringHelper.addToEndIfDoesNotEndWith(replacement, ConstantCharacter.DOT);
 		
 		if(StringUtils.contains(name, subString))
 			name = StringUtils.replace(name, subString,replacement);

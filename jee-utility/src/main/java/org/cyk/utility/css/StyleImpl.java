@@ -7,8 +7,8 @@ import javax.enterprise.context.Dependent;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
-import org.cyk.utility.string.StringHelperImpl;
-import org.cyk.utility.string.Strings;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.string.Strings;
 
 @Dependent
 public class StyleImpl extends AbstractObject implements Style,Serializable {
@@ -33,7 +33,7 @@ public class StyleImpl extends AbstractObject implements Style,Serializable {
 		String string = null;
 		Strings classes = getClasses();
 		if(classes!=null)
-			string = StringHelperImpl.__concatenate__(classes.get(), ConstantCharacter.SPACE.toString());
+			string = StringHelper.concatenate(classes.get(), ConstantCharacter.SPACE.toString());
 		return string;
 	}
 
@@ -66,7 +66,7 @@ public class StyleImpl extends AbstractObject implements Style,Serializable {
 		String string = null;
 		Strings values = getValues();
 		if(values!=null)
-			string = StringHelperImpl.__concatenate__(values.get(), ConstantCharacter.SEMI_COLON.toString());
+			string = StringHelper.concatenate(values.get(), ConstantCharacter.SEMI_COLON.toString());
 		return string;
 	}
 	

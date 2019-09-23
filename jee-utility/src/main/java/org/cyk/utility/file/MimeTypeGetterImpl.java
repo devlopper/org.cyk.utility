@@ -11,8 +11,9 @@ import javax.enterprise.context.Dependent;
 import javax.ws.rs.core.MediaType;
 
 import org.cyk.utility.__kernel__.constant.ConstantSeparator;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.string.StringHelper;
+
 
 @Dependent
 public class MimeTypeGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<String> implements MimeTypeGetter,Serializable {
@@ -33,11 +34,11 @@ public class MimeTypeGetterImpl extends AbstractFunctionWithPropertiesAsInputImp
             e.printStackTrace();
         }
         
-        if(__inject__(StringHelper.class).isBlank(mime) || mime.equalsIgnoreCase(MediaType.APPLICATION_OCTET_STREAM)) {
+        if(StringHelper.isBlank(mime) || mime.equalsIgnoreCase(MediaType.APPLICATION_OCTET_STREAM)) {
         	mime = MimetypesFileTypeMap.getDefaultFileTypeMap().getContentType(fileName);
         }
         
-        if(__inject__(StringHelper.class).isBlank(mime) || mime.equalsIgnoreCase(MediaType.APPLICATION_OCTET_STREAM)) {
+        if(StringHelper.isBlank(mime) || mime.equalsIgnoreCase(MediaType.APPLICATION_OCTET_STREAM)) {
         	mime = URLConnection.guessContentTypeFromName(fileName);
         }
         

@@ -76,7 +76,7 @@ public class ObjectToStringBuilderJsonImpl extends AbstractObjectToStringBuilder
 								__inject__(ThrowableHelper.class).throwRuntimeException("collection value cannot be deduced to string");
 							strings.add(string);
 						}
-						String string = __inject__(StringHelper.class).concatenate(strings.get(), COMA);
+						String string =StringHelper.concatenate(strings.get(), COMA);
 						generator.writeStringField(index.getFieldInstance().getPath(), string );
 					}else if(index.getValue() instanceof Map<?, ?>) {
 						generator.writeStringField(index.getFieldInstance().getPath(), new ObjectMapper().writeValueAsString(index.getValue()) );

@@ -2,7 +2,7 @@ package org.cyk.utility.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.cyk.utility.string.StringLocation;
+import org.cyk.utility.__kernel__.string.StringLocation;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 

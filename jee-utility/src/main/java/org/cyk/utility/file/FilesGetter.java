@@ -5,7 +5,7 @@ import java.util.Collection;
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
 import org.cyk.utility.number.Interval;
 import org.cyk.utility.number.Intervals;
-import org.cyk.utility.string.Strings;
+import org.cyk.utility.__kernel__.string.Strings;
 
 @Deprecated
 public interface FilesGetter extends FunctionWithPropertiesAsInput<Files> {

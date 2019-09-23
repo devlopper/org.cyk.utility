@@ -1,7 +1,7 @@
 package org.cyk.utility.css;
 
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
-import org.cyk.utility.string.Strings;
+import org.cyk.utility.__kernel__.string.Strings;
 
 @Deprecated
 public interface StyleBuilder extends FunctionWithPropertiesAsInput<Style> {

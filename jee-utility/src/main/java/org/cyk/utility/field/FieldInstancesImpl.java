@@ -8,7 +8,8 @@ import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.collection.AbstractCollectionInstanceImpl;
 import org.cyk.utility.__kernel__.field.FieldHelper;
-import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
+
 
 @Dependent
 public class FieldInstancesImpl extends AbstractCollectionInstanceImpl<FieldInstance> implements FieldInstances,Serializable {
@@ -17,7 +18,7 @@ public class FieldInstancesImpl extends AbstractCollectionInstanceImpl<FieldInst
 	@Override
 	public FieldInstance get(Class<?> aClass, Collection<String> paths) {
 		String path = FieldHelper.join(paths);
-		if(collection!=null && !collection.isEmpty() && aClass!=null && __inject__(StringHelper.class).isNotBlank(path))
+		if(collection!=null && !collection.isEmpty() && aClass!=null && StringHelper.isNotBlank(path))
 			for(FieldInstance index : collection)
 				if(aClass.equals(index.getClazz()) && path.equals(index.getPath()))
 					return index;

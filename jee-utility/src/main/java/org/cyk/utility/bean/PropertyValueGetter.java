@@ -3,7 +3,7 @@ package org.cyk.utility.bean;
 import java.util.Collection;
 
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
-import org.cyk.utility.string.Strings;
+import org.cyk.utility.__kernel__.string.Strings;
 
 public interface PropertyValueGetter extends FunctionWithPropertiesAsInput<Object> {
 

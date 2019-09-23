@@ -2,10 +2,9 @@ package org.cyk.utility.clazz;
 
 import java.io.Serializable;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.string.Case;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
-import org.cyk.utility.string.Case;
-import org.cyk.utility.string.StringHelper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -90,7 +89,7 @@ public interface ClassNameBuilder extends FunctionWithPropertiesAsInput<String> 
 				if("representation".equals(layer))
 					suffix = "Dto";					
 			}else {
-				suffix = DependencyInjection.inject(StringHelper.class).applyCase(layer, Case.FIRST_CHARACTER_UPPER);
+				suffix = StringHelper.applyCase(layer, Case.FIRST_CHARACTER_UPPER);
 				if("impl".equals(subLayer))
 					suffix = suffix + "Impl";
 			}			

@@ -13,7 +13,7 @@ import org.cyk.utility.__kernel__.collection.AbstractCollectionInstanceImpl;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.array.ArrayHelperImpl;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierHelperImpl;
-import org.cyk.utility.string.Strings;
+import org.cyk.utility.__kernel__.string.Strings;
 
 @Dependent
 public class PathsImpl extends AbstractCollectionInstanceImpl<Path> implements Paths,Serializable {

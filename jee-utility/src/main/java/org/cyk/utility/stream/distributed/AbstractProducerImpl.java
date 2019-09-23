@@ -2,7 +2,7 @@ package org.cyk.utility.stream.distributed;
 
 import java.io.Serializable;
 
-import org.cyk.utility.string.Strings;
+import org.cyk.utility.__kernel__.string.Strings;
 
 public abstract class AbstractProducerImpl extends AbstractProducerConsumerImpl implements Producer,Serializable {
 	private static final long serialVersionUID = 1L;

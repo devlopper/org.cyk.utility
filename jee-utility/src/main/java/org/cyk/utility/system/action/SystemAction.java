@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 import org.cyk.utility.object.Objects;
-import org.cyk.utility.string.Strings;
+import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 public interface SystemAction extends Objectable  {

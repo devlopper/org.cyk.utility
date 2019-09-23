@@ -6,10 +6,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.string.StringLocation;
+import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.assertion.AssertionHelper;
-import org.cyk.utility.string.StringHelper;
-import org.cyk.utility.string.StringLocation;
-import org.cyk.utility.string.Strings;
 
 import lombok.ToString;
 
@@ -27,7 +27,7 @@ public class TestExpectedStringImpl extends AbstractObject implements TestExpect
 				Strings strings = locationStringsMap.get(indexLocation);
 				if(strings!=null) {
 					for(String indexString : strings.get()) {
-						__inject__(AssertionHelper.class).assertTrue(indexString+"  NOT "+indexLocation+" "+string,__inject__(StringHelper.class).isAtLocation(string, indexString, indexLocation));
+						__inject__(AssertionHelper.class).assertTrue(indexString+"  NOT "+indexLocation+" "+string,StringHelper.isAtLocation(string, indexString, indexLocation));
 					}
 				}
 			}

@@ -3,7 +3,7 @@ package org.cyk.utility.internationalization;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
-import org.cyk.utility.string.Strings;
+import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.*;

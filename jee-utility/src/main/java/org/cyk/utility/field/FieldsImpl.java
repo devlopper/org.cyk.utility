@@ -15,7 +15,7 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.string.Strings;
+import org.cyk.utility.__kernel__.string.Strings;
 
 @Dependent
 public class FieldsImpl extends AbstractCollectionInstanceImpl<Field> implements Fields,Serializable {

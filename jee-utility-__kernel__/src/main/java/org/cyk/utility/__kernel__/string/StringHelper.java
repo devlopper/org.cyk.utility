@@ -13,6 +13,48 @@ import org.cyk.utility.__kernel__.constant.ConstantSeparator;
 
 public interface StringHelper {
 
+	static Boolean isEmpty(String string) {
+		return string == null || string.isEmpty();
+	}
+	
+	static Boolean isNotEmpty(String string) {
+		return string != null && !string.isEmpty();
+	}
+	
+	static Boolean isBlank(String string) {
+		return string == null || string.isBlank();
+	}
+	
+	static Boolean isNotBlank(String string) {
+		return string != null && !string.isBlank();
+	}
+	
+	static Boolean isAtLocation(String string,String subString,StringLocation location,Boolean caseSensitive){
+		if(StringUtils.isEmpty(subString))
+			return Boolean.TRUE;
+		if(location==null)
+			location = StringLocation.EXAT;
+		if(caseSensitive==null)
+			caseSensitive = Boolean.TRUE;
+		switch(location){
+		case START : return Boolean.TRUE.equals(caseSensitive) ? StringUtils.startsWith(string, subString) : StringUtils.startsWithIgnoreCase(string, subString);
+		case INSIDE : return Boolean.TRUE.equals(caseSensitive) ? StringUtils.contains(string, subString) : StringUtils.containsIgnoreCase(string, subString);
+		case END : return Boolean.TRUE.equals(caseSensitive) ? StringUtils.endsWith(string, subString) : StringUtils.endsWithIgnoreCase(string, subString);
+		case EXAT : return Boolean.TRUE.equals(caseSensitive) ? StringUtils.equals(string, subString) : StringUtils.equalsIgnoreCase(string, subString);
+		}
+		return Boolean.FALSE;
+	}
+	
+	static Boolean isAtLocation(String string, String subString, StringLocation location) {
+		return isAtLocation(string, subString, location, Boolean.TRUE);
+	}
+	
+	static Number getLength(String string) {
+		if(string == null || string.isEmpty())
+			return 0;
+		return string.length();
+	}
+	
 	static Collection<String> splitByCharacterTypeCamelCase(String string) {
 		if(string == null || string.isBlank())
 			return null;

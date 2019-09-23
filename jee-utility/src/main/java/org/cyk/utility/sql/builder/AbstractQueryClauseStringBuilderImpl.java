@@ -8,8 +8,8 @@ import java.util.List;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl;
-import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.throwable.ThrowableHelper;
 
 public abstract class AbstractQueryClauseStringBuilderImpl extends AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl implements QueryClauseStringBuilder, Serializable {
@@ -18,10 +18,10 @@ public abstract class AbstractQueryClauseStringBuilderImpl extends AbstractFunct
 	@Override
 	protected String __execute__() throws Exception {
 		String format = getFormat();
-		if(__inject__(StringHelper.class).isBlank(format))
+		if(StringHelper.isBlank(format))
 			__inject__(ThrowableHelper.class).throwRuntimeException("Sql query format is required");
 		String keyword = getKeyword();
-		if(__inject__(StringHelper.class).isBlank(keyword))
+		if(StringHelper.isBlank(keyword))
 			__inject__(ThrowableHelper.class).throwRuntimeException("Sql clause keyword is required");
 		Collection<Tuple> tuples = getTuples();
 		if(CollectionHelper.isEmpty(tuples) && Boolean.TRUE.equals(getProperties().getFromPath(Properties.IS,Properties.TUPLE,Properties.REQUIRED)))
@@ -44,7 +44,7 @@ public abstract class AbstractQueryClauseStringBuilderImpl extends AbstractFunct
 	}
 	
 	protected String __execute__(String format,String keyword,Collection<String> arguments) throws Exception {
-		return String.format(format, keyword,__inject__(StringHelper.class).concatenate(arguments, ConstantCharacter.COMA.toString()));
+		return String.format(format, keyword,StringHelper.concatenate(arguments, ConstantCharacter.COMA.toString()));
 	}
 	
 	@Override

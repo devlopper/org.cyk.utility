@@ -8,6 +8,7 @@ import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
 
@@ -38,7 +39,7 @@ public class DurationStringBuilderImpl extends AbstractStringFunctionImpl implem
 			if(__inject__(NumberHelper.class).isGreaterThanZero(duration.getNumberOfMillisecond()))
 				strings.add(duration.getNumberOfMillisecond()+"");
 		}
-		String string = __injectStringHelper__().concatenate(strings,ConstantCharacter.COMA.toString());
+		String string = StringHelper.concatenate(strings,ConstantCharacter.COMA.toString());
 		return string;
 	}
 

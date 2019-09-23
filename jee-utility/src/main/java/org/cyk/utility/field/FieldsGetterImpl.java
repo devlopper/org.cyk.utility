@@ -13,16 +13,16 @@ import java.util.Set;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.string.StringLocation;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.regularexpression.RegularExpressionInstance;
-import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.string.StringLocatable;
 import org.cyk.utility.string.StringLocatables;
-import org.cyk.utility.string.StringLocation;
 
 @Dependent @Deprecated
 public class FieldsGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Fields> implements FieldsGetter, Serializable {
@@ -48,7 +48,7 @@ public class FieldsGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<
 	    	RegularExpressionInstance nameRegularExpression = getNameRegularExpression();
 		    if(nameRegularExpression == null) {
 		    	String token = getToken();
-				if(__inject__(StringHelper.class).isBlank(token)){
+				if(StringHelper.isBlank(token)){
 					FieldName fieldName = getFieldName();
 					if(fieldName!=null){
 						ValueUsageType valueUsageType = getValueUsageType();
@@ -61,8 +61,8 @@ public class FieldsGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<
 					location = StringLocation.EXAT;
 				for(Field index : collection){
 					Boolean add = Boolean.TRUE;
-					if(__inject__(StringHelper.class).isNotBlank(token)){
-						add = __inject__(StringHelper.class).isAtLocation(index.getName(), token, location);				
+					if(StringHelper.isNotBlank(token)){
+						add =StringHelper.isAtLocation(index.getName(), token, location);				
 					}
 					if(Boolean.TRUE.equals(add))
 						fields = __addField__(fields, index);
@@ -76,12 +76,12 @@ public class FieldsGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<
 	    }else {
 	    	for(StringLocatable indexNameToken : nameTokens.get()) {
 	    		String string = indexNameToken.getString();
-	    		if(__inject__(StringHelper.class).isNotBlank(string)){
+	    		if(StringHelper.isNotBlank(string)){
 	    			StringLocation location = indexNameToken.getLocation();
 					if(location == null)
 						location = StringLocation.EXAT;
 		    		for(Field indexField : collection)
-		    			if(__inject__(StringHelper.class).isAtLocation(indexField.getName(), string, location))
+		    			if(StringHelper.isAtLocation(indexField.getName(), string, location))
 		    				fields = __addField__(fields, indexField);	
 	    		}
 	    	}
@@ -203,7 +203,7 @@ public class FieldsGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<
 	
 	@Override
 	public FieldsGetter addNameToken(String string, StringLocation location) {
-		if(__injectStringHelper__().isNotBlank(string))
+		if(StringHelper.isNotBlank(string))
 			addNameTokens(__inject__(StringLocatable.class).setString(string).setLocation(location));
 		return this;
 	}

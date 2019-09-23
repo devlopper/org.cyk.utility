@@ -4,7 +4,7 @@ import java.nio.file.Path;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.collection.CollectionInstance;
-import org.cyk.utility.string.Strings;
+import org.cyk.utility.__kernel__.string.Strings;
 
 public interface Paths extends CollectionInstance<Path> {
 

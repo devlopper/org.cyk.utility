@@ -13,10 +13,10 @@ import org.cyk.utility.__kernel__.annotation.Generatable;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.log.LogLevel;
-import org.cyk.utility.string.StringHelper;
-import org.cyk.utility.string.Strings;
 
 @ApplicationScoped
 public class FieldInstancesRuntimeImpl extends AbstractObject implements FieldInstancesRuntime,Serializable {
@@ -29,7 +29,7 @@ public class FieldInstancesRuntimeImpl extends AbstractObject implements FieldIn
 		Log log = __inject__(Log.class).setLevel(LogLevel.TRACE);
 		FieldInstance instance = null;
 		String path = org.cyk.utility.__kernel__.field.FieldHelper.join(paths);
-		if(klass!=null && __inject__(StringHelper.class).isNotBlank(path)) {
+		if(klass!=null && StringHelper.isNotBlank(path)) {
 			Strings fieldNames = __inject__(Strings.class).add(org.cyk.utility.__kernel__.field.FieldHelper.disjoin(path));
 			instance = getInstances(Boolean.TRUE).get(klass,path);
 			if(instance == null) {

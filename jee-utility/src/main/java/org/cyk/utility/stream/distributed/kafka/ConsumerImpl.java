@@ -9,7 +9,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.cyk.utility.stream.distributed.AbstractConsumerImpl;
-import org.cyk.utility.string.Strings;
+import org.cyk.utility.__kernel__.string.Strings;
 
 @Dependent
 public class ConsumerImpl extends AbstractConsumerImpl implements Serializable {

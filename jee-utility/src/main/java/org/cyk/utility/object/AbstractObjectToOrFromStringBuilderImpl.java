@@ -3,8 +3,8 @@ package org.cyk.utility.object;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.string.Strings;
 
 public abstract class AbstractObjectToOrFromStringBuilderImpl<OUTPUT> extends AbstractFunctionWithPropertiesAsInputImpl<OUTPUT> implements ObjectToOrFromStringBuilder<OUTPUT>,Serializable {
 	private static final long serialVersionUID = 1L;

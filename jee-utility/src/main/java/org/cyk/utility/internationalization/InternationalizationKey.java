@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.string.Case;
+import org.cyk.utility.__kernel__.string.Case;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Locale;
 
 import org.cyk.utility.function.FunctionWithPropertiesAsInputAndStringAsOutput;
-import org.cyk.utility.string.Case;
+import org.cyk.utility.__kernel__.string.Case;
 
 //TODO use sinleton helper to reduce memory 
 @Deprecated

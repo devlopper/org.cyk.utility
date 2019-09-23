@@ -6,7 +6,8 @@ import java.util.regex.Pattern;
 import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
-import org.cyk.utility.string.Strings;
+import org.cyk.utility.__kernel__.string.RegularExpressionHelper;
+import org.cyk.utility.__kernel__.string.Strings;
 
 @Dependent
 public class RegularExpressionInstanceImpl extends AbstractObject implements RegularExpressionInstance,Serializable {
@@ -33,7 +34,7 @@ public class RegularExpressionInstanceImpl extends AbstractObject implements Reg
 	public Boolean match(String string) {
 		if(pattern == null && string!=null)
 			pattern = Pattern.compile(expression);
-		return pattern == null ? Boolean.FALSE : __inject__(RegularExpressionHelper.class).match(string, pattern);
+		return pattern == null ? Boolean.FALSE : RegularExpressionHelper.match(string, pattern);
 	}
 	
 	@Override

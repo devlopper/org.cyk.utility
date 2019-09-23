@@ -6,7 +6,7 @@ import java.util.Locale;
 import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.map.AbstractMapInstanceImpl;
-import org.cyk.utility.string.Case;
+import org.cyk.utility.__kernel__.string.Case;
 
 @Dependent
 public class InternationalizationStringMapImpl extends AbstractMapInstanceImpl<String, InternationalizationString> implements InternationalizationStringMap,Serializable {

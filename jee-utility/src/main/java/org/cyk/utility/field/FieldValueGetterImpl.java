@@ -14,11 +14,12 @@ import org.apache.commons.lang3.reflect.MethodUtils;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.field.FieldName;
+import org.cyk.utility.__kernel__.string.Case;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.log.Log;
-import org.cyk.utility.string.Case;
-import org.cyk.utility.string.StringHelper;
+
 
 @Dependent @Deprecated
 public class FieldValueGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Object> implements FieldValueGetter, Serializable {
@@ -38,7 +39,7 @@ public class FieldValueGetterImpl extends AbstractFunctionWithPropertiesAsInputI
 		}else {
 			if(object!=null){
 				if(field == null) {
-					String methodName = "get"+__inject__(StringHelper.class).applyCase(getFieldName(), Case.FIRST_CHARACTER_UPPER);
+					String methodName = "get"+StringHelper.applyCase(getFieldName(), Case.FIRST_CHARACTER_UPPER);
 					Method method = MethodUtils.getAccessibleMethod(object.getClass(), methodName);
 					if(method!=null)
 						try {

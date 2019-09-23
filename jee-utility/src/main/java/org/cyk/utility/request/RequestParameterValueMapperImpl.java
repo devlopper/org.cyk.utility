@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterNameStringBuilder;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterValueMatrix;
@@ -67,7 +68,7 @@ public class RequestParameterValueMapperImpl extends AbstractFunctionWithPropert
 				}
 			}
 			*/
-			if(__injectStringHelper__().isNotBlank(parameterValue)) {
+			if(StringHelper.isNotBlank(parameterValue)) {
 				if(__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setNameAsActionClass().execute().getOutput().equals(parameterName)) {
 					value = __getSystemAction__(parameterValue,UniformResourceIdentifierParameterNameStringBuilder.Name.ACTION_IDENTIFIER);					
 					if(value!=null) {

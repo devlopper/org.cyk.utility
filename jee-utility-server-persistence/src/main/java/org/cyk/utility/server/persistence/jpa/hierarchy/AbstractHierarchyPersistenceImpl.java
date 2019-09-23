@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.string.Case;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.clazz.ClassInstance;
@@ -17,7 +19,6 @@ import org.cyk.utility.server.persistence.PersistenceFunctionReader;
 import org.cyk.utility.server.persistence.PersistenceQueryIdentifierStringBuilder;
 import org.cyk.utility.server.persistence.query.PersistenceQueryContext;
 import org.cyk.utility.server.persistence.query.filter.Filter;
-import org.cyk.utility.string.Case;
 
 public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends AbstractHierarchy<ENTITY>,ENTITY extends AbstractIdentifiedByString<?,?>,HIERARCHIES extends Hierarchies<HIERARCHY,ENTITY>> extends AbstractPersistenceEntityImpl<HIERARCHY> implements HierarchyPersistence<HIERARCHY,ENTITY, HIERARCHIES>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -47,7 +48,7 @@ public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends Abstrac
 	protected void addQueryCollectInstancesReadByParentsOrChildren(String queryIdentifier,Field identifierField,String parentOrChildFieldName) {
 		if(identifierField != null) {
 			addQueryCollectInstances(queryIdentifier, String.format("SELECT tuple FROM %s tuple WHERE tuple.%s.%s IN :%s", __getTupleName__()
-					,parentOrChildFieldName,identifierField.getName(),parentOrChildFieldName+__injectStringHelper__().applyCase(identifierField.getName(), Case.FIRST_CHARACTER_UPPER))+"s");
+					,parentOrChildFieldName,identifierField.getName(),parentOrChildFieldName+StringHelper.applyCase(identifierField.getName(), Case.FIRST_CHARACTER_UPPER))+"s");
 		}
 	}
 	

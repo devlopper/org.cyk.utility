@@ -7,8 +7,8 @@ import java.security.NoSuchAlgorithmException;
 import javax.enterprise.context.ApplicationScoped;
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.helper.AbstractHelper;
-import org.cyk.utility.string.StringHelperImpl;
 
 @ApplicationScoped
 public class ByteHelperImpl extends AbstractHelper implements ByteHelper,Serializable {
@@ -17,7 +17,7 @@ public class ByteHelperImpl extends AbstractHelper implements ByteHelper,Seriali
 	public static String __buildMessageDigest__(byte[] bytes,String algorithm) {
 		if(bytes == null || bytes.length == 0)
 			return null;
-		if(StringHelperImpl.__isBlank__(algorithm))
+		if(StringHelper.isBlank(algorithm))
 			algorithm = "SHA-1";
 		MessageDigest messageDigest;
 		try {

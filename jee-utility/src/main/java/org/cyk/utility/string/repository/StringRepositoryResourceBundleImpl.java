@@ -9,15 +9,15 @@ import java.util.Locale;
 import javax.enterprise.context.ApplicationScoped;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.string.Case;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.locale.LocaleHelper;
-import org.cyk.utility.string.Case;
-import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.value.ValueHelper;
 
-@ApplicationScoped
+@ApplicationScoped @Deprecated
 public class StringRepositoryResourceBundleImpl extends AbstractStringRepositoryImpl implements StringRepositoryResourceBundle,Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -115,7 +115,7 @@ public class StringRepositoryResourceBundleImpl extends AbstractStringRepository
 					if(StringUtils.startsWith(value,DO_NOT_PROCESS_TAG_START) && StringUtils.endsWith(value,DO_NOT_PROCESS_TAG_END)){
 						value = StringUtils.substringBetween(value, DO_NOT_PROCESS_TAG_START, DO_NOT_PROCESS_TAG_END);
 					}else{
-						value = __inject__(StringHelper.class).applyCase(value, aCase);
+						value =StringHelper.applyCase(value, aCase);
 					}
 					
 					if(properties.getResourceBundleKeyValueFoundListener() instanceof ResourceBundleKeyValueFoundListener)

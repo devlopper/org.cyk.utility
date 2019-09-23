@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.server.persistence.query.PersistenceQueryRepository;
-import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.system.AbstractSystemFunctionServerImpl;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.layer.SystemLayer;
@@ -33,12 +33,12 @@ public abstract class AbstractPersistenceFunctionImpl extends AbstractSystemFunc
 	protected final void __execute__(SystemAction action) {
 		String queryIdentifier = (String) getQueryIdentifier();
 		String queryValue = getQueryValue();
-		if(__inject__(StringHelper.class).isBlank(queryIdentifier) && __inject__(StringHelper.class).isBlank(queryValue)){
+		if(StringHelper.isBlank(queryIdentifier) &&StringHelper.isBlank(queryValue)){
 			__executeQuery__(action);		
 		}else {
 			PersistenceQuery persistenceQuery = __inject__(PersistenceQueryRepository.class).getBySystemIdentifier(queryIdentifier);
 			if(persistenceQuery == null){
-				if(__inject__(StringHelper.class).isBlank(queryValue))
+				if(StringHelper.isBlank(queryValue))
 					__injectThrowableHelper__().throwRuntimeException("persistence query with identifier "+queryIdentifier+" not found.");	
 				persistenceQuery = new PersistenceQuery().setValue(queryValue).setResultClass(getQueryResultClass());	
 			}

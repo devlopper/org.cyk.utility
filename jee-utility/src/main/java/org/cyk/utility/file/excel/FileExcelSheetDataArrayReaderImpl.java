@@ -18,6 +18,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.array.ArrayInstanceTwoDimensionString;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.number.Interval;
@@ -43,7 +44,7 @@ public class FileExcelSheetDataArrayReaderImpl extends AbstractFunctionWithPrope
 		
 		if(workbook == null) {
 			String workbookFileName = getWorkbookFileName();
-			if(__injectStringHelper__().isNotBlank(workbookFileName))
+			if(StringHelper.isNotBlank(workbookFileName))
 				workbook = WorkbookFactory.create(new File(workbookFileName));
 		}
 		
@@ -51,7 +52,7 @@ public class FileExcelSheetDataArrayReaderImpl extends AbstractFunctionWithPrope
 		
         Sheet sheet = null;
         String sheetName = getSheetName();
-        if(sheet == null && __injectStringHelper__().isNotBlank(sheetName))
+        if(sheet == null && StringHelper.isNotBlank(sheetName))
         	sheet = workbook.getSheet(sheetName);
         
         sheet = __injectValueHelper__().returnOrThrowIfBlank("excel workbook sheet", sheet);

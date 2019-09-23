@@ -13,6 +13,7 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.stacktrace.StackTraceHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.clazz.ClassInstance;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.method.MethodGetter;
@@ -26,7 +27,6 @@ import org.cyk.utility.sql.builder.QueryStringBuilder;
 import org.cyk.utility.sql.builder.QueryStringBuilderSelect;
 import org.cyk.utility.sql.builder.Tuple;
 import org.cyk.utility.sql.jpql.JpqlQualifier;
-import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.system.AbstractSystemServiceProviderImpl;
 import org.cyk.utility.throwable.ThrowableHelper;
 
@@ -84,18 +84,18 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 				Query annotation = index.getAnnotation(Query.class);
 				PersistenceQuery query = new PersistenceQuery();
 				String identifier = annotation.identifier();
-				if(__inject__(StringHelper.class).isBlank(identifier)){
+				if(StringHelper.isBlank(identifier)){
 					identifier = __buildQueryIdentifierString__(index);
 				}
-				if(__inject__(StringHelper.class).isBlank(identifier))
+				if(StringHelper.isBlank(identifier))
 					__inject__(ThrowableHelper.class).throwRuntimeException("Query identifier is required.");
 				query.setIdentifier(identifier);
 				
 				String value = annotation.value();
-				if(__inject__(StringHelper.class).isBlank(value)){
+				if(StringHelper.isBlank(value)){
 					
 				}
-				if(__inject__(StringHelper.class).isBlank(value))
+				if(StringHelper.isBlank(value))
 					__inject__(ThrowableHelper.class).throwRuntimeException("Query value is required.");
 				query.setValue(value);
 				
@@ -130,7 +130,7 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	
 	/*
 	protected void addDerivedQueryIdentifier(Object from,Object value){
-		if(__inject__(StringHelper.class).isNotBlank((String)from) && __inject__(StringHelper.class).isNotBlank((String)value)){
+		if(StringHelper.isNotBlank((String)from) &&StringHelper.isNotBlank((String)value)){
 			if(derivedQueryIdentifierMap == null)
 				derivedQueryIdentifierMap = new HashMap<Object, Set<Object>>();
 			Set<Object> values = derivedQueryIdentifierMap.get(from);
@@ -424,7 +424,7 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 				name = classInstance.getTupleName();
 			}
 			
-			if(__inject__(StringHelper.class).isBlank(name))
+			if(StringHelper.isBlank(name))
 				name = klass.getSimpleName();
 		}
 		return name;

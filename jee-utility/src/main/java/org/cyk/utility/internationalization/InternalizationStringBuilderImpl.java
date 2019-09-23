@@ -11,9 +11,10 @@ import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.string.Case;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl;
-import org.cyk.utility.string.Case;
-import org.cyk.utility.string.Strings;
 import org.cyk.utility.string.repository.StringRepositoryResourceBundle;
 import org.cyk.utility.system.exception.EntityNotFoundException;
 import org.cyk.utility.system.exception.ServiceNotFoundException;
@@ -33,11 +34,11 @@ public class InternalizationStringBuilderImpl extends AbstractFunctionWithProper
 		String result = null;
 		String key = getKey();
 		Collection<Object> parameters = getParameters();
-		if(__injectStringHelper__().isBlank(key)) {
+		if(StringHelper.isBlank(key)) {
 			InternalizationKeyStringBuilder keyBuilder = getKeyBuilder();
 			if(keyBuilder!=null)
 				key = keyBuilder.execute().getOutput();
-			if(__injectStringHelper__().isNotBlank(key)) {
+			if(StringHelper.isNotBlank(key)) {
 				if(keyBuilder.getValue() instanceof UnknownHostException) {
 					if(parameters == null)
 						parameters = new ArrayList<Object>();
@@ -69,7 +70,7 @@ public class InternalizationStringBuilderImpl extends AbstractFunctionWithProper
 				}				
 			}
 		}
-		if(__injectStringHelper__().isBlank(key)) {
+		if(StringHelper.isBlank(key)) {
 			result = "##??KEY_NOT_DEF??##";
 		}else {
 			result = null;
@@ -84,33 +85,33 @@ public class InternalizationStringBuilderImpl extends AbstractFunctionWithProper
 			//Build cache identifier from properties
 			
 			//2 - user
-			if(__injectStringHelper__().isBlank(result))
+			if(StringHelper.isBlank(result))
 				result = null;
 			
 			//3 - database
-			if(__injectStringHelper__().isBlank(result))
+			if(StringHelper.isBlank(result))
 				result = null;
 			
 			//4 - bundles
-			if(__injectStringHelper__().isBlank(result))
+			if(StringHelper.isBlank(result))
 				result = __inject__(StringRepositoryResourceBundle.class).getOne(properties);
 			
 			//5 - derive from related
-			if(__injectStringHelper__().isBlank(result)) {
+			if(StringHelper.isBlank(result)) {
 				Collection<Strings> related = __inject__(InternalizationKeyRelatedStringsBuilder.class).setKey(key).execute().getOutput();
 				if(CollectionHelper.isNotEmpty(related)) {
 					for(Strings index : related) {
 						InternalizationPhraseBuilder phraseBuilder = __inject__(InternalizationPhraseBuilder.class);
 						phraseBuilder.addStringsByKeys(CollectionHelper.cast(Object.class, index.get()));
 						result = phraseBuilder.execute().getOutput();
-						if(__injectStringHelper__().isNotBlank(result))
+						if(StringHelper.isNotBlank(result))
 							break;
 					}
 				}
 			}
 			
 			//
-			if(__injectStringHelper__().isBlank(result)) {
+			if(StringHelper.isBlank(result)) {
 				result = "##??"+key+"??##";
 			}
 			

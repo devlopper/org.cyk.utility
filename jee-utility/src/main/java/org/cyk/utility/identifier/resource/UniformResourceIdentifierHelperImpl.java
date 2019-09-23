@@ -13,16 +13,16 @@ import java.util.Map;
 import javax.enterprise.context.ApplicationScoped;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
-import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.string.Case;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.network.protocol.ProtocolHelperImpl;
 import org.cyk.utility.number.NumberHelperImpl;
 import org.cyk.utility.request.RequestHelperImpl;
-import org.cyk.utility.string.Case;
-import org.cyk.utility.string.StringHelperImpl;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
@@ -96,7 +96,7 @@ public class UniformResourceIdentifierHelperImpl extends AbstractHelper implemen
 	/* URI */
 	
 	public static String __getComponent__(Component component,String string) {
-		if(component == null || StringHelperImpl.__isBlank__(string))
+		if(component == null || StringHelper.isBlank(string))
 			return null;
 		String value = null;	
 		URI uri = URI.create(string);
@@ -120,11 +120,11 @@ public class UniformResourceIdentifierHelperImpl extends AbstractHelper implemen
 			return null;
 		Collection<String> keysValues = null;
 		for(Map.Entry<String,List<String>> entry : parameters.entrySet()) {
-			if(StringHelperImpl.__isNotBlank__(entry.getKey()) && CollectionHelper.isNotEmpty(entry.getValue())) {
+			if(StringHelper.isNotBlank(entry.getKey()) && CollectionHelper.isNotEmpty(entry.getValue())) {
 				if(keysValues == null)
 					keysValues = new ArrayList<>();
 				//FIXME , this is not a standard way to do
-				keysValues.add(entry.getKey()+"="+StringHelperImpl.__concatenate__(entry.getValue(), ","));
+				keysValues.add(entry.getKey()+"="+StringHelper.concatenate(entry.getValue(), ","));
 			}
 		}
 		return keysValues == null || keysValues.isEmpty() ? null : StringUtils.join(keysValues,"&");
@@ -138,13 +138,13 @@ public class UniformResourceIdentifierHelperImpl extends AbstractHelper implemen
 			String name = null;
 			if(index.getKey()!=null)
 				name = __buildParameterName__(index.getKey());
-			if(StringHelperImpl.__isNotBlank__(name)) {
+			if(StringHelper.isNotBlank(name)) {
 				List<String> values = new ArrayList<>();
 				String value = null;
 				if(index.getValue()!=null) {
 					for(Object object : index.getValue()) {
 						value = __buildParameterValue__(object);
-						if(StringHelperImpl.__isNotBlank__(value)) {
+						if(StringHelper.isNotBlank(value)) {
 							if(values == null)
 								values = new ArrayList<>();
 							values.add(value);
@@ -227,25 +227,25 @@ public class UniformResourceIdentifierHelperImpl extends AbstractHelper implemen
 	public static String __build__(String scheme,String user,String password,String host,Integer port,String path,String query,String fragment,String model) {	
 		String uniformResourceIdentifier = ConstantEmpty.STRING;
 		//scheme
-		if(StringHelperImpl.__isBlank__(scheme))
+		if(StringHelper.isBlank(scheme))
 			scheme = __getComponent__(Component.SCHEME, model);
-		if(StringHelperImpl.__isNotBlank__(scheme))
+		if(StringHelper.isNotBlank(scheme))
 			uniformResourceIdentifier = scheme+"://";
 		//user
-		if(StringHelperImpl.__isBlank__(user))
+		if(StringHelper.isBlank(user))
 			user = __getComponent__(Component.USER, model);		
-		if(StringHelperImpl.__isNotBlank__(user)) {
+		if(StringHelper.isNotBlank(user)) {
 			uniformResourceIdentifier += user;
-			if(StringHelperImpl.__isBlank__(password))
+			if(StringHelper.isBlank(password))
 				password = __getComponent__(Component.PASSWORD, model);		
-			if(StringHelperImpl.__isNotBlank__(password))
+			if(StringHelper.isNotBlank(password))
 				uniformResourceIdentifier += ":"+password;
 			uniformResourceIdentifier += "@";
 		}
 		//host	
-		if(StringHelperImpl.__isBlank__(host))
+		if(StringHelper.isBlank(host))
 			host = __getComponent__(Component.HOST, model);	
-		if(StringHelperImpl.__isNotBlank__(host)) {
+		if(StringHelper.isNotBlank(host)) {
 			uniformResourceIdentifier += host;
 			if(port == null)
 				port = NumberHelperImpl.__getInteger__(__getComponent__(Component.PORT, model));
@@ -253,21 +253,21 @@ public class UniformResourceIdentifierHelperImpl extends AbstractHelper implemen
 				uniformResourceIdentifier += ":"+port;
 		}
 		//path
-		if(StringHelperImpl.__isBlank__(path))
+		if(StringHelper.isBlank(path))
 			path = __getComponent__(Component.PATH, model);	
-		if(StringHelperImpl.__isNotBlank__(path))
+		if(StringHelper.isNotBlank(path))
 			uniformResourceIdentifier += __formatPath__(path);
 
 		//query
-		if(StringHelperImpl.__isBlank__(query))
+		if(StringHelper.isBlank(query))
 			query = __getComponent__(Component.QUERY, model);
-		if(StringHelperImpl.__isNotBlank__(query)) {
+		if(StringHelper.isNotBlank(query)) {
 			uniformResourceIdentifier += "?"+query;
 		}
 		//fragment
-		if(StringHelperImpl.__isBlank__(fragment))
+		if(StringHelper.isBlank(fragment))
 			fragment = __getComponent__(Component.FRAGMENT, model);	
-		if(StringHelperImpl.__isNotBlank__(fragment)) {
+		if(StringHelper.isNotBlank(fragment)) {
 			uniformResourceIdentifier += "#"+fragment;
 		}
 		return uniformResourceIdentifier;
@@ -301,7 +301,7 @@ public class UniformResourceIdentifierHelperImpl extends AbstractHelper implemen
 	/* Path */
 	
 	public static String __formatPath__(String path) {
-		if(StringHelperImpl.__isNotBlank__(path)) {
+		if(StringHelper.isNotBlank(path)) {
 			if(!path.startsWith("/"))
 				path = "/"+path;
 		}
@@ -311,10 +311,10 @@ public class UniformResourceIdentifierHelperImpl extends AbstractHelper implemen
 	
 	public static String __buildPath__(String identifier,String root) {
 		String path = __concatenatePathRoot__(null, root);
-		if(StringHelperImpl.__isNotBlank__(identifier)) {
+		if(StringHelper.isNotBlank(identifier)) {
 			String __path__ = __getPathByIdentifier__(identifier);
-			if(StringHelperImpl.__isNotBlank__(__path__)) {
-				if(StringHelperImpl.__isBlank__(path))
+			if(StringHelper.isNotBlank(__path__)) {
+				if(StringHelper.isBlank(path))
 					path = __path__;
 				else
 					path = path + __formatPath__(__path__);	
@@ -325,7 +325,7 @@ public class UniformResourceIdentifierHelperImpl extends AbstractHelper implemen
 	
 	private static String __concatenatePathRoot__(String path,String root) {		
 		root = ValueHelperImpl.__defaultToIfBlank__(root, PATH_ROOT);	
-		if(StringHelperImpl.__isNotBlank__(root)) {
+		if(StringHelper.isNotBlank(root)) {
 			path = root + (path == null ? ConstantEmpty.STRING : path);
 		}
 		return path;
@@ -390,7 +390,7 @@ public class UniformResourceIdentifierHelperImpl extends AbstractHelper implemen
 		if(systemActionClass == null)
 			return null;
 		Object[] arguments = new Object[2];		
-		arguments[0] = entityClass==null ? IDENTIFIER_ENTITY_TOKEN : StringHelperImpl.__applyCase__(entityClass.getSimpleName().endsWith("Impl") 
+		arguments[0] = entityClass==null ? IDENTIFIER_ENTITY_TOKEN : StringHelper.applyCase(entityClass.getSimpleName().endsWith("Impl") 
 				? StringUtils.substringBefore(entityClass.getSimpleName(), "Impl") : entityClass.getSimpleName(), Case.FIRST_CHARACTER_LOWER);
 		if(Boolean.TRUE.equals(isUseGeneric) && ClassHelper.isInstanceOfOne(systemActionClass,SystemActionCreate.class,SystemActionUpdate.class,SystemActionDelete.class))
 			arguments[1] = IDENTIFIER_EDIT_TOKEN;

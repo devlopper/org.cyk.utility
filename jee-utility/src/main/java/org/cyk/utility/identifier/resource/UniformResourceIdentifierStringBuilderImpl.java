@@ -9,6 +9,7 @@ import javax.enterprise.context.Dependent;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.map.MapHelper;
 import org.cyk.utility.object.ObjectByObjectMap;
 import org.cyk.utility.request.RequestProperty;
@@ -35,35 +36,35 @@ public class UniformResourceIdentifierStringBuilderImpl extends AbstractStringFu
 	@Override
 	protected StringFormat __getFormat__(StringFormat format) {
 		String string = getString();
-		String scheme = __injectStringHelper__().getString(getScheme());
-		if(__injectStringHelper__().isBlank(scheme))
+		String scheme = StringHelper.get(getScheme());
+		if(StringHelper.isBlank(scheme))
 			setScheme(scheme = __getRequestProperty__(RequestProperty.SCHEME,string));
 		
-		String host = __injectStringHelper__().getString(getHost());
-		if(__injectStringHelper__().isBlank(host))
+		String host = StringHelper.get(getHost());
+		if(StringHelper.isBlank(host))
 			setHost(host = __getRequestProperty__(RequestProperty.HOST,string));
 
-		String port = __injectStringHelper__().getString(getPort());
-		if(__injectStringHelper__().isBlank(port))
+		String port = StringHelper.get(getPort());
+		if(StringHelper.isBlank(port))
 			setPort(port = __getRequestProperty__(RequestProperty.PORT,string));
 		
 		setFormatArguments(FORMAT_ARGUMENT_HOST_PORT_SEPARATOR,port == null ? ConstantEmpty.STRING : ConstantCharacter.COLON);
 		
-		String context = __injectStringHelper__().getString(getContext());
-		if(__injectStringHelper__().isBlank(context))
+		String context = StringHelper.get(getContext());
+		if(StringHelper.isBlank(context))
 			setContext(context = __getRequestProperty__(RequestProperty.CONTEXT,string));
 		
 		Object pathObject = getPath();
-		if(pathObject == null && __injectStringHelper__().isNotBlank(string))
+		if(pathObject == null && StringHelper.isNotBlank(string))
 			setPath(pathObject = __getRequestProperty__(RequestProperty.PATH,string));
-		String path = __injectValueHelper__().defaultToIfNull(__injectStringHelper__().getString(getPath()), ConstantEmpty.STRING) ;
+		String path = __injectValueHelper__().defaultToIfNull(StringHelper.get(getPath()), ConstantEmpty.STRING) ;
 		
-		if(__injectStringHelper__().isNotBlank(context))
+		if(StringHelper.isNotBlank(context))
 			path = context + ConstantCharacter.SLASH + path;
 		
 		while(StringUtils.contains(path, "//"))
 			path = StringUtils.replace((String)path, "//", "/");
-		path = __injectStringHelper__().removeToBeginIfDoesStartWith(path, ConstantCharacter.SLASH);
+		path = StringHelper.removeToBeginIfDoesStartWith(path, ConstantCharacter.SLASH);
 		
 		ObjectByObjectMap parameterMap = getParameterMap();
 		if(Boolean.TRUE.equals(__inject__(MapHelper.class).isNotEmpty(parameterMap))) {
@@ -77,7 +78,7 @@ public class UniformResourceIdentifierStringBuilderImpl extends AbstractStringFu
 					else
 						name = index.getKey().toString();
 				}
-				if(__injectStringHelper__().isNotBlank(name)) {
+				if(StringHelper.isNotBlank(name)) {
 					String value = null;
 					if(index.getValue()!=null) {
 						if(index.getValue() instanceof UniformResourceIdentifierParameterValueStringBuilder)
@@ -86,7 +87,7 @@ public class UniformResourceIdentifierStringBuilderImpl extends AbstractStringFu
 							value = index.getValue().toString();
 					}
 					
-					if(__injectStringHelper__().isNotBlank(value)) {
+					if(StringHelper.isNotBlank(value)) {
 						finalParameterMap.set(name,value);	
 					}
 				}
@@ -96,11 +97,11 @@ public class UniformResourceIdentifierStringBuilderImpl extends AbstractStringFu
 		
 		setPath(path);
 		
-		String query = __injectStringHelper__().getString(getQuery());
-		if(__injectStringHelper__().isBlank(query))
+		String query = StringHelper.get(getQuery());
+		if(StringHelper.isBlank(query))
 			setQuery(query = __injectValueHelper__().defaultToIfNull(__getRequestProperty__(RequestProperty.QUERY,string),ConstantEmpty.STRING));
 		
-		setFormatArguments(FORMAT_ARGUMENT_PATH_QUERY_SEPARATOR,Boolean.TRUE.equals(__injectStringHelper__().isBlank(query)) ? ConstantEmpty.STRING : ConstantCharacter.QUESTION_MARK);
+		setFormatArguments(FORMAT_ARGUMENT_PATH_QUERY_SEPARATOR,Boolean.TRUE.equals(StringHelper.isBlank(query)) ? ConstantEmpty.STRING : ConstantCharacter.QUESTION_MARK);
 		
 		return super.__getFormat__(format);
 	}
@@ -108,10 +109,10 @@ public class UniformResourceIdentifierStringBuilderImpl extends AbstractStringFu
 	protected String __getRequestProperty__(RequestProperty property,String string) {
 		String value = null;
 		if(property!=null) {
-			if(__injectStringHelper__().isBlank(string)) {
+			if(StringHelper.isBlank(string)) {
 				Object request = getRequest();
 				if(request!=null)
-					value = __injectStringHelper__().getString(__inject__(RequestPropertyValueGetter.class).setRequest(request).setProperty(property).execute().getOutput());
+					value = StringHelper.get(__inject__(RequestPropertyValueGetter.class).setRequest(request).setProperty(property).execute().getOutput());
 			}else {
 				URI uri = URI.create(string);
 				if(uri!=null) {
@@ -125,7 +126,7 @@ public class UniformResourceIdentifierStringBuilderImpl extends AbstractStringFu
 					case PATH: value = uri.getPath();break;
 					case QUERY: 
 						String query = uri.getQuery();
-						value = __injectStringHelper__().isBlank(query) ? ConstantEmpty.STRING : query;
+						value = StringHelper.isBlank(query) ? ConstantEmpty.STRING : query;
 						break;
 					default: value = null;
 					}		

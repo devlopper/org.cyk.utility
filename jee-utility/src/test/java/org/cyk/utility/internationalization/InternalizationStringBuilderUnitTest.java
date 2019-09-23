@@ -5,7 +5,7 @@ import java.net.UnknownHostException;
 import java.util.List;
 
 import org.cyk.utility.ApplicationScopeLifeCycleListener;
-import org.cyk.utility.string.Case;
+import org.cyk.utility.__kernel__.string.Case;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionProcess;
 import org.cyk.utility.system.action.SystemActionRead;

@@ -12,7 +12,7 @@ import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.string.Strings;
+import org.cyk.utility.__kernel__.string.Strings;
 
 @Dependent @Deprecated
 public class PathsGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Paths> implements PathsGetter,Serializable {

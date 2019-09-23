@@ -24,8 +24,6 @@ import org.cyk.utility.map.MapHelper;
 import org.cyk.utility.map.MapHelperImpl;
 import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.number.NumberHelperImpl;
-import org.cyk.utility.string.StringHelper;
-import org.cyk.utility.string.StringHelperImpl;
 import org.cyk.utility.throwable.ThrowableHelper;
 import org.cyk.utility.throwable.ThrowableHelperImpl;
 import org.cyk.utility.type.TypeHelper;
@@ -267,7 +265,7 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 	}
 	
 	protected void throwRuntimeExceptionIfIsBlank(String string,String name) {
-		if(__inject__(StringHelper.class).isBlank(string))
+		if(string == null || string.isBlank())
 			__injectThrowableHelper__().throwRuntimeException(name+" must not be blank");
 	}
 	
@@ -282,10 +280,6 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 	}
 	
 	/**/
-	
-	protected static StringHelper __injectStringHelper__(){
-		return StringHelperImpl.getInstance();
-	}
 	
 	protected static ValueHelper __injectValueHelper__(){
 		return ValueHelperImpl.getInstance();

@@ -19,7 +19,6 @@ import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.network.MailHelper;
 import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.stream.distributed.Topic;
-import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.system.SystemFunction;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.throwable.ThrowableHelper;
@@ -63,10 +62,6 @@ public abstract class AbstractServiceProviderImpl extends AbstractSingleton impl
 	
 	protected ThrowableHelper __injectThrowableHelper__(){
 		return __inject__(ThrowableHelper.class);
-	}
-	
-	protected StringHelper __injectStringHelper__(){
-		return __inject__(StringHelper.class);
 	}
 	
 	protected FieldValueSetter __injectFieldValueSetter__(){

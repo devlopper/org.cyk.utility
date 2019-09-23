@@ -6,6 +6,7 @@ import javax.enterprise.context.Dependent;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.field.FieldName;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
 import org.cyk.utility.system.action.SystemAction;
 
@@ -33,11 +34,11 @@ public class UniformResourceIdentifierParameterNameStringBuilderImpl extends Abs
 				value = enumeration.name().toLowerCase();
 			}
 			
-			if(__injectStringHelper__().isNotBlank(value)) {
+			if(StringHelper.isNotBlank(value)) {
 				value = StringUtils.remove(value, "_");
 			}
 				
-			if(__injectStringHelper__().isBlank(value))
+			if(StringHelper.isBlank(value))
 				__injectThrowableHelper__().throwRuntimeException("Parameter name cannot be found for <<"+name+">>");
 		}
 		return value;

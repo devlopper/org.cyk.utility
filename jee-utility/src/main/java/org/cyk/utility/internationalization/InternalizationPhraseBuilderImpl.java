@@ -10,9 +10,10 @@ import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
+import org.cyk.utility.__kernel__.string.Case;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
-import org.cyk.utility.string.Case;
-import org.cyk.utility.string.StringHelper;
+
 
 @Dependent @Deprecated
 public class InternalizationPhraseBuilderImpl extends AbstractStringFunctionImpl implements InternalizationPhraseBuilder,Serializable {
@@ -40,8 +41,8 @@ public class InternalizationPhraseBuilderImpl extends AbstractStringFunctionImpl
 		Case aCase = getCase();
 		//if(aCase == null)
 		//	aCase = Case.FIRST_CHARACTER_UPPER;
-		String string = __injectStringHelper__().concatenate(stringsCollection,SEPARATOR);
-		string = __inject__(StringHelper.class).applyCase(string, aCase);	
+		String string = StringHelper.concatenate(stringsCollection,SEPARATOR);
+		string =StringHelper.applyCase(string, aCase);	
 		return string;
 	}
 	

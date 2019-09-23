@@ -5,12 +5,12 @@ import java.util.Collection;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
-import org.cyk.utility.__kernel__.collection.CollectionHelper;
-import org.cyk.utility.field.FieldInstancesRuntime;
-import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
+import org.cyk.utility.field.FieldInstancesRuntime;
 
 @Dependent
 public class FilterImpl extends AbstractObject implements Filter,Serializable {
@@ -28,7 +28,7 @@ public class FilterImpl extends AbstractObject implements Filter,Serializable {
 		if(CollectionHelper.isNotEmpty(fields))
 			for(Field index : fields.get()) {
 				if(index.getInstance() == null) {
-					if(__inject__(StringHelper.class).isNotBlank(index.getName()))
+					if(StringHelper.isNotBlank(index.getName()))
 						index.setInstance(__inject__(FieldInstancesRuntime.class).get(this.klass, index.getName()));
 				}
 			}

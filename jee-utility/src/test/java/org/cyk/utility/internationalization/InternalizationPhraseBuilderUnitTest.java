@@ -1,7 +1,7 @@
 package org.cyk.utility.internationalization;
 
 import org.cyk.utility.ApplicationScopeLifeCycleListener;
-import org.cyk.utility.string.Case;
+import org.cyk.utility.__kernel__.string.Case;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

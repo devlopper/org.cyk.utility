@@ -8,6 +8,7 @@ import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
 import org.cyk.utility.string.StringFormat;
 
@@ -31,7 +32,7 @@ public class OperatingSystemCommandBuilderImpl extends AbstractStringFunctionImp
 		Boolean isTerminalStartable = __injectValueHelper__().defaultToIfNull(getIsTerminalStartable(), Boolean.FALSE);
 		if(Boolean.TRUE.equals(isTerminalStartable)) {
 			String title = getTerminalTitle();
-			if(__injectStringHelper__().isBlank(title))
+			if(StringHelper.isBlank(title))
 				title = "Terminal for <<"+command+">>";
 			options.add("start \""+title+"\"");
 			
@@ -45,12 +46,12 @@ public class OperatingSystemCommandBuilderImpl extends AbstractStringFunctionImp
 		}
 		
 		String workingDirectory = getWorkingDirectory();
-		if(__injectStringHelper__().isNotBlank(workingDirectory))
+		if(StringHelper.isNotBlank(workingDirectory))
 			options.add("/d \""+workingDirectory+"\"");
 		
 		
 		if(CollectionHelper.isNotEmpty(options))
-			command = __injectStringHelper__().concatenate(options,ConstantCharacter.SPACE.toString()) + ConstantCharacter.SPACE + command;
+			command = StringHelper.concatenate(options,ConstantCharacter.SPACE.toString()) + ConstantCharacter.SPACE + command;
 		
 		format.setArguments(0,command);
 		return super.__getFormat__(format);

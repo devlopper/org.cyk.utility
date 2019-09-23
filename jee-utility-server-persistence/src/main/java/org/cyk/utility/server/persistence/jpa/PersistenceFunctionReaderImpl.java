@@ -8,10 +8,12 @@ import javax.enterprise.context.Dependent;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-import org.cyk.utility.__kernel__.computation.ComparisonOperator;
-import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.field.FieldName;
+import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.field.FieldNameGetter;
 import org.cyk.utility.server.persistence.AbstractPersistenceFunctionReaderImpl;
 import org.cyk.utility.server.persistence.PersistenceFunctionReader;
@@ -23,7 +25,6 @@ import org.cyk.utility.sql.jpql.builder.QueryStringBuilderSelectJpql;
 import org.cyk.utility.sql.jpql.builder.QueryWherePredicateStringBuilderEqualJpql;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionRead;
-import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 @Dependent
 public class PersistenceFunctionReaderImpl extends AbstractPersistenceFunctionReaderImpl implements PersistenceFunctionReader,Serializable {
@@ -72,7 +73,7 @@ public class PersistenceFunctionReaderImpl extends AbstractPersistenceFunctionRe
 		EntityManager entityManager = __inject__(JavaPersistenceApiHelper.class).getEntityManager(getProperties());
 		String identifier = persistenceQuery.getIdentifier() == null ? null : persistenceQuery.getIdentifier().toString();
 		Class<?> resultClass = persistenceQuery.getResultClass();
-		TypedQuery<?> typedQuery = __injectStringHelper__().isBlank(identifier) ? entityManager.createQuery(persistenceQuery.getValue(), resultClass) 
+		TypedQuery<?> typedQuery = StringHelper.isBlank(identifier) ? entityManager.createQuery(persistenceQuery.getValue(), resultClass) 
 				: entityManager.createNamedQuery(identifier, resultClass);
 		
 		//Parameters

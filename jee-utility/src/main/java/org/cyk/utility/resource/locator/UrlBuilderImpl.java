@@ -5,6 +5,7 @@ import java.net.URL;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
 @Dependent
@@ -19,7 +20,7 @@ public class UrlBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<UR
 		UniformResourceLocatorStringBuilder string = getString();
 		if(string!=null) {
 			String urlString = string.execute().getOutput();
-			url = __injectStringHelper__().isBlank(urlString) ? null : new URL(urlString);
+			url = StringHelper.isBlank(urlString) ? null : new URL(urlString);
 		}
 		return url;
 	}

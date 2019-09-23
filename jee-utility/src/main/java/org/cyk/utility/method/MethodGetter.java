@@ -4,8 +4,8 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Set;
 
+import org.cyk.utility.__kernel__.string.StringLocation;
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
-import org.cyk.utility.string.StringLocation;
 
 public interface MethodGetter extends FunctionWithPropertiesAsInput<Collection<Method>> {
 

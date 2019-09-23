@@ -13,9 +13,10 @@ import javax.validation.ConstraintViolationException;
 
 import org.assertj.core.util.Arrays;
 import org.cyk.utility.__kernel__.AbstractRunnableImpl;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.assertion.AssertionHelper;
-import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
 import org.cyk.utility.throwable.ThrowableHelper;
 
@@ -99,7 +100,7 @@ public abstract class AbstractTestImpl extends AbstractFunctionWithPropertiesAsI
 	}
 	
 	protected String __getName__(String name) {
-		if(__injectStringHelper__().isBlank(name)) {
+		if(StringHelper.isBlank(name)) {
 			name = getClass().getSimpleName();
 		}
 		return name;

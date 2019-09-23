@@ -1,4 +1,4 @@
-package org.cyk.utility.string;
+package org.cyk.utility.__kernel__.string;
 
 public enum StringLocation{
 	START

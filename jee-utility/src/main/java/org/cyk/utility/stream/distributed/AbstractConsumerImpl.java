@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.cyk.utility.string.Strings;
+import org.cyk.utility.__kernel__.string.Strings;
 
 public abstract class AbstractConsumerImpl extends AbstractProducerConsumerImpl implements Consumer,Serializable {
 	private static final long serialVersionUID = 1L;

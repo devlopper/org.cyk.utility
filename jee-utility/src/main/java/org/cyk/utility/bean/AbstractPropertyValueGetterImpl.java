@@ -5,8 +5,8 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.string.Strings;
 
 public abstract class AbstractPropertyValueGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Object> implements PropertyValueGetter,Serializable {
 	private static final long serialVersionUID = 1L;

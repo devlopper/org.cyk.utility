@@ -15,8 +15,9 @@ import javax.enterprise.context.Dependent;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.string.StringLocation;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.string.StringLocation;
 
 @Dependent
 public class MethodGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Collection<Method>> implements MethodGetter, Serializable {
@@ -42,7 +43,7 @@ public class MethodGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<
 				}
 				if(!overridden) {
 					//index.geta
-					if(__injectStringHelper__().isBlank(token) || index.getName().equals(token))
+					if(StringHelper.isBlank(token) || index.getName().equals(token))
 						methods.add(index);
 				}
 			}
@@ -59,8 +60,8 @@ public class MethodGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<
 		
 		for(Method index : methods){
 			Boolean add = Boolean.TRUE;
-			/*if(__inject__(StringHelper.class).isNotBlank(token)){
-				add = __inject__(StringHelper.class).isAtLocation(index.getName(), token, location);				
+			/*if(StringHelper.isNotBlank(token)){
+				add =StringHelper.isAtLocation(index.getName(), token, location);				
 			}*/
 			if(Boolean.TRUE.equals(add)){
 				if(collection == null)

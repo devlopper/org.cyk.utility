@@ -13,8 +13,9 @@ import java.util.TreeMap;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.array.ArrayHelper;
-import org.cyk.utility.string.StringHelper;
+
 
 public abstract class AbstractMapInstanceImpl<KEY,VALUE> extends AbstractObject implements MapInstance<KEY,VALUE>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -149,14 +150,14 @@ public abstract class AbstractMapInstanceImpl<KEY,VALUE> extends AbstractObject 
 	public String getRepresentationAsString() {
 		Collection<String> strings = new ArrayList<>();
 		Collection<Map.Entry<KEY, VALUE>> entries = getEntries();
-		String entrySeparator = __inject__(StringHelper.class).getString(getEntrySeparator());
+		String entrySeparator =StringHelper.get(getEntrySeparator());
 		if(entries!=null) {
-			String keyValueSeparator = __inject__(StringHelper.class).getString(getKeyValueSeparator());
+			String keyValueSeparator =StringHelper.get(getKeyValueSeparator());
 			for(Map.Entry<KEY, VALUE> index : entries) {
 				strings.add(index.getKey()+keyValueSeparator+index.getValue());
 			}
 		}
-		return __inject__(StringHelper.class).concatenate(strings, entrySeparator);
+		return StringHelper.concatenate(strings, entrySeparator);
 	}
 
 	

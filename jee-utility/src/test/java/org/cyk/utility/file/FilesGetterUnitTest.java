@@ -6,7 +6,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
-import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.time.DurationStringBuilder;
 import org.junit.jupiter.api.Disabled;
@@ -66,7 +66,7 @@ public class FilesGetterUnitTest extends AbstractWeldUnitTest {
 	@Test
 	public void checkPerformance_computeChecksum_sequentially() {
 		String directory = System.getProperty("org.cyk.utility.file.FilesGetterUnitTest.performance.directory");
-		if(__inject__(StringHelper.class).isNotBlank(directory)) {
+		if(StringHelper.isNotBlank(directory)) {
 			System.out.println("Performance(Compute checksum) testing with directory : "+directory);
 			FilesGetter filesGetter = __inject__(FilesGetter.class);
 			filesGetter.getPathsGetter(Boolean.TRUE).addDirectories(directory);
@@ -89,7 +89,7 @@ public class FilesGetterUnitTest extends AbstractWeldUnitTest {
 	@Test
 	public void checkPerformance_computeChecksum() {
 		String directory = System.getProperty("org.cyk.utility.file.FilesGetterUnitTest.performance.directory");
-		if(__inject__(StringHelper.class).isNotBlank(directory)) {
+		if(StringHelper.isNotBlank(directory)) {
 			System.out.println("Performance(Compute checksum) testing with directory : "+directory);
 			FilesGetter filesGetter = __inject__(FilesGetter.class);
 			filesGetter.getPathsGetter(Boolean.TRUE).addDirectories(directory);
@@ -106,7 +106,7 @@ public class FilesGetterUnitTest extends AbstractWeldUnitTest {
 	@Test
 	public void checkPerformance_computeBytesAndComputeChecksum() {
 		String directory = System.getProperty("org.cyk.utility.file.FilesGetterUnitTest.performance.directory");
-		if(__inject__(StringHelper.class).isNotBlank(directory)) {
+		if(StringHelper.isNotBlank(directory)) {
 			System.out.println("Performance(Compute checksum) testing with directory : "+directory);
 			Paths paths = __inject__(PathsGetter.class).addDirectories(directory).setIsDirectoryGettable(Boolean.FALSE).setIsFileGettable(Boolean.TRUE).execute().getOutput();
 			System.out.println("Number of files : "+paths.getSize());
@@ -148,7 +148,7 @@ public class FilesGetterUnitTest extends AbstractWeldUnitTest {
 	@Test
 	public void checkPerformance_doNotComputeChecksum() {
 		String directory = System.getProperty("org.cyk.utility.file.FilesGetterUnitTest.performance.directory");
-		if(__inject__(StringHelper.class).isNotBlank(directory)) {
+		if(StringHelper.isNotBlank(directory)) {
 			System.out.println("Performance(Do not compute checksum) testing with directory : "+directory);
 			FilesGetter filesGetter = __inject__(FilesGetter.class);
 			filesGetter.getPathsGetter(Boolean.TRUE).addDirectories(directory);

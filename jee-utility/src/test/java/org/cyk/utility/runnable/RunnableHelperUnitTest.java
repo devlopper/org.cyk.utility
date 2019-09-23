@@ -7,7 +7,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import org.cyk.utility.string.StringHelperImpl;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 
@@ -72,15 +72,15 @@ public class RunnableHelperUnitTest extends AbstractWeldUnitTest {
 		
 		@Override
 		public void run() {
-			if(StringHelperImpl.__isNotBlank__(name))
+			if(StringHelper.isNotBlank(name))
 				System.out.println("Work "+name+" started.");
 			if(duration != null && duration > 0)
 				try {
 					Thread.sleep(duration);
-					if(StringHelperImpl.__isNotBlank__(name))
+					if(StringHelper.isNotBlank(name))
 						System.out.println("Work "+name+" done.");
 				} catch (InterruptedException e) {
-					if(StringHelperImpl.__isNotBlank__(name))
+					if(StringHelper.isNotBlank(name))
 						System.out.println("Work "+name+" interrupted.");
 					else
 						e.printStackTrace();

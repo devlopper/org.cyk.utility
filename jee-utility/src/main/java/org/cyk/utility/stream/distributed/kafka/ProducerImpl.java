@@ -13,7 +13,7 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import org.cyk.utility.stream.distributed.AbstractProducerImpl;
 import org.cyk.utility.stream.distributed.Message;
 import org.cyk.utility.stream.distributed.ProducerCallback;
-import org.cyk.utility.string.Strings;
+import org.cyk.utility.__kernel__.string.Strings;
 
 @Dependent
 public class ProducerImpl extends AbstractProducerImpl implements Serializable {

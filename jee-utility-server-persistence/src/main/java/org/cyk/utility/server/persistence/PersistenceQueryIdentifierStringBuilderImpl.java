@@ -12,8 +12,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.function.Function;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl;
-import org.cyk.utility.string.StringHelper;
+
 
 @Dependent
 public class PersistenceQueryIdentifierStringBuilderImpl extends AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl implements PersistenceQueryIdentifierStringBuilder, Serializable {
@@ -40,13 +41,13 @@ public class PersistenceQueryIdentifierStringBuilderImpl extends AbstractFunctio
 			Boolean isDerivedFromQueryIdentifier = getIsDerivedFromQueryIdentifier();
 			String derivedFromQueryIdentifier = (String)getDerivedFromQueryIdentifier();
 			String classSimpleName = getClassSimpleName();
-			if(__inject__(StringHelper.class).isBlank(classSimpleName)){
+			if(StringHelper.isBlank(classSimpleName)){
 				if(Boolean.TRUE.equals(isDerivedFromQueryIdentifier)){
 					classSimpleName =  StringUtils.substringBefore(derivedFromQueryIdentifier, ".");
 				}
 			}
 			String name = getName();
-			if(__inject__(StringHelper.class).isBlank(name)){
+			if(StringHelper.isBlank(name)){
 				if(Boolean.TRUE.equals(isDerivedFromQueryIdentifier)){
 					name =  StringUtils.substringAfter(derivedFromQueryIdentifier, ".");
 					if(Boolean.TRUE.equals(getIsCountInstances()))

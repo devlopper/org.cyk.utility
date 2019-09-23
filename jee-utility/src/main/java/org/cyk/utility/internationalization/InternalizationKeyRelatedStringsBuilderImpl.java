@@ -9,9 +9,9 @@ import javax.enterprise.context.Dependent;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.string.StringHelper;
-import org.cyk.utility.string.Strings;
 
 @Dependent @Deprecated
 public class InternalizationKeyRelatedStringsBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Collection<Strings>> implements InternalizationKeyRelatedStringsBuilder, Serializable {
@@ -25,7 +25,7 @@ public class InternalizationKeyRelatedStringsBuilderImpl extends AbstractFunctio
 		Object key = getKey();
 		if(key != null) {
 			String keyAsString = __inject__(InternalizationKeyStringBuilder.class).setValue(key).execute().getOutput();
-			if(__inject__(StringHelper.class).isNotBlank(keyAsString)) {
+			if(StringHelper.isNotBlank(keyAsString)) {
 				if(StringUtils.contains(keyAsString, ConstantCharacter.DOT)) {
 					//y.x => x of y
 					for(String index : X_OF_Y) {

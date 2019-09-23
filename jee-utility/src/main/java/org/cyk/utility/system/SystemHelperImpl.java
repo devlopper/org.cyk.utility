@@ -5,8 +5,8 @@ import java.io.Serializable;
 import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.constant.ConstantNull;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.helper.AbstractHelper;
-import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.value.ValueHelper;
 
 @ApplicationScoped
@@ -16,7 +16,7 @@ public class SystemHelperImpl extends AbstractHelper implements SystemHelper, Se
 	@Override
 	public String getProperty(String name,String defaultToIfBlank) {
 		String value = System.getProperty(name);
-		if(__inject__(StringHelper.class).isBlank(value))
+		if(StringHelper.isBlank(value))
 			value = defaultToIfBlank;
 		return value;
 	}
@@ -29,7 +29,7 @@ public class SystemHelperImpl extends AbstractHelper implements SystemHelper, Se
 	@Override
 	public String getProperty(String name, Boolean defaultOnOperatingSystemIfBlank) {
 		String value = getProperty(name);
-		if(__inject__(StringHelper.class).isBlank(value) && Boolean.TRUE.equals(defaultOnOperatingSystemIfBlank)) {
+		if(StringHelper.isBlank(value) && Boolean.TRUE.equals(defaultOnOperatingSystemIfBlank)) {
 			value = __inject__(OperatingSystemHelper.class).getProperty(name);
 		}
 		return value;
@@ -49,7 +49,7 @@ public class SystemHelperImpl extends AbstractHelper implements SystemHelper, Se
 	
 	@Override
 	public SystemHelper executeCommand(String command) {
-		if(__inject__(StringHelper.class).isNotBlank(command))
+		if(StringHelper.isNotBlank(command))
 			try {
 				Runtime.getRuntime().exec(command);
 			} catch (Exception exception) {

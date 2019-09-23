@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
 @Dependent @SuppressWarnings("rawtypes")
@@ -19,7 +20,7 @@ public class EnumGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<En
 		Class<? extends Enum<?>> clazz = getClazz();
 		Enum<?> enumValue = null;
 		String name = getName() == null ? null : getName().toString();
-		if(__injectStringHelper__().isNotBlank(name)) {
+		if(StringHelper.isNotBlank(name)) {
 			Boolean isNameCaseSensitive = Boolean.TRUE.equals(getIsNameCaseSensitive());
 			for(Enum<?> index : clazz.getEnumConstants())
 				if(index.name().equals(name)) {

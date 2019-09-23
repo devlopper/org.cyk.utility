@@ -7,12 +7,13 @@ import javax.enterprise.context.Dependent;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Invocation;
 
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.field.FieldValueCopy;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierStringBuilder;
 import org.cyk.utility.map.MapHelper;
 import org.cyk.utility.object.ObjectByObjectMap;
-import org.cyk.utility.string.StringHelper;
+
 
 @Dependent
 public class RequestProcessorImpl extends AbstractFunctionWithPropertiesAsInputImpl<Object> implements RequestProcessor,Serializable {
@@ -33,14 +34,14 @@ public class RequestProcessorImpl extends AbstractFunctionWithPropertiesAsInputI
 		String uniformResourceIdentifier = null;
 		if(uniformResourceIdentifierString == null) {
 			String uniformResourceIdentifierStringFormat = __injectValueHelper__().returnOrThrowIfBlank("request processor uniform resource locator string format", getUniformResourceIdentifierStringFormat());
-			if( Boolean.TRUE.equals(__inject__(StringHelper.class).isNotBlank(uniformResourceIdentifierStringFormat)) && responseEntity!=null ) {
+			if( Boolean.TRUE.equals(StringHelper.isNotBlank(uniformResourceIdentifierStringFormat)) && responseEntity!=null ) {
 				uniformResourceIdentifier = String.format(uniformResourceIdentifierStringFormat, org.cyk.utility.__kernel__.field.FieldHelper.readSystemIdentifier(responseEntity));
 			}
 		}else {
 			uniformResourceIdentifier = uniformResourceIdentifierString.execute().getOutput();
 		}
 		
-		if(__injectStringHelper__().isBlank(uniformResourceIdentifier))
+		if(StringHelper.isBlank(uniformResourceIdentifier))
 			__injectThrowableHelper__().throwRuntimeException("request processor uniform resource locator cannot be derived");
 		
 		Client client = getClient();

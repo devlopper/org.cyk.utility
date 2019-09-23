@@ -3,8 +3,8 @@ package org.cyk.utility.test;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
-import org.cyk.utility.string.StringLocation;
-import org.cyk.utility.string.Strings;
+import org.cyk.utility.__kernel__.string.StringLocation;
+import org.cyk.utility.__kernel__.string.Strings;
 
 public interface TestExpectedString extends Objectable {
 

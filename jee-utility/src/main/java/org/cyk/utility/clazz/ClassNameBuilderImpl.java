@@ -6,8 +6,9 @@ import javax.enterprise.context.Dependent;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.string.Case;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.string.Case;
 
 @Dependent
 public class ClassNameBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<String> implements ClassNameBuilder , Serializable {
@@ -22,10 +23,10 @@ public class ClassNameBuilderImpl extends AbstractFunctionWithPropertiesAsInputI
 		String name = null;
 		Class<?> klass = getKlass();
 		String packageName = getPackageName();
-		if(__injectStringHelper__().isBlank(packageName))
+		if(StringHelper.isBlank(packageName))
 			packageName = klass.getPackage().getName();
 		String simpleName = getSimpleName();
-		if(__injectStringHelper__().isBlank(simpleName)) {
+		if(StringHelper.isBlank(simpleName)) {
 			simpleName = StringUtils.substringBeforeLast(klass.getSimpleName(),"$Proxy$_$$_WeldSubclass");
 		}
 		
@@ -41,7 +42,7 @@ public class ClassNameBuilderImpl extends AbstractFunctionWithPropertiesAsInputI
 			if(StringUtils.isNotBlank(sourceNamingModel.getSuffix()))
 				simpleName = StringUtils.replaceOnce(simpleName, sourceNamingModel.getSuffix(), "");
 			String suffix = destinationNamingModel.getSuffix();
-			if(__injectStringHelper__().isBlank(suffix)) {
+			if(StringHelper.isBlank(suffix)) {
 				Boolean isSuffixedByLayer = destinationNamingModel.getIsSuffixedByLayer();
 				if(isSuffixedByLayer == null || isSuffixedByLayer) {
 					if("representation".equals(destinationNamingModel.getLayer()) && "entities".equals(destinationNamingModel.getSubLayer()))
@@ -50,12 +51,12 @@ public class ClassNameBuilderImpl extends AbstractFunctionWithPropertiesAsInputI
 							&& "entities".equals(destinationNamingModel.getSubLayer()))
 						suffix = "";
 					else if("impl".equals(destinationNamingModel.getSubLayer()))
-						suffix = __injectStringHelper__().applyCase(destinationNamingModel.getLayer(),Case.FIRST_CHARACTER_UPPER)+"Impl";
+						suffix = StringHelper.applyCase(destinationNamingModel.getLayer(),Case.FIRST_CHARACTER_UPPER)+"Impl";
 					else
-						suffix = __injectStringHelper__().applyCase(destinationNamingModel.getLayer(),Case.FIRST_CHARACTER_UPPER);
+						suffix = StringHelper.applyCase(destinationNamingModel.getLayer(),Case.FIRST_CHARACTER_UPPER);
 				}
 			}
-			if(__injectStringHelper__().isNotBlank(suffix))
+			if(StringHelper.isNotBlank(suffix))
 				simpleName = simpleName + suffix;
 			name = name + simpleName;
 		}

@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.field.FieldInstances;
 import org.cyk.utility.field.FieldInstancesRuntime;
-import org.cyk.utility.string.Strings;
 import org.cyk.utility.throwable.ThrowableHelperImpl;
 
 @Deprecated

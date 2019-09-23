@@ -10,7 +10,7 @@ import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.service.AbstractServiceProviderImpl;
 import org.cyk.utility.service.ServiceProvider;
-import org.cyk.utility.string.Strings;
+import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.system.action.SystemAction;
 
 public abstract class AbstractSystemServiceProviderImpl extends AbstractServiceProviderImpl implements SystemServiceProvider, Serializable {

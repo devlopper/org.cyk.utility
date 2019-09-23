@@ -7,6 +7,7 @@ import java.security.MessageDigest;
 import javax.enterprise.context.Dependent;
 
 import org.apache.commons.io.IOUtils;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
 @Dependent
@@ -27,8 +28,8 @@ public class FileBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 		file.setUniformResourceLocator(uniformResourceLocator);
 		
 		String path = getPath();
-		if(__injectStringHelper__().isNotBlank(path)) {
-			path = __injectStringHelper__().addToEndIfDoesNotEndWith(path, "/");
+		if(StringHelper.isNotBlank(path)) {
+			path = StringHelper.addToEndIfDoesNotEndWith(path, "/");
 		}
 		file.setPath(path);
 		
@@ -36,12 +37,12 @@ public class FileBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 		file.setName(__inject__(FileHelper.class).getName(name));
 		
 		String extension = getExtension();
-		if(__injectStringHelper__().isBlank(extension))
+		if(StringHelper.isBlank(extension))
 			extension = __inject__(FileHelper.class).getExtension(name);
 		file.setExtension(extension);
 		
 		String mimeType = getMimeType();
-		if(__injectStringHelper__().isBlank(mimeType))
+		if(StringHelper.isBlank(mimeType))
 			mimeType = __inject__(FileHelper.class).getMimeTypeByExtension(file.getExtension());
 		file.setMimeType(mimeType);
 		
@@ -67,7 +68,7 @@ public class FileBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 		file.setSize(size);
 		
 		String checksum = getChecksum();
-		if(__injectStringHelper__().isBlank(checksum)) {
+		if(StringHelper.isBlank(checksum)) {
 			Boolean isChecksumComputable = getIsChecksumComputable();
 			if(Boolean.TRUE.equals(isChecksumComputable)) {
 				if(file.getBytes()!=null && file.getBytes().length>0) {
@@ -79,7 +80,7 @@ public class FileBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 				}	
 			}	
 		}
-		if(__injectStringHelper__().isNotBlank(checksum))
+		if(StringHelper.isNotBlank(checksum))
 			file.setChecksum(new String(checksum));		
 		return file;
 	}

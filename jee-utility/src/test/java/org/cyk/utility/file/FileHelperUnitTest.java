@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.regularexpression.RegularExpressionHelperImpl;
+import org.cyk.utility.__kernel__.string.RegularExpressionHelper;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 
@@ -134,7 +134,7 @@ public class FileHelperUnitTest extends AbstractWeldUnitTest {
 		.hasSize(files.size())
 		.containsExactlyInAnyOrder("f0.txt","f1.png","f2.txt","f3.png","f4.txt");
 		
-		paths = __getPaths__(Arrays.asList(root.toString()),RegularExpressionHelperImpl.__formatFileNameHavingExtensions__("png","jpeg","pdf"), Boolean.TRUE, Boolean.TRUE, null);
+		paths = __getPaths__(Arrays.asList(root.toString()),RegularExpressionHelper.formatFileNameHavingExtensions("png","jpeg","pdf"), Boolean.TRUE, Boolean.TRUE, null);
 		assertThat(paths).isNotNull();
 		assertThat(paths.get()).isNotNull();
 		assertThat(paths.get().stream().map(x -> StringUtils.substringAfter(x.toString(), root.toString()+"\\")).collect(Collectors.toList()))

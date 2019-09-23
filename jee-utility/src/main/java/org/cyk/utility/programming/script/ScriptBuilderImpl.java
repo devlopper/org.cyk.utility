@@ -6,7 +6,7 @@ import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.string.Strings;
+import org.cyk.utility.__kernel__.string.Strings;
 
 @Dependent
 public class ScriptBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Script> implements ScriptBuilder,Serializable {

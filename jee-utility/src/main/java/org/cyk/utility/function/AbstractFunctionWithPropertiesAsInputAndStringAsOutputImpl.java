@@ -11,7 +11,7 @@ import org.cyk.utility.__kernel__.computation.LogicalOperator;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.throwable.ThrowableHelper;
 
 public abstract class AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl extends AbstractFunctionWithPropertiesAsInputImpl<String>
@@ -37,11 +37,11 @@ public abstract class AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl
 						string = ((FunctionWithPropertiesAsInputAndStringAsOutput)index).execute().getOutput();
 					else
 						string = index.toString();
-				if(__inject__(StringHelper.class).isNotBlank(string)){
+				if(StringHelper.isNotBlank(string)){
 					strings.add(string +( __executeIsAppendSpaceToChildString__(index, string) ? ConstantCharacter.SPACE : ConstantEmpty.STRING) );
 				}
 			}
-			String string = __inject__(StringHelper.class).concatenate(strings);
+			String string =StringHelper.concatenate(strings,ConstantEmpty.STRING);
 			if(StringUtils.endsWith(string, ConstantCharacter.SPACE.toString())){
 				string = string.substring(0, string.length()-1);
 			}
@@ -49,12 +49,12 @@ public abstract class AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl
 		}else {
 			Boolean isFormatRequired = __getIsFormatRequired__(Boolean.TRUE.equals(getProperties().getFromPath(Properties.IS,Properties.FORMAT,Properties.REQUIRED)));
 			String format = __getFormat__(getFormat());
-			if(__inject__(StringHelper.class).isBlank(format) && isFormatRequired)
+			if(StringHelper.isBlank(format) && isFormatRequired)
 				__inject__(ThrowableHelper.class).throwRuntimeException(getClass().getName()+" : format is required");
 			Collection<Object> formatArguments = isFormatRequired ? __getFormatArguments__(isFormatRequired,getFormatArguments()) : null;
 			if(CollectionHelper.isEmpty(formatArguments) && isFormatRequired)
 				__inject__(ThrowableHelper.class).throwRuntimeException(getClass().getName()+" : format arguments are required");
-			if(__inject__(StringHelper.class).isNotBlank(format) && CollectionHelper.isNotEmpty(formatArguments))
+			if(StringHelper.isNotBlank(format) && CollectionHelper.isNotEmpty(formatArguments))
 				return __execute__(format,formatArguments);	
 		}
 		return super.__execute__();

@@ -9,9 +9,10 @@ import javax.enterprise.context.Dependent;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.string.Case;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
-import org.cyk.utility.string.Case;
 import org.cyk.utility.system.action.SystemAction;
 
 @Dependent @Deprecated
@@ -48,7 +49,7 @@ public class InternalizationKeyStringBuilderImpl extends AbstractStringFunctionI
 				if(ClassHelper.isInstanceOf(clazz, SystemAction.class))
 					key = StringUtils.substringAfter(clazz.getSimpleName(), SystemAction.class.getSimpleName());
 				else
-					key = __injectStringHelper__().applyCase(clazz.getSimpleName(),Case.FIRST_CHARACTER_LOWER);
+					key = StringHelper.applyCase(clazz.getSimpleName(),Case.FIRST_CHARACTER_LOWER);
 				
 				//if(__injectClassHelper__().isInstanceOf(clazz, AbstractSystemActionImpl.class))
 					key = StringUtils.substringBeforeLast(key.toString(), "Impl");
@@ -60,15 +61,15 @@ public class InternalizationKeyStringBuilderImpl extends AbstractStringFunctionI
 			if(__inject__(ArrayHelper.class).isNotEmpty(strings)) {
 				tokens = new ArrayList<>();
 				for(String index : strings) {
-					tokens.addAll(__injectStringHelper__().splitByCharacterTypeCamelCase(index));
+					tokens.addAll(StringHelper.splitByCharacterTypeCamelCase(index));
 				}
-				string = __injectStringHelper__().concatenate(tokens,DOT).toLowerCase();
+				string = StringHelper.concatenate(tokens,DOT).toLowerCase();
 			}
 			
-			//string = __injectStringHelper__().concatenate(
-			//		__injectStringHelper__().applyCase(__injectStringHelper__().splitByCharacterTypeCamelCase(key.toString()),Case.LOWER),CharacterConstant.DOT.toString());
+			//string = StringHelper.concatenate(
+			//		StringHelper.applyCase(StringHelper.splitByCharacterTypeCamelCase(key.toString()),Case.LOWER),CharacterConstant.DOT.toString());
 			
-			if(__injectStringHelper__().isNotBlank(string)) {
+			if(StringHelper.isNotBlank(string)) {
 				InternationalizationKeyStringType type = getType();
 				if(type!=null)
 					string = String.format(type.getFormat(), string);

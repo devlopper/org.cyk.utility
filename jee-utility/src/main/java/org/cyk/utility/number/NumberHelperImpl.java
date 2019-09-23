@@ -10,8 +10,9 @@ import javax.enterprise.context.ApplicationScoped;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.helper.AbstractHelper;
-import org.cyk.utility.string.StringHelper;
+
 
 @ApplicationScoped
 public class NumberHelperImpl extends AbstractHelper implements NumberHelper,Serializable {
@@ -185,7 +186,7 @@ public class NumberHelperImpl extends AbstractHelper implements NumberHelper,Ser
 	}
 	
 	public static <NUMBER> NUMBER __get__(Class<NUMBER> aClass,Object object,NUMBER nullValue){
-		if(object==null || ( (object instanceof String) && __inject__(StringHelper.class).isBlank((String)object) ) )
+		if(object==null || ( (object instanceof String) && StringHelper.isBlank((String)object) ) )
 			return nullValue;
 		return org.cyk.utility.__kernel__.klass.ClassHelper.instanciate(aClass, new Object[]{String.class,object.toString()});
 	}

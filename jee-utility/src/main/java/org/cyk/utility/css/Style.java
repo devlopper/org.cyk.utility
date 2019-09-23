@@ -1,7 +1,7 @@
 package org.cyk.utility.css;
 
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
-import org.cyk.utility.string.Strings;
+import org.cyk.utility.__kernel__.string.Strings;
 
 public interface Style extends Objectable {
 

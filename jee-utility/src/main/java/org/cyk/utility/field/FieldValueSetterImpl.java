@@ -15,11 +15,11 @@ import org.apache.commons.lang3.reflect.MethodUtils;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.field.FieldName;
+import org.cyk.utility.__kernel__.string.Case;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
 import org.cyk.utility.log.Log;
-import org.cyk.utility.string.Case;
-import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.value.ValueConverter;
 
 @Dependent @Deprecated
@@ -34,7 +34,7 @@ public class FieldValueSetterImpl extends AbstractFunctionWithPropertiesAsInputA
 		if(object!=null){
 			Class<?> fieldType = null;
 			if(field == null) {
-				String getMethodName = "get"+__inject__(StringHelper.class).applyCase(getFieldName(), Case.FIRST_CHARACTER_UPPER);
+				String getMethodName = "get"+StringHelper.applyCase(getFieldName(), Case.FIRST_CHARACTER_UPPER);
 				Method getMethod = MethodUtils.getAccessibleMethod(object.getClass(), getMethodName);
 				if(getMethod!=null)
 					fieldType = getMethod.getReturnType();
@@ -46,7 +46,7 @@ public class FieldValueSetterImpl extends AbstractFunctionWithPropertiesAsInputA
 				value = __inject__(ValueConverter.class).execute(value, fieldTypeWrapper).getOutput();
 			}
 			
-			String methodName = "set"+__inject__(StringHelper.class).applyCase(getFieldName(), Case.FIRST_CHARACTER_UPPER);
+			String methodName = "set"+StringHelper.applyCase(getFieldName(), Case.FIRST_CHARACTER_UPPER);
 			Method method = MethodUtils.getAccessibleMethod(object.getClass(), methodName,fieldType);
 
 			if(method == null) {

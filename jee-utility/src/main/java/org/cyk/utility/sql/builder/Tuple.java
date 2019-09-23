@@ -9,8 +9,9 @@ import java.util.List;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.array.ArrayHelper;
-import org.cyk.utility.string.StringHelper;
+
 
 public class Tuple extends AbstractObject implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -53,8 +54,8 @@ public class Tuple extends AbstractObject implements Serializable {
 	
 	public Tuple setName(String name){
 		getProperties().setName(name);
-		if(__inject__(StringHelper.class).isBlank(getAlias()))
-			setAlias(__inject__(StringHelper.class).getVariableNameFrom(getName()));
+		if(StringHelper.isBlank(getAlias()))
+			setAlias(StringHelper.getVariableNameFrom(getName()));
 		return this;
 	}
 	

@@ -10,9 +10,9 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
 import org.cyk.utility.__kernel__.object.__static__.representation.AbstractRepresentationObjectCollection;
-import org.cyk.utility.string.StringHelper;
-import org.cyk.utility.value.ValueDto;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
+import org.cyk.utility.value.ValueDto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -61,7 +61,7 @@ public class FieldDtoCollection extends AbstractRepresentationObjectCollection<F
 				type = org.cyk.utility.field.FieldDto.Type.INTEGER;
 				valueType = ValueDto.Type.INTEGER;
 			}
-			if(__inject__(StringHelper.class).isBlank(valueAsString))
+			if(StringHelper.isBlank(valueAsString))
 				try {
 					valueAsString = JsonbBuilder.create().toJson(value);
 				} catch (Exception exception) {

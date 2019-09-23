@@ -7,14 +7,14 @@ import java.util.Collection;
 import javax.json.bind.JsonbBuilder;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.field.FieldInstance;
 import org.cyk.utility.field.FieldInstancesRuntime;
 import org.cyk.utility.mapping.AbstractMapperSourceDestinationImpl;
 import org.cyk.utility.mapping.Instantiator;
 import org.cyk.utility.number.NumberHelper;
-import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.value.ValueDto;
 import org.cyk.utility.value.ValueDto.Container;
 import org.mapstruct.Mapper;
@@ -66,7 +66,7 @@ public abstract class FieldDtoMapper extends AbstractMapperSourceDestinationImpl
 					value = NumberHelper.getLong(valueDto.getValue(), null);
 			}else if(Container.COLLECTION.equals(container)) {
 				Collection<?> collection = null;
-				if(DependencyInjection.inject(StringHelper.class).isNotBlank(valueDto.getValue())) {
+				if(valueDto.getValue()!= null && !valueDto.getValue().isBlank()) {
 					Type __type__ = null;
 					if(ValueDto.Type.INTEGER.equals(valueDto.getType()))
 						__type__ = new ArrayList<Integer>(){private static final long serialVersionUID = 1L;}.getClass().getGenericSuperclass();
@@ -109,9 +109,9 @@ public abstract class FieldDtoMapper extends AbstractMapperSourceDestinationImpl
 		super.__listenGetDestinationAfter__(fieldDto, field);
 		if(fieldDto.getField() != null) {
 			Class<?> klass = null;
-			if(DependencyInjection.inject(StringHelper.class).isNotBlank(fieldDto.getField().getKlass()))
+			if(StringHelper.isNotBlank(fieldDto.getField().getKlass()))
 				klass = ClassHelper.getByName(fieldDto.getField().getKlass());
-			if(klass != null && DependencyInjection.inject(StringHelper.class).isNotBlank(fieldDto.getField().getPath())) {
+			if(klass != null && StringHelper.isNotBlank(fieldDto.getField().getPath())) {
 				FieldInstance instance = DependencyInjection.inject(FieldInstancesRuntime.class).get(klass, fieldDto.getField().getPath());
 				field.setInstance(instance);
 			}

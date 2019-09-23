@@ -10,8 +10,9 @@ import javax.enterprise.context.Dependent;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.byte_.HashFunction;
-import org.cyk.utility.string.StringHelper;
+
 
 @Dependent
 public class FileImpl extends AbstractObject implements File,Serializable {
@@ -164,7 +165,7 @@ public class FileImpl extends AbstractObject implements File,Serializable {
 		byte[] bytes = getBytes();
 		if(bytes == null) {
 			String pathAndNameAndExtension = getPathAndNameAndExtension();
-			if(__inject__(StringHelper.class).isNotBlank(pathAndNameAndExtension))
+			if(StringHelper.isNotBlank(pathAndNameAndExtension))
 				bytes = __inject__(FileHelper.class).getBytes(new java.io.File(pathAndNameAndExtension));
 		}
 		if(bytes != null)
@@ -187,7 +188,7 @@ public class FileImpl extends AbstractObject implements File,Serializable {
 	public String getNameAndExtension() {
 		String nameAndExtension = getName();
 		String extension = getExtension();
-		if(__inject__(StringHelper.class).isNotBlank(extension))
+		if(StringHelper.isNotBlank(extension))
 			nameAndExtension = nameAndExtension + "." + extension;
 		return nameAndExtension;
 	}
@@ -196,8 +197,8 @@ public class FileImpl extends AbstractObject implements File,Serializable {
 	public String getPathAndNameAndExtension() {
 		String pathNameAndExtension = getNameAndExtension();
 		String path = getPath();
-		if(__inject__(StringHelper.class).isNotBlank(path)) {
-			path = __inject__(StringHelper.class).addToEndIfDoesNotEndWith(path, "/");
+		if(StringHelper.isNotBlank(path)) {
+			path =StringHelper.addToEndIfDoesNotEndWith(path, "/");
 			pathNameAndExtension = path + pathNameAndExtension;
 		}
 		return pathNameAndExtension;

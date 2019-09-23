@@ -12,15 +12,17 @@ import java.util.Map;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.stacktrace.StackTraceHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.clazz.ClassInstance;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
-import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.field.FieldInstance;
 import org.cyk.utility.field.FieldInstancesRuntime;
 import org.cyk.utility.map.MapHelper;
@@ -31,7 +33,6 @@ import org.cyk.utility.server.persistence.query.PersistenceQueryContext;
 import org.cyk.utility.server.persistence.query.filter.Filter;
 import org.cyk.utility.sql.builder.QueryStringBuilder;
 import org.cyk.utility.sql.builder.QueryStringBuilderSelect;
-import org.cyk.utility.string.Strings;
 import org.cyk.utility.type.BooleanHelper;
 
 public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPersistenceServiceProviderImpl<ENTITY> implements PersistenceEntity<ENTITY>,Serializable {
@@ -270,7 +271,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 			properties.setQueryNumberOfTuple(null);
 			if(properties.getQueryIdentifier() == null) {
 				String queryIdentifier = __injectValueHelper__().defaultToIfNull(__getQueryIdentifier__(PersistenceFunctionReader.class, properties),read);
-				if(__injectStringHelper__().isNotBlank(queryIdentifier))
+				if(StringHelper.isNotBlank(queryIdentifier))
 					queryIdentifier = __inject__(PersistenceQueryIdentifierStringBuilder.class).setIsDerivedFromQueryIdentifier(Boolean.TRUE)
 						.setDerivedFromQueryIdentifier(queryIdentifier).setIsCountInstances(Boolean.TRUE)
 						.execute().getOutput();
@@ -472,9 +473,9 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	@SuppressWarnings("unchecked")
 	protected <FUNCTION extends PersistenceFunction> FUNCTION __getFunction__(Class<FUNCTION> aClass,Properties properties,Object...parameters) {
 		String queryIdentifier = (String) Properties.getFromPath(properties, Properties.QUERY_IDENTIFIER);
-		if(__injectStringHelper__().isBlank(queryIdentifier))
+		if(StringHelper.isBlank(queryIdentifier))
 			queryIdentifier = __getQueryIdentifier__(aClass, properties, parameters);
-		if(__injectStringHelper__().isBlank(queryIdentifier))
+		if(StringHelper.isBlank(queryIdentifier))
 			queryIdentifier = __buildQueryStringIdentifierFromCurrentCall__(6);
 		return (FUNCTION) __inject__(aClass)
 				.setQueryIdentifier(queryIdentifier)
@@ -589,7 +590,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	
 	protected Object[] ____getQueryParameters____(Properties properties,Object...objects){
 		String queryIdentifier = (String) Properties.getFromPath(properties, Properties.QUERY_IDENTIFIER);
-		if(__injectStringHelper__().isBlank(queryIdentifier))
+		if(StringHelper.isBlank(queryIdentifier))
 			queryIdentifier = __buildQueryStringIdentifierFromCurrentCall__(4);
 		Object[] parameters = (Object[]) Properties.getFromPath(properties, Properties.QUERY_PARAMETERS);
 		if(parameters == null)
