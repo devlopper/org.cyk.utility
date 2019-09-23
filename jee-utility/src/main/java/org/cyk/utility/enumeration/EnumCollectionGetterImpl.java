@@ -4,9 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.List;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
 @Dependent @SuppressWarnings("rawtypes")
@@ -20,7 +22,7 @@ public class EnumCollectionGetterImpl extends AbstractFunctionWithPropertiesAsIn
 	protected Collection __execute__() throws Exception {
 		Collection<String> names = getNames();
 		Collection<Enum> enums = null;
-		if(__injectCollectionHelper__().isNotEmpty(names)) {
+		if(CollectionHelper.isNotEmpty(names)) {
 			enums = new LinkedHashSet<>();
 			
 			EnumGetter getter = getGetter();
@@ -56,13 +58,13 @@ public class EnumCollectionGetterImpl extends AbstractFunctionWithPropertiesAsIn
 
 	@Override
 	public EnumCollectionGetter addNames(Collection<String> names) {
-		this.names = __injectCollectionHelper__().add(ArrayList.class, this.names, Boolean.TRUE, names);
+		this.names = CollectionHelper.add(ArrayList.class, this.names, Boolean.TRUE, names);
 		return this;
 	}
 
 	@Override
 	public EnumCollectionGetter addNames(String... names) {
-		addNames(__injectCollectionHelper__().instanciate(names));
+		addNames(List.of(names));
 		return this;
 	}
 

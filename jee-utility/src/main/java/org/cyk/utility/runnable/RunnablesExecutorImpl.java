@@ -9,7 +9,7 @@ import javax.enterprise.context.Dependent;
 import org.cyk.utility.__kernel__.function.Function;
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
 import org.cyk.utility.thread.ExecutorServiceBuilder;
 
@@ -25,7 +25,7 @@ public class RunnablesExecutorImpl extends AbstractFunctionWithPropertiesAsInput
 	@Override
 	public Function<Properties, Void> execute() {
 		Runnables runnables = getRunnables();
-		if(__inject__(CollectionHelper.class).isNotEmpty(runnables)) {
+		if(CollectionHelper.isNotEmpty(runnables)) {
 			ExecutorServiceBuilder threadPoolExecutorBuilder = getExecutorServiceBuilder();
 			if(threadPoolExecutorBuilder == null)
 				threadPoolExecutorBuilder = __inject__(ExecutorServiceBuilder.class);

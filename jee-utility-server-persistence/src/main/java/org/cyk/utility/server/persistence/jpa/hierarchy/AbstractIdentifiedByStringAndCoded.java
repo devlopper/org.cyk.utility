@@ -8,7 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
 
-import org.cyk.utility.collection.CollectionInstance;
+import org.cyk.utility.__kernel__.collection.CollectionInstance;
 
 import lombok.Getter;
 import lombok.Setter;

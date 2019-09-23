@@ -5,12 +5,13 @@ import java.net.URI;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.collection.AbstractCollectionInstanceImpl;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.array.ArrayHelperImpl;
-import org.cyk.utility.collection.AbstractCollectionInstanceImpl;
-import org.cyk.utility.collection.CollectionHelperImpl;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierHelperImpl;
 import org.cyk.utility.string.Strings;
 
@@ -20,7 +21,7 @@ public class PathsImpl extends AbstractCollectionInstanceImpl<Path> implements P
 
 	@Override
 	public Paths removeByUniformResourceIdentifiers(Collection<String> uniformResourceIdentifiers) {
-		if(isNotEmpty() && CollectionHelperImpl.__isNotEmpty__(uniformResourceIdentifiers)) {
+		if(isNotEmpty() && CollectionHelper.isNotEmpty(uniformResourceIdentifiers)) {
 			Collection<URI> uris = UniformResourceIdentifierHelperImpl.__getURIs__(uniformResourceIdentifiers);
 			Collection<Path> elements = null;
 			for(Path path : collection)
@@ -38,13 +39,13 @@ public class PathsImpl extends AbstractCollectionInstanceImpl<Path> implements P
 	@Override
 	public Paths removeByUniformResourceIdentifiers(String... uniformResourceIdentifiers) {
 		if(ArrayHelperImpl.__isNotEmpty__(uniformResourceIdentifiers))
-			removeByUniformResourceIdentifiers(CollectionHelperImpl.__instanciate__(uniformResourceIdentifiers));
+			removeByUniformResourceIdentifiers(List.of(uniformResourceIdentifiers));
 		return this;
 	}
 
 	@Override
 	public Paths removeByUniformResourceIdentifiers(Strings uniformResourceIdentifiers) {
-		if(CollectionHelperImpl.__isNotEmpty__(uniformResourceIdentifiers))
+		if(CollectionHelper.isNotEmpty(uniformResourceIdentifiers))
 			removeByUniformResourceIdentifiers(uniformResourceIdentifiers.get());
 		return this;
 	}

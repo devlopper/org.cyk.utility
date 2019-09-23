@@ -5,14 +5,16 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Predicate;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.collection.AbstractCollectionInstanceImpl;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.collection.AbstractCollectionInstanceImpl;
-import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.string.Strings;
 
 @Dependent
@@ -22,7 +24,7 @@ public class FieldsImpl extends AbstractCollectionInstanceImpl<Field> implements
 	@Override
 	public Strings getNames() {
 		Strings names = null;
-		if(__inject__(CollectionHelper.class).isNotEmpty(collection)) {
+		if(CollectionHelper.isNotEmpty(collection)) {
 			names = __inject__(Strings.class);
 			for(Field index : collection)
 				names.add(index.getName());
@@ -33,7 +35,7 @@ public class FieldsImpl extends AbstractCollectionInstanceImpl<Field> implements
 	@Override
 	public Field getByName(String name) {
 		Field field = null;
-		if(__inject__(CollectionHelper.class).isNotEmpty(collection)) {
+		if(CollectionHelper.isNotEmpty(collection)) {
 			for(Field index : collection)
 				if(index.getName().equals(name)) {
 					field = index;
@@ -45,7 +47,7 @@ public class FieldsImpl extends AbstractCollectionInstanceImpl<Field> implements
 	
 	@Override
 	public Field getByName(Class<?> klass,FieldName fieldName, ValueUsageType valueUsageType) {
-		return getByName(__inject__(FieldNameGetter.class).execute(klass, fieldName, valueUsageType).execute().getOutput());
+		return getByName(FieldHelper.getName(klass, fieldName, valueUsageType));
 	}
 
 	@Override
@@ -62,7 +64,7 @@ public class FieldsImpl extends AbstractCollectionInstanceImpl<Field> implements
 	
 	@Override
 	public Fields removeByNames(String... names) {
-		return removeByNames(__inject__(CollectionHelper.class).instanciate(names));
+		return removeByNames(List.of(names));
 	}
 	
 	@Override

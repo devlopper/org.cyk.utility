@@ -3,8 +3,10 @@ package org.cyk.utility.assertion;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.cyk.utility.__kernel__.assertion.Assertion;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.function.Function;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
@@ -47,7 +49,7 @@ public abstract class AbstractAssertionsProviderImpl extends AbstractFunctionWit
 	protected abstract void ____execute____(Function<?, ?> function,Object filter);
 	
 	protected AssertionsProvider __add__(Collection<Assertion> assertions) {
-		if(__injectCollectionHelper__().isNotEmpty(assertions)) {
+		if(CollectionHelper.isNotEmpty(assertions)) {
 			if(__assertions__ == null)
 				__assertions__ = new ArrayList<>();
 			__assertions__.addAll(assertions);
@@ -56,12 +58,12 @@ public abstract class AbstractAssertionsProviderImpl extends AbstractFunctionWit
 	}
 	
 	protected AssertionsProvider __add__(Assertion...assertions) {
-		return __add__(__injectCollectionHelper__().instanciate(assertions));
+		return __add__(List.of(assertions));
 	}
 	
 	@Deprecated
 	protected AssertionsProvider __addFromBuilders__(Collection<AssertionBuilder> assertionBuilders) {
-		if(__injectCollectionHelper__().isNotEmpty(assertionBuilders)) {
+		if(CollectionHelper.isNotEmpty(assertionBuilders)) {
 			for(AssertionBuilder index : assertionBuilders)
 				__add__(index.execute().getOutput());
 		}
@@ -70,7 +72,7 @@ public abstract class AbstractAssertionsProviderImpl extends AbstractFunctionWit
 	
 	@Deprecated
 	protected AssertionsProvider __addFromBuilders__(AssertionBuilder...assertionBuilders) {
-		return __addFromBuilders__(__injectCollectionHelper__().instanciate(assertionBuilders));
+		return __addFromBuilders__(List.of(assertionBuilders));
 	}
 	
 	/**/

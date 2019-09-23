@@ -6,7 +6,7 @@ import java.util.Collection;
 import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.object.Objects;
 
 @Dependent
@@ -94,7 +94,7 @@ public class HierarchyNodeImpl extends AbstractObject implements HierarchyNode,S
 		Objects objects = __inject__(Objects.class);
 		objects.add(getFamily());
 		Collection<HierarchyNode> children = getChildrenInstanceOf(HierarchyNode.class);
-		if(__inject__(CollectionHelper.class).isNotEmpty(children)) {
+		if(CollectionHelper.isNotEmpty(children)) {
 			for(HierarchyNode index : children)
 				objects.add(index.getFamilies());
 		}

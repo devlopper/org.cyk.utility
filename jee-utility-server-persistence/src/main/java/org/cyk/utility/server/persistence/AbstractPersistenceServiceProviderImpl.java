@@ -6,14 +6,15 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.stacktrace.StackTraceHelper;
 import org.cyk.utility.clazz.ClassInstance;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
-import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.method.MethodGetter;
 import org.cyk.utility.server.persistence.annotation.Query;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
@@ -42,7 +43,7 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	@Override
 	protected void __listenAfterPostConstruct__() {
 		super.__listenAfterPostConstruct__();
-		__logInfo__(getIdentifier()+" : Number of queries : "+__inject__(CollectionHelper.class).getSize(getQueries()));
+		__logInfo__(getIdentifier()+" : Number of queries : "+CollectionHelper.getSize(getQueries()));
 	}
 	
 	/**
@@ -57,7 +58,7 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	 */
 	protected void __listenPostConstructPersistenceQueriesIdentifiers__(){
 		Collection<Field> fields = __inject__(PersistenceQueryIdentifierFieldGetter.class).setClazz(getClass()).execute().getOutput();
-		if(__inject__(CollectionHelper.class).isNotEmpty(fields)){
+		if(CollectionHelper.isNotEmpty(fields)){
 			for(Field index : fields){
 				FieldHelper.write(this, index, __buildQueryIdentifierString__(index));
 			}
@@ -78,7 +79,7 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 		//2 - from field
 		//3 - from method
 		Collection<Method> methods = __inject__(MethodGetter.class).setClazz(getClass()).addAnnotationClasses(Query.class).execute().getOutput();
-		if(__inject__(CollectionHelper.class).isNotEmpty(methods)){
+		if(CollectionHelper.isNotEmpty(methods)){
 			for(Method index : methods){
 				Query annotation = index.getAnnotation(Query.class);
 				PersistenceQuery query = new PersistenceQuery();
@@ -181,13 +182,13 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	}
 	
 	protected void __listenExecuteCreateBefore__(Collection<OBJECT> objects, Properties properties,PersistenceFunctionCreator function){
-		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(objects)))
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(objects)))
 			for(OBJECT index : objects)
 				__listenExecuteCreateBefore__(index, properties, function);
 	}
 	
 	protected void __listenExecuteCreateAfter__(Collection<OBJECT> objects, Properties properties,PersistenceFunctionCreator function){
-		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(objects)))
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(objects)))
 			for(OBJECT index : objects)
 				__listenExecuteCreateAfter__(index, properties, function);
 	}
@@ -226,13 +227,13 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	}
 	
 	protected void __listenExecuteUpdateBefore__(Collection<OBJECT> objects, Properties properties,PersistenceFunctionModifier function){
-		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(objects)))
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(objects)))
 			for(OBJECT index : objects)
 				__listenExecuteUpdateBefore__(index, properties, function);
 	}
 	
 	protected void __listenExecuteUpdateAfter__(Collection<OBJECT> objects, Properties properties,PersistenceFunctionModifier function){
-		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(objects)))
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(objects)))
 			for(OBJECT index : objects)
 				__listenExecuteUpdateAfter__(index, properties, function);
 	}
@@ -282,13 +283,13 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	}
 	
 	protected void __listenExecuteDeleteBefore__(Collection<OBJECT> objects, Properties properties,PersistenceFunctionRemover function){
-		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(objects)))
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(objects)))
 			for(OBJECT index : objects)
 				__listenExecuteDeleteBefore__(index, properties, function);
 	}
 	
 	protected void __listenExecuteDeleteAfter__(Collection<OBJECT> objects, Properties properties,PersistenceFunctionRemover function){
-		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(objects)))
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(objects)))
 			for(OBJECT index : objects)
 				__listenExecuteDeleteAfter__(index, properties, function);
 	}
@@ -301,7 +302,7 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	
 	@Override
 	public PersistenceServiceProvider<OBJECT> saveMany(Collection<OBJECT> objects,Properties properties) {
-		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(objects))) {
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(objects))) {
 			for(OBJECT index : objects) {
 				if(Boolean.TRUE.equals(isPersisted(index)))
 					update(index, properties);
@@ -343,14 +344,14 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	
 	@Override
 	public PersistenceServiceProvider<OBJECT> addQueries(Collection<PersistenceQuery> queries) {
-		setQueries(__inject__(CollectionHelper.class).add(HashSet.class, getQueries(), Boolean.TRUE, queries));
+		setQueries(CollectionHelper.add(HashSet.class, getQueries(), Boolean.TRUE, queries));
 		__inject__(PersistenceQueryRepository.class).add(getQueries());//TODO is it the right place ? what if call multiple times ??? are the old ones overwritten ???
 		return this;
 	}
 	
 	@Override
 	public PersistenceServiceProvider<OBJECT> addQueries(PersistenceQuery... queries) {
-		return addQueries(__inject__(CollectionHelper.class).instanciate(queries));
+		return addQueries(List.of(queries));
 	}
 	
 	@Override

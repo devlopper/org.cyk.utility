@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 
 @Deprecated
 public abstract class AbstractMethodCallListenerImpl implements MethodCallListener,Serializable {
@@ -36,7 +36,7 @@ public abstract class AbstractMethodCallListenerImpl implements MethodCallListen
 		Object object = getObject();
 		if(object!=null) {
 			Collection<Method> methods = DependencyInjection.inject(MethodGetter.class).setClazz(object.getClass()).setToken(methodName.name()).execute().getOutput();
-			setMethod(DependencyInjection.inject(CollectionHelper.class).getFirst(methods));
+			setMethod(CollectionHelper.getFirst(methods));
 		}
 		return this;
 	}

@@ -3,10 +3,11 @@ package org.cyk.utility.instance;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.repository.AbstractRepositoryImpl;
@@ -25,29 +26,29 @@ public abstract class AbstractInstanceRepositoryImpl<INSTANCE> extends AbstractR
 	
 	@Override
 	public InstanceRepository<INSTANCE> add(Collection<INSTANCE> instances) {
-		this.instances = (Set<INSTANCE>) __inject__(CollectionHelper.class).add(LinkedHashSet.class, this.instances, Boolean.TRUE, instances);
+		this.instances = (Set<INSTANCE>) CollectionHelper.add(LinkedHashSet.class, this.instances, Boolean.TRUE, instances);
 		return this;
 	}
 	
 	@Override
 	public InstanceRepository<INSTANCE> add(INSTANCE...instances) {
-		add(__inject__(CollectionHelper.class).instanciate(instances));
+		add(List.of(instances));
 		return this;
 	}
 	
 	@Override
 	public INSTANCE getAt(Integer index) {
-		return __inject__(CollectionHelper.class).getElementAt(readAll(), index);
+		return CollectionHelper.getElementAt(readAll(), index);
 	}
 	
 	@Override
 	public INSTANCE getFirst() {
-		return __inject__(CollectionHelper.class).getFirst(readAll());
+		return CollectionHelper.getFirst(readAll());
 	}
 	
 	@Override
 	public INSTANCE getLast() {
-		return __inject__(CollectionHelper.class).getLast(readAll());
+		return CollectionHelper.getLast(readAll());
 	}
 	
 	@Override
@@ -56,7 +57,7 @@ public abstract class AbstractInstanceRepositoryImpl<INSTANCE> extends AbstractR
 		if(identifier == null){
 			
 		}else{
-			if(__inject__(CollectionHelper.class).isNotEmpty(instances)){
+			if(CollectionHelper.isNotEmpty(instances)){
 				for(INSTANCE index : instances){
 					Object indexSystemIdentifier = org.cyk.utility.__kernel__.field.FieldHelper.readSystemIdentifier(index);
 					if(identifier.equals(indexSystemIdentifier)){
@@ -86,7 +87,7 @@ public abstract class AbstractInstanceRepositoryImpl<INSTANCE> extends AbstractR
 	
 	@Override
 	public Long countAll() {
-		return NumberHelper.getLong(__inject__(CollectionHelper.class).getSize(instances));
+		return NumberHelper.getLong(CollectionHelper.getSize(instances));
 	}
 	
 	@Override

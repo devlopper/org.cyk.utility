@@ -2,7 +2,7 @@ package org.cyk.utility.string;
 
 import java.util.Collection;
 
-import org.cyk.utility.collection.CollectionInstance;
+import org.cyk.utility.__kernel__.collection.CollectionInstance;
 
 public interface Strings extends CollectionInstance<String> {
 

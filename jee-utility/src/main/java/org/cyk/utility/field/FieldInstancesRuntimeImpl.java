@@ -2,6 +2,7 @@ package org.cyk.utility.field;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -9,9 +10,9 @@ import javax.persistence.GeneratedValue;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.cyk.utility.__kernel__.annotation.Generatable;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
-import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.string.StringHelper;
@@ -36,7 +37,7 @@ public class FieldInstancesRuntimeImpl extends AbstractObject implements FieldIn
 				instance.setClazz(klass);
 				instance.setPath(path);
 				Collection<String> fieldContainerNames = fieldNames.getWithoutLast(1);
-				if(__inject__(CollectionHelper.class).isEmpty(fieldContainerNames)) {
+				if(CollectionHelper.isEmpty(fieldContainerNames)) {
 					
 				}else {
 					for(String index : fieldContainerNames)
@@ -57,7 +58,7 @@ public class FieldInstancesRuntimeImpl extends AbstractObject implements FieldIn
 	
 	@Override
 	public FieldInstance get(Class<?> aClass, String... paths) {
-		return get(aClass,__inject__(CollectionHelper.class).instanciate(paths));
+		return get(aClass,List.of(paths));
 	}
 	
 	@Override

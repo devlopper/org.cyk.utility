@@ -3,8 +3,10 @@ package org.cyk.utility.internationalization;
 import org.cyk.utility.ApplicationScopeLifeCycleListener;
 import org.cyk.utility.string.Case;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+@Deprecated @Disabled
 public class InternalizationPhraseBuilderUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 

@@ -2,11 +2,12 @@ package org.cyk.utility.service;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractSingleton;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.assertion.AssertionBuilderNull;
-import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.enumeration.EnumCollectionGetter;
 import org.cyk.utility.enumeration.EnumGetter;
 import org.cyk.utility.enumeration.EnumerationHelper;
@@ -37,7 +38,7 @@ public abstract class AbstractServiceProviderImpl extends AbstractSingleton impl
 	}
 	
 	protected Collection<String> getLogMarkers(SystemAction systemAction,Object object){
-		return systemAction == null ? null :__inject__(CollectionHelper.class).instanciate(systemAction.getIdentifier().toString(),object.getClass().getSimpleName());
+		return systemAction == null ? null :List.of(systemAction.getIdentifier().toString(),object.getClass().getSimpleName());
 	}
 	
 	protected void __logTrace__(String message){
@@ -54,10 +55,6 @@ public abstract class AbstractServiceProviderImpl extends AbstractSingleton impl
 	
 	protected ValueHelper __injectValueHelper__(){
 		return __inject__(ValueHelper.class);
-	}
-	
-	protected CollectionHelper __injectCollectionHelper__(){
-		return __inject__(CollectionHelper.class);
 	}
 	
 	protected InstanceHelper __injectInstanceHelper__(){
@@ -119,7 +116,7 @@ public abstract class AbstractServiceProviderImpl extends AbstractSingleton impl
 			__injectMailHelper__().produce(title, body, receiversIdentifiers);
 		else {
 			try {
-				__sendMail__(title, body, __inject__(CollectionHelper.class).cast(Object.class, receiversIdentifiers), Boolean.FALSE);
+				__sendMail__(title, body, CollectionHelper.cast(Object.class, receiversIdentifiers), Boolean.FALSE);
 			} catch (Exception exception) {
 				exception.printStackTrace();
 			}

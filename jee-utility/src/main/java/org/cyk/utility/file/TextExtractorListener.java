@@ -3,7 +3,7 @@ package org.cyk.utility.file;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.collection.CollectionHelperImpl;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 
 public interface TextExtractorListener {
 	
@@ -11,7 +11,7 @@ public interface TextExtractorListener {
 	
 	default String processExtractedText(String text) {
 		Set<String> invalidLines = getInvalidLines(text);
-		if(CollectionHelperImpl.__isNotEmpty__(invalidLines))
+		if(CollectionHelper.isNotEmpty(invalidLines))
 			for(String invalidLine : invalidLines) {
 				text = StringUtils.remove(text, invalidLine+"\n");		
 			}

@@ -1,7 +1,7 @@
 package org.cyk.utility.method;
 
 import org.apache.commons.lang3.reflect.MethodUtils;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.string.StringLocation;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
@@ -11,13 +11,13 @@ public class MethodGetterUnitTest extends AbstractWeldUnitTest {
 
 	@Test
 	public void get_setter_method_f1(){
-		assertionHelper.assertEquals(MethodUtils.getMatchingMethod(MyClass.class, "setF1", String.class),__inject__(CollectionHelper.class).getFirst(
+		assertionHelper.assertEquals(MethodUtils.getMatchingMethod(MyClass.class, "setF1", String.class),CollectionHelper.getFirst(
 				__inject__(MethodGetter.class).setClazz(MyClass.class).setToken("setF1").setTokenLocation(StringLocation.EXAT).execute().getOutput()));
 	}
 	
 	@Test
 	public void get_setter_method_f2(){
-		assertionHelper.assertEquals(MethodUtils.getMatchingMethod(MyClass.class, "setF2", String.class),__inject__(CollectionHelper.class).getFirst(
+		assertionHelper.assertEquals(MethodUtils.getMatchingMethod(MyClass.class, "setF2", String.class),CollectionHelper.getFirst(
 				__inject__(MethodGetter.class).setClazz(MyClass.class).setToken("setF2").setTokenLocation(StringLocation.EXAT).execute().getOutput()));
 	}
 	

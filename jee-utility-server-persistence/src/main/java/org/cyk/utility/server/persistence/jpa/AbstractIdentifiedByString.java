@@ -13,7 +13,7 @@ import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.object.__static__.identifiable.AbstractIdentifiedPersistableByString;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.field.FieldsGetter;
 
 import lombok.Getter;
@@ -47,7 +47,7 @@ public abstract class AbstractIdentifiedByString extends AbstractIdentifiedPersi
 	}
 	
 	public AbstractIdentifiedByString setFromIdentifier(String fieldName,Object identifier,ValueUsageType valueUsageType){
-		return setFromIdentifier(__inject__(CollectionHelper.class).getFirst(__inject__(FieldsGetter.class).execute(getClass(), fieldName).getOutput()), identifier,valueUsageType);
+		return setFromIdentifier(CollectionHelper.getFirst(__inject__(FieldsGetter.class).execute(getClass(), fieldName).getOutput()), identifier,valueUsageType);
 	}
 	
 	protected <T> T __getFromBusinessIdentifier__(Class<T> aClass,Object identifier){

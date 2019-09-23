@@ -3,9 +3,10 @@ package org.cyk.utility.sql.builder;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.List;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.throwable.ThrowableHelper;
 
@@ -22,7 +23,7 @@ public abstract class AbstractQueryClauseStringBuilderSelectImpl extends Abstrac
 	@Override
 	protected Collection<String> __executeGetArguments__(Collection<Tuple> tuples,Collection<String> arguments) {
 		Collection<Attribute> columns = getAttributes();
-		if(__inject__(CollectionHelper.class).isNotEmpty(columns)){
+		if(CollectionHelper.isNotEmpty(columns)){
 			QueryAttributeNameBuilder attributeNameBuilder = getAttributeNameBuilder();
 			attributeNameBuilder.setIsPrefixedWithTuple(getIsAttributeNamePrefixedWithTuple());
 			for(Attribute index : columns){
@@ -31,11 +32,11 @@ public abstract class AbstractQueryClauseStringBuilderSelectImpl extends Abstrac
 				arguments.add(attributeNameBuilder.setAttribute(index).execute().getOutput());
 			}
 		}
-		if(__inject__(CollectionHelper.class).isEmpty(arguments)){
+		if(CollectionHelper.isEmpty(arguments)){
 			String allColumns = getAllColumnsArgument(tuples);
 			if(__inject__(StringHelper.class).isBlank(allColumns))
 				__inject__(ThrowableHelper.class).throwRuntimeException("Sql clause select all columns are required");
-			return __inject__(CollectionHelper.class).instanciate(allColumns);
+			return List.of(allColumns);
 		}
 		return arguments;
 	}

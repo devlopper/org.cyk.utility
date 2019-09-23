@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 
 import javax.enterprise.context.Dependent;
 
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.string.Strings;
 
@@ -103,7 +103,7 @@ public class PathsGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<P
 	
 	@Override
 	public PathsGetter addDirectoriesByJavaFiles(Collection<java.io.File> files) {
-		if(__inject__(CollectionHelper.class).isNotEmpty(files))
+		if(CollectionHelper.isNotEmpty(files))
 			files.forEach(new Consumer<java.io.File>() {
 				@Override
 				public void accept(java.io.File file) {
@@ -116,7 +116,7 @@ public class PathsGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<P
 	
 	@Override
 	public PathsGetter addDirectoriesByJavaFiles(java.io.File... files) {
-		return addDirectoriesByJavaFiles(__inject__(CollectionHelper.class).instanciate(files));
+		return addDirectoriesByJavaFiles(List.of(files));
 	}
 	
 	public static final String FIELD_DIRECTORIES = "directories";

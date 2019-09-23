@@ -2,21 +2,22 @@ package org.cyk.utility.server.persistence.jpa.hierarchy;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.clazz.ClassInstance;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
-import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.server.persistence.AbstractPersistenceEntityImpl;
 import org.cyk.utility.server.persistence.PersistenceFunctionReader;
 import org.cyk.utility.server.persistence.PersistenceQueryIdentifierStringBuilder;
 import org.cyk.utility.server.persistence.query.PersistenceQueryContext;
 import org.cyk.utility.server.persistence.query.filter.Filter;
 import org.cyk.utility.string.Case;
-import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends AbstractHierarchy<ENTITY>,ENTITY extends AbstractIdentifiedByString<?,?>,HIERARCHIES extends Hierarchies<HIERARCHY,ENTITY>> extends AbstractPersistenceEntityImpl<HIERARCHY> implements HierarchyPersistence<HIERARCHY,ENTITY, HIERARCHIES>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -62,7 +63,7 @@ public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends Abstrac
 	public HIERARCHIES readByParentsIdentifiers(Collection<String> parentsIdentifiers) {
 		Properties properties = new Properties().setQueryIdentifier(readByParentsIdentifiers);
 		Collection<HIERARCHY> hierarchies = __readMany__(properties,____getQueryParameters____(properties,parentsIdentifiers));
-		return __injectCollectionHelper__().isEmpty(hierarchies) ? null : (HIERARCHIES) __inject__(__getCollectionInstanceClass__()).add(hierarchies);
+		return CollectionHelper.isEmpty(hierarchies) ? null : (HIERARCHIES) __inject__(__getCollectionInstanceClass__()).add(hierarchies);
 	}
 	
 	@Override
@@ -88,12 +89,12 @@ public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends Abstrac
 	
 	@Override
 	public HIERARCHIES readByParentsIdentifiers(String... parentsIdentifiers) {
-		return readByParentsIdentifiers(__injectCollectionHelper__().instanciate(parentsIdentifiers));
+		return readByParentsIdentifiers(List.of(parentsIdentifiers));
 	}
 	
 	@Override
 	public Long countByParentsIdentifiers(String... parentsIdentifiers) {
-		return countByParentsIdentifiers(__inject__(CollectionHelper.class).instanciate(parentsIdentifiers), null);
+		return countByParentsIdentifiers(List.of(parentsIdentifiers), null);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -101,12 +102,12 @@ public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends Abstrac
 	public HIERARCHIES readByParentsBusinessIdentifiers(Collection<Object> parentsBusinessIdentifiers) {
 		Properties properties = new Properties().setQueryIdentifier(readByParentsBusinessIdentifiers);
 		Collection<HIERARCHY> hierarchies = __readMany__(properties,____getQueryParameters____(properties,parentsBusinessIdentifiers));
-		return __injectCollectionHelper__().isEmpty(hierarchies) ? null : (HIERARCHIES) __inject__(__getCollectionInstanceClass__()).add(hierarchies);
+		return CollectionHelper.isEmpty(hierarchies) ? null : (HIERARCHIES) __inject__(__getCollectionInstanceClass__()).add(hierarchies);
 	}
 	
 	@Override
 	public HIERARCHIES readByParentsBusinessIdentifiers(Object... parentsBusinessIdentifiers) {
-		return readByParentsBusinessIdentifiers(__injectCollectionHelper__().instanciate(parentsBusinessIdentifiers));
+		return readByParentsBusinessIdentifiers(List.of(parentsBusinessIdentifiers));
 	}
 	
 	@Override
@@ -128,19 +129,19 @@ public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends Abstrac
 	
 	@Override
 	public Long countByParentsBusinessIdentifiers(Object... parentsBusinessIdentifiers) {
-		return countByParentsBusinessIdentifiers(__injectCollectionHelper__().instanciate(parentsBusinessIdentifiers));
+		return countByParentsBusinessIdentifiers(List.of(parentsBusinessIdentifiers));
 	}
 	
 	@Override
 	public HIERARCHIES readByParents(Collection<ENTITY> parents) {
-		if(__injectCollectionHelper__().isNotEmpty(parents))
+		if(CollectionHelper.isNotEmpty(parents))
 			return readByParentsIdentifiers(parents.stream().map(AbstractIdentifiedByString::getIdentifier).collect(Collectors.toList()));
 		return null;
 	}
 	
 	@Override
 	public HIERARCHIES readByParents(@SuppressWarnings("unchecked") ENTITY... parents) {
-		return readByParents(__injectCollectionHelper__().instanciate(parents));
+		return readByParents(List.of(parents));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -150,7 +151,7 @@ public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends Abstrac
 			properties = new Properties();
 		properties.setIfNull(Properties.QUERY_IDENTIFIER,readWhereParentDoesNotHaveParent);
 		Collection<HIERARCHY> hierarchies = __readMany__(properties,____getQueryParameters____(properties));
-		return __injectCollectionHelper__().isEmpty(hierarchies) ? null : (HIERARCHIES) __inject__(__getCollectionInstanceClass__()).add(hierarchies);
+		return CollectionHelper.isEmpty(hierarchies) ? null : (HIERARCHIES) __inject__(__getCollectionInstanceClass__()).add(hierarchies);
 	}
 	
 	@Override
@@ -185,12 +186,12 @@ public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends Abstrac
 	public HIERARCHIES readByChildrenIdentifiers(Collection<String> childrenIdentifiers) {
 		Properties properties = new Properties().setQueryIdentifier(readByChildrenIdentifiers);
 		Collection<HIERARCHY> hierarchies = __readMany__(properties,____getQueryParameters____(properties,childrenIdentifiers));
-		return __injectCollectionHelper__().isEmpty(hierarchies) ? null : (HIERARCHIES) __inject__(__getCollectionInstanceClass__()).add(hierarchies);
+		return CollectionHelper.isEmpty(hierarchies) ? null : (HIERARCHIES) __inject__(__getCollectionInstanceClass__()).add(hierarchies);
 	}
 	
 	@Override
 	public HIERARCHIES readByChildrenIdentifiers(String... childrenIdentifiers) {
-		return readByChildrenIdentifiers(__injectCollectionHelper__().instanciate(childrenIdentifiers));
+		return readByChildrenIdentifiers(List.of(childrenIdentifiers));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -198,24 +199,24 @@ public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends Abstrac
 	public HIERARCHIES readByChildrenBusinessIdentifiers(Collection<Object> childrenBusinessIdentifiers) {
 		Properties properties = new Properties().setQueryIdentifier(childrenBusinessIdentifiers);
 		Collection<HIERARCHY> hierarchies = __readMany__(properties,____getQueryParameters____(properties,childrenBusinessIdentifiers));
-		return __injectCollectionHelper__().isEmpty(hierarchies) ? null : (HIERARCHIES) __inject__(__getCollectionInstanceClass__()).add(hierarchies);
+		return CollectionHelper.isEmpty(hierarchies) ? null : (HIERARCHIES) __inject__(__getCollectionInstanceClass__()).add(hierarchies);
 	}
 	
 	@Override
 	public HIERARCHIES readByChildrenBusinessIdentifiers(Object... childrenBusinessIdentifiers) {
-		return readByChildrenBusinessIdentifiers(__injectCollectionHelper__().instanciate(childrenBusinessIdentifiers));
+		return readByChildrenBusinessIdentifiers(List.of(childrenBusinessIdentifiers));
 	}
 	
 	@Override
 	public HIERARCHIES readByChildren(Collection<ENTITY> children) {
-		if(__injectCollectionHelper__().isNotEmpty(children))
+		if(CollectionHelper.isNotEmpty(children))
 			return readByChildrenIdentifiers(children.stream().map(AbstractIdentifiedByString::getIdentifier).collect(Collectors.toList()));
 		return null;
 	}
 	
 	@Override
 	public HIERARCHIES readByChildren(@SuppressWarnings("unchecked") ENTITY... children) {
-		return readByChildren(__injectCollectionHelper__().instanciate(children));
+		return readByChildren(List.of(children));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -223,24 +224,24 @@ public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends Abstrac
 	public HIERARCHIES readWhereIsParentOrChildIdentifiers(Collection<String> identifiers) {
 		Properties properties = new Properties().setQueryIdentifier(readWhereIsParentOrChildIdentifiers);
 		Collection<HIERARCHY> hierarchies = __readMany__(properties,____getQueryParameters____(properties,identifiers));
-		return __injectCollectionHelper__().isEmpty(hierarchies) ? null : (HIERARCHIES) __inject__(__getCollectionInstanceClass__()).add(hierarchies);
+		return CollectionHelper.isEmpty(hierarchies) ? null : (HIERARCHIES) __inject__(__getCollectionInstanceClass__()).add(hierarchies);
 	}
 	
 	@Override
 	public HIERARCHIES readWhereIsParentOrChildIdentifiers(String... identifiers) {
-		return readWhereIsParentOrChildIdentifiers(__injectCollectionHelper__().instanciate(identifiers));
+		return readWhereIsParentOrChildIdentifiers(List.of(identifiers));
 	}
 	
 	@Override
 	public HIERARCHIES readWhereIsParentOrChild(Collection<ENTITY> entities) {
-		if(__injectCollectionHelper__().isNotEmpty(entities))
+		if(CollectionHelper.isNotEmpty(entities))
 			return readWhereIsParentOrChildIdentifiers(entities.stream().map(AbstractIdentifiedByString::getIdentifier).collect(Collectors.toList()));
 		return null;
 	}
 	
 	@Override
 	public HIERARCHIES readWhereIsParentOrChild(@SuppressWarnings("unchecked") ENTITY... entities) {
-		return readWhereIsParentOrChild(__injectCollectionHelper__().instanciate(entities));
+		return readWhereIsParentOrChild(List.of(entities));
 	}
 	
 	@Override

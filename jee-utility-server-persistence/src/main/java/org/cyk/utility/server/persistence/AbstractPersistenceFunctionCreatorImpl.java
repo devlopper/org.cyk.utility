@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.UUID;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.field.FieldInstance;
 import org.cyk.utility.field.FieldInstancesRuntime;
 import org.cyk.utility.field.FieldValueGetter;
@@ -23,7 +24,7 @@ public abstract class AbstractPersistenceFunctionCreatorImpl extends AbstractPer
 	@Override
 	protected Collection<Object> __getEntities__() {
 		Collection<Object> entities = super.__getEntities__();
-		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(entities))) {
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(entities))) {
 			for(Object index : entities) {
 				if(__entityClassSystemIdentifierField__ != null) {
 					//Generate value if needed

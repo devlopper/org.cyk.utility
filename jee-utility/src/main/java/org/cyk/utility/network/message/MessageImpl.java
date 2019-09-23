@@ -7,7 +7,7 @@ import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.array.ArrayHelper;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 
 @Dependent
 public class MessageImpl extends AbstractObject implements Message , Serializable {
@@ -69,7 +69,7 @@ public class MessageImpl extends AbstractObject implements Message , Serializabl
 	
 	@Override
 	public Message addReceiversByIdentifiers(Collection<Object> receiversIdentifiers) {
-		if(Boolean.TRUE.equals(__inject__(CollectionHelper.class).isNotEmpty(receiversIdentifiers))){
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(receiversIdentifiers))){
 			for(Object index : receiversIdentifiers)
 				addReceivers(__inject__(Receiver.class).setIdentifier(index));
 		}

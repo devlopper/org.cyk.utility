@@ -11,7 +11,7 @@ import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.array.ArrayHelperImpl;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.helper.AbstractHelper;
 
 @ApplicationScoped
@@ -25,7 +25,7 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 		fieldValueCopy.copyProperty(Properties.REQUEST, properties);
 		Boolean isAutomaticallyDetectFields = null;
 		Object fields = properties.getFields();
-		if(fields instanceof Collection && __inject__(CollectionHelper.class).isNotEmpty((Collection<?>) fields)) {
+		if(fields instanceof Collection && CollectionHelper.isNotEmpty((Collection<?>) fields)) {
 			for(String index : ((Collection<String>)fields))
 				fieldValueCopy.setFieldName(index);
 			isAutomaticallyDetectFields = Boolean.FALSE;

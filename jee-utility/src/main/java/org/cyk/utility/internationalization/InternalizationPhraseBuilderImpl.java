@@ -3,10 +3,12 @@ package org.cyk.utility.internationalization;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
 import org.cyk.utility.string.Case;
@@ -24,7 +26,7 @@ public class InternalizationPhraseBuilderImpl extends AbstractStringFunctionImpl
 	protected String __execute__() throws Exception {
 		Collection<String> stringsCollection = null;
 		InternalizationStringBuilders strings = getStrings();
-		if(__injectCollectionHelper__().isNotEmpty(strings)) {
+		if(CollectionHelper.isNotEmpty(strings)) {
 			stringsCollection = new ArrayList<>();
 			Locale locale = getLocale();
 			for(InternalizationStringBuilder index : strings.get()) {
@@ -68,7 +70,7 @@ public class InternalizationPhraseBuilderImpl extends AbstractStringFunctionImpl
 	}
 	@Override
 	public InternalizationPhraseBuilder addStringsByKeys(Collection<Object> keys) {
-		if(__injectCollectionHelper__().isNotEmpty(keys)) {
+		if(CollectionHelper.isNotEmpty(keys)) {
 			for(Object index : keys)
 				getStrings(Boolean.TRUE).add(__inject__(InternalizationStringBuilder.class).setKeyValue(index));
 		}
@@ -76,7 +78,7 @@ public class InternalizationPhraseBuilderImpl extends AbstractStringFunctionImpl
 	}
 	@Override
 	public InternalizationPhraseBuilder addStringsByKeys(Object... keys) {
-		addStringsByKeys(__injectCollectionHelper__().instanciate(keys));
+		addStringsByKeys(List.of(keys));
 		return this;
 	}
 	@Override

@@ -9,6 +9,7 @@ import java.util.Locale;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl;
 import org.cyk.utility.string.Case;
@@ -97,10 +98,10 @@ public class InternalizationStringBuilderImpl extends AbstractFunctionWithProper
 			//5 - derive from related
 			if(__injectStringHelper__().isBlank(result)) {
 				Collection<Strings> related = __inject__(InternalizationKeyRelatedStringsBuilder.class).setKey(key).execute().getOutput();
-				if(__injectCollectionHelper__().isNotEmpty(related)) {
+				if(CollectionHelper.isNotEmpty(related)) {
 					for(Strings index : related) {
 						InternalizationPhraseBuilder phraseBuilder = __inject__(InternalizationPhraseBuilder.class);
-						phraseBuilder.addStringsByKeys(__injectCollectionHelper__().cast(Object.class, index.get()));
+						phraseBuilder.addStringsByKeys(CollectionHelper.cast(Object.class, index.get()));
 						result = phraseBuilder.execute().getOutput();
 						if(__injectStringHelper__().isNotBlank(result))
 							break;

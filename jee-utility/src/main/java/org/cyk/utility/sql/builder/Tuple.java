@@ -4,11 +4,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.List;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.array.ArrayHelper;
-import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.string.StringHelper;
 
 public class Tuple extends AbstractObject implements Serializable {
@@ -17,7 +18,7 @@ public class Tuple extends AbstractObject implements Serializable {
 	public Attribute getAttributeByName(String name,Boolean instanciateIfNull){
 		Collection<Attribute> attributes = getAttributes();
 		Attribute attribute = null;
-		if(__inject__(CollectionHelper.class).isNotEmpty(attributes)){
+		if(CollectionHelper.isNotEmpty(attributes)){
 			for(Attribute index : attributes)
 				if(index.getName().equals(name)){
 					attribute = index;
@@ -76,7 +77,7 @@ public class Tuple extends AbstractObject implements Serializable {
 	}
 	
 	public Tuple addAttributes(Collection<Attribute> attributes){
-		if(__inject__(CollectionHelper.class).isNotEmpty(attributes)){
+		if(CollectionHelper.isNotEmpty(attributes)){
 			Collection<Attribute> collection = getAttributes();
 			if(collection == null)
 				setAttributes(collection = new LinkedHashSet<Attribute>());
@@ -89,12 +90,12 @@ public class Tuple extends AbstractObject implements Serializable {
 	}
 	
 	public Tuple addAttributes(Attribute...attributes){
-		addAttributes(__inject__(CollectionHelper.class).instanciate(attributes));
+		addAttributes(List.of(attributes));
 		return this;
 	}
 	
 	public Tuple addAttributesByNames(Collection<String> attributeNames){
-		if(__inject__(CollectionHelper.class).isNotEmpty(attributeNames)){
+		if(CollectionHelper.isNotEmpty(attributeNames)){
 			for(String index : attributeNames)
 				addAttributes(new Attribute().setName(index));
 		}
@@ -102,7 +103,7 @@ public class Tuple extends AbstractObject implements Serializable {
 	}
 	
 	public Tuple addAttributesByNames(String...attributeNames){
-		addAttributesByNames(__inject__(CollectionHelper.class).instanciate(attributeNames));
+		addAttributesByNames(List.of(attributeNames));
 		return this;
 	}
 

@@ -2,12 +2,13 @@ package org.cyk.utility.function;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 import org.cyk.utility.__kernel__.assertion.Assertion;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.function.FunctionRunnable;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.assertion.AssertionBuilder;
-import org.cyk.utility.collection.CollectionHelper;
 
 @Deprecated
 public class ExecutionPhase extends org.cyk.utility.__kernel__.function.ExecutionPhase implements Serializable {
@@ -23,12 +24,12 @@ public class ExecutionPhase extends org.cyk.utility.__kernel__.function.Executio
 	}
 	
 	public ExecutionPhase addAssertions(Collection<Assertion> assertions){
-		setAssertions(__inject__(CollectionHelper.class).add(getAssertions(), Boolean.TRUE, assertions));
+		setAssertions(CollectionHelper.add(getAssertions(), Boolean.TRUE, assertions));
 		return this;
 	}
 	
 	public ExecutionPhase addAssertions(Assertion...assertions){
-		addAssertions(__inject__(CollectionHelper.class).instanciate(assertions));
+		addAssertions(List.of(assertions));
 		return this;
 	}
 	
@@ -44,12 +45,12 @@ public class ExecutionPhase extends org.cyk.utility.__kernel__.function.Executio
 	}
 	
 	public ExecutionPhase addAssertionBuilders(Collection<AssertionBuilder> assertionBuilders){
-		setAssertionBuilders(__inject__(CollectionHelper.class).add(getAssertionBuilders(), Boolean.TRUE, assertionBuilders));
+		setAssertionBuilders(CollectionHelper.add(getAssertionBuilders(), Boolean.TRUE, assertionBuilders));
 		return this;
 	}
 	
 	public ExecutionPhase addAssertionBuilders(AssertionBuilder...assertionBuilders){
-		addAssertionBuilders(__inject__(CollectionHelper.class).instanciate(assertionBuilders));
+		addAssertionBuilders(List.of(assertionBuilders));
 		return this;
 	}
 	
@@ -68,13 +69,13 @@ public class ExecutionPhase extends org.cyk.utility.__kernel__.function.Executio
 	
 	@Deprecated
 	public ExecutionPhase addRunnables(Collection<Runnable> runnables){
-		setRunnables(__inject__(CollectionHelper.class).add(getRunnables(), Boolean.TRUE, runnables));
+		setRunnables(CollectionHelper.add(getRunnables(), Boolean.TRUE, runnables));
 		return this;
 	}
 	
 	@Deprecated
 	public ExecutionPhase addRunnables(Runnable...runnables){
-		addRunnables(__inject__(CollectionHelper.class).instanciate(runnables));
+		addRunnables(List.of(runnables));
 		return this;
 	}
 	
@@ -91,13 +92,13 @@ public class ExecutionPhase extends org.cyk.utility.__kernel__.function.Executio
 	
 	@Deprecated
 	public ExecutionPhase addFunctionRunnables(Collection<FunctionRunnable<?>> functionRunnables){
-		setFunctionRunnables(__inject__(CollectionHelper.class).add(getFunctionRunnables(), Boolean.TRUE, functionRunnables));
+		setFunctionRunnables(CollectionHelper.add(getFunctionRunnables(), Boolean.TRUE, functionRunnables));
 		return this;
 	}
 	
 	@Deprecated
 	public ExecutionPhase addFunctionRunnables(FunctionRunnable<?>...functionRunnables){
-		addFunctionRunnables(__inject__(CollectionHelper.class).instanciate(functionRunnables));
+		addFunctionRunnables(List.of(functionRunnables));
 		return this;
 	}
 	
@@ -116,13 +117,13 @@ public class ExecutionPhase extends org.cyk.utility.__kernel__.function.Executio
 	
 	@Deprecated
 	public ExecutionPhase addFinallyRunnables(Collection<Runnable> runnables){
-		setFinallyRunnables(__inject__(CollectionHelper.class).add(getFinallyRunnables(), Boolean.TRUE, runnables));
+		setFinallyRunnables(CollectionHelper.add(getFinallyRunnables(), Boolean.TRUE, runnables));
 		return this;
 	}
 	
 	@Deprecated
 	public ExecutionPhase addFinallyRunnables(Runnable...runnables){
-		addFinallyRunnables(__inject__(CollectionHelper.class).instanciate(runnables));
+		addFinallyRunnables(List.of(runnables));
 		return this;
 	}
 	

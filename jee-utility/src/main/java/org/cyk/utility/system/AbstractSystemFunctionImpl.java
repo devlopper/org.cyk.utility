@@ -5,8 +5,10 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.__kernel__.function.FunctionExecutionPhase;
@@ -20,7 +22,6 @@ import org.cyk.utility.assertion.AssertionsProviderClassMap;
 import org.cyk.utility.assertion.AssertionsProviderFor;
 import org.cyk.utility.clazz.ClassInstance;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
-import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.enumeration.EnumGetter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
 import org.cyk.utility.function.FunctionHelper;
@@ -85,7 +86,7 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 		super.__executePhaseMoment__(executionPhase, momentClass);
 		if(executionPhase instanceof FunctionExecutionPhaseTry && FunctionExecutionPhaseMomentBegin.class.equals(momentClass)) {
 			//we put markers in message to support those logging framework which do not handle markers
-			addLogMessageBuilderParameter(__inject__(StringHelper.class).concatenate(__injectCollectionHelper__().cast(String.class, getLog(Boolean.TRUE).getMarkers())
+			addLogMessageBuilderParameter(__inject__(StringHelper.class).concatenate(CollectionHelper.cast(String.class, getLog(Boolean.TRUE).getMarkers())
 					,ConstantCharacter.SPACE.toString()));
 		}
 	}
@@ -128,10 +129,10 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 		__initialiseEntitiesIdentifiers__();
 		
 		Integer numberOfProcessedElement = null;
-		if(__injectCollectionHelper__().isNotEmpty(__entities__))
+		if(CollectionHelper.isNotEmpty(__entities__))
 			numberOfProcessedElement = __entities__.size();
 		else { 
-			numberOfProcessedElement = __injectCollectionHelper__().getSize(__entitiesSystemIdentifiers__) + __injectCollectionHelper__().getSize(__entitiesBusinessIdentifiers__);
+			numberOfProcessedElement = CollectionHelper.getSize(__entitiesSystemIdentifiers__) + CollectionHelper.getSize(__entitiesBusinessIdentifiers__);
 		}
 		
 		if(numberOfProcessedElement != null && numberOfProcessedElement > 0)
@@ -201,7 +202,7 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	protected Collection<Object> __getEntitiesIdentifiers__(ValueUsageType valueUsageType) {
 		Collection<Object> identifiers = null;
 		
-		if(__injectCollectionHelper__().isNotEmpty(__entities__)) {
+		if(CollectionHelper.isNotEmpty(__entities__)) {
 			if(identifiers == null)
 				identifiers = new LinkedHashSet<>();
 			
@@ -225,7 +226,7 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 				identifiers.add(getEntityIdentifier());
 			}	
 			
-			if(__injectCollectionHelper__().isNotEmpty(getAction().getEntitiesIdentifiers())) {
+			if(CollectionHelper.isNotEmpty(getAction().getEntitiesIdentifiers())) {
 				if(identifiers == null)
 					identifiers = new LinkedHashSet<>();
 				identifiers.addAll(getAction().getEntitiesIdentifiers().get());
@@ -264,7 +265,7 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	
 	@Override
 	public SystemFunction setEntityFieldNames(Collection<String> entityFieldNames) {
-		if(__injectCollectionHelper__().isNotEmpty(entityFieldNames)) {
+		if(CollectionHelper.isNotEmpty(entityFieldNames)) {
 			Strings collection = getEntityFieldNames();
 			if(collection == null)
 				setEntityFieldNames(collection = __inject__(Strings.class));
@@ -275,12 +276,12 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	
 	@Override
 	public SystemFunction setEntityFieldNames(String... entityFieldNames) {
-		return setEntityFieldNames(__injectCollectionHelper__().instanciate(entityFieldNames));
+		return setEntityFieldNames(List.of(entityFieldNames));
 	}
 	
 	@Override
 	public SystemFunction addEntityFieldNames(Collection<String> entityFieldNames) {
-		if(__injectCollectionHelper__().isNotEmpty(entityFieldNames)) {
+		if(CollectionHelper.isNotEmpty(entityFieldNames)) {
 			Strings collection = getEntityFieldNames();
 			if(collection == null)
 				setEntityFieldNames(entityFieldNames);
@@ -292,7 +293,7 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	
 	@Override
 	public SystemFunction addEntityFieldNames(String... entityFieldNames) {
-		return addEntityFieldNames(__injectCollectionHelper__().instanciate(entityFieldNames));
+		return addEntityFieldNames(List.of(entityFieldNames));
 	}
 	
 	@Override
@@ -324,7 +325,7 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	
 	@Override
 	public SystemFunction addActionEntities(Object... entities) {
-		return addActionEntities(__injectCollectionHelper__().instanciate(entities));
+		return addActionEntities(List.of(entities));
 	}
 	
 	@Override
@@ -417,7 +418,7 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	
 	protected void __setConditionsAssertionsProvidersIfNull__(Collection<Object> entities,Object preFilter,Object postFilter) {
 		AssertionsProvider preConditionsAssertionsProvider = (AssertionsProvider) getPreConditionsAssertionsProvider();
-		Boolean areEntitiesNotEmpty = Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(entities));
+		Boolean areEntitiesNotEmpty = Boolean.TRUE.equals(CollectionHelper.isNotEmpty(entities));
 		if(preConditionsAssertionsProvider==null && areEntitiesNotEmpty)
 			setPreConditionsAssertionsProvider(preConditionsAssertionsProvider = __inject__(AssertionsProviderClassMap.class).inject(entities.iterator().next()));
 		
@@ -452,7 +453,7 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	@Override
 	public SystemFunction setEntities(Collection<?> entities) {
 		getProperties().setEntities(entities);
-		if(__inject__(CollectionHelper.class).isNotEmpty(entities))
+		if(CollectionHelper.isNotEmpty(entities))
 			setEntityClass(entities.iterator().next().getClass());
 		return this;
 	}
@@ -477,11 +478,11 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	/* following can be more upper*/
 	
 	protected Collection<FieldName> __getLoggedEntityFieldNames__(){
-		return __inject__(CollectionHelper.class).instanciate(FieldName.IDENTIFIER);
+		return List.of(FieldName.IDENTIFIER);
 	}
 	
 	protected Collection<ValueUsageType> getValueUsageTypes(FieldName fieldName){
-		return __inject__(CollectionHelper.class).instanciate(ValueUsageType.values());
+		return List.of(ValueUsageType.values());
 	}
 	
 	@Override

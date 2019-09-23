@@ -2,10 +2,11 @@ package org.cyk.utility.sql.builder;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.LogicalOperator;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.criteria.Criteria;
 import org.cyk.utility.filter.Filter;
 import org.cyk.utility.throwable.ThrowableHelper;
@@ -50,7 +51,7 @@ public abstract class AbstractQueryClauseStringBuilderWhereImpl extends Abstract
 		QueryWherePredicateStringBuilder predicateBuilder = getPredicateBuilder();
 		if(predicateBuilder == null)
 			__inject__(ThrowableHelper.class).throwRuntimeException("Sql query clause where : predicate is required");
-		return __inject__(CollectionHelper.class).isEmpty(arguments) ? __inject__(CollectionHelper.class).instanciate(predicateBuilder.execute().getOutput()) 
+		return CollectionHelper.isEmpty(arguments) ? List.of(predicateBuilder.execute().getOutput()) 
 				: super.__executeGetArguments__(tuples, arguments);
 	}
 	

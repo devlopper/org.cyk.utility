@@ -3,10 +3,11 @@ package org.cyk.utility.server.persistence;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.clazz.Classes;
 import org.cyk.utility.value.ValueHelper;
-import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +21,7 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	
 	@Override
 	public PersistenceServiceProvider<Object> createMany(Collection<Object> objects, Properties properties) {
-		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(objects))) {
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(objects))) {
 			PersistenceEntity<Object> persistence = __injectPersistenceLayer__().injectInterfaceClassFromEntity(objects.iterator().next());
 			if(persistence == null){
 				super.createMany(objects, properties);
@@ -39,7 +40,7 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	public <ENTITY> Collection<ENTITY> readByIdentifiers(Class<ENTITY> aClass, Collection<Object> identifiers,ValueUsageType valueUsageType, Properties properties) {
 		if(aClass == null)
 			__injectThrowableHelper__().throwRuntimeException("class is required");
-		if(Boolean.TRUE.equals(__injectCollectionHelper__().isEmpty(identifiers)))
+		if(Boolean.TRUE.equals(CollectionHelper.isEmpty(identifiers)))
 			__injectThrowableHelper__().throwRuntimeException("identifiers are required");
 		PersistenceEntity<ENTITY> persistence = __injectPersistenceLayer__().injectInterfaceClassFromEntityClass(aClass);
 		Collection<ENTITY> entities;
@@ -153,7 +154,7 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	
 	@Override
 	public PersistenceServiceProvider<Object> updateMany(Collection<Object> objects, Properties properties) {
-		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(objects))) {
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(objects))) {
 			PersistenceEntity<Object> persistence = __injectPersistenceLayer__().injectInterfaceClassFromEntity(objects.iterator().next());
 			if(persistence == null){
 				super.updateMany(objects, properties);
@@ -179,7 +180,7 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	
 	@Override
 	public PersistenceServiceProvider<Object> deleteMany(Collection<Object> objects, Properties properties) {
-		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(objects))) {
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(objects))) {
 			PersistenceEntity<Object> persistence = __injectPersistenceLayer__().injectInterfaceClassFromEntity(objects.iterator().next());
 			if(persistence == null){
 				super.deleteMany(objects, properties);
@@ -247,7 +248,7 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	@Override
 	public PersistenceServiceProvider<Object> deleteAll(Properties properties) {
 		Classes classes = __inject__(PersistableClassesGetter.class).execute().getOutput();
-		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(classes))) {
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(classes))) {
 			for(Class<?> index : classes.get())
 				deleteByEntityClass(index, properties);
 		}

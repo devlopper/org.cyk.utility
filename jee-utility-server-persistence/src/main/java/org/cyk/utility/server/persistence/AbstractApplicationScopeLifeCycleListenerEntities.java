@@ -11,7 +11,7 @@ import org.cyk.utility.clazz.ClassInstance;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.clazz.Classes;
 import org.cyk.utility.clazz.ClassesGetter;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.field.FieldInstance;
 import org.cyk.utility.field.FieldInstancesRuntime;
 import org.cyk.utility.internationalization.InternationalizationHelperImpl;
@@ -37,7 +37,7 @@ public abstract class AbstractApplicationScopeLifeCycleListenerEntities extends 
 		Class<?>[] basesClasses = __getClassesBasesClasses__();
 		if(__inject__(ArrayHelper.class).isNotEmpty(basesClasses)) {
 			Classes classes = __inject__(ClassesGetter.class).addPackageNames(packageName).addBasesClasses(basesClasses).setIsInterface(Boolean.FALSE).execute().getOutput();
-			if(__inject__(CollectionHelper.class).isNotEmpty(classes)) {
+			if(CollectionHelper.isNotEmpty(classes)) {
 				for(@SuppressWarnings("rawtypes") Class index : classes.get()) {
 					if(!Modifier.isAbstract(index.getModifiers())) {
 						ClassInstance classInstance = __inject__(ClassInstancesRuntime.class).get(index);

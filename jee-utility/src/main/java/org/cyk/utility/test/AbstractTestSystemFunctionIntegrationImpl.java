@@ -12,7 +12,7 @@ import javax.transaction.UserTransaction;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.array.ArrayHelper;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 
@@ -74,7 +74,7 @@ public abstract class AbstractTestSystemFunctionIntegrationImpl extends Abstract
 			Collection<Object> collection = getObjects();
 			if(collection == null)
 				setObjects(collection = new ArrayList<Object>());
-			__inject__(CollectionHelper.class).add(collection, objects);
+			CollectionHelper.add(collection, objects);
 		}
 		return this;
 	}
@@ -108,7 +108,7 @@ public abstract class AbstractTestSystemFunctionIntegrationImpl extends Abstract
 			Collection<Object> collection = getObjectIdentifiers();
 			if(collection == null)
 				setObjectIdentifiers(collection = new ArrayList<Object>());
-			__inject__(CollectionHelper.class).add(collection, objectIdentifiers);
+			CollectionHelper.add(collection, objectIdentifiers);
 		}
 		return this;
 	}
@@ -151,7 +151,7 @@ public abstract class AbstractTestSystemFunctionIntegrationImpl extends Abstract
 			Collection<Object> collection = getUnexistingObjectIdentifiers();
 			if(collection == null)
 				setUnexistingObjectIdentifiers(collection = new ArrayList<Object>());
-			__inject__(CollectionHelper.class).add(collection, unexistingObjectIdentifiers);
+			CollectionHelper.add(collection, unexistingObjectIdentifiers);
 		}
 		return this;
 	}

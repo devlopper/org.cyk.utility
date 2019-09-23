@@ -3,7 +3,7 @@ package org.cyk.utility.server.persistence.test;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.server.persistence.Persistence;
@@ -25,7 +25,7 @@ public abstract class AbstractTestPersistenceReadIntegrationImpl extends Abstrac
 	
 	@Override
 	protected void __perform__(Object object) throws Exception {
-		Boolean mustUnexist =  Boolean.TRUE.equals(__inject__(CollectionHelper.class).contains(getUnexistingObjectIdentifiers(), object));
+		Boolean mustUnexist =  Boolean.TRUE.equals(CollectionHelper.contains(getUnexistingObjectIdentifiers(), object));
 		ValueUsageType valueUsageType = getIdentifierValueUsageType();
 		Object one = __inject__(Persistence.class).readByIdentifier(getObjectClass(),object,new Properties().setValueUsageType(valueUsageType));
 		assertionHelper.assertEquals(getObjectClass()+" with "+valueUsageType+" identifier <"+object+">"+(mustUnexist ? "" : " not")+" found", !mustUnexist,one!=null);

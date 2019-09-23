@@ -8,7 +8,7 @@ import javax.json.bind.JsonbBuilder;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.field.FieldInstance;
 import org.cyk.utility.field.FieldInstancesRuntime;
 import org.cyk.utility.mapping.AbstractMapperSourceDestinationImpl;
@@ -35,7 +35,7 @@ public abstract class FieldDtoMapper extends AbstractMapperSourceDestinationImpl
 			}else if(value instanceof Collection) {
 				valueAsJson = JsonbBuilder.create().toJson(value);
 				valueDto.setContainer(ValueDto.Container.COLLECTION);
-				Object element = DependencyInjection.inject(CollectionHelper.class).getFirst((Collection<?>) value);
+				Object element = CollectionHelper.getFirst((Collection<?>) value);
 				if(element != null) {
 					if(element instanceof String)
 						valueDto.setType(ValueDto.Type.STRING);

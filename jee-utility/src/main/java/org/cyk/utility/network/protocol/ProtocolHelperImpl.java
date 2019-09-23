@@ -9,7 +9,7 @@ import java.util.Map;
 
 import javax.enterprise.context.ApplicationScoped;
 
-import org.cyk.utility.collection.CollectionHelperImpl;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.helper.AbstractHelper;
 
 @ApplicationScoped
@@ -27,6 +27,6 @@ public class ProtocolHelperImpl extends AbstractHelper implements ProtocolHelper
 	}
 	
 	public static Integer __getDefaultPort__(String scheme) {
-		return CollectionHelperImpl.__getFirst__(__getPorts__(scheme));
+		return CollectionHelper.getFirst(__getPorts__(scheme));
 	}
 }

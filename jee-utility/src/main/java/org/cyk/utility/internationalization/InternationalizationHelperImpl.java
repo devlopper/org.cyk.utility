@@ -15,11 +15,11 @@ import java.util.stream.Collectors;
 import javax.enterprise.context.ApplicationScoped;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.array.ArrayHelperImpl;
-import org.cyk.utility.collection.CollectionHelperImpl;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.locale.LocaleHelper;
 import org.cyk.utility.string.Case;
@@ -160,7 +160,7 @@ public class InternationalizationHelperImpl extends AbstractHelper implements In
 		if(StringHelperImpl.__isBlank__(result)) {
 			//derive it from related
 			Collection<Strings> related = __deriveKeys__(key.getValue());
-			if(CollectionHelperImpl.__isNotEmpty__(related)) {
+			if(CollectionHelper.isNotEmpty(related)) {
 				for(Strings index : related) {
 					result = __buildPhraseFromKeysValues__(index.get(),ValueHelperImpl.__defaultToIfBlank__(kase, Case.NONE));
 					if(StringHelperImpl.__isNotBlank__(result))
@@ -212,7 +212,7 @@ public class InternationalizationHelperImpl extends AbstractHelper implements In
 	}
 	
 	public static String __buildPhrase__(Collection<InternationalizationKey> keys,Locale locale,Case kase) {
-		if(CollectionHelperImpl.__isEmpty__(keys))
+		if(CollectionHelper.isEmpty(keys))
 			return null;
 		locale = ValueHelperImpl.__defaultToIfNull__(locale, __inject__(LocaleHelper.class).getLocaleDefaultIfNull());
 		kase = ValueHelperImpl.__defaultToIfNull__(kase,Case.FIRST_CHARACTER_UPPER_REMAINDER_LOWER);
@@ -229,7 +229,7 @@ public class InternationalizationHelperImpl extends AbstractHelper implements In
 	}
 	
 	private static String ____buildPhrase____(Collection<String> strings,Case kase) {
-		return CollectionHelperImpl.__isEmpty__(strings) ? null : StringHelperImpl.__applyCase__(StringHelperImpl.__concatenate__(strings, SEPARATOR), kase);
+		return CollectionHelper.isEmpty(strings) ? null : StringHelperImpl.__applyCase__(StringHelperImpl.__concatenate__(strings, SEPARATOR), kase);
 	}
 	
 	public static String __buildPhrase__(Collection<InternationalizationKey> keys) {
@@ -250,7 +250,7 @@ public class InternationalizationHelperImpl extends AbstractHelper implements In
 	}
 	
 	public static String __buildPhraseFromKeysValues__(Locale locale,Case kase,String...keysValues) {
-		return keysValues == null ? null : __buildPhraseFromKeysValues__(CollectionHelperImpl.__instanciate__(keysValues),locale,kase);
+		return keysValues == null ? null : __buildPhraseFromKeysValues__(List.of(keysValues),locale,kase);
 	}
 	
 	public static String __buildPhraseFromKeysValues__(Case kase,String...keysValues) {
@@ -262,7 +262,7 @@ public class InternationalizationHelperImpl extends AbstractHelper implements In
 	}
 	
 	public static String __buildPhrase__(Collection<InternationalizationString> strings,Case kase) {
-		if(CollectionHelperImpl.__isEmpty__(strings))
+		if(CollectionHelper.isEmpty(strings))
 			return null;
 		Collection<String> phraseStrings = new ArrayList<>();
 		for(InternationalizationString index : strings) {
@@ -274,27 +274,27 @@ public class InternationalizationHelperImpl extends AbstractHelper implements In
 	}
 	
 	public static void __processStrings__(Collection<InternationalizationString> internalizationStrings) {
-		if(CollectionHelperImpl.__isNotEmpty__(internalizationStrings))
+		if(CollectionHelper.isNotEmpty(internalizationStrings))
 			for(InternationalizationString index : internalizationStrings)
 				if(!Boolean.TRUE.equals(index.getIsHasBeenProcessed()))
 					index.setValue(__buildString__(index.getKey(), null, index.getLocale(), index.getKase()));
 	}
 	
 	public static void __processStrings__(InternationalizationString...internalizationStrings) {
-		__processStrings__(CollectionHelperImpl.__instanciate__(internalizationStrings));
+		__processStrings__(List.of(internalizationStrings));
 	}
 	
 	public static void __processPhrases__(Collection<InternationalizationPhrase> internalizationPhrases) {
-		if(CollectionHelperImpl.__isNotEmpty__(internalizationPhrases))
+		if(CollectionHelper.isNotEmpty(internalizationPhrases))
 			for(InternationalizationPhrase index : internalizationPhrases)
-				if(CollectionHelperImpl.__isNotEmpty__(index.getStrings())) {
+				if(CollectionHelper.isNotEmpty(index.getStrings())) {
 					__processStrings__(index.getStrings().get());
 					index.setValue(____buildPhrase____(index.getStrings().get().stream().map(InternationalizationString::getValue).collect(Collectors.toList()), index.getKase()));
 				}
 	}
 	
 	public static void __processPhrases__(InternationalizationPhrase...internalizationPhrases) {
-		__processPhrases__(CollectionHelperImpl.__instanciate__(internalizationPhrases));
+		__processPhrases__(List.of(internalizationPhrases));
 	}
 	
 	public static void __addResourceBundleAt__(String baseName, ClassLoader classLoader,Integer index) {
@@ -334,8 +334,8 @@ public class InternationalizationHelperImpl extends AbstractHelper implements In
 	}
 	
 	public static String __getFromResourceBundles__(String identifier,Object[] arguments,Locale locale,Case aCase,Collection<ResourceBundle> resourceBundles) {
-		resourceBundles = resourceBundles == null ? RESOURCE_BUNDLES : CollectionHelperImpl.__concatenate__(resourceBundles,RESOURCE_BUNDLES);
-		if(CollectionHelperImpl.__isEmpty__(resourceBundles)){
+		resourceBundles = resourceBundles == null ? RESOURCE_BUNDLES : CollectionHelper.concatenate(resourceBundles,RESOURCE_BUNDLES);
+		if(CollectionHelper.isEmpty(resourceBundles)){
 			//TODO log a warning
 		}else{
 			locale = ValueHelperImpl.__defaultToIfNull__(locale, __inject__(LocaleHelper.class).getLocaleDefaultIfNull());

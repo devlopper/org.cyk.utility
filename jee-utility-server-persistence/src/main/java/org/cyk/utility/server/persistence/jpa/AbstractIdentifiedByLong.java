@@ -14,7 +14,7 @@ import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.object.__static__.identifiable.AbstractIdentifiedPersistableByLong;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.field.FieldsGetter;
 
 import lombok.Getter;
@@ -48,7 +48,7 @@ public abstract class AbstractIdentifiedByLong extends AbstractIdentifiedPersist
 	}
 	
 	public AbstractIdentifiedByLong setFromBusinessIdentifier(String fieldName,Object identifier){
-		return setFromBusinessIdentifier(__inject__(CollectionHelper.class).getFirst(__inject__(FieldsGetter.class).execute(getClass(), fieldName).getOutput()), identifier);
+		return setFromBusinessIdentifier(CollectionHelper.getFirst(__inject__(FieldsGetter.class).execute(getClass(), fieldName).getOutput()), identifier);
 	}
 	
 	/**/

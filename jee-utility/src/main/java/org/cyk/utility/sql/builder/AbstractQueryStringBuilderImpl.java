@@ -3,7 +3,7 @@ package org.cyk.utility.sql.builder;
 import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl;
 
 public abstract class AbstractQueryStringBuilderImpl extends AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl implements QueryStringBuilder, Serializable {
@@ -67,7 +67,7 @@ public abstract class AbstractQueryStringBuilderImpl extends AbstractFunctionWit
 		QueryWherePredicateStringBuilder builder = where.getPredicateBuilder();
 		if(builder == null){
 			where.setPredicateBuilder(builder = ____inject____(aClass).setParent(where));
-			builder.setTuple(__inject__(CollectionHelper.class).getFirst(getFromClauseBuilder().getTuples()));
+			builder.setTuple(CollectionHelper.getFirst(getFromClauseBuilder().getTuples()));
 		}
 		return (I) builder;
 	}

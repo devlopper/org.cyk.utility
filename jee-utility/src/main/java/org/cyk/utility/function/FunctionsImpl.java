@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import javax.enterprise.context.Dependent;
 
-import org.cyk.utility.collection.AbstractCollectionInstanceImpl;
+import org.cyk.utility.__kernel__.collection.AbstractCollectionInstanceImpl;
 
 @Dependent @SuppressWarnings("rawtypes")
 public class FunctionsImpl extends AbstractCollectionInstanceImpl<Function> implements Functions,Serializable {

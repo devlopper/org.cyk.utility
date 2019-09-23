@@ -1,6 +1,6 @@
 package org.cyk.utility.clazz;
 
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 
@@ -22,13 +22,13 @@ public class ClassInstancesRuntimeUnitTest extends AbstractWeldUnitTest {
 	@Test
 	public void getC1_many_call_add_class_only_once_to_runtime_collection() {
 		for(Integer index = 0; index < 5; index = index + 1) {
-			Integer count = __inject__(CollectionHelper.class).getSize(__inject__(ClassInstancesRuntime.class).getInstances());
+			Integer count = CollectionHelper.getSize(__inject__(ClassInstancesRuntime.class).getInstances());
 			if(index == 0)
 				assertionHelper.assertEqualsNumber(0, count);
 			else
 				assertionHelper.assertNotEqualsNumber(0, count);
 			assertionHelper.assertEquals(C1.class, __inject__(ClassInstancesRuntime.class).get(C1.class).getClazz());
-			assertionHelper.assertEqualsNumber(1, __inject__(CollectionHelper.class).getSize(__inject__(ClassInstancesRuntime.class).getInstances()));
+			assertionHelper.assertEqualsNumber(1, CollectionHelper.getSize(__inject__(ClassInstancesRuntime.class).getInstances()));
 		}
 	}
 	

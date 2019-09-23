@@ -2,7 +2,7 @@ package org.cyk.utility.clazz;
 
 import java.util.Collection;
 
-import org.cyk.utility.collection.CollectionInstance;
+import org.cyk.utility.__kernel__.collection.CollectionInstance;
 
 @SuppressWarnings("rawtypes")
 public interface Classes extends CollectionInstance<Class> {

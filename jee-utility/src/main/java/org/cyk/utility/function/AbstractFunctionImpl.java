@@ -7,14 +7,13 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionInstance;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.function.FunctionRunnable;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.assertion.AssertionBuilder;
-import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.collection.CollectionHelperImpl;
-import org.cyk.utility.collection.CollectionInstance;
 import org.cyk.utility.css.CascadeStyleSheetHelper;
 import org.cyk.utility.css.CascadeStyleSheetHelperImpl;
 import org.cyk.utility.instance.InstanceHelper;
@@ -146,7 +145,7 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 	
 	@Override
 	public Function<INPUT, OUTPUT> addLogMarkers(Collection<String> markers) {
-		if(__inject__(CollectionHelper.class).isNotEmpty(markers)){
+		if(CollectionHelper.isNotEmpty(markers)){
 			Collection<String> collection = getLogMarkers();
 			if(collection == null)
 				setLogMarkers(collection = new ArrayList<>());
@@ -158,7 +157,7 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 	
 	@Override
 	public Function<INPUT, OUTPUT> addLogMarkers(String... markers) {
-		addLogMarkers(__inject__(CollectionHelper.class).instanciate(markers));
+		addLogMarkers(List.of(markers));
 		return this;
 	}*/
 	
@@ -273,12 +272,12 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 	}
 	
 	protected void throwRuntimeExceptionIfIsEmpty(Collection<?> collection,String name) {
-		if(__inject__(CollectionHelper.class).isEmpty(collection))
+		if(CollectionHelper.isEmpty(collection))
 			__injectThrowableHelper__().throwRuntimeException(name+" must not be empty");
 	}
 	
 	protected void throwRuntimeExceptionIfIsEmpty(CollectionInstance<?> collectionInstance,String name) {
-		if(__inject__(CollectionHelper.class).isEmpty(collectionInstance))
+		if(CollectionHelper.isEmpty(collectionInstance))
 			__injectThrowableHelper__().throwRuntimeException(name+" must not be empty");
 	}
 	
@@ -294,10 +293,6 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 	
 	protected static MapHelper __injectMapHelper__(){
 		return MapHelperImpl.getInstance();
-	}
-	
-	protected static CollectionHelper __injectCollectionHelper__(){
-		return CollectionHelperImpl.getInstance();
 	}
 	
 	protected static ThrowableHelper __injectThrowableHelper__(){

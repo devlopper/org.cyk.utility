@@ -3,7 +3,7 @@ package org.cyk.utility.field;
 import javax.persistence.GeneratedValue;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 
@@ -38,13 +38,13 @@ public class FieldInstancesRuntimeUnitTest extends AbstractWeldUnitTest {
 	@Test
 	public void getC1_f01_many_call_add_field_only_once_to_runtime_collection() {
 		for(Integer index = 0; index < 5; index = index + 1) {
-			Integer count = __inject__(CollectionHelper.class).getSize(__inject__(FieldInstancesRuntime.class).getInstances());
+			Integer count = CollectionHelper.getSize(__inject__(FieldInstancesRuntime.class).getInstances());
 			if(index == 0)
 				assertionHelper.assertEqualsNumber(0, count);
 			else
 				assertionHelper.assertNotEqualsNumber(0, count);
 			assertionHelper.assertEquals(FieldUtils.getDeclaredField(C1.class, "f01", Boolean.TRUE), __inject__(FieldInstancesRuntime.class).get(C1.class,"f01").getField());
-			assertionHelper.assertEqualsNumber(1, __inject__(CollectionHelper.class).getSize(__inject__(FieldInstancesRuntime.class).getInstances()));
+			assertionHelper.assertEqualsNumber(1, CollectionHelper.getSize(__inject__(FieldInstancesRuntime.class).getInstances()));
 		}
 	}
 	
@@ -56,13 +56,13 @@ public class FieldInstancesRuntimeUnitTest extends AbstractWeldUnitTest {
 	@Test
 	public void getC1_sub1_f01_from_C01_many_call_add_field_only_once_to_runtime_collection() {
 		for(Integer index = 0; index < 5; index = index + 1) {
-			Integer count = __inject__(CollectionHelper.class).getSize(__inject__(FieldInstancesRuntime.class).getInstances());
+			Integer count = CollectionHelper.getSize(__inject__(FieldInstancesRuntime.class).getInstances());
 			if(index == 0)
 				assertionHelper.assertEqualsNumber(0, count);
 			else
 				assertionHelper.assertNotEqualsNumber(0, count);
 			assertionHelper.assertEquals(FieldUtils.getDeclaredField(C1_Sub1.class, "f01", Boolean.TRUE), __inject__(FieldInstancesRuntime.class).get(C1.class,"sub1.f01").getField());
-			assertionHelper.assertEqualsNumber(1, __inject__(CollectionHelper.class).getSize(__inject__(FieldInstancesRuntime.class).getInstances()));
+			assertionHelper.assertEqualsNumber(1, CollectionHelper.getSize(__inject__(FieldInstancesRuntime.class).getInstances()));
 		}
 	}
 	

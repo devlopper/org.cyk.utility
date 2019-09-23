@@ -583,7 +583,7 @@ public interface FieldHelper {
 			collection = fieldsNames;
 		}else {
 			Fields fields = __inject__(ClassInstancesRuntime.class).get(object.getClass()).getFields();
-			if(__inject__(CollectionHelper.class).isNotEmpty(fields)) {
+			if(CollectionHelper.isNotEmpty(fields)) {
 				collection = new ArrayList<>();
 				for(Field index : fields.get()) {
 					String fieldName = index.getName();
@@ -592,7 +592,7 @@ public interface FieldHelper {
 				}	
 			}
 		}
-		if(__inject__(CollectionHelper.class).isNotEmpty(collection)) {
+		if(CollectionHelper.isNotEmpty(collection)) {
 			for(String index : collection)
 				__write__(object, index, null);
 		}

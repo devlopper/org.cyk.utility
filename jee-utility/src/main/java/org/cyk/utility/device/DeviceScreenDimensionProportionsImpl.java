@@ -1,14 +1,16 @@
 package org.cyk.utility.device;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
-import org.cyk.utility.collection.CollectionHelperImpl;
 
 @Dependent
 public class DeviceScreenDimensionProportionsImpl extends AbstractObject implements DeviceScreenDimensionProportions,Serializable {
@@ -36,7 +38,7 @@ public class DeviceScreenDimensionProportionsImpl extends AbstractObject impleme
 
 	@Override
 	public DeviceScreenDimensionProportions setByClasses(Integer value,Collection<Class<? extends Device>> classes) {
-		if(CollectionHelperImpl.__isNotEmpty__(classes)) {
+		if(CollectionHelper.isNotEmpty(classes)) {
 			Map<Class<? extends Device>, Integer> map = getMap(Boolean.TRUE);
 			for(Class<? extends Device> index : classes)
 				map.put(index, value);
@@ -46,7 +48,7 @@ public class DeviceScreenDimensionProportionsImpl extends AbstractObject impleme
 
 	@Override
 	public DeviceScreenDimensionProportions setByClasses(Integer value, Class<? extends Device>... classes) {
-		return setByClasses(value,CollectionHelperImpl.__instanciate__(classes));
+		return setByClasses(value,List.of(classes));
 	}
 
 	@Override
@@ -81,7 +83,9 @@ public class DeviceScreenDimensionProportionsImpl extends AbstractObject impleme
 
 	@Override
 	public DeviceScreenDimensionProportions setDefault(Integer value) {
-		return setByClasses(value, (Class<? extends Device>)null);
+		ArrayList<Class<? extends Device>> classes = new ArrayList<Class<? extends Device>>();
+		classes.add(null);
+		return setByClasses(value, classes);
 	}
 
 	@Override

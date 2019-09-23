@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.function.Function;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
@@ -19,11 +20,11 @@ public class StyleBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<
 	public Function<Properties, Style> execute() {
 		Style style = __inject__(Style.class);
 		Strings classes = getClasses();
-		if(__injectCollectionHelper__().isNotEmpty(classes))
+		if(CollectionHelper.isNotEmpty(classes))
 			style.getClasses(Boolean.TRUE).add(classes);
 		
 		Strings values = getValues();
-		if(__injectCollectionHelper__().isNotEmpty(values))
+		if(CollectionHelper.isNotEmpty(values))
 			style.getValues(Boolean.TRUE).add(values);
 		setProperty(Properties.OUTPUT, style);
 		return this;

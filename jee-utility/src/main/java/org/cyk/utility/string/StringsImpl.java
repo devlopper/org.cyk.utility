@@ -7,8 +7,8 @@ import java.util.List;
 import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
-import org.cyk.utility.collection.AbstractCollectionInstanceImpl;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.AbstractCollectionInstanceImpl;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 
 @Dependent
 public class StringsImpl extends AbstractCollectionInstanceImpl<String> implements Strings,Serializable {
@@ -26,7 +26,7 @@ public class StringsImpl extends AbstractCollectionInstanceImpl<String> implemen
 
 	@Override
 	public Strings addWithPrefix(String prefix, Collection<String> elements) {
-		if(__inject__(StringHelper.class).isNotEmpty(prefix) && elements instanceof List && __inject__(CollectionHelper.class).isNotEmpty(elements)) {
+		if(__inject__(StringHelper.class).isNotEmpty(prefix) && elements instanceof List && CollectionHelper.isNotEmpty(elements)) {
 			for(Integer index = 0 ; index < elements.size() ; index = index + 1)
 				((List<String>)elements).set(index, prefix+((List<String>)elements).get(index));
 		}
@@ -35,7 +35,7 @@ public class StringsImpl extends AbstractCollectionInstanceImpl<String> implemen
 
 	@Override
 	public Strings addWithPrefix(String prefix, String... elements) {
-		return addWithPrefix(prefix,__inject__(CollectionHelper.class).instanciate(elements));
+		return addWithPrefix(prefix,List.of(elements));
 	}
 	
 	@Override

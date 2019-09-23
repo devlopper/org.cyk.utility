@@ -1,10 +1,10 @@
 package org.cyk.utility.stream.distributed;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.array.ArrayHelper;
-import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.system.SystemHelper;
 import org.cyk.utility.type.BooleanHelper;
 import org.cyk.utility.value.ValueHelper;
@@ -99,7 +99,7 @@ public enum Topic {
 	
 	public static void startConsumers(Topic...topics) {
 		if(DependencyInjection.inject(ArrayHelper.class).isNotEmpty(topics))
-			startConsumers(DependencyInjection.inject(CollectionHelper.class).instanciate(topics));
+			startConsumers(List.of(topics));
 	}
 	
 	public static void startAllConsumers() {
@@ -119,7 +119,7 @@ public enum Topic {
 	
 	public static void stopConsumers(Topic...topics) {
 		if(DependencyInjection.inject(ArrayHelper.class).isNotEmpty(topics))
-			stopConsumers(DependencyInjection.inject(CollectionHelper.class).instanciate(topics));
+			stopConsumers(List.of(topics));
 	}
 	
 	public static void stopAllConsumers() {

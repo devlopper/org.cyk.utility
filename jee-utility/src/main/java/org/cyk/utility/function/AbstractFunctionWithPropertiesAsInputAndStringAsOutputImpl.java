@@ -3,13 +3,14 @@ package org.cyk.utility.function;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.LogicalOperator;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.throwable.ThrowableHelper;
 
@@ -21,9 +22,9 @@ public abstract class AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl
 	@Override
 	protected String __execute__() throws Exception {
 		Collection<Object> children = getChildren();
-		if(__inject__(CollectionHelper.class).isNotEmpty(children)){
+		if(CollectionHelper.isNotEmpty(children)){
 			if(Boolean.TRUE.equals(getIsSurroundedWithParentheses())){
-				__inject__(CollectionHelper.class).addElementAt(children, 0, ConstantCharacter.LEFT_PARENTHESIS);
+				CollectionHelper.addElementAt(children, 0, ConstantCharacter.LEFT_PARENTHESIS);
 				rp();
 			}
 			Collection<String> strings = new ArrayList<>();
@@ -51,9 +52,9 @@ public abstract class AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl
 			if(__inject__(StringHelper.class).isBlank(format) && isFormatRequired)
 				__inject__(ThrowableHelper.class).throwRuntimeException(getClass().getName()+" : format is required");
 			Collection<Object> formatArguments = isFormatRequired ? __getFormatArguments__(isFormatRequired,getFormatArguments()) : null;
-			if(__inject__(CollectionHelper.class).isEmpty(formatArguments) && isFormatRequired)
+			if(CollectionHelper.isEmpty(formatArguments) && isFormatRequired)
 				__inject__(ThrowableHelper.class).throwRuntimeException(getClass().getName()+" : format arguments are required");
-			if(__inject__(StringHelper.class).isNotBlank(format) && __inject__(CollectionHelper.class).isNotEmpty(formatArguments))
+			if(__inject__(StringHelper.class).isNotBlank(format) && CollectionHelper.isNotEmpty(formatArguments))
 				return __execute__(format,formatArguments);	
 		}
 		return super.__execute__();
@@ -117,7 +118,7 @@ public abstract class AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl
 	
 	@Override
 	public FunctionWithPropertiesAsInputAndStringAsOutput addFormatArguments(Collection<Object> formatArguments) {
-		if(__inject__(CollectionHelper.class).isNotEmpty(formatArguments)){
+		if(CollectionHelper.isNotEmpty(formatArguments)){
 			Collection<Object> collection = getFormatArguments();
 			if(collection == null)
 				setFormatArguments(collection = new ArrayList<Object>());
@@ -128,7 +129,7 @@ public abstract class AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl
 	
 	@Override
 	public FunctionWithPropertiesAsInputAndStringAsOutput addFormatArgumentObjects(Object... formatArguments) {
-		addFormatArguments(__inject__(CollectionHelper.class).instanciate(formatArguments));
+		addFormatArguments(List.of(formatArguments));
 		return this;
 	}
 	

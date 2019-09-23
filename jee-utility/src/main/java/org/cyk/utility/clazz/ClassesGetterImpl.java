@@ -7,6 +7,7 @@ import java.util.Collection;
 import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.string.Strings;
 import org.reflections.Reflections;
@@ -39,7 +40,7 @@ public class ClassesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl
 			
 			@SuppressWarnings("rawtypes")
 			Collection<Class> result = new Reflections(configurationBuilder).getSubTypesOf(indexBaseClass);
-			if(__injectCollectionHelper__().isNotEmpty(result)) {
+			if(CollectionHelper.isNotEmpty(result)) {
 				for(@SuppressWarnings("rawtypes") Class index : result) {
 					Boolean isAddable = Boolean.TRUE;
 					if(Boolean.TRUE.equals(isAddable) && isInterface!=null && 

@@ -3,7 +3,7 @@ package org.cyk.utility.field;
 import java.lang.reflect.Field;
 import java.util.Collection;
 
-import org.cyk.utility.collection.CollectionInstance;
+import org.cyk.utility.__kernel__.collection.CollectionInstance;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.__kernel__.value.ValueUsageType;

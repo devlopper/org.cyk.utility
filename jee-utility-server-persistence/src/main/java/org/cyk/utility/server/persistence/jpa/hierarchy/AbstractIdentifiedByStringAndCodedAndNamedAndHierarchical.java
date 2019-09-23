@@ -2,15 +2,15 @@ package org.cyk.utility.server.persistence.jpa.hierarchy;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
+import org.cyk.utility.__kernel__.collection.CollectionInstance;
 import org.cyk.utility.array.ArrayHelper;
-import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.collection.CollectionInstance;
 import org.cyk.utility.server.persistence.jpa.AbstractIdentifiedByStringAndCodedAndNamed;
 
 import lombok.Getter;
@@ -42,7 +42,7 @@ public abstract class AbstractIdentifiedByStringAndCodedAndNamedAndHierarchical<
 	
 	public AbstractIdentifiedByStringAndCodedAndNamedAndHierarchical addParents(@SuppressWarnings("unchecked") ENTITY...parents) {
 		if(__inject__(ArrayHelper.class).isNotEmpty(parents))
-			addParents(__inject__(CollectionHelper.class).instanciate(parents));
+			addParents(List.of(parents));
 		return this;
 	}
 	
@@ -60,7 +60,7 @@ public abstract class AbstractIdentifiedByStringAndCodedAndNamedAndHierarchical<
 	
 	public AbstractIdentifiedByStringAndCodedAndNamedAndHierarchical addChildren(@SuppressWarnings("unchecked") ENTITY...children) {
 		if(__inject__(ArrayHelper.class).isNotEmpty(children))
-			addChildren(__inject__(CollectionHelper.class).instanciate(children));
+			addChildren(List.of(children));
 		return this;
 	}
 	

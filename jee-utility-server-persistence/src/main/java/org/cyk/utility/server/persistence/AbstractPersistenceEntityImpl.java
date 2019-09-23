@@ -20,7 +20,7 @@ import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.clazz.ClassInstance;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.field.FieldInstance;
 import org.cyk.utility.field.FieldInstancesRuntime;
 import org.cyk.utility.map.MapHelper;
@@ -144,7 +144,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		__copyCommonProperties__(function, properties);
 		function.execute();
 		Collection<ENTITY> entities = (Collection<ENTITY>) function.getEntities();
-		if(__injectCollectionHelper__().isNotEmpty(entities))
+		if(CollectionHelper.isNotEmpty(entities))
 			__listenExecuteReadAfter__(entities,properties);
 		return entities;
 	}
@@ -177,10 +177,10 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	@Override
 	public ENTITY readByIdentifier(Object identifier,ValueUsageType valueUsageType, Properties properties) {
 		Collection<ENTITY> entities = (Collection<ENTITY>) readByIdentifiers(Arrays.asList(identifier),valueUsageType, properties);
-		Integer size = __injectCollectionHelper__().getSize(entities);
+		Integer size = CollectionHelper.getSize(entities);
 		if(size!=null && size > 1)
 			throw new RuntimeException("too much ("+size+") results found");
-		ENTITY entity = __injectCollectionHelper__().getFirst(entities);
+		ENTITY entity = CollectionHelper.getFirst(entities);
 		return entity;
 	}
 	
@@ -502,13 +502,13 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	@SuppressWarnings("unchecked")
 	protected Collection<ENTITY> __readMany__(Properties properties,Object...parameters) {
 		Collection<ENTITY> entities = (Collection<ENTITY>) __getReader__(properties,parameters).execute().getEntities();
-		if(__injectCollectionHelper__().isNotEmpty(entities))
+		if(CollectionHelper.isNotEmpty(entities))
 			__listenExecuteReadAfter__(entities,properties);
 		return entities;
 	}
 	
 	protected void __listenExecuteReadAfter__(Collection<ENTITY> entities,Properties properties) {
-		if(__injectCollectionHelper__().isNotEmpty(entities)) {
+		if(CollectionHelper.isNotEmpty(entities)) {
 			for(ENTITY index : entities)
 				__listenExecuteReadAfter__(index,properties);	
 		}
@@ -519,7 +519,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		Collection<Field> fieldsToBeSet = new ArrayList<>();
 		Collection<Field> fieldsToBeSetToNull = new ArrayList<>();
 		Collection<String> fieldsToBeSetNames = new ArrayList<>();
-		if(__injectCollectionHelper__().isNotEmpty(fields) && __injectCollectionHelper__().isNotEmpty(__classInstance__.getFields())) {
+		if(CollectionHelper.isNotEmpty(fields) && CollectionHelper.isNotEmpty(__classInstance__.getFields())) {
 			for(Field index : __classInstance__.getFields().get()) {
 				String indexName = index.getName();
 				if(!Modifier.isStatic(index.getModifiers()) && !Modifier.isFinal(index.getModifiers()) 
@@ -544,7 +544,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		}
 				
 		Strings uniformResourceIdentifierStringFormats = __getReadOneUniformResourceIdentifierFormats__();
-		if(__injectCollectionHelper__().isNotEmpty(uniformResourceIdentifierStringFormats)) {
+		if(CollectionHelper.isNotEmpty(uniformResourceIdentifierStringFormats)) {
 			for(String index : uniformResourceIdentifierStringFormats.get())
 				__inject__(RequestProcessor.class).setUniformResourceIdentifierStringFormat(index).setResponseEntity(entity).execute();		
 		}
@@ -565,16 +565,16 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	protected ENTITY __readOne__(Properties properties,Object...parameters) {
 		@SuppressWarnings("unchecked")
 		Collection<ENTITY> entities = (Collection<ENTITY>) __getReader__(properties,parameters).execute().getEntities();
-		Integer size = __injectCollectionHelper__().getSize(entities);
+		Integer size = CollectionHelper.getSize(entities);
 		if(size!=null && size > 1)
 			throw new RuntimeException("too much ("+size+") results found");
-		ENTITY entity = __injectCollectionHelper__().getFirst(entities);
+		ENTITY entity = CollectionHelper.getFirst(entities);
 		__listenExecuteReadAfter__(entity,properties);
 		return entity;
 	}
 	
 	protected Long __count__(Properties properties,Object...parameters) {
-		return (Long) __inject__(CollectionHelper.class).getFirst(__getReader__(properties,parameters).execute().getEntities());
+		return (Long) CollectionHelper.getFirst(__getReader__(properties,parameters).execute().getEntities());
 	}
 	
 	protected Long __modify__(Properties properties,Object...parameters) {

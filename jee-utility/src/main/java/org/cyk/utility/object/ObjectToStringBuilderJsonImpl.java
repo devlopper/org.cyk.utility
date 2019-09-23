@@ -24,7 +24,7 @@ public class ObjectToStringBuilderJsonImpl extends AbstractObjectToStringBuilder
 		if(Boolean.TRUE.equals(__inject__(ClassHelper.class).isBelongsToJavaPackages(object.getClass()))) {
 			return mapper.writeValueAsString(object);
 		}else {
-			if(__injectCollectionHelper__().isEmpty(fieldInstanceValues)) {
+			if(CollectionHelper.isEmpty(fieldInstanceValues)) {
 				__inject__(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented("jsonify object without specified fields");
 				return null;
 			}else { 

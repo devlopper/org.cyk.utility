@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.SortOrder;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 
@@ -19,9 +20,9 @@ public abstract class AbstractQueryClauseStringBuilderOrderByImpl extends Abstra
 	
 	@Override
 	protected Collection<String> __executeGetArguments__(Collection<Tuple> tuples,Collection<String> arguments) {
-		if(__injectCollectionHelper__().isEmpty(arguments)){
+		if(CollectionHelper.isEmpty(arguments)){
 			Collection<Attribute> attributes = getAttributes();	
-			if(__injectCollectionHelper__().isEmpty(attributes))
+			if(CollectionHelper.isEmpty(attributes))
 				__injectThrowableHelper__().throwRuntimeException(getClass()+" : attribute(s) are required");
 			else{
 				QueryAttributeNameBuilder attributeNameBuilder = getAttributeNameBuilder();

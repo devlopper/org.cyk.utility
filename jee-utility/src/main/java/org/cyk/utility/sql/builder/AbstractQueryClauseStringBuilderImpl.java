@@ -3,10 +3,11 @@ package org.cyk.utility.sql.builder;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.List;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.throwable.ThrowableHelper;
@@ -23,10 +24,10 @@ public abstract class AbstractQueryClauseStringBuilderImpl extends AbstractFunct
 		if(__inject__(StringHelper.class).isBlank(keyword))
 			__inject__(ThrowableHelper.class).throwRuntimeException("Sql clause keyword is required");
 		Collection<Tuple> tuples = getTuples();
-		if(__inject__(CollectionHelper.class).isEmpty(tuples) && Boolean.TRUE.equals(getProperties().getFromPath(Properties.IS,Properties.TUPLE,Properties.REQUIRED)))
+		if(CollectionHelper.isEmpty(tuples) && Boolean.TRUE.equals(getProperties().getFromPath(Properties.IS,Properties.TUPLE,Properties.REQUIRED)))
 			__inject__(ThrowableHelper.class).throwRuntimeException("Sql clause select tuples are required");	
 		Collection<String> arguments = __executeGetArguments__(tuples,getArguments());
-		if(__inject__(CollectionHelper.class).isEmpty(arguments))
+		if(CollectionHelper.isEmpty(arguments))
 			__inject__(ThrowableHelper.class).throwRuntimeException("Sql clause arguments are required");		
 		return __execute__(format,keyword,arguments);		
 	}
@@ -86,13 +87,13 @@ public abstract class AbstractQueryClauseStringBuilderImpl extends AbstractFunct
 	
 	@Override
 	public QueryClauseStringBuilder addAttributes(Collection<Attribute> attributes) {
-		if(__inject__(CollectionHelper.class).isNotEmpty(attributes)){
+		if(CollectionHelper.isNotEmpty(attributes)){
 			Collection<Attribute> collection = getAttributes();
 			if(collection == null)
 				setAttributes(collection = new LinkedHashSet<Attribute>());
 			for(Attribute index : attributes)
 				if(index.getTuple() == null)
-					index.setTuple(__inject__(CollectionHelper.class).getFirst(getTuples()));
+					index.setTuple(CollectionHelper.getFirst(getTuples()));
 			collection.addAll(attributes);
 		}
 		return this;
@@ -100,13 +101,13 @@ public abstract class AbstractQueryClauseStringBuilderImpl extends AbstractFunct
 	
 	@Override
 	public QueryClauseStringBuilder addAttributes(Attribute... attributes) {
-		addAttributes(__inject__(CollectionHelper.class).instanciate(attributes));
+		addAttributes(List.of(attributes));
 		return this;
 	}
 	
 	@Override
 	public QueryClauseStringBuilder addAttributesByNames(Collection<String> attributeNames) {
-		if(__inject__(CollectionHelper.class).isNotEmpty(attributeNames)){
+		if(CollectionHelper.isNotEmpty(attributeNames)){
 			for(String index : attributeNames)
 				addAttributes(new Attribute().setName(index));
 		}
@@ -115,7 +116,7 @@ public abstract class AbstractQueryClauseStringBuilderImpl extends AbstractFunct
 	
 	@Override
 	public QueryClauseStringBuilder addAttributesByNames(String... attributeNames) {
-		addAttributesByNames(__inject__(CollectionHelper.class).instanciate(attributeNames));
+		addAttributesByNames(List.of(attributeNames));
 		return this;
 	}
 	
@@ -126,7 +127,7 @@ public abstract class AbstractQueryClauseStringBuilderImpl extends AbstractFunct
 	
 	@Override
 	public Tuple getFirstTuple() {
-		return __injectCollectionHelper__().getFirst(getTuples());
+		return CollectionHelper.getFirst(getTuples());
 	}
 	
 	@Override
@@ -137,7 +138,7 @@ public abstract class AbstractQueryClauseStringBuilderImpl extends AbstractFunct
 	
 	@Override
 	public QueryClauseStringBuilder addTuples(Collection<Tuple> tuples) {
-		if(__inject__(CollectionHelper.class).isNotEmpty(tuples)){
+		if(CollectionHelper.isNotEmpty(tuples)){
 			Collection<Tuple> collection = getTuples();
 			if(collection == null)
 				setTuples(collection = new LinkedHashSet<Tuple>());
@@ -148,13 +149,13 @@ public abstract class AbstractQueryClauseStringBuilderImpl extends AbstractFunct
 	
 	@Override
 	public QueryClauseStringBuilder addTuples(Tuple... tuples) {
-		addTuples(__inject__(CollectionHelper.class).instanciate(tuples));
+		addTuples(List.of(tuples));
 		return this;
 	}
 	
 	@Override
 	public QueryClauseStringBuilder addTuplesByNames(Collection<String> tupleNames) {
-		if(__inject__(CollectionHelper.class).isNotEmpty(tupleNames)){
+		if(CollectionHelper.isNotEmpty(tupleNames)){
 			for(String index : tupleNames)
 				addTuples(new Tuple().setName(index));
 		}
@@ -163,7 +164,7 @@ public abstract class AbstractQueryClauseStringBuilderImpl extends AbstractFunct
 	
 	@Override
 	public QueryClauseStringBuilder addTuplesByNames(String... tupleNames) {
-		addTuplesByNames(__inject__(CollectionHelper.class).instanciate(tupleNames));
+		addTuplesByNames(List.of(tupleNames));
 		return this;
 	}
 	

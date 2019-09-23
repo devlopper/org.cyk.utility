@@ -2,13 +2,13 @@ package org.cyk.utility.network;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 
 import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.array.ArrayHelper;
-import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.network.message.Message;
 import org.cyk.utility.network.message.sender.SenderMail;
@@ -56,7 +56,7 @@ public class MailHelperImpl extends AbstractHelper implements MailHelper,Seriali
 	@Override
 	public MailHelper produce(String title, String body, String... receiversIdentifiers) {
 		if(__inject__(ArrayHelper.class).isNotEmpty(receiversIdentifiers))
-			produce(title, body, __inject__(CollectionHelper.class).instanciate(receiversIdentifiers));
+			produce(title, body, List.of(receiversIdentifiers));
 		return this;
 	}
 }

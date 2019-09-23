@@ -3,11 +3,12 @@ package org.cyk.utility.log;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.function.AbstractFunctionImpl;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.stacktrace.StackTraceHelper;
-import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.log.message.LogMessage;
 import org.cyk.utility.log.message.LogMessageBuilder;
 import org.cyk.utility.string.StringHelper;
@@ -170,7 +171,7 @@ public abstract class AbstractLogImpl<LEVEL> extends AbstractFunctionImpl<LogMes
 	
 	@Override
 	public Log addMarkers(Collection<?> markers) {
-		if(__inject__(CollectionHelper.class).isNotEmpty(markers)){
+		if(CollectionHelper.isNotEmpty(markers)){
 			Collection<Object> collection = getMarkers();
 			if(collection == null)
 				setMarkers(collection = new ArrayList<>());
@@ -181,7 +182,7 @@ public abstract class AbstractLogImpl<LEVEL> extends AbstractFunctionImpl<LogMes
 	
 	@Override
 	public Log addMarkers(String... markers) {
-		addMarkers(__inject__(CollectionHelper.class).instanciate(markers));
+		addMarkers(List.of(markers));
 		return this;
 	}
 	

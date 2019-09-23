@@ -10,7 +10,7 @@ import javax.persistence.TypedQuery;
 
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.field.FieldNameGetter;
 import org.cyk.utility.server.persistence.AbstractPersistenceFunctionReaderImpl;
@@ -58,7 +58,7 @@ public class PersistenceFunctionReaderImpl extends AbstractPersistenceFunctionRe
 					//TODO should be take from parameters
 					//.setHint("org.hibernate.readOnly", true)
 					.getResultList();
-			entity = __inject__(CollectionHelper.class).getFirst(objects);
+			entity = CollectionHelper.getFirst(objects);
 		}
 		getProperties().setEntity(entity);
 		if(entity == null)
@@ -101,7 +101,7 @@ public class PersistenceFunctionReaderImpl extends AbstractPersistenceFunctionRe
 		Collection<?> objects = typedQuery.getResultList();
 		
 		getProperties().setEntities(objects);
-		if(__inject__(CollectionHelper.class).isEmpty(objects)){
+		if(CollectionHelper.isEmpty(objects)){
 			//TODO log not found
 		}	
 	}

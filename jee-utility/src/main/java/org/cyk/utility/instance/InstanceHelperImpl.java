@@ -9,7 +9,7 @@ import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.helper.AbstractHelper;
@@ -47,7 +47,7 @@ public class InstanceHelperImpl extends AbstractHelper implements InstanceHelper
 	
 	@Override
 	public <INSTANCE> INSTANCE getByIdentifierSystem(Class<INSTANCE> aClass, Object value,Properties properties) {
-		return __inject__(CollectionHelper.class).getFirst(getByFieldNameByValueUsageType(aClass, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, value,properties));
+		return CollectionHelper.getFirst(getByFieldNameByValueUsageType(aClass, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, value,properties));
 	}
 	
 	@Override
@@ -57,7 +57,7 @@ public class InstanceHelperImpl extends AbstractHelper implements InstanceHelper
 
 	@Override
 	public <INSTANCE> INSTANCE getByIdentifierBusiness(Class<INSTANCE> aClass, Object value,Properties properties) {
-		return __inject__(CollectionHelper.class).getFirst(getByFieldNameByValueUsageType(aClass, FieldName.IDENTIFIER, ValueUsageType.BUSINESS, value,properties));
+		return CollectionHelper.getFirst(getByFieldNameByValueUsageType(aClass, FieldName.IDENTIFIER, ValueUsageType.BUSINESS, value,properties));
 	}
 	
 	@Override
@@ -98,7 +98,7 @@ public class InstanceHelperImpl extends AbstractHelper implements InstanceHelper
 	@Override
 	public <INSTANCE> Collection<INSTANCE> buildMany(Class<INSTANCE> aClass, Collection<?> fieldsValuesObjects,Properties properties) {
 		Collection<INSTANCE> instances = Collections.synchronizedList(new ArrayList<>());
-		if(__inject__(CollectionHelper.class).isNotEmpty(fieldsValuesObjects)) {
+		if(CollectionHelper.isNotEmpty(fieldsValuesObjects)) {
 			//instances = new ArrayList<>();
 			for(Object index : fieldsValuesObjects) {
 				instances.add(buildOne(aClass, index,properties));

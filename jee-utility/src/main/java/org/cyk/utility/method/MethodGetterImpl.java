@@ -7,13 +7,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.enterprise.context.Dependent;
 
 import org.apache.commons.lang3.reflect.MethodUtils;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.string.StringLocation;
 
@@ -48,10 +49,10 @@ public class MethodGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<
 			indexClass = indexClass.getSuperclass();
 		}
 		
-		if(__injectCollectionHelper__().isEmpty(annotationsClasses)) {
+		if(CollectionHelper.isEmpty(annotationsClasses)) {
 			
 		}else {
-			methods = MethodUtils.getMethodsListWithAnnotation(aClass, (Class<? extends Annotation>) __inject__(CollectionHelper.class)
+			methods = MethodUtils.getMethodsListWithAnnotation(aClass, (Class<? extends Annotation>) CollectionHelper
 					.getFirst(getAnnotationClasses()));	
 		}
 		
@@ -154,7 +155,7 @@ public class MethodGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<
 
 	@Override
 	public MethodGetter addModifiers(Integer... modifiers) {
-		addModifiers(__inject__(CollectionHelper.class).instanciate(modifiers));
+		addModifiers(List.of(modifiers));
 		return this;
 	}
 
@@ -183,7 +184,7 @@ public class MethodGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<
 
 	@Override
 	public MethodGetter addAnnotationClasses(Class<?>...annotationClasses) {
-		addAnnotationClasses(__inject__(CollectionHelper.class).instanciate(annotationClasses));
+		addAnnotationClasses(List.of(annotationClasses));
 		return this;
 	}
 

@@ -7,7 +7,7 @@ import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.field.Fields;
 import org.cyk.utility.log.Log;
@@ -31,7 +31,7 @@ public class ClassInstancesRuntimeImpl extends AbstractObject implements ClassIn
 			instance.setIsTransferable(klass.isAnnotationPresent(javax.xml.bind.annotation.XmlRootElement.class));
 			//TODO loading can be deffered at demand
 			Fields fields = instance.getFields(Boolean.TRUE);
-			if(__inject__(CollectionHelper.class).isNotEmpty(fields)) {
+			if(CollectionHelper.isNotEmpty(fields)) {
 				instance.setSystemIdentifierField(fields.getByName(klass,FieldName.IDENTIFIER,ValueUsageType.SYSTEM));
 				instance.setBusinessIdentifierField(fields.getByName(klass,FieldName.IDENTIFIER,ValueUsageType.BUSINESS));
 			}

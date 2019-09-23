@@ -2,9 +2,10 @@ package org.cyk.utility.sql.builder;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl;
 
 public abstract class AbstractQueryParameterNameBuilderImpl extends AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl
@@ -20,7 +21,7 @@ public abstract class AbstractQueryParameterNameBuilderImpl extends AbstractFunc
 	
 	@Override
 	protected Collection<Object> __getFormatArguments__(Boolean isFormatRequired,Collection<Object> formatArguments) {
-		return __inject__(CollectionHelper.class).isEmpty(formatArguments) ? __inject__(CollectionHelper.class).instanciate(getParameter().getName()) : formatArguments;
+		return CollectionHelper.isEmpty(formatArguments) ? List.of(getParameter().getName()) : formatArguments;
 	}
 	
 	@Override

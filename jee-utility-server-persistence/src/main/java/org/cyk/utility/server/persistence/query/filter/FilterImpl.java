@@ -7,7 +7,7 @@ import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.field.FieldInstancesRuntime;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
@@ -25,7 +25,7 @@ public class FilterImpl extends AbstractObject implements Filter,Serializable {
 		if(this.klass == null)
 			this.klass = klass;
 		Fields fields = getFields();
-		if(__inject__(CollectionHelper.class).isNotEmpty(fields))
+		if(CollectionHelper.isNotEmpty(fields))
 			for(Field index : fields.get()) {
 				if(index.getInstance() == null) {
 					if(__inject__(StringHelper.class).isNotBlank(index.getName()))

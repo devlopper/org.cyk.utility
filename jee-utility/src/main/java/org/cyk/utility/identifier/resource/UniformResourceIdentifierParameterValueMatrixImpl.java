@@ -2,10 +2,11 @@ package org.cyk.utility.identifier.resource;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
 
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.map.AbstractMapInstanceImpl;
 import org.cyk.utility.object.ObjectByStringMap;
 
@@ -26,7 +27,7 @@ public class UniformResourceIdentifierParameterValueMatrixImpl extends AbstractM
 	
 	@Override
 	public UniformResourceIdentifierParameterValueMatrix setClasses(Collection<Class<?>> classes) {
-		if(__inject__(CollectionHelper.class).isNotEmpty(classes))
+		if(CollectionHelper.isNotEmpty(classes))
 			for(Class<?> index : classes)
 				getClassMap().set(index,__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(index).execute().getOutput());
 		return this;
@@ -34,7 +35,7 @@ public class UniformResourceIdentifierParameterValueMatrixImpl extends AbstractM
 	
 	@Override
 	public UniformResourceIdentifierParameterValueMatrix setClasses(Class<?>... classes) {
-		return setClasses(__inject__(CollectionHelper.class).instanciate(classes));
+		return setClasses(List.of(classes));
 	}
 	
 	@Override

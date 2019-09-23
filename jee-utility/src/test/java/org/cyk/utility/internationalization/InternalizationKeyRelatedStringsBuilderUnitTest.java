@@ -2,7 +2,7 @@ package org.cyk.utility.internationalization;
 
 import java.util.Collection;
 
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
@@ -39,18 +39,18 @@ public class InternalizationKeyRelatedStringsBuilderUnitTest extends AbstractWel
 	public void eventType(){
 		Collection<Strings> collection = __inject__(InternalizationKeyRelatedStringsBuilder.class).setKey("eventType").execute().getOutput();
 		assertThat(collection).hasSize(1);
-		assertionHelper.assertEquals("type", __inject__(CollectionHelper.class).getElementAt(collection, 0).getAt(0));
-		assertionHelper.assertEquals("of", __inject__(CollectionHelper.class).getElementAt(collection, 0).getAt(1));
-		assertionHelper.assertEquals("event", __inject__(CollectionHelper.class).getElementAt(collection, 0).getAt(2));
+		assertionHelper.assertEquals("type", CollectionHelper.getElementAt(collection, 0).getAt(0));
+		assertionHelper.assertEquals("of", CollectionHelper.getElementAt(collection, 0).getAt(1));
+		assertionHelper.assertEquals("event", CollectionHelper.getElementAt(collection, 0).getAt(2));
 	}
 	
 	@Test
 	public void event_dot_type(){
 		Collection<Strings> collection = __inject__(InternalizationKeyRelatedStringsBuilder.class).setKey("event.type").execute().getOutput();
 		assertThat(collection).hasSize(1);
-		assertionHelper.assertEquals("type", __inject__(CollectionHelper.class).getElementAt(collection, 0).getAt(0));
-		assertionHelper.assertEquals("of", __inject__(CollectionHelper.class).getElementAt(collection, 0).getAt(1));
-		assertionHelper.assertEquals("event", __inject__(CollectionHelper.class).getElementAt(collection, 0).getAt(2));
+		assertionHelper.assertEquals("type", CollectionHelper.getElementAt(collection, 0).getAt(0));
+		assertionHelper.assertEquals("of", CollectionHelper.getElementAt(collection, 0).getAt(1));
+		assertionHelper.assertEquals("event", CollectionHelper.getElementAt(collection, 0).getAt(2));
 	}
 	
 }

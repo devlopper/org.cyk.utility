@@ -11,7 +11,7 @@ import javax.enterprise.context.ApplicationScoped;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.array.ArrayHelper;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.locale.LocaleHelper;
 import org.cyk.utility.string.Case;
 import org.cyk.utility.string.StringHelper;
@@ -52,7 +52,7 @@ public class StringRepositoryResourceBundleImpl extends AbstractStringRepository
 			if(index == null)
 				bundles.add(bundle);
 			else if(index > -1)
-				__inject__(CollectionHelper.class).addElementAt(bundles, index, bundle);
+				CollectionHelper.addElementAt(bundles, index, bundle);
 		}
 		return this;
 	}
@@ -81,9 +81,9 @@ public class StringRepositoryResourceBundleImpl extends AbstractStringRepository
 	
 	@Override
 	public String getOne(Properties properties) {
-		Collection<ResourceBundle> bundles = (Collection<ResourceBundle>) __inject__(CollectionHelper.class).concatenate((Collection<ResourceBundle>)properties.getResourceBundles()
+		Collection<ResourceBundle> bundles = (Collection<ResourceBundle>) CollectionHelper.concatenate((Collection<ResourceBundle>)properties.getResourceBundles()
 				,(Collection<ResourceBundle>)getProperties().getResourceBundles());
-		if(__inject__(CollectionHelper.class).isEmpty(bundles)){
+		if(CollectionHelper.isEmpty(bundles)){
 			//TODO log a warning
 		}else{
 			String identifier = (String) properties.getKey();

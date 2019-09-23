@@ -2,7 +2,7 @@ package org.cyk.utility.field;
 
 import java.io.Serializable;
 
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
 public abstract class AbstractFieldValueCopyFieldsGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Fields> implements FieldValueCopyFieldsGetter,Serializable {
@@ -22,9 +22,9 @@ public abstract class AbstractFieldValueCopyFieldsGetterImpl extends AbstractFun
 			fieldGetter.setClazz(sourceClass);		
 		fields = fieldGetter.execute().getOutput();
 		
-		if(__inject__(CollectionHelper.class).isNotEmpty(fields))
+		if(CollectionHelper.isNotEmpty(fields))
 			fields.removeModifierStatic().removeModifierFinal();
-		fields = __injectCollectionHelper__().isEmpty(fields) ? null : fields;
+		fields = CollectionHelper.isEmpty(fields) ? null : fields;
 		return fields;
 	}
 	

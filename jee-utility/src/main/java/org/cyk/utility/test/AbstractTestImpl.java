@@ -15,7 +15,7 @@ import org.assertj.core.util.Arrays;
 import org.cyk.utility.__kernel__.AbstractRunnableImpl;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.assertion.AssertionHelper;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
 import org.cyk.utility.throwable.ThrowableHelper;
 
@@ -118,13 +118,13 @@ public abstract class AbstractTestImpl extends AbstractFunctionWithPropertiesAsI
 	
 	@Override
 	public Test addObjectsToBeCreatedCollection(Collection<Object> objects){
-		setObjectsToBeCreated(__inject__(CollectionHelper.class).add(getObjectsToBeCreated(), Boolean.TRUE, objects));
+		setObjectsToBeCreated(CollectionHelper.add(getObjectsToBeCreated(), Boolean.TRUE, objects));
 		return this;
 	}
 	
 	@Override
 	public Test addObjectsToBeCreatedArray(Object...objects){
-		addObjectsToBeCreatedCollection(__inject__(CollectionHelper.class).instanciate(objects));
+		addObjectsToBeCreatedCollection(List.of(objects));
 		return this;
 	}
 	
@@ -155,7 +155,7 @@ public abstract class AbstractTestImpl extends AbstractFunctionWithPropertiesAsI
 	
 	@Override
 	public Test addObjectBusinessIdentifiersToBeDeletedOnCleanArray(Class<?> aClass,Object...identifiers){
-		addObjectBusinessIdentifiersToBeDeletedOnCleanCollection(aClass,__inject__(CollectionHelper.class).instanciate(identifiers));
+		addObjectBusinessIdentifiersToBeDeletedOnCleanCollection(aClass,List.of(identifiers));
 		return this;
 	}
 	
@@ -172,13 +172,13 @@ public abstract class AbstractTestImpl extends AbstractFunctionWithPropertiesAsI
 	
 	@Override
 	public Test addGarbagesCollection(Collection<Object> objects){
-		setGarbages(__inject__(CollectionHelper.class).add(getGarbages(), Boolean.TRUE, objects));
+		setGarbages(CollectionHelper.add(getGarbages(), Boolean.TRUE, objects));
 		return this;
 	}
 	
 	@Override
 	public Test addGarbagesArray(Object...objects){
-		addGarbagesCollection(__inject__(CollectionHelper.class).instanciate(objects));
+		addGarbagesCollection(List.of(objects));
 		return this;
 	}
 	
@@ -195,13 +195,13 @@ public abstract class AbstractTestImpl extends AbstractFunctionWithPropertiesAsI
 	
 	@Override
 	public Test addNotGarbagableCollection(Collection<Object> objects){
-		setNotGarbagable(__inject__(CollectionHelper.class).add(getNotGarbagable(), Boolean.TRUE, objects));
+		setNotGarbagable(CollectionHelper.add(getNotGarbagable(), Boolean.TRUE, objects));
 		return this;
 	}
 	
 	@Override
 	public Test addNotGarbagableArray(Object...objects){
-		addNotGarbagableCollection(__inject__(CollectionHelper.class).instanciate(objects));
+		addNotGarbagableCollection(List.of(objects));
 		return this;
 	}
 		
@@ -229,7 +229,7 @@ public abstract class AbstractTestImpl extends AbstractFunctionWithPropertiesAsI
 	}
 	
 	protected void __createMany__(Collection<Object> objects) throws Exception {
-		if(__injectCollectionHelper__().isNotEmpty(objects))
+		if(CollectionHelper.isNotEmpty(objects))
 			for(Object index : objects)
 				__createOne__(index);
 	}
@@ -248,7 +248,7 @@ public abstract class AbstractTestImpl extends AbstractFunctionWithPropertiesAsI
 	}
 	
 	protected void __deleteMany__(Collection<Object> objects) throws Exception {
-		if(__injectCollectionHelper__().isNotEmpty(objects))
+		if(CollectionHelper.isNotEmpty(objects))
 			for(Object index : objects)
 				__deleteOne__(index);
 	}
@@ -284,7 +284,7 @@ public abstract class AbstractTestImpl extends AbstractFunctionWithPropertiesAsI
 				for(Object index : indexEntry.getValue())
 					garbages.add(__readOneByBusinessIdentifier__(indexEntry.getKey(),index));
 		}
-		if(__injectCollectionHelper__().isNotEmpty(garbages)) {
+		if(CollectionHelper.isNotEmpty(garbages)) {
 			__beginTransaction__();
 			if(garbages instanceof List)
 				Collections.reverse((List<?>) garbages);

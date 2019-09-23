@@ -50,7 +50,7 @@ public class SenderMailUnitTest extends AbstractWeldUnitTest {
 			    }
 			});
 			reader.execute();
-			assertionHelper.assertEquals("MyTitle Sync", __inject__(CollectionHelper.class).getFirst(reader.getMessages()).getTitle());
+			assertionHelper.assertEquals("MyTitle Sync", CollectionHelper.getFirst(reader.getMessages()).getTitle());
 			*/
 		}
 	}

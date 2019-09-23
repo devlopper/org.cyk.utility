@@ -8,7 +8,7 @@ import java.util.List;
 import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.field.Fields;
 
 @Dependent
@@ -160,7 +160,7 @@ public class ClassInstanceImpl extends AbstractObject implements ClassInstance,S
 	}
 	
 	private static void __addFields__(List<Field> fields,Field...values) {
-		fields.addAll(0, __inject__(CollectionHelper.class).instanciate(values));
+		fields.addAll(0, List.of(values));
 	}
 	
 }

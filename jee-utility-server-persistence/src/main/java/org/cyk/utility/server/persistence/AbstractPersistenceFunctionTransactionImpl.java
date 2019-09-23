@@ -3,9 +3,10 @@ package org.cyk.utility.server.persistence;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
+import org.cyk.utility.system.action.SystemAction;
 
 public abstract class AbstractPersistenceFunctionTransactionImpl extends AbstractPersistenceFunctionImpl implements PersistenceFunctionTransaction, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -17,7 +18,7 @@ public abstract class AbstractPersistenceFunctionTransactionImpl extends Abstrac
 	
 	@Override
 	protected void __executeQuery__(SystemAction action) {
-		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(__entities__))) {
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(__entities__))) {
 			__executeQueryWithEntities__(__entities__);
 			//TODO integration with distributed stream
 			/*if(__en == null)

@@ -9,7 +9,7 @@ import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.criteria.Criteria;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl;
 import org.cyk.utility.string.StringHelper;
@@ -63,7 +63,7 @@ public abstract class AbstractQueryPredicateStringBuilderImpl extends AbstractFu
 	
 	protected void __executeProcessCriteria__(Criteria criteria){
 		Collection<Object> children = criteria.getChildren();
-		if(__inject__(CollectionHelper.class).isEmpty(children)){
+		if(CollectionHelper.isEmpty(children)){
 			Class<?> clazz = criteria.getClazz();
 			/*String className = criteria.getClassName();
 			if(__inject__(StringHelper.class).isBlank(className)){

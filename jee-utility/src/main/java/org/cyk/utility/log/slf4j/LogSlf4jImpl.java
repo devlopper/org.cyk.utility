@@ -7,7 +7,7 @@ import javax.enterprise.context.Dependent;
 
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.cyk.utility.array.ArrayHelper;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.log.AbstractLogImpl;
 import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.log.message.LogMessage;
@@ -67,7 +67,7 @@ public class LogSlf4jImpl extends AbstractLogImpl<Level> implements LogSlf4j, Se
 	@Override
 	protected Marker __getMarker__(Collection<Object> markers) {
 		Marker marker = null;
-		if(__inject__(CollectionHelper.class).isNotEmpty(markers)){
+		if(CollectionHelper.isNotEmpty(markers)){
 			for(Object index : markers)
 				if(marker == null)
 					marker = MarkerFactory.getMarker(index.toString());

@@ -7,7 +7,7 @@ import javax.persistence.AccessType;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
-import org.cyk.utility.collection.CollectionInstance;
+import org.cyk.utility.__kernel__.collection.CollectionInstance;
 
 import lombok.Getter;
 import lombok.Setter;

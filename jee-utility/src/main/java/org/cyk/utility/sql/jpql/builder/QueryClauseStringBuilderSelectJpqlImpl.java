@@ -6,7 +6,7 @@ import java.util.Collection;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.util.AnnotationLiteral;
 
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.sql.builder.AbstractQueryClauseStringBuilderSelectImpl;
 import org.cyk.utility.sql.builder.Tuple;
 import org.cyk.utility.sql.jpql.Jpql;
@@ -18,7 +18,7 @@ public class QueryClauseStringBuilderSelectJpqlImpl extends AbstractQueryClauseS
 
 	@Override
 	protected String getAllColumnsArgument(Collection<Tuple> tuples) {
-		return __inject__(CollectionHelper.class).getFirst(tuples).getAlias();
+		return CollectionHelper.getFirst(tuples).getAlias();
 	}
 	
 	@Override

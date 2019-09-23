@@ -7,6 +7,7 @@ import java.util.Collection;
 import javax.enterprise.context.Dependent;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.string.StringHelper;
@@ -41,7 +42,7 @@ public class InternalizationKeyRelatedStringsBuilderImpl extends AbstractFunctio
 	}
 	
 	private Collection<Strings> __add__(Collection<Strings> collection,Strings strings) {
-		if(__injectCollectionHelper__().isNotEmpty(strings)) {
+		if(CollectionHelper.isNotEmpty(strings)) {
 			if(collection == null)
 				collection = new ArrayList<Strings>();
 			collection.add(strings);

@@ -1,14 +1,16 @@
 package org.cyk.utility.server.persistence.jpa.hierarchy;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.server.persistence.PersistenceFunctionReader;
 import org.cyk.utility.server.persistence.query.PersistenceQueryContext;
 import org.cyk.utility.server.persistence.query.filter.Field;
 import org.cyk.utility.server.persistence.query.filter.Filter;
-import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 public abstract class AbstractPersistenceIdentifiedByStringAndCodedImpl<ENTITY extends AbstractIdentifiedByStringAndCoded<ENTITY,?>,HIERARCHY extends AbstractHierarchy<ENTITY>,HIERARCHIES extends Hierarchies<HIERARCHY,ENTITY>,HIERARCHY_PERSISTENCE extends HierarchyPersistence<HIERARCHY,ENTITY, HIERARCHIES>> extends AbstractPersistenceIdentifiedByStringImpl<ENTITY,HIERARCHY,HIERARCHIES,HIERARCHY_PERSISTENCE> implements PersistenceIdentifiedByStringAndCoded<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -24,7 +26,7 @@ public abstract class AbstractPersistenceIdentifiedByStringAndCodedImpl<ENTITY e
 	
 	@Override
 	public Collection<ENTITY> readByParentsCodes(Collection<String> parentsCodes,Properties properties) {
-		HIERARCHIES hierarchies = __inject__(__hierarchyPersistenceClass__).readByParentsBusinessIdentifiers(__injectCollectionHelper__().cast(Object.class, parentsCodes));
+		HIERARCHIES hierarchies = __inject__(__hierarchyPersistenceClass__).readByParentsBusinessIdentifiers(CollectionHelper.cast(Object.class, parentsCodes));
 		return hierarchies == null ? null : hierarchies.getHierarchyChildren();	
 	}
 	
@@ -35,7 +37,7 @@ public abstract class AbstractPersistenceIdentifiedByStringAndCodedImpl<ENTITY e
 	
 	@Override
 	public Collection<ENTITY> readByParentsCodes(Properties properties,String... parentsCodes) {
-		return readByParentsCodes(__injectCollectionHelper__().instanciate(parentsCodes));
+		return readByParentsCodes(List.of(parentsCodes));
 	}
 	
 	@Override
@@ -45,7 +47,7 @@ public abstract class AbstractPersistenceIdentifiedByStringAndCodedImpl<ENTITY e
 	
 	@Override
 	public Long countByParentsCodes(Collection<String> parentsCodes, Properties properties) {
-		return __inject__(__hierarchyPersistenceClass__).countByParentsBusinessIdentifiers(__injectCollectionHelper__().cast(Object.class, parentsCodes));
+		return __inject__(__hierarchyPersistenceClass__).countByParentsBusinessIdentifiers(CollectionHelper.cast(Object.class, parentsCodes));
 	}
 	
 	@Override
@@ -55,7 +57,7 @@ public abstract class AbstractPersistenceIdentifiedByStringAndCodedImpl<ENTITY e
 	
 	@Override
 	public Long countByParentsCodes(Properties properties, String... parentsCodes) {
-		return countByParentsCodes(__injectCollectionHelper__().instanciate(parentsCodes),properties);
+		return countByParentsCodes(List.of(parentsCodes),properties);
 	}
 	
 	@Override
@@ -67,7 +69,7 @@ public abstract class AbstractPersistenceIdentifiedByStringAndCodedImpl<ENTITY e
 	
 	@Override
 	public Collection<ENTITY> readByChildrenCodes(Collection<String> childrenCodes,Properties properties) {
-		HIERARCHIES hierarchies = __inject__(__hierarchyPersistenceClass__).readByChildrenBusinessIdentifiers(__injectCollectionHelper__().cast(Object.class, childrenCodes));
+		HIERARCHIES hierarchies = __inject__(__hierarchyPersistenceClass__).readByChildrenBusinessIdentifiers(CollectionHelper.cast(Object.class, childrenCodes));
 		return hierarchies == null ? null : hierarchies.getHierarchyParents();	
 	}
 	
@@ -78,7 +80,7 @@ public abstract class AbstractPersistenceIdentifiedByStringAndCodedImpl<ENTITY e
 	
 	@Override
 	public Collection<ENTITY> readByChildrenCodes(Properties properties,String... childrenCodes) {
-		return readByChildrenCodes(__injectCollectionHelper__().instanciate(childrenCodes));
+		return readByChildrenCodes(List.of(childrenCodes));
 	}
 	
 	@Override

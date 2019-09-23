@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 import javax.enterprise.context.Dependent;
 
-import org.cyk.utility.collection.AbstractCollectionInstanceImpl;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.AbstractCollectionInstanceImpl;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 
 @Dependent
 public class ClassInstancesImpl extends AbstractCollectionInstanceImpl<ClassInstance> implements ClassInstances,Serializable {
@@ -13,7 +13,7 @@ public class ClassInstancesImpl extends AbstractCollectionInstanceImpl<ClassInst
 
 	@Override
 	public ClassInstance get(Class<?> aClass) {
-		if(aClass!=null && __inject__(CollectionHelper.class).isNotEmpty(collection))
+		if(aClass!=null && CollectionHelper.isNotEmpty(collection))
 			for(ClassInstance index : collection)
 				if(aClass.equals(index.getClazz()))
 					return index;

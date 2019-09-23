@@ -6,9 +6,8 @@ import java.util.Collection;
 import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.collection.CollectionHelperImpl;
-import org.cyk.utility.collection.CollectionInstance;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionInstance;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.string.StringHelperImpl;
@@ -51,9 +50,9 @@ public class ValueHelperImpl extends AbstractHelper implements ValueHelper,Seria
 		if(!Boolean.TRUE.equals(isThrow))
 			isThrow = (value instanceof String) && __inject__(StringHelper.class).isBlank((String) value);
 		if(!Boolean.TRUE.equals(isThrow))
-			isThrow = (value instanceof Collection) && __inject__(CollectionHelper.class).isEmpty((Collection<?>)value);
+			isThrow = (value instanceof Collection) && CollectionHelper.isEmpty((Collection<?>)value);
 		if(!Boolean.TRUE.equals(isThrow))
-			isThrow = (value instanceof CollectionInstance<?>) && __inject__(CollectionHelper.class).isEmpty((CollectionInstance<?>)value);
+			isThrow = (value instanceof CollectionInstance<?>) && CollectionHelper.isEmpty((CollectionInstance<?>)value);
 		
 		if(Boolean.TRUE.equals(isThrow))
 			__inject__(ThrowableHelper.class).throwRuntimeException(name+" is required.");
@@ -83,9 +82,9 @@ public class ValueHelperImpl extends AbstractHelper implements ValueHelper,Seria
 		if(!Boolean.TRUE.equals(isEmpty))
 			isEmpty = (value instanceof String) && StringHelperImpl.__isEmpty__((String) value);
 		if(!Boolean.TRUE.equals(isEmpty))
-			isEmpty = (value instanceof Collection) && CollectionHelperImpl.__isEmpty__((Collection<?>)value);
+			isEmpty = (value instanceof Collection) && CollectionHelper.isEmpty((Collection<?>)value);
 		if(!Boolean.TRUE.equals(isEmpty))
-			isEmpty = (value instanceof CollectionInstance<?>) && CollectionHelperImpl.__isEmpty__((CollectionInstance<?>)value);
+			isEmpty = (value instanceof CollectionInstance<?>) && CollectionHelper.isEmpty((CollectionInstance<?>)value);
 		
 		return Boolean.TRUE.equals(isEmpty);
 	}

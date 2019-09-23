@@ -2,9 +2,9 @@ package org.cyk.utility.internationalization;
 
 import java.net.ConnectException;
 import java.net.UnknownHostException;
+import java.util.List;
 
 import org.cyk.utility.ApplicationScopeLifeCycleListener;
-import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.string.Case;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionProcess;
@@ -12,8 +12,10 @@ import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.system.exception.EntityNotFoundException;
 import org.cyk.utility.system.exception.ServiceNotFoundException;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+@Deprecated @Disabled
 public class InternalizationStringBuilderUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
@@ -90,7 +92,7 @@ public class InternalizationStringBuilderUnitTest extends AbstractWeldUnitTest {
 	@Test
 	public void is_le_service_de_creation_de_personne_est_introuvable_whenKeyIsServiceOfActNotFound(){
 		assertionHelper.assertEquals("le service de create de person est introuvable", __inject__(InternalizationStringBuilder.class).setKeyValue("service.of.act.not.found")
-				.setParameters(__inject__(CollectionHelper.class).instanciate("create","person")).execute().getOutput());	
+				.setParameters(List.of("create","person")).execute().getOutput());	
 	}
 	
 	@Test

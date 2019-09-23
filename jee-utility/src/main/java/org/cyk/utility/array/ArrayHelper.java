@@ -2,7 +2,7 @@ package org.cyk.utility.array;
 
 import java.util.Collection;
 
-import org.cyk.utility.collection.CollectionInstance;
+import org.cyk.utility.__kernel__.collection.CollectionInstance;
 import org.cyk.utility.helper.Helper;
 
 public interface ArrayHelper extends Helper {

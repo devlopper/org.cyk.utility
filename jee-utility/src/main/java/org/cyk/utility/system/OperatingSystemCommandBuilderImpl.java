@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
 import org.cyk.utility.string.StringFormat;
@@ -48,7 +49,7 @@ public class OperatingSystemCommandBuilderImpl extends AbstractStringFunctionImp
 			options.add("/d \""+workingDirectory+"\"");
 		
 		
-		if(__injectCollectionHelper__().isNotEmpty(options))
+		if(CollectionHelper.isNotEmpty(options))
 			command = __injectStringHelper__().concatenate(options,ConstantCharacter.SPACE.toString()) + ConstantCharacter.SPACE + command;
 		
 		format.setArguments(0,command);

@@ -90,14 +90,17 @@ public interface CollectionHelper {
 	}
 	
 	static <ELEMENT> Collection<ELEMENT> getElementsFromTo(Collection<ELEMENT> collection,Integer begin, Integer end) {
+		/*
+		 * end is exclusive
+		 */
 		if(isEmpty(collection))
 			return null;		
 		if(begin==null || begin < 0)
 			begin = 0;
 		if(end==null || end < 0)
-			end = collection.size()-1;
+			end = collection.size();
 		if(collection instanceof List)
-			return ((List<ELEMENT>)collection).subList(begin, end+1);
+			return ((List<ELEMENT>)collection).subList(begin, end);
 		throw new RuntimeException("Cannot get elements from "+begin+" to "+end+" of type "+collection.getClass());
 	}
 	

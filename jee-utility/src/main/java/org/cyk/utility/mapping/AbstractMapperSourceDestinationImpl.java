@@ -10,7 +10,7 @@ import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.clazz.ClassInstance;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.field.FieldHelperImpl;
 import org.cyk.utility.field.FieldInstance;
 import org.cyk.utility.field.FieldInstancesRuntime;
@@ -80,7 +80,7 @@ public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> ex
 	 * @return
 	 */
 	protected void __processPersistableFields__(SOURCE source,DESTINATION destination,Collection<Field> fields) {
-		if(Boolean.TRUE.equals(DependencyInjection.inject(CollectionHelper.class).isNotEmpty(fields))) {
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(fields))) {
 			for(Field index : fields) {
 				Object value = org.cyk.utility.__kernel__.field.FieldHelper.read(destination, index);
 				if(value != null) {
@@ -104,7 +104,7 @@ public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> ex
 	@Override
 	public Collection<SOURCE> getSources(Collection<DESTINATION> destinations, Properties properties) {
 		final Collection<SOURCE> sources = new ArrayList<>();
-		if(DependencyInjection.inject(CollectionHelper.class).isNotEmpty(destinations)) {
+		if(CollectionHelper.isNotEmpty(destinations)) {
 			Integer executorCorePoolSize = EXECUTOR_CORE_POOL_SIZE;
 			if(executorCorePoolSize!=null && executorCorePoolSize>0) {
 				//Parrallel processing

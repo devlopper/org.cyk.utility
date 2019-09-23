@@ -1,16 +1,19 @@
 package org.cyk.utility.collection;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.runnable.RunnablesExecutor;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.time.TimeHelper;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+@Deprecated @Disabled
 public class CollectionHelperUnitTestPerformance extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
@@ -57,7 +60,7 @@ public class CollectionHelperUnitTestPerformance extends AbstractWeldUnitTest {
 		}
 		Long t = System.currentTimeMillis();
 		System.out.print("Working. #worker : "+numberOfWorker+" : ");
-		if(__inject__(CollectionHelper.class).isNotEmpty(workers)) {
+		if(CollectionHelper.isNotEmpty(workers)) {
 			if(numberOfSimultanousWorker!=null && numberOfSimultanousWorker>0) {
 				RunnablesExecutor runner = __inject__(RunnablesExecutor.class);
 				runner.getExecutorServiceBuilder(Boolean.TRUE).setCorePoolSize(numberOfSimultanousWorker);

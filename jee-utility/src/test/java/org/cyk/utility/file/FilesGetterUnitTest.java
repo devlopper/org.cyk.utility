@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.nio.file.Path;
 import java.util.List;
 
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.time.DurationStringBuilder;
@@ -73,14 +73,14 @@ public class FilesGetterUnitTest extends AbstractWeldUnitTest {
 			Files files = filesGetter.execute().getOutput();
 			assertThat(files).withFailMessage("No file found").isNotNull();
 			assertThat(files.get()).withFailMessage("No file found").isNotEmpty();
-			System.out.println("Number of file read for performance testing 01 : "+__inject__(CollectionHelper.class).getSize(files));
+			System.out.println("Number of file read for performance testing 01 : "+CollectionHelper.getSize(files));
 			DurationStringBuilder durationStringBuilder = __inject__(DurationStringBuilder.class);
 			durationStringBuilder.getDurationBuilder(Boolean.TRUE).setBeginToNow();
 			files.computeChecksum(Boolean.TRUE);
 			durationStringBuilder.getDurationBuilder(Boolean.TRUE).setEndToNow();
 			System.out.println("Checksum computed : "+durationStringBuilder.execute().getOutput());
 			files.removeDuplicateByChecksum();
-			System.out.println("Number of file read for performance testing 02 : "+__inject__(CollectionHelper.class).getSize(files));
+			System.out.println("Number of file read for performance testing 02 : "+CollectionHelper.getSize(files));
 		}else {
 			System.out.println("No performance testing done for FilesGetter");
 		}
@@ -97,7 +97,7 @@ public class FilesGetterUnitTest extends AbstractWeldUnitTest {
 			Files files = filesGetter.execute().getOutput();
 			assertThat(files).withFailMessage("No file found").isNotNull();
 			assertThat(files.get()).withFailMessage("No file found").isNotEmpty();
-			System.out.println("Number of file read for performance testing : "+__inject__(CollectionHelper.class).getSize(files));
+			System.out.println("Number of file read for performance testing : "+CollectionHelper.getSize(files));
 		}else {
 			System.out.println("No performance testing done for FilesGetter");
 		}
@@ -127,7 +127,7 @@ public class FilesGetterUnitTest extends AbstractWeldUnitTest {
 				assertThat(files).withFailMessage("No file found").isNotNull();
 				assertThat(files.get()).withFailMessage("No file found").isNotEmpty();
 				assertThat(files.getFirst().getBytes()).withFailMessage("Bytes not found").isNotNull();
-				System.out.println("Number of file read for performance testing : "+__inject__(CollectionHelper.class).getSize(files));
+				System.out.println("Number of file read for performance testing : "+CollectionHelper.getSize(files));
 			}
 			/*
 			FilesGetter filesGetter = __inject__(FilesGetter.class);
@@ -138,7 +138,7 @@ public class FilesGetterUnitTest extends AbstractWeldUnitTest {
 			assertThat(files).withFailMessage("No file found").isNotNull();
 			assertThat(files.get()).withFailMessage("No file found").isNotEmpty();
 			assertThat(files.getFirst().getBytes()).withFailMessage("Bytes not found").isNotNull();
-			System.out.println("Number of file read for performance testing : "+__inject__(CollectionHelper.class).getSize(files));
+			System.out.println("Number of file read for performance testing : "+CollectionHelper.getSize(files));
 			*/
 		}else {
 			System.out.println("No performance testing done for FilesGetter");
@@ -156,7 +156,7 @@ public class FilesGetterUnitTest extends AbstractWeldUnitTest {
 			Files files = filesGetter.execute().getOutput();
 			assertThat(files).withFailMessage("No file found").isNotNull();
 			assertThat(files.get()).withFailMessage("No file found").isNotEmpty();
-			System.out.println("Number of file read for performance testing : "+__inject__(CollectionHelper.class).getSize(files));
+			System.out.println("Number of file read for performance testing : "+CollectionHelper.getSize(files));
 		}else {
 			System.out.println("No performance testing done for FilesGetter");
 		}

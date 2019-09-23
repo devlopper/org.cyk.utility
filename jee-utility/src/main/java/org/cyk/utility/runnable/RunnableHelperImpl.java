@@ -11,7 +11,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import org.cyk.utility.collection.CollectionHelperImpl;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.throwable.ThrowableHelperImpl;
 import org.cyk.utility.value.ValueHelperImpl;
@@ -45,7 +45,7 @@ public class RunnableHelperImpl extends AbstractHelper implements RunnableHelper
 	}
 	
 	public static void __run__(Collection<Runnable> runnables,String name,ExecutorService executorService,Long timeOut,TimeUnit timeOutUnit) {
-		if(CollectionHelperImpl.__isEmpty__(runnables))
+		if(CollectionHelper.isEmpty(runnables))
 			return;
 		ValueHelperImpl.__throwIfBlank__("runnables name", name);
 		if(executorService == null)

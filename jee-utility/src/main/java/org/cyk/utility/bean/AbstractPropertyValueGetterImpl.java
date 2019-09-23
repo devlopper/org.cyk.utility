@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.collection.CollectionHelperImpl;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.string.Strings;
 
@@ -22,7 +22,7 @@ public abstract class AbstractPropertyValueGetterImpl extends AbstractFunctionWi
 		Property property = getProperty();
 		if(property == null) {
 			Strings pathStrings = getPathStrings();
-			if(CollectionHelperImpl.__isNotEmpty__(pathStrings)) {
+			if(CollectionHelper.isNotEmpty(pathStrings)) {
 				property = (Property) org.cyk.utility.__kernel__.field.FieldHelper.read(object,pathStrings.get());
 			}
 		}

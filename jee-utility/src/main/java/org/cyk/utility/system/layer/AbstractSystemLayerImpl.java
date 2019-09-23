@@ -5,7 +5,7 @@ import java.io.Serializable;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractSingleton;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.string.StringHelper;
 
 public abstract class AbstractSystemLayerImpl extends AbstractSingleton implements SystemLayer, Serializable {
@@ -112,7 +112,7 @@ public abstract class AbstractSystemLayerImpl extends AbstractSingleton implemen
 	public String getInterfaceNameFromEntityClassName(String entityClassName) {
 		String string = null;
 		//if(getEntityLayer().isPackage(entityClassName)) {
-			string = StringUtils.substringBeforeLast(StringUtils.replace(entityClassName, ".entities.", ".api."),"Impl")+__inject__(CollectionHelper.class)
+			string = StringUtils.substringBeforeLast(StringUtils.replace(entityClassName, ".entities.", ".api."),"Impl")+CollectionHelper
 			.getFirst(getInterfaceLayer().getInterfaceNameRegularExpression().getEndTokens().get());
 		//}
 		return string;

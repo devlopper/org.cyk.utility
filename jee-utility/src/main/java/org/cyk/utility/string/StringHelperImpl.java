@@ -5,17 +5,17 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.enterprise.context.ApplicationScoped;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.constant.ConstantSeparator;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.collection.CollectionHelperImpl;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.regularexpression.RegularExpressionHelperImpl;
 
@@ -88,7 +88,7 @@ public class StringHelperImpl extends AbstractHelper implements StringHelper,Ser
 	@Override
 	public Collection<String> applyCase(Collection<String> strings, Case aCase) {
 		Collection<String> result = null;
-		if(__inject__(CollectionHelper.class).isNotEmpty(strings)) {
+		if(CollectionHelper.isNotEmpty(strings)) {
 			result = new ArrayList<>();
 			for(String index : strings) {
 				result.add(applyCase(index, aCase));
@@ -137,13 +137,13 @@ public class StringHelperImpl extends AbstractHelper implements StringHelper,Ser
 
 	@Override
 	public String concatenate(String... strings) {
-		return concatenate(__inject__(CollectionHelper.class).instanciate(strings));
+		return concatenate(List.of(strings));
 	}
 	
 	@Override
 	public Collection<String> get(Collection<?> collection) {
 		Collection<String> strings = null;
-		if(__inject__(CollectionHelper.class).isNotEmpty(strings)){
+		if(CollectionHelper.isNotEmpty(strings)){
 			strings = new ArrayList<>();
 			for(Object index : collection)
 				strings.add(index == null ? null : index.toString());	
@@ -153,7 +153,7 @@ public class StringHelperImpl extends AbstractHelper implements StringHelper,Ser
 	
 	@Override
 	public Collection<String> getFromArray(Object... array) {
-		return get(__inject__(CollectionHelper.class).instanciate(array));
+		return get(List.of(array));
 	}
 	
 	@Override
@@ -187,7 +187,7 @@ public class StringHelperImpl extends AbstractHelper implements StringHelper,Ser
 	
 	@Override
 	public Collection<String> splitByCharacterTypeCamelCase(String string) {
-		return __inject__(CollectionHelper.class).instanciate(StringUtils.splitByCharacterTypeCamelCase(string)); 
+		return List.of(StringUtils.splitByCharacterTypeCamelCase(string)); 
 	}
 	
 	/**/
@@ -234,7 +234,7 @@ public class StringHelperImpl extends AbstractHelper implements StringHelper,Ser
 	
 	public static Collection<String> __applyCase__(Collection<String> strings, Case aCase) {
 		Collection<String> result = null;
-		if(CollectionHelperImpl.__isNotEmpty__(strings)) {
+		if(CollectionHelper.isNotEmpty(strings)) {
 			result = new ArrayList<>();
 			for(String index : strings) {
 				result.add(__applyCase__(index, aCase));
@@ -244,7 +244,7 @@ public class StringHelperImpl extends AbstractHelper implements StringHelper,Ser
 	}
 	
 	public static Collection<String> __splitByCharacterTypeCamelCase__(String string) {
-		return CollectionHelperImpl.__instanciate__(StringUtils.splitByCharacterTypeCamelCase(string)); 
+		return List.of(StringUtils.splitByCharacterTypeCamelCase(string)); 
 	}
 	
 	public static String __addToBeginIfDoesNotStartWith__(String string, Object prefix) {
@@ -285,7 +285,7 @@ public class StringHelperImpl extends AbstractHelper implements StringHelper,Ser
 	}
 	
 	public static Collection<String> __getInvalidLines__(Collection<String> lines,Set<String> invalidLinesRegularExpressions) {
-		if(CollectionHelperImpl.__isEmpty__(lines))
+		if(CollectionHelper.isEmpty(lines))
 			return null;
 		Collection<String> collection = new ArrayList<>();
 		for(String line : lines) {

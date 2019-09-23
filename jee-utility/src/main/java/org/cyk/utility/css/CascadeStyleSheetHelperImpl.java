@@ -2,12 +2,12 @@ package org.cyk.utility.css;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.collection.CollectionHelperImpl;
 import org.cyk.utility.device.Device;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.throwable.ThrowableHelperImpl;
@@ -53,7 +53,7 @@ public class CascadeStyleSheetHelperImpl extends AbstractHelper implements Casca
 	
 	@Override
 	public Collection<String> getStyleClassesFromRoles(Object... roles) {
-		return __getStyleClassesFromRoles__(CollectionHelperImpl.getInstance().instanciate(roles));
+		return __getStyleClassesFromRoles__(List.of(roles));
 	}
 	
 	@Override

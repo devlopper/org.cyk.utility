@@ -3,12 +3,13 @@ package org.cyk.utility.number;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
-import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.string.StringHelper;
 
@@ -42,7 +43,7 @@ public class NumberHelperImpl extends AbstractHelper implements NumberHelper,Ser
 	
 	@Override
 	public Number operate(Operation operation,Collection<Number> numbers){
-		if(operation == null || __inject__(CollectionHelper.class).isEmpty(numbers))
+		if(operation == null || CollectionHelper.isEmpty(numbers))
 			return null;
 		Number result = null;
 		switch(operation){
@@ -80,7 +81,7 @@ public class NumberHelperImpl extends AbstractHelper implements NumberHelper,Ser
 	
 	@Override
 	public Number operate(Operation operation, Number... numbers) {
-		return operate(operation, __inject__(CollectionHelper.class).instanciate(numbers));
+		return operate(operation, List.of(numbers));
 	}
 	
 	@Override
@@ -135,7 +136,7 @@ public class NumberHelperImpl extends AbstractHelper implements NumberHelper,Ser
 	}
 	
 	public static Number __operate__(Operation operation,Collection<Number> numbers){
-		if(operation == null || __inject__(CollectionHelper.class).isEmpty(numbers))
+		if(operation == null || CollectionHelper.isEmpty(numbers))
 			return null;
 		Number result = null;
 		switch(operation){
@@ -172,7 +173,7 @@ public class NumberHelperImpl extends AbstractHelper implements NumberHelper,Ser
 	}
 	
 	public static Number __operate__(Operation operation, Number... numbers) {
-		return __operate__(operation, __inject__(CollectionHelper.class).instanciate(numbers));
+		return __operate__(operation, List.of(numbers));
 	}
 	
 	public static Number __add__(Number... numbers) {

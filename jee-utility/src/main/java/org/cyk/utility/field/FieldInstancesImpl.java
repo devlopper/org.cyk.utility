@@ -2,12 +2,12 @@ package org.cyk.utility.field;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.collection.AbstractCollectionInstanceImpl;
 import org.cyk.utility.__kernel__.field.FieldHelper;
-import org.cyk.utility.collection.AbstractCollectionInstanceImpl;
-import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.string.StringHelper;
 
 @Dependent
@@ -26,7 +26,7 @@ public class FieldInstancesImpl extends AbstractCollectionInstanceImpl<FieldInst
 
 	@Override
 	public FieldInstance get(Class<?> aClass, String... paths) {
-		return get(aClass, __inject__(CollectionHelper.class).instanciate(paths));
+		return get(aClass, List.of(paths));
 	}
 	
 }

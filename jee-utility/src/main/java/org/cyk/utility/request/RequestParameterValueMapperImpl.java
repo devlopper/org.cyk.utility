@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterNameStringBuilder;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterValueMatrix;
@@ -96,9 +97,9 @@ public class RequestParameterValueMapperImpl extends AbstractFunctionWithPropert
 					//For now we will use string
 					value = parameterValue;
 				}else if(__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setNameAsEntityClass().execute().getOutput().equals(parameterName)) {
-					value = __injectCollectionHelper__().getFirst(__inject__(UniformResourceIdentifierParameterValueMatrix.class).getClassMap().getKeys(parameterValue));
+					value = CollectionHelper.getFirst(__inject__(UniformResourceIdentifierParameterValueMatrix.class).getClassMap().getKeys(parameterValue));
 				}else if(__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setNameAsWindowRenderTypeClass().execute().getOutput().equals(parameterName)) {
-					value = __injectCollectionHelper__().getFirst(__inject__(UniformResourceIdentifierParameterValueMatrix.class).getClassMap().getKeys(parameterValue));
+					value = CollectionHelper.getFirst(__inject__(UniformResourceIdentifierParameterValueMatrix.class).getClassMap().getKeys(parameterValue));
 				}
 				
 				if(value == null)

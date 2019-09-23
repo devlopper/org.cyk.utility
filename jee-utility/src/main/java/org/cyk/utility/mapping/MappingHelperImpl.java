@@ -6,7 +6,7 @@ import java.util.Collection;
 import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.helper.AbstractHelper;
 
 @ApplicationScoped
@@ -16,7 +16,7 @@ public class MappingHelperImpl extends AbstractHelper implements MappingHelper,S
 	@Override
 	public <SOURCE, DESTINATION> Collection<DESTINATION> getDestinations(Collection<SOURCE> sources,Class<DESTINATION> destinationClass,Properties properties) {
 		Collection<DESTINATION> destinations = null;
-		if(Boolean.TRUE.equals(__inject__(CollectionHelper.class).isNotEmpty(sources))) {
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(sources))) {
 			Class<SOURCE> sourceClass = (Class<SOURCE>) sources.iterator().next().getClass();
 			destinations = __inject__(MapperSourceDestinationGetter.class).setSourceClass(sourceClass).setDestinationClass(destinationClass)
 					.execute().getOutput().getDestinations(sources);	
@@ -32,7 +32,7 @@ public class MappingHelperImpl extends AbstractHelper implements MappingHelper,S
 	@Override
 	public <SOURCE, DESTINATION> Collection<SOURCE> getSources(Collection<DESTINATION> destinations,Class<SOURCE> sourceClass,Properties properties) {
 		Collection<SOURCE> sources = null;
-		if(Boolean.TRUE.equals(__inject__(CollectionHelper.class).isNotEmpty(destinations))) {
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(destinations))) {
 			Class<DESTINATION> destinationClass = (Class<DESTINATION>) destinations.iterator().next().getClass();
 			sources = __inject__(MapperSourceDestinationGetter.class).setSourceClass(sourceClass).setDestinationClass(destinationClass)
 					.execute().getOutput().getSources(destinations,properties);

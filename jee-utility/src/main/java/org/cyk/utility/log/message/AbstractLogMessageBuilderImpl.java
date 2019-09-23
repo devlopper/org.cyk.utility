@@ -6,7 +6,7 @@ import java.util.Collection;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.value.ValueHelper;
@@ -26,7 +26,7 @@ public abstract class AbstractLogMessageBuilderImpl extends AbstractFunctionWith
 		LogMessage message = new LogMessage();
 		Collection<Object> parameters = (Collection<Object>) getProperties().getParameters();
 		StringBuilder templateStringBuilder = new StringBuilder();
-		if(__inject__(CollectionHelper.class).isNotEmpty(parameters)){
+		if(CollectionHelper.isNotEmpty(parameters)){
 			Integer index = 0;
 			for(Object parameter : parameters){
 				if(templateStringBuilder.length()>0)

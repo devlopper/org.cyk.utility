@@ -1,9 +1,11 @@
 package org.cyk.utility.server.persistence.jpa.hierarchy;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.server.persistence.AbstractPersistenceEntityImpl;
@@ -29,19 +31,19 @@ public abstract class AbstractPersistenceIdentifiedByStringAndCodedAndNamedAndHi
 	
 	@Override
 	public Collection<ENTITY> readByParentsIdentifiers(String... parentsIdentifiers) {
-		return readByParentsIdentifiers(__injectCollectionHelper__().instanciate(parentsIdentifiers));
+		return readByParentsIdentifiers(List.of(parentsIdentifiers));
 	}
 	
 	@Override
 	public Collection<ENTITY> readByParents(Collection<ENTITY> parents) {
-		if(__injectCollectionHelper__().isNotEmpty(parents))
+		if(CollectionHelper.isNotEmpty(parents))
 			return readByParentsIdentifiers(parents.stream().map(AbstractIdentifiedByString::getIdentifier).collect(Collectors.toList()));
 		return null;
 	}
 	
 	@Override
 	public Collection<ENTITY> readByParents(@SuppressWarnings("unchecked") ENTITY... parents) {
-		return readByParents(__injectCollectionHelper__().instanciate(parents));
+		return readByParents(List.of(parents));
 	}
 	
 	@Override
@@ -52,37 +54,37 @@ public abstract class AbstractPersistenceIdentifiedByStringAndCodedAndNamedAndHi
 	
 	@Override
 	public Collection<ENTITY> readByChildrenIdentifiers(String... childrenIdentifiers) {
-		return readByChildrenIdentifiers(__injectCollectionHelper__().instanciate(childrenIdentifiers));
+		return readByChildrenIdentifiers(List.of(childrenIdentifiers));
 	}
 	
 	@Override
 	public Collection<ENTITY> readByChildren(Collection<ENTITY> children) {
-		if(__injectCollectionHelper__().isNotEmpty(children))
+		if(CollectionHelper.isNotEmpty(children))
 			return readByChildrenIdentifiers(children.stream().map(AbstractIdentifiedByString::getIdentifier).collect(Collectors.toList()));
 		return null;
 	}
 	
 	@Override
 	public Collection<ENTITY> readByChildren(@SuppressWarnings("unchecked") ENTITY... children) {
-		return readByChildren(__injectCollectionHelper__().instanciate(children));
+		return readByChildren(List.of(children));
 	}
 	
 	@Override
 	protected void __listenExecuteReadAfter__(ENTITY entity,Properties properties) {
 		super.__listenExecuteReadAfter__(entity,properties);
 		Strings fields = __getFieldsFromProperties__(properties);
-		if(__injectCollectionHelper__().isNotEmpty(fields))
+		if(CollectionHelper.isNotEmpty(fields))
 			fields.get().forEach(new Consumer<String>() {
 				@SuppressWarnings("unchecked")
 				@Override
 				public void accept(String field) {
 					if(AbstractIdentifiedByString.FIELD_PARENTS.equals(field)) {
 						Collection<ENTITY> parents = readByChildren(entity);
-						if(__injectCollectionHelper__().isNotEmpty(parents))
+						if(CollectionHelper.isNotEmpty(parents))
 							entity.getParents(Boolean.TRUE).add(parents);
 					}else if(AbstractIdentifiedByString.FIELD_CHILDREN.equals(field)) {
 						Collection<ENTITY> children = readByParents(entity);
-						if(__injectCollectionHelper__().isNotEmpty(children))
+						if(CollectionHelper.isNotEmpty(children))
 							entity.getChildren(Boolean.TRUE).add(children);
 					}
 				}

@@ -149,7 +149,7 @@ public class CriteriaImpl extends AbstractObject implements Criteria,Serializabl
 	/**/
 	
 	/*public T getPreparedValue(){
-		return __inject__(CollectionHelper.class).isEmpty(getValuesMatch()) ? nullValue : value;
+		return CollectionHelper.isEmpty(getValuesMatch()) ? nullValue : value;
 	}*/
 	/*
 	public java.lang.Boolean isNull(){

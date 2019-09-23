@@ -2,7 +2,7 @@ package org.cyk.utility.object;
 
 import java.util.Collection;
 
-import org.cyk.utility.collection.CollectionInstance;
+import org.cyk.utility.__kernel__.collection.CollectionInstance;
 
 public interface Objects extends CollectionInstance<Object> {
 

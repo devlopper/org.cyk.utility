@@ -2,12 +2,12 @@ package org.cyk.utility.server.persistence;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
-import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldName;
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
+import org.cyk.utility.system.action.SystemAction;
 
 public abstract class AbstractPersistenceFunctionReaderImpl extends AbstractPersistenceFunctionImpl implements PersistenceFunctionReader, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -23,7 +23,7 @@ public abstract class AbstractPersistenceFunctionReaderImpl extends AbstractPers
 	@Override
 	protected Collection<ValueUsageType> getValueUsageTypes(FieldName fieldName) {
 		if(getProperties().getEntity() == null)
-			return __inject__(CollectionHelper.class).instanciate(ValueUsageType.SYSTEM);
+			return List.of(ValueUsageType.SYSTEM);
 		return super.getValueUsageTypes(fieldName);
 	}
 

@@ -1,6 +1,6 @@
 package org.cyk.utility.number;
 
-import org.cyk.utility.collection.CollectionInstance;
+import org.cyk.utility.__kernel__.collection.CollectionInstance;
 
 public interface Intervals extends CollectionInstance<Interval> {
 

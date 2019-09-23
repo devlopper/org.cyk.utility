@@ -5,7 +5,7 @@ import java.util.Collection;
 import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.field.Fields;
 import org.cyk.utility.field.FieldsGetter;
 import org.cyk.utility.server.persistence.PersistenceEntity;
@@ -52,7 +52,7 @@ public abstract class AbstractPersistenceEntityIntegrationTest<ENTITY> extends A
 		Object action = __inject__(SystemActionRead.class);
 		Object object = __instanciateEntity__(action);
 		Fields fields = __inject__(FieldsGetter.class).setFieldName(FieldName.IDENTIFIER).setValueUsageType(ValueUsageType.BUSINESS).setClazz(object.getClass()).execute().getOutput();
-		if(__inject__(CollectionHelper.class).isNotEmpty(fields)) {
+		if(CollectionHelper.isNotEmpty(fields)) {
 			__createEntity__(object);
 			__readEntity__(__getEntityClass__(action),__getFieldValueBusinessIdentifier__(object), ValueUsageType.BUSINESS);
 			//cleanup

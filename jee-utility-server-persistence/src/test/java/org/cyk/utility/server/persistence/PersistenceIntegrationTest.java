@@ -20,7 +20,7 @@ import org.cyk.utility.__kernel__.computation.SortOrder;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.field.FieldInstancesRuntime;
 import org.cyk.utility.mapping.MappingHelper;
 import org.cyk.utility.server.persistence.api.MyEntityPersistence;
@@ -363,7 +363,7 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 	@Test
 	public void read_myEntity_by_identifier_system_contains() throws Exception{
 		userTransaction.begin();
-		__inject__(MyEntityPersistence.class).createMany(__inject__(CollectionHelper.class).instanciate(
+		__inject__(MyEntityPersistence.class).createMany(List.of(
 				new MyEntity().setIdentifier("123").setCode(__getRandomCode__()).setIntegerValue(1)
 				,new MyEntity().setIdentifier("133").setCode(__getRandomCode__()).setIntegerValue(2)
 				,new MyEntity().setIdentifier("144").setCode(__getRandomCode__()).setIntegerValue(1)
@@ -401,7 +401,7 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 	@Test
 	public void read_myEntity_by_identifier_business_contains() throws Exception{
 		userTransaction.begin();
-		__inject__(MyEntityPersistence.class).createMany(__inject__(CollectionHelper.class).instanciate(
+		__inject__(MyEntityPersistence.class).createMany(List.of(
 				new MyEntity().setCode("123").setIntegerValue(1)
 				,new MyEntity().setCode("133").setIntegerValue(2)
 				,new MyEntity().setCode("144").setIntegerValue(1)
@@ -814,9 +814,9 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		Node nodeService = new Node().setCode("service").setName(__getRandomName__()).addParents(nodeModule);
 		Node nodeMenu = new Node().setCode("menu").setName(__getRandomName__()).addParents(nodeService);
 		Node nodeAction = new Node().setCode("action").setName(__getRandomName__()).addParents(nodeMenu);
-		__inject__(NodePersistence.class).createMany(__inject__(CollectionHelper.class).instanciate(nodeModule,nodeService,nodeMenu
+		__inject__(NodePersistence.class).createMany(List.of(nodeModule,nodeService,nodeMenu
 				,nodeAction));
-		__inject__(NodeHierarchyPersistence.class).createMany(__inject__(CollectionHelper.class).instanciate(
+		__inject__(NodeHierarchyPersistence.class).createMany(List.of(
 				new NodeHierarchy().setParent(nodeModule).setChild(nodeService)
 				,new NodeHierarchy().setParent(nodeService).setChild(nodeMenu)
 				,new NodeHierarchy().setParent(nodeMenu).setChild(nodeAction)
@@ -894,9 +894,9 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		Node node0_0 = new Node().setIdentifier("0.0").setCode(__getRandomCode__()).setName(__getRandomName__()).addParents(node0);
 		Node node0_1 = new Node().setIdentifier("0.1").setCode(__getRandomCode__()).setName(__getRandomName__()).addParents(node0);
 		Node node_0_0_0 = new Node().setIdentifier("0.0.0").setCode(__getRandomCode__()).setName(__getRandomName__()).addParents(node0_0);
-		__inject__(NodePersistence.class).createMany(__inject__(CollectionHelper.class).instanciate(node0,node0_0,node0_1
+		__inject__(NodePersistence.class).createMany(List.of(node0,node0_0,node0_1
 				,node_0_0_0));
-		__inject__(NodeHierarchyPersistence.class).createMany(__inject__(CollectionHelper.class).instanciate(
+		__inject__(NodeHierarchyPersistence.class).createMany(List.of(
 				new NodeHierarchy().setParent(node0).setChild(node0_0)
 				,new NodeHierarchy().setParent(node0).setChild(node0_1)
 				,new NodeHierarchy().setParent(node0_0).setChild(node_0_0_0)
@@ -918,9 +918,9 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		Node nodeService = new Node().setIdentifier("S").setCode("service").setName(__getRandomName__()).addParents(nodeModule);
 		Node nodeMenu = new Node().setIdentifier("ME").setCode("menu").setName(__getRandomName__()).addParents(nodeService);
 		Node nodeAction = new Node().setIdentifier("A").setCode("action").setName(__getRandomName__()).addParents(nodeMenu);
-		__inject__(NodePersistence.class).createMany(__inject__(CollectionHelper.class).instanciate(nodeModule,nodeService,nodeMenu
+		__inject__(NodePersistence.class).createMany(List.of(nodeModule,nodeService,nodeMenu
 				,nodeAction));
-		__inject__(NodeHierarchyPersistence.class).createMany(__inject__(CollectionHelper.class).instanciate(
+		__inject__(NodeHierarchyPersistence.class).createMany(List.of(
 				new NodeHierarchy().setParent(nodeModule).setChild(nodeService)
 				,new NodeHierarchy().setParent(nodeService).setChild(nodeMenu)
 				,new NodeHierarchy().setParent(nodeMenu).setChild(nodeAction)
@@ -939,9 +939,9 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		Node nodeService = new Node().setIdentifier("S").setCode("service").setName(__getRandomName__()).addParents(nodeModule);
 		Node nodeMenu = new Node().setIdentifier("ME").setCode("menu").setName(__getRandomName__()).addParents(nodeService);
 		Node nodeAction = new Node().setIdentifier("A").setCode("action").setName(__getRandomName__()).addParents(nodeMenu);
-		__inject__(NodePersistence.class).createMany(__inject__(CollectionHelper.class).instanciate(nodeModule,nodeService,nodeMenu
+		__inject__(NodePersistence.class).createMany(List.of(nodeModule,nodeService,nodeMenu
 				,nodeAction));
-		__inject__(NodeHierarchyPersistence.class).createMany(__inject__(CollectionHelper.class).instanciate(
+		__inject__(NodeHierarchyPersistence.class).createMany(List.of(
 				new NodeHierarchy().setParent(nodeModule).setChild(nodeService)
 				,new NodeHierarchy().setParent(nodeService).setChild(nodeMenu)
 				,new NodeHierarchy().setParent(nodeMenu).setChild(nodeAction)
@@ -970,9 +970,9 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		Node nodeService = new Node().setIdentifier("S").setCode("service").setName(__getRandomName__()).addParents(nodeModule);
 		Node nodeMenu = new Node().setIdentifier("ME").setCode("menu").setName(__getRandomName__()).addParents(nodeService);
 		Node nodeAction = new Node().setIdentifier("A").setCode("action").setName(__getRandomName__()).addParents(nodeMenu);
-		__inject__(NodePersistence.class).createMany(__inject__(CollectionHelper.class).instanciate(nodeModule,nodeService,nodeMenu
+		__inject__(NodePersistence.class).createMany(List.of(nodeModule,nodeService,nodeMenu
 				,nodeAction));
-		__inject__(NodeHierarchyPersistence.class).createMany(__inject__(CollectionHelper.class).instanciate(
+		__inject__(NodeHierarchyPersistence.class).createMany(List.of(
 				new NodeHierarchy().setParent(nodeModule).setChild(nodeService)
 				,new NodeHierarchy().setParent(nodeService).setChild(nodeMenu)
 				,new NodeHierarchy().setParent(nodeMenu).setChild(nodeAction)
@@ -1007,9 +1007,9 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		Node nodeService = new Node().setIdentifier("S").setCode("service").setName(__getRandomName__()).addParents(nodeModule);
 		Node nodeMenu = new Node().setIdentifier("ME").setCode("menu").setName(__getRandomName__()).addParents(nodeService);
 		Node nodeAction = new Node().setIdentifier("A").setCode("action").setName(__getRandomName__()).addParents(nodeMenu);
-		__inject__(NodePersistence.class).createMany(__inject__(CollectionHelper.class).instanciate(nodeModule,nodeService,nodeMenu
+		__inject__(NodePersistence.class).createMany(List.of(nodeModule,nodeService,nodeMenu
 				,nodeAction));
-		__inject__(NodeHierarchyPersistence.class).createMany(__inject__(CollectionHelper.class).instanciate(
+		__inject__(NodeHierarchyPersistence.class).createMany(List.of(
 				new NodeHierarchy().setParent(nodeModule).setChild(nodeService)
 				,new NodeHierarchy().setParent(nodeService).setChild(nodeMenu)
 				,new NodeHierarchy().setParent(nodeMenu).setChild(nodeAction)
@@ -1031,9 +1031,9 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		Node nodeService = new Node().setIdentifier("S").setCode("service").setName(__getRandomName__()).addParents(nodeModule);
 		Node nodeMenu = new Node().setIdentifier("ME").setCode("menu").setName(__getRandomName__()).addParents(nodeService);
 		Node nodeAction = new Node().setIdentifier("A").setCode("action").setName(__getRandomName__()).addParents(nodeMenu);
-		__inject__(NodePersistence.class).createMany(__inject__(CollectionHelper.class).instanciate(nodeModule,nodeService,nodeMenu
+		__inject__(NodePersistence.class).createMany(List.of(nodeModule,nodeService,nodeMenu
 				,nodeAction));
-		__inject__(NodeHierarchyPersistence.class).createMany(__inject__(CollectionHelper.class).instanciate(
+		__inject__(NodeHierarchyPersistence.class).createMany(List.of(
 				new NodeHierarchy().setParent(nodeModule).setChild(nodeService)
 				,new NodeHierarchy().setParent(nodeService).setChild(nodeMenu)
 				,new NodeHierarchy().setParent(nodeMenu).setChild(nodeAction)
@@ -1068,9 +1068,9 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		Node nodeService = new Node().setIdentifier("S").setCode("service").setName(__getRandomName__()).addParents(nodeModule);
 		Node nodeMenu = new Node().setIdentifier("ME").setCode("menu").setName(__getRandomName__()).addParents(nodeService);
 		Node nodeAction = new Node().setIdentifier("A").setCode("action").setName(__getRandomName__()).addParents(nodeMenu);
-		__inject__(NodePersistence.class).createMany(__inject__(CollectionHelper.class).instanciate(nodeModule,nodeService,nodeMenu
+		__inject__(NodePersistence.class).createMany(List.of(nodeModule,nodeService,nodeMenu
 				,nodeAction));
-		__inject__(NodeHierarchyPersistence.class).createMany(__inject__(CollectionHelper.class).instanciate(
+		__inject__(NodeHierarchyPersistence.class).createMany(List.of(
 				new NodeHierarchy().setParent(nodeModule).setChild(nodeService)
 				,new NodeHierarchy().setParent(nodeService).setChild(nodeMenu)
 				,new NodeHierarchy().setParent(nodeMenu).setChild(nodeAction)

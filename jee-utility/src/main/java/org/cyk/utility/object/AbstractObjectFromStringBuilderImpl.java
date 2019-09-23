@@ -3,6 +3,7 @@ package org.cyk.utility.object;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.field.FieldInstances;
 import org.cyk.utility.field.FieldInstancesRuntime;
 import org.cyk.utility.string.Strings;
@@ -25,7 +26,7 @@ public abstract class AbstractObjectFromStringBuilderImpl extends AbstractObject
 			
 		}else {
 			__injectValueHelper__().returnOrThrowIfBlank("field names", fieldNamesStrings);
-			if(__injectCollectionHelper__().isNotEmpty(fieldNamesStrings)) {
+			if(CollectionHelper.isNotEmpty(fieldNamesStrings)) {
 				fieldInstances = __inject__(FieldInstances.class);
 				for(String index : fieldNamesStrings.get())
 					fieldInstances.add(__inject__(FieldInstancesRuntime.class).get(klass, index));

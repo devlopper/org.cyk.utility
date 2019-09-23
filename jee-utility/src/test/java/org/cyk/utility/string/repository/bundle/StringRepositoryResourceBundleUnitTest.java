@@ -8,8 +8,10 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.string.repository.ResourceBundle;
 import org.cyk.utility.string.repository.StringRepositoryResourceBundle;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+@Deprecated @Disabled
 public class StringRepositoryResourceBundleUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 

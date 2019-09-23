@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.number.Interval;
 import org.cyk.utility.number.Intervals;
@@ -34,15 +35,15 @@ public class FilesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 		Strings fileExtensions = getFileExtensions();
 		Intervals fileSizeIntervals = getFileSizeIntervals();
 		//build files
-		if(__injectCollectionHelper__().isNotEmpty(paths)) {			
+		if(CollectionHelper.isNotEmpty(paths)) {			
 			paths.get().forEach(new Consumer<Path>() {
 				@Override
 				public void accept(Path path) {
 					java.io.File javaFile = path.toFile();
 					Boolean isAddable = Boolean.TRUE;
-					if(Boolean.TRUE.equals(isAddable) && __injectCollectionHelper__().isNotEmpty(fileExtensions))
-						isAddable = __injectCollectionHelper__().contains(fileExtensions, __inject__(FileHelper.class).getExtension(javaFile.getName()).toLowerCase());
-					if(Boolean.TRUE.equals(isAddable) && __injectCollectionHelper__().isNotEmpty(fileSizeIntervals))
+					if(Boolean.TRUE.equals(isAddable) && CollectionHelper.isNotEmpty(fileExtensions))
+						isAddable = CollectionHelper.contains(fileExtensions, __inject__(FileHelper.class).getExtension(javaFile.getName()).toLowerCase());
+					if(Boolean.TRUE.equals(isAddable) && CollectionHelper.isNotEmpty(fileSizeIntervals))
 						isAddable = fileSizeIntervals.contains(javaFile.length());
 					
 					if(Boolean.TRUE.equals(isAddable)) {
@@ -139,7 +140,7 @@ public class FilesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 		});
 		
 		//compute checksum
-		Boolean isChecksumComputable = Boolean.TRUE.equals(isFileChecksumComputable) && getParent() == null && __injectCollectionHelper__().isNotEmpty(filesAll);
+		Boolean isChecksumComputable = Boolean.TRUE.equals(isFileChecksumComputable) && getParent() == null && CollectionHelper.isNotEmpty(filesAll);
 		if(isChecksumComputable) {
 			System.out.println("Computing checksums");
 			filesAll.get().stream().forEach(new Consumer<File>() {

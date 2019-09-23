@@ -16,7 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
-import org.cyk.utility.collection.CollectionHelperImpl;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.network.protocol.ProtocolHelperImpl;
 import org.cyk.utility.number.NumberHelperImpl;
@@ -120,7 +120,7 @@ public class UniformResourceIdentifierHelperImpl extends AbstractHelper implemen
 			return null;
 		Collection<String> keysValues = null;
 		for(Map.Entry<String,List<String>> entry : parameters.entrySet()) {
-			if(StringHelperImpl.__isNotBlank__(entry.getKey()) && CollectionHelperImpl.__isNotEmpty__(entry.getValue())) {
+			if(StringHelperImpl.__isNotBlank__(entry.getKey()) && CollectionHelper.isNotEmpty(entry.getValue())) {
 				if(keysValues == null)
 					keysValues = new ArrayList<>();
 				//FIXME , this is not a standard way to do
@@ -150,7 +150,7 @@ public class UniformResourceIdentifierHelperImpl extends AbstractHelper implemen
 							values.add(value);
 						}
 					}
-					if(CollectionHelperImpl.__isNotEmpty__(values))
+					if(CollectionHelper.isNotEmpty(values))
 						__parameters__.put(name,values);	
 				}
 			}
@@ -202,9 +202,9 @@ public class UniformResourceIdentifierHelperImpl extends AbstractHelper implemen
 		if(systemAction.getEntities()!=null) {
 			if(systemAction.getEntities().getElementClass()!=null)
 				parameters.put(ParameterName.ENTITY_CLASS,Arrays.asList(systemAction.getEntities().getElementClass()));						
-			if(CollectionHelperImpl.__isNotEmpty__(systemAction.getEntities()))
+			if(CollectionHelper.isNotEmpty(systemAction.getEntities()))
 				parameters.put(ParameterName.ENTITY_IDENTIFIER,Arrays.asList(systemAction.getEntities().getFirst()));
-			if(CollectionHelperImpl.__isNotEmpty__(systemAction.getEntitiesIdentifiers()))
+			if(CollectionHelper.isNotEmpty(systemAction.getEntitiesIdentifiers()))
 				parameters.put(ParameterName.ENTITY_IDENTIFIER,Arrays.asList(systemAction.getEntitiesIdentifiers().getFirst()));				
 		}
 		parameters.put(ParameterName.ACTION_CLASS,Arrays.asList(systemAction.getClass()));	
@@ -414,7 +414,7 @@ public class UniformResourceIdentifierHelperImpl extends AbstractHelper implemen
 	}
 	
 	public static Collection<URI> __getURIs__(Collection<String> uniformResourceIdentifiers) {
-		if(CollectionHelperImpl.__isEmpty__(uniformResourceIdentifiers))
+		if(CollectionHelper.isEmpty(uniformResourceIdentifiers))
 			return null;
 		Collection<URI> uris = new ArrayList<>();
 		for(String uniformResourceIdentifier : uniformResourceIdentifiers)

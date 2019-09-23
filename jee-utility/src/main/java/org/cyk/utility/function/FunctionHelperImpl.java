@@ -9,7 +9,7 @@ import java.util.UUID;
 import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.function.FunctionExecutionMessage;
-import org.cyk.utility.collection.CollectionHelperImpl;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.stream.distributed.Producer;
 import org.cyk.utility.stream.distributed.ProducerBuilder;
@@ -34,7 +34,7 @@ public class FunctionHelperImpl extends AbstractHelper implements FunctionHelper
 
 	public static Collection<Runnable> __getRunnables__(Collection<? extends Function<?,?>> functions) {
 		Collection<Runnable> runnables = null;
-		if(CollectionHelperImpl.__isNotEmpty__(functions)) {
+		if(CollectionHelper.isNotEmpty(functions)) {
 			runnables = new ArrayList<>();
 			for(Function<?,?> index : functions) {
 				runnables.add(new Runnable() {

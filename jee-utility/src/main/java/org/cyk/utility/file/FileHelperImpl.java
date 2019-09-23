@@ -29,7 +29,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.constant.ConstantSeparator;
 import org.cyk.utility.array.ArrayHelperImpl;
 import org.cyk.utility.byte_.ByteHelperImpl;
-import org.cyk.utility.collection.CollectionHelperImpl;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.number.Intervals;
 import org.cyk.utility.regularexpression.RegularExpressionHelperImpl;
@@ -167,7 +167,7 @@ public class FileHelperImpl extends AbstractHelper implements FileHelper,Seriali
 	}
 	
 	public static Paths __getPaths__(Collection<String> directories,String nameRegularExpression,Boolean isDirectoryGettable,Boolean isFileGettable,Integer maximalNumberOfPath) {
-		if(CollectionHelperImpl.__isEmpty__(directories))
+		if(CollectionHelper.isEmpty(directories))
 			return null;
 		final List<String> directoriesFinal = new ArrayList<>(directories);
 		final Boolean isDirectoryGettableFinal = ValueHelperImpl.__defaultToIfNull__(isDirectoryGettable,Boolean.TRUE);
@@ -213,15 +213,15 @@ public class FileHelperImpl extends AbstractHelper implements FileHelper,Seriali
 	}
 	
 	public static Paths __getPaths__(Strings directories,String nameRegularExpression,Boolean isDirectoryGettable,Boolean isFileGettable,Integer maximalNumberOfPath) {
-		if(CollectionHelperImpl.__isEmpty__(directories))
+		if(CollectionHelper.isEmpty(directories))
 			return null;
 		return __getPaths__(directories.get(), nameRegularExpression, isDirectoryGettable, isFileGettable, maximalNumberOfPath);
 	}
 	
 	public static Files __get__(Paths paths,Intervals sizeIntervals) {	
-		if(CollectionHelperImpl.__isEmpty__(paths))
+		if(CollectionHelper.isEmpty(paths))
 			return null;
-		if(CollectionHelperImpl.__isEmpty__(sizeIntervals))
+		if(CollectionHelper.isEmpty(sizeIntervals))
 			sizeIntervals = null;
 		Files files = null;
 		for(Path path : paths.get()) {
@@ -296,7 +296,7 @@ public class FileHelperImpl extends AbstractHelper implements FileHelper,Seriali
 	}
 	
 	public static void __computeChecksum__(Collection<File> files) {
-		if(CollectionHelperImpl.__isEmpty__(files))
+		if(CollectionHelper.isEmpty(files))
 			return;
 		Collection<Runnable> runnables = null;
 		for(File file : files) {
@@ -320,7 +320,7 @@ public class FileHelperImpl extends AbstractHelper implements FileHelper,Seriali
 	}
 	
 	public static void __computeChecksum__(Files files) {
-		if(CollectionHelperImpl.__isEmpty__(files))
+		if(CollectionHelper.isEmpty(files))
 			return;
 		__computeChecksum__(files.get());
 	}
@@ -328,7 +328,7 @@ public class FileHelperImpl extends AbstractHelper implements FileHelper,Seriali
 	public static void __computeChecksum__(File...files) {
 		if(ArrayHelperImpl.__isEmpty__(files))
 			return;
-		__computeChecksum__(CollectionHelperImpl.__instanciate__(files));
+		__computeChecksum__(List.of(files));
 	}
 	
 	public static String __extractText__(InputStream inputStream) {
@@ -377,7 +377,7 @@ public class FileHelperImpl extends AbstractHelper implements FileHelper,Seriali
 	}
 	
 	public static Collection<URI> __getPathsURIs__(Collection<Path> paths) {
-		if(CollectionHelperImpl.__isEmpty__(paths))
+		if(CollectionHelper.isEmpty(paths))
 			return null;
 		Collection<URI> uris = new ArrayList<>();
 		for(Path path : paths)

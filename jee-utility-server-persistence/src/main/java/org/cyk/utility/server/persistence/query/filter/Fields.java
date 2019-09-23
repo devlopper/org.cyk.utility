@@ -1,6 +1,6 @@
 package org.cyk.utility.server.persistence.query.filter;
 
-import org.cyk.utility.collection.CollectionInstance;
+import org.cyk.utility.__kernel__.collection.CollectionInstance;
 
 public interface Fields extends CollectionInstance<Field> {
 

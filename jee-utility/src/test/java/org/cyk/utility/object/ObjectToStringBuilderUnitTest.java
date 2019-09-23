@@ -1,9 +1,9 @@
 package org.cyk.utility.object;
 
+import java.util.List;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.annotation.JavaScriptObjectNotation;
-import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.map.MapHelper;
 import org.cyk.utility.network.message.Receiver;
 import org.cyk.utility.network.message.Receivers;
@@ -16,7 +16,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@Disabled
+@Disabled @Deprecated
 public class ObjectToStringBuilderUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
@@ -66,7 +66,7 @@ public class ObjectToStringBuilderUnitTest extends AbstractWeldUnitTest {
 	
 	@Test
 	public void stringify_json_list_simple(){
-		assertionHelper.assertEquals("[\"i01\",\"i02\"]",buildStringFromObjectUsingJson(__inject__(CollectionHelper.class).instanciate("i01","i02")));
+		assertionHelper.assertEquals("[\"i01\",\"i02\"]",buildStringFromObjectUsingJson(List.of("i01","i02")));
 	}
 	
 	/**/

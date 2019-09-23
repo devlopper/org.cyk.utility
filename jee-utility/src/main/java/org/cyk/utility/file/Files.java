@@ -1,6 +1,6 @@
 package org.cyk.utility.file;
 
-import org.cyk.utility.collection.CollectionInstance;
+import org.cyk.utility.__kernel__.collection.CollectionInstance;
 
 public interface Files extends CollectionInstance<File> {
 

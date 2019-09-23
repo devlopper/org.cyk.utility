@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
 import org.cyk.utility.array.ArrayHelper;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.log.AbstractLogImpl;
 import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.log.message.LogMessage;
@@ -55,7 +55,7 @@ public class LogLog4j2Impl extends AbstractLogImpl<Level> implements LogLog4j2, 
 	@Override
 	protected Marker __getMarker__(Collection<Object> markers) {
 		Marker marker = null;
-		if(__inject__(CollectionHelper.class).isNotEmpty(markers)){
+		if(CollectionHelper.isNotEmpty(markers)){
 			for(Object index : markers)
 				if(marker == null)
 					marker = MarkerManager.getMarker(index.toString());

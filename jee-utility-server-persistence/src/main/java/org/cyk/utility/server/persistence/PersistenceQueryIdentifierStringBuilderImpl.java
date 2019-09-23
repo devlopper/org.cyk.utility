@@ -4,13 +4,14 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.List;
 
 import javax.enterprise.context.Dependent;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.function.Function;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl;
 import org.cyk.utility.string.StringHelper;
 
@@ -35,7 +36,7 @@ public class PersistenceQueryIdentifierStringBuilderImpl extends AbstractFunctio
 	
 	@Override
 	protected Collection<Object> __getFormatArguments__(Boolean isFormatRequired, Collection<Object> formatArguments) {
-		if(__inject__(CollectionHelper.class).isEmpty(formatArguments)){
+		if(CollectionHelper.isEmpty(formatArguments)){
 			Boolean isDerivedFromQueryIdentifier = getIsDerivedFromQueryIdentifier();
 			String derivedFromQueryIdentifier = (String)getDerivedFromQueryIdentifier();
 			String classSimpleName = getClassSimpleName();
@@ -53,7 +54,7 @@ public class PersistenceQueryIdentifierStringBuilderImpl extends AbstractFunctio
 						name = StringUtils.replaceOnce(name, "read", "count");
 				}
 			}
-			formatArguments = __inject__(CollectionHelper.class).instanciate(classSimpleName,name);
+			formatArguments = List.of(classSimpleName,name);
 		}
 		return super.__getFormatArguments__(isFormatRequired, formatArguments);
 	}

@@ -16,7 +16,7 @@ import org.apache.logging.log4j.core.layout.PatternLayout;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.instance.InstanceRepository;
 import org.cyk.utility.log.LogEventEntity;
 import org.cyk.utility.log.LogEventEntityBuilder;
@@ -69,22 +69,22 @@ public class LogEventEntityRepositoryLog4j2Impl extends AbstractAppender impleme
 	
 	@Override
 	public Long countAll() {
-		return NumberHelper.getLong(DependencyInjection.inject(CollectionHelper.class).getSize(instances));
+		return NumberHelper.getLong(CollectionHelper.getSize(instances));
 	}
 
 	@Override
 	public LogEventEntity getAt(Integer index) {
-		return DependencyInjection.inject(CollectionHelper.class).getElementAt(instances, index);
+		return CollectionHelper.getElementAt(instances, index);
 	}
 
 	@Override
 	public LogEventEntity getFirst() {
-		return DependencyInjection.inject(CollectionHelper.class).getFirst(instances);
+		return CollectionHelper.getFirst(instances);
 	}
 
 	@Override
 	public LogEventEntity getLast() {
-		return DependencyInjection.inject(CollectionHelper.class).getLast(instances);
+		return CollectionHelper.getLast(instances);
 	}
 
 	@Override

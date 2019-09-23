@@ -5,15 +5,16 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
+import java.util.List;
 
 import javax.enterprise.context.Dependent;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.string.Case;
@@ -101,17 +102,17 @@ public class FieldValueGetterImpl extends AbstractFunctionWithPropertiesAsInputI
 	
 	@Override
 	public FieldValueGetter setField(Class<?> aClass, Collection<String> names) {
-		if(aClass !=null && __inject__(CollectionHelper.class).isNotEmpty(names)){
+		if(aClass !=null && CollectionHelper.isNotEmpty(names)){
 			String fieldName = FieldHelper.join(names);
 			setFieldName(fieldName);
-			setField(__inject__(CollectionHelper.class).getFirst(__inject__(FieldsGetter.class).execute(aClass, fieldName).getOutput()));
+			setField(CollectionHelper.getFirst(__inject__(FieldsGetter.class).execute(aClass, fieldName).getOutput()));
 		}
 		return this;
 	}
 	
 	@Override
 	public FieldValueGetter setField(Class<?> aClass, String... names) {
-		setField(aClass, __inject__(CollectionHelper.class).instanciate(names));
+		setField(aClass, List.of(names));
 		return this;
 	}
 	

@@ -5,8 +5,8 @@ import java.lang.reflect.Array;
 import java.util.Collection;
 
 import javax.enterprise.context.ApplicationScoped;
-import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.collection.CollectionInstance;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionInstance;
 import org.cyk.utility.helper.AbstractHelper;
 
 @ApplicationScoped
@@ -25,8 +25,8 @@ public class ArrayHelperImpl extends AbstractHelper implements ArrayHelper,Seria
 	
 	private <ELEMENT> ELEMENT[] __instanciate__(Class<ELEMENT> aClass,Collection<ELEMENT> collection) {
 		ELEMENT[] array = null;
-		if(__inject__(CollectionHelper.class).isNotEmpty(collection)){
-			array = (ELEMENT[]) Array.newInstance(aClass, __inject__(CollectionHelper.class).getSize(collection));
+		if(CollectionHelper.isNotEmpty(collection)){
+			array = (ELEMENT[]) Array.newInstance(aClass, CollectionHelper.getSize(collection));
 			Integer index = 0;
 			for(ELEMENT element : collection)
 				array[index++] = element;
@@ -41,7 +41,7 @@ public class ArrayHelperImpl extends AbstractHelper implements ArrayHelper,Seria
 	
 	@Override
 	public <ELEMENT> ELEMENT[] instanciate(Class<ELEMENT> aClass, CollectionInstance<ELEMENT> collectionInstance) {
-		return __instanciate__(aClass,__inject__(CollectionHelper.class).isEmpty(collectionInstance) ? null : collectionInstance.get());
+		return __instanciate__(aClass,CollectionHelper.isEmpty(collectionInstance) ? null : collectionInstance.get());
 	}
 	
 	@Override

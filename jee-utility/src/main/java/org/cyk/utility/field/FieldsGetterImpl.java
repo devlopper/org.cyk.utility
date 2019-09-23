@@ -16,7 +16,7 @@ import javax.enterprise.context.Dependent;
 import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.regularexpression.RegularExpressionInstance;
 import org.cyk.utility.string.StringHelper;
@@ -44,7 +44,7 @@ public class FieldsGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<
 		List<Field> collection = __getClassFields__(aClass);
 		
 	    StringLocatables nameTokens = getNameTokens();
-	    if(__injectCollectionHelper__().isEmpty(nameTokens)) {
+	    if(CollectionHelper.isEmpty(nameTokens)) {
 	    	RegularExpressionInstance nameRegularExpression = getNameRegularExpression();
 		    if(nameRegularExpression == null) {
 		    	String token = getToken();
@@ -123,7 +123,7 @@ public class FieldsGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<
 	}
 	
 	private void __addFields__(List<Field> fields,Field...values) {
-		fields.addAll(0, __injectCollectionHelper__().instanciate(values));
+		fields.addAll(0, List.of(values));
 	}
 	
 	private Fields __addField__(Fields fields,Field field) {
@@ -319,7 +319,7 @@ public class FieldsGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<
 
 	@Override
 	public FieldsGetter addModifiers(Integer... modifiers) {
-		addModifiers(__inject__(CollectionHelper.class).instanciate(modifiers));
+		addModifiers(List.of(modifiers));
 		return this;
 	}
 
@@ -348,7 +348,7 @@ public class FieldsGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<
 
 	@Override
 	public FieldsGetter addAnnotationClasses(Class<?>...annotationClasses) {
-		addAnnotationClasses(__inject__(CollectionHelper.class).instanciate(annotationClasses));
+		addAnnotationClasses(List.of(annotationClasses));
 		return this;
 	}
 

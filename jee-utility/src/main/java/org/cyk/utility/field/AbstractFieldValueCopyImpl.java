@@ -12,7 +12,7 @@ import org.cyk.utility.__kernel__.object.__static__.identifiable.AbstractIdentif
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
 import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.map.MapHelper;
@@ -39,7 +39,7 @@ public abstract class AbstractFieldValueCopyImpl extends AbstractFunctionWithPro
 			if(Boolean.TRUE.equals(isAutomaticallyDetectFields)) {
 				Fields fields = __inject__(FieldValueCopyFieldsGetter.class).setSourceClass(getterModel.getObject().getClass())
 						.setDestinationClass(setterModel.getObject().getClass()).execute().getOutput();
-				if(__inject__(CollectionHelper.class).isNotEmpty(fields)) {
+				if(CollectionHelper.isNotEmpty(fields)) {
 					for(Field index : fields.get()) {
 						if(fieldNameMap == null)
 							fieldNameMap = new HashMap<>();
@@ -113,7 +113,7 @@ public abstract class AbstractFieldValueCopyImpl extends AbstractFunctionWithPro
 						}else {
 							Fields fields =  __inject__(FieldsGetter.class).setClazz(destinationType).setFieldName(FieldName.IDENTIFIER).setValueUsageType(ValueUsageType.SYSTEM)
 									.execute().getOutput();
-							if(__inject__(CollectionHelper.class).isNotEmpty(fields)) {
+							if(CollectionHelper.isNotEmpty(fields)) {
 								Class<?> identifierTypeDestinationType = null;//fields.getFirst().getType();
 								if(org.cyk.utility.__kernel__.klass.ClassHelper.isInstanceOf(destinationType, AbstractIdentifiedPersistableByLong.class))
 									identifierTypeDestinationType = Long.class;
