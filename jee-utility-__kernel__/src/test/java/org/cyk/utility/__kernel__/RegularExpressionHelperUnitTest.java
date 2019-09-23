@@ -1,8 +1,8 @@
 package org.cyk.utility.__kernel__;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.cyk.utility.__kernel__.RegularExpressionHelper.buildIsExactly;
-import static org.cyk.utility.__kernel__.RegularExpressionHelper.buildIsNotExactly;
+import static org.cyk.utility.__kernel__.string.RegularExpressionHelper.buildIsExactly;
+import static org.cyk.utility.__kernel__.string.RegularExpressionHelper.buildIsNotExactly;
 
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;

@@ -9,9 +9,9 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
-import org.cyk.utility.__kernel__.StringHelper;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
 
 /**
  * Handle java time api convertion

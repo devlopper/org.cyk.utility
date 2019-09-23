@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.cyk.utility.__kernel__.RegularExpressionHelper;
+import org.cyk.utility.__kernel__.string.RegularExpressionHelper;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.junit.jupiter.api.Test;

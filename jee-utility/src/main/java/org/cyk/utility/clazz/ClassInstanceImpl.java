@@ -8,7 +8,6 @@ import java.util.List;
 import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
-import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.field.Fields;
 
 @Dependent
