@@ -6,9 +6,9 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import org.apache.commons.lang3.reflect.MethodUtils;
-import org.cyk.utility.__kernel__.CollectionHelper;
 import org.cyk.utility.__kernel__.assertion.Assertion;
 import org.cyk.utility.__kernel__.assertion.AssertionBuilder;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.__kernel__.properties.Properties;
 
@@ -38,7 +38,7 @@ public abstract class AbstractFunctionExecutionPhaseMomentImpl extends AbstractO
 		
 		Function<?,Collection<Assertion>> assertionsProvider = getAssertionsProvider();
 		if(assertionsProvider!=null)
-			CollectionHelper.addToCollection(assertions, assertionsProvider.execute().getOutput());
+			CollectionHelper.add(assertions,Boolean.TRUE, assertionsProvider.execute().getOutput());
 			
 		Collection<Assertion> __assertions__ = getAssertions();	
 		if(__assertions__!=null) {

@@ -7,7 +7,7 @@ import java.util.Collection;
 
 import javax.annotation.PostConstruct;
 
-import org.cyk.utility.__kernel__.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 
@@ -201,7 +201,7 @@ public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.A
 	
 	@Override
 	public Object getLastChild() {
-		return CollectionHelper.getElementAtEnd(getChildren());
+		return CollectionHelper.getLast(getChildren());
 	}
 	
 	@Override

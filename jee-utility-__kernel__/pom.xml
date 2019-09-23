@@ -19,6 +19,7 @@
 	<properties>
 		<commons-io.commons-io.version>2.6</commons-io.commons-io.version>
 		<commons-beanutils-commons-beanutils>1.9.4</commons-beanutils-commons-beanutils>
+		<org.apache.commons.commons-collections4.version>4.3</org.apache.commons.commons-collections4.version>
 	</properties> 
 	
 	<build>
@@ -47,5 +48,11 @@
 		    <artifactId>commons-beanutils</artifactId>
 		    <version>${commons-beanutils-commons-beanutils}</version>
 		</dependency>	
+		
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-collections4</artifactId>
+		    <version>${org.apache.commons.commons-collections4.version}</version>
+		</dependency>
 	</dependencies>
 </project>

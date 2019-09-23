@@ -17,7 +17,6 @@
 	
 	<properties>
 		<org.cyk.jee.utility.__kernel__.jee-utility-__kernel__.version>0.1.0</org.cyk.jee.utility.__kernel__.jee-utility-__kernel__.version>
-		<org.apache.commons.commons-collections4.version>4.3</org.apache.commons.commons-collections4.version>
 		<org.apache.commons.commons-text.version>1.4</org.apache.commons.commons-text.version>
 		<org.apache.poi.poi.version>3.14</org.apache.poi.poi.version>
 		<org.apache.poi.poi-ooxml.version>3.14</org.apache.poi.poi-ooxml.version>
@@ -36,12 +35,6 @@
 			<groupId>org.cyk.jee.utility.__kernel__</groupId>
 			<artifactId>jee-utility-__kernel__</artifactId>
 			<version>${org.cyk.jee.utility.__kernel__.jee-utility-__kernel__.version}</version>
-		</dependency>
-		
-		<dependency>
-		    <groupId>org.apache.commons</groupId>
-		    <artifactId>commons-collections4</artifactId>
-		    <version>${org.apache.commons.commons-collections4.version}</version>
 		</dependency>
 		
 		<dependency>
