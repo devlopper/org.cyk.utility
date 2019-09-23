@@ -9,27 +9,14 @@ import java.util.Collection;
 
 import javax.enterprise.context.ApplicationScoped;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.array.ArrayHelperImpl;
-import org.cyk.utility.clazz.ClassHelper;
-import org.cyk.utility.clazz.ClassHelperImpl;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.helper.AbstractHelper;
 
 @ApplicationScoped
 public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Serializable {
 	private static final long serialVersionUID = -5367150176793830358L;
-
-	private static FieldHelper INSTANCE;
-	public static FieldHelper getInstance(Boolean isNew) {
-		//if(INSTANCE == null || Boolean.TRUE.equals(isNew))
-			INSTANCE =  DependencyInjection.inject(FieldHelper.class);
-		return INSTANCE;
-	}
-	public static FieldHelper getInstance() {
-		return getInstance(null);
-	}
 
 	@Override
 	public FieldHelper copy(Object source, Object destination,Properties properties) {
@@ -56,6 +43,7 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 	
 	/* get field type*/
 	
+	@Deprecated
 	public static FieldType __getType__(Class<?> klass,Field field) {
 		FieldType fieldType = null;
 		if(field!=null){
@@ -75,14 +63,14 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 							Type type = parameterizedType.getActualTypeArguments()[index];
 							Class<?> argumentClass = null;
 							if(type instanceof TypeVariable) {
-								argumentClass = ClassHelperImpl.__getParameterAt__(klass, index, Object.class);
+								argumentClass = org.cyk.utility.__kernel__.klass.ClassHelper.getParameterAt(klass, index);
 							}else
 								argumentClass = (Class<?>) type;
 							fieldType.getParameterizedClasses(Boolean.TRUE).set(index,argumentClass);
 						}
 					}
 				}else {
-					fieldType.setType(__inject__(ClassHelper.class).getParameterAt(klass, 0, Object.class));
+					fieldType.setType(org.cyk.utility.__kernel__.klass.ClassHelper.getParameterAt(klass, 0));
 				}
 			}
 			if(fieldType.getType() == null)

@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 public interface Filter extends Objectable {
 

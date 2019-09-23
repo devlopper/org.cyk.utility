@@ -1,7 +1,7 @@
 package org.cyk.utility.server.persistence.query.filter;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.clazz.ClassHelper;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.mapping.AbstractMapperSourceDestinationImpl;
 import org.cyk.utility.mapping.Instantiator;
 import org.cyk.utility.mapping.MappingHelper;
@@ -13,7 +13,7 @@ public abstract class FilterDtoMapper extends AbstractMapperSourceDestinationImp
 	private static final long serialVersionUID = 1L;
 	
 	public Class<?> getKlass(String name) {
-		return DependencyInjection.inject(StringHelper.class).isBlank(name) ? null : DependencyInjection.inject(ClassHelper.class).getByName(name);
+		return DependencyInjection.inject(StringHelper.class).isBlank(name) ? null : ClassHelper.getByName(name);
 	}
 	
 	public String getClassName(Class<?> klass) {

@@ -9,9 +9,9 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
-import org.cyk.utility.__kernel__.ClassHelper;
 import org.cyk.utility.__kernel__.StringHelper;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 
 /**
  * Handle java time api convertion
@@ -35,7 +35,7 @@ public abstract class AbstractTimeAdapter<TIME> extends XmlAdapter<String, TIME>
     
     @SuppressWarnings("unchecked")
 	protected Class<TIME> __getTimeClass__() {
-    	return (Class<TIME>) ClassHelper.getParameterAt(getClass(), 0, Object.class);
+    	return (Class<TIME>) ClassHelper.getParameterAt(getClass(), 0);
     }
     
     protected DateTimeFormatter __getFormatter__() {

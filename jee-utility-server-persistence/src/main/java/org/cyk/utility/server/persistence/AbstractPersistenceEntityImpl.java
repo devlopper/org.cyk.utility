@@ -16,8 +16,8 @@ import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.stacktrace.StackTraceHelper;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.array.ArrayHelper;
-import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.clazz.ClassInstance;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.collection.CollectionHelper;
@@ -33,7 +33,6 @@ import org.cyk.utility.sql.builder.QueryStringBuilder;
 import org.cyk.utility.sql.builder.QueryStringBuilderSelect;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.type.BooleanHelper;
-import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPersistenceServiceProviderImpl<ENTITY> implements PersistenceEntity<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -97,7 +96,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	@Override
 	protected void __listenBeforePostConstruct__() {
 		super.__listenBeforePostConstruct__();
-		__entityClass__ = (Class<ENTITY>) __inject__(ClassHelper.class).getParameterAt(getClass(), 0, Object.class);
+		__entityClass__ = (Class<ENTITY>) org.cyk.utility.__kernel__.klass.ClassHelper.getParameterAt(getClass(), 0);
 		setIsPhysicallyMapped(__entityClass__.getAnnotation(Entity.class)!=null);
 	}
 

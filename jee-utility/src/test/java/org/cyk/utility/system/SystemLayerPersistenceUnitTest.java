@@ -1,8 +1,8 @@
 package org.cyk.utility.system;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.cyk.utility.map.MapHelper;
@@ -27,12 +27,12 @@ public class SystemLayerPersistenceUnitTest extends AbstractSystemLayerUnitTestW
 
 	@Override
 	protected Collection<String> __getEntityTruePackages__() {
-		return Arrays.asList("a.persistence.entities.b","a.persistence.entities","persistence.entities.b","persistence.entities");
+		return List.of("a.persistence.entities.b","a.persistence.entities","persistence.entities.b","persistence.entities");
 	}
 
 	@Override
 	protected Collection<String> __getEntityFalsePackages__() {
-		return Arrays.asList("a.persistence.c.entities.b","a.persistence.c.entities","persistence.c.entities.b","persistence.c.entities",
+		return List.of("a.persistence.c.entities.b","a.persistence.c.entities","persistence.c.entities.b","persistence.c.entities",
 				"entities","persistence");
 	}
 
@@ -85,12 +85,12 @@ public class SystemLayerPersistenceUnitTest extends AbstractSystemLayerUnitTestW
 
 	@Override
 	protected Collection<String> __getInterfaceTruePackages__() {
-		return Arrays.asList("a.persistence.api.b","a.persistence.api","persistence.api.b","persistence.api");
+		return List.of("a.persistence.api.b","a.persistence.api","persistence.api.b","persistence.api");
 	}
 
 	@Override
 	protected Collection<String> __getInterfaceFalsePackages__() {
-		return Arrays.asList("a.persistence.c.api.b","a.persistence.c.api","persistence.c.api.b","persistence.c.api",
+		return List.of("a.persistence.c.api.b","a.persistence.c.api","persistence.c.api.b","persistence.c.api",
 				"api","persistence");
 	}
 
@@ -152,12 +152,12 @@ public class SystemLayerPersistenceUnitTest extends AbstractSystemLayerUnitTestW
 
 	@Override
 	protected Collection<String> __getImplementationTruePackages__() {
-		return Arrays.asList("a.persistence.impl.b","a.persistence.impl","persistence.impl.b","persistence.impl");
+		return List.of("a.persistence.impl.b","a.persistence.impl","persistence.impl.b","persistence.impl");
 	}
 
 	@Override
 	protected Collection<String> __getImplementationFalsePackages__() {
-		return Arrays.asList("a.persistence.c.impl.b","a.persistence.c.impl","persistence.c.impl.b","persistence.c.impl",
+		return List.of("a.persistence.c.impl.b","a.persistence.c.impl","persistence.c.impl.b","persistence.c.impl",
 				"impl","persistence");
 	}
 

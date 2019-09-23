@@ -3,11 +3,11 @@ package org.cyk.utility.system;
 import java.util.Collection;
 import java.util.Map;
 
-import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemSubLayer;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public abstract class AbstractSystemLayerUnitTestWithDefaultDeployment extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
@@ -57,17 +57,17 @@ public abstract class AbstractSystemLayerUnitTestWithDefaultDeployment extends A
 	
 	@Test
 	public void getEntityPackageNameRegularExpression() {
-		assertionHelper.assertEquals(__getExpectedEntityPackageNameRegularExpression__(), __injectSystemLayer__().getEntityLayer().getPackageNameRegularExpression(Boolean.TRUE).getExpression());
+		assertThat(__injectSystemLayer__().getEntityLayer().getPackageNameRegularExpression(Boolean.TRUE).getExpression()).isEqualTo(__getExpectedEntityPackageNameRegularExpression__());
 	}
 	
 	@Test
 	public void getEntityClassNameRegularExpression() {
-		assertionHelper.assertEquals(__getExpectedEntityClassNameRegularExpression__(), __injectSystemLayer__().getEntityLayer().getClassNameRegularExpression(Boolean.TRUE).getExpression());
+		assertThat(__injectSystemLayer__().getEntityLayer().getClassNameRegularExpression(Boolean.TRUE).getExpression()).isEqualTo(__getExpectedEntityClassNameRegularExpression__());
 	}
 	
 	@Test
 	public void getEntityInterfaceNameRegularExpression() {
-		assertionHelper.assertEquals(__getExpectedEntityInterfaceNameRegularExpression__(), __injectSystemLayer__().getEntityLayer().getInterfaceNameRegularExpression(Boolean.TRUE).getExpression());
+		assertThat(__injectSystemLayer__().getEntityLayer().getInterfaceNameRegularExpression(Boolean.TRUE).getExpression()).isEqualTo(__getExpectedEntityInterfaceNameRegularExpression__());
 	}
 	
 	@Test
@@ -104,17 +104,17 @@ public abstract class AbstractSystemLayerUnitTestWithDefaultDeployment extends A
 	
 	@Test
 	public void getInterfacePackageNameRegularExpression() {
-		assertionHelper.assertEquals(__getExpectedInterfacePackageNameRegularExpression__(), __injectSystemLayer__().getInterfaceLayer().getPackageNameRegularExpression(Boolean.TRUE).getExpression());
+		assertThat(__injectSystemLayer__().getInterfaceLayer().getPackageNameRegularExpression(Boolean.TRUE).getExpression()).isEqualTo(__getExpectedInterfacePackageNameRegularExpression__());
 	}
 	
 	@Test
 	public void getInterfaceClassNameRegularExpression() {
-		assertionHelper.assertEquals(__getExpectedInterfaceClassNameRegularExpression__(), __injectSystemLayer__().getInterfaceLayer().getClassNameRegularExpression(Boolean.TRUE).getExpression());
+		assertThat(__injectSystemLayer__().getInterfaceLayer().getClassNameRegularExpression(Boolean.TRUE).getExpression()).isEqualTo(__getExpectedInterfaceClassNameRegularExpression__());
 	}
 	
 	@Test
 	public void getInterfaceInterfaceNameRegularExpression() {
-		assertionHelper.assertEquals(__getExpectedInterfaceInterfaceNameRegularExpression__(), __injectSystemLayer__().getInterfaceLayer().getInterfaceNameRegularExpression(Boolean.TRUE).getExpression());
+		assertThat(__injectSystemLayer__().getInterfaceLayer().getInterfaceNameRegularExpression(Boolean.TRUE).getExpression()).isEqualTo(__getExpectedInterfaceInterfaceNameRegularExpression__());
 	}
 	
 	@Test
@@ -152,7 +152,7 @@ public abstract class AbstractSystemLayerUnitTestWithDefaultDeployment extends A
 		Map<String,String> map = __getExpectedInterfaceNameFromEntityClassName__();
 		if(map!=null)
 			for(Map.Entry<String, String> index : map.entrySet()) {
-				assertionHelper.assertEquals(index.getValue(), __injectSystemLayer__().getInterfaceNameFromEntityClassName(index.getKey()));
+				assertThat(__injectSystemLayer__().getInterfaceNameFromEntityClassName(index.getKey())).isEqualTo(index.getValue());
 			}
 	}
 	
@@ -163,8 +163,8 @@ public abstract class AbstractSystemLayerUnitTestWithDefaultDeployment extends A
 			for(Map.Entry<SystemSubLayer,Map<String,String>> indexEntry : map.entrySet()) {
 				if(indexEntry.getKey()!=null && indexEntry.getValue()!=null) {
 					for(Map.Entry<String, String> indexEntrySystemSubLayer : indexEntry.getValue().entrySet()) {
-						assertionHelper.assertEquals(indexEntrySystemSubLayer.getValue(), __injectSystemLayer__().getInterfaceNameFrom(indexEntrySystemSubLayer.getKey()
-								,indexEntry.getKey()));
+						assertThat(__injectSystemLayer__().getInterfaceNameFrom(indexEntrySystemSubLayer.getKey()
+								,indexEntry.getKey())).isEqualTo(indexEntrySystemSubLayer.getValue());
 					}
 				}
 			}
@@ -175,17 +175,17 @@ public abstract class AbstractSystemLayerUnitTestWithDefaultDeployment extends A
 	
 	@Test
 	public void getImplementationPackageNameRegularExpression() {
-		assertionHelper.assertEquals(__getExpectedImplementationPackageNameRegularExpression__(), __injectSystemLayer__().getImplementationLayer().getPackageNameRegularExpression(Boolean.TRUE).getExpression());
+		assertThat(__injectSystemLayer__().getImplementationLayer().getPackageNameRegularExpression(Boolean.TRUE).getExpression()).isEqualTo(__getExpectedImplementationPackageNameRegularExpression__());
 	}
 	
 	@Test
 	public void getImplementationClassNameRegularExpression() {
-		assertionHelper.assertEquals(__getExpectedImplementationClassNameRegularExpression__(), __injectSystemLayer__().getImplementationLayer().getClassNameRegularExpression(Boolean.TRUE).getExpression());
+		assertThat(__injectSystemLayer__().getImplementationLayer().getClassNameRegularExpression(Boolean.TRUE).getExpression()).isEqualTo(__getExpectedImplementationClassNameRegularExpression__());
 	}
 	
 	@Test
 	public void getImplementationInterfaceNameRegularExpression() {
-		assertionHelper.assertEquals(__getExpectedImplementationInterfaceNameRegularExpression__(), __injectSystemLayer__().getImplementationLayer().getInterfaceNameRegularExpression(Boolean.TRUE).getExpression());
+		assertThat(__injectSystemLayer__().getImplementationLayer().getInterfaceNameRegularExpression(Boolean.TRUE).getExpression()).isEqualTo(__getExpectedImplementationInterfaceNameRegularExpression__());
 	}
 	
 	@Test
@@ -221,20 +221,23 @@ public abstract class AbstractSystemLayerUnitTestWithDefaultDeployment extends A
 	/**/
 	
 	private void __assertPackages__(SystemSubLayer subLayer,Collection<String> collection,Boolean isTrue,String description) {
-		if(__inject__(CollectionHelper.class).isNotEmpty(collection))
+		if(collection != null && !collection.isEmpty())
 			for(String index : collection)
-				assertionHelper.assertEquals(index+" is "+(isTrue ? "not" : "")+" a valid "+description+" package for "+subLayer,isTrue,subLayer.isPackage(index));
+				assertThat(subLayer.isPackage(index)).isEqualTo(isTrue).as(description);
+				//assertionHelper.assertEquals(index+" is "+(isTrue ? "not" : "")+" a valid "+description+" package for "+subLayer,isTrue,);
 	}
 	
 	private void __assertInterfaces__(SystemSubLayer subLayer,Collection<String> collection,Boolean isTrue,String description) {
-		if(__inject__(CollectionHelper.class).isNotEmpty(collection))
+		if(collection != null && !collection.isEmpty())
 			for(String index : collection)
-				assertionHelper.assertEquals(index+" is "+(isTrue ? "not" : "")+" a valid "+description+" interface for "+subLayer,isTrue,subLayer.isInterface(index));
+				assertThat(subLayer.isInterface(index)).isEqualTo(isTrue);
+				//assertionHelper.assertEquals(index+" is "+(isTrue ? "not" : "")+" a valid "+description+" interface for "+subLayer,,);
 	}
 	
 	private void __assertClasses__(SystemSubLayer subLayer,Collection<String> collection,Boolean isTrue,String description) {
-		if(__inject__(CollectionHelper.class).isNotEmpty(collection))
+		if(collection != null && !collection.isEmpty())
 			for(String index : collection)
-				assertionHelper.assertEquals(index+" is "+(isTrue ? "not" : "")+" a valid "+description+" class for "+subLayer,isTrue,subLayer.isClass(index));
+				assertThat(subLayer.isClass(index)).isEqualTo(isTrue);
+				//assertionHelper.assertEquals(index+" is "+(isTrue ? "not" : "")+" a valid "+description+" class for "+subLayer,,);
 	}
 }

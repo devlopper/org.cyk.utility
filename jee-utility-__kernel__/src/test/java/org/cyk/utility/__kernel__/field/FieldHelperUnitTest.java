@@ -208,6 +208,14 @@ public class FieldHelperUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	@Test
+	public void write_byName_unkonwnFieldName() {
+		Name name = new Name();
+		assertThat(name.getCode()).isNull();
+		write(name,"xxx","c01");
+		assertThat(name.getCode()).isNull();
+	}
+	
+	@Test
 	public void write_byField() throws NoSuchFieldException, SecurityException {
 		Name name = new Name();
 		assertThat(name.getCode()).isNull();

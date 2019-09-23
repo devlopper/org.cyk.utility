@@ -7,7 +7,6 @@ import org.cyk.utility.__kernel__.constant.ConstantString;
 import org.cyk.utility.__kernel__.object.__static__.identifiable.AbstractIdentifiedPersistableByLong;
 import org.cyk.utility.__kernel__.object.__static__.identifiable.AbstractIdentifiedPersistableByString;
 import org.cyk.utility.array.ArrayHelper;
-import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.clazz.ClassInstance;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.clazz.Classes;
@@ -15,13 +14,13 @@ import org.cyk.utility.clazz.ClassesGetter;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldInstance;
 import org.cyk.utility.field.FieldInstancesRuntime;
+import org.cyk.utility.internationalization.InternationalizationHelperImpl;
 import org.cyk.utility.server.persistence.jpa.AbstractIdentifiedByString;
 import org.cyk.utility.server.persistence.jpa.AbstractIdentifiedByStringAndCoded;
 import org.cyk.utility.server.persistence.jpa.AbstractIdentifiedByStringAndCodedAndNamed;
 import org.cyk.utility.server.persistence.jpa.AbstractIdentifiedByStringAndCodedAndNamedAndDescribable;
 import org.cyk.utility.server.persistence.jpa.AbstractIdentifiedByStringAndLinkedByStringAndNamed;
 import org.cyk.utility.server.persistence.jpa.hierarchy.AbstractIdentifiedByStringAndLinkedByString;
-import org.cyk.utility.string.repository.StringRepositoryResourceBundle;
 
 public abstract class AbstractApplicationScopeLifeCycleListenerEntities extends AbstractApplicationScopeLifeCycleListener implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -33,7 +32,7 @@ public abstract class AbstractApplicationScopeLifeCycleListenerEntities extends 
 	public void __initialize__(Object object) {
 		__inject__(org.cyk.utility.server.persistence.ApplicationScopeLifeCycleListener.class).initialize(null);
 		String packageName = getClass().getPackage().getName();		
-		__inject__(StringRepositoryResourceBundle.class).addBundleAt(packageName+ConstantCharacter.DOT+ConstantString.MESSAGE,0);
+		InternationalizationHelperImpl.__addResourceBundleAt__(packageName+ConstantCharacter.DOT+ConstantString.MESSAGE,0);
 		
 		Class<?>[] basesClasses = __getClassesBasesClasses__();
 		if(__inject__(ArrayHelper.class).isNotEmpty(basesClasses)) {
@@ -45,9 +44,9 @@ public abstract class AbstractApplicationScopeLifeCycleListenerEntities extends 
 						classInstance.setIsActionable(IS_ACTIONABLE);
 						classInstance.setIsProjectionable(IS_PROJECTIONABLE);
 						FieldInstance fieldInstance = __inject__(FieldInstancesRuntime.class).get(index,classInstance.getSystemIdentifierField().getName());
-						if(__inject__(ClassHelper.class).isInstanceOf(index, AbstractIdentifiedPersistableByString.class))
+						if(org.cyk.utility.__kernel__.klass.ClassHelper.isInstanceOf(index, AbstractIdentifiedPersistableByString.class))
 							fieldInstance.setType(String.class);
-						else if(__inject__(ClassHelper.class).isInstanceOf(index, AbstractIdentifiedPersistableByLong.class))
+						else if(org.cyk.utility.__kernel__.klass.ClassHelper.isInstanceOf(index, AbstractIdentifiedPersistableByLong.class))
 							fieldInstance.setType(Long.class);		
 					}
 				}

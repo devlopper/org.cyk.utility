@@ -5,7 +5,6 @@ import java.io.Serializable;
 import javax.enterprise.context.ApplicationScoped;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.clazz.ClassHelper;
 
 @ApplicationScoped
 public class SystemLayerControllerImpl extends AbstractSystemLayerImpl implements SystemLayerController, Serializable {
@@ -38,7 +37,7 @@ public class SystemLayerControllerImpl extends AbstractSystemLayerImpl implement
 
 	@Override
 	public Class<?> getDataTransferClassFromEntityClass(Class<?> entityClass) {
-		return entityClass == null ? null : __inject__(ClassHelper.class).getByName(getDataTransferClassNameFromEntityClass(entityClass));
+		return entityClass == null ? null : org.cyk.utility.__kernel__.klass.ClassHelper.getByName(getDataTransferClassNameFromEntityClass(entityClass));
 	}
 
 	@Override
@@ -72,7 +71,7 @@ public class SystemLayerControllerImpl extends AbstractSystemLayerImpl implement
 
 	@Override
 	public Class<?> getRepresentationClassFromEntityClass(Class<?> entityClass) {
-		return entityClass == null ? null : __inject__(ClassHelper.class).getByName(getRepresentationClassNameFromEntityClass(entityClass));
+		return entityClass == null ? null : org.cyk.utility.__kernel__.klass.ClassHelper.getByName(getRepresentationClassNameFromEntityClass(entityClass));
 	}
 
 	@Override

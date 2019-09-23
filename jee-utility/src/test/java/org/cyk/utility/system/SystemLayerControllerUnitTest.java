@@ -1,8 +1,8 @@
 package org.cyk.utility.system;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.cyk.utility.map.MapHelper;
@@ -29,12 +29,12 @@ public class SystemLayerControllerUnitTest extends AbstractSystemLayerUnitTestWi
 
 	@Override
 	protected Collection<String> __getEntityTruePackages__() {
-		return Arrays.asList("a.controller.entities.b","a.controller.entities","controller.entities.b","controller.entities");
+		return List.of("a.controller.entities.b","a.controller.entities","controller.entities.b","controller.entities");
 	}
 
 	@Override
 	protected Collection<String> __getEntityFalsePackages__() {
-		return Arrays.asList("a.controller.c.entities.b","a.controller.c.entities","controller.c.entities.b","controller.c.entities",
+		return List.of("a.controller.c.entities.b","a.controller.c.entities","controller.c.entities.b","controller.c.entities",
 				"entities","controller");
 	}
 
@@ -60,12 +60,12 @@ public class SystemLayerControllerUnitTest extends AbstractSystemLayerUnitTestWi
 	
 	@Override
 	protected Collection<String> __getEntityTrueClasses__() {
-		return Arrays.asList("a.controller.entities.b.MyClassImpl","a.controller.entities.MyClassImpl","controller.entities.b.MyClassImpl","controller.entities.MyClassImpl");
+		return List.of("a.controller.entities.b.MyClassImpl","a.controller.entities.MyClassImpl","controller.entities.b.MyClassImpl","controller.entities.MyClassImpl");
 	}
 
 	@Override
 	protected Collection<String> __getEntityFalseClasses__() {
-		return Arrays.asList("a.controller.entitie.MyClass","a.controller.entities.Impl","controller.entities.b.MyClass","controller.entities.MyClass");
+		return List.of("a.controller.entitie.MyClass","a.controller.entities.Impl","controller.entities.b.MyClass","controller.entities.MyClass");
 	}
 
 	/* Interface */
@@ -87,12 +87,12 @@ public class SystemLayerControllerUnitTest extends AbstractSystemLayerUnitTestWi
 
 	@Override
 	protected Collection<String> __getInterfaceTruePackages__() {
-		return Arrays.asList("a.controller.api.b","a.controller.api","controller.api.b","controller.api");
+		return List.of("a.controller.api.b","a.controller.api","controller.api.b","controller.api");
 	}
 
 	@Override
 	protected Collection<String> __getInterfaceFalsePackages__() {
-		return Arrays.asList("a.controller.c.api.b","a.controller.c.api","controller.c.api.b","controller.c.api",
+		return List.of("a.controller.c.api.b","a.controller.c.api","controller.c.api.b","controller.c.api",
 				"api","controller");
 	}
 
@@ -155,12 +155,12 @@ public class SystemLayerControllerUnitTest extends AbstractSystemLayerUnitTestWi
 
 	@Override
 	protected Collection<String> __getImplementationTruePackages__() {
-		return Arrays.asList("a.controller.impl.b","a.controller.impl","controller.impl.b","controller.impl");
+		return List.of("a.controller.impl.b","a.controller.impl","controller.impl.b","controller.impl");
 	}
 
 	@Override
 	protected Collection<String> __getImplementationFalsePackages__() {
-		return Arrays.asList("a.controller.c.impl.b","a.controller.c.impl","controller.c.impl.b","controller.c.impl",
+		return List.of("a.controller.c.impl.b","a.controller.c.impl","controller.c.impl.b","controller.c.impl",
 				"impl","controller");
 	}
 	

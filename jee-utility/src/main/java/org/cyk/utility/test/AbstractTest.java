@@ -8,7 +8,6 @@ import javax.inject.Inject;
 
 import org.cyk.utility.ApplicationScopeLifeCycleListener;
 import org.cyk.utility.assertion.AssertionHelper;
-import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.log.LogEventEntityRepository;
 import org.cyk.utility.random.RandomHelper;
 import org.cyk.utility.system.OperatingSystemCommandExecutor;
@@ -37,7 +36,7 @@ public abstract class AbstractTest extends org.cyk.utility.__kernel__.test.Abstr
 	}
 	
 	protected <T> T instanciateOne(Class<T> aClass) {
-		return __inject__(ClassHelper.class).instanciateOne(aClass);
+		return org.cyk.utility.__kernel__.klass.ClassHelper.instanciate(aClass);
 	}
 	
 	protected void __setFieldValues__(Object object) {}

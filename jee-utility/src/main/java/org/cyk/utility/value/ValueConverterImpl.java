@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.number.NumberHelper;
 
@@ -18,7 +19,7 @@ public class ValueConverterImpl extends AbstractFunctionWithPropertiesAsInputImp
 			Class<?> clazz = getClazz();
 			if(String.class.equals(clazz) && !(value instanceof String))
 				value = value.toString();
-			else if(__injectClassHelper__().isInstanceOfNumber(clazz))
+			else if(ClassHelper.isInstanceOfNumber(clazz))
 				value = NumberHelper.get(clazz, value);
 		}
 		return value;

@@ -17,8 +17,8 @@ import javax.enterprise.context.ApplicationScoped;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.array.ArrayHelperImpl;
-import org.cyk.utility.clazz.ClassHelperImpl;
 import org.cyk.utility.collection.CollectionHelperImpl;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.locale.LocaleHelper;
@@ -95,7 +95,7 @@ public class InternationalizationHelperImpl extends AbstractHelper implements In
 		}
 		if(key instanceof Class) {
 			Class<?> clazz = (Class<?>) key;
-			if(ClassHelperImpl.__isInstanceOf__(clazz, SystemAction.class))
+			if(ClassHelper.isInstanceOf(clazz, SystemAction.class))
 				key = StringUtils.substringAfter(clazz.getSimpleName(), SystemAction.class.getSimpleName());
 			else
 				key = StringHelperImpl.__applyCase__(clazz.getSimpleName(),Case.FIRST_CHARACTER_LOWER);

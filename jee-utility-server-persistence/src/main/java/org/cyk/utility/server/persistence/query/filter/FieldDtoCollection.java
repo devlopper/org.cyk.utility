@@ -12,7 +12,7 @@ import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
 import org.cyk.utility.__kernel__.object.__static__.representation.AbstractRepresentationObjectCollection;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.value.ValueDto;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

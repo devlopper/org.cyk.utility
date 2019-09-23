@@ -17,9 +17,10 @@ import javax.validation.ConstraintViolationException;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
 import org.cyk.utility.__kernel__.computation.SortOrder;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.field.FieldInstancesRuntime;
 import org.cyk.utility.mapping.MappingHelper;
 import org.cyk.utility.server.persistence.api.MyEntityPersistence;
@@ -41,7 +42,6 @@ import org.cyk.utility.sql.builder.Attribute;
 import org.cyk.utility.sql.builder.Tuple;
 import org.cyk.utility.throwable.ThrowableHelper;
 import org.cyk.utility.value.ValueDto;
-import org.cyk.utility.value.ValueUsageType;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -618,48 +618,48 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 			__inject__(MyEntityPersistence.class).create(new MyEntity().setIdentifier(index.toString()).setCode(index.toString()));
 		userTransaction.commit();
 		
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).read()))
+		assertThat(FieldHelper.readSystemIdentifiers(__inject__(MyEntityPersistence.class).read()))
 			.containsExactly("0","1","2","3","4","5","6","7","8","9");
 		
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).read(null)))
+		assertThat(FieldHelper.readSystemIdentifiers( __inject__(MyEntityPersistence.class).read(null)))
 		.containsExactly("0","1","2","3","4","5","6","7","8","9");
 		
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).read()))
+		assertThat(FieldHelper.readSystemIdentifiers( __inject__(MyEntityPersistence.class).read()))
 		.containsExactly("0","1","2","3","4","5","6","7","8","9");
 		
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).read(null)))
+		assertThat(FieldHelper.readSystemIdentifiers( __inject__(MyEntityPersistence.class).read(null)))
 		.containsExactly("0","1","2","3","4","5","6","7","8","9");
 		
 		Properties properties = new Properties();
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).read(properties)))
+		assertThat(FieldHelper.readSystemIdentifiers( __inject__(MyEntityPersistence.class).read(properties)))
 			.containsExactly("0","1","2","3","4","5","6","7","8","9");
 		
 		properties = new Properties();
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).read(properties)))
+		assertThat(FieldHelper.readSystemIdentifiers( __inject__(MyEntityPersistence.class).read(properties)))
 			.containsExactly("0","1","2","3","4","5","6","7","8","9");
 		
 		properties = new Properties();
 		properties.setQueryFirstTupleIndex(0);
 		properties.setQueryNumberOfTuple(1);
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).read(properties)))
+		assertThat(FieldHelper.readSystemIdentifiers( __inject__(MyEntityPersistence.class).read(properties)))
 			.containsExactly("0");
 		
 		properties = new Properties();
 		properties.setQueryFirstTupleIndex(1);
 		properties.setQueryNumberOfTuple(1);
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).read(properties)))
+		assertThat(FieldHelper.readSystemIdentifiers( __inject__(MyEntityPersistence.class).read(properties)))
 			.containsExactly("1");
 		
 		properties = new Properties();
 		properties.setQueryFirstTupleIndex(0);
 		properties.setQueryNumberOfTuple(3);
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).read(properties)))
+		assertThat(FieldHelper.readSystemIdentifiers( __inject__(MyEntityPersistence.class).read(properties)))
 			.containsExactly("0","1","2");
 		
 		properties = new Properties();
 		properties.setQueryFirstTupleIndex(4);
 		properties.setQueryNumberOfTuple(3);
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).read(properties)))
+		assertThat(FieldHelper.readSystemIdentifiers( __inject__(MyEntityPersistence.class).read(properties)))
 			.containsExactly("4","5","6");
 	}
 	

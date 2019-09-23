@@ -8,12 +8,12 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.stacktrace.StackTraceHelper;
 import org.cyk.utility.clazz.ClassInstance;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.field.FieldValueSetter;
 import org.cyk.utility.method.MethodGetter;
 import org.cyk.utility.server.persistence.annotation.Query;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
@@ -59,7 +59,7 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 		Collection<Field> fields = __inject__(PersistenceQueryIdentifierFieldGetter.class).setClazz(getClass()).execute().getOutput();
 		if(__inject__(CollectionHelper.class).isNotEmpty(fields)){
 			for(Field index : fields){
-				__inject__(FieldValueSetter.class).setObject(this).setField(index).setValue(__buildQueryIdentifierString__(index)).execute();
+				FieldHelper.write(this, index, __buildQueryIdentifierString__(index));
 			}
 		}
 	}

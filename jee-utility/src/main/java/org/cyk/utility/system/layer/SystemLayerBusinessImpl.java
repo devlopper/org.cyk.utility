@@ -6,7 +6,6 @@ import javax.enterprise.context.ApplicationScoped;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
-import org.cyk.utility.clazz.ClassHelper;
 
 @ApplicationScoped
 public class SystemLayerBusinessImpl extends AbstractSystemLayerImpl implements SystemLayerBusiness, Serializable {
@@ -25,7 +24,7 @@ public class SystemLayerBusinessImpl extends AbstractSystemLayerImpl implements 
 
 	@Override
 	public Class<?> getInterfaceClassFromPersistenceEntityClassName(String persistenceEntityClassName) {
-		return __inject__(ClassHelper.class).getByName(getInterfaceNameFromPersistenceEntityClassName(persistenceEntityClassName));
+		return org.cyk.utility.__kernel__.klass.ClassHelper.getByName(getInterfaceNameFromPersistenceEntityClassName(persistenceEntityClassName));
 	}
 
 	@Override

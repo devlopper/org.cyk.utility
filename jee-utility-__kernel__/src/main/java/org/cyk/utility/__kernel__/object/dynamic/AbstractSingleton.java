@@ -2,7 +2,7 @@ package org.cyk.utility.__kernel__.object.dynamic;
 
 import java.io.Serializable;
 
-import org.cyk.utility.__kernel__.ClassHelper;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +19,7 @@ public abstract class AbstractSingleton extends AbstractObject implements Single
 	}
 	
 	protected String __getIdentifier__(){
-		return ClassHelper.getInterfaceSimpleName(getClass());
+		return ClassHelper.getInterfaceSimpleNameFromImplementationClass(getClass());
 	}
 	
 }

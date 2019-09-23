@@ -38,7 +38,7 @@ public class FieldValueSetterImpl extends AbstractFunctionWithPropertiesAsInputA
 				if(getMethod!=null)
 					fieldType = getMethod.getReturnType();
 			}else {
-				fieldType = __inject__(FieldTypeGetter.class).execute(field).getOutput().getType();
+				fieldType = (Class<?>) FieldHelper.getType(field, null);
 			}
 			Class<?> fieldTypeWrapper = ClassUtils.primitiveToWrapper(fieldType);
 			if(value!=null && !fieldTypeWrapper.equals(value.getClass())) {

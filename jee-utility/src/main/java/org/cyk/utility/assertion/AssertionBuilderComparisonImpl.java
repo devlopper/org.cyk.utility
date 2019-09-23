@@ -9,7 +9,7 @@ import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.number.NumberHelper;
 
-@Dependent
+@Dependent @Deprecated
 public class AssertionBuilderComparisonImpl extends AbstractAssertionBuilderImpl implements AssertionBuilderComparison, Serializable {
 	private static final long serialVersionUID = 1L;
 	

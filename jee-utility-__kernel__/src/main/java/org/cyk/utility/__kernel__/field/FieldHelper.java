@@ -287,6 +287,7 @@ public interface FieldHelper {
 		return getType(field,klass);
 	}
 	
+	@SuppressWarnings("unchecked")
 	static Class<?> getParameterAt(Field field,Class<?> klass, Integer index) {
 		ParameterizedType type = (ParameterizedType) field.getGenericType();
 		return (Class<TYPE>) type.getActualTypeArguments()[index];
@@ -483,15 +484,22 @@ public interface FieldHelper {
 			} catch (Exception exception) {
 				throw new RuntimeException(exception);
 			}
-		}else	
+		}else {
 			try {
 				if(object instanceof Class)
 					FieldUtils.writeStaticField((Class<?>) object, fieldName, value, Boolean.TRUE);
-				else
-					FieldUtils.writeField(object,fieldName,value, Boolean.TRUE);
+				else {
+					Field field = getByName(object.getClass(), fieldName);
+					if(field == null) {
+						System.err.println("field helper write : "+object.getClass()+"."+fieldName+" does not exist");
+						return;
+					}
+					FieldUtils.writeField(field,object,value, Boolean.TRUE);
+				}
 			} catch (Exception exception) {
 				throw new RuntimeException(exception);
 			}
+		}
 	}
 	
 	static void write(Object object, String fieldName, Object value) {

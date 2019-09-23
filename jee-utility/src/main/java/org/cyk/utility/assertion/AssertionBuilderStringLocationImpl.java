@@ -8,12 +8,11 @@ import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.assertion.Assertion;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.field.FieldHelperImpl;
 import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.string.StringLocation;
 import org.cyk.utility.string.Strings;
 
-@Dependent
+@Dependent @Deprecated
 public class AssertionBuilderStringLocationImpl extends AbstractAssertionBuilderImpl implements AssertionBuilderStringLocation, Serializable {
 	private static final long serialVersionUID = 1L;
 	

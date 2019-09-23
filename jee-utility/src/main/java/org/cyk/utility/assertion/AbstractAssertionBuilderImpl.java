@@ -7,6 +7,7 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.throwable.ThrowableHelper;
 
+@Deprecated
 public abstract class AbstractAssertionBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Assertion> implements AssertionBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 

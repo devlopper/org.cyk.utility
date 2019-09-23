@@ -3,7 +3,7 @@ package org.cyk.utility.server.persistence;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 /**
  * Generic persistence functions provider. It tries , first , to find the specific persistence defined for a specific object class.<br/>

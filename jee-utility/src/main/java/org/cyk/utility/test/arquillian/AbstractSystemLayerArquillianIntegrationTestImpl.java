@@ -3,23 +3,19 @@ package org.cyk.utility.test.arquillian;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.clazz.ClassHelperImpl;
-import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.field.FieldHelper;
-import org.cyk.utility.field.FieldHelperImpl;
 import org.cyk.utility.__kernel__.field.FieldName;
-import org.cyk.utility.field.Fields;
-import org.cyk.utility.field.FieldsGetter;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
 import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.system.action.SystemActionUpdate;
-import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 public abstract class AbstractSystemLayerArquillianIntegrationTestImpl<LAYER_ENTITY_INTERFACE> extends org.cyk.utility.test.arquillian.AbstractArquillianIntegrationTest implements SystemLayerIntegrationTest<LAYER_ENTITY_INTERFACE>, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -27,7 +23,7 @@ public abstract class AbstractSystemLayerArquillianIntegrationTestImpl<LAYER_ENT
 	protected Class<? extends LAYER_ENTITY_INTERFACE> layerEntityInterfaceClass;
 	
 	{
-		layerEntityInterfaceClass = (Class<LAYER_ENTITY_INTERFACE>) ClassHelperImpl.__getParameterAt__(getClass(), 0, Object.class);
+		layerEntityInterfaceClass = (Class<LAYER_ENTITY_INTERFACE>) ClassHelper.getParameterAt(getClass(), 0);
 	}
 	
 	/* Create one entity */
@@ -213,10 +209,9 @@ public abstract class AbstractSystemLayerArquillianIntegrationTestImpl<LAYER_ENT
 		super.__setFieldValues__(object);
 		if(object != null) {
 			org.cyk.utility.__kernel__.field.FieldHelper.writeSystemIdentifier(object, __getRandomIdentifier__());
-			
-			Fields fields = __inject__(FieldsGetter.class).setFieldName(FieldName.IDENTIFIER).setValueUsageType(ValueUsageType.BUSINESS).setClazz(object.getClass()).execute().getOutput();
-			if(__inject__(CollectionHelper.class).isNotEmpty(fields))
-				org.cyk.utility.__kernel__.field.FieldHelper.writeBusinessIdentifier(object, __getRandomCode__());
+			Field field = org.cyk.utility.__kernel__.field.FieldHelper.getByName(object.getClass(), FieldName.IDENTIFIER, ValueUsageType.BUSINESS);
+			if(field != null)
+				org.cyk.utility.__kernel__.field.FieldHelper.write(object,field, __getRandomCode__());
 		}
 	}
 	

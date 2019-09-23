@@ -10,7 +10,7 @@ import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldInstancesRuntime;
 import org.cyk.utility.string.StringHelper;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 @Dependent
 public class FilterImpl extends AbstractObject implements Filter,Serializable {

@@ -3,7 +3,6 @@ package org.cyk.utility.instance;
 import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
@@ -21,7 +20,7 @@ public abstract class AbstractInstanceBuilderImpl extends AbstractFunctionWithPr
 		if(fieldsValuesObject != null) {
 			Class<?> aClass = getClazz();
 			Object[] parameters = getConstructorParameters();
-			instance = __inject__(ClassHelper.class).instanciate(aClass,parameters);
+			instance = org.cyk.utility.__kernel__.klass.ClassHelper.instanciate(aClass,parameters);
 			__execute__(fieldsValuesObject, instance);
 		}
 		return instance;

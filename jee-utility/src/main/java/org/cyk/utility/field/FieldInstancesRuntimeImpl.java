@@ -67,7 +67,8 @@ public class FieldInstancesRuntimeImpl extends AbstractObject implements FieldIn
 	
 	@Override
 	public FieldInstances getInstances(Boolean injectIfNull) {
-		FieldInstances instances = (FieldInstances) __getInjectIfNull__(FIELD_INSTANCES, injectIfNull);
+		if(instances == null && Boolean.TRUE.equals(injectIfNull))
+			instances = __inject__(FieldInstances.class);
 		instances.setCollectionClass(Set.class);
 		return instances;
 	}

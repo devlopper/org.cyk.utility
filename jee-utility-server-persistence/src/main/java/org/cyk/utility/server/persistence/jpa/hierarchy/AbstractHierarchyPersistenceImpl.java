@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.clazz.ClassInstance;
@@ -15,7 +16,7 @@ import org.cyk.utility.server.persistence.PersistenceQueryIdentifierStringBuilde
 import org.cyk.utility.server.persistence.query.PersistenceQueryContext;
 import org.cyk.utility.server.persistence.query.filter.Filter;
 import org.cyk.utility.string.Case;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends AbstractHierarchy<ENTITY>,ENTITY extends AbstractIdentifiedByString<?,?>,HIERARCHIES extends Hierarchies<HIERARCHY,ENTITY>> extends AbstractPersistenceEntityImpl<HIERARCHY> implements HierarchyPersistence<HIERARCHY,ENTITY, HIERARCHIES>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -31,7 +32,7 @@ public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends Abstrac
 	protected void __listenPostConstructPersistenceQueries__() {
 		super.__listenPostConstructPersistenceQueries__();
 		@SuppressWarnings("unchecked")
-		Class<ENTITY> entityClass = (Class<ENTITY>) __injectClassHelper__().getByName(__injectClassHelper__().getParameterAt(getClass(), 1, Object.class).getName());
+		Class<ENTITY> entityClass = (Class<ENTITY>) ClassHelper.getParameterAt(getClass(), 1);
 		ClassInstance classInstance = __inject__(ClassInstancesRuntime.class).get(entityClass);
 		if(classInstance != null) {
 			addQueryCollectInstances(readWhereParentDoesNotHaveParent, String.format(READ_WHERE_PARENT_DOES_NOT_HAVE_PARENT_FORMAT,__getTupleName__()));
@@ -292,7 +293,7 @@ public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends Abstrac
 	
 	@SuppressWarnings("unchecked")
 	protected Class<HIERARCHIES> __getCollectionInstanceClass__() {
-		return (Class<HIERARCHIES>) __injectClassHelper__().getByName(__injectClassHelper__().getParameterAt(getClass(), 2, Object.class).getName());
+		return (Class<HIERARCHIES>) ClassHelper.getParameterAt(getClass(), 2);
 	}
 	
 }

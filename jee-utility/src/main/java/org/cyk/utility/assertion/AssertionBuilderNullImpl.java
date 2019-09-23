@@ -6,7 +6,6 @@ import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.assertion.Assertion;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.field.FieldHelperImpl;
 import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.internationalization.InternalizationStringBuilder;
 

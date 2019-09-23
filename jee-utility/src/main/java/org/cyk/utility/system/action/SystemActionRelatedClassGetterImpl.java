@@ -5,7 +5,6 @@ import java.io.Serializable;
 import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.clazz.AbstractClassFunctionImpl;
-import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.string.Strings;
 
 @Dependent @SuppressWarnings("rawtypes")
@@ -27,7 +26,7 @@ public class SystemActionRelatedClassGetterImpl extends AbstractClassFunctionImp
 		
 		if(__injectCollectionHelper__().isNotEmpty(names))
 			for(String index : names.get()) {
-				clazz = (Class<?>) __inject__(ClassHelper.class).getByName(index);
+				clazz = (Class<?>) org.cyk.utility.__kernel__.klass.ClassHelper.getByName(index);
 				if(clazz != null)
 					break;
 			}

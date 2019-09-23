@@ -5,7 +5,7 @@ import java.io.Serializable;
 import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.field.FieldInstance;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 public class FieldImpl extends AbstractObject implements Field,Serializable {
 	private static final long serialVersionUID = 1L;

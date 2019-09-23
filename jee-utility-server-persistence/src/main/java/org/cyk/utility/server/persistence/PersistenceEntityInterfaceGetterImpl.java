@@ -5,7 +5,6 @@ import java.io.Serializable;
 import javax.enterprise.context.Dependent;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
 @Dependent @SuppressWarnings("rawtypes")
@@ -16,7 +15,7 @@ public class PersistenceEntityInterfaceGetterImpl extends AbstractFunctionWithPr
 	protected Class<?> __execute__() {
 		String name = StringUtils.replace(getEntityClass().getName(), ".entities.", ".api.");
 		name = name+"Persistence";
-		return __inject__(ClassHelper.class).getByName(name);
+		return org.cyk.utility.__kernel__.klass.ClassHelper.getByName(name);
 	}
 
 	@Override

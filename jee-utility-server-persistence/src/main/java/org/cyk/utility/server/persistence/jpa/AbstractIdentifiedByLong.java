@@ -10,13 +10,12 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.object.__static__.identifiable.AbstractIdentifiedPersistableByLong;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldsGetter;
-import org.cyk.utility.field.FieldTypeGetter;
-import org.cyk.utility.field.FieldValueSetter;
-import org.cyk.utility.value.ValueUsageType;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -44,8 +43,7 @@ public abstract class AbstractIdentifiedByLong extends AbstractIdentifiedPersist
 	}
 	
 	public AbstractIdentifiedByLong setFromBusinessIdentifier(Field field,Object identifier){
-		Class<?> type = __inject__(FieldTypeGetter.class).execute(field).getOutput().getType();
-		__inject__(FieldValueSetter.class).setObject(this).setField(field).setValue(__getFromBusinessIdentifier__(type, identifier)).execute();
+		FieldHelper.write(this, field, __getFromBusinessIdentifier__((Class<?>) FieldHelper.getType(field, getClass()), identifier));
 		return this;
 	}
 	

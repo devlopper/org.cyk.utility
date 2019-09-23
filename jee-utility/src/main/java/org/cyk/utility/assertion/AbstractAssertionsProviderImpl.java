@@ -59,6 +59,7 @@ public abstract class AbstractAssertionsProviderImpl extends AbstractFunctionWit
 		return __add__(__injectCollectionHelper__().instanciate(assertions));
 	}
 	
+	@Deprecated
 	protected AssertionsProvider __addFromBuilders__(Collection<AssertionBuilder> assertionBuilders) {
 		if(__injectCollectionHelper__().isNotEmpty(assertionBuilders)) {
 			for(AssertionBuilder index : assertionBuilders)
@@ -67,16 +68,19 @@ public abstract class AbstractAssertionsProviderImpl extends AbstractFunctionWit
 		return this;
 	}
 	
+	@Deprecated
 	protected AssertionsProvider __addFromBuilders__(AssertionBuilder...assertionBuilders) {
 		return __addFromBuilders__(__injectCollectionHelper__().instanciate(assertionBuilders));
 	}
 	
 	/**/
 	
+	@Deprecated
 	protected static AssertionBuilderComparison __injectAssertionBuilderComparison__() {
 		return __inject__(AssertionBuilderComparison.class);
 	}
 	
+	@Deprecated
 	protected static AssertionBuilderNull __injectAssertionBuilderNull__() {
 		return __inject__(AssertionBuilderNull.class);
 	}

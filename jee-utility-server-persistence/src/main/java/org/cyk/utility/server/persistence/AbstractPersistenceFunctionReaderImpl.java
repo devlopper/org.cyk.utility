@@ -5,20 +5,20 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.field.FieldName;
+import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 public abstract class AbstractPersistenceFunctionReaderImpl extends AbstractPersistenceFunctionImpl implements PersistenceFunctionReader, Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Override
+	/*@Override
 	protected Object getEnityFieldValue(Object entity, FieldName fieldName, ValueUsageType valueUsageType,String derivedFieldName) {
 		if(getProperties().getEntity() == null){
 			return getEntityIdentifier();
 		}
 		return super.getEnityFieldValue(entity, fieldName, valueUsageType, derivedFieldName);
-	}
+	}*/
 	
 	@Override
 	protected Collection<ValueUsageType> getValueUsageTypes(FieldName fieldName) {

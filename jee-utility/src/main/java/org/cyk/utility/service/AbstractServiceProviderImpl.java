@@ -6,7 +6,6 @@ import java.util.Collection;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractSingleton;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.assertion.AssertionBuilderNull;
-import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.enumeration.EnumCollectionGetter;
 import org.cyk.utility.enumeration.EnumGetter;
@@ -79,10 +78,6 @@ public abstract class AbstractServiceProviderImpl extends AbstractSingleton impl
 	
 	protected FieldHelper __injectFieldHelper__(){
 		return __inject__(FieldHelper.class);
-	}
-	
-	protected ClassHelper __injectClassHelper__(){
-		return __inject__(ClassHelper.class);
 	}
 	
 	protected AssertionBuilderNull __injectAssertionBuilderNull__(){

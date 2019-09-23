@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.server.persistence.AbstractPersistenceEntityImpl;
 import org.cyk.utility.string.Strings;
@@ -17,7 +18,7 @@ public abstract class AbstractPersistenceIdentifiedByStringAndCodedAndNamedAndHi
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
-		hierarchyPersistenceClass = (Class<HIERARCHY_PERSISTENCE>) __injectClassHelper__().getByName(__injectClassHelper__().getParameterAt(getClass(), 3, Object.class).getName());
+		hierarchyPersistenceClass = (Class<HIERARCHY_PERSISTENCE>) ClassHelper.getParameterAt(getClass(), 3);
 	}
 	
 	@Override

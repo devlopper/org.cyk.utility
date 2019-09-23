@@ -4,10 +4,10 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.field.FieldName;
+import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.server.persistence.Persistence;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 public abstract class AbstractTestPersistenceReadIntegrationImpl extends AbstractTestPersistenceFunctionIntegrationImpl implements TestPersistenceReadIntegration {
 	private static final long serialVersionUID = 1L;

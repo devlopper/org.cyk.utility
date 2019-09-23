@@ -8,6 +8,7 @@ import javax.enterprise.context.Dependent;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
 import org.cyk.utility.string.Case;
@@ -44,7 +45,7 @@ public class InternalizationKeyStringBuilderImpl extends AbstractStringFunctionI
 			}
 			if(key instanceof Class) {
 				Class<?> clazz = (Class<?>) key;
-				if(__injectClassHelper__().isInstanceOf(clazz, SystemAction.class))
+				if(ClassHelper.isInstanceOf(clazz, SystemAction.class))
 					key = StringUtils.substringAfter(clazz.getSimpleName(), SystemAction.class.getSimpleName());
 				else
 					key = __injectStringHelper__().applyCase(clazz.getSimpleName(),Case.FIRST_CHARACTER_LOWER);

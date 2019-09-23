@@ -1,8 +1,8 @@
 package org.cyk.utility.system;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.cyk.utility.map.MapHelper;
@@ -34,12 +34,12 @@ public class SystemLayerBusinessUnitTest extends AbstractSystemLayerUnitTestWith
 
 	@Override
 	protected Collection<String> __getEntityTruePackages__() {
-		return Arrays.asList("a.business.entities.b","a.business.entities","business.entities.b","business.entities");
+		return List.of("a.business.entities.b","a.business.entities","business.entities.b","business.entities");
 	}
 
 	@Override
 	protected Collection<String> __getEntityFalsePackages__() {
-		return Arrays.asList("a.business.c.entities.b","a.business.c.entities","business.c.entities.b","business.c.entities",
+		return List.of("a.business.c.entities.b","a.business.c.entities","business.c.entities.b","business.c.entities",
 				"entities","business");
 	}
 
@@ -92,12 +92,12 @@ public class SystemLayerBusinessUnitTest extends AbstractSystemLayerUnitTestWith
 
 	@Override
 	protected Collection<String> __getInterfaceTruePackages__() {
-		return Arrays.asList("a.business.api.b","a.business.api","business.api.b","business.api");
+		return List.of("a.business.api.b","a.business.api","business.api.b","business.api");
 	}
 
 	@Override
 	protected Collection<String> __getInterfaceFalsePackages__() {
-		return Arrays.asList("a.business.c.api.b","a.business.c.api","business.c.api.b","business.c.api",
+		return List.of("a.business.c.api.b","a.business.c.api","business.c.api.b","business.c.api",
 				"api","business");
 	}
 
@@ -158,12 +158,12 @@ public class SystemLayerBusinessUnitTest extends AbstractSystemLayerUnitTestWith
 
 	@Override
 	protected Collection<String> __getImplementationTruePackages__() {
-		return Arrays.asList("a.business.impl.b","a.business.impl","business.impl.b","business.impl");
+		return List.of("a.business.impl.b","a.business.impl","business.impl.b","business.impl");
 	}
 
 	@Override
 	protected Collection<String> __getImplementationFalsePackages__() {
-		return Arrays.asList("a.business.c.impl.b","a.business.c.impl","business.c.impl.b","business.c.impl",
+		return List.of("a.business.c.impl.b","a.business.c.impl","business.c.impl.b","business.c.impl",
 				"impl","business");
 	}
 

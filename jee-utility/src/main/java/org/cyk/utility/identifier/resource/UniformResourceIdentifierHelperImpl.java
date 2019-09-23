@@ -14,8 +14,8 @@ import javax.enterprise.context.ApplicationScoped;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
-import org.cyk.utility.clazz.ClassHelperImpl;
 import org.cyk.utility.collection.CollectionHelperImpl;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.network.protocol.ProtocolHelperImpl;
@@ -63,7 +63,7 @@ public class UniformResourceIdentifierHelperImpl extends AbstractHelper implemen
 			return null;
 		if(value instanceof Class) {
 			Class<?> klass = (Class<?>)value;
-			if(ClassHelperImpl.__isInstanceOf__(klass, SystemAction.class))
+			if(ClassHelper.isInstanceOf(klass, SystemAction.class))
 				if(klass.equals(SystemAction.class))
 					return "action";
 				else
@@ -392,7 +392,7 @@ public class UniformResourceIdentifierHelperImpl extends AbstractHelper implemen
 		Object[] arguments = new Object[2];		
 		arguments[0] = entityClass==null ? IDENTIFIER_ENTITY_TOKEN : StringHelperImpl.__applyCase__(entityClass.getSimpleName().endsWith("Impl") 
 				? StringUtils.substringBefore(entityClass.getSimpleName(), "Impl") : entityClass.getSimpleName(), Case.FIRST_CHARACTER_LOWER);
-		if(Boolean.TRUE.equals(isUseGeneric) && ClassHelperImpl.__isInstanceOfOne__(systemActionClass,SystemActionCreate.class,SystemActionUpdate.class,SystemActionDelete.class))
+		if(Boolean.TRUE.equals(isUseGeneric) && ClassHelper.isInstanceOfOne(systemActionClass,SystemActionCreate.class,SystemActionUpdate.class,SystemActionDelete.class))
 			arguments[1] = IDENTIFIER_EDIT_TOKEN;
 		else
 			arguments[1] = systemActionClass.getSimpleName().endsWith("Impl") 

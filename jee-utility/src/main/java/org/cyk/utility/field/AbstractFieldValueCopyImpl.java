@@ -6,11 +6,11 @@ import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.__kernel__.object.__static__.identifiable.AbstractIdentifiedPersistableByLong;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
@@ -78,32 +78,31 @@ public abstract class AbstractFieldValueCopyImpl extends AbstractFunctionWithPro
 	}
 	
 	protected Object __processValue__(Field source,Field destination,Object value) {
-		ClassHelper classHelper = __inject__(ClassHelper.class);
 		ClassInstancesRuntime classInstancesRuntime = __inject__(ClassInstancesRuntime.class);
-		Class<?> sourceType = __inject__(FieldTypeGetter.class).execute(source).getOutput().getType();
-		Class<?> destinationType = __inject__(FieldTypeGetter.class).execute(destination).getOutput().getType();
+		Class<?> sourceType = (Class<?>) FieldHelper.getType(source, null);
+		Class<?> destinationType = (Class<?>) FieldHelper.getType(destination, null);
 		Properties properties = new Properties();
 		properties.copyFrom(getProperties(), Properties.CONTEXT,Properties.REQUEST);
 		
 		//Primitive or string or enum
-		if(classHelper.isNumberOrStringOrEnum(sourceType)) {
-			if(classHelper.isNumberOrStringOrEnum(destinationType)) {
+		if(org.cyk.utility.__kernel__.klass.ClassHelper.isNumberOrCharSequenceOrEnum(sourceType)) {
+			if(org.cyk.utility.__kernel__.klass.ClassHelper.isNumberOrCharSequenceOrEnum(destinationType)) {
 				//convert value
 				return __inject__(ValueConverter.class).execute(value, destinationType).getOutput();
 			}
-			if(!classHelper.isBelongsToJavaPackages(destinationType)) {
+			if(!org.cyk.utility.__kernel__.klass.ClassHelper.isBelongsToJavaPackages(destinationType)) {
 				//value might be a destination type instance business identifier
 				return __inject__(InstanceHelper.class).getByIdentifierBusiness(destinationType, value,properties);
 			}
 		}
 		
 		//Non java classes , means custom classes
-		if(!classHelper.isBelongsToJavaPackages(sourceType)) {
-			if(classHelper.isNumberOrStringOrEnum(destinationType)) {
+		if(!org.cyk.utility.__kernel__.klass.ClassHelper.isBelongsToJavaPackages(sourceType)) {
+			if(org.cyk.utility.__kernel__.klass.ClassHelper.isNumberOrCharSequenceOrEnum(destinationType)) {
 				//get value business identifier
 				return org.cyk.utility.__kernel__.field.FieldHelper.readBusinessIdentifier(value);
 			}
-			if(!classHelper.isBelongsToJavaPackages(destinationType)) {
+			if(!org.cyk.utility.__kernel__.klass.ClassHelper.isBelongsToJavaPackages(destinationType)) {
 				if(Boolean.TRUE.equals(classInstancesRuntime.get(destinationType).getIsPersistable())) {
 					if(destination.isAnnotationPresent(javax.persistence.ManyToOne.class)) {
 						//Find the object to be linked by its identifier (system and/or business)
@@ -116,7 +115,7 @@ public abstract class AbstractFieldValueCopyImpl extends AbstractFunctionWithPro
 									.execute().getOutput();
 							if(__inject__(CollectionHelper.class).isNotEmpty(fields)) {
 								Class<?> identifierTypeDestinationType = null;//fields.getFirst().getType();
-								if(__inject__(ClassHelper.class).isInstanceOf(destinationType, AbstractIdentifiedPersistableByLong.class))
+								if(org.cyk.utility.__kernel__.klass.ClassHelper.isInstanceOf(destinationType, AbstractIdentifiedPersistableByLong.class))
 									identifierTypeDestinationType = Long.class;
 								identifier = __inject__(ValueConverter.class).execute(identifier, identifierTypeDestinationType).getOutput();	
 							}

@@ -11,7 +11,6 @@ import java.util.function.Function;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.array.ArrayHelper;
-import org.cyk.utility.clazz.ClassHelper;
 
 public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject implements CollectionInstance<T>, Serializable {
 	private static final long serialVersionUID = -1888054558236819369L;
@@ -26,7 +25,7 @@ public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject i
 	@Override
 	protected void __listenBeforePostConstruct__() {
 		super.__listenBeforePostConstruct__();
-		setElementClass(clazz = (Class<T>) __inject__(ClassHelper.class).getParameterAt(getClass(), 0, Object.class));
+		setElementClass(clazz = (Class<T>) org.cyk.utility.__kernel__.klass.ClassHelper.getParameterAt(getClass(), 0));
 	}
 	
 	@Override
@@ -55,7 +54,7 @@ public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject i
 		Collection<T> collection = null;
 		if(__inject__(CollectionHelper.class).isNotEmpty(this.collection)) {
 			for(T index : this.collection) {
-				if(index!=null && Boolean.TRUE.equals(__inject__(ClassHelper.class).isInstanceOfOne(index.getClass(), classes))) {
+				if(index!=null && org.cyk.utility.__kernel__.klass.ClassHelper.isInstanceOfOne(index.getClass(), classes)) {
 					if(collection == null)
 						collection = new ArrayList<>();
 					collection.add(index);

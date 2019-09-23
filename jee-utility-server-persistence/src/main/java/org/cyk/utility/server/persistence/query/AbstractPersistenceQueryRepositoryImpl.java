@@ -13,9 +13,4 @@ public abstract class AbstractPersistenceQueryRepositoryImpl extends AbstractIns
 		setInstanceClass(PersistenceQuery.class);
 	}
 	
-	@Override
-	protected Object getSystemIdentifier(PersistenceQuery instance) {
-		return instance.getIdentifier();
-	}
-	
 }

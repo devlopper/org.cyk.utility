@@ -6,7 +6,7 @@ import java.util.Collection;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.clazz.Classes;
 import org.cyk.utility.value.ValueHelper;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -7,7 +7,7 @@ import java.util.Collection;
 import javax.json.bind.JsonbBuilder;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.clazz.ClassHelper;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldInstance;
 import org.cyk.utility.field.FieldInstancesRuntime;
@@ -93,9 +93,9 @@ public abstract class FieldDtoMapper extends AbstractMapperSourceDestinationImpl
 			org.cyk.utility.field.FieldDto instanceDto = new org.cyk.utility.field.FieldDto();
 			instanceDto.setKlass(field.getInstance().getClazz().getSimpleName());
 			instanceDto.setPath(field.getInstance().getPath());
-			if(Boolean.TRUE.equals(DependencyInjection.inject(ClassHelper.class).isInstanceOf(field.getInstance().getType(), String.class)))
+			if(Boolean.TRUE.equals(ClassHelper.isInstanceOf((Class<?>)field.getInstance().getType(), String.class)))
 				instanceDto.setType(org.cyk.utility.field.FieldDto.Type.STRING);
-			else if(Boolean.TRUE.equals(DependencyInjection.inject(ClassHelper.class).isInstanceOf(field.getInstance().getType(), Collection.class)))
+			else if(Boolean.TRUE.equals(ClassHelper.isInstanceOf((Class<?>)field.getInstance().getType(), Collection.class)))
 				instanceDto.setType(org.cyk.utility.field.FieldDto.Type.COLLECTION);
 			fieldDto.setField(instanceDto);
 		}
@@ -110,7 +110,7 @@ public abstract class FieldDtoMapper extends AbstractMapperSourceDestinationImpl
 		if(fieldDto.getField() != null) {
 			Class<?> klass = null;
 			if(DependencyInjection.inject(StringHelper.class).isNotBlank(fieldDto.getField().getKlass()))
-				klass = DependencyInjection.inject(ClassHelper.class).getByName(fieldDto.getField().getKlass());
+				klass = ClassHelper.getByName(fieldDto.getField().getKlass());
 			if(klass != null && DependencyInjection.inject(StringHelper.class).isNotBlank(fieldDto.getField().getPath())) {
 				FieldInstance instance = DependencyInjection.inject(FieldInstancesRuntime.class).get(klass, fieldDto.getField().getPath());
 				field.setInstance(instance);

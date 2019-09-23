@@ -1,8 +1,8 @@
 package org.cyk.utility.system;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.cyk.utility.map.MapHelper;
@@ -28,12 +28,12 @@ public class SystemLayerRepresentationUnitTest extends AbstractSystemLayerUnitTe
 
 	@Override
 	protected Collection<String> __getEntityTruePackages__() {
-		return Arrays.asList("a.representation.entities.b","a.representation.entities","representation.entities.b","representation.entities");
+		return List.of("a.representation.entities.b","a.representation.entities","representation.entities.b","representation.entities");
 	}
 
 	@Override
 	protected Collection<String> __getEntityFalsePackages__() {
-		return Arrays.asList("a.representation.c.entities.b","a.representation.c.entities","representation.c.entities.b","representation.c.entities",
+		return List.of("a.representation.c.entities.b","a.representation.c.entities","representation.c.entities.b","representation.c.entities",
 				"entities","representation");
 	}
 
@@ -59,12 +59,12 @@ public class SystemLayerRepresentationUnitTest extends AbstractSystemLayerUnitTe
 	
 	@Override
 	protected Collection<String> __getEntityTrueClasses__() {
-		return Arrays.asList("a.representation.entities.b.MyClassDto","a.representation.entities.MyClassDto","representation.entities.b.MyClassDto","representation.entities.MyClassDto");
+		return List.of("a.representation.entities.b.MyClassDto","a.representation.entities.MyClassDto","representation.entities.b.MyClassDto","representation.entities.MyClassDto");
 	}
 
 	@Override
 	protected Collection<String> __getEntityFalseClasses__() {
-		return Arrays.asList("a.representation.entitie.MyClassDto","a.representation.entities.Dto","representation.entities.b.MyClassDo","representation.entities.MyClassDtos");
+		return List.of("a.representation.entitie.MyClassDto","a.representation.entities.Dto","representation.entities.b.MyClassDo","representation.entities.MyClassDtos");
 	}
 
 	/* Interface */
@@ -86,12 +86,12 @@ public class SystemLayerRepresentationUnitTest extends AbstractSystemLayerUnitTe
 
 	@Override
 	protected Collection<String> __getInterfaceTruePackages__() {
-		return Arrays.asList("a.representation.api.b","a.representation.api","representation.api.b","representation.api");
+		return List.of("a.representation.api.b","a.representation.api","representation.api.b","representation.api");
 	}
 
 	@Override
 	protected Collection<String> __getInterfaceFalsePackages__() {
-		return Arrays.asList("a.representation.c.api.b","a.representation.c.api","representation.c.api.b","representation.c.api",
+		return List.of("a.representation.c.api.b","a.representation.c.api","representation.c.api.b","representation.c.api",
 				"api","representation");
 	}
 
@@ -152,12 +152,12 @@ public class SystemLayerRepresentationUnitTest extends AbstractSystemLayerUnitTe
 
 	@Override
 	protected Collection<String> __getImplementationTruePackages__() {
-		return Arrays.asList("a.representation.impl.b","a.representation.impl","representation.impl.b","representation.impl");
+		return List.of("a.representation.impl.b","a.representation.impl","representation.impl.b","representation.impl");
 	}
 
 	@Override
 	protected Collection<String> __getImplementationFalsePackages__() {
-		return Arrays.asList("a.representation.c.impl.b","a.representation.c.impl","representation.c.impl.b","representation.c.impl",
+		return List.of("a.representation.c.impl.b","a.representation.c.impl","representation.c.impl.b","representation.c.impl",
 				"impl","representation");
 	}
 

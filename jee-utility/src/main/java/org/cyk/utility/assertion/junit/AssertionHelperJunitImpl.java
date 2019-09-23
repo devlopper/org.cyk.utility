@@ -8,7 +8,6 @@ import javax.enterprise.context.ApplicationScoped;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.assertion.AbstractAssertionHelperImpl;
 import org.cyk.utility.assertion.AssertionHelper;
-import org.cyk.utility.field.FieldHelperImpl;
 import org.junit.Assert;
 
 @ApplicationScoped

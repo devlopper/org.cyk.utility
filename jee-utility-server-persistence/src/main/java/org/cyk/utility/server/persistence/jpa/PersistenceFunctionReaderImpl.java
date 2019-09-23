@@ -11,7 +11,7 @@ import javax.persistence.TypedQuery;
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.field.FieldName;
+import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.field.FieldNameGetter;
 import org.cyk.utility.server.persistence.AbstractPersistenceFunctionReaderImpl;
 import org.cyk.utility.server.persistence.PersistenceFunctionReader;
@@ -23,7 +23,7 @@ import org.cyk.utility.sql.jpql.builder.QueryStringBuilderSelectJpql;
 import org.cyk.utility.sql.jpql.builder.QueryWherePredicateStringBuilderEqualJpql;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionRead;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 @Dependent
 public class PersistenceFunctionReaderImpl extends AbstractPersistenceFunctionReaderImpl implements PersistenceFunctionReader,Serializable {

@@ -5,7 +5,6 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.collection.CollectionHelperImpl;
-import org.cyk.utility.field.FieldHelperImpl;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.string.Strings;
 

@@ -2,19 +2,18 @@ package org.cyk.utility.server.persistence.test.arquillian;
 
 import java.util.Collection;
 
-import org.cyk.utility.clazz.ClassHelper;
+import org.cyk.utility.__kernel__.field.FieldName;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.field.FieldsGetter;
-import org.cyk.utility.field.FieldHelper;
-import org.cyk.utility.field.FieldName;
 import org.cyk.utility.field.Fields;
+import org.cyk.utility.field.FieldsGetter;
 import org.cyk.utility.server.persistence.PersistenceEntity;
 import org.cyk.utility.server.persistence.PersistenceLayer;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
 import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.system.action.SystemActionUpdate;
-import org.cyk.utility.value.ValueUsageType;
 import org.junit.Test;
 
 public abstract class AbstractPersistenceEntityIntegrationTest<ENTITY> extends AbstractPersistenceArquillianIntegrationTest {
@@ -66,7 +65,7 @@ public abstract class AbstractPersistenceEntityIntegrationTest<ENTITY> extends A
 		Object action = __inject__(SystemActionUpdate.class);
 		ENTITY object = __instanciateEntity__(action);
 		__createEntity__(object);
-		object = (ENTITY) __getPersistenceEntity__(action).readByIdentifier(__inject__(FieldHelper.class).getFieldValueSystemIdentifier(object));
+		object = (ENTITY) __getPersistenceEntity__(action).readByIdentifier(org.cyk.utility.__kernel__.field.FieldHelper.readSystemIdentifier(object));
 		__setEntityFields__(object,action);
 		__updateEntity__(object);
 		//cleanup
@@ -109,7 +108,7 @@ public abstract class AbstractPersistenceEntityIntegrationTest<ENTITY> extends A
 	
 	@SuppressWarnings("unchecked")
 	protected Class<ENTITY> __getEntityClass__(Object action){
-		return (Class<ENTITY>) __inject__(ClassHelper.class).getParameterAt(getClass(), 0, Object.class);
+		return (Class<ENTITY>) ClassHelper.getParameterAt(getClass(), 0);
 	}
 	
 	protected PersistenceEntity<ENTITY> __getPersistenceEntity__(Object action){

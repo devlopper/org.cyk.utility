@@ -9,13 +9,12 @@ import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.object.__static__.identifiable.AbstractIdentifiedPersistableByString;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.field.FieldTypeGetter;
-import org.cyk.utility.field.FieldValueSetter;
 import org.cyk.utility.field.FieldsGetter;
-import org.cyk.utility.value.ValueUsageType;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -43,8 +42,7 @@ public abstract class AbstractIdentifiedByString extends AbstractIdentifiedPersi
 	}
 	
 	public AbstractIdentifiedByString setFromIdentifier(Field field,Object identifier,ValueUsageType valueUsageType){
-		Class<?> type = __inject__(FieldTypeGetter.class).execute(field).getOutput().getType();
-		__inject__(FieldValueSetter.class).setObject(this).setField(field).setValue(__getFromIdentifier__(type, identifier,valueUsageType)).execute();
+		FieldHelper.write(this, field, __getFromIdentifier__((Class<?>) FieldHelper.getType(field, getClass()), identifier,valueUsageType));
 		return this;
 	}
 	

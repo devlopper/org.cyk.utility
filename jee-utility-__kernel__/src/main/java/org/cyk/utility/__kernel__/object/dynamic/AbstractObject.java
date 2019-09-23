@@ -7,8 +7,8 @@ import java.util.Collection;
 
 import javax.annotation.PostConstruct;
 
-import org.cyk.utility.__kernel__.ClassHelper;
 import org.cyk.utility.__kernel__.CollectionHelper;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 
 public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractObject implements Objectable, Serializable {

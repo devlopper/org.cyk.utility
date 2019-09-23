@@ -5,7 +5,6 @@ import java.io.Serializable;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractSingleton;
-import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.string.StringHelper;
 
@@ -121,7 +120,7 @@ public abstract class AbstractSystemLayerImpl extends AbstractSingleton implemen
 	
 	@Override
 	public Class<?> getInterfaceClassFromEntityClassName(String entityClassName) {
-		return __inject__(ClassHelper.class).getByName(getInterfaceNameFromEntityClassName(entityClassName));
+		return org.cyk.utility.__kernel__.klass.ClassHelper.getByName(getInterfaceNameFromEntityClassName(entityClassName));
 	}
 	
 	

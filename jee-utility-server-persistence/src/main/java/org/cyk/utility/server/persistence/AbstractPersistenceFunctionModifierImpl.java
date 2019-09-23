@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionUpdate;
-import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractPersistenceFunctionModifierImpl extends AbstractPersistenceFunctionTransactionImpl implements PersistenceFunctionModifier, Serializable {
 	private static final long serialVersionUID = 1L;

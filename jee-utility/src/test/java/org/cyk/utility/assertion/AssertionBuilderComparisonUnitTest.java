@@ -4,8 +4,10 @@ import org.cyk.utility.__kernel__.assertion.Assertion;
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+@Deprecated @Disabled
 public class AssertionBuilderComparisonUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 

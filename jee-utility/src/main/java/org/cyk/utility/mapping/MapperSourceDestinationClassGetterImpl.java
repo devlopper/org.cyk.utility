@@ -3,7 +3,6 @@ package org.cyk.utility.mapping;
 import java.io.Serializable;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
 @SuppressWarnings("rawtypes")
@@ -15,10 +14,10 @@ public class MapperSourceDestinationClassGetterImpl extends AbstractFunctionWith
 	@Override
 	protected Class<?> __execute__() throws Exception {
 		Class<?> klass = __injectValueHelper__().returnOrThrowIfBlank("class", getKlass());
-		Class<?> result = __inject__(ClassHelper.class).getByName(__inject__(MapperSourceDestinationClassNameGetter.class).setKlass(klass).execute().getOutput());
+		Class<?> result = org.cyk.utility.__kernel__.klass.ClassHelper.getByName(__inject__(MapperSourceDestinationClassNameGetter.class).setKlass(klass).execute().getOutput());
 		if(result == null) {
 			if(klass.getName().endsWith("Impl"))
-				result = __inject__(ClassHelper.class).getByName(__inject__(MapperSourceDestinationClassNameGetter.class).setClassName(
+				result = org.cyk.utility.__kernel__.klass.ClassHelper.getByName(__inject__(MapperSourceDestinationClassNameGetter.class).setClassName(
 						StringUtils.substringBeforeLast(klass.getName(), "Impl")).execute().getOutput());
 		}
 		return result;

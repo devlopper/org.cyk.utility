@@ -2,7 +2,7 @@ package org.cyk.utility.server.persistence.query;
 
 import java.io.Serializable;
 
-import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
+import org.cyk.utility.__kernel__.object.AbstractObject;
 
 import lombok.Getter;
 import lombok.Setter;

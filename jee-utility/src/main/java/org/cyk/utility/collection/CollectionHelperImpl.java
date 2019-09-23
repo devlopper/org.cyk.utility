@@ -15,10 +15,9 @@ import javax.enterprise.context.ApplicationScoped;
 
 import org.apache.commons.collections4.ListUtils;
 import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.array.ArrayHelperImpl;
-import org.cyk.utility.clazz.ClassHelper;
-import org.cyk.utility.clazz.ClassHelperImpl;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.throwable.ThrowableHelper;
@@ -71,7 +70,7 @@ public class CollectionHelperImpl extends AbstractHelper implements CollectionHe
 			collectionClass = __inject__(ValueHelper.class).cast(ArrayList.class, collectionClass);
 		else if(Collection.class.equals(collectionClass))
 			collectionClass = __inject__(ValueHelper.class).cast(ArrayList.class, collectionClass);			
-		Collection<ELEMENT> collection = (Collection<ELEMENT>) __inject__(ClassHelper.class).instanciateOne(collectionClass);
+		Collection<ELEMENT> collection = (Collection<ELEMENT>) org.cyk.utility.__kernel__.klass.ClassHelper.instanciate(collectionClass);
 		if(__inject__(ArrayHelper.class).isNotEmpty(elements))
 			collection.addAll(Arrays.asList(elements));
 		return collection;
@@ -351,7 +350,7 @@ public class CollectionHelperImpl extends AbstractHelper implements CollectionHe
 			collectionClass = ValueHelperImpl.__cast__(ArrayList.class, collectionClass);
 		else if(Collection.class.equals(collectionClass))
 			collectionClass = ValueHelperImpl.__cast__(ArrayList.class, collectionClass);			
-		Collection<ELEMENT> collection = (Collection<ELEMENT>) ClassHelperImpl.__instanciateOne__(collectionClass);
+		Collection<ELEMENT> collection = (Collection<ELEMENT>) ClassHelper.instanciate(collectionClass);
 		if(ArrayHelperImpl.__isNotEmpty__(elements))
 			collection.addAll(Arrays.asList(elements));
 		return collection;

@@ -13,7 +13,7 @@ import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerPersistence;
 import org.cyk.utility.test.arquillian.AbstractSystemServerArquillianIntegrationTestImpl;
 import org.cyk.utility.test.arquillian.SystemServerIntegrationTest;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 @SuppressWarnings({"rawtypes","unchecked"})
 public abstract class AbstractPersistenceArquillianIntegrationTest extends AbstractSystemServerArquillianIntegrationTestImpl<PersistenceEntity> implements SystemServerIntegrationTest<PersistenceEntity>, Serializable {

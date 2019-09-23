@@ -12,15 +12,11 @@ import org.cyk.utility.__kernel__.function.FunctionRunnable;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.assertion.AssertionBuilder;
-import org.cyk.utility.clazz.ClassHelper;
-import org.cyk.utility.clazz.ClassHelperImpl;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.collection.CollectionHelperImpl;
 import org.cyk.utility.collection.CollectionInstance;
 import org.cyk.utility.css.CascadeStyleSheetHelper;
 import org.cyk.utility.css.CascadeStyleSheetHelperImpl;
-import org.cyk.utility.field.FieldHelper;
-import org.cyk.utility.field.FieldHelperImpl;
 import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.instance.InstanceHelperImpl;
 import org.cyk.utility.log.Log;
@@ -302,14 +298,6 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 	
 	protected static CollectionHelper __injectCollectionHelper__(){
 		return CollectionHelperImpl.getInstance();
-	}
-	
-	protected static ClassHelper __injectClassHelper__(){
-		return ClassHelperImpl.getInstance();
-	}
-	
-	protected static FieldHelper __injectFieldHelper__(){
-		return FieldHelperImpl.getInstance();
 	}
 	
 	protected static ThrowableHelper __injectThrowableHelper__(){

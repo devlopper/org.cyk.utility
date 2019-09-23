@@ -11,6 +11,7 @@ import java.util.Set;
 import javax.enterprise.inject.spi.CDI;
 import javax.enterprise.util.AnnotationLiteral;
 
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.jboss.weld.exceptions.IllegalArgumentException;
 
 public class DependencyInjection implements Serializable {

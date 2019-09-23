@@ -9,7 +9,6 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
 import org.cyk.utility.array.ArrayHelper;
-import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.collection.CollectionInstance;
 import org.cyk.utility.server.persistence.jpa.AbstractIdentifiedByStringAndCodedAndNamed;
@@ -32,7 +31,7 @@ public abstract class AbstractIdentifiedByStringAndCodedAndNamedAndHierarchical<
 	@SuppressWarnings("unchecked")
 	public COLLECTION getParents(Boolean injectIfNull) {
 		if(parents == null && Boolean.TRUE.equals(injectIfNull))
-			setParents((COLLECTION) __inject__(__inject__(ClassHelper.class).getParameterAt(getClass(), 1, CollectionInstance.class)));
+			setParents((COLLECTION) __inject__(org.cyk.utility.__kernel__.klass.ClassHelper.getParameterAt(getClass(), 1)));
 		return parents;
 	}
 	
@@ -50,7 +49,7 @@ public abstract class AbstractIdentifiedByStringAndCodedAndNamedAndHierarchical<
 	@SuppressWarnings("unchecked")
 	public COLLECTION getChildren(Boolean injectIfNull) {
 		if(children == null && Boolean.TRUE.equals(injectIfNull))
-			setChildren((COLLECTION) __inject__(__inject__(ClassHelper.class).getParameterAt(getClass(), 1, CollectionInstance.class)));
+			setChildren((COLLECTION) __inject__(org.cyk.utility.__kernel__.klass.ClassHelper.getParameterAt(getClass(), 1)));
 		return children;
 	}
 	

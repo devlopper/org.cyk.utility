@@ -6,9 +6,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.field.FieldHelperImpl;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.repository.AbstractRepositoryImpl;
@@ -22,7 +20,7 @@ public abstract class AbstractInstanceRepositoryImpl<INSTANCE> extends AbstractR
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
-		setInstanceClass((Class<INSTANCE>) __inject__(ClassHelper.class).getParameterAt(getClass(), 0, Object.class));
+		setInstanceClass((Class<INSTANCE>) org.cyk.utility.__kernel__.klass.ClassHelper.getParameterAt(getClass(), 0));
 	}
 	
 	@Override

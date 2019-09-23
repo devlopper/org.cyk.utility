@@ -14,10 +14,10 @@ import javax.enterprise.context.Dependent;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.__kernel__.ClassHelper;
 import org.cyk.utility.__kernel__.MapHelper;
 import org.cyk.utility.__kernel__.NumberHelper;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 
 @Dependent
 public class Properties implements java.io.Serializable {
@@ -271,7 +271,7 @@ public class Properties implements java.io.Serializable {
 				keyValue = (String)(keyValue == null ? ConstantEmpty.STRING : keyValue) + value;
 			else
 				keyValue = StringUtils.replace((String)keyValue, (String) value, ConstantEmpty.STRING);
-		}else if(ClassHelper.isNumber(valueClass)){
+		}else if(ClassHelper.isInstanceOfNumber(valueClass)){
 			if(Boolean.TRUE.equals(add))
 				keyValue = NumberHelper.addNumbers((Number)keyValue , (Number)value);
 			else

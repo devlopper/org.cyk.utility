@@ -3,7 +3,6 @@ package org.cyk.utility.object;
 import java.io.Serializable;
 import java.util.Collection;
 
-import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.field.FieldInstanceValue;
 import org.cyk.utility.field.FieldInstanceValues;
 import org.cyk.utility.field.FieldInstancesRuntime;
@@ -18,7 +17,7 @@ public abstract class AbstractObjectToStringBuilderImpl extends AbstractObjectTo
 	protected String __execute__(Strings fieldNamesStrings) throws Exception {
 		Object object = __injectValueHelper__().returnOrThrowIfBlank("object to stringify", getObject());
 		FieldInstanceValues fieldInstanceValues = null;
-		if(Boolean.TRUE.equals(__inject__(ClassHelper.class).isBelongsToJavaPackages(object.getClass()))) {
+		if(org.cyk.utility.__kernel__.klass.ClassHelper.isBelongsToJavaPackages(object.getClass())) {
 			
 		}else {
 			if(__injectCollectionHelper__().isNotEmpty(fieldNamesStrings)) {

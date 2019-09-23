@@ -6,6 +6,7 @@ import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.string.StringLocation;
 import org.cyk.utility.string.Strings;
 
+@Deprecated
 public interface AssertionBuilderStringLocation extends AssertionBuilder {
 
 	FieldValueGetter getFieldValueGetter();

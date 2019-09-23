@@ -2,7 +2,6 @@ package org.cyk.utility.instance;
 
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.field.FieldHelper;
 
 @Deprecated
@@ -18,7 +17,7 @@ public abstract class AbstractInstanceBuilderFunctionRunnableImpl extends Abstra
 				if(fieldsValuesObject != null) {
 					Class<?> aClass = getFunction().getClazz();
 					Object[] parameters = getFunction().getConstructorParameters();
-					instance = __inject__(ClassHelper.class).instanciate(aClass,parameters);
+					instance = org.cyk.utility.__kernel__.klass.ClassHelper.instanciate(aClass,parameters);
 					__copy__(fieldsValuesObject, instance);
 				}
 				setOutput(instance);
