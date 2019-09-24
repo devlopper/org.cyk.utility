@@ -1,12 +1,11 @@
 package org.cyk.utility.identifier.resource;
 
-import static org.cyk.utility.identifier.resource.UniformResourceIdentifierHelperImpl.____buildQuery____;
-import static org.cyk.utility.identifier.resource.UniformResourceIdentifierHelperImpl.__buildParameterName__;
-import static org.cyk.utility.identifier.resource.UniformResourceIdentifierHelperImpl.__buildParameterValue__;
-import static org.cyk.utility.identifier.resource.UniformResourceIdentifierHelperImpl.__buildPath__;
-import static org.cyk.utility.identifier.resource.UniformResourceIdentifierHelperImpl.__buildQuery__;
-import static org.cyk.utility.identifier.resource.UniformResourceIdentifierHelperImpl.__build__;
-import static org.cyk.utility.identifier.resource.UniformResourceIdentifierHelperImpl.__setPathByIdentifier__;
+import static org.cyk.utility.identifier.resource.UniformResourceIdentifierHelper.build;
+import static org.cyk.utility.identifier.resource.UniformResourceIdentifierHelper.buildParameterValue;
+import static org.cyk.utility.identifier.resource.UniformResourceIdentifierHelper.buildPath;
+import static org.cyk.utility.identifier.resource.UniformResourceIdentifierHelper.buildQuery;
+import static org.cyk.utility.identifier.resource.UniformResourceIdentifierHelper.buildQueryFromStringsMap;
+import static org.cyk.utility.identifier.resource.UniformResourceIdentifierHelper.setPathByIdentifier;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -14,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.cyk.utility.__kernel__.identifier.resource.ParameterName;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
@@ -24,83 +24,52 @@ public class UniformResourceIdentifierHelperUnitTestPerformance extends Abstract
 	private static final long serialVersionUID = 1L;
 
 	@Test
-	public void buildParameterName_1000000(){
-		execute("build parameter name from string",1000000,500,new Runnable() {
-			@Override
-			public void run() {
-				__buildParameterName__("p01");
-			}
-		});
-		
-		execute("build parameter name from enum",1000000,500,new Runnable() {
-			@Override
-			public void run() {
-				__buildParameterName__(ParameterName.ACTION_CLASS);
-			}
-		});
-		
-		execute("build parameter name from class",1000000,500,new Runnable() {
-			@Override
-			public void run() {
-				__buildParameterName__(Class.class);
-			}
-		});
-		
-		execute("build parameter name from system action",1000000,500,new Runnable() {
-			@Override
-			public void run() {
-				__buildParameterName__(SystemAction.class);
-			}
-		});
-	}
-	
-	@Test
 	public void buildParameterValue_1000000(){
 		execute("build parameter value from string",1000000,500,new Runnable() {
 			@Override
 			public void run() {
-				__buildParameterValue__("v01");
+				buildParameterValue("v01");
 			}
 		});
 		execute("build parameter value from class",1000000,500,new Runnable() {
 			@Override
 			public void run() {
-				__buildParameterValue__(MyEntity.class);
+				buildParameterValue(MyEntity.class);
 			}
 		});
 		SystemAction systemAction = __inject__(SystemActionCreate.class);
 		execute("build parameter value from objectable with identifier",1000000,500,new Runnable() {
 			@Override
 			public void run() {
-				__buildParameterValue__(systemAction);
+				buildParameterValue(systemAction);
 			}
 		});
 	}
 	
 	@Test
 	public void buildPath_1000000(){
-		__setPathByIdentifier__("pathIdentifier01", "");
+		setPathByIdentifier("pathIdentifier01", "");
 		execute("build path from identifier",1000000,1000,new Runnable() {
 			@Override
 			public void run() {
-				__buildPath__("pathIdentifier01");
+				buildPath("pathIdentifier01");
 			}
 		});
 		
-		__setPathByIdentifier__("__entity__EditView", "p01");
+		setPathByIdentifier("__entity__EditView", "p01");
 		SystemAction systemAction = __inject__(SystemActionCreate.class);
 		systemAction.setEntityClass(MyEntity.class);
 		execute("build path from system action",1000000,5000,new Runnable() {
 			@Override
 			public void run() {
-				__buildPath__(systemAction);
+				buildPath(systemAction);
 			}
 		});
 		
 		execute("build path from system action class / entity class",1000000,5000,new Runnable() {
 			@Override
 			public void run() {
-				__buildPath__(SystemActionCreate.class,MyEntity.class,null,null);
+				buildPath(SystemActionCreate.class,MyEntity.class,null,null);
 			}
 		});
 	}
@@ -115,7 +84,7 @@ public class UniformResourceIdentifierHelperUnitTestPerformance extends Abstract
 		execute("build query from map string",1000000,5000,new Runnable() {
 			@Override
 			public void run() {
-				____buildQuery____(mapString);
+				buildQueryFromStringsMap(mapString);
 			}
 		});
 		
@@ -127,14 +96,14 @@ public class UniformResourceIdentifierHelperUnitTestPerformance extends Abstract
 		execute("build query from map object",1000000,5000,new Runnable() {
 			@Override
 			public void run() {
-				__buildQuery__(mapObject);
+				buildQuery(mapObject);
 			}
 		});
 		Collection<MyEntity> entities = Arrays.asList(__inject__(MyEntity.class).setIdentifier(1));
 		execute("build query from system action class / entity class",1000000,15000,new Runnable() {
 			@Override
 			public void run() {
-				__buildQuery__(SystemActionCreate.class,null,MyEntity.class,entities,null,null,null);
+				buildQuery(SystemActionCreate.class,null,MyEntity.class,entities,null,null,null);
 			}
 		});
 		
@@ -144,7 +113,7 @@ public class UniformResourceIdentifierHelperUnitTestPerformance extends Abstract
 		execute("build query from system action",1000000,15000,new Runnable() {
 			@Override
 			public void run() {
-				__buildQuery__(systemAction);
+				buildQuery(systemAction);
 			}
 		});
 	}	
@@ -154,7 +123,7 @@ public class UniformResourceIdentifierHelperUnitTestPerformance extends Abstract
 		execute("build using all components",1000000,5000,new Runnable() {
 			@Override
 			public void run() {
-				__build__("http","localhost",8080,"playground/list.jsf","entity=myentity",null,null);
+				build("http","localhost",8080,"playground/list.jsf","entity=myentity",null,null);
 			}
 		});
 		
@@ -164,7 +133,7 @@ public class UniformResourceIdentifierHelperUnitTestPerformance extends Abstract
 		execute("build using system action create",1000000,15000,new Runnable() {
 			@Override
 			public void run() {
-				__build__("http","localhost",8080,systemAction);
+				build("http","localhost",8080,systemAction);
 			}
 		});
 		
@@ -172,7 +141,7 @@ public class UniformResourceIdentifierHelperUnitTestPerformance extends Abstract
 		execute("build using system action class / entity class",1000000,15000,new Runnable() {
 			@Override
 			public void run() {
-				__build__("http","localhost",8080,SystemActionCreate.class,null,MyEntity.class,entities,null,null,null);
+				build("http","localhost",8080,SystemActionCreate.class,null,MyEntity.class,entities,null,null,null);
 			}
 		});
 	}	

@@ -11,9 +11,9 @@ import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.collection.AbstractCollectionInstanceImpl;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
-import org.cyk.utility.array.ArrayHelperImpl;
-import org.cyk.utility.identifier.resource.UniformResourceIdentifierHelperImpl;
 import org.cyk.utility.__kernel__.string.Strings;
+import org.cyk.utility.array.ArrayHelperImpl;
+import org.cyk.utility.identifier.resource.UniformResourceIdentifierHelper;
 
 @Dependent
 public class PathsImpl extends AbstractCollectionInstanceImpl<Path> implements Paths,Serializable {
@@ -22,7 +22,7 @@ public class PathsImpl extends AbstractCollectionInstanceImpl<Path> implements P
 	@Override
 	public Paths removeByUniformResourceIdentifiers(Collection<String> uniformResourceIdentifiers) {
 		if(isNotEmpty() && CollectionHelper.isNotEmpty(uniformResourceIdentifiers)) {
-			Collection<URI> uris = UniformResourceIdentifierHelperImpl.__getURIs__(uniformResourceIdentifiers);
+			Collection<URI> uris = UniformResourceIdentifierHelper.getURIs(uniformResourceIdentifiers);
 			Collection<Path> elements = null;
 			for(Path path : collection)
 				if(uris.contains(path.toFile().toURI())) {

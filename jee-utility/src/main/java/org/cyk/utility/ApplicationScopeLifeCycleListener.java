@@ -26,9 +26,9 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 			Topic.stopAllConsumers();
 		}
 
-		Client client = __inject__(RequestHelper.class).getClient();
-		if(client != null)
-			client.close();
+		//Client client = __inject__(RequestHelper.class).getClient();
+		//if(client != null)
+		//	client.close();
 	}
 	
 	/**/

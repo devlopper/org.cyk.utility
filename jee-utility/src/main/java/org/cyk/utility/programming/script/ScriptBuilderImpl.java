@@ -30,7 +30,9 @@ public class ScriptBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl
 
 	@Override
 	public Strings getInstructions(Boolean injectIfNull) {
-		return (Strings) __getInjectIfNull__(FIELD_INSTRUCTIONS, injectIfNull);
+		if(instructions == null && Boolean.TRUE.equals(injectIfNull))
+			instructions = __inject__(Strings.class);
+		return instructions;
 	}
 
 	@Override

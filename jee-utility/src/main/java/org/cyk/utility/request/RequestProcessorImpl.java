@@ -45,8 +45,8 @@ public class RequestProcessorImpl extends AbstractFunctionWithPropertiesAsInputI
 			__injectThrowableHelper__().throwRuntimeException("request processor uniform resource locator cannot be derived");
 		
 		Client client = getClient();
-		if(client == null)
-			client = __inject__(RequestHelper.class).getClient(Boolean.TRUE);
+		//if(client == null)
+		//	client = __inject__(RequestHelper.class).getClient(Boolean.TRUE);
 		
 		Class<?> responseEntityClass = getResponseEntityClass();
 		if(responseEntityClass == null && responseEntity!=null)

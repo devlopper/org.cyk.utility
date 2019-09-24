@@ -3,6 +3,7 @@ package org.cyk.utility.request;
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
 import org.cyk.utility.object.ObjectByStringMap;
 
+@Deprecated
 public interface RequestParameterValueMapper extends FunctionWithPropertiesAsInput<Object> {
 
 	Object getParameterName();

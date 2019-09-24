@@ -26,7 +26,7 @@ import org.cyk.utility.system.action.SystemActionTree;
 import org.cyk.utility.system.action.SystemActionUpdate;
 import org.cyk.utility.system.action.SystemActionView;
 
-@Dependent
+@Dependent @Deprecated
 public class RequestParameterValueMapperImpl extends AbstractFunctionWithPropertiesAsInputImpl<Object> implements RequestParameterValueMapper,Serializable {
 	private static final long serialVersionUID = 1L;
 	

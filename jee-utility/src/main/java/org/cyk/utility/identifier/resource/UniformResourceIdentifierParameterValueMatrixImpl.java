@@ -10,7 +10,7 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.map.AbstractMapInstanceImpl;
 import org.cyk.utility.object.ObjectByStringMap;
 
-@ApplicationScoped
+@ApplicationScoped @Deprecated
 public class UniformResourceIdentifierParameterValueMatrixImpl extends AbstractMapInstanceImpl<String, ObjectByStringMap> implements UniformResourceIdentifierParameterValueMatrix,Serializable {
 	private static final long serialVersionUID = 1L;
 

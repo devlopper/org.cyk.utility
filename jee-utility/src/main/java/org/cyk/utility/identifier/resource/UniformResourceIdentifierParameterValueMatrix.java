@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.cyk.utility.map.MapInstance;
 import org.cyk.utility.object.ObjectByStringMap;
 
+@Deprecated
 public interface UniformResourceIdentifierParameterValueMatrix extends MapInstance<String, ObjectByStringMap> {
 
 	ObjectByStringMap getClassMap();
