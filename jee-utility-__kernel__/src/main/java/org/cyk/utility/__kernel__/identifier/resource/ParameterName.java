@@ -1,12 +1,9 @@
 package org.cyk.utility.__kernel__.identifier.resource;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.__kernel__.MapHelper;
-import org.cyk.utility.__kernel__.collection.CollectionHelper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -71,22 +68,6 @@ public enum ParameterName {
 			return null;
 		string = StringUtils.remove(string.toLowerCase(), "_");
 		return string;
-	}
-	
-	public static Collection<Object> getKeys(Boolean keysAreClasses,Collection<Class<?>> keysInstanceOfClasses,Collection<String> values) {
-		return MapHelper.getKeys(ParameterName.MAP, keysAreClasses,keysInstanceOfClasses, values);
-	}
-	
-	public static Collection<Object> getKeysWhereKeysAreClasses(Collection<Class<?>> keysInstanceOfClasses,Collection<String> values) {
-		if(keysInstanceOfClasses == null || keysInstanceOfClasses.isEmpty())
-			return null;
-		return MapHelper.getKeysWhereKeysAreClasses(ParameterName.MAP, keysInstanceOfClasses, values);
-	}
-	
-	public static Collection<Object> getKeysWhereKeysAreClasses(Collection<Class<?>> keysInstanceOfClasses,String value) {
-		if(keysInstanceOfClasses == null || keysInstanceOfClasses.isEmpty())
-			return null;
-		return MapHelper.getKeysWhereKeysAreClasses(ParameterName.MAP, keysInstanceOfClasses, value == null || value.isBlank() ? null : CollectionHelper.listOf(value));
 	}
 	
 	public static final Map<Object,String> MAP = new HashMap<>();

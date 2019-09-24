@@ -99,6 +99,11 @@ public class ClassHelperUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	@Test
+	public void isInstanceOf_interface_interface() {
+		assertThat(isInstanceOf(Interface02Sub.class, Interface02.class)).isTrue();
+	}
+	
+	@Test
 	public void isNumber_false() {
 		assertThat(isInstanceOfNumber(Object.class)).isFalse();
 	}
@@ -188,6 +193,10 @@ public class ClassHelperUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	public static interface Interface02 {
+		
+	}
+	
+	public static interface Interface02Sub extends Interface02 {
 		
 	}
 	

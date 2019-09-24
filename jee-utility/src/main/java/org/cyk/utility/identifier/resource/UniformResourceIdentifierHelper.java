@@ -1,5 +1,7 @@
 package org.cyk.utility.identifier.resource;
 
+import static org.cyk.utility.__kernel__.map.MapHelper.getKeys;
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -108,9 +110,9 @@ public interface UniformResourceIdentifierHelper extends Helper {
 			//For now we will use string
 			value = parameterValue;
 		}else if(ParameterName.ENTITY_CLASS.getValue().equals(parameterName)) {
-			value = CollectionHelper.getFirst(ParameterName.getKeysWhereKeysAreClasses(List.of(ParameterName.ENTITY_CLASS.getType()),List.of(parameterValue)));
+			value = CollectionHelper.getFirst(getKeys(ParameterName.MAP,null,List.of(ParameterName.ENTITY_CLASS.getType()),List.of(parameterValue)));
 		}else if(ParameterName.WINDOW_RENDER_TYPE_CLASS.getValue().equals(parameterName)) {
-			value = ParameterName.getKeys(Boolean.TRUE, null, List.of(parameterValue));
+			value = getKeys(ParameterName.MAP,null,List.of(ParameterName.WINDOW_RENDER_TYPE_CLASS.getType()), List.of(parameterValue));
 		}
 		
 		if(value == null)
@@ -121,7 +123,8 @@ public interface UniformResourceIdentifierHelper extends Helper {
 	static SystemAction getSystemAction(String parameterValue,Object identifierName,QueryParameterValueGetter parameterValueGetter) {
 		Class<? extends SystemAction> systemActionClass = null;
 		SystemAction systemAction = null;
-		Collection<?> keys = ParameterName.getKeysWhereKeysAreClasses(List.of(SystemAction.class),parameterValue);
+		//Collection<?> keys = getKeysWhereKeysAreClasses(ParameterName.MAP,List.of(SystemAction.class),parameterValue);
+		Collection<?> keys = getKeys(ParameterName.MAP,null,List.of(SystemAction.class),List.of(parameterValue));
 		systemActionClass = (Class<? extends SystemAction>) CollectionHelper.getFirst(keys);
 		if(systemActionClass!=null) {
 			systemAction = DependencyInjection.inject(systemActionClass).setIdentifier(parameterValueGetter.get(ParameterName.stringify(identifierName)));
