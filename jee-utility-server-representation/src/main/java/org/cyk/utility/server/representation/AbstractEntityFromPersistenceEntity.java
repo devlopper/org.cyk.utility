@@ -3,9 +3,9 @@ package org.cyk.utility.server.representation;
 import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.server.persistence.Persistence;
-import org.cyk.utility.value.ValueUsageType;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

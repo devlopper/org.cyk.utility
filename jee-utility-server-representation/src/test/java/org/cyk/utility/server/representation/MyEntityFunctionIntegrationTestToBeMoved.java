@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Collection;
 
-import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.random.RandomHelper;
 import org.cyk.utility.server.business.api.MyEntityBusiness;
 import org.cyk.utility.server.persistence.entities.MyEntity;
@@ -71,19 +70,19 @@ public class MyEntityFunctionIntegrationTestToBeMoved extends AbstractRepresenta
 		for(Integer index = 0 ; index < 10 ; index = index + 1)
 			__inject__(MyEntityBusiness.class).create(new MyEntity().setIdentifier(index.toString()).setCode(index.toString()));
 		
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, (Collection<?>)__inject__(MyEntityRepresentation.class).getMany(Boolean.FALSE,null,null,null,null).getEntity()))
+		assertThat(org.cyk.utility.__kernel__.field.FieldHelper.readSystemIdentifiers((Collection<?>)__inject__(MyEntityRepresentation.class).getMany(Boolean.FALSE,null,null,null,null).getEntity()))
 			.containsExactly("0","1","2","3","4","5","6","7","8","9");
 		
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, (Collection<?>)__inject__(MyEntityRepresentation.class).getMany(null,0l,1l,null,null).getEntity()))
+		assertThat(org.cyk.utility.__kernel__.field.FieldHelper.readSystemIdentifiers((Collection<?>)__inject__(MyEntityRepresentation.class).getMany(null,0l,1l,null,null).getEntity()))
 			.containsExactly("0");
 		
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, (Collection<?>)__inject__(MyEntityRepresentation.class).getMany(null,1l,1l,null,null).getEntity()))
+		assertThat(org.cyk.utility.__kernel__.field.FieldHelper.readSystemIdentifiers((Collection<?>)__inject__(MyEntityRepresentation.class).getMany(null,1l,1l,null,null).getEntity()))
 			.containsExactly("1");
 		
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, (Collection<?>)__inject__(MyEntityRepresentation.class).getMany(null,0l,3l,null,null).getEntity()))
+		assertThat(org.cyk.utility.__kernel__.field.FieldHelper.readSystemIdentifiers((Collection<?>)__inject__(MyEntityRepresentation.class).getMany(null,0l,3l,null,null).getEntity()))
 			.containsExactly("0","1","2");
 		
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, (Collection<?>)__inject__(MyEntityRepresentation.class).getMany(null,4l,3l,null,null).getEntity()))
+		assertThat(org.cyk.utility.__kernel__.field.FieldHelper.readSystemIdentifiers((Collection<?>)__inject__(MyEntityRepresentation.class).getMany(null,4l,3l,null,null).getEntity()))
 			.containsExactly("4","5","6");
 	}
 	

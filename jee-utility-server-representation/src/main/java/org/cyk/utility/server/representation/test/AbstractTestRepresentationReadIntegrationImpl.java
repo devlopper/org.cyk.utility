@@ -2,12 +2,12 @@ package org.cyk.utility.server.representation.test;
 
 import java.util.Collection;
 
-import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.field.FieldName;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.field.FieldName;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.server.representation.RepresentationEntity;
 import org.cyk.utility.server.representation.RepresentationLayer;
-import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractTestRepresentationReadIntegrationImpl extends AbstractTestRepresentationFunctionIntegrationImpl implements TestRepresentationReadIntegration {
 	private static final long serialVersionUID = 1L;
@@ -25,7 +25,7 @@ public abstract class AbstractTestRepresentationReadIntegrationImpl extends Abst
 	
 	@Override
 	protected void ____perform____(Object object) throws Exception {
-		Boolean mustUnexist =  Boolean.TRUE.equals(__inject__(CollectionHelper.class).contains(getUnexistingObjectIdentifiers(), object));
+		Boolean mustUnexist =  Boolean.TRUE.equals(CollectionHelper.contains(getUnexistingObjectIdentifiers(), object));
 		ValueUsageType valueUsageType = getIdentifierValueUsageType();
 		@SuppressWarnings("rawtypes")
 		RepresentationEntity representation = __inject__(RepresentationLayer.class).injectInterfaceClassFromEntityClass(getObjectClass());

@@ -5,15 +5,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.ws.rs.core.Response;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.server.representation.MessageDto;
 import org.cyk.utility.server.representation.MessageDtoCollection;
 import org.cyk.utility.server.representation.Representation;
 import org.cyk.utility.server.representation.ResponseEntityDto;
 import org.cyk.utility.test.AbstractTestSystemFunctionIntegrationImpl;
-import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractTestRepresentationFunctionIntegrationImpl extends AbstractTestSystemFunctionIntegrationImpl implements TestRepresentationFunctionIntegration {
 	private static final long serialVersionUID = 1L;
@@ -59,14 +61,14 @@ public abstract class AbstractTestRepresentationFunctionIntegrationImpl extends 
 			assertThat(__response__.getEntity()).isEqualTo(expectedResponseEntity);
 		
 		Collection<ExpectedMessageDto> expectedMessageDtos = getExpectedResponseEntityDtoMessages();
-		if(__injectCollectionHelper__().isNotEmpty(expectedMessageDtos)) {
+		if(CollectionHelper.isNotEmpty(expectedMessageDtos)) {
 			Collection<MessageDto> messages = new ArrayList<>();
 			if(__response__.getEntity() instanceof MessageDto) {
 				messages.add((MessageDto) __response__.getEntity());
 			}else if(__response__.getEntity() instanceof MessageDtoCollection) {
-				messages = __injectCollectionHelper__().add(ArrayList.class, messages, Boolean.TRUE, ((MessageDtoCollection)__response__.getEntity()).getCollection());
+				messages = CollectionHelper.add(ArrayList.class, messages, Boolean.TRUE, ((MessageDtoCollection)__response__.getEntity()).getCollection());
 			}else if(__response__.getEntity() instanceof ResponseEntityDto) {
-				messages = __injectCollectionHelper__().add(ArrayList.class, messages, Boolean.TRUE, ((ResponseEntityDto)__response__.getEntity()).getMessages());
+				messages = CollectionHelper.add(ArrayList.class, messages, Boolean.TRUE, ((ResponseEntityDto)__response__.getEntity()).getMessages());
 			}
 			if(expectedMessageDtos.size() == 1) {
 				MessageDto message = messages.iterator().next();
@@ -150,13 +152,13 @@ public abstract class AbstractTestRepresentationFunctionIntegrationImpl extends 
 	
 	@Override
 	public TestRepresentationFunctionIntegration addExpectedResponseEntityDtoMessages(Collection<ExpectedMessageDto> messages) {
-		expectedResponseEntityDtoMessages = __injectCollectionHelper__().add(ArrayList.class, expectedResponseEntityDtoMessages, Boolean.TRUE, messages);
+		expectedResponseEntityDtoMessages = CollectionHelper.add(ArrayList.class, expectedResponseEntityDtoMessages, Boolean.TRUE, messages);
 		return this;
 	}
 	
 	@Override
 	public TestRepresentationFunctionIntegration addExpectedResponseEntityDtoMessages(ExpectedMessageDto... messages) {
-		addExpectedResponseEntityDtoMessages(__injectCollectionHelper__().instanciate(messages));
+		addExpectedResponseEntityDtoMessages(List.of(messages));
 		return this;
 	}
 	

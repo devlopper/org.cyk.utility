@@ -13,9 +13,9 @@ import javax.ws.rs.core.Response.Status;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.object.__static__.representation.Action;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.assertion.AssertionsProviderClassMap;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
-import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.server.business.api.MyEntityAssertionsProvider;
 import org.cyk.utility.server.business.api.MyEntityBusiness;
 import org.cyk.utility.server.business.api.NodeBusiness;
@@ -30,9 +30,7 @@ import org.cyk.utility.server.representation.entities.MyEntityDtoCollection;
 import org.cyk.utility.server.representation.entities.NodeDto;
 import org.cyk.utility.server.representation.test.TestRepresentationRead;
 import org.cyk.utility.server.representation.test.arquillian.AbstractRepresentationArquillianIntegrationTestWithDefaultDeployment;
-import org.cyk.utility.value.ValueUsageType;
 import org.junit.Test;
-import org.junit.runners.Parameterized.UseParametersRunnerFactory;
 
 public class RepresentationIntegrationTest extends AbstractRepresentationArquillianIntegrationTestWithDefaultDeployment {
 	private static final long serialVersionUID = 1L;
@@ -445,19 +443,19 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 		__inject__(MyEntityRepresentation.class).createMany(dtos, null);
 		
 		dtos = (Collection<MyEntityDto>) __inject__(MyEntityRepresentation.class).getMany(Boolean.FALSE, null, null, null, null).getEntity();
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, dtos)).containsExactly("0","1","2","3","4","5","6","7","8","9");
+		assertThat(org.cyk.utility.__kernel__.field.FieldHelper.readSystemIdentifiers(dtos)).containsExactly("0","1","2","3","4","5","6","7","8","9");
 		
 		dtos = (Collection<MyEntityDto>) __inject__(MyEntityRepresentation.class).getMany(Boolean.TRUE, 0l, 1l, null, null).getEntity();
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, dtos)).containsExactly("0");
+		assertThat(org.cyk.utility.__kernel__.field.FieldHelper.readSystemIdentifiers(dtos)).containsExactly("0");
 		
 		dtos = (Collection<MyEntityDto>) __inject__(MyEntityRepresentation.class).getMany(Boolean.TRUE, 1l, 1l, null, null).getEntity();
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, dtos)).containsExactly("1");
+		assertThat(org.cyk.utility.__kernel__.field.FieldHelper.readSystemIdentifiers(dtos)).containsExactly("1");
 		
 		dtos = (Collection<MyEntityDto>) __inject__(MyEntityRepresentation.class).getMany(Boolean.TRUE, 0l, 3l, null, null).getEntity();
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, dtos)).containsExactly("0","1","2");
+		assertThat(org.cyk.utility.__kernel__.field.FieldHelper.readSystemIdentifiers(dtos)).containsExactly("0","1","2");
 		
 		dtos = (Collection<MyEntityDto>) __inject__(MyEntityRepresentation.class).getMany(Boolean.TRUE, 4l, 3l, null, null).getEntity();
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, dtos)).containsExactly("4","5","6");
+		assertThat(org.cyk.utility.__kernel__.field.FieldHelper.readSystemIdentifiers(dtos)).containsExactly("4","5","6");
 	}
 	
 	/* Hierarchy */

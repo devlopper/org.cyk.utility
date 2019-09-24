@@ -7,10 +7,10 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.core.Response;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
+import org.cyk.utility.__kernel__.string.Strings;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.server.business.Business;
-import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.layer.SystemLayerRepresentation;
-import org.cyk.utility.value.ValueUsageType;
 
 @ApplicationScoped
 public class RepresentationImpl extends AbstractObject implements Representation, Serializable {

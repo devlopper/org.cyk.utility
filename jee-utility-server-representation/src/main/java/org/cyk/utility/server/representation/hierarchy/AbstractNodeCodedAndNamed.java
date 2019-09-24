@@ -2,7 +2,7 @@ package org.cyk.utility.server.representation.hierarchy;
 
 import java.io.Serializable;
 
-import org.cyk.utility.clazz.ClassHelper;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +20,7 @@ public abstract class AbstractNodeCodedAndNamed<ENTITY extends AbstractNodeCoded
 	@SuppressWarnings("unchecked")
 	protected COLLECTION __getParents__(Boolean injectIfNull) {
 		if(parents == null && Boolean.TRUE.equals(injectIfNull))
-			parents = (COLLECTION) __inject__(ClassHelper.class).instanciateOne(__inject__(ClassHelper.class).getParameterAt(getClass(), 1, Object.class));
+			parents = (COLLECTION) ClassHelper.instanciate(ClassHelper.getParameterAt(getClass(), 1));
 		return parents;			
 	}
 	
@@ -32,7 +32,7 @@ public abstract class AbstractNodeCodedAndNamed<ENTITY extends AbstractNodeCoded
 	@SuppressWarnings("unchecked")
 	protected COLLECTION __getChildren__(Boolean injectIfNull) {
 		if(children == null && Boolean.TRUE.equals(injectIfNull))
-			children = (COLLECTION) __inject__(ClassHelper.class).instanciateOne(__inject__(ClassHelper.class).getParameterAt(getClass(), 1, Object.class));
+			children = (COLLECTION) ClassHelper.instanciate(ClassHelper.getParameterAt(getClass(), 1));
 		return children;			
 	}
 	

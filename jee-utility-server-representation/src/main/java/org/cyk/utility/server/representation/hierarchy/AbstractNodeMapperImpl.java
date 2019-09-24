@@ -1,10 +1,9 @@
 package org.cyk.utility.server.representation.hierarchy;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.clazz.ClassHelper;
-import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.collection.CollectionInstance;
-import org.cyk.utility.field.FieldHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionInstance;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.server.representation.AbstractEntityCollection;
 import org.cyk.utility.server.representation.AbstractMapperSourceDestinationImpl;
@@ -17,9 +16,9 @@ public abstract class AbstractNodeMapperImpl<SOURCE,DESTINATION,SOURCE_COLLECTIO
     	SOURCE_COLLECTION sourceCollection = null;
     	if(destinationCollection != null) {
     		Class<DESTINATION_COLLECTION> destinationCollectionClass = __getDestinationCollectionClass__();
-        	if(DependencyInjection.inject(ClassHelper.class).isInstanceOf(destinationCollectionClass, CollectionInstance.class)) {
+        	if(ClassHelper.isInstanceOf(destinationCollectionClass, CollectionInstance.class)) {
         		CollectionInstance<DESTINATION> destinationCollectionInstance = (CollectionInstance<DESTINATION>) destinationCollection;
-        		if(DependencyInjection.inject(CollectionHelper.class).isNotEmpty(destinationCollectionInstance)) {
+        		if(CollectionHelper.isNotEmpty(destinationCollectionInstance)) {
         			sourceCollection = DependencyInjection.inject(__getSourceCollectionClass__());
             		for(DESTINATION index : destinationCollectionInstance.get())
             			if(sourceCollection instanceof AbstractEntityCollection)
@@ -35,17 +34,17 @@ public abstract class AbstractNodeMapperImpl<SOURCE,DESTINATION,SOURCE_COLLECTIO
     	DESTINATION_COLLECTION destinationCollection = null;
     	if(sourceCollection != null) {
     		Class<SOURCE_COLLECTION> sourceCollectionClass = __getSourceCollectionClass__();
-        	if(DependencyInjection.inject(ClassHelper.class).isInstanceOf(sourceCollectionClass, AbstractEntityCollection.class)) {
+        	if(ClassHelper.isInstanceOf(sourceCollectionClass, AbstractEntityCollection.class)) {
         		AbstractEntityCollection<SOURCE> sourceCollectionInstance = (AbstractEntityCollection<SOURCE>) sourceCollection;
-        		if(DependencyInjection.inject(CollectionHelper.class).isNotEmpty(sourceCollectionInstance.getCollection())) {
+        		if(CollectionHelper.isNotEmpty(sourceCollectionInstance.getCollection())) {
         			destinationCollection = DependencyInjection.inject(__getDestinationCollectionClass__());
         			Class<DESTINATION> destinationClass = __getDestinationClass__();
             		for(SOURCE index : sourceCollectionInstance.getCollection())
             			if(destinationCollection instanceof CollectionInstance) {
             				DESTINATION destination = null;
-            				Object identifier = DependencyInjection.inject(FieldHelper.class).getFieldValueSystemIdentifier(index);
+            				Object identifier = org.cyk.utility.__kernel__.field.FieldHelper.readSystemIdentifier(index);
             				if(identifier == null) {
-            					identifier = DependencyInjection.inject(FieldHelper.class).getFieldValueBusinessIdentifier(index);
+            					identifier = org.cyk.utility.__kernel__.field.FieldHelper.readBusinessIdentifier(index);
             					if(identifier != null)
             						destination = DependencyInjection.inject(InstanceHelper.class).getByIdentifierBusiness(destinationClass, identifier);
             				}else

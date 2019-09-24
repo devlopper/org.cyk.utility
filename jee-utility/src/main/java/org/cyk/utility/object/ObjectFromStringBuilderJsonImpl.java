@@ -15,7 +15,7 @@ public class ObjectFromStringBuilderJsonImpl extends AbstractObjectFromStringBui
 	protected Object __execute__(String string, Class<?> klass,FieldInstances fieldInstances) throws Exception {
 		Object object=null;
 		/*ObjectMapper objectMapper = new ObjectMapper();
-		if(Boolean.TRUE.equals(__inject__(ClassHelper.class).isBelongsToJavaPackages(klass))) {
+		if(Boolean.TRUE.equals(ClassHelper.isBelongsToJavaPackages(klass))) {
 			object = objectMapper.readValue(string, klass);
 		}else {
 			SimpleModule module = new SimpleModule();
@@ -54,9 +54,9 @@ public class ObjectFromStringBuilderJsonImpl extends AbstractObjectFromStringBui
 				JsonNode fieldNode = node.get(index.getPath());
 				if (fieldNode != null) {
 					Object value = null;
-					if (Boolean.TRUE.equals(__inject__(ClassHelper.class).isInstanceOf(index.getType(), String.class))) {
+					if (Boolean.TRUE.equals(ClassHelper.isInstanceOf(index.getType(), String.class))) {
 						value = fieldNode.asText();
-					}else if (Boolean.TRUE.equals(__inject__(ClassHelper.class).isInstanceOf(index.getType(), CollectionInstance.class))) {
+					}else if (Boolean.TRUE.equals(ClassHelper.isInstanceOf(index.getType(), CollectionInstance.class))) {
 						String[] tokens = ((String)fieldNode.asText()).split(ObjectToStringBuilderJsonImpl.Serializer.COMA);
 						value = __inject__(index.getType());
 						for(String indexToken : tokens) {
@@ -68,9 +68,9 @@ public class ObjectFromStringBuilderJsonImpl extends AbstractObjectFromStringBui
 								__inject__(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented("objectfy field of type " + index.getType());
 							}
 						}						
-					}else if (Boolean.TRUE.equals(__inject__(ClassHelper.class).isInstanceOf(index.getType(), Map.class))) {
+					}else if (Boolean.TRUE.equals(ClassHelper.isInstanceOf(index.getType(), Map.class))) {
 						value = new ObjectMapper().readValue(fieldNode.asText(), Map.class);
-					}else if (Boolean.TRUE.equals(__inject__(ClassHelper.class).isInstanceOf(index.getType(), Enum.class))) {
+					}else if (Boolean.TRUE.equals(ClassHelper.isInstanceOf(index.getType(), Enum.class))) {
 						value = new ObjectMapper().readValue(fieldNode.asText(), index.getType());
 					}else
 						__inject__(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented("objectfy field of type " + index.getType());

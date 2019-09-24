@@ -3,8 +3,8 @@ package org.cyk.utility.server.representation.test;
 import java.net.URI;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.test.TestSystemFunctionIntegration;
-import org.cyk.utility.value.ValueUsageType;
 
 public interface TestRepresentationFunctionIntegration extends TestSystemFunctionIntegration {
 

@@ -19,6 +19,8 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.assertj.core.util.diff.Delta.TYPE;
+import org.cyk.utility.__kernel__.Helper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 import lombok.AllArgsConstructor;
@@ -62,8 +64,7 @@ public interface FieldHelper {
 	static List<String> disjoin(Collection<String> paths) {
 		if(paths == null || paths.isEmpty())
 			return null;
-		String path = join(paths);
-		return List.of(StringUtils.split(path,DOT));
+		return CollectionHelper.listOf(StringUtils.split(join(paths),DOT));
 	}
 	
 	/**
@@ -72,7 +73,7 @@ public interface FieldHelper {
 	 * @return
 	 */
 	static List<String> disjoin(String... paths) {
-		return paths == null || paths.length == 0 ? null : disjoin(List.of(paths));
+		return paths == null || paths.length == 0 ? null : disjoin(CollectionHelper.listOf(paths));
 	}
 	
 	static String getName(Class<?> klass,FieldName fieldName,ValueUsageType valueUsageType) {
@@ -111,7 +112,7 @@ public interface FieldHelper {
 			if(declaredFields.length > 0) {
 				if(fields == null)
 					fields = new ArrayList<>();
-				fields.addAll(0,List.of(declaredFields));
+				fields.addAll(0,CollectionHelper.listOf(declaredFields));
 			}
 			if(indexClass.isInterface()) {
 				if(indexClass.getGenericInterfaces().length == 0)
@@ -161,14 +162,14 @@ public interface FieldHelper {
 	static Field getByName(Class<?> klass, String... fieldNames) {
 		if(klass == null || fieldNames == null || fieldNames.length == 0)
 			return null;
-		return getByName(klass,List.of(fieldNames));
+		return getByName(klass,CollectionHelper.listOf(fieldNames));
 	}
 	
 	static Field getByName(Class<?> klass,FieldName fieldName,ValueUsageType valueUsageType) {
 		return klass == null || fieldName == null || valueUsageType == null ? null : getByName(klass, getName(klass, fieldName, valueUsageType));
 	}
 	
-	static Collection<Field> filter(Class<?> klass, String fieldNameRegularExpression,Integer modifiers) {
+	static Collection<Field> filter(Class<?> klass, String fieldNameRegularExpression,Collection<Integer> modifiersIncluded,Collection<Integer> modifiersExcluded) {
 		if(klass == null)
 			return null;
 		Collection<Field> collection = get(klass);
@@ -179,37 +180,29 @@ public interface FieldHelper {
 		Pattern pattern = null;
 		if(fieldNameRegularExpression!=null)
 			pattern = Pattern.compile(fieldNameRegularExpression);
+		if(modifiersIncluded != null && modifiersIncluded.isEmpty())
+			modifiersIncluded = null;
+		if(modifiersExcluded != null && modifiersExcluded.isEmpty())
+			modifiersIncluded = null;
 		Collection<Field> fields = null;
 		for(Field index : collection) {
 			if(pattern != null && !pattern.matcher(index.getName()).find())
 				continue;
-			if(modifiers != null) {
-				if(!(Modifier.isAbstract(index.getModifiers()) && Modifier.isAbstract(modifiers)))
-					continue;
-				if(!(Modifier.isFinal(index.getModifiers()) && Modifier.isFinal(modifiers)))
-					continue;
-				if(!(Modifier.isNative(index.getModifiers()) && Modifier.isNative(modifiers)))
-					continue;
-				if(!(Modifier.isPrivate(index.getModifiers()) && Modifier.isPrivate(modifiers)))
-					continue;
-				if(!(Modifier.isProtected(index.getModifiers()) && Modifier.isProtected(modifiers)))
-					continue;
-				if(!(Modifier.isPublic(index.getModifiers()) && Modifier.isPublic(modifiers)))
-					continue;
-				if(!(Modifier.isStatic(index.getModifiers()) && Modifier.isStatic(modifiers)))
-					continue;
-				if(!(Modifier.isStrict(index.getModifiers()) && Modifier.isStrict(modifiers)))
-					continue;
-				if(!(Modifier.isTransient(index.getModifiers()) && Modifier.isTransient(modifiers)))
-					continue;
-				if(!(Modifier.isVolatile(index.getModifiers()) && Modifier.isVolatile(modifiers)))
-					continue;
-			}
+			if(modifiersIncluded != null && !Helper.isHaveAllModifiers(index.getModifiers(), modifiersIncluded))
+				continue;	
+			if(modifiersExcluded != null && Helper.isHaveAllModifiers(index.getModifiers(), modifiersExcluded))
+				continue;
 			if(fields == null)
 				fields = new ArrayList<Field>();
 			fields.add(index);
 		}
 		return fields;
+	}
+	
+	static Collection<Field> filter(Class<?> klass, String fieldNameRegularExpression,Integer modifiers) {
+		if(klass == null)
+			return null;
+		return filter(klass, fieldNameRegularExpression, modifiers == null ? null : CollectionHelper.listOf(modifiers), null);
 	}
 	
 	/* get set type */
@@ -557,7 +550,10 @@ public interface FieldHelper {
 	static void writeMany(Object object, String fieldNameRegularExpression,Integer modifiers,Object value) {
 		if(object == null)
 			return;
-		Collection<Field> fields = filter(object.getClass(), fieldNameRegularExpression, modifiers);
+		/*
+		 * we exclude fields not writable : FINAL
+		 */
+		Collection<Field> fields = filter(object.getClass(), fieldNameRegularExpression, modifiers == null ? null : CollectionHelper.listOf(modifiers),CollectionHelper.setOf(Modifier.FINAL));
 		if(fields == null || fields.isEmpty())
 			return;
 		writeMany(object, fields, value);

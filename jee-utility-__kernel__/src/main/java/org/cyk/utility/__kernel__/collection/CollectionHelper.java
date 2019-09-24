@@ -16,6 +16,30 @@ import one.util.streamex.StreamEx;
 
 public interface CollectionHelper {
 
+	static <T> Collection<T> instantiate(Class<?> klass,@SuppressWarnings("unchecked") T...elements) {
+		if(klass == null || elements == null || elements.length == 0)
+			return null;
+		if(klass.equals(List.class))
+			return List.of(elements);
+		if(klass.equals(Set.class))
+			return Set.of(elements);
+		throw new RuntimeException("instantiate collection of type "+klass+" not yet handled");
+	}
+	
+	@SuppressWarnings("unchecked")
+	static <T> List<T> listOf(T...elements) {
+		if(elements == null || elements.length == 0)
+			return null;
+		return (List<T>) instantiate(List.class,elements);
+	}
+	
+	@SuppressWarnings("unchecked")
+	static <T> Set<T> setOf(T...elements) {
+		if(elements == null || elements.length == 0)
+			return null;
+		return (Set<T>) instantiate(Set.class,elements);
+	}
+	
 	static Boolean isEmpty(Collection<?> collection){
 		if(collection == null)
 			return Boolean.TRUE;

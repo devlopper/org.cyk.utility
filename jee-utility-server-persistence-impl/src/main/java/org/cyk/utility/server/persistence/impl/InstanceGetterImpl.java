@@ -6,7 +6,7 @@ import java.util.Collection;
 
 import javax.enterprise.context.Dependent;
 
-import org.cyk.utility.field.FieldName;
+import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.instance.AbstractInstanceGetterImpl;
 import org.cyk.utility.server.persistence.Persistence;
 

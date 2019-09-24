@@ -10,15 +10,16 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.string.Strings;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.mapping.MappingHelper;
 import org.cyk.utility.server.persistence.query.filter.Filter;
 import org.cyk.utility.server.persistence.query.filter.FilterDto;
-import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionRead;
-import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractRepresentationFunctionReaderImpl extends AbstractRepresentationFunctionImpl implements RepresentationFunctionReader, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -48,7 +49,7 @@ public abstract class AbstractRepresentationFunctionReaderImpl extends AbstractR
 		Strings entityFieldNames = getEntityFieldNames();
 		Properties properties = new Properties().setFields(entityFieldNames);
 		if(Boolean.TRUE.equals(__isCollectionable__)) {
-			if(Boolean.TRUE.equals(__injectCollectionHelper__().isEmpty(__entitiesSystemIdentifiers__)) && Boolean.TRUE.equals(__injectCollectionHelper__().isEmpty(__entitiesBusinessIdentifiers__))) {
+			if(Boolean.TRUE.equals(CollectionHelper.isEmpty(__entitiesSystemIdentifiers__)) && Boolean.TRUE.equals(CollectionHelper.isEmpty(__entitiesBusinessIdentifiers__))) {
 				FilterDto filterDto = (FilterDto) getProperty(Properties.QUERY_FILTERS);
 				if(filterDto != null) {
 					Filter filter = __inject__(MappingHelper.class).getDestination(filterDto, Filter.class).normalize(__persistenceEntityClass__);
@@ -72,7 +73,7 @@ public abstract class AbstractRepresentationFunctionReaderImpl extends AbstractR
 					addLogMessageBuilderParameter("filter", properties.getQueryFilters());
 				
 				Collection<?> collection = __injectBusiness__().find(__persistenceEntityClass__, properties);
-				if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(collection))) {
+				if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(collection))) {
 					if(__entities__ == null)
 						__entities__ = new ArrayList<>();
 					__entities__.addAll(__inject__(MappingHelper.class).getSources(collection, __entityClass__,properties));
@@ -90,7 +91,7 @@ public abstract class AbstractRepresentationFunctionReaderImpl extends AbstractR
 				
 			}
 		} else {
-			Object identifier = __injectCollectionHelper__().getFirst(ValueUsageType.SYSTEM.equals(__entityIdentifierValueUsageType__) ? __entitiesSystemIdentifiers__ : __entitiesBusinessIdentifiers__);
+			Object identifier = CollectionHelper.getFirst(ValueUsageType.SYSTEM.equals(__entityIdentifierValueUsageType__) ? __entitiesSystemIdentifiers__ : __entitiesBusinessIdentifiers__);
 			if(identifier != null) {
 				properties.setValueUsageType(__entityIdentifierValueUsageType__);
 				Object entity = __injectBusiness__().findByIdentifier(__persistenceEntityClass__,identifier,__entityIdentifierValueUsageType__,properties);
@@ -106,7 +107,7 @@ public abstract class AbstractRepresentationFunctionReaderImpl extends AbstractR
 	
 	@Override
 	protected Status __computeResponseStatus__() {
-		if(!Boolean.TRUE.equals(__isCollectionable__) && Boolean.TRUE.equals(__injectCollectionHelper__().isEmpty(__entities__))) {
+		if(!Boolean.TRUE.equals(__isCollectionable__) && Boolean.TRUE.equals(CollectionHelper.isEmpty(__entities__))) {
 			return Response.Status.NOT_FOUND;	
 		}
 		return super.__computeResponseStatus__();
@@ -116,12 +117,12 @@ public abstract class AbstractRepresentationFunctionReaderImpl extends AbstractR
 	protected Object __computeResponseEntity__() {
 		if(__throwable__ == null) {
 			if(Boolean.TRUE.equals(__isCollectionable__)) {
-				if(Boolean.TRUE.equals(__injectCollectionHelper__().isEmpty(__entities__)))
+				if(Boolean.TRUE.equals(CollectionHelper.isEmpty(__entities__)))
 					return null;
 				else
 					return new GenericEntity<List<?>>((List<?>) __entities__,(Type) __injectTypeHelper__().instanciateCollectionParameterizedType(List.class, __entityClass__));
 			}else {
-				if(Boolean.TRUE.equals(__injectCollectionHelper__().isEmpty(__entities__)))
+				if(Boolean.TRUE.equals(CollectionHelper.isEmpty(__entities__)))
 					return null;
 				else
 					return new GenericEntity<Object>(__entities__.iterator().next(), __entityClass__);	

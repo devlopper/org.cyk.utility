@@ -7,10 +7,11 @@ import java.util.Collection;
 import javax.ws.rs.core.Response;
 
 import org.cyk.utility.__kernel__.constant.ConstantNull;
-import org.cyk.utility.clazz.ClassHelper;
-import org.cyk.utility.clazz.ClassHelperImpl;
+import org.cyk.utility.__kernel__.field.FieldName;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.string.StringLocation;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.field.FieldHelper;
-import org.cyk.utility.field.FieldName;
 import org.cyk.utility.field.FieldNameGetter;
 import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.map.MapHelper;
@@ -24,8 +25,6 @@ import org.cyk.utility.server.representation.test.TestRepresentationCreate;
 import org.cyk.utility.server.representation.test.TestRepresentationDelete;
 import org.cyk.utility.server.representation.test.TestRepresentationRead;
 import org.cyk.utility.server.representation.test.TestRepresentationUpdate;
-import org.cyk.utility.string.StringLocation;
-import org.cyk.utility.value.ValueUsageType;
 import org.junit.Test;
 
 public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extends AbstractRepresentationArquillianIntegrationTest {
@@ -43,7 +42,7 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 	@Test
 	public void createOne_businessIdentifierMustNotBeNull() throws Exception{
 		Object object = __instanciateEntity__(null);
-		__inject__(FieldHelper.class).setFieldValueBusinessIdentifier(object, null);
+		org.cyk.utility.__kernel__.field.FieldHelper.writeBusinessIdentifier(object, null);
 		__inject__(TestRepresentationCreate.class).addObjects(object)
 		.setExpectedResponseStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
 		.setExpectedResponseEntityClass(ResponseEntityDto.class)
@@ -163,7 +162,7 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 		
 	@SuppressWarnings("unchecked")
 	protected Class<ENTITY> __getEntityClass__(Object action){
-		return (Class<ENTITY>) ClassHelperImpl.__getParameterAt__(getClass(), 0, Object.class);
+		return (Class<ENTITY>) ClassHelper.getParameterAt(getClass(), 0);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -186,13 +185,13 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 	@SuppressWarnings("rawtypes")
 	@Override
 	public Class<? extends RepresentationEntity> __getLayerEntityInterfaceClass__() {
-		return __inject__(RepresentationLayer.class).getInterfaceClassFromEntityClass(__inject__(ClassHelper.class).getParameterAt(getClass(), 0, Object.class));
+		return __inject__(RepresentationLayer.class).getInterfaceClassFromEntityClass(ClassHelper.getParameterAt(getClass(), 0));
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	protected <T> Class<? extends AbstractEntityCollection<T>> __getEntityCollectionClass__(Class<T> aClass) {
-		aClass = (Class<T>) __inject__(ClassHelper.class).getParameterAt(getClass(), 0, Object.class);
+		aClass = (Class<T>) ClassHelper.getParameterAt(getClass(), 0);
 		try {
 			return (Class<? extends AbstractEntityCollection<T>>) Class.forName(aClass.getName()+"Collection");
 		} catch (ClassNotFoundException e) {

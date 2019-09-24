@@ -10,6 +10,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.server.representation.AbstractEntityCollection;
 import org.cyk.utility.server.representation.AbstractEntityFromPersistenceEntity;
@@ -21,7 +22,6 @@ import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerRepresentation;
 import org.cyk.utility.test.arquillian.AbstractSystemServerArquillianIntegrationTestImpl;
 import org.cyk.utility.test.arquillian.SystemServerIntegrationTest;
-import org.cyk.utility.value.ValueUsageType;
 import org.junit.Assert;
 
 @SuppressWarnings({"rawtypes","unchecked"})
@@ -39,13 +39,13 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 		Response response = representation.createOne(entity);
 		assertThat(response.getStatus()).isEqualTo(Response.Status.CREATED.getStatusCode());
 		response.close();
-		Object businessIdentifier = __inject__(FieldHelper.class).getFieldValueBusinessIdentifier(entity);
+		Object businessIdentifier = org.cyk.utility.__kernel__.field.FieldHelper.readBusinessIdentifier(entity);
 		if(businessIdentifier!=null) {
 			response = representation.getOne(businessIdentifier.toString(), ValueUsageType.BUSINESS.name(),null);
 			entity = (ENTITY) response.getEntity();
 			Assert.assertNotNull("Get entity with business identifier <"+businessIdentifier+"> not found", entity);
 			Assert.assertNotNull("Entity <"+entity+"> found under business identifier <"+businessIdentifier+"> has null system identifier"
-					,__inject__(FieldHelper.class).getFieldValueSystemIdentifier(entity));
+					,org.cyk.utility.__kernel__.field.FieldHelper.readSystemIdentifier(entity));
 			response.close();
 		}
 	}
@@ -58,12 +58,12 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 		assertThat(response.getStatus()).isEqualTo(Response.Status.CREATED.getStatusCode());
 		response.close();
 		for(ENTITY index : entities) {
-			Object businessIdentifier = __inject__(FieldHelper.class).getFieldValueBusinessIdentifier(index);
+			Object businessIdentifier = org.cyk.utility.__kernel__.field.FieldHelper.readBusinessIdentifier(index);
 			if(businessIdentifier != null) {
 				Object entity = index;
 				response = representation.getOne(businessIdentifier.toString(), ValueUsageType.BUSINESS.name(),null);
 				entity = (ENTITY) response.getEntity();
-				String systemIdentifier = (String) __inject__(FieldHelper.class).getFieldValueSystemIdentifier(entity);
+				String systemIdentifier = (String) org.cyk.utility.__kernel__.field.FieldHelper.readSystemIdentifier(entity);
 				assertThat(systemIdentifier).isNotBlank();	
 				response.close();
 			}

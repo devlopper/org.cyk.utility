@@ -9,14 +9,17 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.annotation.JavaScriptObjectNotation;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.clazz.ClassNameBuilder;
 import org.cyk.utility.map.MapInstanceIntegerToString;
 import org.cyk.utility.object.ObjectFromStringBuilder;
 import org.cyk.utility.server.business.BusinessEntity;
 import org.cyk.utility.server.persistence.query.filter.FilterDto;
-import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINESS extends BusinessEntity<PERSISTENCE_ENTITY>,ENTITY extends AbstractEntityFromPersistenceEntity,ENTITY_COLLECTION> extends AbstractRepresentationServiceProviderImpl implements RepresentationEntity<PERSISTENCE_ENTITY,ENTITY,ENTITY_COLLECTION>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -32,14 +35,14 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 			ClassNameBuilder classNameBuilder = __inject__(ClassNameBuilder.class).setKlass(getClass());
 			classNameBuilder.getSourceNamingModel(Boolean.TRUE).server().representation().impl().suffix();
 			classNameBuilder.getDestinationNamingModel(Boolean.TRUE).server().representation().entities().suffix();
-			__entityClass__ = __injectValueHelper__().returnOrThrowIfBlank("entity class",(Class<ENTITY>) __injectClassHelper__().getByName(classNameBuilder));
+			__entityClass__ = __injectValueHelper__().returnOrThrowIfBlank("entity class",(Class<ENTITY>) ClassHelper.getByName(classNameBuilder.execute().getOutput()));
 		}
 		
 		if(__persistenceEntityClass__ == null) {
 			ClassNameBuilder classNameBuilder = __inject__(ClassNameBuilder.class).setKlass(getClass());
 			classNameBuilder.getSourceNamingModel(Boolean.TRUE).server().representation().impl().suffix();
 			classNameBuilder.getDestinationNamingModel(Boolean.TRUE).server().persistence().entities();
-			__persistenceEntityClass__ = __injectValueHelper__().returnOrThrowIfBlank("persistence entity class",(Class<PERSISTENCE_ENTITY>) __injectClassHelper__().getByName(classNameBuilder));
+			__persistenceEntityClass__ = __injectValueHelper__().returnOrThrowIfBlank("persistence entity class",(Class<PERSISTENCE_ENTITY>) ClassHelper.getByName(classNameBuilder.execute().getOutput()));
 		}
 		
 	}
@@ -122,7 +125,7 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 		ValueUsageType valueUsageType = ValueUsageType.BUSINESS.name().equalsIgnoreCase(type) ? ValueUsageType.BUSINESS : ValueUsageType.SYSTEM;
 		RepresentationFunctionRemover function = __inject__(RepresentationFunctionRemover.class);
 		function.setPersistenceEntityClass(__persistenceEntityClass__).setEntityIdentifierValueUsageType(valueUsageType);
-		function.addActionEntitiesIdentifiers(__injectCollectionHelper__().cast(Object.class, identifiers));
+		function.addActionEntitiesIdentifiers(CollectionHelper.cast(Object.class, identifiers));
 		return function.execute().getResponse();
 	}
 
@@ -133,7 +136,7 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	
 	@Override
 	public Response saveFromFileExcelSheet(String workbookName, String sheetName,List<String> columnIndexFieldNames) {
-		if(__injectCollectionHelper__().isNotEmpty(columnIndexFieldNames)) {
+		if(CollectionHelper.isNotEmpty(columnIndexFieldNames)) {
 			//Properties properties = new Properties();
 			MapInstanceIntegerToString columnIndexFieldNameMap = __inject__(MapInstanceIntegerToString.class);
 			for(String index : columnIndexFieldNames) {
@@ -175,7 +178,7 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	@SuppressWarnings("unchecked")
 	protected Map<String,Object> __getFiltersMap__(String filters) {
 		Map<String,Object> __filters__ = null;
-		if(__injectStringHelper__().isNotBlank(filters)) {
+		if(StringHelper.isNotBlank(filters)) {
 			/*
 			 * Convert filters from json to map
 			 */
@@ -188,7 +191,7 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	@SuppressWarnings("unchecked")
 	protected Map<String,Object> __buildMapFromString__(String string) {
 		Map<String,Object> map = null;
-		if(__injectStringHelper__().isNotBlank(string)) {
+		if(StringHelper.isNotBlank(string)) {
 			/*
 			 * Convert string from json to map
 			 */

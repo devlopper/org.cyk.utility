@@ -9,10 +9,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
-import org.cyk.utility.collection.CollectionHelperImpl;
-import org.cyk.utility.field.FieldHelperImpl;
 import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.server.business.Business;
 import org.cyk.utility.system.AbstractSystemFunctionServerImpl;
@@ -51,7 +52,7 @@ public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemF
 				String className = klass.getName();
 				className = StringUtils.replaceOnce(className, ".representation.", ".persistence.");
 				className = StringUtils.removeEnd(className, "Dto");
-				__persistenceEntityClass__ = __injectClassHelper__().getByName(className);	
+				__persistenceEntityClass__ = ClassHelper.getByName(className);	
 			}
 		}
 	}
@@ -69,19 +70,19 @@ public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemF
 				Field persistenceBusinessIdentifierField = __inject__(ClassInstancesRuntime.class).get(__persistenceEntityClass__).getBusinessIdentifierField();
 				Integer count = 0;
 				for(Object index : __persistenceEntities__) {
-					Object dto = CollectionHelperImpl.__getElementAt__(__entities__, count);
-					Object identifier = FieldHelperImpl.__read__(index, persistenceSystemIdentifierField); 
+					Object dto = CollectionHelper.getElementAt(__entities__, count);
+					Object identifier = FieldHelper.read(index, persistenceSystemIdentifierField); 
 					if(identifier != null) {
 						identifiersSystem.add(identifier.toString());
 						if(__entityClassSystemIdentifierField__ != null) {
-							FieldHelperImpl.__write__(dto, __entityClassSystemIdentifierField__, identifier.toString());
+							FieldHelper.write(dto, __entityClassSystemIdentifierField__, identifier.toString());
 						}
 					}					
-					identifier = FieldHelperImpl.__read__(index, persistenceBusinessIdentifierField);
+					identifier = FieldHelper.read(index, persistenceBusinessIdentifierField);
 					if(identifier != null) {
 						identifiersBusiness.add(identifier.toString());
 						if(__entityClassBusinessIdentifierField__ != null) {
-							FieldHelperImpl.__write__(dto, __entityClassBusinessIdentifierField__, identifier.toString());
+							FieldHelper.write(dto, __entityClassBusinessIdentifierField__, identifier.toString());
 						}
 					}				
 					count++;

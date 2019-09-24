@@ -2,10 +2,11 @@ package org.cyk.utility.server.representation;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +26,7 @@ public class ResponseEntityDto extends AbstractEntityDto implements  Serializabl
 	}
 	
 	public ResponseEntityDto addMessage(Collection<MessageDto> messages) {
-		if(__inject__(CollectionHelper.class).isNotEmpty(messages)) {
+		if(CollectionHelper.isNotEmpty(messages)) {
 			if(this.messageCollection == null)
 				this.messageCollection = new MessageDtoCollection();
 			this.messageCollection.add(messages);
@@ -34,7 +35,7 @@ public class ResponseEntityDto extends AbstractEntityDto implements  Serializabl
 	}
 	
 	public ResponseEntityDto addMessage(MessageDto...messages) {
-		return addMessage(__inject__(CollectionHelper.class).instanciate(messages));
+		return addMessage(List.of(messages));
 	}
 	
 	public Collection<MessageDto> getMessages(){
@@ -42,7 +43,7 @@ public class ResponseEntityDto extends AbstractEntityDto implements  Serializabl
 	}
 	
 	public MessageDto getMessageAt(Integer index) {
-		return __inject__(CollectionHelper.class).getElementAt(getMessages(),index);
+		return CollectionHelper.getElementAt(getMessages(),index);
 	}
 	
 	/**/

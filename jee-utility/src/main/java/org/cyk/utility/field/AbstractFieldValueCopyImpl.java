@@ -150,7 +150,7 @@ public abstract class AbstractFieldValueCopyImpl extends AbstractFunctionWithPro
 		//__inject__(ThrowableHelper.class).throwRuntimeException("value copy from field <<"+source+">> to field <<"+destination+">> is not yet handled");
 		
 		/*
-		if(!sourceType.isPrimitive() && !sourceType.isEnum() && !__inject__(ClassHelper.class).isInstanceOf(sourceType, Collection.class) && !StringUtils.startsWithAny(sourceType.getName(), "java.","javax.")) {
+		if(!sourceType.isPrimitive() && !sourceType.isEnum() && !ClassHelper.isInstanceOf(sourceType, Collection.class) && !StringUtils.startsWithAny(sourceType.getName(), "java.","javax.")) {
 			//source is a custom object
 			if(Boolean.TRUE.equals(__inject__(ClassInstancesRuntime.class).get(destinationType).getIsPersistable())) {
 				if(destination.isAnnotationPresent(javax.persistence.ManyToOne.class)) {
@@ -190,7 +190,7 @@ public abstract class AbstractFieldValueCopyImpl extends AbstractFunctionWithPro
 		}
 		
 		if(Boolean.TRUE.equals(isUnSet)) {
-			if(!destinationType.isPrimitive() && !sourceType.isEnum() && !__inject__(ClassHelper.class).isInstanceOf(sourceType, Collection.class) && !StringUtils.startsWithAny(destinationType.getName(), "java.","javax.")) {
+			if(!destinationType.isPrimitive() && !sourceType.isEnum() && !ClassHelper.isInstanceOf(sourceType, Collection.class) && !StringUtils.startsWithAny(destinationType.getName(), "java.","javax.")) {
 				value = __inject__(InstanceHelper.class).getByIdentifierBusiness(destinationType, value,properties);
 			}	
 		}

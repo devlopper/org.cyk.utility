@@ -21,7 +21,7 @@ public class ObjectToStringBuilderJsonImpl extends AbstractObjectToStringBuilder
 	@Override
 	protected String __execute__(Object object, FieldInstanceValues fieldInstanceValues) throws Exception {
 		/*ObjectMapper mapper = new ObjectMapper();
-		if(Boolean.TRUE.equals(__inject__(ClassHelper.class).isBelongsToJavaPackages(object.getClass()))) {
+		if(Boolean.TRUE.equals(ClassHelper.isBelongsToJavaPackages(object.getClass()))) {
 			return mapper.writeValueAsString(object);
 		}else {
 			if(CollectionHelper.isEmpty(fieldInstanceValues)) {

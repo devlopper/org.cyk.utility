@@ -5,7 +5,7 @@ import java.io.Serializable;
 import javax.inject.Inject;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
-import org.cyk.utility.string.StringLocation;
+import org.cyk.utility.__kernel__.string.StringLocation;
 import org.cyk.utility.test.TestExpectedString;
 
 import lombok.Getter;

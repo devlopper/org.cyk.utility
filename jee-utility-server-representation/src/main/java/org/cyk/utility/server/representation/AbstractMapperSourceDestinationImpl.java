@@ -1,24 +1,26 @@
 package org.cyk.utility.server.representation;
 
+import java.lang.reflect.Modifier;
+
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.object.__static__.representation.AbstractRepresentationObject;
 import org.cyk.utility.__kernel__.object.__static__.representation.Action;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.string.RegularExpressionHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.array.ArrayHelper;
-import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.clazz.ClassInstance;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.clazz.ClassNameBuilder;
-import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierStringBuilder;
-import org.cyk.utility.string.StringHelper;
-import org.cyk.utility.string.Strings;
 import org.cyk.utility.value.ValueHelper;
 
 public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> extends org.cyk.utility.mapping.AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> {
@@ -39,7 +41,7 @@ public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> ex
 			classNameBuilder.getSourceNamingModel(Boolean.TRUE).server().representation().entities().setSuffix("DtoMapperImpl");
 			classNameBuilder.getDestinationNamingModel(Boolean.TRUE).server().persistence().entities().suffix();
 			__destinationClass__ = DependencyInjection.inject(ValueHelper.class).returnOrThrowIfBlank("persistence entity class"
-					,(Class<DESTINATION>) DependencyInjection.inject(ClassHelper.class).getByName(classNameBuilder));
+					,(Class<DESTINATION>) ClassHelper.getByName(classNameBuilder.execute().getOutput()));
 		}
 		
 		ClassInstance classInstance = DependencyInjection.inject(ClassInstancesRuntime.class).get(__destinationClass__);
@@ -75,7 +77,7 @@ public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> ex
 		if(source instanceof AbstractRepresentationObject) {
 			AbstractRepresentationObject representationObject = (AbstractRepresentationObject) source;
 			Strings actionsIdentifiers = __getActionsIdentifiers__(destination,source);
-			if(DependencyInjection.inject(CollectionHelper.class).isNotEmpty(actionsIdentifiers)) {
+			if(CollectionHelper.isNotEmpty(actionsIdentifiers)) {
 				for(String actionIdentifier : actionsIdentifiers.get()) {
 					String pathFormat = __getPathFormat__(actionIdentifier,destination,source);
 					//TODO is it necessary to get the request. required information can be set once in post construct
@@ -84,7 +86,7 @@ public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> ex
 					String path = DependencyInjection.inject(ArrayHelper.class).isEmpty(pathFormatParameters) ? pathFormat : String.format(pathFormat, pathFormatParameters);
 					String uniformResourceLocator = DependencyInjection.inject(UniformResourceIdentifierStringBuilder.class)
 							.setRequest(request).setPath(path).execute().getOutput();
-					if(DependencyInjection.inject(StringHelper.class).isNotBlank(uniformResourceLocator)) {
+					if(StringHelper.isNotBlank(uniformResourceLocator)) {
 						String actionMethod = __getActionMethod__(actionIdentifier, destination, source);
 						representationObject.add__action__(actionIdentifier, uniformResourceLocator, actionMethod);	
 					}
@@ -128,8 +130,8 @@ public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> ex
 	/**/
 	
 	protected void __project__(DESTINATION destination, SOURCE source,Strings fieldsNames) {
-		if( DependencyInjection.inject(CollectionHelper.class).isNotEmpty(fieldsNames) )
-			DependencyInjection.inject(FieldHelper.class).nullify(source, fieldsNames,Boolean.FALSE);
+		if(CollectionHelper.isNotEmpty(fieldsNames) )
+			org.cyk.utility.__kernel__.field.FieldHelper.nullify(source, RegularExpressionHelper.buildIsNotExactly(fieldsNames.get()),~Modifier.STATIC);
 	}
 	
 	/**/

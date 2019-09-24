@@ -6,8 +6,8 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
-import org.cyk.utility.string.Strings;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.__kernel__.string.Strings;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 /**
  * 

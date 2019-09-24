@@ -7,9 +7,9 @@ import static org.cyk.utility.__kernel__.DependencyInjection.inject;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.array.ArrayHelper;
-import org.cyk.utility.clazz.ClassHelper;
-import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.collection.CollectionInstance;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionInstance;
 import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.mapping.MappingHelper;
@@ -27,10 +27,10 @@ public abstract class AbstractEntityCollectionMapperImpl<SOURCE,SOURCE_ITEM,DEST
 	
 	@SuppressWarnings("unchecked")
 	public AbstractEntityCollectionMapperImpl() {
-		sourceClass = (Class<SOURCE>) inject(ClassHelper.class).getParameterAt(getClass(), 0, Object.class);
-		sourceItemClass = (Class<SOURCE_ITEM>) inject(ClassHelper.class).getParameterAt(getClass(), 1, Object.class);
-		destinationClass = (Class<DESTINATION>) inject(ClassHelper.class).getParameterAt(getClass(), 2, Object.class);
-		destinationItemClass = (Class<DESTINATION_ITEM>) inject(ClassHelper.class).getParameterAt(getClass(), 3, Object.class);
+		sourceClass = (Class<SOURCE>) ClassHelper.getParameterAt(getClass(), 0);
+		sourceItemClass = (Class<SOURCE_ITEM>) ClassHelper.getParameterAt(getClass(), 1);
+		destinationClass = (Class<DESTINATION>) ClassHelper.getParameterAt(getClass(), 2);
+		destinationItemClass = (Class<DESTINATION_ITEM>) ClassHelper.getParameterAt(getClass(), 3);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -57,17 +57,17 @@ public abstract class AbstractEntityCollectionMapperImpl<SOURCE,SOURCE_ITEM,DEST
     	if(source != null) {
     		if(source instanceof AbstractEntityCollection) {
         		AbstractEntityCollection<SOURCE_ITEM> sourceCollection = (AbstractEntityCollection<SOURCE_ITEM>) source;
-    			if(Boolean.TRUE.equals(inject(CollectionHelper.class).isNotEmpty(sourceCollection.getCollection()))) {
+    			if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(sourceCollection.getCollection()))) {
     				destination = inject(destinationClass);
     				if(destination instanceof CollectionInstance) {
     					CollectionInstance<DESTINATION_ITEM> destinationCollection = (CollectionInstance<DESTINATION_ITEM>) destination;
     		    		for(SOURCE_ITEM index : sourceCollection.getCollection()) {
     		    			DESTINATION_ITEM destinationItem = null;
     		    			Object identifier = null;
-    		    			if(destinationItem == null && (identifier = inject(FieldHelper.class).getFieldValueSystemIdentifier(index)) != null)
+    		    			if(destinationItem == null && (identifier = org.cyk.utility.__kernel__.field.FieldHelper.readSystemIdentifier(index)) != null)
     		    				destinationItem = inject(InstanceHelper.class).getByIdentifierSystem(destinationItemClass, identifier);
     		    			
-    		    			if(destinationItem == null && (identifier = inject(FieldHelper.class).getFieldValueBusinessIdentifier(index)) != null)
+    		    			if(destinationItem == null && (identifier = org.cyk.utility.__kernel__.field.FieldHelper.readBusinessIdentifier(index)) != null)
     		    				destinationItem = inject(InstanceHelper.class).getByIdentifierBusiness(destinationItemClass, identifier);
     		    			
     		    			if(destinationItem == null)

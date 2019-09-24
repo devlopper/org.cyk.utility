@@ -1,7 +1,7 @@
 package org.cyk.utility.server.representation.hierarchy;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.clazz.ClassHelper;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.mapping.MapperSourceDestination;
 import org.cyk.utility.server.representation.AbstractMapperSourceDestinationImpl;
 
@@ -21,7 +21,7 @@ public abstract class AbstractHierarchyMapperImpl<SOURCE,DESTINATION,NODE_SOURCE
     @SuppressWarnings("unchecked")
 	protected Class<NODE_MAPPER> __getNodeMapperClass__() {
 		if(nodeMapperClass == null)
-			nodeMapperClass = (Class<NODE_MAPPER>) DependencyInjection.inject(ClassHelper.class).getByName(DependencyInjection.inject(ClassHelper.class).getParameterAt(getClass(), 4, Object.class).getName());
+			nodeMapperClass = (Class<NODE_MAPPER>) ClassHelper.getByName(ClassHelper.getParameterAt(getClass(), 4).getName());
     	return nodeMapperClass;
     }
     

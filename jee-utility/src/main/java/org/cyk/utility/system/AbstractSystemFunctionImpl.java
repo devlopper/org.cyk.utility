@@ -276,7 +276,7 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	
 	@Override
 	public SystemFunction setEntityFieldNames(String... entityFieldNames) {
-		return setEntityFieldNames(List.of(entityFieldNames));
+		return setEntityFieldNames(entityFieldNames == null ? null : List.of(entityFieldNames));
 	}
 	
 	@Override
