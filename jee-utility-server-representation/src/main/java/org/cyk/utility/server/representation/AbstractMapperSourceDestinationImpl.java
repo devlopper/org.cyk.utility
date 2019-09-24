@@ -131,7 +131,7 @@ public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> ex
 	
 	protected void __project__(DESTINATION destination, SOURCE source,Strings fieldsNames) {
 		if(CollectionHelper.isNotEmpty(fieldsNames) )
-			org.cyk.utility.__kernel__.field.FieldHelper.nullify(source, RegularExpressionHelper.buildIsNotExactly(fieldsNames.get()),~Modifier.STATIC);
+			org.cyk.utility.__kernel__.field.FieldHelper.nullify(source, RegularExpressionHelper.buildIsNotExactly(fieldsNames.get()),null);
 	}
 	
 	/**/
