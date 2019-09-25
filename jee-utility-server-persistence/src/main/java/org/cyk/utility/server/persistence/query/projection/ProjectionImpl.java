@@ -43,7 +43,9 @@ public class ProjectionImpl extends AbstractObject implements Projection,Seriali
 
 	@Override
 	public Fields getFields(Boolean injectIfNull) {
-		return (Fields) __getInjectIfNull__(PROPERTY_FIELDS, injectIfNull);
+		if(fields == null && Boolean.TRUE.equals(injectIfNull))
+			fields = __inject__(Fields.class);
+		return fields;
 	}
 
 	@Override

@@ -1,19 +1,18 @@
 package org.cyk.utility.server.persistence.test.arquillian;
 
+import java.lang.reflect.Field;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
-import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.__kernel__.collection.CollectionHelper;
-import org.cyk.utility.field.Fields;
-import org.cyk.utility.field.FieldsGetter;
-import org.cyk.utility.server.persistence.PersistenceEntity;
-import org.cyk.utility.server.persistence.PersistenceLayer;
 import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
 import org.cyk.utility.__kernel__.system.action.SystemActionDelete;
 import org.cyk.utility.__kernel__.system.action.SystemActionRead;
 import org.cyk.utility.__kernel__.system.action.SystemActionUpdate;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
+import org.cyk.utility.server.persistence.PersistenceEntity;
+import org.cyk.utility.server.persistence.PersistenceLayer;
 import org.junit.Test;
 
 public abstract class AbstractPersistenceEntityIntegrationTest<ENTITY> extends AbstractPersistenceArquillianIntegrationTest {
@@ -51,8 +50,8 @@ public abstract class AbstractPersistenceEntityIntegrationTest<ENTITY> extends A
 	public void readOneByBusinessIdentifier() throws Exception{
 		Object action = __inject__(SystemActionRead.class);
 		Object object = __instanciateEntity__(action);
-		Fields fields = __inject__(FieldsGetter.class).setFieldName(FieldName.IDENTIFIER).setValueUsageType(ValueUsageType.BUSINESS).setClazz(object.getClass()).execute().getOutput();
-		if(CollectionHelper.isNotEmpty(fields)) {
+		Field field = FieldHelper.getByName(object.getClass(),FieldName.IDENTIFIER,ValueUsageType.BUSINESS);
+		if(field != null) {
 			__createEntity__(object);
 			__readEntity__(__getEntityClass__(action),__getFieldValueBusinessIdentifier__(object), ValueUsageType.BUSINESS);
 			//cleanup

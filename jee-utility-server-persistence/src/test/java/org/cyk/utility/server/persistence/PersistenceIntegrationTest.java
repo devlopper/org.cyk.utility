@@ -20,7 +20,6 @@ import org.cyk.utility.__kernel__.computation.SortOrder;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.field.FieldInstancesRuntime;
 import org.cyk.utility.mapping.MappingHelper;
 import org.cyk.utility.server.persistence.api.MyEntityPersistence;

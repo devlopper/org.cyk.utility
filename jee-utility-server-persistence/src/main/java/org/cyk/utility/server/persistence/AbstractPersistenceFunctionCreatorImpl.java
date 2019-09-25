@@ -5,12 +5,11 @@ import java.util.Collection;
 import java.util.UUID;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
 import org.cyk.utility.field.FieldInstance;
 import org.cyk.utility.field.FieldInstancesRuntime;
-import org.cyk.utility.field.FieldValueGetter;
-import org.cyk.utility.field.FieldValueSetter;
 import org.cyk.utility.server.persistence.jpa.AbstractIdentifiedByString;
-import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
 
 public abstract class AbstractPersistenceFunctionCreatorImpl extends AbstractPersistenceFunctionTransactionImpl implements PersistenceFunctionCreator, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -28,7 +27,7 @@ public abstract class AbstractPersistenceFunctionCreatorImpl extends AbstractPer
 			for(Object index : entities) {
 				if(__entityClassSystemIdentifierField__ != null) {
 					//Generate value if needed
-					Object value = __inject__(FieldValueGetter.class).execute(index, __entityClassSystemIdentifierField__).getOutput();
+					Object value = FieldHelper.read(index, __entityClassSystemIdentifierField__);
 					if(value == null) {
 						FieldInstance fieldInstance = __inject__(FieldInstancesRuntime.class).get(index.getClass(), __entityClassSystemIdentifierField__.getName());
 						if(Boolean.TRUE.equals(fieldInstance.getIsGeneratable())) {
@@ -38,7 +37,7 @@ public abstract class AbstractPersistenceFunctionCreatorImpl extends AbstractPer
 								__injectThrowableHelper__().throwRuntimeException("cannot generate value of type "+fieldInstance.getType());
 						}
 						if(value != null)
-							__inject__(FieldValueSetter.class).execute(index, __entityClassSystemIdentifierField__, value);
+							FieldHelper.write(index, __entityClassSystemIdentifierField__, value);
 					}	
 				}
 			}
