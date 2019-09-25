@@ -8,12 +8,13 @@ import javax.enterprise.context.Dependent;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
+import org.cyk.utility.__kernel__.internationalization.InternationalizationKeyStringType;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.string.Case;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
-import org.cyk.utility.__kernel__.system.action.SystemAction;
 
 @Dependent @Deprecated
 public class InternalizationKeyStringBuilderImpl extends AbstractStringFunctionImpl implements InternalizationKeyStringBuilder, Serializable {

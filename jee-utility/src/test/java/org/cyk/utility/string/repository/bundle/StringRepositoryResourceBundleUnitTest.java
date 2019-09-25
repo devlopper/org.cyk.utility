@@ -4,8 +4,8 @@ import java.util.Arrays;
 
 import javax.inject.Inject;
 
+import org.cyk.utility.__kernel__.internationalization.ResourceBundle;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.string.repository.ResourceBundle;
 import org.cyk.utility.string.repository.StringRepositoryResourceBundle;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Disabled;

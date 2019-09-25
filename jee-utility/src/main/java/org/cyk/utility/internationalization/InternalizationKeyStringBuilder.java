@@ -1,5 +1,6 @@
 package org.cyk.utility.internationalization;
 
+import org.cyk.utility.__kernel__.internationalization.InternationalizationKeyStringType;
 import org.cyk.utility.string.StringFunction;
 
 @Deprecated

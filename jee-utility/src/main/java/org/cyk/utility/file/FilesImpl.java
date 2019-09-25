@@ -1,7 +1,6 @@
 package org.cyk.utility.file;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -20,11 +19,10 @@ public class FilesImpl extends AbstractCollectionInstanceImpl<File> implements F
 	private Boolean isDuplicateChecksumAllowed;
 	
 	@Override
-	protected void ____add____(Collection<File> __collection__, File file) {
+	protected Boolean __isAddable__(File file) {
 		Boolean isDuplicateChecksumAllowed = getIsDuplicateChecksumAllowed();
-		if(isDuplicateChecksumAllowed==null || Boolean.TRUE.equals(isDuplicateChecksumAllowed) || 
-				!__collection__.stream().map(x -> x.getChecksum()).collect(Collectors.toList()).contains(file.getChecksum()))
-			super.____add____(__collection__, file);
+		return Boolean.TRUE.equals(super.__isAddable__(file)) && (isDuplicateChecksumAllowed==null || Boolean.TRUE.equals(isDuplicateChecksumAllowed) || 
+				!collection.stream().map(x -> x.getChecksum()).collect(Collectors.toList()).contains(file.getChecksum()));
 	}
 	
 	@Override

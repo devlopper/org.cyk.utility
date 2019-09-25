@@ -12,6 +12,10 @@ import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
 public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject implements CollectionInstance<T>, Serializable {
 	private static final long serialVersionUID = -1888054558236819369L;
 
@@ -21,6 +25,8 @@ public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject i
 	protected Collection<T> collection;
 	private Class<?> collectionClass;
 	private Boolean isDoNotAddNull;
+	@Getter @Setter @Accessors(chain=true) private Boolean isDistinct;
+	@Getter @Setter @Accessors(chain=true) private Integer defaultIndex;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -91,6 +97,16 @@ public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject i
 		}
 		return null;
 	}
+	
+	@Override
+	public T getDefault() {
+		if(collection == null || collection.isEmpty())
+			return null;
+		Integer defaultIndex = getDefaultIndex();
+		if(defaultIndex == null || defaultIndex < 0)
+			defaultIndex = 0;
+		return getAt(defaultIndex);
+	}
 
 	@Override
 	public CollectionInstance<T> set(Collection<T> collection) {
@@ -112,42 +128,74 @@ public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject i
 	}
 
 	@Override
-	public CollectionInstance<T> add(Collection<T> collection) {
-		if(CollectionHelper.isNotEmpty(collection)) {
-			__add__(collection);
-		}
+	public CollectionInstance<T> add(Collection<T> collection,Integer index) {
+		if(collection == null || collection.isEmpty())
+			return this;
+		__add__(collection,index);
 		return this;
 	}
 	
-	protected void  __add__(Collection<T> collection) {
-		Collection<T> __collection__ = __getCollection__(Boolean.TRUE);
+	@Override
+	public CollectionInstance<T> add(Collection<T> collection) {
+		if(collection == null || collection.isEmpty())
+			return this;
+		__add__(collection,null);
+		return this;
+	}
+	
+	protected void  __add__(Collection<T> collection,Integer index) {
+		if(this.collection == null)
+			__getCollection__(Boolean.TRUE);
 		Boolean isDoNotAddNull = getIsDoNotAddNull();
 		if(isDoNotAddNull == null)
 			isDoNotAddNull = Boolean.TRUE;
-		for(T index : collection)
-			if(index != null || Boolean.FALSE.equals(isDoNotAddNull))
-				____add____(__collection__,index);
+		Collection<T> addable = null;
+		for(T element : collection)
+			if(Boolean.TRUE.equals(__isAddable__(element))) {
+				if(addable == null)
+					addable = new ArrayList<>();
+				addable.add(element);
+			}
+		if(addable != null) {
+			if(index == null)
+				this.collection.addAll(addable);
+			else
+				((List<T>)this.collection).addAll(index,addable);
+		}			
 	}
 	
-	protected void ____add____(Collection<T> __collection__,T item) {
-		__collection__.add(item);
+	protected Boolean __isAddable__(T element) {
+		if(Boolean.TRUE.equals(isDoNotAddNull) && element == null)
+			return Boolean.FALSE;
+		if(Boolean.TRUE.equals(isDistinct) && collection.contains(element))
+			return Boolean.FALSE;
+		return Boolean.TRUE;
 	}
 
+	@Override
+	public CollectionInstance<T> add(Integer index,@SuppressWarnings("unchecked") T... elements) {
+		if(elements == null || elements.length == 0)
+			return this;
+		__add__(List.of(elements),index);
+		return this;
+	}
+	
 	@Override
 	public CollectionInstance<T> add(@SuppressWarnings("unchecked") T... elements) {
 		if(elements == null || elements.length == 0)
 			return this;
-		add(List.of(elements));
+		__add__(List.of(elements),null);
 		return this;
 	}
 	
 	@Override
 	public CollectionInstance<T> add(CollectionInstance<T> elements) {
-		if(CollectionHelper.isNotEmpty(elements))
-			add(elements.get());
+		if(CollectionHelper.isEmpty(elements))
+			return this;
+		__add__(elements.get(),null);
 		return this;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public CollectionInstance<T> addInstanceOf(Collection<?> collection) {

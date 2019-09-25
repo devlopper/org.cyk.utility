@@ -1,12 +1,12 @@
 package org.cyk.utility.__kernel__.collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.cyk.utility.__kernel__.collection.CollectionHelper.isEmpty;
-import static org.cyk.utility.__kernel__.collection.CollectionHelper.isNotEmpty;
-import static org.cyk.utility.__kernel__.collection.CollectionHelper.getSize;
 import static org.cyk.utility.__kernel__.collection.CollectionHelper.getElementAt;
 import static org.cyk.utility.__kernel__.collection.CollectionHelper.getElementsFrom;
 import static org.cyk.utility.__kernel__.collection.CollectionHelper.getElementsFromTo;
+import static org.cyk.utility.__kernel__.collection.CollectionHelper.getSize;
+import static org.cyk.utility.__kernel__.collection.CollectionHelper.isEmpty;
+import static org.cyk.utility.__kernel__.collection.CollectionHelper.isNotEmpty;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -107,4 +107,5 @@ public class CollectionHelperUnitTest extends AbstractWeldUnitTest {
 	public void getElementsFromTo_(){
 		assertThat(getElementsFromTo(List.of(5,7,4,2,9),1,3)).containsExactly(7,4);
 	}
+	
 }

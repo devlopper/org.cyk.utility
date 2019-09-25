@@ -10,14 +10,15 @@ import java.util.Locale;
 import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.internationalization.InternationalizationKeyStringType;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.Case;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.string.Strings;
+import org.cyk.utility.__kernel__.throwable.EntityNotFoundException;
+import org.cyk.utility.__kernel__.throwable.ServiceNotFoundException;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl;
 import org.cyk.utility.string.repository.StringRepositoryResourceBundle;
-import org.cyk.utility.system.exception.EntityNotFoundException;
-import org.cyk.utility.system.exception.ServiceNotFoundException;
 
 @Dependent @Deprecated
 public class InternalizationStringBuilderImpl extends AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl implements InternalizationStringBuilder,Serializable{

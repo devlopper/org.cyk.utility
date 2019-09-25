@@ -8,9 +8,9 @@ import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.throwable.SystemException;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.helper.AbstractHelper;
-import org.cyk.utility.system.exception.SystemException;
 import org.cyk.utility.value.ValueHelper;
 import org.cyk.utility.value.ValueHelperImpl;
 

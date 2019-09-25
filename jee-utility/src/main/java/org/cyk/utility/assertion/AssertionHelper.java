@@ -1,17 +1,17 @@
 package org.cyk.utility.assertion;
 
-import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.assertion.Assertion;
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.field.FieldName;
+import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
+import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.helper.Helper;
-import org.cyk.utility.internationalization.InternationalizationHelperImpl;
 import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.number.NumberHelperImpl;
 import org.cyk.utility.value.Value;
 import org.cyk.utility.value.ValueHelperImpl;
-import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 public interface AssertionHelper extends Helper {
 
@@ -20,7 +20,7 @@ public interface AssertionHelper extends Helper {
 			
 		}else {
 			messageIdentifierWhenValueIsNotTrue = ValueHelperImpl.__defaultToIfBlank__(messageIdentifierWhenValueIsNotTrue,defaultDessageIdentifierWhenValueIsNotTrue);
-			assertion.setMessageWhenValueIsNotTrue(InternationalizationHelperImpl.__buildString__(messageIdentifierWhenValueIsNotTrue, arguments, null, null));
+			assertion.setMessageWhenValueIsNotTrue(InternationalizationHelper.buildString(messageIdentifierWhenValueIsNotTrue, arguments, null, null));
 			assertion.setIdentifier(String.format("assertion.%s", identifier));	
 		}
 	}

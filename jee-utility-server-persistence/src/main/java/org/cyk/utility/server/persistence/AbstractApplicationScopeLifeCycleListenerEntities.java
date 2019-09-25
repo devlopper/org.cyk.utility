@@ -2,8 +2,9 @@ package org.cyk.utility.server.persistence;
 import java.io.Serializable;
 import java.lang.reflect.Modifier;
 
-import org.cyk.utility.__kernel__.constant.ConstantCharacter;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantString;
+import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
 import org.cyk.utility.__kernel__.object.__static__.identifiable.AbstractIdentifiedPersistableByLong;
 import org.cyk.utility.__kernel__.object.__static__.identifiable.AbstractIdentifiedPersistableByString;
 import org.cyk.utility.array.ArrayHelper;
@@ -11,10 +12,8 @@ import org.cyk.utility.clazz.ClassInstance;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.clazz.Classes;
 import org.cyk.utility.clazz.ClassesGetter;
-import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.field.FieldInstance;
 import org.cyk.utility.field.FieldInstancesRuntime;
-import org.cyk.utility.internationalization.InternationalizationHelperImpl;
 import org.cyk.utility.server.persistence.jpa.AbstractIdentifiedByString;
 import org.cyk.utility.server.persistence.jpa.AbstractIdentifiedByStringAndCoded;
 import org.cyk.utility.server.persistence.jpa.AbstractIdentifiedByStringAndCodedAndNamed;
@@ -32,7 +31,7 @@ public abstract class AbstractApplicationScopeLifeCycleListenerEntities extends 
 	public void __initialize__(Object object) {
 		__inject__(org.cyk.utility.server.persistence.ApplicationScopeLifeCycleListener.class).initialize(null);
 		String packageName = getClass().getPackage().getName();		
-		InternationalizationHelperImpl.__addResourceBundleAt__(packageName+ConstantCharacter.DOT+ConstantString.MESSAGE,0);
+		InternationalizationHelper.addResourceBundlesFromNames(getClass(),0, ConstantString.MESSAGE);
 		
 		Class<?>[] basesClasses = __getClassesBasesClasses__();
 		if(__inject__(ArrayHelper.class).isNotEmpty(basesClasses)) {

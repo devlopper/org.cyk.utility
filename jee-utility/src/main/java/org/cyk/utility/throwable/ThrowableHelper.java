@@ -1,7 +1,7 @@
 package org.cyk.utility.throwable;
 
+import org.cyk.utility.__kernel__.throwable.SystemException;
 import org.cyk.utility.helper.Helper;
-import org.cyk.utility.system.exception.SystemException;
 
 public interface ThrowableHelper extends Helper {
 
