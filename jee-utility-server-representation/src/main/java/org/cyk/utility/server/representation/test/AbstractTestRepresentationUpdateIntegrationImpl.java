@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.field.FieldValueSetter;
 import org.cyk.utility.server.representation.RepresentationEntity;
 import org.cyk.utility.server.representation.RepresentationLayer;
 
@@ -31,7 +31,7 @@ public abstract class AbstractTestRepresentationUpdateIntegrationImpl extends Ab
 		Collection<String> fieldNames = new ArrayList<>();
 		if(map!=null)
 			for(Map.Entry<String, Object> index : map.entrySet()) {
-				__inject__(FieldValueSetter.class).execute(object, index.getKey(), index.getValue());
+				FieldHelper.write(object, index.getKey(), index.getValue());
 				fieldNames.add(index.getKey());
 			}
 		__response__ = representation.updateOne(object,StringHelper.concatenate(fieldNames, ConstantCharacter.COMA.toString()));

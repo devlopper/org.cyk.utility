@@ -19,6 +19,4 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 	public void __destroy__(Object object) {}
 	
 	/**/
-	
-	public static final Integer LEVEL = new Integer(org.cyk.utility.server.business.ApplicationScopeLifeCycleListener.LEVEL+1);
 }

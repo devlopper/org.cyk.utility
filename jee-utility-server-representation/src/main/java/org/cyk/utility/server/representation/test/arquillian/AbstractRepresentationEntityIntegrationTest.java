@@ -11,8 +11,6 @@ import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.string.StringLocation;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.field.FieldHelper;
-import org.cyk.utility.field.FieldNameGetter;
 import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.map.MapHelper;
 import org.cyk.utility.random.RandomHelper;
@@ -134,7 +132,7 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 	@Test
 	public void updateOne() throws Exception{
 		Object object = __instanciateEntity__(null);
-		String businessIdentifierFieldName = __inject__(FieldNameGetter.class).execute(object.getClass(), FieldName.IDENTIFIER, ValueUsageType.BUSINESS).execute().getOutput();
+		String businessIdentifierFieldName = org.cyk.utility.__kernel__.field.FieldHelper.getName(object.getClass(), FieldName.IDENTIFIER, ValueUsageType.BUSINESS);
 		Object newBusinessIdentifierFieldValue = __inject__(RandomHelper.class).getAlphanumeric(5);
 		
 		__inject__(TestRepresentationUpdate.class).setFieldValuesMap(object, __inject__(MapHelper.class).instanciateKeyAsStringValueAsObject(businessIdentifierFieldName

@@ -3,9 +3,9 @@ package org.cyk.utility.server.representation.test;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.server.representation.RepresentationEntity;
 import org.cyk.utility.server.representation.RepresentationLayer;
 
@@ -37,7 +37,7 @@ public abstract class AbstractTestRepresentationReadIntegrationImpl extends Abst
 		if(mustUnexist) {
 			
 		}else {
-			assertionHelper.assertEquals(valueUsageType+" identitier do not match", object,__inject__(FieldValueGetter.class).execute(one, FieldName.IDENTIFIER, valueUsageType).getOutput());
+			assertionHelper.assertEquals(valueUsageType+" identitier do not match", object,FieldHelper.read(one, FieldName.IDENTIFIER, valueUsageType));
 		}
 		
 	}
