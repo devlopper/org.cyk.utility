@@ -16,7 +16,4 @@ public class ApplicationScopeLifeCycleListener extends org.cyk.utility.__kernel_
 	@Override
 	public void __destroy__(Object object) {}
 	
-	/**/
-	
-	public static final Integer LEVEL = new Integer(org.cyk.utility.server.persistence.ApplicationScopeLifeCycleListener.LEVEL+1);
 }

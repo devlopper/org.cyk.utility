@@ -50,7 +50,7 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 		for(Integer index  = 0; index < arrayInstanceTwoDimensionString.getFirstDimensionElementCount(); index = index + 1) {
 			ENTITY entitiy = ClassHelper.instanciate(__persistenceEntityClass__);
 			for(Map.Entry<Integer, String> indexEntry : columnIndexFieldNameMap.getEntries()) {
-				__injectFieldValueSetter__().execute(entitiy, indexEntry.getValue(), arrayInstanceTwoDimensionString.get(index, indexEntry.getKey()));
+				FieldHelper.write(entitiy, indexEntry.getValue(), arrayInstanceTwoDimensionString.get(index, indexEntry.getKey()));
 			}
 			if(entities == null)
 				entities = new ArrayList<ENTITY>();
@@ -410,8 +410,8 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 					if(collection == null)
 						collection = new ArrayList<>();
 					D instance = ClassHelper.instanciate(klass);
-					__injectFieldValueSetter__().execute(instance, masterFieldName, master);
-					__injectFieldValueSetter__().execute(instance, fieldName, index);
+					FieldHelper.write(instance, masterFieldName, master);
+					FieldHelper.write(instance, fieldName, index);
 					collection.add(instance);	
 				}
 			}

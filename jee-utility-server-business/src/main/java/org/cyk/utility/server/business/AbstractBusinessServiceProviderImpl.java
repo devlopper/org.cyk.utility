@@ -9,11 +9,10 @@ import javax.transaction.Transactional;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.assertion.AssertionBuilderNull;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.server.persistence.PersistenceEntity;
 import org.cyk.utility.server.persistence.PersistenceLayer;
 import org.cyk.utility.system.AbstractSystemServiceProviderImpl;
-import org.cyk.utility.__kernel__.system.action.SystemAction;
 
 public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends AbstractSystemServiceProviderImpl implements BusinessServiceProvider<OBJECT>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -273,12 +272,6 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 	
 	protected PersistenceEntity<?> __injectPersistenceFromClass__(Class<?> entityClass){
 		return (PersistenceEntity<?>) __inject__(PersistenceLayer.class).injectInterfaceClassFromEntityClass(entityClass);
-	}
-	
-	/**/
-	
-	protected AssertionBuilderNull __injectAssertionBuilderNull__(Boolean isAffirmation,Object object,String...names){
-		return __inject__(AssertionBuilderNull.class).setIsAffirmation(isAffirmation).setFieldValueGetter(object,names);
 	}
 	
 	@SuppressWarnings("unchecked")

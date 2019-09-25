@@ -3,10 +3,10 @@ package org.cyk.utility.server.business.test;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.server.business.Business;
 
 public abstract class AbstractTestBusinessReadIntegrationImpl extends AbstractTestBusinessFunctionIntegrationImpl implements TestBusinessReadIntegration {
@@ -32,7 +32,7 @@ public abstract class AbstractTestBusinessReadIntegrationImpl extends AbstractTe
 		if(mustUnexist) {
 			
 		}else {
-			assertionHelper.assertEquals(valueUsageType+" identitier do not match", object,__inject__(FieldValueGetter.class).execute(one, FieldName.IDENTIFIER, valueUsageType).getOutput());
+			assertionHelper.assertEquals(valueUsageType+" identitier do not match", object,FieldHelper.read(one, FieldName.IDENTIFIER, valueUsageType));
 		}
 		
 	}
