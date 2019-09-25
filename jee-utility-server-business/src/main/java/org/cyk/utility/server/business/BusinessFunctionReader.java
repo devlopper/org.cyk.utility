@@ -2,7 +2,7 @@ package org.cyk.utility.server.business;
 
 import java.util.Collection;
 
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 public interface BusinessFunctionReader extends BusinessFunction {

@@ -2,7 +2,7 @@ package org.cyk.utility.assertion;
 
 import java.util.Collection;
 
-import org.cyk.utility.object.Objects;
+import org.cyk.utility.__kernel__.object.Objects;
 
 public interface AssertionsProviderFor<T> extends AssertionsProvider {
 

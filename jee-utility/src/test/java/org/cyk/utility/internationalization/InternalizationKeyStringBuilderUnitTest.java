@@ -3,16 +3,18 @@ package org.cyk.utility.internationalization;
 import java.net.ConnectException;
 import java.net.UnknownHostException;
 
-import org.cyk.utility.system.action.SystemActionCreate;
-import org.cyk.utility.system.action.SystemActionDelete;
-import org.cyk.utility.system.action.SystemActionList;
-import org.cyk.utility.system.action.SystemActionProcess;
-import org.cyk.utility.system.action.SystemActionRead;
-import org.cyk.utility.system.action.SystemActionSelect;
-import org.cyk.utility.system.action.SystemActionUpdate;
+import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
+import org.cyk.utility.__kernel__.system.action.SystemActionDelete;
+import org.cyk.utility.__kernel__.system.action.SystemActionList;
+import org.cyk.utility.__kernel__.system.action.SystemActionProcess;
+import org.cyk.utility.__kernel__.system.action.SystemActionRead;
+import org.cyk.utility.__kernel__.system.action.SystemActionSelect;
+import org.cyk.utility.__kernel__.system.action.SystemActionUpdate;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+@Deprecated @Disabled
 public class InternalizationKeyStringBuilderUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 

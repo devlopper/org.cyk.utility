@@ -3,9 +3,9 @@ package org.cyk.utility.system;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.system.action.SystemActionCreate;
+import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
+import org.cyk.utility.__kernel__.system.action.SystemActionSelect;
 import org.cyk.utility.system.action.SystemActionRelatedClassesNamesGetter;
-import org.cyk.utility.system.action.SystemActionSelect;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 

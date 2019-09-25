@@ -10,10 +10,10 @@ import org.cyk.utility.field.Fields;
 import org.cyk.utility.field.FieldsGetter;
 import org.cyk.utility.server.persistence.PersistenceEntity;
 import org.cyk.utility.server.persistence.PersistenceLayer;
-import org.cyk.utility.system.action.SystemActionCreate;
-import org.cyk.utility.system.action.SystemActionDelete;
-import org.cyk.utility.system.action.SystemActionRead;
-import org.cyk.utility.system.action.SystemActionUpdate;
+import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
+import org.cyk.utility.__kernel__.system.action.SystemActionDelete;
+import org.cyk.utility.__kernel__.system.action.SystemActionRead;
+import org.cyk.utility.__kernel__.system.action.SystemActionUpdate;
 import org.junit.Test;
 
 public abstract class AbstractPersistenceEntityIntegrationTest<ENTITY> extends AbstractPersistenceArquillianIntegrationTest {

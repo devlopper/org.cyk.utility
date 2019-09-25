@@ -2,7 +2,7 @@ package org.cyk.utility.server.persistence;
 
 import java.io.Serializable;
 
-import org.cyk.utility.system.action.SystemActionDelete;
+import org.cyk.utility.__kernel__.system.action.SystemActionDelete;
 
 public abstract class AbstractPersistenceFunctionRemoverImpl extends AbstractPersistenceFunctionTransactionImpl implements PersistenceFunctionRemover, Serializable {
 	private static final long serialVersionUID = 1L;

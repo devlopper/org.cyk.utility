@@ -8,7 +8,7 @@ import javax.persistence.EntityManager;
 import org.cyk.utility.server.persistence.AbstractPersistenceFunctionRemoverImpl;
 import org.cyk.utility.server.persistence.PersistenceFunctionRemover;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 
 @Dependent
 public class PersistenceFunctionRemoverImpl extends AbstractPersistenceFunctionRemoverImpl implements PersistenceFunctionRemover,Serializable {

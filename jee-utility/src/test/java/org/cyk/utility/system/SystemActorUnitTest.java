@@ -1,6 +1,6 @@
 package org.cyk.utility.system;
 
-import org.cyk.utility.system.action.SystemActorServer;
+import org.cyk.utility.__kernel__.system.action.SystemActorServer;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 

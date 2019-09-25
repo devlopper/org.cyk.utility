@@ -1,7 +1,7 @@
 package org.cyk.utility.server.persistence;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 public interface PersistenceFunctionReader extends PersistenceFunction {

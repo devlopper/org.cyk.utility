@@ -1,11 +1,11 @@
 package org.cyk.utility.identifier.resource;
 
-import static org.cyk.utility.identifier.resource.UniformResourceIdentifierHelper.build;
-import static org.cyk.utility.identifier.resource.UniformResourceIdentifierHelper.buildParameterValue;
-import static org.cyk.utility.identifier.resource.UniformResourceIdentifierHelper.buildPath;
-import static org.cyk.utility.identifier.resource.UniformResourceIdentifierHelper.buildQuery;
-import static org.cyk.utility.identifier.resource.UniformResourceIdentifierHelper.buildQueryFromStringsMap;
-import static org.cyk.utility.identifier.resource.UniformResourceIdentifierHelper.setPathByIdentifier;
+import static org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierHelper.build;
+import static org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierHelper.buildParameterValue;
+import static org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierHelper.buildPath;
+import static org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierHelper.buildQuery;
+import static org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierHelper.buildQueryFromStringsMap;
+import static org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierHelper.setPathByIdentifier;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -15,8 +15,8 @@ import java.util.Map;
 
 import org.cyk.utility.__kernel__.identifier.resource.ParameterName;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
-import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.action.SystemActionCreate;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
 import org.cyk.utility.test.weld.AbstractWeldUnitTestPerformance;
 import org.junit.jupiter.api.Test;
 

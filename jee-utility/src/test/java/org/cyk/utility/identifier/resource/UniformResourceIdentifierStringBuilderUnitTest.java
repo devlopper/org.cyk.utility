@@ -4,10 +4,11 @@ import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.__kernel__.function.FunctionRunnableMap;
-import org.cyk.utility.request.RequestProperty;
+import org.cyk.utility.__kernel__.identifier.resource.RequestProperty;
 import org.cyk.utility.request.RequestPropertyValueGetter;
 import org.cyk.utility.request.RequestPropertyValueGetterImpl;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import lombok.AllArgsConstructor;
@@ -16,6 +17,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+@Deprecated @Disabled
 public class UniformResourceIdentifierStringBuilderUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 	

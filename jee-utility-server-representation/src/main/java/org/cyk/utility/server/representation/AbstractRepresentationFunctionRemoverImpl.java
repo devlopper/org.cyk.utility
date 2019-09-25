@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.system.action.SystemActionDelete;
+import org.cyk.utility.__kernel__.system.action.SystemActionDelete;
 
 public abstract class AbstractRepresentationFunctionRemoverImpl extends AbstractRepresentationFunctionTransactionImpl implements RepresentationFunctionRemover, Serializable {
 	private static final long serialVersionUID = 1L;

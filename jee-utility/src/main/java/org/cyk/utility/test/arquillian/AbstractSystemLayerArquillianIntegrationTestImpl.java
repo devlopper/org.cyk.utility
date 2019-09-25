@@ -11,11 +11,11 @@ import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.action.SystemActionCreate;
-import org.cyk.utility.system.action.SystemActionDelete;
-import org.cyk.utility.system.action.SystemActionRead;
-import org.cyk.utility.system.action.SystemActionUpdate;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
+import org.cyk.utility.__kernel__.system.action.SystemActionDelete;
+import org.cyk.utility.__kernel__.system.action.SystemActionRead;
+import org.cyk.utility.__kernel__.system.action.SystemActionUpdate;
 
 public abstract class AbstractSystemLayerArquillianIntegrationTestImpl<LAYER_ENTITY_INTERFACE> extends org.cyk.utility.test.arquillian.AbstractArquillianIntegrationTest implements SystemLayerIntegrationTest<LAYER_ENTITY_INTERFACE>, Serializable {
 	private static final long serialVersionUID = 1L;

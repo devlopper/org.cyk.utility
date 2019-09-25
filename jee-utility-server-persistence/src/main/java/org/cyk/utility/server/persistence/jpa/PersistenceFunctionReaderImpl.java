@@ -23,8 +23,8 @@ import org.cyk.utility.sql.builder.Tuple;
 import org.cyk.utility.sql.jpql.JpqlQualifier;
 import org.cyk.utility.sql.jpql.builder.QueryStringBuilderSelectJpql;
 import org.cyk.utility.sql.jpql.builder.QueryWherePredicateStringBuilderEqualJpql;
-import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.action.SystemActionRead;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemActionRead;
 
 @Dependent
 public class PersistenceFunctionReaderImpl extends AbstractPersistenceFunctionReaderImpl implements PersistenceFunctionReader,Serializable {

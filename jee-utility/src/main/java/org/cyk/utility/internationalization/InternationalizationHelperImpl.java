@@ -26,7 +26,7 @@ import org.cyk.utility.array.ArrayHelperImpl;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.locale.LocaleHelper;
 import org.cyk.utility.string.repository.ResourceBundle;
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.system.exception.EntityNotFoundException;
 import org.cyk.utility.system.exception.ServiceNotFoundException;
 import org.cyk.utility.value.ValueHelperImpl;

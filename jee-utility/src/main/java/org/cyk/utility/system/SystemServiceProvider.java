@@ -3,7 +3,7 @@ package org.cyk.utility.system;
 import java.util.Collection;
 
 import org.cyk.utility.service.ServiceProvider;
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 
 public interface SystemServiceProvider extends ServiceProvider {
 

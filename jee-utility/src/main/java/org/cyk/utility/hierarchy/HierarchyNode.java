@@ -1,7 +1,7 @@
 package org.cyk.utility.hierarchy;
 
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
-import org.cyk.utility.object.Objects;
+import org.cyk.utility.__kernel__.object.Objects;
 
 public interface HierarchyNode extends Objectable {
 

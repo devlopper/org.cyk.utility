@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.function.Function;
-import org.cyk.utility.object.Objects;
+import org.cyk.utility.__kernel__.object.Objects;
 
 public abstract class AbstractAssertionsProviderForImpl<T> extends AbstractAssertionsProviderImpl implements AssertionsProviderFor<T>,Serializable {
 	private static final long serialVersionUID = 1L;

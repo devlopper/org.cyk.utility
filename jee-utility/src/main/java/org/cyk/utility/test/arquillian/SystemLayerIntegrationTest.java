@@ -3,7 +3,7 @@ package org.cyk.utility.test.arquillian;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.system.action.SystemActor;
+import org.cyk.utility.__kernel__.system.action.SystemActor;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 

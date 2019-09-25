@@ -1,9 +1,9 @@
 package org.cyk.utility.identifier.resource;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
-import org.cyk.utility.system.action.SystemActionCreate;
-import org.cyk.utility.system.action.SystemActionList;
-import org.cyk.utility.system.action.SystemActionTree;
+import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
+import org.cyk.utility.__kernel__.system.action.SystemActionList;
+import org.cyk.utility.__kernel__.system.action.SystemActionTree;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 

@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import javax.ws.rs.core.Response;
 
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 
 public abstract class AbstractRepresentationFunctionTransactionImpl extends AbstractRepresentationFunctionImpl implements RepresentationFunctionTransaction, Serializable {
 	private static final long serialVersionUID = 1L;

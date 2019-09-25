@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import javax.ws.rs.core.Response;
 
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 
 public abstract class AbstractSystemClientExceptionImpl extends AbstractSystemExceptionImpl implements SystemClientException,Serializable {
 	private static final long serialVersionUID = 1L;

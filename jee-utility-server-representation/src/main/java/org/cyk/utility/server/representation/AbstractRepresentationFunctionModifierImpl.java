@@ -10,7 +10,7 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.field.FieldValueCopy;
-import org.cyk.utility.system.action.SystemActionUpdate;
+import org.cyk.utility.__kernel__.system.action.SystemActionUpdate;
 
 public abstract class AbstractRepresentationFunctionModifierImpl extends AbstractRepresentationFunctionTransactionImpl implements RepresentationFunctionModifier, Serializable {
 	private static final long serialVersionUID = 1L;

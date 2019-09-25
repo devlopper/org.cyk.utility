@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import javax.transaction.Transactional;
 
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 
 public abstract class AbstractBusinessFunctionTransactionImpl extends AbstractBusinessFunctionImpl implements BusinessFunctionTransaction, Serializable {
 	private static final long serialVersionUID = 1L;

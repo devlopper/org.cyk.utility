@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.enterprise.context.Dependent;
 import javax.servlet.http.HttpServletRequest;
 
+import org.cyk.utility.__kernel__.identifier.resource.RequestProperty;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
 @Dependent

@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 
 @Dependent @Deprecated
 public class UniformResourceIdentifierParameterNameStringBuilderImpl extends AbstractStringFunctionImpl implements UniformResourceIdentifierParameterNameStringBuilder,Serializable {

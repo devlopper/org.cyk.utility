@@ -8,8 +8,8 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.server.persistence.Persistence;
-import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.action.SystemActionRead;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemActionRead;
 
 public abstract class AbstractBusinessFunctionReaderImpl extends AbstractBusinessFunctionImpl implements BusinessFunctionReader, Serializable {
 	private static final long serialVersionUID = 1L;

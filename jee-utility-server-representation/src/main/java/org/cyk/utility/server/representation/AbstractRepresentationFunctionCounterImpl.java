@@ -3,8 +3,8 @@ package org.cyk.utility.server.representation;
 import java.io.Serializable;
 import java.util.Collection;
 
-import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.action.SystemActionCount;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemActionCount;
 
 public abstract class AbstractRepresentationFunctionCounterImpl extends AbstractRepresentationFunctionImpl implements RepresentationFunctionCounter, Serializable {
 	private static final long serialVersionUID = 1L;

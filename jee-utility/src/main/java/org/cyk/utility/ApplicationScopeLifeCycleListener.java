@@ -2,9 +2,7 @@ package org.cyk.utility;
 import java.io.Serializable;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.ws.rs.client.Client;
 
-import org.cyk.utility.request.RequestHelper;
 import org.cyk.utility.stream.distributed.StreamDistributedHelper;
 import org.cyk.utility.stream.distributed.Topic;
 

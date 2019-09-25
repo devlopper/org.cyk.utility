@@ -3,8 +3,8 @@ package org.cyk.utility.system;
 import java.io.Serializable;
 import java.util.Collection;
 
-import org.cyk.utility.system.action.SystemActor;
-import org.cyk.utility.system.action.SystemActorClient;
+import org.cyk.utility.__kernel__.system.action.SystemActor;
+import org.cyk.utility.__kernel__.system.action.SystemActorClient;
 
 import lombok.Getter;
 import lombok.Setter;

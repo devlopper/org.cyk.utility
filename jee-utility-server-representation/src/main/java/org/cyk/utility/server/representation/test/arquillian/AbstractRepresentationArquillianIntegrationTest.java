@@ -17,7 +17,7 @@ import org.cyk.utility.server.representation.AbstractEntityFromPersistenceEntity
 import org.cyk.utility.server.representation.Representation;
 import org.cyk.utility.server.representation.RepresentationEntity;
 import org.cyk.utility.server.representation.ResponseHelper;
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerRepresentation;
 import org.cyk.utility.test.arquillian.AbstractSystemServerArquillianIntegrationTestImpl;

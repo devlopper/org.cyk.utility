@@ -1,7 +1,7 @@
 package org.cyk.utility.system.action;
 
 import org.cyk.utility.string.StringsFunction;
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 
 public interface SystemActionRelatedClassesNamesGetter extends StringsFunction {
 

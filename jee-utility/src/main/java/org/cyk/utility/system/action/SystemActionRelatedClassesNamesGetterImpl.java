@@ -7,8 +7,13 @@ import javax.enterprise.context.Dependent;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
-import org.cyk.utility.string.AbstractStringsFunctionImpl;
 import org.cyk.utility.__kernel__.string.Strings;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
+import org.cyk.utility.__kernel__.system.action.SystemActionDelete;
+import org.cyk.utility.__kernel__.system.action.SystemActionRead;
+import org.cyk.utility.__kernel__.system.action.SystemActionUpdate;
+import org.cyk.utility.string.AbstractStringsFunctionImpl;
 
 @Dependent
 public class SystemActionRelatedClassesNamesGetterImpl extends AbstractStringsFunctionImpl implements SystemActionRelatedClassesNamesGetter,Serializable {

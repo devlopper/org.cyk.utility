@@ -17,7 +17,7 @@ import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.server.business.Business;
 import org.cyk.utility.system.AbstractSystemFunctionServerImpl;
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerRepresentation;
 

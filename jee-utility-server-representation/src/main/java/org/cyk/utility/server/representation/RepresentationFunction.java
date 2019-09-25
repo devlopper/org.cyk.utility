@@ -5,7 +5,7 @@ import java.util.Collection;
 import javax.ws.rs.core.Response;
 
 import org.cyk.utility.system.SystemFunctionServer;
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 
 //TODO execution should follow these steps:
 //1 - process

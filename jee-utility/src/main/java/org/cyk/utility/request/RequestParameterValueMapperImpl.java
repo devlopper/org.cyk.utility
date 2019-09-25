@@ -8,23 +8,23 @@ import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemActionAdd;
+import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
+import org.cyk.utility.__kernel__.system.action.SystemActionDelete;
+import org.cyk.utility.__kernel__.system.action.SystemActionList;
+import org.cyk.utility.__kernel__.system.action.SystemActionProcess;
+import org.cyk.utility.__kernel__.system.action.SystemActionRead;
+import org.cyk.utility.__kernel__.system.action.SystemActionRemove;
+import org.cyk.utility.__kernel__.system.action.SystemActionSelect;
+import org.cyk.utility.__kernel__.system.action.SystemActionTree;
+import org.cyk.utility.__kernel__.system.action.SystemActionUpdate;
+import org.cyk.utility.__kernel__.system.action.SystemActionView;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterNameStringBuilder;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterValueMatrix;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterValueStringBuilder;
 import org.cyk.utility.object.ObjectByStringMap;
-import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.action.SystemActionAdd;
-import org.cyk.utility.system.action.SystemActionCreate;
-import org.cyk.utility.system.action.SystemActionDelete;
-import org.cyk.utility.system.action.SystemActionList;
-import org.cyk.utility.system.action.SystemActionProcess;
-import org.cyk.utility.system.action.SystemActionRead;
-import org.cyk.utility.system.action.SystemActionRemove;
-import org.cyk.utility.system.action.SystemActionSelect;
-import org.cyk.utility.system.action.SystemActionTree;
-import org.cyk.utility.system.action.SystemActionUpdate;
-import org.cyk.utility.system.action.SystemActionView;
 
 @Dependent @Deprecated
 public class RequestParameterValueMapperImpl extends AbstractFunctionWithPropertiesAsInputImpl<Object> implements RequestParameterValueMapper,Serializable {

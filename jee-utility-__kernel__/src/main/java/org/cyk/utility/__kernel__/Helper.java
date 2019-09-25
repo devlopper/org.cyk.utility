@@ -66,4 +66,18 @@ public interface Helper {
 			return Boolean.TRUE;
 		return isHaveModifiers(encodedModifiers, List.of(modifiers),modifiers.length);
 	}
+
+	@SuppressWarnings("unchecked")
+	static <T extends Enum<?>> T getEnumByName(Class<T> klass,String name,Boolean isCaseSensitive) {
+		if(klass == null || !klass.isEnum())
+			return null;
+		for(Object index : klass.getEnumConstants())
+			if(isCaseSensitive && ((Enum<?>)index).name().equals(name) || !isCaseSensitive && ((Enum<?>)index).name().equalsIgnoreCase(name))
+				return (T) index;
+		return null;		
+	}
+	
+	static <T extends Enum<?>> T getEnumByName(Class<T> klass,String name) {
+		return getEnumByName(klass, name,Boolean.FALSE);
+	}
 }

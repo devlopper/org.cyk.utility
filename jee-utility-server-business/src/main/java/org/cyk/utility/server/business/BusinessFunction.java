@@ -1,7 +1,7 @@
 package org.cyk.utility.server.business;
 
 import org.cyk.utility.system.SystemFunctionServer;
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 
 public interface BusinessFunction extends SystemFunctionServer {
 	

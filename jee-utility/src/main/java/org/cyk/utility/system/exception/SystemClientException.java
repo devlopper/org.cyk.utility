@@ -2,7 +2,7 @@ package org.cyk.utility.system.exception;
 
 import javax.ws.rs.core.Response;
 
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 
 public interface SystemClientException extends SystemException {
 

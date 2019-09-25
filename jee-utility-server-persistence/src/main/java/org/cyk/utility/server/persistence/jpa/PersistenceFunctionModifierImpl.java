@@ -6,7 +6,7 @@ import javax.persistence.EntityManager;
 import org.cyk.utility.server.persistence.AbstractPersistenceFunctionModifierImpl;
 import org.cyk.utility.server.persistence.PersistenceFunctionModifier;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 
 @Dependent
 public class PersistenceFunctionModifierImpl extends AbstractPersistenceFunctionModifierImpl implements PersistenceFunctionModifier {
