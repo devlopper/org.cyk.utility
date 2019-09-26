@@ -2,6 +2,7 @@ package org.cyk.utility.log.message;
 
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.log.LogMessage;
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
 import org.cyk.utility.log.Log;
 

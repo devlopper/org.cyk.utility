@@ -7,7 +7,7 @@ import javax.enterprise.context.Dependent;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.field.FieldValueGetter;
 
-@Dependent
+@Dependent @Deprecated
 public class ConditionBuilderNullImpl extends AbstractConditionBuilderImpl implements ConditionBuilderNull, Serializable {
 	private static final long serialVersionUID = 1L;
 

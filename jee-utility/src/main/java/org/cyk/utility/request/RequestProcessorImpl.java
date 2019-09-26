@@ -16,7 +16,7 @@ import org.cyk.utility.map.MapHelper;
 import org.cyk.utility.object.ObjectByObjectMap;
 
 
-@Dependent
+@Dependent @Deprecated
 public class RequestProcessorImpl extends AbstractFunctionWithPropertiesAsInputImpl<Object> implements RequestProcessor,Serializable {
 	private static final long serialVersionUID = 1L;
 

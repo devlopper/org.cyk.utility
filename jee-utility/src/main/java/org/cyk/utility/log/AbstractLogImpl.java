@@ -11,7 +11,7 @@ import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.stacktrace.StackTraceHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
-import org.cyk.utility.log.message.LogMessage;
+import org.cyk.utility.__kernel__.log.LogMessage;
 import org.cyk.utility.log.message.LogMessageBuilder;
 
 

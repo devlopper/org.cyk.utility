@@ -5,11 +5,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
+import org.cyk.utility.__kernel__.log.LogMessage;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.log.Log;
-import org.cyk.utility.__kernel__.value.ValueHelper;
 
 public abstract class AbstractLogMessageBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<LogMessage> implements LogMessageBuilder,Serializable {
 	private static final long serialVersionUID = 1L;

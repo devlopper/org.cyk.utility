@@ -1,4 +1,4 @@
-package org.cyk.utility.log.message;
+package org.cyk.utility.__kernel__.log;
 
 import java.io.Serializable;
 import java.util.List;

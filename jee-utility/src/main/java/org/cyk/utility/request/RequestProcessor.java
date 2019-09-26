@@ -6,6 +6,8 @@ import org.cyk.utility.function.FunctionWithPropertiesAsInput;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierStringBuilder;
 import org.cyk.utility.object.ObjectByObjectMap;
 
+@Deprecated
+//integrate to a helper
 public interface RequestProcessor extends FunctionWithPropertiesAsInput<Object> {
 
 	Client getClient();

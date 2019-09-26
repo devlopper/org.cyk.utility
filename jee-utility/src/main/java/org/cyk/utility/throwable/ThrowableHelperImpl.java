@@ -9,10 +9,9 @@ import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.throwable.SystemException;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.helper.AbstractHelper;
-import org.cyk.utility.__kernel__.value.ValueHelper;
-import org.cyk.utility.__kernel__.value.ValueHelper;
 
 @ApplicationScoped
 public class ThrowableHelperImpl extends AbstractHelper implements ThrowableHelper,Serializable {

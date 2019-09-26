@@ -6,6 +6,7 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
+@Deprecated
 public abstract class AbstractValueBuilderImpl<VALUE> extends AbstractFunctionWithPropertiesAsInputImpl<VALUE> implements ValueBuilder<VALUE>,Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -6,7 +6,7 @@ import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.field.FieldValueGetter;
 
-@Dependent
+@Dependent @Deprecated
 public class ValueBuilderBooleanImpl extends AbstractValueBuilderImpl<Boolean> implements ValueBuilderBoolean, Serializable {
 	private static final long serialVersionUID = 1L;
 

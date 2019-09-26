@@ -2,8 +2,10 @@ package org.cyk.utility.condition;
 
 import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+@Deprecated @Disabled
 public class ConditionBuilderNullUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 

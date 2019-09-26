@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.function.Function;
 import org.cyk.utility.__kernel__.log.LogLevel;
-import org.cyk.utility.log.message.LogMessage;
+import org.cyk.utility.__kernel__.log.LogMessage;
 import org.cyk.utility.log.message.LogMessageBuilder;
 
 public interface Log extends Function<LogMessage,Void> {

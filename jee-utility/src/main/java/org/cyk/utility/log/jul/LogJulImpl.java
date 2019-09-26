@@ -15,7 +15,7 @@ import org.cyk.utility.log.AbstractLogImpl;
 import org.cyk.utility.log.LogEventEntityBuilder;
 import org.cyk.utility.log.LogEventEntityRepository;
 import org.cyk.utility.__kernel__.log.LogLevel;
-import org.cyk.utility.log.message.LogMessage;
+import org.cyk.utility.__kernel__.log.LogMessage;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 
 @Dependent

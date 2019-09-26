@@ -70,7 +70,9 @@ public class OperatingSystemCommandExecutorImpl extends AbstractFunctionWithProp
 	
 	@Override
 	public OperatingSystemCommandBuilder getCommand(Boolean injectIfNull) {
-		return (OperatingSystemCommandBuilder) __getInjectIfNull__(FIELD_COMMAND, injectIfNull);
+		if(command == null && Boolean.TRUE.equals(injectIfNull))
+			command = __inject__(OperatingSystemCommandBuilder.class);
+		return command;
 	}
 	
 	@Override
@@ -113,6 +115,5 @@ public class OperatingSystemCommandExecutorImpl extends AbstractFunctionWithProp
 	}
 
 	/**/
-	
-	private static final String FIELD_COMMAND = "command";
+
 }
