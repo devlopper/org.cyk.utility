@@ -11,7 +11,7 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.field.Fields;
 import org.cyk.utility.log.Log;
-import org.cyk.utility.log.LogLevel;
+import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 @ApplicationScoped

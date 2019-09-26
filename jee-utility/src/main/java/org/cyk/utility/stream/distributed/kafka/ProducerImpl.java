@@ -10,10 +10,11 @@ import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.cyk.utility.__kernel__.string.Strings;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.stream.distributed.AbstractProducerImpl;
 import org.cyk.utility.stream.distributed.Message;
 import org.cyk.utility.stream.distributed.ProducerCallback;
-import org.cyk.utility.__kernel__.string.Strings;
 
 @Dependent
 public class ProducerImpl extends AbstractProducerImpl implements Serializable {
@@ -27,8 +28,8 @@ public class ProducerImpl extends AbstractProducerImpl implements Serializable {
 		getProperties().setIfNull("acks", "all");
 		Class<?> keySerialisationClass = getKeySerialisationClass();
 		Class<?> valueSerialisationClass = getValueSerialisationClass();
-		getProperties().setIfNull("key.serializer", __injectValueHelper__().defaultToIfNull(keySerialisationClass, StringSerializer.class));
-		getProperties().setIfNull("value.serializer", __injectValueHelper__().defaultToIfNull(valueSerialisationClass, StringSerializer.class));
+		getProperties().setIfNull("key.serializer", ValueHelper.defaultToIfNull(keySerialisationClass, StringSerializer.class));
+		getProperties().setIfNull("value.serializer", ValueHelper.defaultToIfNull(valueSerialisationClass, StringSerializer.class));
 		kafkaProducer = new KafkaProducer<>(getProperties().buildJavaUtilProperties());
 	}
 	

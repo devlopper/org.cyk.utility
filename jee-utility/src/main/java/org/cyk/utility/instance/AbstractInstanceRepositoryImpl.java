@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Set;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.log.Log;
-import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.repository.AbstractRepositoryImpl;
 import org.cyk.utility.repository.Repository;
 

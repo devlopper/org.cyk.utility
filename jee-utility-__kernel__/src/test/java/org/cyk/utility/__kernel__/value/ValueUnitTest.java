@@ -1,9 +1,9 @@
-package org.cyk.utility.value;
+package org.cyk.utility.__kernel__.value;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.cyk.utility.field.FieldInstance;
-import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.__kernel__.field.FieldInstance;
+import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 
 import lombok.Getter;

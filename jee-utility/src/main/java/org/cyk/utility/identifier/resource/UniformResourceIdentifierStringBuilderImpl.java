@@ -11,6 +11,7 @@ import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.identifier.resource.RequestProperty;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.map.MapHelper;
 import org.cyk.utility.object.ObjectByObjectMap;
 import org.cyk.utility.request.RequestPropertyValueGetter;
@@ -57,7 +58,7 @@ public class UniformResourceIdentifierStringBuilderImpl extends AbstractStringFu
 		Object pathObject = getPath();
 		if(pathObject == null && StringHelper.isNotBlank(string))
 			setPath(pathObject = __getRequestProperty__(RequestProperty.PATH,string));
-		String path = __injectValueHelper__().defaultToIfNull(StringHelper.get(getPath()), ConstantEmpty.STRING) ;
+		String path = ValueHelper.defaultToIfNull(StringHelper.get(getPath()), ConstantEmpty.STRING) ;
 		
 		if(StringHelper.isNotBlank(context))
 			path = context + ConstantCharacter.SLASH + path;
@@ -99,7 +100,7 @@ public class UniformResourceIdentifierStringBuilderImpl extends AbstractStringFu
 		
 		String query = StringHelper.get(getQuery());
 		if(StringHelper.isBlank(query))
-			setQuery(query = __injectValueHelper__().defaultToIfNull(__getRequestProperty__(RequestProperty.QUERY,string),ConstantEmpty.STRING));
+			setQuery(query = ValueHelper.defaultToIfNull(__getRequestProperty__(RequestProperty.QUERY,string),ConstantEmpty.STRING));
 		
 		setFormatArguments(FORMAT_ARGUMENT_PATH_QUERY_SEPARATOR,Boolean.TRUE.equals(StringHelper.isBlank(query)) ? ConstantEmpty.STRING : ConstantCharacter.QUESTION_MARK);
 		

@@ -14,14 +14,14 @@ import org.apache.logging.log4j.core.appender.AbstractAppender;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
 import org.apache.logging.log4j.core.layout.PatternLayout;
 import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.instance.InstanceRepository;
 import org.cyk.utility.log.LogEventEntity;
 import org.cyk.utility.log.LogEventEntityBuilder;
-import org.cyk.utility.log.LogLevel;
-import org.cyk.utility.number.NumberHelper;
+import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.random.RandomHelper;
 import org.cyk.utility.repository.Repository;
 

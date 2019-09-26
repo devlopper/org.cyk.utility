@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.string.Strings;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 
 public abstract class AbstractConsumerImpl extends AbstractProducerConsumerImpl implements Consumer,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -17,10 +18,10 @@ public abstract class AbstractConsumerImpl extends AbstractProducerConsumerImpl 
 	
 	@Override
 	protected void __execute__(Strings topics) throws Exception {
-		Class<? extends ConsumerMessageProcessor> messageProcessorClass = __injectValueHelper__().returnOrThrowIfBlank("consumer message processor",getMessageProcessorClass());
+		Class<? extends ConsumerMessageProcessor> messageProcessorClass = ValueHelper.returnOrThrowIfBlank("consumer message processor",getMessageProcessorClass());
 		__prepare__(topics);
 		
-		Boolean isKeepMessages = __injectValueHelper__().defaultToIfNull(getIsKeepMessages(), Boolean.FALSE);	
+		Boolean isKeepMessages = ValueHelper.defaultToIfNull(getIsKeepMessages(), Boolean.FALSE);	
 		Long numberOfPollRequest = getNumberOfPollRequest();
 		Long numberOfMessages = getNumberOfMessages();
 		
@@ -113,7 +114,9 @@ public abstract class AbstractConsumerImpl extends AbstractProducerConsumerImpl 
 	
 	@Override
 	public Messages getMessages(Boolean injectIfNull) {
-		return (Messages) __getInjectIfNull__(FIELD_MESSAGES, injectIfNull);
+		if(messages == null && Boolean.TRUE.equals(injectIfNull))
+			messages = __inject__(Messages.class);
+		return messages;
 	}
 
 	@Override
@@ -153,5 +156,4 @@ public abstract class AbstractConsumerImpl extends AbstractProducerConsumerImpl 
 	
 	/**/
 	
-	private static final String FIELD_MESSAGES = "messages";
 }

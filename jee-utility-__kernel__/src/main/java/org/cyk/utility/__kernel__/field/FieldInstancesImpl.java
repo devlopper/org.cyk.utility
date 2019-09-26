@@ -1,4 +1,4 @@
-package org.cyk.utility.field;
+package org.cyk.utility.__kernel__.field;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -8,6 +8,7 @@ import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.collection.AbstractCollectionInstanceImpl;
 import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.field.FieldInstance;
 import org.cyk.utility.__kernel__.string.StringHelper;
 
 

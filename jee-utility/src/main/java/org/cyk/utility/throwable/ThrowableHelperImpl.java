@@ -11,8 +11,8 @@ import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.throwable.SystemException;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.helper.AbstractHelper;
-import org.cyk.utility.value.ValueHelper;
-import org.cyk.utility.value.ValueHelperImpl;
+import org.cyk.utility.__kernel__.value.ValueHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 
 @ApplicationScoped
 public class ThrowableHelperImpl extends AbstractHelper implements ThrowableHelper,Serializable {
@@ -190,12 +190,12 @@ public class ThrowableHelperImpl extends AbstractHelper implements ThrowableHelp
 	}
 
 	public static void __throwRuntimeExceptionIfEmpty__(Object value, String message) {
-		if(ValueHelperImpl.__isEmpty__(value))
+		if(ValueHelper.isEmpty(value))
 			__throwRuntimeException__(message);
 	}
 
 	public static void __throwRuntimeExceptionIfBlank__(Object value, String message) {
-		if(ValueHelperImpl.__isBlank__(value))
+		if(ValueHelper.isBlank(value))
 			__throwRuntimeException__(message);
 	}
 }

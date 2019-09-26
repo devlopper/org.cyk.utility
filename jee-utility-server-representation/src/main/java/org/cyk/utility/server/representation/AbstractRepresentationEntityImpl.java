@@ -14,6 +14,7 @@ import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.clazz.ClassNameBuilder;
 import org.cyk.utility.map.MapInstanceIntegerToString;
@@ -35,14 +36,14 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 			ClassNameBuilder classNameBuilder = __inject__(ClassNameBuilder.class).setKlass(getClass());
 			classNameBuilder.getSourceNamingModel(Boolean.TRUE).server().representation().impl().suffix();
 			classNameBuilder.getDestinationNamingModel(Boolean.TRUE).server().representation().entities().suffix();
-			__entityClass__ = __injectValueHelper__().returnOrThrowIfBlank("entity class",(Class<ENTITY>) ClassHelper.getByName(classNameBuilder.execute().getOutput()));
+			__entityClass__ = ValueHelper.returnOrThrowIfBlank("entity class",(Class<ENTITY>) ClassHelper.getByName(classNameBuilder.execute().getOutput()));
 		}
 		
 		if(__persistenceEntityClass__ == null) {
 			ClassNameBuilder classNameBuilder = __inject__(ClassNameBuilder.class).setKlass(getClass());
 			classNameBuilder.getSourceNamingModel(Boolean.TRUE).server().representation().impl().suffix();
 			classNameBuilder.getDestinationNamingModel(Boolean.TRUE).server().persistence().entities();
-			__persistenceEntityClass__ = __injectValueHelper__().returnOrThrowIfBlank("persistence entity class",(Class<PERSISTENCE_ENTITY>) ClassHelper.getByName(classNameBuilder.execute().getOutput()));
+			__persistenceEntityClass__ = ValueHelper.returnOrThrowIfBlank("persistence entity class",(Class<PERSISTENCE_ENTITY>) ClassHelper.getByName(classNameBuilder.execute().getOutput()));
 		}
 		
 	}

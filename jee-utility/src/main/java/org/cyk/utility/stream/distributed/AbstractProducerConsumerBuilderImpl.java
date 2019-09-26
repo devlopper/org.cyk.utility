@@ -2,6 +2,7 @@ package org.cyk.utility.stream.distributed;
 
 import java.io.Serializable;
 
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
 public abstract class AbstractProducerConsumerBuilderImpl<OUTPUT extends ProducerConsumer> extends AbstractFunctionWithPropertiesAsInputImpl<OUTPUT> implements ProducerConsumerBuilder<OUTPUT>,Serializable {
@@ -11,7 +12,7 @@ public abstract class AbstractProducerConsumerBuilderImpl<OUTPUT extends Produce
 	
 	@Override
 	protected OUTPUT __execute__() throws Exception {
-		Topic topic = __injectValueHelper__().returnOrThrowIfBlank("topic", getTopic());
+		Topic topic = ValueHelper.returnOrThrowIfBlank("topic", getTopic());
 		return __execute__(topic);
 	}
 	

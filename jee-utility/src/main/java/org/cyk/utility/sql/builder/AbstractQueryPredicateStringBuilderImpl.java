@@ -13,7 +13,7 @@ import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.criteria.Criteria;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl;
-import org.cyk.utility.value.ValueHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 
 public abstract class AbstractQueryPredicateStringBuilderImpl extends AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl implements QueryPredicateStringBuilder, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -42,8 +42,8 @@ public abstract class AbstractQueryPredicateStringBuilderImpl extends AbstractFu
 			}
 			Tuple tuple = new Tuple().setName(classSimpleName);
 			
-			FieldName fieldName = __inject__(ValueHelper.class).defaultToIfNull(criteria.getFieldName(), FieldName.IDENTIFIER);
-			ValueUsageType valueUsageType = __inject__(ValueHelper.class).defaultToIfNull(criteria.getFieldValueUsageType(),ValueUsageType.BUSINESS);
+			FieldName fieldName = ValueHelper.defaultToIfNull(criteria.getFieldName(), FieldName.IDENTIFIER);
+			ValueUsageType valueUsageType = ValueHelper.defaultToIfNull(criteria.getFieldValueUsageType(),ValueUsageType.BUSINESS);
 			
 			String fieldNameAsString = criteria.getFieldNameAsString();
 			if(StringHelper.isBlank(fieldNameAsString)){				
@@ -77,8 +77,8 @@ public abstract class AbstractQueryPredicateStringBuilderImpl extends AbstractFu
 			}
 			Tuple tuple = new Tuple().setName(classSimpleName);
 			
-			FieldName fieldName = __inject__(ValueHelper.class).defaultToIfNull(criteria.getFieldName(), FieldName.IDENTIFIER);
-			ValueUsageType valueUsageType = __inject__(ValueHelper.class).defaultToIfNull(criteria.getFieldValueUsageType(),ValueUsageType.BUSINESS);
+			FieldName fieldName = ValueHelper.defaultToIfNull(criteria.getFieldName(), FieldName.IDENTIFIER);
+			ValueUsageType valueUsageType = ValueHelper.defaultToIfNull(criteria.getFieldValueUsageType(),ValueUsageType.BUSINESS);
 			
 			String fieldNameAsString = criteria.getFieldNameAsString();
 			if(StringHelper.isBlank(fieldNameAsString)){				

@@ -15,6 +15,7 @@ import org.cyk.utility.__kernel__.function.FunctionExecutionPhase;
 import org.cyk.utility.__kernel__.function.FunctionExecutionPhaseMoment;
 import org.cyk.utility.__kernel__.function.FunctionExecutionPhaseMomentBegin;
 import org.cyk.utility.__kernel__.function.FunctionExecutionPhaseTry;
+import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.object.Objects;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.StringHelper;
@@ -34,14 +35,13 @@ import org.cyk.utility.enumeration.EnumGetter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
 import org.cyk.utility.function.FunctionHelper;
 import org.cyk.utility.log.Log;
-import org.cyk.utility.log.LogLevel;
+import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.notification.NotificationBuilders;
 import org.cyk.utility.notification.Notifications;
-import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.throwable.ThrowableHelper;
 import org.cyk.utility.type.BooleanHelper;
-import org.cyk.utility.value.ValueHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -104,7 +104,7 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 
 	@Override
 	protected void ____execute____() {
-		Boolean isActionRequired = __injectValueHelper__().defaultToIfNull(getIsActionRequired(),Boolean.TRUE);
+		Boolean isActionRequired = ValueHelper.defaultToIfNull(getIsActionRequired(),Boolean.TRUE);
 		if(__action__ == null && Boolean.TRUE.equals(isActionRequired)) {			
 			__inject__(ThrowableHelper.class).throwRuntimeException(getClass().getSimpleName()+" : action must not be null");
 		} else {
@@ -138,7 +138,7 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 		if(numberOfProcessedElement != null && numberOfProcessedElement > 0)
 			addLogMessageBuilderParameter("count", numberOfProcessedElement);
 		
-		__isBatchable__ = __inject__(ValueHelper.class).defaultToIfNull(BooleanHelper.get(getProperty(Properties.IS_BATCHABLE)),Boolean.FALSE);
+		__isBatchable__ = ValueHelper.defaultToIfNull(BooleanHelper.get(getProperty(Properties.IS_BATCHABLE)),Boolean.FALSE);
 		if(Boolean.TRUE.equals(__isBatchable__)) {
 			__batchSize__ = NumberHelper.getInteger(getProperty(Properties.BATCH_SIZE), 30);
 			addLogMessageBuilderParameter("batch", __batchSize__);

@@ -13,7 +13,7 @@ import org.cyk.utility.server.persistence.Persistence;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
 import org.cyk.utility.type.BooleanHelper;
-import org.cyk.utility.value.ValueHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 
 public abstract class AbstractBusinessFunctionCreatorImpl extends AbstractBusinessFunctionTransactionImpl implements BusinessFunctionCreator, Serializable {
 	private static final long serialVersionUID = 1L;

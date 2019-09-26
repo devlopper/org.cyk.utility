@@ -6,6 +6,7 @@ import java.security.MessageDigest;
 import javax.enterprise.context.Dependent;
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
 @Dependent
@@ -17,8 +18,8 @@ public class HashFunctionImpl extends AbstractFunctionWithPropertiesAsInputImpl<
 	
 	@Override
 	protected String __execute__() throws Exception {
-		byte[] bytes = __injectValueHelper__().returnOrThrowIfBlank("hash function bytes", getBytes());
-		String algorithm = __injectValueHelper__().returnOrThrowIfBlank("hash function algorithm", getAlgorithm());
+		byte[] bytes = ValueHelper.returnOrThrowIfBlank("hash function bytes", getBytes());
+		String algorithm = ValueHelper.returnOrThrowIfBlank("hash function algorithm", getAlgorithm());
 		MessageDigest messageDigest = MessageDigest.getInstance(algorithm);
 		messageDigest.update(bytes);
 		return new HexBinaryAdapter().marshal(messageDigest.digest());

@@ -6,6 +6,7 @@ import java.io.Serializable;
 import javax.enterprise.context.Dependent;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.krysalis.barcode4j.impl.code128.Code128Bean;
 import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
@@ -19,7 +20,7 @@ public class StringToBarCodeBytesBuilderImpl extends AbstractFunctionWithPropert
 	
 	@Override
 	protected byte[] __execute__() throws Exception {
-		String string = __injectValueHelper__().returnOrThrowIfBlank("String to bar code bytes builder", getString()).toString();
+		String string = ValueHelper.returnOrThrowIfBlank("String to bar code bytes builder", getString()).toString();
 		Code128Bean bean = new Code128Bean();
 		final int dpi = 160;
 		//Configure the barcode generator

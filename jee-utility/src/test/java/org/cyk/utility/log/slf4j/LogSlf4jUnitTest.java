@@ -3,7 +3,7 @@ package org.cyk.utility.log.slf4j;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.log.Log;
-import org.cyk.utility.log.LogLevel;
+import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.log.message.LogMessageBuilder;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;

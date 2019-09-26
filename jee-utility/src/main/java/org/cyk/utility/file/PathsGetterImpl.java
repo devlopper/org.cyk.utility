@@ -11,8 +11,9 @@ import java.util.function.Consumer;
 import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
-import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.__kernel__.string.Strings;
+import org.cyk.utility.__kernel__.value.ValueHelper;
+import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
 @Dependent @Deprecated
 public class PathsGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Paths> implements PathsGetter,Serializable {
@@ -25,9 +26,9 @@ public class PathsGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<P
 	@Override
 	protected Paths __execute__() throws Exception {
 		Paths paths =  __inject__(Paths.class);
-		Strings directories = __injectValueHelper__().returnOrThrowIfBlank("paths getter directories", getDirectories());
-		Boolean isDirectoryGettable = __injectValueHelper__().defaultToIfNull(getIsDirectoryGettable(),Boolean.TRUE);
-		Boolean isFileGettable = __injectValueHelper__().defaultToIfNull(getIsFileGettable(),Boolean.TRUE);
+		Strings directories = ValueHelper.returnOrThrowIfBlank("paths getter directories", getDirectories());
+		Boolean isDirectoryGettable = ValueHelper.defaultToIfNull(getIsDirectoryGettable(),Boolean.TRUE);
+		Boolean isFileGettable = ValueHelper.defaultToIfNull(getIsFileGettable(),Boolean.TRUE);
 		
 		Collection<Path> pathCollection = new ArrayList<Path>();
 		directories.get().forEach(new Consumer<String>() {

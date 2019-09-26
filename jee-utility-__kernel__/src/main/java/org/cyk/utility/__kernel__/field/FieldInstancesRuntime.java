@@ -1,7 +1,8 @@
-package org.cyk.utility.field;
+package org.cyk.utility.__kernel__.field;
 
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.field.FieldInstance;
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 
 public interface FieldInstancesRuntime extends Objectable {

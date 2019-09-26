@@ -13,6 +13,7 @@ import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
 import org.cyk.utility.__kernel__.system.action.SystemActionDelete;
 import org.cyk.utility.__kernel__.system.action.SystemActionRead;
 import org.cyk.utility.__kernel__.system.action.SystemActionUpdate;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.string.AbstractStringsFunctionImpl;
 
 @Dependent
@@ -30,7 +31,7 @@ public class SystemActionRelatedClassesNamesGetterImpl extends AbstractStringsFu
 		Strings strings = __inject__(Strings.class);
 		Class<?> entityClass = getEntityClass();
 		Class<? extends SystemAction> systemActionClass = getSystemActionClass();
-		String nameSuffix = __injectValueHelper__().defaultToIfNull(getNameSuffix(),ConstantEmpty.STRING);
+		String nameSuffix = ValueHelper.defaultToIfNull(getNameSuffix(),ConstantEmpty.STRING);
 		
 		String systemActionName = null;
 		if(systemActionClass != null) {

@@ -7,8 +7,8 @@ import java.util.UUID;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
-import org.cyk.utility.field.FieldInstance;
-import org.cyk.utility.field.FieldInstancesRuntime;
+import org.cyk.utility.__kernel__.field.FieldInstance;
+import org.cyk.utility.__kernel__.field.FieldInstancesRuntime;
 import org.cyk.utility.server.persistence.jpa.AbstractIdentifiedByString;
 
 public abstract class AbstractPersistenceFunctionCreatorImpl extends AbstractPersistenceFunctionTransactionImpl implements PersistenceFunctionCreator, Serializable {

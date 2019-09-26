@@ -6,7 +6,7 @@ import org.cyk.utility.__kernel__.collection.AbstractCollectionInstanceImpl;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.array.ArrayHelper;
-import org.cyk.utility.field.FieldInstance;
+import org.cyk.utility.__kernel__.field.FieldInstance;
 
 
 public class FieldsImpl extends AbstractCollectionInstanceImpl<Field> implements Fields,Serializable {

@@ -13,7 +13,7 @@ import org.cyk.utility.random.RandomHelper;
 import org.cyk.utility.system.OperatingSystemCommandExecutor;
 import org.cyk.utility.system.SystemHelper;
 import org.cyk.utility.time.TimeHelper;
-import org.cyk.utility.value.ValueHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 
 public abstract class AbstractTest extends org.cyk.utility.__kernel__.test.AbstractTest implements Serializable {
 	private static final long serialVersionUID = -4375668358714913342L;
@@ -124,7 +124,7 @@ public abstract class AbstractTest extends org.cyk.utility.__kernel__.test.Abstr
 	}
 	
 	protected static void startServerZookeeper() {
-		String workingDirectory = __inject__(ValueHelper.class).returnOrThrowIfBlank("Zookeeper home", __inject__(SystemHelper.class).getProperty("zookeeper.home",Boolean.TRUE));
+		String workingDirectory = ValueHelper.returnOrThrowIfBlank("Zookeeper home", __inject__(SystemHelper.class).getProperty("zookeeper.home",Boolean.TRUE));
 		System.out.print("Starting zookeeper("+workingDirectory+")...");
 		OperatingSystemCommandExecutor operatingSystemCommandExecutor = __inject__(OperatingSystemCommandExecutor.class);
 		operatingSystemCommandExecutor.getCommand(Boolean.TRUE).setCommand("zkserver").setIsTerminalStartable(Boolean.TRUE)
@@ -150,7 +150,7 @@ public abstract class AbstractTest extends org.cyk.utility.__kernel__.test.Abstr
 	}
 	
 	protected static void startServerKafka() {
-		String homeDirectory = __inject__(ValueHelper.class).returnOrThrowIfBlank("Kafka home", __inject__(SystemHelper.class).getProperty("kafka.home",Boolean.TRUE));
+		String homeDirectory = ValueHelper.returnOrThrowIfBlank("Kafka home", __inject__(SystemHelper.class).getProperty("kafka.home",Boolean.TRUE));
 		System.out.print("Starting kafka("+homeDirectory+")...");
 		OperatingSystemCommandExecutor operatingSystemCommandExecutor = __inject__(OperatingSystemCommandExecutor.class);
 		operatingSystemCommandExecutor.getCommand(Boolean.TRUE).setCommand("kafka-server-start.bat "+homeDirectory+"\\config\\server.properties")

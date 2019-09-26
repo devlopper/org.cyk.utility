@@ -6,12 +6,12 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 
 import org.cyk.utility.__kernel__.field.FieldName;
+import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.log.LogEventEntityRepository;
-import org.cyk.utility.log.LogLevel;
-import org.cyk.utility.number.NumberHelper;
+import org.cyk.utility.__kernel__.log.LogLevel;
 
 public abstract class AbstractAssertionHelperImpl extends AbstractHelper implements AssertionHelper, Serializable {
 	private static final long serialVersionUID = 1L;

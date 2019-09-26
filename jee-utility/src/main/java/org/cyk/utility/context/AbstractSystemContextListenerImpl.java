@@ -2,9 +2,9 @@ package org.cyk.utility.context;
 
 import java.io.Serializable;
 
+import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.configuration.ConstantParameterName;
-import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.type.BooleanHelper;
 
 public abstract class AbstractSystemContextListenerImpl<CONTEXT> extends AbstractObject implements SystemContextListener<CONTEXT>,Serializable {

@@ -1,4 +1,4 @@
-package org.cyk.utility.log;
+package org.cyk.utility.__kernel__.log;
 
 public enum LogLevel {
 	ALL

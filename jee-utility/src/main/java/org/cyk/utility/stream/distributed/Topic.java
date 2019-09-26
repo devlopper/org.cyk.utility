@@ -7,7 +7,7 @@ import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.system.SystemHelper;
 import org.cyk.utility.type.BooleanHelper;
-import org.cyk.utility.value.ValueHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -36,7 +36,7 @@ public enum Topic {
 		if(Boolean.TRUE.equals(DependencyInjection.inject(StreamDistributedHelper.class).getIsEnable())) {
 			String suffix = name().toLowerCase();
 			String systemPropertyName = String.format(SYSTEM_PROPERTY_NAME_FORMAT, suffix);
-			identifier = DependencyInjection.inject(ValueHelper.class).defaultToIfNull(
+			identifier = ValueHelper.defaultToIfNull(
 					DependencyInjection.inject(SystemHelper.class).getProperty(systemPropertyName,Boolean.TRUE),suffix);	
 		}else {
 			

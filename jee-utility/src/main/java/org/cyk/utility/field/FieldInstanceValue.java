@@ -1,5 +1,6 @@
 package org.cyk.utility.field;
 
+import org.cyk.utility.__kernel__.field.FieldInstance;
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 
 public interface FieldInstanceValue extends Objectable {

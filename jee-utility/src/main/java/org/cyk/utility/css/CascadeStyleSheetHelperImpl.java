@@ -11,7 +11,7 @@ import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.device.Device;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.throwable.ThrowableHelperImpl;
-import org.cyk.utility.value.ValueHelperImpl;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 
 @ApplicationScoped
 public class CascadeStyleSheetHelperImpl extends AbstractHelper implements CascadeStyleSheetHelper, Serializable {
@@ -59,7 +59,7 @@ public class CascadeStyleSheetHelperImpl extends AbstractHelper implements Casca
 	@Override
 	public String buildStyleClassProportion(Class<? extends Device> deviceClass,Integer proportion) {
 		StyleClassProportionGrid styleClassProportionGrid = getStyleClassProportionGrid();
-		ValueHelperImpl.__throwIfBlank__("style class proportion grid",styleClassProportionGrid);
+		ValueHelper.throwIfBlank("style class proportion grid",styleClassProportionGrid);
 		return styleClassProportionGrid.get(deviceClass, proportion);
 	}
 	
@@ -72,12 +72,12 @@ public class CascadeStyleSheetHelperImpl extends AbstractHelper implements Casca
 	}
 	
 	public static String __buildStyleClassProportion__(Integer proportion,Integer defaultProportion,Integer maximalProportion,String format) {
-		proportion = ValueHelperImpl.__defaultToIfNull__(proportion, defaultProportion);
-		ValueHelperImpl.__throwIfBlank__("style class proportion",proportion);
-		ValueHelperImpl.__throwIfBlank__("style class maximal proportion",maximalProportion);
+		proportion = ValueHelper.defaultToIfNull(proportion, defaultProportion);
+		ValueHelper.throwIfBlank("style class proportion",proportion);
+		ValueHelper.throwIfBlank("style class maximal proportion",maximalProportion);
 		if(proportion > maximalProportion)
 			ThrowableHelperImpl.__throwRuntimeException__(String.format("style class proportion (%s) must be less than or equal to maximal proportion (%s)",proportion,maximalProportion));
-		ValueHelperImpl.__throwIfBlank__("style class proportion format",format);
+		ValueHelper.throwIfBlank("style class proportion format",format);
 		return String.format(format, proportion);
 	}
 	

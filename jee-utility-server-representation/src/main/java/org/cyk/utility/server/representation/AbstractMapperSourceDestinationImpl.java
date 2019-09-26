@@ -1,7 +1,5 @@
 package org.cyk.utility.server.representation;
 
-import java.lang.reflect.Modifier;
-
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,12 +14,12 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.RegularExpressionHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.string.Strings;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.clazz.ClassInstance;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.clazz.ClassNameBuilder;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierStringBuilder;
-import org.cyk.utility.value.ValueHelper;
 
 public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> extends org.cyk.utility.mapping.AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> {
 	private static final long serialVersionUID = 1L;
@@ -40,14 +38,14 @@ public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> ex
 			ClassNameBuilder classNameBuilder = DependencyInjection.inject(ClassNameBuilder.class).setKlass(getClass());
 			classNameBuilder.getSourceNamingModel(Boolean.TRUE).server().representation().entities().setSuffix("DtoMapperImpl");
 			classNameBuilder.getDestinationNamingModel(Boolean.TRUE).server().persistence().entities().suffix();
-			__destinationClass__ = DependencyInjection.inject(ValueHelper.class).returnOrThrowIfBlank("persistence entity class"
+			__destinationClass__ = ValueHelper.returnOrThrowIfBlank("persistence entity class"
 					,(Class<DESTINATION>) ClassHelper.getByName(classNameBuilder.execute().getOutput()));
 		}
 		
 		ClassInstance classInstance = DependencyInjection.inject(ClassInstancesRuntime.class).get(__destinationClass__);
 		__isDestinationPersistable__ = Boolean.TRUE.equals(classInstance.getIsPersistable());
-		__isDestinationProjectionable__ = Boolean.TRUE.equals(DependencyInjection.inject(ValueHelper.class).defaultToIfNull(classInstance.getIsProjectionable(),Boolean.TRUE));
-		__isDestinationActionable__ = Boolean.TRUE.equals(DependencyInjection.inject(ValueHelper.class).defaultToIfNull(classInstance.getIsActionable(),Boolean.TRUE));
+		__isDestinationProjectionable__ = Boolean.TRUE.equals(ValueHelper.defaultToIfNull(classInstance.getIsProjectionable(),Boolean.TRUE));
+		__isDestinationActionable__ = Boolean.TRUE.equals(ValueHelper.defaultToIfNull(classInstance.getIsActionable(),Boolean.TRUE));
 		if(Boolean.TRUE.equals(__isDestinationActionable__)) {			
 			if(__isDestinationPersistable__) {
 				__actionsIdentifiers__ = DependencyInjection.inject(Strings.class);

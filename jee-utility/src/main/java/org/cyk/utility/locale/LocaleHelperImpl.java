@@ -6,7 +6,7 @@ import java.util.Locale;
 import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.helper.AbstractHelper;
-import org.cyk.utility.value.ValueHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 
 @ApplicationScoped
 public class LocaleHelperImpl extends AbstractHelper implements LocaleHelper,Serializable {
@@ -27,7 +27,7 @@ public class LocaleHelperImpl extends AbstractHelper implements LocaleHelper,Ser
 
 	@Override
 	public Locale getLocaleDefaultToIfNull(Locale defaultLocale) {
-		return __inject__(ValueHelper.class).defaultToIfNull(getDefaultLocale(), defaultLocale);
+		return ValueHelper.defaultToIfNull(getDefaultLocale(), defaultLocale);
 	}
 	
 	@Override

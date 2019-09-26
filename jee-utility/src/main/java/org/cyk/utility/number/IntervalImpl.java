@@ -6,6 +6,7 @@ import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.constant.ConstantString;
+import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 
 @Dependent
@@ -23,13 +24,13 @@ public class IntervalImpl extends AbstractObject implements Interval,Serializabl
 			if(high == null)
 				contains = Boolean.TRUE;
 			else
-				contains = __inject__(NumberHelper.class).compare(number, high.getPreparedValueAs(Double.class), ComparisonOperator.LTE);
+				contains = NumberHelper.compare(number, high.getPreparedValueAs(Double.class), ComparisonOperator.LTE);
 		else
 			if(high == null)
-				contains = __inject__(NumberHelper.class).compare(number, low.getPreparedValueAs(Double.class), ComparisonOperator.GTE);
+				contains = NumberHelper.compare(number, low.getPreparedValueAs(Double.class), ComparisonOperator.GTE);
 			else
-				contains = __inject__(NumberHelper.class).compare(number, low.getPreparedValueAs(Double.class), ComparisonOperator.GTE) && 
-				__inject__(NumberHelper.class).compare(number, high.getPreparedValueAs(Double.class), ComparisonOperator.LTE);
+				contains = NumberHelper.compare(number, low.getPreparedValueAs(Double.class), ComparisonOperator.GTE) && 
+						NumberHelper.compare(number, high.getPreparedValueAs(Double.class), ComparisonOperator.LTE);
 		return contains;
 	}
 	
@@ -40,7 +41,9 @@ public class IntervalImpl extends AbstractObject implements Interval,Serializabl
 	
 	@Override
 	public IntervalExtremity getLow(Boolean injectIfNull) {
-		return (IntervalExtremity) __getInjectIfNull__(FIELD_LOW, injectIfNull);
+		if(low == null && Boolean.TRUE.equals(injectIfNull))
+			low = __inject__(IntervalExtremity.class);
+		return low;
 	}
 
 	@Override
@@ -73,7 +76,9 @@ public class IntervalImpl extends AbstractObject implements Interval,Serializabl
 	
 	@Override
 	public IntervalExtremity getHigh(Boolean injectIfNull) {
-		return (IntervalExtremity) __getInjectIfNull__(FIELD_HIGH, injectIfNull);
+		if(high == null && Boolean.TRUE.equals(injectIfNull))
+			high = __inject__(IntervalExtremity.class);
+		return high;
 	}
 
 	@Override

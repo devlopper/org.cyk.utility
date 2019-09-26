@@ -2,6 +2,7 @@ package org.cyk.utility.context;
 
 import java.io.Serializable;
 
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.system.SystemHelper;
 
@@ -13,7 +14,7 @@ public abstract class AbstractContextParameterValueGetterImpl extends AbstractFu
 	
 	@Override
 	protected Object __execute__() throws Exception {
-		Object context = __injectValueHelper__().returnOrThrowIfBlank("context", getContext());
+		Object context = ValueHelper.returnOrThrowIfBlank("context", getContext());
 		String name = getName();
 		Object value = __execute__(context,name);
 		if(value == null)

@@ -13,9 +13,9 @@ import org.apache.logging.log4j.MarkerManager;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.log.AbstractLogImpl;
-import org.cyk.utility.log.LogLevel;
+import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.log.message.LogMessage;
-import org.cyk.utility.value.ValueHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 
 @Dependent @Log4j2
 public class LogLog4j2Impl extends AbstractLogImpl<Level> implements LogLog4j2, Serializable {
@@ -38,7 +38,7 @@ public class LogLog4j2Impl extends AbstractLogImpl<Level> implements LogLog4j2, 
 	
 	@Override
 	protected Level __getLevel__(LogLevel level) {
-		level = __inject__(ValueHelper.class).defaultToIfNull(level, LogLevel.DEFAULT);
+		level = ValueHelper.defaultToIfNull(level, LogLevel.DEFAULT);
 		switch(level){
 		case ALL: return org.apache.logging.log4j.Level.ALL;
 		case TRACE: return org.apache.logging.log4j.Level.TRACE;

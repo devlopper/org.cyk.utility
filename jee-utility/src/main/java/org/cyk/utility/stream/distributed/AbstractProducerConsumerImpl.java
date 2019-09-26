@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Set;
 
 import org.cyk.utility.__kernel__.string.Strings;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
 
 public abstract class AbstractProducerConsumerImpl extends AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl implements ProducerConsumer,Serializable {
@@ -19,7 +20,7 @@ public abstract class AbstractProducerConsumerImpl extends AbstractFunctionWithP
 	@Override
 	protected void ____execute____() throws Exception {
 		if(Boolean.TRUE.equals(__inject__(StreamDistributedHelper.class).getIsEnable())) {
-			Strings topics = __injectValueHelper__().returnOrThrowIfBlank("topics", getTopics());
+			Strings topics = ValueHelper.returnOrThrowIfBlank("topics", getTopics());
 			__execute__(topics);	
 		}else {
 			__logWarning__(getClass().getSimpleName()+" : Cannot produce and consume because distributed stream functionnality is not enable.");

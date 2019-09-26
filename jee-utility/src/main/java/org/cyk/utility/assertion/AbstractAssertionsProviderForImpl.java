@@ -6,6 +6,7 @@ import java.util.Collection;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.function.Function;
 import org.cyk.utility.__kernel__.object.Objects;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 
 public abstract class AbstractAssertionsProviderForImpl<T> extends AbstractAssertionsProviderImpl implements AssertionsProviderFor<T>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -14,7 +15,7 @@ public abstract class AbstractAssertionsProviderForImpl<T> extends AbstractAsser
 	
 	@Override
 	protected void ____execute____(Function<?, ?> function,Object filter) {
-		Objects fors = __injectValueHelper__().returnOrThrowIfBlank("assertions provider fors", getFors());	
+		Objects fors = ValueHelper.returnOrThrowIfBlank("assertions provider fors", getFors());	
 		____execute____(function,filter,(Collection<T>) fors.get());
 	}
 	

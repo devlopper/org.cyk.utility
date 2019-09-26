@@ -14,6 +14,7 @@ import org.cyk.utility.__kernel__.collection.CollectionInstance;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.array.ArrayInstanceTwoDimensionString;
 import org.cyk.utility.clazz.ClassNameBuilder;
@@ -36,10 +37,10 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 			ClassNameBuilder classNameBuilder = __inject__(ClassNameBuilder.class).setKlass(getClass());
 			classNameBuilder.getSourceNamingModel(Boolean.TRUE).server().business().impl().suffix();
 			classNameBuilder.getDestinationNamingModel(Boolean.TRUE).server().persistence().entities();
-			__persistenceEntityClass__ = __injectValueHelper__().returnOrThrowIfBlank("persistence entity class",(Class<ENTITY>) ClassHelper.getByName(classNameBuilder.execute().getOutput()));
+			__persistenceEntityClass__ = ValueHelper.returnOrThrowIfBlank("persistence entity class",(Class<ENTITY>) ClassHelper.getByName(classNameBuilder.execute().getOutput()));
 		}
 		if(__persistence__ == null)
-			__persistence__ = (PERSISTENCE) __injectValueHelper__().returnOrThrowIfBlank("persistence",__inject__(PersistenceLayer.class).injectInterfaceClassFromEntityClass(__persistenceEntityClass__));	
+			__persistence__ = (PERSISTENCE) ValueHelper.returnOrThrowIfBlank("persistence",__inject__(PersistenceLayer.class).injectInterfaceClassFromEntityClass(__persistenceEntityClass__));	
 	}
 	
 	//TODO : an idea is to transform array content to json format and transform it java object

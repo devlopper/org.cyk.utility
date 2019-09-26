@@ -2,6 +2,7 @@ package org.cyk.utility.log;
 
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 
 public interface LogEventEntity extends Objectable {

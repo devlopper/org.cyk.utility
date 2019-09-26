@@ -2,6 +2,7 @@ package org.cyk.utility.log;
 
 import java.io.Serializable;
 
+import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.instance.AbstractInstanceRepositoryImpl;
 
 public abstract class AbstractLogEventEntityRepositoryImpl extends AbstractInstanceRepositoryImpl<LogEventEntity> implements LogEventEntityRepository, Serializable {

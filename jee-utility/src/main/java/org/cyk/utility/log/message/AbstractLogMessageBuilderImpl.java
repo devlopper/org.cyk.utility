@@ -9,7 +9,7 @@ import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.log.Log;
-import org.cyk.utility.value.ValueHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 
 public abstract class AbstractLogMessageBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<LogMessage> implements LogMessageBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -30,7 +30,7 @@ public abstract class AbstractLogMessageBuilderImpl extends AbstractFunctionWith
 			Integer index = 0;
 			for(Object parameter : parameters){
 				if(templateStringBuilder.length()>0)
-					templateStringBuilder.append(__inject__(ValueHelper.class).defaultToIfNull(getProperties().getParameterSeparator(),ConstantCharacter.SPACE));
+					templateStringBuilder.append(ValueHelper.defaultToIfNull(getProperties().getParameterSeparator(),ConstantCharacter.SPACE));
 				if(parameter instanceof Object[]){
 					templateStringBuilder.append(formatParameter((String)getProperties().getParameterFormat(),index++, ((Object[])parameter)[0]));
 					if(message.getArguments()==null)

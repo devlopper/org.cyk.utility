@@ -8,6 +8,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Invocation;
 
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.field.FieldValueCopy;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierStringBuilder;
@@ -33,7 +34,7 @@ public class RequestProcessorImpl extends AbstractFunctionWithPropertiesAsInputI
 		UniformResourceIdentifierStringBuilder uniformResourceIdentifierString = getUniformResourceIdentifierString();
 		String uniformResourceIdentifier = null;
 		if(uniformResourceIdentifierString == null) {
-			String uniformResourceIdentifierStringFormat = __injectValueHelper__().returnOrThrowIfBlank("request processor uniform resource locator string format", getUniformResourceIdentifierStringFormat());
+			String uniformResourceIdentifierStringFormat = ValueHelper.returnOrThrowIfBlank("request processor uniform resource locator string format", getUniformResourceIdentifierStringFormat());
 			if( Boolean.TRUE.equals(StringHelper.isNotBlank(uniformResourceIdentifierStringFormat)) && responseEntity!=null ) {
 				uniformResourceIdentifier = String.format(uniformResourceIdentifierStringFormat, org.cyk.utility.__kernel__.field.FieldHelper.readSystemIdentifier(responseEntity));
 			}

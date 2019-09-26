@@ -7,6 +7,7 @@ import java.util.LinkedHashSet;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.SortOrder;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 
 public abstract class AbstractQueryClauseStringBuilderOrderByImpl extends AbstractQueryClauseStringBuilderImpl implements QueryClauseStringBuilderOrderBy, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -30,7 +31,7 @@ public abstract class AbstractQueryClauseStringBuilderOrderByImpl extends Abstra
 				for(Attribute index : attributes){
 					if(arguments == null)
 						arguments = new LinkedHashSet<String>();
-					SortOrder sortOrder = __injectValueHelper__().defaultToIfNull(index.getSortOrder(), SortOrder.ASCENDING);
+					SortOrder sortOrder = ValueHelper.defaultToIfNull(index.getSortOrder(), SortOrder.ASCENDING);
 					arguments.add(attributeNameBuilder.setAttribute(index).execute().getOutput()+ConstantCharacter.SPACE+(SortOrder.ASCENDING.equals(sortOrder)?"ASC":"DESC"));
 				}
 			}

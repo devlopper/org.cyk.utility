@@ -1,4 +1,4 @@
-package org.cyk.utility.field;
+package org.cyk.utility.__kernel__.field;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -11,12 +11,9 @@ import javax.persistence.GeneratedValue;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.cyk.utility.__kernel__.annotation.Generatable;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
-import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.string.Strings;
-import org.cyk.utility.log.Log;
-import org.cyk.utility.log.LogLevel;
 
 @ApplicationScoped
 public class FieldInstancesRuntimeImpl extends AbstractObject implements FieldInstancesRuntime,Serializable {
@@ -26,7 +23,7 @@ public class FieldInstancesRuntimeImpl extends AbstractObject implements FieldIn
 	
 	@Override
 	public FieldInstance get(Class<?> klass,Collection<String> paths) {
-		Log log = __inject__(Log.class).setLevel(LogLevel.TRACE);
+		//Log log = __inject__(Log.class).setLevel(LogLevel.TRACE);
 		FieldInstance instance = null;
 		String path = org.cyk.utility.__kernel__.field.FieldHelper.join(paths);
 		if(klass!=null && StringHelper.isNotBlank(path)) {
@@ -47,12 +44,12 @@ public class FieldInstancesRuntimeImpl extends AbstractObject implements FieldIn
 				instance.setType(FieldHelper.getType(instance.getField(),klass));
 				instance.setIsGeneratable(instance.getField().isAnnotationPresent(GeneratedValue.class) || instance.getField().isAnnotationPresent(Generatable.class));
 				getInstances(Boolean.TRUE).add(instance);
-				log.getMessageBuilder(Boolean.TRUE).addParameter("field <<"+instance.getClazz()+"."+path+">> added to runtime collection");
+				//log.getMessageBuilder(Boolean.TRUE).addParameter("field <<"+instance.getClazz()+"."+path+">> added to runtime collection");
 			}else {
-				log.getMessageBuilder(Boolean.TRUE).addParameter("field <<"+instance.getClazz()+"."+path+">> fetched from runtime collection");
+				//log.getMessageBuilder(Boolean.TRUE).addParameter("field <<"+instance.getClazz()+"."+path+">> fetched from runtime collection");
 			}
 		}
-		log.execute();
+		//log.execute();
 		return instance;
 	}
 	

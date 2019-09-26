@@ -8,8 +8,9 @@ import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
-import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.__kernel__.string.Strings;
+import org.cyk.utility.__kernel__.value.ValueHelper;
+import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 import org.reflections.util.ConfigurationBuilder;
@@ -24,8 +25,8 @@ public class ClassesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl
 	
 	@Override
 	protected Classes __execute__() throws Exception {
-		Strings packageNames = __injectValueHelper__().returnOrThrowIfBlank("classes packages names", getPackageNames());
-		Classes basesClasses = __injectValueHelper__().returnOrThrowIfBlank("classes bases", getBasesClasses());
+		Strings packageNames = ValueHelper.returnOrThrowIfBlank("classes packages names", getPackageNames());
+		Classes basesClasses = ValueHelper.returnOrThrowIfBlank("classes bases", getBasesClasses());
 		Boolean isInterface = getIsInterface();
 		Classes classes = __inject__(Classes.class);
 		SubTypesScanner subTypesScanner = new SubTypesScanner(false);

@@ -6,7 +6,7 @@ import java.util.Collection;
 import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
-import org.cyk.utility.field.FieldInstancesRuntime;
+import org.cyk.utility.__kernel__.field.FieldInstancesRuntime;
 
 @Dependent
 public class ProjectionImpl extends AbstractObject implements Projection,Serializable {

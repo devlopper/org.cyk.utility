@@ -2,7 +2,7 @@ package org.cyk.utility.time;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.cyk.utility.number.NumberHelper;
+import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 

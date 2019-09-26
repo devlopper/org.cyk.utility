@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.core.LogEvent;
 import org.cyk.utility.log.AbstractLogEventPropertyAccessorImpl;
-import org.cyk.utility.log.LogLevel;
+import org.cyk.utility.__kernel__.log.LogLevel;
 
 @ApplicationScoped @Alternative
 public class LogEventPropertyAccessorLog4j2Impl extends AbstractLogEventPropertyAccessorImpl implements LogEventPropertyAccessorLog4j2, Serializable {

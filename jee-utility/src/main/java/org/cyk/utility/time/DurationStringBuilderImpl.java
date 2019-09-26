@@ -8,8 +8,8 @@ import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
+import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
-import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
 
 @Dependent
@@ -32,11 +32,11 @@ public class DurationStringBuilderImpl extends AbstractStringFunctionImpl implem
 			
 		}else {
 			strings = new ArrayList<>();	
-			if(__inject__(NumberHelper.class).isGreaterThanZero(duration.getNumberOfMinute()))
+			if(NumberHelper.isGreaterThanZero(duration.getNumberOfMinute()))
 				strings.add(duration.getNumberOfMinute()+" min");
-			if(__inject__(NumberHelper.class).isGreaterThanZero(duration.getNumberOfSecond()))
+			if(NumberHelper.isGreaterThanZero(duration.getNumberOfSecond()))
 				strings.add(duration.getNumberOfSecond()+" sec");
-			if(__inject__(NumberHelper.class).isGreaterThanZero(duration.getNumberOfMillisecond()))
+			if(NumberHelper.isGreaterThanZero(duration.getNumberOfMillisecond()))
 				strings.add(duration.getNumberOfMillisecond()+"");
 		}
 		String string = StringHelper.concatenate(strings,ConstantCharacter.COMA.toString());

@@ -4,7 +4,7 @@ import org.cyk.utility.__kernel__.function.FunctionRunnable;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.assertion.AssertionBuilder;
 import org.cyk.utility.log.Log;
-import org.cyk.utility.log.LogLevel;
+import org.cyk.utility.__kernel__.log.LogLevel;
 
 public interface Function<INPUT,OUTPUT> extends org.cyk.utility.__kernel__.function.Function<INPUT, OUTPUT> {
 

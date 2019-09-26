@@ -9,9 +9,9 @@ import org.apache.commons.lang3.reflect.MethodUtils;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.log.AbstractLogImpl;
-import org.cyk.utility.log.LogLevel;
+import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.log.message.LogMessage;
-import org.cyk.utility.value.ValueHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
@@ -44,7 +44,7 @@ public class LogSlf4jImpl extends AbstractLogImpl<Level> implements LogSlf4j, Se
 
 	@Override
 	protected Level __getLevel__(LogLevel level) {
-		level = __inject__(ValueHelper.class).defaultToIfNull(level, LogLevel.DEFAULT);
+		level = ValueHelper.defaultToIfNull(level, LogLevel.DEFAULT);
 		switch(level){
 		case ALL: 
 			//TODO log warning

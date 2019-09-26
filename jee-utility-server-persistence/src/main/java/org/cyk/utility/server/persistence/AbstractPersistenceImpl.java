@@ -7,7 +7,7 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.clazz.Classes;
-import org.cyk.utility.value.ValueHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -72,7 +72,7 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 			__injectThrowableHelper__().throwRuntimeException("class is required");
 		if(identifier == null)
 			__injectThrowableHelper__().throwRuntimeException("identifier is required");
-		ValueUsageType valueUsageType = properties == null ? ValueUsageType.SYSTEM : (ValueUsageType) __inject__(ValueHelper.class).defaultToIfNull(properties.getValueUsageType(),ValueUsageType.SYSTEM);
+		ValueUsageType valueUsageType = properties == null ? ValueUsageType.SYSTEM : (ValueUsageType) ValueHelper.defaultToIfNull(properties.getValueUsageType(),ValueUsageType.SYSTEM);
 		PersistenceEntity<ENTITY> persistence = __injectPersistenceLayer__().injectInterfaceClassFromEntityClass(aClass);
 		ENTITY entity;
 		if(persistence == null){

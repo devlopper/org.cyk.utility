@@ -2,6 +2,7 @@ package org.cyk.utility.stream.distributed;
 
 import java.io.Serializable;
 
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
 
 public abstract class AbstractConsumerMessageProcessorImpl extends AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl implements ConsumerMessageProcessor,Serializable {
@@ -11,7 +12,7 @@ public abstract class AbstractConsumerMessageProcessorImpl extends AbstractFunct
 	
 	@Override
 	protected void ____execute____() throws Exception {
-		Message message = __injectValueHelper__().returnOrThrowIfBlank("consumed message", getMessage());
+		Message message = ValueHelper.returnOrThrowIfBlank("consumed message", getMessage());
 		__process__(message);
 	}
 	

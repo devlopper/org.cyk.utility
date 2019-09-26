@@ -10,6 +10,7 @@ import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.constant.ConstantSeparator;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
 import org.cyk.utility.time.TimeHelper;
 
@@ -25,13 +26,13 @@ public class OperatingSystemCommandExecutorImpl extends AbstractFunctionWithProp
 	
 	@Override
 	protected void ____execute____() throws Exception {
-		OperatingSystemCommandBuilder command = __injectValueHelper__().returnOrThrowIfBlank("operating system command builder", getCommand());
+		OperatingSystemCommandBuilder command = ValueHelper.returnOrThrowIfBlank("operating system command builder", getCommand());
 		String commandAsString = command.execute().getOutput();
 		
 		Process process = Runtime.getRuntime().exec(commandAsString);
 		setProcess(process);
 		
-		Boolean isWaitForTermination = __injectValueHelper__().defaultToIfNull(getIsWaitForTermination(),Boolean.FALSE);
+		Boolean isWaitForTermination = ValueHelper.defaultToIfNull(getIsWaitForTermination(),Boolean.FALSE);
 		
 		if(Boolean.TRUE.equals(isWaitForTermination))
 			process.waitFor();

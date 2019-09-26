@@ -5,8 +5,9 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.string.Strings;
-import org.cyk.utility.field.FieldInstances;
-import org.cyk.utility.field.FieldInstancesRuntime;
+import org.cyk.utility.__kernel__.value.ValueHelper;
+import org.cyk.utility.__kernel__.field.FieldInstances;
+import org.cyk.utility.__kernel__.field.FieldInstancesRuntime;
 import org.cyk.utility.throwable.ThrowableHelperImpl;
 
 @Deprecated
@@ -19,13 +20,13 @@ public abstract class AbstractObjectFromStringBuilderImpl extends AbstractObject
 	@Override
 	protected Object __execute__(Strings fieldNamesStrings) throws Exception {
 		ThrowableHelperImpl.__throwRuntimeException__(getClass()+" is deprecated");
-		String string = __injectValueHelper__().returnOrThrowIfBlank("string", getString());
-		Class<?> klass = __injectValueHelper__().returnOrThrowIfBlank("class", getKlass());
+		String string = ValueHelper.returnOrThrowIfBlank("string", getString());
+		Class<?> klass = ValueHelper.returnOrThrowIfBlank("class", getKlass());
 		FieldInstances fieldInstances = null;
 		if(org.cyk.utility.__kernel__.klass.ClassHelper.isBelongsToJavaPackages(klass)) {
 			
 		}else {
-			__injectValueHelper__().returnOrThrowIfBlank("field names", fieldNamesStrings);
+			ValueHelper.returnOrThrowIfBlank("field names", fieldNamesStrings);
 			if(CollectionHelper.isNotEmpty(fieldNamesStrings)) {
 				fieldInstances = __inject__(FieldInstances.class);
 				for(String index : fieldNamesStrings.get())

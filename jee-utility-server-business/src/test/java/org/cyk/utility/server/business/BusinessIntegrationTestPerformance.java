@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.log.LogLevel;
+import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.server.business.api.MyEntityBusiness;
 import org.cyk.utility.server.business.test.arquillian.AbstractBusinessArquillianIntegrationTestWithDefaultDeployment;
 import org.cyk.utility.server.persistence.api.MyEntityPersistence;

@@ -5,9 +5,10 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.string.Strings;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.field.FieldInstanceValue;
 import org.cyk.utility.field.FieldInstanceValues;
-import org.cyk.utility.field.FieldInstancesRuntime;
+import org.cyk.utility.__kernel__.field.FieldInstancesRuntime;
 @Deprecated
 public abstract class AbstractObjectToStringBuilderImpl extends AbstractObjectToOrFromStringBuilderImpl<String> implements ObjectToStringBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -16,7 +17,7 @@ public abstract class AbstractObjectToStringBuilderImpl extends AbstractObjectTo
 	
 	@Override
 	protected String __execute__(Strings fieldNamesStrings) throws Exception {
-		Object object = __injectValueHelper__().returnOrThrowIfBlank("object to stringify", getObject());
+		Object object = ValueHelper.returnOrThrowIfBlank("object to stringify", getObject());
 		FieldInstanceValues fieldInstanceValues = null;
 		if(org.cyk.utility.__kernel__.klass.ClassHelper.isBelongsToJavaPackages(object.getClass())) {
 			

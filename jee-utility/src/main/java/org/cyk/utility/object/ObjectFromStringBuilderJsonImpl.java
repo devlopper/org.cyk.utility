@@ -5,7 +5,7 @@ import java.io.Serializable;
 import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.annotation.JavaScriptObjectNotation;
-import org.cyk.utility.field.FieldInstances;
+import org.cyk.utility.__kernel__.field.FieldInstances;
 
 @Dependent @JavaScriptObjectNotation @Deprecated
 public class ObjectFromStringBuilderJsonImpl extends AbstractObjectFromStringBuilderImpl implements Serializable {

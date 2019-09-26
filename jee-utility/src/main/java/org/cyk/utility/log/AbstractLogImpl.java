@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.function.AbstractFunctionImpl;
+import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.stacktrace.StackTraceHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;

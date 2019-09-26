@@ -3,6 +3,7 @@ package org.cyk.utility.request;
 import java.io.Serializable;
 import java.security.Principal;
 
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
 public abstract class AbstractRequestPrincipalGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Principal> implements RequestPrincipalGetter,Serializable {
@@ -12,7 +13,7 @@ public abstract class AbstractRequestPrincipalGetterImpl extends AbstractFunctio
 
 	@Override
 	protected Principal __execute__() throws Exception {
-		Object request = __injectValueHelper__().returnOrThrowIfBlank("request to get principal", getRequest());
+		Object request = ValueHelper.returnOrThrowIfBlank("request to get principal", getRequest());
 		return __execute__(request);
 	}
 	

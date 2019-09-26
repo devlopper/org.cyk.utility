@@ -10,7 +10,7 @@ import javax.enterprise.context.ApplicationScoped;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.locale.LocaleHelper;
-import org.cyk.utility.value.ValueHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.value.ValueLength;
 
 @ApplicationScoped
@@ -19,9 +19,9 @@ public class InstantHelperImpl extends AbstractHelper implements InstantHelper,S
 
 	@Override
 	public InstantPattern getPattern(Locale locale,InstantPart part,ValueLength length){
-		locale = __inject__(ValueHelper.class).defaultToIfNull(__inject__(LocaleHelper.class).getDefaultLocale(), Locale.FRENCH);
-		part = __inject__(ValueHelper.class).defaultToIfNull(part, InstantPart.DATE_ONLY);
-		length = __inject__(ValueHelper.class).defaultToIfNull(length, ValueLength.SHORT);
+		locale = ValueHelper.defaultToIfNull(__inject__(LocaleHelper.class).getDefaultLocale(), Locale.FRENCH);
+		part = ValueHelper.defaultToIfNull(part, InstantPart.DATE_ONLY);
+		length = ValueHelper.defaultToIfNull(length, ValueLength.SHORT);
 		
 		for(InstantPattern pattern : INSTANT_PATTERNS)
 			if(locale.equals(pattern.getLocale()) && part.equals(pattern.getPart()) && length.equals(pattern.getLength()))

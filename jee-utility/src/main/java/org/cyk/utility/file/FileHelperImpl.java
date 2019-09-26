@@ -36,7 +36,7 @@ import org.cyk.utility.byte_.ByteHelperImpl;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.number.Intervals;
 import org.cyk.utility.runnable.RunnableHelperImpl;
-import org.cyk.utility.value.ValueHelperImpl;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 
 @ApplicationScoped
 public class FileHelperImpl extends AbstractHelper implements FileHelper,Serializable {
@@ -169,8 +169,8 @@ public class FileHelperImpl extends AbstractHelper implements FileHelper,Seriali
 		if(CollectionHelper.isEmpty(directories))
 			return null;
 		final List<String> directoriesFinal = new ArrayList<>(directories);
-		final Boolean isDirectoryGettableFinal = ValueHelperImpl.__defaultToIfNull__(isDirectoryGettable,Boolean.TRUE);
-		final Boolean isFileGettableFinal = ValueHelperImpl.__defaultToIfNull__(isFileGettable,Boolean.TRUE);
+		final Boolean isDirectoryGettableFinal = ValueHelper.defaultToIfNull(isDirectoryGettable,Boolean.TRUE);
+		final Boolean isFileGettableFinal = ValueHelper.defaultToIfNull(isFileGettable,Boolean.TRUE);
 		Paths paths = __inject__(Paths.class);
 		paths.setCollectionClass(Set.class);
 		for(Integer index = 0; index < directoriesFinal.size();) {

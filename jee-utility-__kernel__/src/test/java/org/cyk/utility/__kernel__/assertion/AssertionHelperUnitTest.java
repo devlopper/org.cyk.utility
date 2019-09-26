@@ -1,12 +1,11 @@
-package org.cyk.utility.assertion;
+package org.cyk.utility.__kernel__.assertion;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.cyk.utility.__kernel__.assertion.Assertion;
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
-import org.cyk.utility.field.FieldInstancesRuntime;
-import org.cyk.utility.test.weld.AbstractWeldUnitTest;
-import org.cyk.utility.value.Value;
+import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.__kernel__.value.Value;
+import org.cyk.utility.__kernel__.field.FieldInstancesRuntime;
 import org.junit.jupiter.api.Test;
 
 import lombok.Getter;
@@ -37,6 +36,12 @@ public class AssertionHelperUnitTest extends AbstractWeldUnitTest {
 	@Test
 	public void buildAssertionComparison_literal_2_lesserThan_literal_1() {
 		Assertion assertion = AssertionHelper.buildAssertionComparison(__inject__(Value.class).set(2), ComparisonOperator.LT, __inject__(Value.class).set(1));
+		assertThat(assertion.getValue()).isFalse();
+	}
+	
+	@Test
+	public void buildAssertionComparison_literal_null_gt_literal_minus1() {
+		Assertion assertion = AssertionHelper.buildAssertionComparison(__inject__(Value.class).set(null), ComparisonOperator.GT, __inject__(Value.class).set(-1));
 		assertThat(assertion.getValue()).isFalse();
 	}
 	

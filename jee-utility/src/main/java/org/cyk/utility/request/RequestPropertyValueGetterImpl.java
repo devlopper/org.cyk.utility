@@ -6,6 +6,7 @@ import javax.enterprise.context.Dependent;
 import javax.servlet.http.HttpServletRequest;
 
 import org.cyk.utility.__kernel__.identifier.resource.RequestProperty;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
 @Dependent
@@ -17,8 +18,8 @@ public class RequestPropertyValueGetterImpl extends AbstractFunctionWithProperti
 	
 	@Override
 	protected Object __execute__() throws Exception {
-		Object request = __injectValueHelper__().returnOrThrowIfBlank("request", getRequest());
-		RequestProperty property = __injectValueHelper__().returnOrThrowIfBlank("request property", getProperty());
+		Object request = ValueHelper.returnOrThrowIfBlank("request", getRequest());
+		RequestProperty property = ValueHelper.returnOrThrowIfBlank("request property", getProperty());
 		Object value = null;
 		if(request instanceof HttpServletRequest) {
 			HttpServletRequest httpServletRequest = (HttpServletRequest) request;

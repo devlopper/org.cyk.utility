@@ -16,7 +16,7 @@ import org.cyk.utility.__kernel__.string.Case;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.locale.LocaleHelper;
-import org.cyk.utility.value.ValueHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 
 @ApplicationScoped @Deprecated
 public class StringRepositoryResourceBundleImpl extends AbstractStringRepositoryImpl implements StringRepositoryResourceBundle,Serializable {
@@ -89,14 +89,14 @@ public class StringRepositoryResourceBundleImpl extends AbstractStringRepository
 		}else{
 			String identifier = (String) properties.getKey();
 			Object[] parameters = (Object[]) properties.getParameters();
-			Locale locale = __inject__(ValueHelper.class).defaultToIfNull((Locale)properties.getLocale(), __inject__(LocaleHelper.class).getLocaleDefaultIfNull());
-			Case aCase = __inject__(ValueHelper.class).defaultToIfNull((Case)properties.getCase(), Case.DEFAULT);
-			Boolean cachable = __inject__(ValueHelper.class).defaultToIfNull((Boolean)properties.getCachable(), Boolean.TRUE);
+			Locale locale = ValueHelper.defaultToIfNull((Locale)properties.getLocale(), __inject__(LocaleHelper.class).getLocaleDefaultIfNull());
+			Case aCase = ValueHelper.defaultToIfNull((Case)properties.getCase(), Case.DEFAULT);
+			Boolean cachable = ValueHelper.defaultToIfNull((Boolean)properties.getCachable(), Boolean.TRUE);
 			
 			for(ResourceBundle index : bundles){
 				try {
 					java.util.ResourceBundle resourceBundle = java.util.ResourceBundle.getBundle(index.getName(), locale
-							, __inject__(ValueHelper.class).defaultToIfNull(index.getClassLoader(), StringRepositoryResourceBundle.class.getClassLoader()) );
+							, ValueHelper.defaultToIfNull(index.getClassLoader(), StringRepositoryResourceBundle.class.getClassLoader()) );
 					String value = resourceBundle.getString(identifier);
 					if(__inject__(ArrayHelper.class).isNotEmpty(parameters))
 						value = MessageFormat.format(value,parameters);

@@ -5,10 +5,10 @@ import java.util.Collection;
 
 import javax.ws.rs.core.Response.Status;
 
-import org.cyk.utility.mapping.MappingHelper;
-import org.cyk.utility.number.NumberHelper;
-import org.cyk.utility.server.business.Business;
+import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
+import org.cyk.utility.mapping.MappingHelper;
+import org.cyk.utility.server.business.Business;
 import org.cyk.utility.type.BooleanHelper;
 
 public abstract class AbstractRepresentationFunctionCreatorImpl extends AbstractRepresentationFunctionTransactionImpl implements RepresentationFunctionCreator, Serializable {

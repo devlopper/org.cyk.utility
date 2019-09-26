@@ -2,6 +2,7 @@ package org.cyk.utility.mapping;
 
 import java.io.Serializable;
 
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
 @SuppressWarnings("rawtypes")
@@ -25,8 +26,8 @@ public abstract class AbstractMapperSourceDestinationGetterImpl extends Abstract
 			if(destination != null)
 				destinationClass = destination.getClass();
 		}
-		sourceClass = __injectValueHelper__().returnOrThrowIfBlank("source class", sourceClass);
-		destinationClass = __injectValueHelper__().returnOrThrowIfBlank("destination class", destinationClass);
+		sourceClass = ValueHelper.returnOrThrowIfBlank("source class", sourceClass);
+		destinationClass = ValueHelper.returnOrThrowIfBlank("destination class", destinationClass);
 		return __execute__(sourceClass,destinationClass);
 	}
 	

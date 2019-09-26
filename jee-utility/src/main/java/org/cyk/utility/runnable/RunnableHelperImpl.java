@@ -14,20 +14,20 @@ import java.util.concurrent.TimeUnit;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.throwable.ThrowableHelperImpl;
-import org.cyk.utility.value.ValueHelperImpl;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 
 public class RunnableHelperImpl extends AbstractHelper implements RunnableHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public static ExecutorService __instanciateExecutorService__(Integer corePoolSize,Integer maximumPoolSize,Long keepAliveTime,TimeUnit keepAliveTimeUnit
 			,BlockingQueue<Runnable> queue,Integer queueSize,ThreadFactory threadFactory,RejectedExecutionHandler rejectedExecutionHandler) {
-		corePoolSize = ValueHelperImpl.__defaultToIfBlank__(corePoolSize, 2);
-		maximumPoolSize = ValueHelperImpl.__defaultToIfBlank__(maximumPoolSize, corePoolSize * 3);
-		keepAliveTime = ValueHelperImpl.__defaultToIfBlank__(keepAliveTime, 1l);
-		keepAliveTimeUnit = ValueHelperImpl.__defaultToIfBlank__(keepAliveTimeUnit, TimeUnit.SECONDS);
-		queueSize = ValueHelperImpl.__defaultToIfBlank__(queueSize, maximumPoolSize * 5);
-		threadFactory = ValueHelperImpl.__defaultToIfBlank__(threadFactory, Executors.defaultThreadFactory());
-		corePoolSize = ValueHelperImpl.__defaultToIfBlank__(corePoolSize, 2);
+		corePoolSize = ValueHelper.defaultToIfBlank(corePoolSize, 2);
+		maximumPoolSize = ValueHelper.defaultToIfBlank(maximumPoolSize, corePoolSize * 3);
+		keepAliveTime = ValueHelper.defaultToIfBlank(keepAliveTime, 1l);
+		keepAliveTimeUnit = ValueHelper.defaultToIfBlank(keepAliveTimeUnit, TimeUnit.SECONDS);
+		queueSize = ValueHelper.defaultToIfBlank(queueSize, maximumPoolSize * 5);
+		threadFactory = ValueHelper.defaultToIfBlank(threadFactory, Executors.defaultThreadFactory());
+		corePoolSize = ValueHelper.defaultToIfBlank(corePoolSize, 2);
 		//for optimisation we create object only when needed
 		if(queue == null)
 			queue = new ArrayBlockingQueue<Runnable>(queueSize);
@@ -47,14 +47,14 @@ public class RunnableHelperImpl extends AbstractHelper implements RunnableHelper
 	public static void __run__(Collection<Runnable> runnables,String name,ExecutorService executorService,Long timeOut,TimeUnit timeOutUnit) {
 		if(CollectionHelper.isEmpty(runnables))
 			return;
-		ValueHelperImpl.__throwIfBlank__("runnables name", name);
+		ValueHelper.throwIfBlank("runnables name", name);
 		if(executorService == null)
 			executorService = __instanciateExecutorService__(runnables.size() / 4 + 1);
 		for(Runnable index : runnables)
 			executorService.submit(index);
 		executorService.shutdown();
-		timeOut = ValueHelperImpl.__defaultToIfNull__(timeOut, 60l * 2);
-		timeOutUnit = ValueHelperImpl.__defaultToIfNull__(timeOutUnit, TimeUnit.SECONDS);
+		timeOut = ValueHelper.defaultToIfNull(timeOut, 60l * 2);
+		timeOutUnit = ValueHelper.defaultToIfNull(timeOutUnit, TimeUnit.SECONDS);
 		try {
 			if(executorService.awaitTermination(timeOut, timeOutUnit))
 				;

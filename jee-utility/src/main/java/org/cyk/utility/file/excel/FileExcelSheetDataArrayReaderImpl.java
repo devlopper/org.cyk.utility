@@ -19,6 +19,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.array.ArrayInstanceTwoDimensionString;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.number.Interval;
@@ -48,24 +49,24 @@ public class FileExcelSheetDataArrayReaderImpl extends AbstractFunctionWithPrope
 				workbook = WorkbookFactory.create(new File(workbookFileName));
 		}
 		
-		workbook = __injectValueHelper__().returnOrThrowIfBlank("excel workbook", workbook);
+		workbook = ValueHelper.returnOrThrowIfBlank("excel workbook", workbook);
 		
         Sheet sheet = null;
         String sheetName = getSheetName();
         if(sheet == null && StringHelper.isNotBlank(sheetName))
         	sheet = workbook.getSheet(sheetName);
         
-        sheet = __injectValueHelper__().returnOrThrowIfBlank("excel workbook sheet", sheet);
+        sheet = ValueHelper.returnOrThrowIfBlank("excel workbook sheet", sheet);
         
         Interval rowInterval = getRowInterval();
         Interval columnInterval = getColumnInterval();
         
     	FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
-    	Integer fromRowIndex = __injectValueHelper__().defaultToIfNull(rowInterval == null ? null : rowInterval.getLowValueAs(Integer.class),0);
-    	Integer fromColumnIndex = __injectValueHelper__().defaultToIfNull(columnInterval == null ? null : columnInterval.getLowValueAs(Integer.class),0);
+    	Integer fromRowIndex = ValueHelper.defaultToIfNull(rowInterval == null ? null : rowInterval.getLowValueAs(Integer.class),0);
+    	Integer fromColumnIndex = ValueHelper.defaultToIfNull(columnInterval == null ? null : columnInterval.getLowValueAs(Integer.class),0);
     	
-    	Integer rowCount = __injectValueHelper__().defaultToIfNull(rowInterval == null ? null : rowInterval.getHighValueAs(Integer.class),sheet.getPhysicalNumberOfRows()) - fromRowIndex;
-    	Integer columnCount = __injectValueHelper__().defaultToIfNull(columnInterval == null ? null : columnInterval.getHighValueAs(Integer.class),new Integer(sheet.getRow(0).getLastCellNum())) - fromColumnIndex;
+    	Integer rowCount = ValueHelper.defaultToIfNull(rowInterval == null ? null : rowInterval.getHighValueAs(Integer.class),sheet.getPhysicalNumberOfRows()) - fromRowIndex;
+    	Integer columnCount = ValueHelper.defaultToIfNull(columnInterval == null ? null : columnInterval.getHighValueAs(Integer.class),Integer.valueOf(sheet.getRow(0).getLastCellNum())) - fromColumnIndex;
     	
     	arrayInstance.setFirstDimensionElementCount(rowCount).setSecondDimensionElementCount(columnCount);
     	
@@ -152,7 +153,9 @@ public class FileExcelSheetDataArrayReaderImpl extends AbstractFunctionWithPrope
 	
 	@Override
 	public Interval getRowInterval(Boolean injectIfNull) {
-		return (Interval) __getInjectIfNull__(FIELD_ROW_INTERVAL, injectIfNull);
+		if(rowInterval == null && Boolean.TRUE.equals(injectIfNull))
+			rowInterval = __inject__(Interval.class);
+		return rowInterval;
 	}
 	
 	@Override
@@ -168,7 +171,9 @@ public class FileExcelSheetDataArrayReaderImpl extends AbstractFunctionWithPrope
 	
 	@Override
 	public Interval getColumnInterval(Boolean injectIfNull) {
-		return (Interval) __getInjectIfNull__(FIELD_COLUMN_INTERVAL, injectIfNull);
+		if(columnInterval == null && Boolean.TRUE.equals(injectIfNull))
+			columnInterval = __inject__(Interval.class);
+		return columnInterval;
 	}
 	
 	@Override

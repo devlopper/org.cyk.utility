@@ -3,11 +3,11 @@ package org.cyk.utility.network.message.reader;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.network.message.AbstractSenderReaderImpl;
 import org.cyk.utility.network.message.Message;
 import org.cyk.utility.network.message.Messages;
 import org.cyk.utility.network.protocol.Protocol;
-import org.cyk.utility.number.NumberHelper;
 
 public abstract class AbstractReadderImpl extends AbstractSenderReaderImpl implements Reader,Serializable {
 	private static final long serialVersionUID = 6428760240698553361L;

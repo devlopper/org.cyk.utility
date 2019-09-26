@@ -8,7 +8,7 @@ import javax.persistence.EntityManager;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.test.arquillian.archive.builder.WebArchiveBuilder;
-import org.cyk.utility.log.LogLevel;
+import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.server.persistence.api.MyEntityPersistence;
 import org.cyk.utility.server.persistence.entities.MyEntity;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;

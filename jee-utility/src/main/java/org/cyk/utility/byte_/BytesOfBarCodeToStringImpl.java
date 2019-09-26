@@ -7,6 +7,7 @@ import java.io.Serializable;
 import javax.enterprise.context.Dependent;
 import javax.imageio.ImageIO;
 
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
 import com.google.zxing.BinaryBitmap;
@@ -24,7 +25,7 @@ public class BytesOfBarCodeToStringImpl extends AbstractFunctionWithPropertiesAs
 	
 	@Override
 	protected String __execute__() throws Exception {
-		byte[] bytes = __injectValueHelper__().returnOrThrowIfBlank("bar code bytes", getBytes());
+		byte[] bytes = ValueHelper.returnOrThrowIfBlank("bar code bytes", getBytes());
 		BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(bytes));
 	    LuminanceSource source = new BufferedImageLuminanceSource(bufferedImage);
 	    BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));

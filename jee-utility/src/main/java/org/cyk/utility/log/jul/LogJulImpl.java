@@ -14,9 +14,9 @@ import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.log.AbstractLogImpl;
 import org.cyk.utility.log.LogEventEntityBuilder;
 import org.cyk.utility.log.LogEventEntityRepository;
-import org.cyk.utility.log.LogLevel;
+import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.log.message.LogMessage;
-import org.cyk.utility.value.ValueHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 
 @Dependent
 public class LogJulImpl extends AbstractLogImpl<Level> implements LogJul, Serializable {
@@ -109,7 +109,7 @@ public class LogJulImpl extends AbstractLogImpl<Level> implements LogJul, Serial
 */
 	@Override
 	protected Level __getLevel__(LogLevel level) {
-		level = __inject__(ValueHelper.class).defaultToIfNull(level, LogLevel.DEFAULT);
+		level = ValueHelper.defaultToIfNull(level, LogLevel.DEFAULT);
 		switch(level){
 		case ALL: return Level.ALL;
 		case TRACE: return Level.FINEST;

@@ -8,8 +8,8 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Response.Status.Family;
 
+import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.helper.Helper;
-import org.cyk.utility.number.NumberHelper;
 
 public interface ResponseHelper extends Helper {
 

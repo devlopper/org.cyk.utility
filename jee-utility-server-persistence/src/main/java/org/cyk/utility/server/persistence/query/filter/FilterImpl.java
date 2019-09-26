@@ -10,7 +10,7 @@ import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.field.FieldInstancesRuntime;
+import org.cyk.utility.__kernel__.field.FieldInstancesRuntime;
 
 @Dependent
 public class FilterImpl extends AbstractObject implements Filter,Serializable {

@@ -1,11 +1,12 @@
-package org.cyk.utility.value;
+package org.cyk.utility.__kernel__.value;
 
 import java.io.Serializable;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.field.FieldInstance;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
-import org.cyk.utility.field.FieldInstance;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -33,7 +34,7 @@ public class ValueImpl extends AbstractObject implements Value, Serializable {
 	public Object get() {
 		if(Boolean.TRUE.equals(__isValueHashBeenSet__) || fieldInstance == null)
 			return __value__;
-		__value__ =org.cyk.utility.__kernel__.field.FieldHelper.read(object, fieldInstance.getPath());
+		__value__ = FieldHelper.read(object, fieldInstance.getPath());
 		return __value__;
 	}
 	

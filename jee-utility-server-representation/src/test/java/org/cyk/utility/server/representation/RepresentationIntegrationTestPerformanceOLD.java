@@ -17,7 +17,7 @@ import org.cyk.utility.field.FieldsGetter;
 import org.cyk.utility.instance.AbstractInstanceBuilderImpl;
 import org.cyk.utility.instance.InstanceBuilder;
 import org.cyk.utility.instance.InstanceHelper;
-import org.cyk.utility.log.LogLevel;
+import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.mapping.MappingHelper;
 import org.cyk.utility.object.ObjectToStringBuilder;
 import org.cyk.utility.server.business.api.MyEntityAssertionsProvider;

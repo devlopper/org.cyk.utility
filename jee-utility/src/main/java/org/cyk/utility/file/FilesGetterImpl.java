@@ -8,10 +8,11 @@ import java.util.function.Consumer;
 import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.string.Strings;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.number.Interval;
 import org.cyk.utility.number.Intervals;
-import org.cyk.utility.__kernel__.string.Strings;
 
 @Dependent @Deprecated
 public class FilesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Files> implements FilesGetter,Serializable {
@@ -28,7 +29,7 @@ public class FilesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 		//get files paths
 		Paths paths = getPaths();
 		if(paths == null) {
-			PathsGetter pathsGetter = __injectValueHelper__().returnOrThrowIfBlank("files getter paths getter", getPathsGetter());
+			PathsGetter pathsGetter = ValueHelper.returnOrThrowIfBlank("files getter paths getter", getPathsGetter());
 			paths = pathsGetter.execute().getOutput();
 		}
 		Files files = __inject__(Files.class);
@@ -66,7 +67,7 @@ public class FilesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 				files.computeChecksum(Boolean.TRUE);
 			
 			//filter files by checksum
-			Boolean isFilterByFileChecksum = __injectValueHelper__().defaultToIfNull(getIsFilterByFileChecksum(),Boolean.FALSE);
+			Boolean isFilterByFileChecksum = ValueHelper.defaultToIfNull(getIsFilterByFileChecksum(),Boolean.FALSE);
 			if(Boolean.TRUE.equals(isFilterByFileChecksum))
 				files.removeDuplicateByChecksum();
 		}
@@ -75,7 +76,7 @@ public class FilesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 		
 		/*
 		Files files =  __inject__(Files.class);
-		Strings directories = __injectValueHelper__().returnOrThrowIfBlank("file directories", getDirectories());
+		Strings directories = ValueHelper.returnOrThrowIfBlank("file directories", getDirectories());
 		directories.get().forEach(new Consumer<String>() {
 			@Override
 			public void accept(String directory) {
@@ -100,7 +101,7 @@ public class FilesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 		Boolean isFileChecksumComputable = getIsFileChecksumComputable();
 		if(Boolean.TRUE.equals(isFileChecksumComputable))
 			files.computeChecksum(Boolean.TRUE);
-		Boolean isFilterByFileChecksum = __injectValueHelper__().defaultToIfNull(getIsFilterByFileChecksum(),Boolean.FALSE);
+		Boolean isFilterByFileChecksum = ValueHelper.defaultToIfNull(getIsFilterByFileChecksum(),Boolean.FALSE);
 		if(Boolean.TRUE.equals(isFilterByFileChecksum))
 			files.removeDuplicateByChecksum();
 		return files;
@@ -110,9 +111,9 @@ public class FilesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 	/*
 	@Override
 	protected Files __execute__() throws Exception {
-		Boolean isFilterByFileChecksum = __injectValueHelper__().defaultToIfNull(getIsFilterByFileChecksum(),Boolean.FALSE);
+		Boolean isFilterByFileChecksum = ValueHelper.defaultToIfNull(getIsFilterByFileChecksum(),Boolean.FALSE);
 		Files filesAll =  __inject__(Files.class);
-		Strings directories = __injectValueHelper__().returnOrThrowIfBlank("file directories", getDirectories());
+		Strings directories = ValueHelper.returnOrThrowIfBlank("file directories", getDirectories());
 		Boolean isFileChecksumComputable = getIsFileChecksumComputable();
 		
 		//get all files

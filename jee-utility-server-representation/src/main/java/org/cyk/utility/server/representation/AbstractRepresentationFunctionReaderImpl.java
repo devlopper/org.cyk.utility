@@ -14,7 +14,7 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.log.LogLevel;
+import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.mapping.MappingHelper;
 import org.cyk.utility.server.persistence.query.filter.Filter;
 import org.cyk.utility.server.persistence.query.filter.FilterDto;

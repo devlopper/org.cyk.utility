@@ -4,6 +4,7 @@ import javax.persistence.GeneratedValue;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.field.FieldInstancesRuntime;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 

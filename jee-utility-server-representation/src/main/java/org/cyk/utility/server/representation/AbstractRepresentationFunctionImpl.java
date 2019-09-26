@@ -14,7 +14,7 @@ import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
-import org.cyk.utility.log.LogLevel;
+import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.server.business.Business;
 import org.cyk.utility.system.AbstractSystemFunctionServerImpl;
 import org.cyk.utility.__kernel__.system.action.SystemAction;

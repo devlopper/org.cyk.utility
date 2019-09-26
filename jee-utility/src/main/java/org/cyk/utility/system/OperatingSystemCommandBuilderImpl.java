@@ -9,6 +9,7 @@ import javax.enterprise.context.Dependent;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
 import org.cyk.utility.string.StringFormat;
 
@@ -27,20 +28,20 @@ public class OperatingSystemCommandBuilderImpl extends AbstractStringFunctionImp
 	
 	@Override
 	protected StringFormat __getFormat__(StringFormat format) {
-		String command = __injectValueHelper__().returnOrThrowIfBlank("command", getCommand());
+		String command = ValueHelper.returnOrThrowIfBlank("command", getCommand());
 		Collection<String> options = new ArrayList<>();
-		Boolean isTerminalStartable = __injectValueHelper__().defaultToIfNull(getIsTerminalStartable(), Boolean.FALSE);
+		Boolean isTerminalStartable = ValueHelper.defaultToIfNull(getIsTerminalStartable(), Boolean.FALSE);
 		if(Boolean.TRUE.equals(isTerminalStartable)) {
 			String title = getTerminalTitle();
 			if(StringHelper.isBlank(title))
 				title = "Terminal for <<"+command+">>";
 			options.add("start \""+title+"\"");
 			
-			Boolean isTerminalShowable = __injectValueHelper__().defaultToIfNull(getIsTerminalShowable(), Boolean.FALSE);
+			Boolean isTerminalShowable = ValueHelper.defaultToIfNull(getIsTerminalShowable(), Boolean.FALSE);
 			if(Boolean.FALSE.equals(isTerminalShowable))
 				options.add("/b");
 			
-			Boolean isStartedTerminalClosable = __injectValueHelper__().defaultToIfNull(getIsStartedTerminalClosable(), Boolean.FALSE);
+			Boolean isStartedTerminalClosable = ValueHelper.defaultToIfNull(getIsStartedTerminalClosable(), Boolean.FALSE);
 			if(Boolean.TRUE.equals(isStartedTerminalClosable))
 				options.add("cmd /c");
 		}

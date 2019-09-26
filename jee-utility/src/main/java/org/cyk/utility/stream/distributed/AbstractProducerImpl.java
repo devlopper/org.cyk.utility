@@ -3,6 +3,7 @@ package org.cyk.utility.stream.distributed;
 import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.string.Strings;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 
 public abstract class AbstractProducerImpl extends AbstractProducerConsumerImpl implements Producer,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -12,7 +13,7 @@ public abstract class AbstractProducerImpl extends AbstractProducerConsumerImpl 
 	
 	@Override
 	protected void __execute__(Strings topics) throws Exception {
-		Message message = __injectValueHelper__().returnOrThrowIfBlank("produced message", getMessage());
+		Message message = ValueHelper.returnOrThrowIfBlank("produced message", getMessage());
 		Class<? extends ProducerCallback> callbackClass = getCallbackClass();
 		__prepare__(topics);
 		for(String index : topics.get())
@@ -29,7 +30,9 @@ public abstract class AbstractProducerImpl extends AbstractProducerConsumerImpl 
 	
 	@Override
 	public Message getMessage(Boolean injectIfNull) {
-		return (Message) __getInjectIfNull__(FIELD_MESSAGE, injectIfNull);
+		if(message == null && Boolean.TRUE.equals(injectIfNull))
+			message = __inject__(Message.class);
+		return message;
 	}
 
 	@Override
@@ -79,6 +82,4 @@ public abstract class AbstractProducerImpl extends AbstractProducerConsumerImpl 
 	
 	/**/
 	
-	private static final String FIELD_MESSAGE = "message";
-
 }

@@ -3,6 +3,7 @@ package org.cyk.utility.mapping;
 import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
 public class MapperSourceDestinationClassNameGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<String> implements MapperSourceDestinationClassNameGetter,Serializable {
@@ -19,7 +20,7 @@ public class MapperSourceDestinationClassNameGetterImpl extends AbstractFunction
 			if(klass != null)
 				className = klass.getName();
 		}
-		String name = String.format("%sMapper", __injectValueHelper__().returnOrThrowIfBlank("class name", className));
+		String name = String.format("%sMapper", ValueHelper.returnOrThrowIfBlank("class name", className));
 		return name;
 	}
 	

@@ -6,8 +6,8 @@ import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.assertion.Assertion;
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
+import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.number.NumberHelper;
 
 @Dependent @Deprecated
 public class AssertionBuilderComparisonImpl extends AbstractAssertionBuilderImpl implements AssertionBuilderComparison, Serializable {
@@ -22,7 +22,7 @@ public class AssertionBuilderComparisonImpl extends AbstractAssertionBuilderImpl
 			ComparisonOperator operator = getOperator();
 			if(operator == null)
 				__injectThrowableHelper__().throwRuntimeException(getClass()+" : operator is required.");
-			value = __inject__(NumberHelper.class).compare(number1, number2, operator);
+			value = NumberHelper.compare(number1, number2, operator);
 		}
 		return value;
 	}

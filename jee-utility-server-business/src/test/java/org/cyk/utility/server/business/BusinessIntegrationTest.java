@@ -92,13 +92,13 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 	}
 	
 	@Test
-	public void create_myEntity_WithLong1Null(){
+	public void create_myEntity_long1_1(){
 		MyEntity myEntity = new MyEntity().setCode("c01").setLong1(1l);
 		__inject__(MyEntityBusiness.class).create(myEntity);
 	}
 	
 	@Test
-	public void create_myEntity_WithAssertionFail(){
+	public void create_myEntity_long1_minus11(){
 		TestBusinessCreate test = __inject__(TestBusinessCreate.class);
 		test.addObjects(new MyEntity().setCode("c01").setLong1(-11l))
 			.setExpectedThrowableCauseClass(RuntimeException.class)

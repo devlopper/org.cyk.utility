@@ -19,17 +19,13 @@ import org.cyk.utility.css.CascadeStyleSheetHelperImpl;
 import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.instance.InstanceHelperImpl;
 import org.cyk.utility.log.Log;
-import org.cyk.utility.log.LogLevel;
+import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.map.MapHelper;
 import org.cyk.utility.map.MapHelperImpl;
-import org.cyk.utility.number.NumberHelper;
-import org.cyk.utility.number.NumberHelperImpl;
 import org.cyk.utility.throwable.ThrowableHelper;
 import org.cyk.utility.throwable.ThrowableHelperImpl;
 import org.cyk.utility.type.TypeHelper;
 import org.cyk.utility.type.TypeHelperImpl;
-import org.cyk.utility.value.ValueHelper;
-import org.cyk.utility.value.ValueHelperImpl;
 
 public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility.__kernel__.function.AbstractFunctionImpl<INPUT, OUTPUT> implements Function<INPUT,OUTPUT>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -281,20 +277,12 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 	
 	/**/
 	
-	protected static ValueHelper __injectValueHelper__(){
-		return ValueHelperImpl.getInstance();
-	}
-	
 	protected static MapHelper __injectMapHelper__(){
 		return MapHelperImpl.getInstance();
 	}
 	
 	protected static ThrowableHelper __injectThrowableHelper__(){
 		return ThrowableHelperImpl.getInstance();
-	}
-	
-	protected static NumberHelper __injectNumberHelper__(){
-		return NumberHelperImpl.getInstance();
 	}
 	
 	protected static InstanceHelper __injectInstanceHelper__(){

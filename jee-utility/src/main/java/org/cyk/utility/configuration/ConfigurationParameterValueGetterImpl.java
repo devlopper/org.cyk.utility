@@ -6,11 +6,12 @@ import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.function.Function;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.context.ContextGetter;
 import org.cyk.utility.context.ContextParameterValueGetter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.log.Log;
-import org.cyk.utility.log.LogLevel;
+import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.request.RequestParameterValueGetter;
 import org.cyk.utility.system.OperatingSystemHelper;
 import org.cyk.utility.system.SystemHelper;
@@ -28,7 +29,7 @@ public class ConfigurationParameterValueGetterImpl extends AbstractFunctionWithP
 	
 	@Override
 	protected Object __execute__() throws Exception {
-		String name = __injectValueHelper__().returnOrThrowIfBlank("configuration parameter name", getName());
+		String name = ValueHelper.returnOrThrowIfBlank("configuration parameter name", getName());
 		Object value = null;
 		Object request = getRequest();
 		Log log = __inject__(Log.class);
@@ -62,7 +63,7 @@ public class ConfigurationParameterValueGetterImpl extends AbstractFunctionWithP
 		Class<? extends IsNullChecker> isNullValueCheckerClass = getIsNullValueCheckerClass();
 		log.getMessageBuilder(Boolean.TRUE).addParameter("is null checker class", isNullValueCheckerClass);
 		if(isNullValueCheckerClass!=null) {
-			Boolean isNull = __injectValueHelper__().defaultToIfNull(__injectByQualifiersClasses__(isNullValueCheckerClass,getIsNullValueCheckerQualifierClass())
+			Boolean isNull = ValueHelper.defaultToIfNull(__injectByQualifiersClasses__(isNullValueCheckerClass,getIsNullValueCheckerQualifierClass())
 					.setValue(value).execute().getOutput(),Boolean.TRUE);
 			log.getMessageBuilder(Boolean.TRUE).addParameter("is null ?", isNull);
 			if(Boolean.TRUE.equals(isNull))

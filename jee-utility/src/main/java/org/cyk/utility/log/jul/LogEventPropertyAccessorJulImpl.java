@@ -9,7 +9,7 @@ import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.log.AbstractLogEventPropertyAccessorImpl;
-import org.cyk.utility.log.LogLevel;
+import org.cyk.utility.__kernel__.log.LogLevel;
 
 @ApplicationScoped
 public class LogEventPropertyAccessorJulImpl extends AbstractLogEventPropertyAccessorImpl implements LogEventPropertyAccessorJul, Serializable {

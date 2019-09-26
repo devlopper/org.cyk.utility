@@ -7,7 +7,7 @@ import javax.enterprise.context.ApplicationScoped;
 import org.cyk.utility.__kernel__.constant.ConstantNull;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.helper.AbstractHelper;
-import org.cyk.utility.value.ValueHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 
 @ApplicationScoped
 public class SystemHelperImpl extends AbstractHelper implements SystemHelper, Serializable {
@@ -38,13 +38,13 @@ public class SystemHelperImpl extends AbstractHelper implements SystemHelper, Se
 	@Override
 	public String getPropertyThrowIfBlank(String name) {
 		String value = getProperty(name);
-		return __inject__(ValueHelper.class).returnOrThrowIfBlank(name, value);
+		return ValueHelper.returnOrThrowIfBlank(name, value);
 	}
 
 	@Override
 	public String getPropertyThrowIfBlank(String name, Boolean defaultOnOperatingSystemIfBlank) {
 		String value = getProperty(name,defaultOnOperatingSystemIfBlank);
-		return __inject__(ValueHelper.class).returnOrThrowIfBlank(name, value);
+		return ValueHelper.returnOrThrowIfBlank(name, value);
 	}
 	
 	@Override

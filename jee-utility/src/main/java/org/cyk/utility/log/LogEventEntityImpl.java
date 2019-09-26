@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 
 @Dependent

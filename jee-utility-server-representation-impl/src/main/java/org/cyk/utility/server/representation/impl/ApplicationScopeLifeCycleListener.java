@@ -6,7 +6,7 @@ import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.AbstractApplicationScopeLifeCycleListener;
 import org.cyk.utility.__kernel__.string.StringHelper;
-import org.cyk.utility.log.LogLevel;
+import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.server.representation.AbstractRepresentationFunctionImpl;
 import org.cyk.utility.system.node.SystemNodeServer;
 
