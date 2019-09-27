@@ -25,7 +25,7 @@ public abstract class AbstractTimeAdapter<TIME> extends XmlAdapter<String, TIME>
 	@SuppressWarnings("unchecked")
 	@Override
     public TIME unmarshal(String string) throws Exception {
-        return (TIME) MethodUtils.invokeExactStaticMethod(__getTimeClass__(), METHOD_NAME_PARSE, new Object[] {string,__getFormatter__()},new Class[] {CharSequence.class,DateTimeFormatter.class} );
+        return (TIME) MethodUtils.invokeExactStaticMethod(__getTimeClass__(), METHOD_NAME_PARSE, new java.lang.Object[] {string,__getFormatter__()},new Class[] {CharSequence.class,DateTimeFormatter.class} );
     }
 
     @Override

@@ -11,26 +11,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor
-@XmlSeeAlso(MyEntityDto.class)
-public class MyEntityDtoCollection implements org.cyk.utility.__kernel__.object.__static__.representation.Collection<MyEntityDto>,Serializable {
+@XmlRootElement @NoArgsConstructor
+@XmlSeeAlso(MyEntityDto.class) @Getter @Setter @Accessors(chain=true) 
+public class MyEntityDtoCollection implements org.cyk.utility.__kernel__.object.__static__.representation.CollectionOfIdentifiedByStringAndCodedAndNamed<MyEntityDto>,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private Collection<MyEntityDto> myEntityDtos;
+	private Class<MyEntityDto> elementClass;
+	private Collection<MyEntityDto> elements;
 	
-	public MyEntityDtoCollection add(String identifier,String code,String name) {
-		add(new MyEntityDto().setIdentifier(identifier).setCode(code).setName(name));
-		return this;
-	}
-
-	@Override
-	public Collection<MyEntityDto> getElements() {
-		return myEntityDtos;
-	}
-
-	@Override
-	public org.cyk.utility.__kernel__.object.__static__.representation.Collection<MyEntityDto> setElements(Collection<MyEntityDto> elements) {
-		this.myEntityDtos = elements;
-		return this;
-	}
 }

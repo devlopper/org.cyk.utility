@@ -520,6 +520,11 @@ public interface FieldHelper {
 			write(object, getName(object.getClass(), fieldName, valueUsageType), value, isGettable);
 	}
 	
+	static void write(Object object, FieldName fieldName,ValueUsageType valueUsageType, Object value) {
+		if(object != null)
+			write(object, getName(object.getClass(), fieldName, valueUsageType), value, null);
+	}
+	
 	static void writeSystemIdentifier(Object object, Object value, Boolean isGettable) {
 		if(object != null)
 			write(object, getName(object.getClass(), FieldName.IDENTIFIER, ValueUsageType.SYSTEM), value, isGettable);

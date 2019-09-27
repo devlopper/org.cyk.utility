@@ -244,7 +244,7 @@ public class RepresentationBasedJaxbUnitTest {
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 			Many many = (Many) unmarshaller.unmarshal(getClass().getResourceAsStream("manyobjectsofoneandtwo.xml"));
 			Assert.assertEquals(3, many.getElements().size());
-			List<Object> elements = (List<Object>) many.getElements();
+			List<java.lang.Object> elements = (List<java.lang.Object>) many.getElements();
 			assertThat(elements.get(0)).isInstanceOf(Two.class);
 			assertThat(elements.get(1)).isInstanceOf(One.class);
 			assertThat(elements.get(2)).isInstanceOf(Two.class);
@@ -541,14 +541,14 @@ public class RepresentationBasedJaxbUnitTest {
 	@XmlRootElement @Getter @Setter @Accessors(chain=true)
 	public static class Many {
 		
-		private Collection<Object> elements = new ArrayList<>();
+		private Collection<java.lang.Object> elements = new ArrayList<>();
 		
 		@XmlElement(name="element")
-		public Collection<Object> getElements(){
+		public Collection<java.lang.Object> getElements(){
 			return elements;
 		}
 		
-		public Many add(Object element) {
+		public Many add(java.lang.Object element) {
 			elements.add(element);
 			return this;
 		}

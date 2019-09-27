@@ -14,8 +14,11 @@ import javax.ws.rs.core.Response.Status;
 
 import org.cyk.utility.__kernel__.test.arquillian.archive.builder.WebArchiveBuilder;
 import org.cyk.utility.server.representation.api.MyEntityRepresentation;
+import org.cyk.utility.server.representation.api.NodeRepresentation;
 import org.cyk.utility.server.representation.entities.MyEntityDto;
 import org.cyk.utility.server.representation.entities.MyEntityDtoCollection;
+import org.cyk.utility.server.representation.entities.NodeDto;
+import org.cyk.utility.server.representation.entities.NodeDtoCollection;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
@@ -50,7 +53,48 @@ public class RepresentationIntegrationRemoteTest  {
 	public void myEntity_create_many_collection_custom() throws Exception{
 		MyEntityRepresentation myEntityRepresentation = __getProxy__(MyEntityRepresentation.class,url);
 		myEntityRepresentation.deleteAll();
-		Response response = myEntityRepresentation.createMany(new MyEntityDtoCollection().add("1", "c01", "nc01").add("2", "c02", "n02"),null);
+		MyEntityDtoCollection myEntityDtoCollection = new MyEntityDtoCollection();
+		//myEntityDtoCollection.add(new MyEntityDto().setCode("1").setCode("c01").setName("n01"));
+		//myEntityDtoCollection.add(new MyEntityDto().setCode("2").setCode("c02").setName("n02"));
+		myEntityDtoCollection.add("1", "c01", "nc01").add("2", "c02", "n02");
+		Response response = myEntityRepresentation.createMany(myEntityDtoCollection,null);
+		assertThat(response.getStatusInfo()).isEqualTo(Status.CREATED);
+	}
+	
+	@Test
+	public void node_create_one() throws Exception{
+		NodeRepresentation nodeRepresentation = __getProxy__(NodeRepresentation.class,url);
+		nodeRepresentation.deleteAll();
+		NodeDto nodeDto = new NodeDto();
+		nodeDto.setIdentifier("1").setCode("c").setName("n");
+		Response response = nodeRepresentation.createOne(nodeDto);
+		assertThat(response.getStatusInfo()).isEqualTo(Status.CREATED);
+	}
+	
+	@Test
+	public void node_create_one_with_parents() throws Exception{
+		NodeRepresentation nodeRepresentation = __getProxy__(NodeRepresentation.class,url);
+		nodeRepresentation.deleteAll();
+		NodeDto nodeDto = new NodeDto();
+		nodeDto.setIdentifier("p1").setCode("c").setName("n");
+		Response response = nodeRepresentation.createOne(nodeDto);
+		assertThat(response.getStatusInfo()).isEqualTo(Status.CREATED);
+		nodeDto = new NodeDto();
+		nodeDto.setIdentifier("1").setCode("c").setName("n");
+		nodeDto.addParents(new NodeDto().setIdentifier("p1"));
+		response = nodeRepresentation.createOne(nodeDto);
+		assertThat(response.getStatusInfo()).isEqualTo(Status.CREATED);
+	}
+	
+	@Test
+	public void node_create_many_collection_custom() throws Exception{
+		NodeRepresentation nodeRepresentation = __getProxy__(NodeRepresentation.class,url);
+		nodeRepresentation.deleteAll();
+		NodeDtoCollection nodeDtoCollection = new NodeDtoCollection();
+		//myEntityDtoCollection.add(new MyEntityDto().setCode("1").setCode("c01").setName("n01"));
+		//myEntityDtoCollection.add(new MyEntityDto().setCode("2").setCode("c02").setName("n02"));
+		nodeDtoCollection.add("1", "c01", "nc01").add("2", "c02", "n02");
+		Response response = nodeRepresentation.createMany(nodeDtoCollection,null);
 		assertThat(response.getStatusInfo()).isEqualTo(Status.CREATED);
 	}
 	

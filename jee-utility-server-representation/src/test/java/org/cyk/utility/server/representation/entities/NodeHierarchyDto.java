@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-
+/*
 @XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor
 public class NodeHierarchyDto extends AbstractHierarchy<NodeDto> implements Serializable {	
 	private static final long serialVersionUID = 1L;
@@ -25,4 +25,4 @@ public class NodeHierarchyDto extends AbstractHierarchy<NodeDto> implements Seri
 		return (NodeHierarchyDto) super.setChild(child);
 	}
 	
-}
+}*/

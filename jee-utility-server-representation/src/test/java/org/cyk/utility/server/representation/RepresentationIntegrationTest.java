@@ -459,7 +459,7 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 	}
 	
 	/* Hierarchy */
-	
+	/*
 	@Test
 	public void create_node() throws Exception{
 		NodeDto nodeModule = new NodeDto().setCode("module").setName(__getRandomName__());
@@ -565,7 +565,7 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 		assertThat(nodes).isNotEmpty();
 		assertThat(nodes.stream().map(NodeDto::getCode).collect(Collectors.toList())).containsOnly("service");
 	}
-	
+	*/
 	@SuppressWarnings("unchecked")
 	@Test
 	public void read_nodes() {
