@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import org.cyk.utility.__kernel__.collection.AbstractCollectionInstanceImpl;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 
-public abstract class AbstractHierarchiesImpl<HIERARCHY extends AbstractHierarchy<ENTITY>,ENTITY extends AbstractIdentifiedByString<?,?>> extends AbstractCollectionInstanceImpl<HIERARCHY> implements Hierarchies<HIERARCHY,ENTITY>,Serializable {
+public abstract class AbstractHierarchiesImpl<HIERARCHY extends AbstractHierarchy<ENTITY>,ENTITY extends AbstractIdentifiedByString<?>> extends AbstractCollectionInstanceImpl<HIERARCHY> implements Hierarchies<HIERARCHY,ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override

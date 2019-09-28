@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 
-public interface PersistenceIdentifiedByStringAndCoded<ENTITY extends AbstractIdentifiedByStringAndCoded<?,?>> extends PersistenceIdentifiedByString<ENTITY> {
+public interface PersistenceIdentifiedByStringAndCoded<ENTITY extends AbstractIdentifiedByStringAndCoded<?>> extends PersistenceIdentifiedByString<ENTITY> {
 
 	Collection<ENTITY> readByParentsCodes(Collection<String> parentsCodes,Properties properties);
 	Collection<ENTITY> readByParentsCodes(Collection<String> parentsCodes);

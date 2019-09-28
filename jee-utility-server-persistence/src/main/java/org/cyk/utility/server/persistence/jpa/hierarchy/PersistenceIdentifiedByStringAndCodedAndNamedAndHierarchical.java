@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import org.cyk.utility.server.persistence.PersistenceEntity;
 
-public interface PersistenceIdentifiedByStringAndCodedAndNamedAndHierarchical<ENTITY extends AbstractIdentifiedByString<?,?>> extends PersistenceEntity<ENTITY> {
+public interface PersistenceIdentifiedByStringAndCodedAndNamedAndHierarchical<ENTITY extends AbstractIdentifiedByString<?>> extends PersistenceEntity<ENTITY> {
 
 	Collection<ENTITY> readByParentsIdentifiers(Collection<String> parentsIdentifiers);
 	Collection<ENTITY> readByParentsIdentifiers(String...parentsIdentifiers);

@@ -15,7 +15,7 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 @MappedSuperclass @Getter @Setter @Accessors(chain=true) @Access(AccessType.FIELD) @ToString
-public class AbstractHierarchy<ENTITY extends AbstractIdentifiedByString<?,?>> extends org.cyk.utility.server.persistence.jpa.AbstractIdentifiedByString implements Serializable {
+public class AbstractHierarchy<ENTITY extends AbstractIdentifiedByString<?>> extends org.cyk.utility.server.persistence.jpa.AbstractIdentifiedByString implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@ManyToOne @JoinColumn(name=COLUMN_PARENT) @NotNull private ENTITY parent;

@@ -5,17 +5,18 @@ import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 
-public interface CollectionOfIdentifiedByStringAndCoded<ELEMENT> extends CollectionOfIdentifiedByString<ELEMENT> {
+public interface CollectionOfIdentifiedByStringAndCoded<IDENTIFIED> extends CollectionOfIdentifiedByString<IDENTIFIED> {
 
-	default CollectionOfIdentifiedByStringAndCoded<ELEMENT> add(String identifier,String code) {
+	default CollectionOfIdentifiedByStringAndCoded<IDENTIFIED> add(String identifier,String code) {
 		add(identifier);
-		ELEMENT element = CollectionHelper.getLast(getElements());
-		if(element == null)
+		IDENTIFIED identified = CollectionHelper.getLast(getElements());
+		if(identified == null)
 			return this;
-		if(code != null) {
-			FieldHelper.write(element, FieldName.IDENTIFIER,ValueUsageType.BUSINESS, code);	
-		}
+		writeCode(identified, code);
 		return this;
 	}
 	
+	default void writeCode(IDENTIFIED identified,String code) {
+		FieldHelper.write(identified, FieldName.IDENTIFIER,ValueUsageType.BUSINESS, code);
+	}
 }

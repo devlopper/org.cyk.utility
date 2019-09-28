@@ -8,15 +8,13 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
 
-import org.cyk.utility.__kernel__.collection.CollectionInstance;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true) @Access(AccessType.FIELD)
 @MappedSuperclass
-public abstract class AbstractIdentifiedByStringAndCoded<ENTITY,COLLECTION extends CollectionInstance<ENTITY>> extends AbstractIdentifiedByString<ENTITY,COLLECTION> implements Serializable {
+public abstract class AbstractIdentifiedByStringAndCoded<ENTITY> extends AbstractIdentifiedByString<ENTITY> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@NotNull @Column(name=COLUMN_CODE,nullable=false,unique=true)

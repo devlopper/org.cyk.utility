@@ -47,47 +47,44 @@ public class JaxbUnitTest extends AbstractWeldUnitTest {
 		nodeDtoCollection01.add(new NodeDto().setIdentifier("1").setCode("c").setName("n"));
 		String string = JsonbBuilder.create().toJson(nodeDtoCollection01);
 		NodeDtoCollection nodeDtoCollection02 = JsonbBuilder.create().fromJson(string, NodeDtoCollection.class);
-		assertThat(nodeDtoCollection02.getCollection()).isNotNull();
-		assertThat(nodeDtoCollection02.getCollection()).hasSize(1);
-		assertThat(nodeDtoCollection02.getCollection().get(0).getIdentifier()).isEqualTo("1");
-		assertThat(nodeDtoCollection02.getCollection().get(0).getCode()).isEqualTo("c");
-		assertThat(nodeDtoCollection02.getCollection().get(0).getName()).isEqualTo("n");
+		assertThat(nodeDtoCollection02.getElements()).isNotNull();
+		assertThat(nodeDtoCollection02.getElements()).hasSize(1);
+		NodeDto nodeDto = nodeDtoCollection02.getElements().iterator().next();
+		assertThat(nodeDto.getIdentifier()).isEqualTo("1");
+		assertThat(nodeDto.getCode()).isEqualTo("c");
+		assertThat(nodeDto.getName()).isEqualTo("n");
 	}
 	
 	@Test
 	public void nodeDtoWithParents_to_json() {
-		NodeDtoCollection nodeDtoCollection01 = new NodeDtoCollection();
 		NodeDto nodeDto01 = new NodeDto().setIdentifier("0").setCode("c0").setName("00");
-		nodeDtoCollection01.add(new NodeDto().setIdentifier("1").setCode("c").setName("n"));
-		nodeDto01.setParents(nodeDtoCollection01);
+		nodeDto01.setParents(List.of(new NodeDto().setIdentifier("1").setCode("c").setName("n")));
 		String string = JsonbBuilder.create().toJson(nodeDto01);
 		//string = "{\"code\":\"null.0\",\"name\":\"SEx\",\"parents\":{\"collection\":[{}]}}";
 		string = "{\"code\":\"null.0\",\"name\":\"Gqe\",\"parents\":{\"collection\":[{\"identifier\":\"1\",\"code\":\"c\",\"name\":\"n\"}]}}";
 		NodeDto nodeDto2 = JsonbBuilder.create().fromJson(string, NodeDto.class);
-		NodeDtoCollection nodeDtoCollection02 = nodeDto2.getParents();
-		assertThat(nodeDtoCollection02.getCollection()).isNotNull();
-		assertThat(nodeDtoCollection02.getCollection()).hasSize(1);
-		assertThat(nodeDtoCollection02.getCollection().get(0).getIdentifier()).isEqualTo("1");
-		assertThat(nodeDtoCollection02.getCollection().get(0).getCode()).isEqualTo("c");
-		assertThat(nodeDtoCollection02.getCollection().get(0).getName()).isEqualTo("n");
+		assertThat(nodeDto2.getParents()).isNotNull();
+		assertThat(nodeDto2.getParents()).hasSize(1);
+		NodeDto nodeDto = nodeDto2.getParents().iterator().next();
+		assertThat(nodeDto.getIdentifier()).isEqualTo("1");
+		assertThat(nodeDto.getCode()).isEqualTo("c");
+		assertThat(nodeDto.getName()).isEqualTo("n");
 	}
 	
 	@Test
 	public void array_nodeDtoWithParents_to_json() {
-		NodeDtoCollection nodeDtoCollection01 = new NodeDtoCollection();
 		NodeDto nodeDto01 = new NodeDto().setIdentifier("0").setCode("c0").setName("00");
-		nodeDtoCollection01.add(new NodeDto().setIdentifier("1").setCode("c").setName("n"));
-		nodeDto01.setParents(nodeDtoCollection01);
+		nodeDto01.addParents(new NodeDto().setIdentifier("1").setCode("c").setName("n"));
 		List<NodeDto> nodeDto01s = List.of(nodeDto01);
 		String string = JsonbBuilder.create().toJson(nodeDto01s);
 		string = "[{\"code\":\"null.0\",\"name\":\"Gqe\",\"parents\":{\"collection\":[{\"identifier\":\"1\",\"code\":\"c\",\"name\":\"n\"}]}}]";
 		List<NodeDto> nodeDto2s = JsonbBuilder.create().fromJson(string, new ArrayList<NodeDto>(){private static final long serialVersionUID = 1L;}.getClass().getGenericSuperclass());
-		NodeDtoCollection nodeDtoCollection02 = nodeDto2s.get(0).getParents();
-		assertThat(nodeDtoCollection02.getCollection()).isNotNull();
-		assertThat(nodeDtoCollection02.getCollection()).hasSize(1);
-		assertThat(nodeDtoCollection02.getCollection().get(0).getIdentifier()).isEqualTo("1");
-		assertThat(nodeDtoCollection02.getCollection().get(0).getCode()).isEqualTo("c");
-		assertThat(nodeDtoCollection02.getCollection().get(0).getName()).isEqualTo("n");
+		assertThat(nodeDto2s.get(0).getParents()).isNotNull();
+		assertThat(nodeDto2s.get(0).getParents()).hasSize(1);
+		NodeDto nodeDto = nodeDto2s.get(0).getParents().iterator().next();
+		assertThat(nodeDto.getIdentifier()).isEqualTo("1");
+		assertThat(nodeDto.getCode()).isEqualTo("c");
+		assertThat(nodeDto.getName()).isEqualTo("n");
 	}
 	
 	/*

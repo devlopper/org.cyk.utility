@@ -1,6 +1,7 @@
 package org.cyk.utility.server.persistence.jpa.hierarchy;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -8,9 +9,6 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
-
-import org.cyk.utility.__kernel__.collection.CollectionInstance;
-import org.cyk.utility.array.ArrayHelper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -20,48 +18,52 @@ import lombok.experimental.Accessors;
 @SuppressWarnings("rawtypes")
 @Getter @Setter @Accessors(chain=true) @Access(AccessType.FIELD) @ToString
 @MappedSuperclass
-public abstract class AbstractIdentifiedByString<ENTITY,COLLECTION extends CollectionInstance<ENTITY>> extends org.cyk.utility.server.persistence.jpa.AbstractIdentifiedByString implements Serializable {
+public abstract class AbstractIdentifiedByString<ENTITY> extends org.cyk.utility.server.persistence.jpa.AbstractIdentifiedByString implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Transient protected COLLECTION parents;
+	@Transient protected Collection<ENTITY> parents;
 	@Transient protected Long numberOfParents;
 	
-	@Transient protected COLLECTION children;
+	@Transient protected Collection<ENTITY> children;
 	@Transient protected Long numberOfChildren;
 	
-	@SuppressWarnings("unchecked")
-	public COLLECTION getParents(Boolean injectIfNull) {
+	public Collection<ENTITY> getParents(Boolean injectIfNull) {
 		if(parents == null && Boolean.TRUE.equals(injectIfNull))
-			setParents((COLLECTION) __inject__(org.cyk.utility.__kernel__.klass.ClassHelper.getParameterAt(getClass(), 1)));
+			setParents(parents = new ArrayList<>());
 		return parents;
 	}
 	
-	public AbstractIdentifiedByString addParents(Collection<ENTITY> children) {
-		getParents(Boolean.TRUE).add(children);
+	public AbstractIdentifiedByString addParents(Collection<ENTITY> parents) {
+		if(parents == null || parents.isEmpty())
+			return this;
+		getParents(Boolean.TRUE).addAll(parents);
 		return this;
 	}
 	
 	public AbstractIdentifiedByString addParents(@SuppressWarnings("unchecked") ENTITY...parents) {
-		if(__inject__(ArrayHelper.class).isNotEmpty(parents))
-			addParents(List.of(parents));
+		if(parents == null || parents.length == 0)
+			return this;
+		addParents(List.of(parents));
 		return this;
 	}
 	
-	@SuppressWarnings("unchecked")
-	public COLLECTION getChildren(Boolean injectIfNull) {
+	public Collection<ENTITY> getChildren(Boolean injectIfNull) {
 		if(children == null && Boolean.TRUE.equals(injectIfNull))
-			setChildren((COLLECTION) __inject__(org.cyk.utility.__kernel__.klass.ClassHelper.getParameterAt(getClass(), 1)));
+			setChildren(children = new ArrayList<>());
 		return children;
 	}
 	
 	public AbstractIdentifiedByString addChildren(Collection<ENTITY> children) {
-		getChildren(Boolean.TRUE).add(children);
+		if(children == null || children.isEmpty())
+			return this;
+		getChildren(Boolean.TRUE).addAll(children);
 		return this;
 	}
 	
 	public AbstractIdentifiedByString addChildren(@SuppressWarnings("unchecked") ENTITY...children) {
-		if(__inject__(ArrayHelper.class).isNotEmpty(children))
-			addChildren(List.of(children));
+		if(children == null || children.length == 0)
+			return this;
+		addChildren(List.of(children));
 		return this;
 	}
 	

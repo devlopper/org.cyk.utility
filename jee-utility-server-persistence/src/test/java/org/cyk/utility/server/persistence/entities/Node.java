@@ -14,7 +14,7 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 @Entity @Getter @Setter @Accessors(chain=true) @Access(AccessType.FIELD) @ToString
-public class Node extends AbstractIdentifiedByStringAndCodedAndNamed<Node,Nodes> implements Serializable {
+public class Node extends AbstractIdentifiedByStringAndCodedAndNamed<Node> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override

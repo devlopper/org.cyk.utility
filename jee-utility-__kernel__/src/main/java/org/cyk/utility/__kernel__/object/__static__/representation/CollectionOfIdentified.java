@@ -6,17 +6,18 @@ import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 
-public interface CollectionOfIdentified<ELEMENT,IDENTIFIER> extends Collection<ELEMENT> {
+public interface CollectionOfIdentified<IDENTIFIED,IDENTIFIER> extends Collection<IDENTIFIED> {
 
-	default CollectionOfIdentified<ELEMENT,IDENTIFIER> add(IDENTIFIER identifier) {
-		ELEMENT element = instantiateElement();
-		if(element == null)
+	default CollectionOfIdentified<IDENTIFIED,IDENTIFIER> add(IDENTIFIER identifier) {
+		IDENTIFIED identified = instantiateElement();
+		if(identified == null)
 			return this;
-		if(identifier != null) {
-			FieldHelper.write(element, FieldName.IDENTIFIER,ValueUsageType.SYSTEM, identifier);	
-		}
-		add(List.of(element));
+		writeIdentifier(identified, identifier);
+		add(List.of(identified));
 		return this;
 	}
 	
+	default void writeIdentifier(IDENTIFIED identified,IDENTIFIER identifier) {
+		FieldHelper.write(identified, FieldName.IDENTIFIER,ValueUsageType.SYSTEM, identifier);
+	}
 }

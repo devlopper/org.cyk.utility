@@ -7,15 +7,13 @@ import javax.persistence.AccessType;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
-import org.cyk.utility.__kernel__.collection.CollectionInstance;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true) @Access(AccessType.FIELD)
 @MappedSuperclass
-public abstract class AbstractIdentifiedByStringAndLinkedByStringAndNamed<ENTITY,COLLECTION extends CollectionInstance<ENTITY>> extends AbstractIdentifiedByStringAndLinkedByString<ENTITY,COLLECTION> implements Serializable {
+public abstract class AbstractIdentifiedByStringAndLinkedByStringAndNamed<ENTITY> extends AbstractIdentifiedByStringAndLinkedByString<ENTITY> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Transient protected String name;

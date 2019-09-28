@@ -5,7 +5,7 @@ import java.util.Collection;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.server.persistence.PersistenceEntity;
 
-public interface HierarchyPersistence<HIERARCHY extends AbstractHierarchy<ENTITY>,ENTITY extends AbstractIdentifiedByString<?,?>,HIERARCHIES extends Hierarchies<HIERARCHY,ENTITY>> extends PersistenceEntity<HIERARCHY> {
+public interface HierarchyPersistence<HIERARCHY extends AbstractHierarchy<ENTITY>,ENTITY extends AbstractIdentifiedByString<?>,HIERARCHIES extends Hierarchies<HIERARCHY,ENTITY>> extends PersistenceEntity<HIERARCHY> {
 
 	HIERARCHIES readByParentsIdentifiers(Collection<String> parentsIdentifiers);
 	Long countByParentsIdentifiers(Collection<String> parentsIdentifiers,Properties properties);

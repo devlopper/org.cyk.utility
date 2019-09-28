@@ -5,7 +5,7 @@ import java.util.Collection;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.server.persistence.PersistenceEntity;
 
-public interface PersistenceIdentifiedByString<ENTITY extends AbstractIdentifiedByString<?,?>> extends PersistenceEntity<ENTITY> {
+public interface PersistenceIdentifiedByString<ENTITY extends AbstractIdentifiedByString<?>> extends PersistenceEntity<ENTITY> {
 
 	Collection<ENTITY> readByParentsIdentifiers(Collection<String> parentsIdentifiers,Properties properties);
 	Long countByParentsIdentifiers(Collection<String> parentsIdentifiers,Properties properties);

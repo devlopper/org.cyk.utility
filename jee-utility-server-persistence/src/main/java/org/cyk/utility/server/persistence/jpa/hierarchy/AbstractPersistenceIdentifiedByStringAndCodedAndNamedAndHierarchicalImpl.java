@@ -11,7 +11,7 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.server.persistence.AbstractPersistenceEntityImpl;
 import org.cyk.utility.__kernel__.string.Strings;
 
-public abstract class AbstractPersistenceIdentifiedByStringAndCodedAndNamedAndHierarchicalImpl<ENTITY extends AbstractIdentifiedByString<ENTITY,?>,HIERARCHY extends AbstractHierarchy<ENTITY>,HIERARCHIES extends Hierarchies<HIERARCHY,ENTITY>,HIERARCHY_PERSISTENCE extends HierarchyPersistence<HIERARCHY,ENTITY, HIERARCHIES>> extends AbstractPersistenceEntityImpl<ENTITY> implements PersistenceIdentifiedByStringAndCodedAndNamedAndHierarchical<ENTITY>,Serializable {
+public abstract class AbstractPersistenceIdentifiedByStringAndCodedAndNamedAndHierarchicalImpl<ENTITY extends AbstractIdentifiedByString<ENTITY>,HIERARCHY extends AbstractHierarchy<ENTITY>,HIERARCHIES extends Hierarchies<HIERARCHY,ENTITY>,HIERARCHY_PERSISTENCE extends HierarchyPersistence<HIERARCHY,ENTITY, HIERARCHIES>> extends AbstractPersistenceEntityImpl<ENTITY> implements PersistenceIdentifiedByStringAndCodedAndNamedAndHierarchical<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Class<HIERARCHY_PERSISTENCE> hierarchyPersistenceClass;
@@ -81,11 +81,11 @@ public abstract class AbstractPersistenceIdentifiedByStringAndCodedAndNamedAndHi
 					if(AbstractIdentifiedByString.FIELD_PARENTS.equals(field)) {
 						Collection<ENTITY> parents = readByChildren(entity);
 						if(CollectionHelper.isNotEmpty(parents))
-							entity.getParents(Boolean.TRUE).add(parents);
+							entity.addParents(parents);
 					}else if(AbstractIdentifiedByString.FIELD_CHILDREN.equals(field)) {
 						Collection<ENTITY> children = readByParents(entity);
 						if(CollectionHelper.isNotEmpty(children))
-							entity.getChildren(Boolean.TRUE).add(children);
+							entity.addChildren(children);
 					}
 				}
 			});

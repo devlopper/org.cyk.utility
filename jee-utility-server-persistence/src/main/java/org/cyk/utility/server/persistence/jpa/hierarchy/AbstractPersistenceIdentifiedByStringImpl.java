@@ -18,7 +18,7 @@ import org.cyk.utility.server.persistence.query.filter.Field;
 import org.cyk.utility.server.persistence.query.filter.Filter;
 import org.cyk.utility.__kernel__.string.Strings;
 
-public abstract class AbstractPersistenceIdentifiedByStringImpl<ENTITY extends AbstractIdentifiedByString<ENTITY,?>,HIERARCHY extends AbstractHierarchy<ENTITY>,HIERARCHIES extends Hierarchies<HIERARCHY,ENTITY>,HIERARCHY_PERSISTENCE extends HierarchyPersistence<HIERARCHY,ENTITY, HIERARCHIES>> extends AbstractPersistenceEntityImpl<ENTITY> implements PersistenceIdentifiedByString<ENTITY>,Serializable {
+public abstract class AbstractPersistenceIdentifiedByStringImpl<ENTITY extends AbstractIdentifiedByString<ENTITY>,HIERARCHY extends AbstractHierarchy<ENTITY>,HIERARCHIES extends Hierarchies<HIERARCHY,ENTITY>,HIERARCHY_PERSISTENCE extends HierarchyPersistence<HIERARCHY,ENTITY, HIERARCHIES>> extends AbstractPersistenceEntityImpl<ENTITY> implements PersistenceIdentifiedByString<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	protected String readWhereNotHavingParent,readWhereNotHavingChild,readByParentsIdentifiers,readByChildrenIdentifiers;
@@ -246,11 +246,11 @@ public abstract class AbstractPersistenceIdentifiedByStringImpl<ENTITY extends A
 					if(AbstractIdentifiedByString.FIELD_PARENTS.equals(field)) {
 						Collection<ENTITY> parents = readByChildren(entity);
 						if(CollectionHelper.isNotEmpty(parents))
-							entity.getParents(Boolean.TRUE).add(parents);
+							entity.addParents(parents);
 					}else if(AbstractIdentifiedByString.FIELD_CHILDREN.equals(field)) {
 						Collection<ENTITY> children = readByParents(entity);
 						if(CollectionHelper.isNotEmpty(children))
-							entity.getChildren(Boolean.TRUE).add(children);
+							entity.addChildren(children);
 					}else if(AbstractIdentifiedByString.FIELD_NUMBER_OF_CHILDREN.equals(field)) {
 						entity.setNumberOfChildren(countByParentsIdentifiers(Arrays.asList(entity.getIdentifier())));
 					}
