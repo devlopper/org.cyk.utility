@@ -44,8 +44,8 @@ public class RepresentationIntegrationRemoteTest  {
 	public void myEntity_create_many_collection_java() throws Exception{
 		MyEntityRepresentation myEntityRepresentation = __getProxy__(MyEntityRepresentation.class,url);
 		myEntityRepresentation.deleteAll();
-		Response response = myEntityRepresentation.createMany(List.of(new MyEntityDto().setIdentifier("1").setCode("c01").setName("n01")
-				,new MyEntityDto().setIdentifier("2").setCode("c02").setName("n02")),null);
+		Response response = myEntityRepresentation.createMany(List.of(new MyEntityDto().setIdentifier("1a").setCode("c01a").setName("n01")
+				,new MyEntityDto().setIdentifier("2a").setCode("c02a").setName("n02")),null);
 		assertThat(response.getStatusInfo()).isEqualTo(Status.CREATED);
 	}
 	
@@ -56,7 +56,7 @@ public class RepresentationIntegrationRemoteTest  {
 		MyEntityDtoCollection myEntityDtoCollection = new MyEntityDtoCollection();
 		//myEntityDtoCollection.add(new MyEntityDto().setCode("1").setCode("c01").setName("n01"));
 		//myEntityDtoCollection.add(new MyEntityDto().setCode("2").setCode("c02").setName("n02"));
-		myEntityDtoCollection.add("1", "c01", "nc01").add("2", "c02", "n02");
+		myEntityDtoCollection.add("1b", "c01b", "nc01").add("2b", "c02b", "n02");
 		Response response = myEntityRepresentation.createMany(myEntityDtoCollection,null);
 		assertThat(response.getStatusInfo()).isEqualTo(Status.CREATED);
 	}
@@ -66,7 +66,7 @@ public class RepresentationIntegrationRemoteTest  {
 		NodeRepresentation nodeRepresentation = __getProxy__(NodeRepresentation.class,url);
 		nodeRepresentation.deleteAll();
 		NodeDto nodeDto = new NodeDto();
-		nodeDto.setIdentifier("1").setCode("c").setName("n");
+		nodeDto.setIdentifier("1000111").setCode("c00011").setName("n");
 		Response response = nodeRepresentation.createOne(nodeDto);
 		assertThat(response.getStatusInfo()).isEqualTo(Status.CREATED);
 	}
@@ -80,7 +80,7 @@ public class RepresentationIntegrationRemoteTest  {
 		Response response = nodeRepresentation.createOne(nodeDto);
 		assertThat(response.getStatusInfo()).isEqualTo(Status.CREATED);
 		nodeDto = new NodeDto();
-		nodeDto.setIdentifier("1").setCode("c").setName("n");
+		nodeDto.setIdentifier("1c").setCode("c2").setName("n2");
 		nodeDto.addParents(new NodeDto().setIdentifier("p1"));
 		response = nodeRepresentation.createOne(nodeDto);
 		assertThat(response.getStatusInfo()).isEqualTo(Status.CREATED);
@@ -93,7 +93,7 @@ public class RepresentationIntegrationRemoteTest  {
 		NodeDtoCollection nodeDtoCollection = new NodeDtoCollection();
 		//myEntityDtoCollection.add(new MyEntityDto().setCode("1").setCode("c01").setName("n01"));
 		//myEntityDtoCollection.add(new MyEntityDto().setCode("2").setCode("c02").setName("n02"));
-		nodeDtoCollection.add("1", "c01", "nc01").add("2", "c02", "n02");
+		nodeDtoCollection.add("1az", "c01az", "nc01").add("2az", "c02az", "n02");
 		Response response = nodeRepresentation.createMany(nodeDtoCollection,null);
 		assertThat(response.getStatusInfo()).isEqualTo(Status.CREATED);
 	}

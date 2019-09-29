@@ -30,7 +30,7 @@ public interface Collection<ELEMENT> extends Objectable {
 		return this;
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") @JsonbTransient
 	default ELEMENT instantiateElement() {
 		Class<ELEMENT> elementClass = getElementClass();
 		if(elementClass == null)

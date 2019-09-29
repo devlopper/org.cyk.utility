@@ -33,8 +33,8 @@ public class JaxbUnitTest extends AbstractWeldUnitTest {
 			assertThat(string)
 			.contains("<nodeDto>")
 			.contains("<identifier>1</identifier>").contains("<code>c</code>").contains("<name>n</name>")
-			.contains("<parents>").contains("</parents>")
-			.contains("<children>").contains("</children>")
+			.contains("<parents").contains("</parents>")
+			.contains("<children").contains("</children>")
 			.contains("</nodeDto>");
 		} catch(Exception exception) {
 			throw new RuntimeException(exception);
@@ -58,10 +58,10 @@ public class JaxbUnitTest extends AbstractWeldUnitTest {
 	@Test
 	public void nodeDtoWithParents_to_json() {
 		NodeDto nodeDto01 = new NodeDto().setIdentifier("0").setCode("c0").setName("00");
-		nodeDto01.setParents(List.of(new NodeDto().setIdentifier("1").setCode("c").setName("n")));
+		nodeDto01.setParents(new ArrayList<NodeDto>(List.of(new NodeDto().setIdentifier("1").setCode("c").setName("n"))));
 		String string = JsonbBuilder.create().toJson(nodeDto01);
 		//string = "{\"code\":\"null.0\",\"name\":\"SEx\",\"parents\":{\"collection\":[{}]}}";
-		string = "{\"code\":\"null.0\",\"name\":\"Gqe\",\"parents\":{\"collection\":[{\"identifier\":\"1\",\"code\":\"c\",\"name\":\"n\"}]}}";
+		string = "{\"code\":\"null.0\",\"name\":\"Gqe\",\"parents\":[{\"identifier\":\"1\",\"code\":\"c\",\"name\":\"n\"}]}";
 		NodeDto nodeDto2 = JsonbBuilder.create().fromJson(string, NodeDto.class);
 		assertThat(nodeDto2.getParents()).isNotNull();
 		assertThat(nodeDto2.getParents()).hasSize(1);
@@ -77,7 +77,7 @@ public class JaxbUnitTest extends AbstractWeldUnitTest {
 		nodeDto01.addParents(new NodeDto().setIdentifier("1").setCode("c").setName("n"));
 		List<NodeDto> nodeDto01s = List.of(nodeDto01);
 		String string = JsonbBuilder.create().toJson(nodeDto01s);
-		string = "[{\"code\":\"null.0\",\"name\":\"Gqe\",\"parents\":{\"collection\":[{\"identifier\":\"1\",\"code\":\"c\",\"name\":\"n\"}]}}]";
+		string = "[{\"code\":\"null.0\",\"name\":\"Gqe\",\"parents\":[{\"identifier\":\"1\",\"code\":\"c\",\"name\":\"n\"}]}]";
 		List<NodeDto> nodeDto2s = JsonbBuilder.create().fromJson(string, new ArrayList<NodeDto>(){private static final long serialVersionUID = 1L;}.getClass().getGenericSuperclass());
 		assertThat(nodeDto2s.get(0).getParents()).isNotNull();
 		assertThat(nodeDto2s.get(0).getParents()).hasSize(1);

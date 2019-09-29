@@ -11,7 +11,7 @@ import org.cyk.utility.server.persistence.jpa.hierarchy.Hierarchies;
 import org.cyk.utility.server.persistence.jpa.hierarchy.HierarchyPersistence;
 import org.cyk.utility.server.persistence.jpa.hierarchy.PersistenceIdentifiedByString;
 
-public abstract class AbstractBusinessIdentifiedByStringImpl<ENTITY extends AbstractIdentifiedByString<ENTITY,?>,PERSISTENCE extends PersistenceIdentifiedByString<ENTITY>,HIERARCHY extends AbstractHierarchy<ENTITY>,HIERARCHIES extends Hierarchies<HIERARCHY,ENTITY>,HIERARCHY_PERSISTENCE extends HierarchyPersistence<HIERARCHY,ENTITY, HIERARCHIES>,HIERARCHY_BUSINESS extends HierarchyBusiness<HIERARCHY, ENTITY, HIERARCHIES>> extends AbstractBusinessEntityImpl<ENTITY,PERSISTENCE> implements BusinessIdentifiedByString<ENTITY>,Serializable {
+public abstract class AbstractBusinessIdentifiedByStringImpl<ENTITY extends AbstractIdentifiedByString<ENTITY>,PERSISTENCE extends PersistenceIdentifiedByString<ENTITY>,HIERARCHY extends AbstractHierarchy<ENTITY>,HIERARCHIES extends Hierarchies<HIERARCHY,ENTITY>,HIERARCHY_PERSISTENCE extends HierarchyPersistence<HIERARCHY,ENTITY, HIERARCHIES>,HIERARCHY_BUSINESS extends HierarchyBusiness<HIERARCHY, ENTITY, HIERARCHIES>> extends AbstractBusinessEntityImpl<ENTITY,PERSISTENCE> implements BusinessIdentifiedByString<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	protected Class<HIERARCHY> __hierarchyClass__;

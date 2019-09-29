@@ -1,6 +1,7 @@
 package org.cyk.utility.server.representation.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -15,6 +16,9 @@ import lombok.experimental.Accessors;
 public class NodeDto extends AbstractIdentifiedByStringAndCodedAndNamedImpl<NodeDto> implements Serializable {	
 	private static final long serialVersionUID = 1L;
 
+	private ArrayList<NodeDto> parents;
+	private ArrayList<NodeDto> children;
+	
 	@Override
 	public NodeDto setIdentifier(String identifier) {
 		return (NodeDto) super.setIdentifier(identifier);

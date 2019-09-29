@@ -3,6 +3,7 @@ package org.cyk.utility.server.representation.entities;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
@@ -18,6 +19,7 @@ import lombok.experimental.Accessors;
 public class MyEntityDtoCollection extends AbstractCollectionOfIdentifiedByStringAndCodedAndNamedImpl<MyEntityDto> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@JsonbTransient
 	private Class<MyEntityDto> elementClass;
 	private Collection<MyEntityDto> elements;
 	

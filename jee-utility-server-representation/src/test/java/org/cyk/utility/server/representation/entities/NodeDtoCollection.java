@@ -1,8 +1,9 @@
 package org.cyk.utility.server.representation.entities;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.ArrayList;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
@@ -18,7 +19,8 @@ import lombok.experimental.Accessors;
 public class NodeDtoCollection extends AbstractCollectionOfIdentifiedByStringAndCodedAndNamedImpl<NodeDto> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@JsonbTransient
 	private Class<NodeDto> elementClass;
-	private Collection<NodeDto> elements;
+	private ArrayList<NodeDto> elements;
 	
 }

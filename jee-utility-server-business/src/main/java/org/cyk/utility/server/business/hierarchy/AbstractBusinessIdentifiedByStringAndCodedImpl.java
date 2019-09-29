@@ -14,7 +14,7 @@ import org.cyk.utility.server.persistence.jpa.hierarchy.Hierarchies;
 import org.cyk.utility.server.persistence.jpa.hierarchy.HierarchyPersistence;
 import org.cyk.utility.server.persistence.jpa.hierarchy.PersistenceIdentifiedByString;
 
-public abstract class AbstractBusinessIdentifiedByStringAndCodedImpl<ENTITY extends AbstractIdentifiedByString<ENTITY,?>,PERSISTENCE extends PersistenceIdentifiedByString<ENTITY>,HIERARCHY extends AbstractHierarchy<ENTITY>,HIERARCHIES extends Hierarchies<HIERARCHY,ENTITY>,HIERARCHY_PERSISTENCE extends HierarchyPersistence<HIERARCHY,ENTITY, HIERARCHIES>,HIERARCHY_BUSINESS extends HierarchyBusiness<HIERARCHY, ENTITY, HIERARCHIES>> extends AbstractBusinessIdentifiedByStringImpl<ENTITY,PERSISTENCE,HIERARCHY,HIERARCHIES,HIERARCHY_PERSISTENCE,HIERARCHY_BUSINESS> implements BusinessIdentifiedByString<ENTITY>,Serializable {
+public abstract class AbstractBusinessIdentifiedByStringAndCodedImpl<ENTITY extends AbstractIdentifiedByString<ENTITY>,PERSISTENCE extends PersistenceIdentifiedByString<ENTITY>,HIERARCHY extends AbstractHierarchy<ENTITY>,HIERARCHIES extends Hierarchies<HIERARCHY,ENTITY>,HIERARCHY_PERSISTENCE extends HierarchyPersistence<HIERARCHY,ENTITY, HIERARCHIES>,HIERARCHY_BUSINESS extends HierarchyBusiness<HIERARCHY, ENTITY, HIERARCHIES>> extends AbstractBusinessIdentifiedByStringImpl<ENTITY,PERSISTENCE,HIERARCHY,HIERARCHIES,HIERARCHY_PERSISTENCE,HIERARCHY_BUSINESS> implements BusinessIdentifiedByString<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("unchecked")
@@ -25,13 +25,13 @@ public abstract class AbstractBusinessIdentifiedByStringAndCodedImpl<ENTITY exte
 		if(CollectionHelper.isNotEmpty(entity.getParents())) {
 			if(hierarchies == null)
 				hierarchies = new ArrayList<>();
-			for(ENTITY index : entity.getParents().get())
+			for(ENTITY index : entity.getParents())
 				hierarchies.add((HIERARCHY) __inject__(__hierarchyClass__).setParent(index).setChild(entity));
 		}
 		if(CollectionHelper.isNotEmpty(entity.getChildren())) {
 			if(hierarchies == null)
 				hierarchies = new ArrayList<>();
-			for(ENTITY index : entity.getChildren().get())
+			for(ENTITY index : entity.getChildren())
 				hierarchies.add((HIERARCHY) __inject__(__hierarchyClass__).setParent(entity).setChild(index));
 		}
 		if(CollectionHelper.isNotEmpty(hierarchies))
