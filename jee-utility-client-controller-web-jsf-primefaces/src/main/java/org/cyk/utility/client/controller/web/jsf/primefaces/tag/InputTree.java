@@ -10,7 +10,7 @@ import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString;
 import org.cyk.utility.client.controller.data.hierarchy.Hierarchy;
 import org.cyk.utility.client.controller.web.jsf.primefaces.PrimefacesHelper;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.primefaces.model.TreeNode;
 
 import lombok.Getter;
@@ -38,11 +38,11 @@ public class InputTree extends AbstractObject implements Serializable {
 	}
 	
 	public <NODE extends DataIdentifiedByString,HIERARCHY extends Hierarchy<NODE>> void __select__(Collection<NODE> nodes,Boolean isSelected) {
-		if(__inject__(CollectionHelper.class).isNotEmpty(nodes)) {
+		if(CollectionHelper.isNotEmpty(nodes)) {
 			PrimefacesHelper primefacesHelper = __inject__(PrimefacesHelper.class);
 			primefacesHelper.setTreeNodesSelected(root, nodes,isSelected);
 			Collection<TreeNode> treeNodes = primefacesHelper.getTreeNodeChildren(root, null,nodes);
-			if(__inject__(CollectionHelper.class).isNotEmpty(treeNodes)) {
+			if(CollectionHelper.isNotEmpty(treeNodes)) {
 				if(Boolean.TRUE.equals(isSelected))
 					setSelected(ArrayUtils.addAll(getSelected(), treeNodes.toArray(new TreeNode[] {})));
 				else {

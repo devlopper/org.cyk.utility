@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import org.cyk.utility.client.controller.command.CommandFunction;
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
-import org.cyk.utility.object.Objects;
+import org.cyk.utility.__kernel__.object.Objects;
 import org.cyk.utility.programming.script.ScriptBuilder;
 
 public interface EventBuilder extends FunctionWithPropertiesAsInput<Event> {

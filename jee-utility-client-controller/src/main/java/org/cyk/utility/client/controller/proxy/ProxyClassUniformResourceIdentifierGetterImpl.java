@@ -5,7 +5,7 @@ import java.net.URI;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.system.OperatingSystemHelper;
 import org.cyk.utility.system.SystemHelper;
 
@@ -20,20 +20,20 @@ public class ProxyClassUniformResourceIdentifierGetterImpl extends AbstractFunct
 		if(uri == null) {
 			Class<?> aClass = getClazz();
 			String string = null;		
-			if(__inject__(StringHelper.class).isBlank(string)) {
+			if(StringHelper.isBlank(string)) {
 				//1 - from application
 				string = __inject__(ProxyClassUniformResourceIdentifierStringProvider.class).setClazz(aClass).execute().getOutput();
 				
-				if(__inject__(StringHelper.class).isBlank(string)) {
+				if(StringHelper.isBlank(string)) {
 					//2 - from server properties
 					if(aClass == null)
-						__injectThrowableHelper__().throwRuntimeException(getClass()+" : class is required");
+						throw new RuntimeException(getClass()+" : class is required");
 					String identifier = StringUtils.substringBefore(aClass.getName(), ".server")+".server"+".uri";
 					string = __inject__(SystemHelper.class).getProperty(identifier);
-					if(__inject__(StringHelper.class).isBlank(string)) {
+					if(StringHelper.isBlank(string)) {
 						//3 - from operating system properties 
 						string = __inject__(OperatingSystemHelper.class).getProperty(identifier);
-						if(__inject__(StringHelper.class).isBlank(string)) {
+						if(StringHelper.isBlank(string)) {
 							//4 - from request
 							ProxyClassUniformResourceIdentifierStringBuilder stringBuilder = getStringBuilder(Boolean.TRUE);
 							string = stringBuilder.execute().getOutput();
@@ -42,19 +42,19 @@ public class ProxyClassUniformResourceIdentifierGetterImpl extends AbstractFunct
 				}	
 			}
 			
-			if(__injectStringHelper__().isNotBlank(string)) 
+			if(StringHelper.isNotBlank(string)) 
 				uri = URI.create(string);	
 		}
 		
 		/*
 		Class<?> aClass = getClazz();
 		if(aClass == null)
-			__injectThrowableHelper__().throwRuntimeException(getClass()+" : class is required");
+			throw new RuntimeException(getClass()+" : class is required");
 		String identifier = StringUtils.substringBefore(aClass.getName(), ".server")+".server"+".uri";
 		String uriString = __inject__(SystemHelper.class).getProperty(identifier,Boolean.TRUE);
-		//if(__injectStringHelper__().isBlank(uriString)) 
-		//	__injectThrowableHelper__().throwRuntimeException(getClass()+" : uniform resource identifier is required for "+identifier+". It must be defined under system properties or environment variable");
-		if(__injectStringHelper__().isNotBlank(uriString)) 
+		//if(StringHelper.isBlank(uriString)) 
+		//	throw new RuntimeException(getClass()+" : uniform resource identifier is required for "+identifier+". It must be defined under system properties or environment variable");
+		if(StringHelper.isNotBlank(uriString)) 
 			uri = URI.create(uriString);
 		*/
 		

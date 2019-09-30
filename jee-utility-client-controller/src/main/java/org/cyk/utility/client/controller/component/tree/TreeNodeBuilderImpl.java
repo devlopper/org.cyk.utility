@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller.component.tree;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
 import org.cyk.utility.hierarchy.HierarchyNode;
 import org.cyk.utility.hierarchy.HierarchyNodeData;
@@ -36,7 +37,7 @@ public class TreeNodeBuilderImpl extends AbstractVisibleComponentBuilderImpl<Tre
 			node.setIsSelectable((Boolean) hierarchyNode.getProperty(TreeNode.PROPERTY_IS_SELECTABLE));
 			
 			Collection<Object> children = hierarchyNode.getChildren();
-			if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(children))) {
+			if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(children))) {
 				for(Object index : children) {
 					if(index instanceof HierarchyNode)
 						addChild(__inject__(TreeNodeBuilder.class).setHierarchyNode((HierarchyNode) index));
@@ -45,7 +46,7 @@ public class TreeNodeBuilderImpl extends AbstractVisibleComponentBuilderImpl<Tre
 		}
 		
 		Collection<Object> children = getChildren();
-		Boolean isHasChild = __injectCollectionHelper__().isNotEmpty(children);
+		Boolean isHasChild = CollectionHelper.isNotEmpty(children);
 		if(isHasChild) {
 			for(Object index : children) {
 				TreeNode child = null;
@@ -57,7 +58,7 @@ public class TreeNodeBuilderImpl extends AbstractVisibleComponentBuilderImpl<Tre
 		}
 		
 		if(node.getIdentifier() == null)
-			node.setIdentifier(__inject__(RandomHelper.class).getAlphabetic(10));
+			node.setIdentifier(RandomHelper.getAlphabetic(10));
 		
 		if(node.getIsCollapsible() == null)
 			node.setIsCollapsible(isHasChild);

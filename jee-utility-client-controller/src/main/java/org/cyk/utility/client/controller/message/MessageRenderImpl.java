@@ -8,7 +8,7 @@ import org.cyk.utility.notification.Notification;
 import org.cyk.utility.notification.NotificationBuilder;
 import org.cyk.utility.notification.NotificationBuilders;
 import org.cyk.utility.notification.Notifications;
-import org.cyk.utility.object.Objects;
+import org.cyk.utility.__kernel__.object.Objects;
 
 public class MessageRenderImpl extends AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl implements MessageRender,Serializable {
 	private static final long serialVersionUID = 1L;

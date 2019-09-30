@@ -1,12 +1,12 @@
 package org.cyk.utility.client.controller.navigation;
 
 import org.cyk.utility.client.controller.ApplicationScopeLifeCycleListener;
-import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.action.SystemActionCreate;
-import org.cyk.utility.system.action.SystemActionDelete;
-import org.cyk.utility.system.action.SystemActionList;
-import org.cyk.utility.system.action.SystemActionTree;
-import org.cyk.utility.system.action.SystemActionUpdate;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
+import org.cyk.utility.__kernel__.system.action.SystemActionDelete;
+import org.cyk.utility.__kernel__.system.action.SystemActionList;
+import org.cyk.utility.__kernel__.system.action.SystemActionTree;
+import org.cyk.utility.__kernel__.system.action.SystemActionUpdate;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 

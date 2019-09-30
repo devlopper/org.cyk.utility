@@ -7,7 +7,7 @@ import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.Controller;
 import org.cyk.utility.client.controller.web.jsf.primefaces.PrimefacesHelper;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.primefaces.model.DualListModel;
 
 import lombok.Getter;
@@ -36,7 +36,7 @@ public class PickList<T> extends AbstractObject implements Serializable {
 		super.__initialise__();
 		if(available == null)
 			available = __inject__(Controller.class).read(klass,new Properties().setIsPageable(Boolean.FALSE));
-		if(__inject__(CollectionHelper.class).isNotEmpty(available))
+		if(CollectionHelper.isNotEmpty(available))
 			model = __inject__(PrimefacesHelper.class).buildDualList(available, selected);
 	}
 	

@@ -7,7 +7,7 @@ import org.cyk.utility.client.controller.component.menu.Menu;
 import org.cyk.utility.client.controller.component.menu.MenuItem;
 import org.cyk.utility.client.controller.component.menu.MenuItems;
 import org.cyk.utility.client.controller.web.ValueExpressionMap;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.primefaces.model.menu.DefaultMenuModel;
 
 public class MenuBuilderImpl extends AbstractComponentBuilderImpl<org.primefaces.model.menu.MenuModel, Menu> implements MenuBuilder,Serializable {
@@ -17,7 +17,7 @@ public class MenuBuilderImpl extends AbstractComponentBuilderImpl<org.primefaces
 	protected org.primefaces.model.menu.MenuModel __execute__(Menu model, ValueExpressionMap valueExpressionMap) throws Exception {
 		DefaultMenuModel menu = null;
 		MenuItems menuItems = model.getItems();
-		if(__inject__(CollectionHelper.class).isNotEmpty(menuItems)) {
+		if(CollectionHelper.isNotEmpty(menuItems)) {
 			menu = new DefaultMenuModel();	
 			__buildItem__(menu, menuItems.get());
 		}
@@ -30,7 +30,7 @@ public class MenuBuilderImpl extends AbstractComponentBuilderImpl<org.primefaces
 	}
 
 	public static void __buildItem__(Object parent,Collection<MenuItem> menuItems) {
-		if(__inject__(CollectionHelper.class).isNotEmpty(menuItems)) {
+		if(CollectionHelper.isNotEmpty(menuItems)) {
 			for(MenuItem index : menuItems)
 				__buildItem__(parent, index);
 		}

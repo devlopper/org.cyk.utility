@@ -3,13 +3,17 @@ package org.cyk.utility.client.controller.component;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.List;
 
 import org.apache.commons.lang3.reflect.MethodUtils;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.internationalization.InternationalizationKey;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.input.InputBuilder;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.internationalization.InternationalizationKey;
-import org.cyk.utility.system.action.SystemAction;
 
 @SuppressWarnings("rawtypes") @Deprecated
 public class ComponentBuilderGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<ComponentBuilder> implements ComponentBuilderGetter,Serializable {
@@ -29,7 +33,7 @@ public class ComponentBuilderGetterImpl extends AbstractFunctionWithPropertiesAs
 		Method method = getMethod();
 		if(method == null && object!=null) {
 			String methodName = getMethodName();
-			if(__injectStringHelper__().isNotBlank(methodName))
+			if(StringHelper.isNotBlank(methodName))
 				method = MethodUtils.getMatchingAccessibleMethod(object.getClass(), methodName);
 		}
 		__method__ = method;
@@ -37,20 +41,20 @@ public class ComponentBuilderGetterImpl extends AbstractFunctionWithPropertiesAs
 		
 		if(field == null) {
 			if(object!=null) {
-				if(__injectCollectionHelper__().isNotEmpty(classGetter.getFieldNameStrings())) {
-					field = __injectFieldHelper__().getField(object.getClass(), classGetter.getFieldNameStrings().get());
+				if(CollectionHelper.isNotEmpty(classGetter.getFieldNameStrings())) {
+					field = FieldHelper.getByName(object.getClass(), (List<String>)classGetter.getFieldNameStrings().get());
 					classGetter.setField(field);
 					/*
 					Collection<String> fieldNames = classGetter.getFieldNameStrings().get();
-					Integer size = __injectCollectionHelper__().getSize(fieldNames);
+					Integer size = CollectionHelper.getSize(fieldNames);
 					if(size == 1) {
-						field = __injectCollectionHelper__().getFirst(__inject__(FieldsGetter.class).execute(object.getClass(), __injectCollectionHelper__()
+						field = CollectionHelper.getFirst(__inject__(FieldsGetter.class).execute(object.getClass(), CollectionHelper
 								.getElementAt(fieldNames, 0)).getOutput());
 					}else {
 						for(Integer index = 0 ; index < size - 1 ; index = index + 1) {
-							String fieldName = __injectCollectionHelper__().getElementAt(fieldNames, index);
+							String fieldName = CollectionHelper.getElementAt(fieldNames, index);
 							object =  __inject__(FieldValueGetter.class).execute(object, fieldName).getOutput();
-							field = __injectCollectionHelper__().getFirst(__inject__(FieldsGetter.class).execute(object.getClass(), __injectCollectionHelper__()
+							field = CollectionHelper.getFirst(__inject__(FieldsGetter.class).execute(object.getClass(), CollectionHelper
 									.getElementAt(fieldNames, index+1)).getOutput());
 							classGetter.setField(field);
 						}	

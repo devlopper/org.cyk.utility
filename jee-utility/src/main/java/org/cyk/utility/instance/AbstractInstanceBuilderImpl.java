@@ -3,7 +3,6 @@ package org.cyk.utility.instance;
 import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
 public abstract class AbstractInstanceBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Object> implements InstanceBuilder,Serializable {
@@ -33,7 +32,7 @@ public abstract class AbstractInstanceBuilderImpl extends AbstractFunctionWithPr
 	}
 	
 	protected void __copy__(Object source,Object destination,Properties properties) {
-		__inject__(FieldHelper.class).copy(source, destination,properties);
+		__inject__(org.cyk.utility.field.FieldHelper.class).copy(source, destination,properties);
 	}
 	
 	@Override

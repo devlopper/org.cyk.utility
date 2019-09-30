@@ -4,7 +4,7 @@ import org.cyk.utility.bean.Property;
 import org.cyk.utility.client.controller.Objectable;
 import org.cyk.utility.client.controller.component.layout.LayoutItem;
 import org.cyk.utility.client.controller.event.Events;
-import org.cyk.utility.object.Objects;
+import org.cyk.utility.__kernel__.object.Objects;
 
 public interface Component extends Objectable {
 

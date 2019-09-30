@@ -2,8 +2,6 @@ package org.cyk.utility.client.controller.web.jsf.primefaces;
 
 import java.io.Serializable;
 
-import javax.inject.Inject;
-
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.component.AbstractComponentBuilderPostConstructListenerImpl;
 import org.cyk.utility.client.controller.component.ComponentBuilder;
@@ -20,8 +18,6 @@ public class ComponentBuilderPostConstructListenerImpl extends AbstractComponent
 	
 	private static final String IDENTIFIER_FORMAT = "%s_%s";
 	
-	@Inject private RandomHelper randomHelper;
-	
 	@Override
 	public void execute() {
 		Long t = System.currentTimeMillis();
@@ -29,7 +25,7 @@ public class ComponentBuilderPostConstructListenerImpl extends AbstractComponent
 		Properties outputProperties = componentBuilder.getOutputProperties(Boolean.TRUE);
 		System.out.println("\t\t\t\t1 - "+(System.currentTimeMillis() - t));t=System.currentTimeMillis();
 		
-		outputProperties.setIdentifier(String.format(IDENTIFIER_FORMAT,componentBuilder.getComponentClass().getSimpleName(),randomHelper.getAlphabetic(3)));
+		outputProperties.setIdentifier(String.format(IDENTIFIER_FORMAT,componentBuilder.getComponentClass().getSimpleName(),RandomHelper.getAlphabetic(3)));
 		outputProperties.setIdentifierAsStyleClass(outputProperties.getIdentifier().toString());
 		outputProperties.setWidgetVar(outputProperties.getIdentifier());
 		outputProperties.setRendered(Boolean.TRUE);						

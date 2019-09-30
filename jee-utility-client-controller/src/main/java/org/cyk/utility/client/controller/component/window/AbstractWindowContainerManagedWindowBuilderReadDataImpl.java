@@ -8,7 +8,7 @@ import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.client.controller.data.Form;
 import org.cyk.utility.client.controller.data.FormData;
 import org.cyk.utility.client.controller.data.Row;
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 
 public abstract class AbstractWindowContainerManagedWindowBuilderReadDataImpl extends AbstractWindowContainerManagedWindowBuilderReadImpl implements WindowContainerManagedWindowBuilderReadData,Serializable {
 	private static final long serialVersionUID = 1L;

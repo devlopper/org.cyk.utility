@@ -5,9 +5,9 @@ import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
 
+import org.cyk.utility.__kernel__.object.Objects;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.client.controller.component.input.AbstractInputImpl;
-import org.cyk.utility.object.Objects;
-import org.cyk.utility.value.ValueHelper;
 
 public abstract class AbstractInputChoiceImpl<CHOICE> extends AbstractInputImpl<CHOICE> implements InputChoice<CHOICE>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -138,7 +138,7 @@ public abstract class AbstractInputChoiceImpl<CHOICE> extends AbstractInputImpl<
 				__maximumNumberOfChoice__ = MAXIMUM_NUMBER_OF_CHOICES_BY_QUERY;
 		}
 		InputChoiceBuilder<?,?> builder =  (InputChoiceBuilder<?,?>) getBuilder();
-		ChoicesGetter choicesGetter = __inject__(__inject__(ValueHelper.class).defaultToIfNull(builder.getChoicesGetterClass(),ChoicesGetter.class));
+		ChoicesGetter choicesGetter = __inject__(ValueHelper.defaultToIfNull(builder.getChoicesGetterClass(),ChoicesGetter.class));
 		choices = choicesGetter.setFieldDeclaringClass(object.getClass()).setField(builder.getField()).setRequest(builder.getProperties().getRequest()).setContext(builder.getProperties().getContext()).setQuery(query)
 				.setMaximumNumberOfChoice(__maximumNumberOfChoice__+1).execute().getOutput();
 		return choices == null ? null : (List<Object>) choices.get();

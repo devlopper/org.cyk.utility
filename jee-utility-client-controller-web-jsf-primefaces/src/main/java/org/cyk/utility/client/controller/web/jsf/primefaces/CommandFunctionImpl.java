@@ -2,9 +2,9 @@ package org.cyk.utility.client.controller.web.jsf.primefaces;
 
 import java.io.Serializable;
 
+import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemActionAdd;
 import org.cyk.utility.client.controller.web.jsf.primefaces.annotation.Primefaces;
-import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.action.SystemActionAdd;
 import org.primefaces.PrimeFaces;
 
 @Primefaces

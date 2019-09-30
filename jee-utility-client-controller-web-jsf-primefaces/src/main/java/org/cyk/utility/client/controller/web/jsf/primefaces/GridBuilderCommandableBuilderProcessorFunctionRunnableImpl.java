@@ -5,7 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemActionAdd;
+import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
 import org.cyk.utility.client.controller.command.CommandFunction;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.grid.AbstractGridBuilderCommandableBuilderProcessorFunctionRunnableImpl;
@@ -13,12 +17,8 @@ import org.cyk.utility.client.controller.component.grid.GridBuilder;
 import org.cyk.utility.client.controller.component.window.WindowRenderTypeDialog;
 import org.cyk.utility.client.controller.event.EventBuilder;
 import org.cyk.utility.client.controller.web.jsf.primefaces.page.EntityListPage;
-import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterNameStringBuilder;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterValueStringBuilder;
-import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.action.SystemActionAdd;
-import org.cyk.utility.system.action.SystemActionCreate;
 import org.primefaces.PrimeFaces;
 
 public class GridBuilderCommandableBuilderProcessorFunctionRunnableImpl extends AbstractGridBuilderCommandableBuilderProcessorFunctionRunnableImpl implements Serializable {
@@ -46,13 +46,13 @@ public class GridBuilderCommandableBuilderProcessorFunctionRunnableImpl extends 
 			        UniformResourceIdentifierParameterValueStringBuilder uniformResourceIdentifierParameterValueStringBuilder = __inject__(UniformResourceIdentifierParameterValueStringBuilder.class);
 			        Map<String,List<String>> parameters = new HashMap<String, List<String>>();
 			        parameters.put(uniformResourceIdentifierParameterNameStringBuilder.setNameAsEntityClass().execute().getOutput()
-			        		, (List<String>) __inject__(CollectionHelper.class).instanciate(gridBuilder.getRowDataClass().getSimpleName().toLowerCase()));
+			        		, (List<String>) CollectionHelper.listOf(gridBuilder.getRowDataClass().getSimpleName().toLowerCase()));
 			        parameters.put(uniformResourceIdentifierParameterNameStringBuilder.setNameAsActionClass().execute().getOutput()
-			        		, (List<String>) __inject__(CollectionHelper.class).instanciate(uniformResourceIdentifierParameterValueStringBuilder.setValue(creationWindowSystemAction).execute().getOutput()));
+			        		, (List<String>) CollectionHelper.listOf(uniformResourceIdentifierParameterValueStringBuilder.setValue(creationWindowSystemAction).execute().getOutput()));
 			        parameters.put(uniformResourceIdentifierParameterNameStringBuilder.setNameAsActionIdentifier().execute().getOutput()
-			        		, (List<String>) __inject__(CollectionHelper.class).instanciate(uniformResourceIdentifierParameterValueStringBuilder.setValue(creationWindowSystemAction).execute().getOutput()));
+			        		, (List<String>) CollectionHelper.listOf(uniformResourceIdentifierParameterValueStringBuilder.setValue(creationWindowSystemAction).execute().getOutput()));
 			        parameters.put(uniformResourceIdentifierParameterNameStringBuilder.setNameAsWindowRenderTypeClass().execute().getOutput()
-			        		, (List<String>) __inject__(CollectionHelper.class).instanciate(uniformResourceIdentifierParameterValueStringBuilder.setValue(WindowRenderTypeDialog.class).execute().getOutput()));
+			        		, (List<String>) CollectionHelper.listOf(uniformResourceIdentifierParameterValueStringBuilder.setValue(WindowRenderTypeDialog.class).execute().getOutput()));
 			        PrimeFaces.current().dialog().openDynamic("__entity__EditView", options, parameters);
 				}
 			});

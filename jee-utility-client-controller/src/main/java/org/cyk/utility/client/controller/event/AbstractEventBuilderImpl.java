@@ -6,7 +6,7 @@ import java.util.Collection;
 import org.cyk.utility.__kernel__.function.Function;
 import org.cyk.utility.client.controller.command.CommandFunction;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.object.Objects;
+import org.cyk.utility.__kernel__.object.Objects;
 import org.cyk.utility.programming.script.ScriptBuilder;
 
 public abstract class AbstractEventBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Event> implements EventBuilder,Serializable {

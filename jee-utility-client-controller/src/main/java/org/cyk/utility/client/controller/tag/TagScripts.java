@@ -1,6 +1,6 @@
 package org.cyk.utility.client.controller.tag;
 
-import org.cyk.utility.collection.CollectionInstance;
+import org.cyk.utility.__kernel__.collection.CollectionInstance;
 
 public interface TagScripts extends CollectionInstance<TagScript> {
 

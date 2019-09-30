@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
+import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.client.controller.component.annotation.Input;
 import org.cyk.utility.client.controller.component.annotation.InputString;
 import org.cyk.utility.client.controller.component.annotation.InputStringLineOne;
@@ -15,7 +16,6 @@ import org.cyk.utility.client.controller.data.AbstractFormDataImpl;
 import org.cyk.utility.client.controller.message.MessageRender;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
 import org.cyk.utility.notification.Notification;
-import org.cyk.utility.number.NumberHelper;
 import org.omnifaces.util.Faces;
 
 import lombok.Getter;
@@ -38,7 +38,7 @@ public class BuildTimeStaticFromModelPage extends AbstractPageContainerManagedIm
 		form.setData(__inject__(Data.class));
 		ViewBuilder viewBuilder = __inject__(ViewBuilder.class);
 		
-		Integer numberOfInputs = __inject__(NumberHelper.class).getInteger(Faces.getRequestParameter("numberofinputs"),50);
+		Integer numberOfInputs = NumberHelper.getInteger(Faces.getRequestParameter("numberofinputs"),50);
 		for(Integer index = 1 ; index <= numberOfInputs ; index = index + 1) {
 			viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.TRUE, "inputText"+index);	
 		}

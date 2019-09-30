@@ -11,8 +11,8 @@ import javax.faces.event.PreDestroyApplicationEvent;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 
-import org.cyk.utility.field.FieldHelperImpl;
-import org.cyk.utility.identifier.resource.UniformResourceIdentifierHelperImpl;
+import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierHelper;
 
 public class ApplicationListener implements SystemEventListener {
 
@@ -24,8 +24,8 @@ public class ApplicationListener implements SystemEventListener {
 			for(Map.Entry<String,Set<NavigationCase>> indexEntry : configurableNavigationHandler.getNavigationCases().entrySet()) {
 				for(NavigationCase indexNavigationCase : indexEntry.getValue()) {
 					//String toViewId = indexNavigationCase.getToViewId(null);//TODO FacesContext is needed to avoid NPE
-					String toViewId = (String) FieldHelperImpl.__read__(indexNavigationCase, "toViewId");
-					UniformResourceIdentifierHelperImpl.__setPathByIdentifier__(indexNavigationCase.getFromOutcome(), toViewId);
+					String toViewId = (String) FieldHelper.read(indexNavigationCase, "toViewId");
+					UniformResourceIdentifierHelper.setPathByIdentifier(indexNavigationCase.getFromOutcome(), toViewId);
 				}
 			}
         } else if (event instanceof PreDestroyApplicationEvent){

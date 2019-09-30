@@ -39,7 +39,7 @@ import org.cyk.utility.server.persistence.test.TestPersistenceCreate;
 import org.cyk.utility.server.persistence.test.arquillian.AbstractPersistenceArquillianIntegrationTestWithDefaultDeployment;
 import org.cyk.utility.sql.builder.Attribute;
 import org.cyk.utility.sql.builder.Tuple;
-import org.cyk.utility.throwable.ThrowableHelper;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.value.ValueDto;
 import org.junit.Assert;
 import org.junit.Test;
@@ -801,7 +801,7 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 	public void is_myEntityCodeMustBeNotNull() throws Exception{
 		TestPersistenceCreate test = __inject__(TestPersistenceCreate.class);
 		test.addObjects(new MyEntity()).setName("MyEntity.code notnull").setExpectedThrowableCauseClassIsConstraintViolationException().execute();
-		assertThat(__inject__(ThrowableHelper.class).getInstanceOf(test.getThrowable(), ConstraintViolationException.class).getMessage()).contains("propertyPath=code");
+		assertThat(ThrowableHelper.getInstanceOf(test.getThrowable(), ConstraintViolationException.class).getMessage()).contains("propertyPath=code");
 	}
 	
 	/* Hierarchy */

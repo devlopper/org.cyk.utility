@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.field.FieldName;
 import org.cyk.utility.instance.AbstractInstanceGetterImpl;
 
 @org.cyk.utility.__kernel__.annotation.Controller

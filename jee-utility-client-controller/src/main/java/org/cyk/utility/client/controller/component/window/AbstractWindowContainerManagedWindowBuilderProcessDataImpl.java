@@ -2,7 +2,10 @@ package org.cyk.utility.client.controller.component.window;
 
 import java.io.Serializable;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.string.Strings;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.input.InputFile;
@@ -14,8 +17,6 @@ import org.cyk.utility.client.controller.data.DataMethodsNamesGetter;
 import org.cyk.utility.client.controller.data.Form;
 import org.cyk.utility.client.controller.data.FormData;
 import org.cyk.utility.client.controller.data.Row;
-import org.cyk.utility.string.Strings;
-import org.cyk.utility.system.action.SystemAction;
 
 public abstract class AbstractWindowContainerManagedWindowBuilderProcessDataImpl extends AbstractWindowContainerManagedWindowBuilderProcessImpl implements WindowContainerManagedWindowBuilderProcessData,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -28,7 +29,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderProcessDataImpl
 				form.setTitle(window.getTitle().getValue());
 			Data data = __getData__(window, systemAction, formClass, rowClass);
 			if(data == null)
-				__injectThrowableHelper__().throwRuntimeException("Data is null for system action "+systemAction);
+				throw new RuntimeException("Data is null for system action "+systemAction);
 			if(form instanceof FormData<?>) {
 				((FormData<Data>)form).setData(data);	
 			}
@@ -44,15 +45,15 @@ public abstract class AbstractWindowContainerManagedWindowBuilderProcessDataImpl
 			__execute__(form,systemAction,data,viewBuilder);
 			
 			Strings methodsNames = __inject__(DataMethodsNamesGetter.class).setSystemAction(systemAction).execute().getOutput();
-			if(__injectCollectionHelper__().isNotEmpty(methodsNames)) {
+			if(CollectionHelper.isNotEmpty(methodsNames)) {
 				for(String index : methodsNames.get()) {
 					//TODO we can write a DataCommandableBuilderGetter
 					CommandableBuilder commandable = (CommandableBuilder) viewBuilder.addComponentBuilderByObjectByMethodName(form, index ,systemAction);
 					/* TODO if it is update action then we need to know which field to process : we can write a getter for it */
-					//commandable.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setProperty(Properties.FIELDS, __inject__(StringHelper.class).concatenate(__getPersistenceEntityFieldNames__(window, systemAction, formClass),","));
+					//commandable.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setProperty(Properties.FIELDS, StringHelper.concatenate(__getPersistenceEntityFieldNames__(window, systemAction, formClass),","));
 					
 					commandable.addDerivableProperties(Properties.NAME);
-					Boolean isHasInputFile = __injectCollectionHelper__().isNotEmpty(viewBuilder.getComponentsBuilder(Boolean.TRUE).getComponents(Boolean.TRUE)
+					Boolean isHasInputFile = CollectionHelper.isNotEmpty(viewBuilder.getComponentsBuilder(Boolean.TRUE).getComponents(Boolean.TRUE)
 							.getIsInstanceOf(InputFileBuilder.class,InputFile.class));
 					commandable.getCommand(Boolean.TRUE).setIsSynchronous(Boolean.TRUE.equals(isHasInputFile));
 				}
@@ -70,7 +71,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderProcessDataImpl
 	/*
 	protected Collection<String> __getPersistenceEntityFieldNames__(WindowBuilder window,SystemAction systemAction,Class<? extends Form> formClass){
 		Strings fieldNames = __inject__(DataFieldsNamesGetter.class).setSystemAction(systemAction).execute().getOutput();
-		return __injectCollectionHelper__().isEmpty(fieldNames) ? null : fieldNames.get();
+		return CollectionHelper.isEmpty(fieldNames) ? null : fieldNames.get();
 	}
 	*/
 }

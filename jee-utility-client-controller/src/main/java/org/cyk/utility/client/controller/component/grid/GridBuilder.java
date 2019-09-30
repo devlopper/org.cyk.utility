@@ -15,8 +15,8 @@ import org.cyk.utility.client.controller.component.view.ViewBuilderMap;
 import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.client.controller.data.Row;
 import org.cyk.utility.object.ObjectByClassMap;
-import org.cyk.utility.object.Objects;
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.object.Objects;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 
 public interface GridBuilder extends VisibleComponentBuilder<Grid> {
 

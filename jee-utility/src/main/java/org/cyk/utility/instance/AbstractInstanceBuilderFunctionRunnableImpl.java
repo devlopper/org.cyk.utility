@@ -2,7 +2,6 @@ package org.cyk.utility.instance;
 
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.field.FieldHelper;
 
 @Deprecated
 public abstract class AbstractInstanceBuilderFunctionRunnableImpl extends AbstractFunctionRunnableImpl<InstanceBuilder> {
@@ -28,7 +27,7 @@ public abstract class AbstractInstanceBuilderFunctionRunnableImpl extends Abstra
 	protected void __copy__(Object source,Object destination) {
 		Properties properties = new Properties();
 		properties.copyFrom(getFunction().getProperties(), Properties.CONTEXT,Properties.REQUEST,Properties.FIELDS);
-		__inject__(FieldHelper.class).copy(source, destination,properties);
+		__inject__(org.cyk.utility.field.FieldHelper.class).copy(source, destination,properties);
 	}
 	
 	

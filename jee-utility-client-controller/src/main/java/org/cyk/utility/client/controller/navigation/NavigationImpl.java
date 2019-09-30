@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.net.URL;
 
 import org.cyk.utility.client.controller.AbstractObject;
-import org.cyk.utility.string.Strings;
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.string.Strings;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 
 public class NavigationImpl extends AbstractObject implements Navigation,Serializable {
 	private static final long serialVersionUID = 1L;

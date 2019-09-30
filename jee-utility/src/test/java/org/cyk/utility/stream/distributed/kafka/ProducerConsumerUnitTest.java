@@ -25,7 +25,7 @@ public class ProducerConsumerUnitTest extends AbstractWeldUnitTest {
 			String topic = "mytopic";
 			String group = "mygroup";
 			
-			Object messageKey = __inject__(RandomHelper.class).getAlphabetic(5);
+			Object messageKey = RandomHelper.getAlphabetic(5);
 			Object messageValue = "Time is "+new Date();
 			
 			Consumer consumer = __inject__(Consumer.class);

@@ -147,7 +147,7 @@ public abstract class AbstractFieldValueCopyImpl extends AbstractFunctionWithPro
 			isUnSet = Boolean.FALSE;
 		}*/
 		
-		//__inject__(ThrowableHelper.class).throwRuntimeException("value copy from field <<"+source+">> to field <<"+destination+">> is not yet handled");
+		//throw new RuntimeException("value copy from field <<"+source+">> to field <<"+destination+">> is not yet handled");
 		
 		/*
 		if(!sourceType.isPrimitive() && !sourceType.isEnum() && !ClassHelper.isInstanceOf(sourceType, Collection.class) && !StringUtils.startsWithAny(sourceType.getName(), "java.","javax.")) {
@@ -155,9 +155,9 @@ public abstract class AbstractFieldValueCopyImpl extends AbstractFunctionWithPro
 			if(Boolean.TRUE.equals(__inject__(ClassInstancesRuntime.class).get(destinationType).getIsPersistable())) {
 				if(destination.isAnnotationPresent(javax.persistence.ManyToOne.class)) {
 					//Find the object to be linked by its identifier (system and/or business)
-					Object identifier = __inject__(FieldHelper.class).getFieldValueSystemIdentifier(value);
+					Object identifier = FieldHelper.getFieldValueSystemIdentifier(value);
 					if(identifier == null) {
-						identifier = __inject__(FieldHelper.class).getFieldValueBusinessIdentifier(value);
+						identifier = FieldHelper.getFieldValueBusinessIdentifier(value);
 						value = __inject__(InstanceHelper.class).getByIdentifierBusiness(destinationType, identifier,properties);
 					}else {
 						value = __inject__(InstanceHelper.class).getByIdentifierSystem(destinationType, identifier,properties);
@@ -169,7 +169,7 @@ public abstract class AbstractFieldValueCopyImpl extends AbstractFunctionWithPro
 			if(Boolean.TRUE.equals(isUnSet)) {
 				if(String.class.equals(destinationType) || destinationType.isPrimitive()) {
 					//single value
-					value = __inject__(FieldHelper.class).getFieldValueBusinessIdentifier(value);
+					value = FieldHelper.getFieldValueBusinessIdentifier(value);
 					isUnSet = Boolean.FALSE;
 				}else if(!StringUtils.startsWithAny(destinationType.getName(), "java.","javax.")){
 					//not a single value

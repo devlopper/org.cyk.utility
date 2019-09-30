@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.cyk.utility.client.controller.component.command.Command;
 import org.cyk.utility.client.controller.component.theme.Theme;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.css.Style;
 import org.cyk.utility.device.DeviceScreenArea;
 
@@ -73,7 +73,7 @@ public abstract class AbstractVisibleComponentImpl extends AbstractComponentImpl
 	
 	@Override
 	public VisibleComponent addCommandFunctionTryRunRunnableAt(Runnable runnable, Integer index) {
-		__inject__(CollectionHelper.class).addElementAt(getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).try_().getRun(Boolean.TRUE).getRunnables(Boolean.TRUE), index, runnable);
+		CollectionHelper.addElementAt(getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).try_().getRun(Boolean.TRUE).getRunnables(Boolean.TRUE), index, runnable);
 		return this;
 	}
 	

@@ -12,7 +12,6 @@ import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.StringHelper;
-import org.cyk.utility.throwable.ThrowableHelper;
 
 public abstract class AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl extends AbstractFunctionWithPropertiesAsInputImpl<String>
 		implements FunctionWithPropertiesAsInputAndStringAsOutput, Serializable {
@@ -50,10 +49,10 @@ public abstract class AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl
 			Boolean isFormatRequired = __getIsFormatRequired__(Boolean.TRUE.equals(getProperties().getFromPath(Properties.IS,Properties.FORMAT,Properties.REQUIRED)));
 			String format = __getFormat__(getFormat());
 			if(StringHelper.isBlank(format) && isFormatRequired)
-				__inject__(ThrowableHelper.class).throwRuntimeException(getClass().getName()+" : format is required");
+				throw new RuntimeException(getClass().getName()+" : format is required");
 			Collection<Object> formatArguments = isFormatRequired ? __getFormatArguments__(isFormatRequired,getFormatArguments()) : null;
 			if(CollectionHelper.isEmpty(formatArguments) && isFormatRequired)
-				__inject__(ThrowableHelper.class).throwRuntimeException(getClass().getName()+" : format arguments are required");
+				throw new RuntimeException(getClass().getName()+" : format arguments are required");
 			if(StringHelper.isNotBlank(format) && CollectionHelper.isNotEmpty(formatArguments))
 				return __execute__(format,formatArguments);	
 		}

@@ -6,7 +6,7 @@ import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.constant.ConstantString;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
-import org.cyk.utility.throwable.ThrowableHelper;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 
 @Dependent
 public class IntervalExtremityImpl extends AbstractObject implements IntervalExtremity,Serializable {
@@ -47,7 +47,7 @@ public class IntervalExtremityImpl extends AbstractObject implements IntervalExt
 			else if(Double.class.equals(aClass))
 				result = (T) new Double(value.doubleValue());
 			else
-				__inject__(ThrowableHelper.class).throwRuntimeException(getClass()+" : get prepared value as "+aClass+" not yet handled");
+				throw new RuntimeException(getClass()+" : get prepared value as "+aClass+" not yet handled");
 		}
 		return result;
 	}

@@ -18,7 +18,7 @@ import org.cyk.utility.client.controller.proxy.ProxyGetterRestEasyFunctionRunnab
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterValueMatrix;
 import org.cyk.utility.instance.InstanceBuilder;
 import org.cyk.utility.instance.InstanceGetter;
-import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.system.node.SystemNodeClient;
 
 @ApplicationScoped
@@ -45,7 +45,7 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 	
 	protected void __initializeApplication__(Object object) {
 		SystemNodeClient systemClient = __inject__(SystemNodeClient.class);
-		if(__inject__(StringHelper.class).isBlank(systemClient.getName()))
+		if(StringHelper.isBlank(systemClient.getName()))
 			systemClient.setName("CLIENT_APP_NAME");
 	}
 	

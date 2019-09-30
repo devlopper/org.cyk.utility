@@ -5,14 +5,17 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.string.Case;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.client.controller.component.ComponentsBuilder;
 import org.cyk.utility.client.controller.component.grid.AbstractDimensionBuilderImpl;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.component.view.ViewBuilderMap;
 import org.cyk.utility.client.controller.component.view.ViewMap;
-import org.cyk.utility.string.Case;
-import org.cyk.utility.string.Strings;
 
 public class ColumnBuilderImpl extends AbstractDimensionBuilderImpl<Column> implements ColumnBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -26,13 +29,13 @@ public class ColumnBuilderImpl extends AbstractDimensionBuilderImpl<Column> impl
 	protected void __execute__(Column column) {
 		super.__execute__(column);
 		Strings fieldNameStrings = getFieldNameStrings();
-		if(__injectCollectionHelper__().isNotEmpty(fieldNameStrings))
-			column.setFieldName(__injectFieldHelper__().join(fieldNameStrings.get()));
+		if(CollectionHelper.isNotEmpty(fieldNameStrings))
+			column.setFieldName(FieldHelper.join(fieldNameStrings.get()));
 		
 		String fieldName = column.getFieldName();
-		if(__injectStringHelper__().isBlank(fieldName)) {
+		if(StringHelper.isBlank(fieldName)) {
 			if(column.getIdentifier() == null)
-				__injectThrowableHelper__().throwRuntimeException(getClass()+" : identifier is required when field name is blank");
+				throw new RuntimeException(getClass()+" : identifier is required when field name is blank");
 			column.setValuePropertyName(column.getIdentifier().toString());
 		}else
 			column.setValuePropertyName(fieldName);
@@ -71,7 +74,7 @@ public class ColumnBuilderImpl extends AbstractDimensionBuilderImpl<Column> impl
 			}
 			
 			Collection<Map.Entry<String,ViewBuilder>> entries = viewMap.getEntries();
-			if(__injectCollectionHelper__().isNotEmpty(entries)) {
+			if(CollectionHelper.isNotEmpty(entries)) {
 				column.setViewMap(__inject__(ViewMap.class));
 				for(Map.Entry<String,ViewBuilder> index : entries) {
 					column.getViewMap().set(index.getKey(),index.getValue().execute().getOutput());

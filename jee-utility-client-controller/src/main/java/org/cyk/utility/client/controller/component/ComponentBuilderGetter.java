@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 
 @SuppressWarnings("rawtypes") @Deprecated
 public interface ComponentBuilderGetter extends FunctionWithPropertiesAsInput<ComponentBuilder> {

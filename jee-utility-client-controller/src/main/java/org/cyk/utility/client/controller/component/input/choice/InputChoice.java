@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.cyk.utility.client.controller.component.input.Input;
-import org.cyk.utility.object.Objects;
+import org.cyk.utility.__kernel__.object.Objects;
 
 public interface InputChoice<CHOICE> extends Input<CHOICE> {
 

@@ -14,7 +14,7 @@ public class TestControllerCreateImpl extends AbstractTestControllerFunctionInte
 		Properties properties = new Properties();
 		__inject__(Controller.class).create(object,properties);
 		Response response = (Response) properties.getResponse();
-		assertionHelper.assertEquals("Response status code", Response.Status.CREATED, __inject__(ResponseHelper.class).getStatus(response));
+		assertionHelper.assertEquals("Response status code", Response.Status.CREATED, ResponseHelper.getStatus(response));
 		addGarbagesArray(object);
 	}
 	

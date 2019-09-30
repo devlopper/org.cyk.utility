@@ -4,14 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.cyk.utility.clazz.ClassHelper;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.client.controller.component.command.Commandable;
 import org.cyk.utility.client.controller.component.grid.Grid;
 import org.cyk.utility.client.controller.component.layout.Layout;
 import org.cyk.utility.client.controller.component.view.View;
 import org.cyk.utility.client.controller.component.view.ViewMap;
-import org.cyk.utility.collection.AbstractCollectionInstanceImpl;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.AbstractCollectionInstanceImpl;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 
 public class ComponentsImpl extends AbstractCollectionInstanceImpl<Component> implements Components,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -32,7 +32,7 @@ public class ComponentsImpl extends AbstractCollectionInstanceImpl<Component> im
 	@Override
 	public Components setInputOutputValueFromFieldValue() {
 		Collection<Component> collection = get();
-		if(__inject__(CollectionHelper.class).isNotEmpty(collection))
+		if(CollectionHelper.isNotEmpty(collection))
 			for(Component index : collection)
 				if(index instanceof InputOutput<?>)
 					((InputOutput<?>)index).setValueFromFieldValue();
@@ -42,9 +42,9 @@ public class ComponentsImpl extends AbstractCollectionInstanceImpl<Component> im
 	@Override
 	public Components setFieldValueFromValue(Class<?>...classes) {
 		Collection<Component> collection = get();
-		if(__inject__(CollectionHelper.class).isNotEmpty(collection))
+		if(CollectionHelper.isNotEmpty(collection))
 			for(Component index : collection)
-				if(Boolean.TRUE.equals(__inject__(ClassHelper.class).isInstanceOfOne(index.getClass(), classes))) {
+				if(Boolean.TRUE.equals(ClassHelper.isInstanceOfOne(index.getClass(), classes))) {
 					if(index instanceof InputOutput)
 						((InputOutput<?>)index).setFieldValueFromValue();
 				}
@@ -54,7 +54,7 @@ public class ComponentsImpl extends AbstractCollectionInstanceImpl<Component> im
 	@Override
 	public Collection<Commandable> getCommandables(Boolean isRecursive) {
 		Collection<Commandable> commandables = null;
-		if(__inject__(CollectionHelper.class).isNotEmpty(collection)) {
+		if(CollectionHelper.isNotEmpty(collection)) {
 			if(Boolean.TRUE.equals(isRecursive)) {
 				if(commandables == null)
 					commandables = new ArrayList<Commandable>();
@@ -91,7 +91,7 @@ public class ComponentsImpl extends AbstractCollectionInstanceImpl<Component> im
 	@Override
 	public Commandable getCommandableByIdentifier(Object identifier, Boolean isRecursive) {
 		Collection<Commandable> commandables = getCommandables(isRecursive);
-		if(__inject__(CollectionHelper.class).isNotEmpty(commandables)) {
+		if(CollectionHelper.isNotEmpty(commandables)) {
 			for(Commandable index : commandables) {
 				if(index.getIdentifier().equals(identifier))
 					return index;

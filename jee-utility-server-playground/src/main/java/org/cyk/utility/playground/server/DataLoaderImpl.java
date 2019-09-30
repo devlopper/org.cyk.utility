@@ -8,7 +8,7 @@ import javax.ws.rs.core.Response;
 
 import org.cyk.utility.playground.server.business.api.PersonBusiness;
 import org.cyk.utility.playground.server.persistence.entities.Person;
-import org.cyk.utility.random.RandomHelperImpl;
+import org.cyk.utility.random.RandomHelper;
 import org.cyk.utility.server.representation.impl.AbstractDataLoaderImpl;
 
 @org.cyk.utility.playground.server.System
@@ -18,12 +18,12 @@ public class DataLoaderImpl extends AbstractDataLoaderImpl implements Serializab
 	@Override
 	protected Response __execute__() throws Exception {
 		Collection<Person> persons = new ArrayList<>();
-		String codePrefix = RandomHelperImpl.__getAlphanumeric__(4);
+		String codePrefix = RandomHelper.getAlphanumeric(4);
 		for(Integer index = 0 ; index < 1000 ; index = index + 1) {
 			Person person = new Person();
 			person.setCode("P_"+codePrefix+"_"+index);
-			person.setFirstName(RandomHelperImpl.__getAlphabetic__(5));
-			person.setLastNames(RandomHelperImpl.__getAlphabetic__(8));
+			person.setFirstName(RandomHelper.getAlphabetic(5));
+			person.setLastNames(RandomHelper.getAlphabetic(8));
 			persons.add(person);
 		}
 		__logInfo__("Persisting "+persons.size()+" persons");

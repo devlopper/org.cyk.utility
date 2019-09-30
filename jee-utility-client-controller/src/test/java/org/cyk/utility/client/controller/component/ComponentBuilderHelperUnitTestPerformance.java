@@ -1,8 +1,8 @@
 package org.cyk.utility.client.controller.component;
 
 import org.cyk.utility.client.controller.component.annotation.InputStringLineOne;
-import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.action.SystemActionAdd;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemActionAdd;
 import org.cyk.utility.test.weld.AbstractWeldUnitTestPerformance;
 import org.junit.jupiter.api.Test;
 

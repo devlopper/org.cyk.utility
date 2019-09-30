@@ -1,19 +1,19 @@
 package org.cyk.utility.client.controller.navigation;
 
+import org.cyk.utility.__kernel__.object.Objects;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
 import org.cyk.utility.object.ObjectByObjectMap;
-import org.cyk.utility.object.Objects;
-import org.cyk.utility.resource.locator.UrlBuilder;
-import org.cyk.utility.system.action.SystemAction;
 
+@Deprecated
 public interface NavigationBuilder extends FunctionWithPropertiesAsInput<Navigation> {
 
 	@Override NavigationBuilder setIdentifier(Object identifier);
-	
+	/*
 	UrlBuilder getUrl();
 	UrlBuilder getUrl(Boolean injectIfNull);
 	NavigationBuilder setUrl(UrlBuilder url);
-	
+	*/
 	NavigationBuilder setParameterMap(ObjectByObjectMap parameterMap);
 	ObjectByObjectMap getParameterMap(Boolean injectIfNull);
 	ObjectByObjectMap getParameterMap();

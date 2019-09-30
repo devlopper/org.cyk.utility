@@ -5,10 +5,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.field.FieldHelperImpl;
-import org.cyk.utility.string.Strings;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.string.Strings;
 
 public abstract class AbstractInputOutputBuilderImpl<INPUT_OUTPUT extends InputOutput<VALUE>,VALUE> extends AbstractVisibleComponentBuilderImpl<INPUT_OUTPUT> implements InputOutputBuilder<INPUT_OUTPUT, VALUE> {
 	private static final long serialVersionUID = 1L;
@@ -31,9 +33,9 @@ public abstract class AbstractInputOutputBuilderImpl<INPUT_OUTPUT extends InputO
 			if(object!=null) {
 				String fieldName = null;
 				Strings fieldNameStrings = getFieldNameStrings();
-				if(__injectCollectionHelper__().isNotEmpty(fieldNameStrings)) {
-					fieldName = FieldHelperImpl.__join__(fieldNameStrings.get());
-					if(__injectStringHelper__().isNotBlank(fieldName)) {
+				if(CollectionHelper.isNotEmpty(fieldNameStrings)) {
+					fieldName = FieldHelper.join(fieldNameStrings.get());
+					if(StringHelper.isNotBlank(fieldName)) {
 						Map<String,Field> map = CLASSES_FIELDS_MAP.get(object.getClass());
 						if(map == null)
 							CLASSES_FIELDS_MAP.put(object.getClass(), map = new HashMap<>());
@@ -44,8 +46,8 @@ public abstract class AbstractInputOutputBuilderImpl<INPUT_OUTPUT extends InputO
 								String objectFieldName = StringUtils.contains(fieldName, ConstantCharacter.DOT.toString()) ? StringUtils.substringBeforeLast(fieldName, ConstantCharacter.DOT.toString()) : null;
 								fieldName = objectFieldName == null ? fieldName : StringUtils.substringAfterLast(fieldName, ConstantCharacter.DOT.toString());
 								if(objectFieldName!=null)
-									object = FieldHelperImpl.__read__(object, objectFieldName);
-								field = FieldHelperImpl.__getByName__(object.getClass(), fieldName);
+									object = FieldHelper.read(object, objectFieldName);
+								field = FieldHelper.getByName(object.getClass(), fieldName);
 								map.put(tempFieldName, field);
 							}
 						}	

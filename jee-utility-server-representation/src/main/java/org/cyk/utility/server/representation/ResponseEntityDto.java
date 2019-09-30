@@ -7,6 +7,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.object.__static__.representation.AbstractObjectImpl;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 @XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor @ToString
-public class ResponseEntityDto extends AbstractEntityDto implements  Serializable {
+public class ResponseEntityDto extends AbstractObjectImpl implements  Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String status;
@@ -39,7 +40,7 @@ public class ResponseEntityDto extends AbstractEntityDto implements  Serializabl
 	}
 	
 	public Collection<MessageDto> getMessages(){
-		return messageCollection == null ? null : messageCollection.getCollection();
+		return messageCollection == null ? null : messageCollection.getElements();
 	}
 	
 	public MessageDto getMessageAt(Integer index) {

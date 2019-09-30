@@ -1,13 +1,12 @@
 package org.cyk.utility.client.controller.component.layout;
 
+import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.__kernel__.function.FunctionRunnableMap;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.client.controller.ApplicationScopeLifeCycleListener;
 import org.cyk.utility.css.StyleClassBuilderWidthImpl;
-import org.cyk.utility.field.FieldHelper;
-import org.cyk.utility.field.FieldHelperImpl;
-import org.cyk.utility.field.FieldName;
 import org.cyk.utility.test.weld.AbstractWeldUnitTestBenchmark;
-import org.cyk.utility.value.ValueUsageType;
 import org.junit.jupiter.api.Test;
 
 public class LayoutItemBuilderUnitTestBenchmark extends AbstractWeldUnitTestBenchmark {
@@ -22,7 +21,6 @@ public class LayoutItemBuilderUnitTestBenchmark extends AbstractWeldUnitTestBenc
 	
 	@Test
 	public void buildFieldName(){
-		FieldHelper fieldHelper = FieldHelperImpl.getInstance(Boolean.TRUE);
 		java.lang.Class<?> klass = Class.class;
 		FieldName fieldName = FieldName.IDENTIFIER;
 		ValueUsageType valueUsageType = ValueUsageType.SYSTEM;
@@ -36,12 +34,7 @@ public class LayoutItemBuilderUnitTestBenchmark extends AbstractWeldUnitTestBenc
 		}).add("FieldHelper.buildFieldName", new Runnable() {
 			@Override
 			public void run() {
-				fieldHelper.buildFieldName(klass, fieldName,valueUsageType);
-			}
-		}).add("FieldHelperImpl.__buildFieldName__", new Runnable() {
-			@Override
-			public void run() {
-				FieldHelperImpl.__getName__(klass, fieldName,valueUsageType);
+				FieldHelper.getName(klass, fieldName,valueUsageType);
 			}
 		})
 			);

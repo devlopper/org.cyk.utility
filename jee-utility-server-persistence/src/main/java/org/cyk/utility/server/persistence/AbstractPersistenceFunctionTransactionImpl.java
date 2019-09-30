@@ -24,7 +24,7 @@ public abstract class AbstractPersistenceFunctionTransactionImpl extends Abstrac
 			/*if(__en == null)
 				entitiesIdentifiers = new ArrayList<Object>();
 			for(Object index : entities) {
-				entitiesIdentifiers.add(__injectFieldHelper__().getFieldValueSystemIdentifier(index));
+				entitiesIdentifiers.add(FieldHelper.getFieldValueSystemIdentifier(index));
 			}	*/
 		}
 	}

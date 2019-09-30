@@ -3,7 +3,15 @@ package org.cyk.utility.client.controller.component.command;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
+import org.cyk.utility.__kernel__.internationalization.InternationalizationKeyStringType;
+import org.cyk.utility.__kernel__.internationalization.InternationalizationString;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.string.Case;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemActionCustom;
 import org.cyk.utility.client.controller.command.CommandFunction;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
 import org.cyk.utility.client.controller.component.ComponentRole;
@@ -12,13 +20,6 @@ import org.cyk.utility.client.controller.component.window.WindowRenderType;
 import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.client.controller.icon.Icon;
 import org.cyk.utility.client.controller.navigation.NavigationBuilder;
-import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.internationalization.InternationalizationHelperImpl;
-import org.cyk.utility.internationalization.InternationalizationKeyStringType;
-import org.cyk.utility.internationalization.InternationalizationString;
-import org.cyk.utility.string.Case;
-import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.action.SystemActionCustom;
 
 public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<Commandable> implements CommandableBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -57,7 +58,7 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 		}
 		
 		String derivedName = null;
-		if(__injectStringHelper__().isBlank(derivedName)) {
+		if(StringHelper.isBlank(derivedName)) {
 			InternationalizationString nameInternationalization = getNameInternationalization();
 			if(nameInternationalization==null) {
 				SystemAction systemAction = null;
@@ -69,8 +70,8 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 					systemAction = navigation.getIdentifierBuilder().getSystemAction();
 				
 				if(systemAction!=null)
-					derivedName = InternationalizationHelperImpl.__buildString__(InternationalizationHelperImpl
-							.__buildKey__(systemAction,InternationalizationKeyStringType.VERB), null, null, Case.FIRST_CHARACTER_UPPER);
+					derivedName = InternationalizationHelper.buildString(InternationalizationHelper
+							.buildKey(systemAction,InternationalizationKeyStringType.VERB), null, null, Case.FIRST_CHARACTER_UPPER);
 				
 				/*
 				if(navigation!=null) {
@@ -84,7 +85,7 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 				}	
 				*/
 			}else {
-				InternationalizationHelperImpl.__processStrings__(nameInternationalization);
+				InternationalizationHelper.processStrings(nameInternationalization);
 				derivedName = nameInternationalization.getValue();
 			}
 			
@@ -92,7 +93,7 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 			
 		}	
 		
-		if(__injectStringHelper__().isBlank(name) && Boolean.TRUE.equals(__getIsFieldNameDerivable__(PROPERTY_NAME))) {
+		if(StringHelper.isBlank(name) && Boolean.TRUE.equals(__getIsFieldNameDerivable__(PROPERTY_NAME))) {
 			name = derivedName;
 		}
 		commandable.setName(name);
@@ -100,14 +101,14 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 		Icon icon = getIcon();
 		if(icon == null && Boolean.TRUE.equals(__getIsFieldNameDerivable__(PROPERTY_ICON))) {
 			ComponentRoles roles = getRoles();
-			if(__injectCollectionHelper__().isNotEmpty(roles)) {
-				if(__injectCollectionHelper__().contains(roles, ComponentRole.CREATOR))
+			if(CollectionHelper.isNotEmpty(roles)) {
+				if(CollectionHelper.contains(roles, ComponentRole.CREATOR))
 					icon = Icon.PLUS;
-				else if(__injectCollectionHelper__().contains(roles, ComponentRole.READER))
+				else if(CollectionHelper.contains(roles, ComponentRole.READER))
 					icon = Icon.EYE;
-				else if(__injectCollectionHelper__().contains(roles, ComponentRole.MODIFIER))
+				else if(CollectionHelper.contains(roles, ComponentRole.MODIFIER))
 					icon = Icon.EDIT;
-				else if(__injectCollectionHelper__().contains(roles, ComponentRole.REMOVER))
+				else if(CollectionHelper.contains(roles, ComponentRole.REMOVER))
 					icon = Icon.REMOVE;
 			}
 		}
@@ -115,7 +116,7 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 		
 		Object tooltip = getTooltip();
 		if(tooltip == null && Boolean.TRUE.equals(__getIsFieldNameDerivable__(PROPERTY_TOOLTIP))) {
-			if(__injectStringHelper__().isBlank(commandable.getName()))
+			if(StringHelper.isBlank(commandable.getName()))
 				tooltip = derivedName;
 			else
 				tooltip = commandable.getName();
@@ -191,7 +192,7 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 	
 	@Override
 	public CommandableBuilder addCommandFunctionTryRunRunnable(Runnable...runnables) {
-		return addCommandFunctionTryRunRunnable(__injectCollectionHelper__().instanciate(runnables));
+		return addCommandFunctionTryRunRunnable(CollectionHelper.listOf(runnables));
 	}
 	
 	@Override
@@ -214,7 +215,7 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 	
 	@Override
 	public CommandableBuilder addCommandFunctionTryRunRunnableAt(Runnable runnable, Integer index) {
-		__inject__(CollectionHelper.class).addElementAt(getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).try_().getRun(Boolean.TRUE).getRunnables(Boolean.TRUE), index, runnable);
+		CollectionHelper.addElementAt(getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).try_().getRun(Boolean.TRUE).getRunnables(Boolean.TRUE), index, runnable);
 		return this;
 	}
 	

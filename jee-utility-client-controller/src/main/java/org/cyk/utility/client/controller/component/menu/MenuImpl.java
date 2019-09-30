@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentImpl;
 import org.cyk.utility.client.controller.component.command.Commandable;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 
 public class MenuImpl extends AbstractVisibleComponentImpl implements Menu,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -37,7 +37,7 @@ public class MenuImpl extends AbstractVisibleComponentImpl implements Menu,Seria
 	@Override
 	public Commandable getCommandableByIdentifier(String identifier) {
 		Commandable commandable = null;
-		if(__inject__(CollectionHelper.class).isNotEmpty(items)) {
+		if(CollectionHelper.isNotEmpty(items)) {
 			for(MenuItem index : items.get()) {
 				Commandable indexCommandable = index.getCommandable();
 				if(indexCommandable!=null && identifier.equals(indexCommandable.getIdentifier())) {

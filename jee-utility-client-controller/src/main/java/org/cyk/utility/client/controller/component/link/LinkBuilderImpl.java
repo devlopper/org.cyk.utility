@@ -5,13 +5,12 @@ import java.io.Serializable;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
 import org.cyk.utility.client.controller.component.text.TextBuilder;
-import org.cyk.utility.resource.locator.UniformResourceLocatorStringBuilder;
 
 public class LinkBuilderImpl extends AbstractVisibleComponentBuilderImpl<Link> implements LinkBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private TextBuilder text;
-	private UniformResourceLocatorStringBuilder uniformResourceLocator;
+	//private UniformResourceLocatorStringBuilder uniformResourceLocator;
 
 	@Override
 	protected void __execute__(Link link) {
@@ -21,12 +20,14 @@ public class LinkBuilderImpl extends AbstractVisibleComponentBuilderImpl<Link> i
 			text.getProperties().copyFrom(getProperties(), Properties.CONTEXT,Properties.UNIFORM_RESOURCE_LOCATOR_MAP,Properties.REQUEST);
 			link.setText(text.execute().getOutput());
 		}
+		/*
 		UniformResourceLocatorStringBuilder uniformResourceLocator = getUniformResourceLocator();
 		if(uniformResourceLocator!=null) {
 			if(uniformResourceLocator.getUniformResourceIdentifierString()!=null)
 				uniformResourceLocator.getUniformResourceIdentifierString().setRequest(getRequest());
 			link.setUniformResourceLocator(uniformResourceLocator.execute().getOutput());
 		}
+		*/
 	}
 	
 	@Override
@@ -52,7 +53,7 @@ public class LinkBuilderImpl extends AbstractVisibleComponentBuilderImpl<Link> i
 		getText(Boolean.TRUE).setCharacters(characters);
 		return this;
 	}
-
+	/*
 	@Override
 	public UniformResourceLocatorStringBuilder getUniformResourceLocator() {
 		return uniformResourceLocator;
@@ -70,7 +71,7 @@ public class LinkBuilderImpl extends AbstractVisibleComponentBuilderImpl<Link> i
 		this.uniformResourceLocator = uniformResourceLocator;
 		return this;
 	}
-	
+	*/
 	/**/
 	
 }

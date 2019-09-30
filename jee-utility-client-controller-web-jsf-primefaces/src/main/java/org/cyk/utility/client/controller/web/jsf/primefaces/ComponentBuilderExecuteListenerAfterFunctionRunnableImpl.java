@@ -58,8 +58,8 @@ import org.cyk.utility.client.controller.web.jsf.converter.DateConverter;
 import org.cyk.utility.client.controller.web.jsf.converter.ObjectConverter;
 import org.cyk.utility.client.controller.web.jsf.primefaces.annotation.Primefaces;
 import org.cyk.utility.css.Style;
-import org.cyk.utility.string.StringHelper;
-import org.cyk.utility.value.ValueHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.primefaces.model.DefaultStreamedContent;
 
 @Primefaces @Deprecated
@@ -82,7 +82,7 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 				index.getProperties().setIfNull(Properties.FUNCTION,index.getFunction());
 				
 				String scriptCodeSource = index.getScript() == null ? null :index.getScript().getCodeSource();
-				if(DependencyInjection.inject(StringHelper.class).isNotBlank(scriptCodeSource)) {
+				if(StringHelper.isNotBlank(scriptCodeSource)) {
 					if(EventName.CLICK.equals(index.getName()))
 						component.getProperties().setOnClick(scriptCodeSource);
 					else if(EventName.COMPLETE.equals(index.getName()))
@@ -158,7 +158,7 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 									choicesLayout = DependencyInjection.inject(ChoicesLayoutResponsive.class).setNumberOfColumns(3);
 								if(choicesLayout instanceof ChoicesLayoutResponsive) {
 									component.getProperties().setLayout("responsive");
-									component.getProperties().setColumns( DependencyInjection.inject(ValueHelper.class).defaultToIfNull(((ChoicesLayoutResponsive)choicesLayout).getNumberOfColumns(),3));
+									component.getProperties().setColumns( ValueHelper.defaultToIfNull(((ChoicesLayoutResponsive)choicesLayout).getNumberOfColumns(),3));
 								}else {
 									component.getProperties().setLayout("responsive");
 									component.getProperties().setColumns(3);

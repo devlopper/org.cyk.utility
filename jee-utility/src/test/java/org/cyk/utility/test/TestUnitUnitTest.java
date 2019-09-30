@@ -13,7 +13,7 @@ public class TestUnitUnitTest extends AbstractWeldUnitTest {
 		//TestUnit test = (TestUnit) __inject__(TestUnit.class).execute();
 		//Throwable throwable = (Throwable) test.getProperties().getThrowable();
 		//assertionHelper.assertEquals(ThrowableHelper.IMPLEMENTATION_OR_RUNNABLE_REQUIRED, throwable);
-		//assertionHelper.assertEquals(ThrowableHelper.IMPLEMENTATION_OR_RUNNABLE_REQUIRED, __inject__(ThrowableHelper.class).getFirstCause(throwable));
+		//assertionHelper.assertEquals(ThrowableHelper.IMPLEMENTATION_OR_RUNNABLE_REQUIRED, ThrowableHelper.getFirstCause(throwable));
 	}
 	
 	@Test

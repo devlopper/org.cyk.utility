@@ -3,10 +3,10 @@ package org.cyk.utility.client.controller.data;
 import java.io.Serializable;
 
 import org.cyk.utility.client.controller.component.grid.GridBuilder;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.object.ObjectByClassMap;
-import org.cyk.utility.object.Objects;
+import org.cyk.utility.__kernel__.object.Objects;
 
 public class RowBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Row> implements RowBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -38,7 +38,7 @@ public class RowBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Ro
 		}
 		
 		if(rowClass == null)
-			__injectThrowableHelper__().throwRuntimeException(getClass()+" : Row class is required");
+			throw new RuntimeException(getClass()+" : Row class is required");
 		
 		if(rowClass!=null) {
 			row = __inject__(rowClass);
@@ -58,7 +58,7 @@ public class RowBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Ro
 				rows = getGrid().getComponent().getObjects();
 		}
 		
-		row.setOrderNumber((orderNumberOffset == null ? 0 : orderNumberOffset)+ __inject__(CollectionHelper.class).getSize(rows)+1);
+		row.setOrderNumber((orderNumberOffset == null ? 0 : orderNumberOffset)+ CollectionHelper.getSize(rows)+1);
 		
 		return row;
 	}

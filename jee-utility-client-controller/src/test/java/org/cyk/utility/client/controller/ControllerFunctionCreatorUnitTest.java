@@ -14,7 +14,7 @@ import org.cyk.utility.client.controller.data.DataTransferObjectClassGetter;
 import org.cyk.utility.client.controller.data.DataTransferObjectClassGetterImpl;
 import org.cyk.utility.client.controller.proxy.ProxyGetter;
 import org.cyk.utility.client.controller.proxy.ProxyGetterImpl;
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.Test;
 

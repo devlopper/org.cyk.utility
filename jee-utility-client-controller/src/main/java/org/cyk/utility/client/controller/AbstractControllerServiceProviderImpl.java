@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.system.AbstractSystemServiceProviderImpl;
 
 public abstract class AbstractControllerServiceProviderImpl<OBJECT> extends AbstractSystemServiceProviderImpl implements ControllerServiceProvider<OBJECT>, Serializable {
@@ -88,7 +89,7 @@ public abstract class AbstractControllerServiceProviderImpl<OBJECT> extends Abst
 		if(properties == null)
 			properties = new Properties();
 		ControllerFunctionRemover function = ____inject____(ControllerFunctionRemover.class);
-		//Object identifier = __injectFieldHelper__().getFieldValueBusinessIdentifier(object);
+		//Object identifier = FieldHelper.getFieldValueBusinessIdentifier(object);
 		function.setEntity(object);
 		//function.copyProperty(Properties.VALUE_USAGE_TYPE,properties);
 		function.copyProperty(Properties.REQUEST,properties);
@@ -108,7 +109,7 @@ public abstract class AbstractControllerServiceProviderImpl<OBJECT> extends Abst
 	
 	@Override
 	public ControllerServiceProvider<OBJECT> deleteAll(Properties properties) {
-		__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
+		ThrowableHelper.throwNotYetImplemented();
 		return null;
 	}
 	

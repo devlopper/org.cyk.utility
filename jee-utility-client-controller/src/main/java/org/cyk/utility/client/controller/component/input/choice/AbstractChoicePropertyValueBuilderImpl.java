@@ -3,13 +3,17 @@ package org.cyk.utility.client.controller.component.input.choice;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
-import org.cyk.utility.field.FieldsGetter;
-import org.cyk.utility.field.FieldHelperImpl;
-import org.cyk.utility.field.FieldName;
+import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.field.FieldName;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.field.Fields;
+import org.cyk.utility.field.FieldsGetter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractChoicePropertyValueBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<String> implements ChoicePropertyValueBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -29,7 +33,7 @@ public abstract class AbstractChoicePropertyValueBuilderImpl extends AbstractFun
 		String fieldName = null;
 		if(object!=null) {
 			String propertyName = getPropertyName();
-			if(__injectStringHelper__().isBlank(propertyName) ) {
+			if(StringHelper.isBlank(propertyName) ) {
 				ChoiceProperty property = getProperty();
 				if(property != null) {
 					//TODO derive property name
@@ -38,19 +42,19 @@ public abstract class AbstractChoicePropertyValueBuilderImpl extends AbstractFun
 			}
 			
 			Field field = null;
-			if(__injectStringHelper__().isNotBlank(propertyName) )
-				field = __injectCollectionHelper__().getFirst(__inject__(FieldsGetter.class).execute(object.getClass(), propertyName).getOutput());
+			if(StringHelper.isNotBlank(propertyName) )
+				field = FieldHelper.getByName(object.getClass(), propertyName);
 			
-			if(__injectStringHelper__().isBlank(propertyName) || field == null) {
+			if(StringHelper.isBlank(propertyName) || field == null) {
 				if(field == null) {
 					FieldsGetter fieldGetter = __inject__(FieldsGetter.class).setClazz(object.getClass());
 					for(Object[] index : FIELD_NAME_VALUE_USAGE_TYPE)
 						fieldGetter.addNameToken((FieldName)index[0], (ValueUsageType)index[1]);
 					Fields fields = fieldGetter.execute().getOutput();
-					if(__injectCollectionHelper__().isNotEmpty(fields)) {
+					if(CollectionHelper.isNotEmpty(fields)) {
 						for(Field indexField : fields.get()) {
-							Object fieldValue = FieldHelperImpl.__read__(object, indexField);
-							if(Boolean.TRUE.equals(__injectValueHelper__().isNotEmpty(fieldValue))) {
+							Object fieldValue = FieldHelper.read(object, indexField);
+							if(ValueHelper.isNotEmpty(fieldValue)) {
 								field = indexField;
 								break;
 							}
@@ -61,7 +65,7 @@ public abstract class AbstractChoicePropertyValueBuilderImpl extends AbstractFun
 			
 			if(field != null) {
 				fieldName = field.getName();
-				Object value = FieldHelperImpl.__read__(object, field);
+				Object value = FieldHelper.read(object, field);
 				if(value == null)
 					result = ConstantEmpty.STRING;
 				else
@@ -70,7 +74,7 @@ public abstract class AbstractChoicePropertyValueBuilderImpl extends AbstractFun
 				result = object.toString();
 		}
 	
-		if(object != null && __injectStringHelper__().isBlank(result)) {
+		if(object != null && StringHelper.isBlank(result)) {
 			System.out.println("blank result has been found for Object : "+object+" , and field : "+fieldName);
 		}
 		return result;

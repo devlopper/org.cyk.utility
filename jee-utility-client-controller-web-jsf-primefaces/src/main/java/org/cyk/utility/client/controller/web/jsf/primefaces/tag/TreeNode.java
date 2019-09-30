@@ -7,7 +7,7 @@ import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString;
 import org.cyk.utility.client.controller.web.jsf.primefaces.PrimefacesHelper;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -126,7 +126,7 @@ public class TreeNode extends org.primefaces.model.DefaultTreeNode implements Se
 	
 	public Boolean isParentOfOneOrMoreData(Collection<?> datas) {
 		Boolean value = null;
-		if(DependencyInjection.inject(CollectionHelper.class).isNotEmpty(datas)) {
+		if(CollectionHelper.isNotEmpty(datas)) {
 			for(Object index : datas) {
 				if(getChildByData(index) != null) {
 					value = Boolean.TRUE;

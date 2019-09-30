@@ -6,6 +6,8 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
 
+import org.cyk.utility.__kernel__.number.NumberHelper;
+import org.cyk.utility.__kernel__.system.action.SystemActionCustom;
 import org.cyk.utility.client.controller.component.annotation.Input;
 import org.cyk.utility.client.controller.component.annotation.InputString;
 import org.cyk.utility.client.controller.component.annotation.InputStringLineOne;
@@ -17,8 +19,6 @@ import org.cyk.utility.client.controller.message.MessageRender;
 import org.cyk.utility.client.controller.web.ComponentHelper;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
 import org.cyk.utility.notification.Notification;
-import org.cyk.utility.number.NumberHelper;
-import org.cyk.utility.system.action.SystemActionCustom;
 import org.omnifaces.util.Faces;
 
 import lombok.Getter;
@@ -34,7 +34,7 @@ public class __InternalCheckerBuildTimePage__ extends AbstractPageContainerManag
 	
 	@Override
 	protected void __listenPostConstruct__() {
-		numberOfInputTexts = __inject__(NumberHelper.class).getInteger(Faces.getRequestParameter("numberOfInputTexts"));
+		numberOfInputTexts = NumberHelper.getInteger(Faces.getRequestParameter("numberOfInputTexts"));
 		if(numberOfInputTexts == null || numberOfInputTexts >50)
 			numberOfInputTexts = 50;
 		super.__listenPostConstruct__();

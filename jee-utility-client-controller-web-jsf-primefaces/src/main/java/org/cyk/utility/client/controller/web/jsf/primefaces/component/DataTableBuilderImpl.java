@@ -22,9 +22,9 @@ import org.cyk.utility.client.controller.component.output.OutputString;
 import org.cyk.utility.client.controller.component.view.ViewMap;
 import org.cyk.utility.client.controller.web.ValueExpressionMap;
 import org.cyk.utility.client.controller.web.jsf.primefaces.LazyDataModel;
-import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.object.Objects;
-import org.cyk.utility.value.ValueHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.object.Objects;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.component.inputtext.InputText;
 
@@ -54,7 +54,7 @@ public class DataTableBuilderImpl extends AbstractComponentBuilderImpl<DataTable
 			dataTable.setFooter(uiComponent);
 		
 		Object dataModel = null;
-		Boolean isLazyLoadable = __inject__(ValueHelper.class).defaultToIfNull(grid.getIsLazyLoadable(),Boolean.TRUE);
+		Boolean isLazyLoadable = ValueHelper.defaultToIfNull(grid.getIsLazyLoadable(),Boolean.TRUE);
 		dataTable.setLazy(isLazyLoadable);
 		if(Boolean.TRUE.equals(isLazyLoadable)) {
 			dataModel = new LazyDataModel<Object>(grid);
@@ -66,22 +66,22 @@ public class DataTableBuilderImpl extends AbstractComponentBuilderImpl<DataTable
 			dataTable.setRowsPerPageTemplate("5,10,15,20,25,50,100");
 		}else {
 			Objects objects = grid.getObjects();
-			if(__inject__(CollectionHelper.class).isEmpty(objects)) {
+			if(CollectionHelper.isEmpty(objects)) {
 				Rows rows = grid.getRows();
-				if(__inject__(CollectionHelper.class).isNotEmpty(rows)) {
+				if(CollectionHelper.isNotEmpty(rows)) {
 					if(objects == null)
 						objects = __inject__(Objects.class);
 					for(Row indexRow : rows.get()) {
 						Map<String,Object> map = new LinkedHashMap<>();
 						objects.add(map);
 						Cells cells = indexRow.getCells();
-						if(__inject__(CollectionHelper.class).isNotEmpty(cells)) {
+						if(CollectionHelper.isNotEmpty(cells)) {
 							for(Cell indexCell : cells.get()) {
 								Object value = null;
 								Components components = null;
 								if(indexCell.getView()!=null)
 									components = indexCell.getView().getComponents();
-								if(__inject__(CollectionHelper.class).isNotEmpty(components)) {
+								if(CollectionHelper.isNotEmpty(components)) {
 									for(Component indexCellComponent : components.get()) {
 										if(indexCellComponent instanceof OutputString) {
 											value = ((OutputString)indexCellComponent).getValue();
@@ -96,12 +96,12 @@ public class DataTableBuilderImpl extends AbstractComponentBuilderImpl<DataTable
 				}
 			}
 			dataModel = new ListDataModel<Object>();
-			((javax.faces.model.DataModel<?>)dataModel).setWrappedData(Boolean.TRUE.equals(__inject__(CollectionHelper.class).isEmpty(objects)) ? new ArrayList<Object>() : objects.get());
+			((javax.faces.model.DataModel<?>)dataModel).setWrappedData(Boolean.TRUE.equals(CollectionHelper.isEmpty(objects)) ? new ArrayList<Object>() : objects.get());
 		}		
 		dataTable.setValue(dataModel);
 		
 		Columns columns = grid.getColumns();
-		if(__inject__(CollectionHelper.class).isNotEmpty(columns))
+		if(CollectionHelper.isNotEmpty(columns))
 			for(Column index : columns.get()) {
 				org.primefaces.component.column.Column __column__ = __inject__(ColumnBuilder.class).setDataTable(dataTable).setGrid(grid).setModel(index).execute().getOutput();
 				dataTable.getColumns().add(__column__);

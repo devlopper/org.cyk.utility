@@ -15,7 +15,7 @@ public class TestControllerModifierImpl extends AbstractTestControllerFunctionIn
 		properties.setFields(getProperties().getFields());
 		__inject__(Controller.class).update(object,properties);
 		Response response = (Response) properties.getResponse();
-		assertionHelper.assertEquals("Response status code", Response.Status.OK, __inject__(ResponseHelper.class).getStatus(response));
+		assertionHelper.assertEquals("Response status code", Response.Status.OK, ResponseHelper.getStatus(response));
 		addGarbagesArray(object);
 	}
 	

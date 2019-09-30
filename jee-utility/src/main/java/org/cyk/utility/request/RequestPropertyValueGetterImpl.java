@@ -37,7 +37,7 @@ public class RequestPropertyValueGetterImpl extends AbstractFunctionWithProperti
 				value = httpServletRequest.getQueryString();
 			*/
 			//else
-			//	__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented("get request "+property+" property");
+			//	ThrowableHelper.throwNotYetImplemented("get request "+property+" property");
 		}
 		return value;
 	}

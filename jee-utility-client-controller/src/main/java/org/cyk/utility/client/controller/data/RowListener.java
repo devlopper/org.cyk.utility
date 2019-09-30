@@ -4,7 +4,7 @@ import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 import org.cyk.utility.client.controller.component.window.WindowContainerManagedWindowBuilder;
 import org.cyk.utility.client.controller.navigation.Navigation;
 import org.cyk.utility.client.controller.navigation.NavigationBuilder;
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 
 public interface RowListener extends Objectable {
 

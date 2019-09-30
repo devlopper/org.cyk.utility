@@ -64,7 +64,7 @@ public class RequestParameterValueMapperImpl extends AbstractFunctionWithPropert
 					if(object instanceof String)
 						parameterValue = object.toString();
 					else
-						__injectThrowableHelper__().throwRuntimeException("Multiple parameter value not yet handled");
+						throw new RuntimeException("Multiple parameter value not yet handled");
 				}
 			}
 			*/

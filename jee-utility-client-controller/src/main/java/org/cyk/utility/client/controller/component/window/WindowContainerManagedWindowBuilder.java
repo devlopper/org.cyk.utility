@@ -5,7 +5,7 @@ import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.data.Form;
 import org.cyk.utility.client.controller.data.Row;
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 
 public interface WindowContainerManagedWindowBuilder extends FunctionWithPropertiesAsInput<WindowBuilder> {
 

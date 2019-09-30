@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.client.controller.data.TreeNodeListener;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.primefaces.model.TreeNode;
 
 import lombok.Getter;
@@ -39,7 +39,7 @@ public class DefaultTreeNode<NODE> extends org.primefaces.model.DefaultTreeNode 
     public List<TreeNode> getChildren() {
 		/*if(!Boolean.TRUE.equals(__childrenHasBeenSet__) && listener!=null) {
 			List<NODE> children = listener.getChildren(node);
-			if(DependencyInjection.inject(CollectionHelper.class).isNotEmpty(children)) {
+			if(CollectionHelper.isNotEmpty(children)) {
 				List<TreeNode> treeNodes = new ArrayList<>();
 				for(NODE index : children) {
 					DefaultTreeNode<NODE> treeNode = new DefaultTreeNode<NODE>(index, listener, this);

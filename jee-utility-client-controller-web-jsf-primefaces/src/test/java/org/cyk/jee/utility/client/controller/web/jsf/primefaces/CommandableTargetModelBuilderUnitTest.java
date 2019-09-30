@@ -2,10 +2,10 @@ package org.cyk.jee.utility.client.controller.web.jsf.primefaces;
 
 import static org.junit.Assert.assertNotNull;
 
+import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
 import org.cyk.utility.client.controller.component.command.Commandable;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.web.jsf.primefaces.ApplicationScopeLifeCycleListener;
-import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.Test;
 import org.primefaces.component.commandbutton.CommandButton;

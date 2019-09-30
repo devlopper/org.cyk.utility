@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.server.representation.RepresentationEntity;
-import org.cyk.utility.system.action.SystemActionUpdate;
+import org.cyk.utility.__kernel__.system.action.SystemActionUpdate;
 
 public class ControllerFunctionModifierImpl extends AbstractControllerFunctionImpl implements ControllerFunctionModifier , Serializable {
 	private static final long serialVersionUID = 1L;

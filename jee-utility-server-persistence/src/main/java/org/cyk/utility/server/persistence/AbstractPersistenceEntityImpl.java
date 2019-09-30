@@ -15,18 +15,19 @@ import javax.persistence.Transient;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
+import org.cyk.utility.__kernel__.field.FieldInstance;
+import org.cyk.utility.__kernel__.field.FieldInstancesRuntime;
 import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.stacktrace.StackTraceHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.string.Strings;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.clazz.ClassInstance;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
-import org.cyk.utility.__kernel__.field.FieldInstance;
-import org.cyk.utility.__kernel__.field.FieldInstancesRuntime;
 import org.cyk.utility.map.MapHelper;
 import org.cyk.utility.request.RequestProcessor;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
@@ -437,7 +438,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 					identifier = map.get(arithmeticOperator);
 			}
 			if(identifier == null)
-				__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented(String.format("filter by identifiers with operator %s and values %s",arithmeticOperator,identifiers));
+				ThrowableHelper.throwNotYetImplemented(String.format("filter by identifiers with operator %s and values %s",arithmeticOperator,identifiers));
 		}
 		return identifier;
 	}
@@ -599,7 +600,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		if(__inject__(ArrayHelper.class).isEmpty(parameters)){
 			//Query can have no parameters
 			//TODO base on query string structure you can know the expected parameters and decide to throw exception
-			//__inject__(ThrowableHelper.class).throwRuntimeException("Parameters of query "+queryIdentifier+" are required");
+			//throw new RuntimeException("Parameters of query "+queryIdentifier+" are required");
 		}
 		return parameters;
 	}

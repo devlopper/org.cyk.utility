@@ -3,6 +3,17 @@ package org.cyk.utility.client.controller.component.menu;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
+import org.cyk.utility.__kernel__.internationalization.InternationalizationKeyStringType;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
+import org.cyk.utility.__kernel__.system.action.SystemActionList;
+import org.cyk.utility.__kernel__.system.action.SystemActionProcess;
+import org.cyk.utility.__kernel__.system.action.SystemActionSelect;
+import org.cyk.utility.__kernel__.system.action.SystemActionTree;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
 import org.cyk.utility.client.controller.component.ComponentRole;
@@ -10,14 +21,6 @@ import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString;
 import org.cyk.utility.client.controller.event.EventName;
 import org.cyk.utility.client.controller.icon.Icon;
-import org.cyk.utility.internationalization.InternationalizationHelperImpl;
-import org.cyk.utility.internationalization.InternationalizationKeyStringType;
-import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.action.SystemActionCreate;
-import org.cyk.utility.system.action.SystemActionList;
-import org.cyk.utility.system.action.SystemActionProcess;
-import org.cyk.utility.system.action.SystemActionSelect;
-import org.cyk.utility.system.action.SystemActionTree;
 
 public class MenuItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<MenuItem> implements MenuItemBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -38,7 +41,7 @@ public class MenuItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<Men
 			*/
 		}
 		Collection<Object> children = getChildren();
-		if(__injectCollectionHelper__().isNotEmpty(children)) {
+		if(CollectionHelper.isNotEmpty(children)) {
 			for(Object index : children) {
 				if(index instanceof MenuItemBuilder) {
 					if(((MenuItemBuilder)index).getRequest() == null)
@@ -101,13 +104,13 @@ public class MenuItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<Men
 	
 	@Override
 	public MenuItemBuilder setCommandableNameInternalizationKeyValue(Object key,InternationalizationKeyStringType type) {
-		getCommandable(Boolean.TRUE).getNameInternationalization(Boolean.TRUE).setKey(InternationalizationHelperImpl.__buildKey__(key,type));
+		getCommandable(Boolean.TRUE).getNameInternationalization(Boolean.TRUE).setKey(InternationalizationHelper.buildKey(key,type));
 		return this;
 	}
 	
 	@Override
 	public MenuItemBuilder setCommandableNameInternalizationKeyValue(Object key) {
-		getCommandable(Boolean.TRUE).getNameInternationalization(Boolean.TRUE).setKey(InternationalizationHelperImpl.__buildKey__(key));
+		getCommandable(Boolean.TRUE).getNameInternationalization(Boolean.TRUE).setKey(InternationalizationHelper.buildKey(key));
 		return this;
 	}
 	
@@ -165,7 +168,7 @@ public class MenuItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<Men
 	public MenuItemBuilder addEntitiesListOrTree(Class<?>... classes) {
 		if(classes != null)
 			for(Class<?> index : classes)
-				if(__injectClassHelper__().isInstanceOf(index, DataIdentifiedByString.class))
+				if(ClassHelper.isInstanceOf(index, DataIdentifiedByString.class))
 					tree(index);
 				else
 					list(index);
@@ -190,7 +193,7 @@ public class MenuItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<Men
 		if(processingActionClass == null)
 			processingActionClass = SystemActionProcess.class;
 		SystemAction process = __inject__(processingActionClass);
-		if(__injectStringHelper__().isBlank(processingActionIdentifier))
+		if(StringHelper.isBlank(processingActionIdentifier))
 			processingActionIdentifier = (String) process.getIdentifier();
 		else
 			process.setIdentifier(processingActionIdentifier);

@@ -6,7 +6,7 @@ import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.client.controller.data.Form;
 import org.cyk.utility.client.controller.data.Row;
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 
 public abstract class AbstractWindowContainerManagedWindowBuilderViewDataImpl extends AbstractWindowContainerManagedWindowBuilderViewImpl implements WindowContainerManagedWindowBuilderViewData,Serializable {
 	private static final long serialVersionUID = 1L;

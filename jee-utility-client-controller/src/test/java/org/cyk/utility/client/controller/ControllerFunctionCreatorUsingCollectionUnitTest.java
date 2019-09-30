@@ -8,9 +8,9 @@ import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.__kernel__.function.FunctionRunnableMap;
 import org.cyk.utility.client.controller.component.annotation.InputStringLineMany;
 import org.cyk.utility.client.controller.component.annotation.InputStringLineOne;
-import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.system.action.SystemActionCreate;
-import org.cyk.utility.system.action.SystemActionRead;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
+import org.cyk.utility.__kernel__.system.action.SystemActionRead;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.Test;
 
@@ -28,16 +28,16 @@ public class ControllerFunctionCreatorUsingCollectionUnitTest extends AbstractWe
 	
 	@Test
 	public void createOne() {
-		assertionHelper.assertNull(__inject__(CollectionHelper.class).getFirst(__inject__(ControllerFunctionReader.class)
+		assertionHelper.assertNull(CollectionHelper.getFirst(__inject__(ControllerFunctionReader.class)
 				.setActionEntityClass(Model.class).addActionEntitiesIdentifiers("1") .execute().getEntities()));
-		assertionHelper.assertNull(__inject__(CollectionHelper.class).getFirst(__inject__(ControllerFunctionReader.class)
+		assertionHelper.assertNull(CollectionHelper.getFirst(__inject__(ControllerFunctionReader.class)
 				.setActionEntityClass(Model.class).addActionEntitiesIdentifiers("2") .execute().getEntities()));
 		
 		__inject__(ControllerFunctionCreator.class).setActionEntityClass(Model.class).addActionEntities(new Model().setIdentifier("1")).execute().getOutput();
 		
-		assertionHelper.assertNotNull(__inject__(CollectionHelper.class).getFirst(__inject__(ControllerFunctionReader.class)
+		assertionHelper.assertNotNull(CollectionHelper.getFirst(__inject__(ControllerFunctionReader.class)
 				.setActionEntityClass(Model.class).addActionEntitiesIdentifiers("1") .execute().getEntities()));
-		assertionHelper.assertNull(__inject__(CollectionHelper.class).getFirst(__inject__(ControllerFunctionReader.class)
+		assertionHelper.assertNull(CollectionHelper.getFirst(__inject__(ControllerFunctionReader.class)
 				.setActionEntityClass(Model.class).addActionEntitiesIdentifiers("2") .execute().getEntities()));
 	}
 	
@@ -79,7 +79,7 @@ public class ControllerFunctionCreatorUsingCollectionUnitTest extends AbstractWe
 					if(Model.class.equals(getFunction().getAction().getEntityClass())) {
 						if(getFunction().getAction() instanceof SystemActionRead) {
 							Collection<Object> result = new ArrayList<Object>();
-							if(__inject__(CollectionHelper.class).isNotEmpty(getFunction().getAction().getEntitiesIdentifiers())) {
+							if(CollectionHelper.isNotEmpty(getFunction().getAction().getEntitiesIdentifiers())) {
 								for(Object indexIdentifier : getFunction().getAction().getEntitiesIdentifiers().get()) {
 									for(Object index : Model.COLLECTION) {
 										if(((Model)index).getIdentifier().equals(indexIdentifier))

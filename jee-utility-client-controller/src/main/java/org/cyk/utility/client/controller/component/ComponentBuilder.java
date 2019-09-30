@@ -12,10 +12,10 @@ import org.cyk.utility.device.Device;
 import org.cyk.utility.device.DeviceScreenArea;
 import org.cyk.utility.device.DeviceScreenDimensionProportions;
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
-import org.cyk.utility.internationalization.InternationalizationString;
+import org.cyk.utility.__kernel__.internationalization.InternationalizationString;
 import org.cyk.utility.internationalization.InternationalizationStringMap;
-import org.cyk.utility.object.Objects;
-import org.cyk.utility.string.Strings;
+import org.cyk.utility.__kernel__.object.Objects;
+import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.type.BooleanMap;
 
 public interface ComponentBuilder<COMPONENT extends Component> extends FunctionWithPropertiesAsInput<COMPONENT> {

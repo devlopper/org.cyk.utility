@@ -3,12 +3,13 @@ package org.cyk.utility.client.controller.component.window;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.string.Strings;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.client.controller.data.DataHelper;
 import org.cyk.utility.client.controller.data.Form;
-import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.string.Strings;
-import org.cyk.utility.system.action.SystemAction;
 
 public abstract class AbstractWindowContainerManagedWindowBuilderSelectImpl extends AbstractWindowContainerManagedWindowBuilderImpl implements WindowContainerManagedWindowBuilderSelect,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -58,19 +59,19 @@ public abstract class AbstractWindowContainerManagedWindowBuilderSelectImpl exte
 	
 	@Override
 	public WindowContainerManagedWindowBuilderSelect addGridColumnsFieldNames(String... gridColumnsFieldNames) {
-		addGridColumnsFieldNames(__inject__(CollectionHelper.class).instanciate(gridColumnsFieldNames));
+		addGridColumnsFieldNames(CollectionHelper.listOf(gridColumnsFieldNames));
 		return this;
 	}
 	
 	@Override
 	public WindowContainerManagedWindowBuilderSelect addGridColumnsFieldNamesWithPrefix(String prefix,Collection<String> gridColumnsFieldNames) {
-		getGridColumnsFieldNames(Boolean.TRUE).addWithPrefix(__injectStringHelper__().addToEndIfDoesNotEndWith(prefix, ConstantCharacter.DOT), gridColumnsFieldNames);
+		getGridColumnsFieldNames(Boolean.TRUE).addWithPrefix(StringHelper.addToEndIfDoesNotEndWith(prefix, ConstantCharacter.DOT), gridColumnsFieldNames);
 		return this;
 	}
 	
 	@Override
 	public WindowContainerManagedWindowBuilderSelect addGridColumnsFieldNamesWithPrefix(String prefix,String... gridColumnsFieldNames) {
-		return addGridColumnsFieldNamesWithPrefix(prefix,__injectCollectionHelper__().instanciate(gridColumnsFieldNames));
+		return addGridColumnsFieldNamesWithPrefix(prefix,CollectionHelper.listOf(gridColumnsFieldNames));
 	}
 	
 	@Override

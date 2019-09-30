@@ -614,7 +614,7 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 	/*
 	@Test
 	public void save_many() {
-		List<MyEntityDto> list = (List<MyEntityDto>) __inject__(CollectionHelper.class).instanciate(List.class,new MyEntityDto().setCode("a").setIntegerValue(3));
+		List<MyEntityDto> list = (List<MyEntityDto>) CollectionHelper.listOf(List.class,new MyEntityDto().setCode("a").setIntegerValue(3));
 		assertThat(__inject__(MyEntityRepresentation.class).count(null).getEntity()).isEqualTo(0);
 		__inject__(MyEntityRepresentation.class).saveMany(list);
 		assertThat(__inject__(MyEntityRepresentation.class).count(null).getEntity()).isEqualTo(1);
@@ -623,7 +623,7 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 	/*
 	@Test
 	public void save_many_twice() {
-		List<MyEntity> list = (List<MyEntity>) __inject__(CollectionHelper.class).instanciate(List.class,new MyEntityDto().setCode("a").setTimestamp(1l));
+		List<MyEntity> list = (List<MyEntity>) CollectionHelper.listOf(List.class,new MyEntityDto().setCode("a").setTimestamp(1l));
 		assertThat(__inject__(MyEntityRepresentation.class).count(null).getEntity()).isEqualTo(0);
 		__inject__(MyEntityRepresentation.class).saveMany(list);
 		assertThat(__inject__(MyEntityRepresentation.class).count(null).getEntity()).isEqualTo(1);
@@ -673,7 +673,7 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 		test.addObjects(new MyEntityDto()).setName("MyEntity.code notnull")
 		.setExpectedThrowableCauseClassIsConstraintViolationException().execute();
 		
-		assertThat(__inject__(ThrowableHelper.class).getInstanceOf(test.getThrowable(), ConstraintViolationException.class).getMessage())
+		assertThat(ThrowableHelper.getInstanceOf(test.getThrowable(), ConstraintViolationException.class).getMessage())
 			.contains("propertyPath=code");
 	}
 	*/

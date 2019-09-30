@@ -133,7 +133,7 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 	public void updateOne() throws Exception{
 		Object object = __instanciateEntity__(null);
 		String businessIdentifierFieldName = org.cyk.utility.__kernel__.field.FieldHelper.getName(object.getClass(), FieldName.IDENTIFIER, ValueUsageType.BUSINESS);
-		Object newBusinessIdentifierFieldValue = __inject__(RandomHelper.class).getAlphanumeric(5);
+		Object newBusinessIdentifierFieldValue = RandomHelper.getAlphanumeric(5);
 		
 		__inject__(TestRepresentationUpdate.class).setFieldValuesMap(object, __inject__(MapHelper.class).instanciateKeyAsStringValueAsObject(businessIdentifierFieldName
 				,newBusinessIdentifierFieldValue)).addObjectsToBeCreatedArray(object).addNotGarbagableArray(object).addObjects(object).setObjectClass(object.getClass())

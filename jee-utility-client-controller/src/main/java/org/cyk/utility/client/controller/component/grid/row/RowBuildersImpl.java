@@ -6,7 +6,7 @@ import java.util.Collection;
 import org.cyk.utility.client.controller.data.Row;
 import org.cyk.utility.client.controller.data.RowListener;
 import org.cyk.utility.client.controller.data.RowListeners;
-import org.cyk.utility.collection.AbstractCollectionInstanceImpl;
+import org.cyk.utility.__kernel__.collection.AbstractCollectionInstanceImpl;
 
 public class RowBuildersImpl extends AbstractCollectionInstanceImpl<RowBuilder> implements RowBuilders,Serializable {
 	private static final long serialVersionUID = 1L;

@@ -7,9 +7,9 @@ import java.util.Collection;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.client.controller.message.MessagesBuilder;
-import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.notification.Notification;
 import org.cyk.utility.notification.NotificationSeverity;
 import org.cyk.utility.notification.NotificationSeverityError;
@@ -27,7 +27,7 @@ public class MessagesBuilderFunctionRunnableImpl extends AbstractFunctionRunnabl
 			public void run() {
 				Collection<Object> collection = new ArrayList<>();
 				Notifications notifications = getFunction().getNotifications();
-				if(__inject__(CollectionHelper.class).isNotEmpty(notifications))
+				if(CollectionHelper.isNotEmpty(notifications))
 					for(Notification  index : notifications.get())
 						collection.add(__instanciate__(index));
 				setOutput(collection);

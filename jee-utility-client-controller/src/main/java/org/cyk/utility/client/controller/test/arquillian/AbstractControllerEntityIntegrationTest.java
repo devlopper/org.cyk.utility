@@ -42,7 +42,7 @@ public abstract class AbstractControllerEntityIntegrationTest<ENTITY> extends Ab
 		Object action = __inject__(SystemActionUpdate.class);
 		ENTITY object = __instanciateEntity__(action);
 		__createEntity__(object);
-		object = (ENTITY) __getBusinessEntity__(action).findOne(__inject__(FieldHelper.class).getFieldValueSystemIdentifier(object));
+		object = (ENTITY) __getBusinessEntity__(action).findOne(FieldHelper.readSystemIdentifier(object));
 		__setEntityFields__(object,action);
 		__updateEntity__(object);
 		__deleteEntitiesAll__(object.getClass());
@@ -62,7 +62,7 @@ public abstract class AbstractControllerEntityIntegrationTest<ENTITY> extends Ab
 	/*
 	@SuppressWarnings("unchecked")
 	protected Class<ENTITY> __getEntityClass__(Object action){
-		return (Class<ENTITY>) __inject__(ClassHelper.class).getParameterAt(getClass(), 0, Object.class);
+		return (Class<ENTITY>) ClassHelper.getParameterAt(getClass(), 0, Object.class);
 	}
 	
 	protected ControllerEntity<ENTITY> __getControllerEntity__(Object action){

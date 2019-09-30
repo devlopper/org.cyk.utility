@@ -25,7 +25,7 @@ public class SessionUserGetterImpl extends AbstractFunctionWithPropertiesAsInput
 			sessionUser = (SessionUser) session.getAttribute(attributeName);
 			if(sessionUser == null) {
 				sessionUser = __inject__(SessionUser.class);
-				sessionUser.setIdentifier(__inject__(RandomHelper.class).getAlphanumeric(10));
+				sessionUser.setIdentifier(RandomHelper.getAlphanumeric(10));
 				sessionUser.setPrincipal(request.getUserPrincipal());
 				session.setAttribute(attributeName, sessionUser);
 			}

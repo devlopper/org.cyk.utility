@@ -2,7 +2,7 @@ package org.cyk.utility.client.controller;
 
 import java.util.Collection;
 
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 
 public interface ControllerFunctionRedirector extends ControllerFunction {
 

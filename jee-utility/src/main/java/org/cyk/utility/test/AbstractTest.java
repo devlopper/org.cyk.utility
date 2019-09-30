@@ -54,19 +54,19 @@ public abstract class AbstractTest extends org.cyk.utility.__kernel__.test.Abstr
 	}
 	
 	protected String __getRandomCode__(){
-		return __inject__(RandomHelper.class).getAlphabetic(3);
+		return RandomHelper.getAlphabetic(3);
 	}
 	
 	protected String __getRandomName__(){
-		return __inject__(RandomHelper.class).getAlphabetic(3);
+		return RandomHelper.getAlphabetic(3);
 	}
 	
 	protected String __getRandomElectronicMailAddress__(){
-		return __inject__(RandomHelper.class).getAlphabetic(3)+"@mail.com";
+		return RandomHelper.getAlphabetic(3)+"@mail.com";
 	}
 	
 	protected String __getRandomString__(){
-		return __inject__(RandomHelper.class).getAlphabetic(3);
+		return RandomHelper.getAlphabetic(3);
 	}
 	
 	protected void __setFieldValueBusinessIdentifier__(Object object,Object value){

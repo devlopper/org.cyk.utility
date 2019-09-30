@@ -25,7 +25,7 @@ public class ObjectToStringBuilderJsonImpl extends AbstractObjectToStringBuilder
 			return mapper.writeValueAsString(object);
 		}else {
 			if(CollectionHelper.isEmpty(fieldInstanceValues)) {
-				__inject__(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented("jsonify object without specified fields");
+				throw new RuntimeException(NotYetImplemented("jsonify object without specified fields");
 				return null;
 			}else { 
 				SimpleModule module = new SimpleModule();
@@ -73,7 +73,7 @@ public class ObjectToStringBuilderJsonImpl extends AbstractObjectToStringBuilder
 									string = indexCollectionInstance.toString();
 							} 
 							if(string == null)
-								__inject__(ThrowableHelper.class).throwRuntimeException("collection value cannot be deduced to string");
+								throw new RuntimeException("collection value cannot be deduced to string");
 							strings.add(string);
 						}
 						String string =StringHelper.concatenate(strings.get(), COMA);
@@ -83,7 +83,7 @@ public class ObjectToStringBuilderJsonImpl extends AbstractObjectToStringBuilder
 					}else if(index.getValue() instanceof Enum<?>) {
 						generator.writeStringField(index.getFieldInstance().getPath(), new ObjectMapper().writeValueAsString(index.getValue()) );
 					}else
-						__inject__(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented("jsonify field of type "+index.getFieldInstance().getType());	
+						throw new RuntimeException(NotYetImplemented("jsonify field of type "+index.getFieldInstance().getType());	
 				}
 			}
 	        generator.writeEndObject();

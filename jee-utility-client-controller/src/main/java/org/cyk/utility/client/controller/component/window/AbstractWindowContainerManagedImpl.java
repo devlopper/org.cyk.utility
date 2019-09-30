@@ -25,10 +25,10 @@ import org.cyk.utility.notification.NotificationSeverityError;
 import org.cyk.utility.notification.NotificationSeverityInformation;
 import org.cyk.utility.notification.NotificationSeverityWarning;
 import org.cyk.utility.request.RequestGetter;
-import org.cyk.utility.string.StringHelperImpl;
-import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.action.SystemActionCreate;
-import org.cyk.utility.throwable.ThrowableHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.time.DurationBuilder;
 import org.cyk.utility.time.DurationStringBuilder;
 
@@ -49,7 +49,7 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
-		setContextDependencyInjectionBeanName(StringHelperImpl.__getVariableNameFrom__(getClass().getSimpleName()));
+		setContextDependencyInjectionBeanName(StringHelper.getVariableNameFrom(getClass().getSimpleName()));
 		setSessionUser(__getSessionUser__());
 		setSystemAction(__getProperty__(WindowContainerManagedProperty.SYSTEM_ACTION, SystemAction.class));
 	}
@@ -161,7 +161,7 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 			DurationBuilder subDurationBuilder = __inject__(DurationBuilder.class).setBeginToNow();
 			
 			String titleValue = __getWindowTitleValue__();
-			if(StringHelperImpl.__isNotBlank__(titleValue))
+			if(StringHelper.isNotBlank(titleValue))
 				windowBuilder.setTitleValue(titleValue);	
 			
 			ViewBuilder view = __getViewBuilder__();
@@ -211,7 +211,7 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 				.setCommandFunctionActionClass(SystemActionCreate.class).addCommandFunctionTryRunRunnable(new Runnable() {
 					@Override
 					public void run() {
-						__inject__(ThrowableHelper.class).throwRuntimeException("Commandable with identifier <<"+identifier+">> not found.");
+						throw new RuntimeException("Commandable with identifier <<"+identifier+">> not found.");
 					}
 				});
 			commandable = commandableBuilder.execute().getOutput();

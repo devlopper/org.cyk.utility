@@ -1,24 +1,14 @@
 package org.cyk.utility.playground.server;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.servlet.ServletContext;
 import javax.servlet.annotation.WebListener;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.playground.server.business.api.MyEntityBusiness;
-import org.cyk.utility.playground.server.business.api.NodeBusiness;
-import org.cyk.utility.playground.server.persistence.entities.ApplicationScopeLifeCycleListenerEntities;
-import org.cyk.utility.playground.server.persistence.entities.MyEntity;
 import org.cyk.utility.playground.server.persistence.entities.Node;
-import org.cyk.utility.playground.server.persistence.entities.Nodes;
-import org.cyk.utility.playground.server.persistence.entities.NodesImpl;
 import org.cyk.utility.random.RandomHelper;
 import org.cyk.utility.server.deployment.AbstractServletContextListener;
-import org.cyk.utility.server.representation.impl.DataLoader;
-import org.w3c.dom.traversal.NodeIterator;
 
 @WebListener
 public class ServletContextListener extends AbstractServletContextListener implements Serializable {
@@ -55,7 +45,7 @@ public class ServletContextListener extends AbstractServletContextListener imple
 		if(level!=null && level>0)
 			for(Integer index = 0 ; index < 5 ; index = index + 1) {
 				String code = parent.getCode()+"."+index.toString();
-				String name = __inject__(RandomHelper.class).getAlphanumeric(4);
+				String name = RandomHelper.getAlphanumeric(4);
 				Node node = new Node().setCode(code).setName(name).addParents(parent);
 				nodes.add(node);
 				__instanciateChildren__(node, level-1, nodes);

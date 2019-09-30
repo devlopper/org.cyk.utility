@@ -1,7 +1,7 @@
 package org.cyk.utility.client.controller.component.window;
 
 import org.cyk.utility.helper.Helper;
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 
 public interface WindowHelper extends Helper {
 

@@ -64,11 +64,11 @@ import org.cyk.utility.client.controller.web.ComponentHelper;
 import org.cyk.utility.client.controller.web.jsf.converter.DateConverter;
 import org.cyk.utility.client.controller.web.jsf.converter.ObjectConverter;
 import org.cyk.utility.client.controller.web.jsf.primefaces.annotation.Primefaces;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.css.Style;
 import org.cyk.utility.random.RandomHelper;
-import org.cyk.utility.string.StringHelper;
-import org.cyk.utility.value.ValueHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.primefaces.model.DefaultStreamedContent;
 
 @ApplicationScoped @Primefaces
@@ -83,7 +83,7 @@ public class ObjectLifeCycleListenerImpl extends AbstractObjectLifeCycleListener
 		super.listenPostConstructComponentBuilder(componentBuilder);
 		Properties outputProperties = componentBuilder.getOutputProperties(Boolean.TRUE);
 		
-		outputProperties.setIdentifier(String.format(IDENTIFIER_FORMAT,componentBuilder.getComponentClass().getSimpleName(),DependencyInjection.inject(RandomHelper.class).getAlphabetic(3)));
+		outputProperties.setIdentifier(String.format(IDENTIFIER_FORMAT,componentBuilder.getComponentClass().getSimpleName(),RandomHelper.getAlphabetic(3)));
 		outputProperties.setIdentifierAsStyleClass(outputProperties.getIdentifier().toString());
 		outputProperties.setWidgetVar(outputProperties.getIdentifier());
 		outputProperties.setRendered(Boolean.TRUE);						
@@ -118,7 +118,7 @@ public class ObjectLifeCycleListenerImpl extends AbstractObjectLifeCycleListener
 			VisibleComponent visibleComponent = (VisibleComponent) component;
 			//visibleComponentBuilder.getStyle(Boolean.TRUE).addClasses("cyk_component");
 			
-			//String identifierAsStyleClass = __inject__(RandomHelper.class).
+			//String identifierAsStyleClass = RandomHelper.
 			//visibleComponentBuilder.getStyle(Boolean.TRUE).addClasses("cyk_component");
 			
 			//String identifierAsStyleClass = visibleComponentBuilder.getIdentifier().toString();
@@ -129,20 +129,20 @@ public class ObjectLifeCycleListenerImpl extends AbstractObjectLifeCycleListener
 			//visibleComponentBuilder.addStyleClasses("AZERTY");
 			/*
 			ComponentRoles roles = visibleComponentBuilder.getRoles();
-			if(__inject__(CollectionHelper.class).isNotEmpty(roles)) {
+			if(CollectionHelper.isNotEmpty(roles)) {
 				for(ComponentRole index : roles.get()) {
 					String styleClass = __inject__(ComponentRoleStyleClassGetter.class).setRole(index).execute().getOutput();
-					if(__inject__(StringHelper.class).isNotBlank(styleClass))
+					if(StringHelper.isNotBlank(styleClass))
 						visibleComponentBuilder.addStyleClasses(styleClass);
 				}
 			}
 			*/
 			/*
-			if(__inject__(CollectionHelper.class).contains(visibleComponentBuilder.getRoles(), ComponentRole.TITLE))
+			if(CollectionHelper.contains(visibleComponentBuilder.getRoles(), ComponentRole.TITLE))
 				visibleComponentBuilder.getLayoutItemStyle(Boolean.TRUE).addClasses("cyk_layout_view_title");
-			if(__inject__(CollectionHelper.class).contains(visibleComponentBuilder.getRoles(), ComponentRole.GRID))
+			if(CollectionHelper.contains(visibleComponentBuilder.getRoles(), ComponentRole.GRID))
 				visibleComponentBuilder.getLayoutItemStyle(Boolean.TRUE).addClasses("cyk_layout_table");
-			if(__inject__(CollectionHelper.class).contains(visibleComponentBuilder.getRoles(), ComponentRole.ROW))
+			if(CollectionHelper.contains(visibleComponentBuilder.getRoles(), ComponentRole.ROW))
 				visibleComponentBuilder.getLayoutItemStyle(Boolean.TRUE).addClasses("cyk_layout_row");
 			*/
 			if(visibleComponent instanceof InputOutput<?>) {
@@ -165,7 +165,7 @@ public class ObjectLifeCycleListenerImpl extends AbstractObjectLifeCycleListener
 				// TODO ui-g must be get from function
 				layoutBuilder.getStyle(Boolean.TRUE).getClasses(Boolean.TRUE).add("ui-g");
 				
-				if(DependencyInjection.inject(CollectionHelper.class).contains(layoutBuilder.getRoles(), ComponentRole.GRID))
+				if(CollectionHelper.contains(layoutBuilder.getRoles(), ComponentRole.GRID))
 					layoutBuilder.addStyleClasses("cyk_layout_grid");
 				
 				layoutBuilder.setOutputProperty(Properties.LAYOUT,"block");//.setLayout("block");
@@ -194,7 +194,7 @@ public class ObjectLifeCycleListenerImpl extends AbstractObjectLifeCycleListener
 				index.getProperties().setIfNull(Properties.FUNCTION,index.getFunction());
 				
 				String scriptCodeSource = index.getScript() == null ? null :index.getScript().getCodeSource();
-				if(DependencyInjection.inject(StringHelper.class).isNotBlank(scriptCodeSource)) {
+				if(StringHelper.isNotBlank(scriptCodeSource)) {
 					if(EventName.CLICK.equals(index.getName()))
 						component.getProperties().setOnClick(scriptCodeSource);
 					else if(EventName.COMPLETE.equals(index.getName()))
@@ -270,7 +270,7 @@ public class ObjectLifeCycleListenerImpl extends AbstractObjectLifeCycleListener
 									choicesLayout = DependencyInjection.inject(ChoicesLayoutResponsive.class).setNumberOfColumns(3);
 								if(choicesLayout instanceof ChoicesLayoutResponsive) {
 									component.getProperties().setLayout("responsive");
-									component.getProperties().setColumns( DependencyInjection.inject(ValueHelper.class).defaultToIfNull(((ChoicesLayoutResponsive)choicesLayout).getNumberOfColumns(),3));
+									component.getProperties().setColumns( ValueHelper.defaultToIfNull(((ChoicesLayoutResponsive)choicesLayout).getNumberOfColumns(),3));
 								}else {
 									component.getProperties().setLayout("responsive");
 									component.getProperties().setColumns(3);

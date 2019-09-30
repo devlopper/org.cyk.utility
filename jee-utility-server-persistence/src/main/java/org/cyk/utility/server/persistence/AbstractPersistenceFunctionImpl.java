@@ -13,7 +13,7 @@ import org.cyk.utility.system.AbstractSystemFunctionServerImpl;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerPersistence;
 import org.cyk.utility.system.node.SystemNodeServer;
-import org.cyk.utility.throwable.ThrowableHelper;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 
 public abstract class AbstractPersistenceFunctionImpl extends AbstractSystemFunctionServerImpl implements PersistenceFunction, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -63,11 +63,11 @@ public abstract class AbstractPersistenceFunctionImpl extends AbstractSystemFunc
 	}
 	
 	protected void __executeQuery__(SystemAction action){
-		__inject__(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented();
+		ThrowableHelper.throwNotYetImplemented();
 	}
 	
 	protected void __executeQuery__(SystemAction action,PersistenceQuery persistenceQuery){
-		__inject__(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented();
+		ThrowableHelper.throwNotYetImplemented();
 	}
 	
 	@Override

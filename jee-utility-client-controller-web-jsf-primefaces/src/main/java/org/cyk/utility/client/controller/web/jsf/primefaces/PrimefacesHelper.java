@@ -13,25 +13,25 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.object.Objects;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.clazz.ClassHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.clazz.ClassNameBuilder;
 import org.cyk.utility.client.controller.ControllerLayer;
 import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.component.ComponentBuilder;
 import org.cyk.utility.client.controller.component.VisibleComponent;
-import org.cyk.utility.client.controller.data.hierarchy.TreeNodeListener;
 import org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString;
 import org.cyk.utility.client.controller.data.hierarchy.Hierarchy;
+import org.cyk.utility.client.controller.data.hierarchy.TreeNodeListener;
 import org.cyk.utility.client.controller.event.Event;
-import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.file.File;
-import org.cyk.utility.object.Objects;
-import org.cyk.utility.string.StringHelper;
-import org.cyk.utility.string.Strings;
 import org.primefaces.PrimeFaces;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.DefaultTreeNode;
@@ -50,7 +50,7 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 	public String computeAttributeUpdate(Objects updatables,Strings strings) {
 		if(strings == null)
 			strings = __inject__(Strings.class);
-		if(__inject__(CollectionHelper.class).isNotEmpty(updatables))
+		if(CollectionHelper.isNotEmpty(updatables))
 			for(Object index : updatables.get()) {
 				Component indexComponent = null;
 				if(index instanceof Component)
@@ -61,7 +61,7 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 				if(indexComponent instanceof VisibleComponent) {
 					String token = null;
 					token = (String)((VisibleComponent)indexComponent).getProperties().getIdentifierAsStyleClass();
-					if(__inject__(StringHelper.class).isNotBlank(token))
+					if(StringHelper.isNotBlank(token))
 						strings.add("@(."+token+")");		
 				}else
 					strings.add(index.toString());
@@ -111,10 +111,10 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 	
 	public <T> DualListModel<T> buildDualList(Collection<T> available,Collection<T> selected) {
 		DualListModel<T> dualListModel = new DualListModel<T>(new ArrayList<>(), new ArrayList<>());
-		if(__inject__(CollectionHelper.class).isNotEmpty(available)) {
+		if(CollectionHelper.isNotEmpty(available)) {
 			for(T index : available) {
 				Boolean isSelected = null;
-				if(__inject__(CollectionHelper.class).isNotEmpty(selected)) {
+				if(CollectionHelper.isNotEmpty(selected)) {
 					for(T indexSub : selected) {
 						if(index.equals(indexSub)) {
 							isSelected = Boolean.TRUE;
@@ -155,7 +155,7 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 	public <NODE extends DataIdentifiedByString> TreeNode buildTreeNode(Collection<NODE> nodes,Collection<NODE> selectedNodes,org.cyk.utility.client.controller.data.TreeNodeListener<NODE> listener) {
 		TreeNode root = new DefaultTreeNode();
 		root.setExpanded(Boolean.TRUE);
-		if(__inject__(CollectionHelper.class).isNotEmpty(nodes))
+		if(CollectionHelper.isNotEmpty(nodes))
 			for(NODE index : nodes) {
 				TreeNode node = new org.cyk.utility.client.controller.web.jsf.primefaces.DefaultTreeNode<NODE>(index, listener, root);
 				//TreeNode node = instantiateTreeNode(index,selectedNodes,listener, root);
@@ -167,10 +167,10 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 	public <NODE extends DataIdentifiedByString,HIERARCHY extends Hierarchy<NODE>> TreeNode buildTreeNode(Collection<NODE> nodes,Collection<HIERARCHY> hierarchies,Collection<NODE> selectedNodes,TreeNodeListener<NODE,HIERARCHY> listener) {
 		TreeNode root = new DefaultTreeNode();
 		root.setExpanded(Boolean.TRUE);
-		if(__inject__(CollectionHelper.class).isNotEmpty(nodes))
+		if(CollectionHelper.isNotEmpty(nodes))
 			for(NODE index : nodes) {
 				Boolean hasParent = Boolean.FALSE;
-				if(__inject__(CollectionHelper.class).isNotEmpty(hierarchies)) {
+				if(CollectionHelper.isNotEmpty(hierarchies)) {
 					for(HIERARCHY hierarchy : hierarchies) {
 						if(hierarchy.getChild().getIdentifier().equals(index.getIdentifier())) {
 							hasParent = Boolean.TRUE;
@@ -189,7 +189,7 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 	
 	private <NODE extends DataIdentifiedByString,HIERARCHY extends Hierarchy<NODE>> void buildTreeNode(NODE node,Collection<NODE> nodes,Collection<HIERARCHY> hierarchies,Collection<NODE> selectedNodes,TreeNodeListener<NODE,HIERARCHY> listener,TreeNode root) {
 		//Find children
-		if(__inject__(CollectionHelper.class).isNotEmpty(nodes) && __inject__(CollectionHelper.class).isNotEmpty(hierarchies)) {
+		if(CollectionHelper.isNotEmpty(nodes) && CollectionHelper.isNotEmpty(hierarchies)) {
 			for(NODE index : nodes) {
 				for(HIERARCHY hierarchy : hierarchies) {
 					if(hierarchy.getParent().getIdentifier().equals(node.getIdentifier()) && hierarchy.getChild().getIdentifier().equals(index.getIdentifier())) {
@@ -206,7 +206,7 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 		TreeNode treeNode = new DefaultTreeNode(listener.getType(node),listener.getData(node),parent);
 		//TreeNode treeNode = new org.cyk.utility.client.controller.web.jsf.primefaces.DefaultTreeNode<NODE>(node,listener,parent);
 		//mark as selected if it belongs to 
-		if(__inject__(CollectionHelper.class).isNotEmpty(selectedNodes)) {
+		if(CollectionHelper.isNotEmpty(selectedNodes)) {
 			treeNode.setSelected(selectedNodes.contains(node));
 			if(treeNode.isSelected()) {
 				setTreeNodesParentsExpanded(treeNode,Boolean.TRUE);
@@ -225,12 +225,12 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 			Integer index = 0;
 			Collection<TreeNode> parents = Arrays.asList(treeNode);
 			Collection<TreeNode> directChildren;
-			Boolean datasIsEmpty = __inject__(CollectionHelper.class).isEmpty(datas);
-			while (index < depth && __inject__(CollectionHelper.class).isNotEmpty(parents)) {
+			Boolean datasIsEmpty = CollectionHelper.isEmpty(datas);
+			while (index < depth && CollectionHelper.isNotEmpty(parents)) {
 				directChildren = new ArrayList<>();
 				Collection<TreeNode> nextParents = new ArrayList<>();
 				for(TreeNode parent : parents) {
-					if(__inject__(CollectionHelper.class).isNotEmpty(parent.getChildren())) {
+					if(CollectionHelper.isNotEmpty(parent.getChildren())) {
 						if(datasIsEmpty)
 							directChildren.addAll(parent.getChildren());
 						else {
@@ -244,14 +244,14 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 				}
 				children.addAll(directChildren);
 				index = index + 1;
-				parents = __inject__(CollectionHelper.class).isEmpty(nextParents) ? null : new ArrayList<>(nextParents);
+				parents = CollectionHelper.isEmpty(nextParents) ? null : new ArrayList<>(nextParents);
 			}			
 		}
 		return children;
 	}
 	
 	public <NODE extends DataIdentifiedByString,HIERARCHY extends Hierarchy<NODE>> PrimefacesHelper setTreeNodesSelected(TreeNode treeNode,Collection<NODE> nodes,Boolean selected) {
-		if(treeNode!=null && __inject__(CollectionHelper.class).isNotEmpty(nodes)) {
+		if(treeNode!=null && CollectionHelper.isNotEmpty(nodes)) {
 			Collection<TreeNode> children = getTreeNodeChildren(treeNode, null,null);
 			for(TreeNode index : children) {
 				if(nodes.contains(index.getData()))
@@ -281,7 +281,7 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 		hierarchyClassNameBuilder.getSourceNamingModel(Boolean.TRUE).client().controller().entities();
 		hierarchyClassNameBuilder.getDestinationNamingModel(Boolean.TRUE).client().controller().entities().setSuffix("Hierarchy");
 		@SuppressWarnings("unchecked")
-		Class<HIERARCHY> hierarchyClass = (Class<HIERARCHY>) __inject__(ClassHelper.class).getByName(hierarchyClassNameBuilder);
+		Class<HIERARCHY> hierarchyClass = (Class<HIERARCHY>) ClassHelper.getByName(hierarchyClassNameBuilder.execute().getOutput());
 		Collection<HIERARCHY> hierarchies = __inject__(ControllerLayer.class).injectInterfaceClassFromEntityClass(hierarchyClass).read(new Properties().setIsPageable(Boolean.FALSE));
 		
 		ClassNameBuilder treeNodeListenerClassNameBuilder = __inject__(ClassNameBuilder.class);
@@ -289,7 +289,7 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 		treeNodeListenerClassNameBuilder.getSourceNamingModel(Boolean.TRUE).client().controller().entities();
 		treeNodeListenerClassNameBuilder.getDestinationNamingModel(Boolean.TRUE).client().controller().impl().setSuffix(TreeNodeListener.class.getSimpleName());
 		@SuppressWarnings("unchecked")
-		Class<TreeNodeListener<NODE,HIERARCHY>> treeNodeListenerClass = (Class<TreeNodeListener<NODE,HIERARCHY>>) __inject__(ClassHelper.class).getByName(treeNodeListenerClassNameBuilder);
+		Class<TreeNodeListener<NODE,HIERARCHY>> treeNodeListenerClass = (Class<TreeNodeListener<NODE,HIERARCHY>>) ClassHelper.getByName(treeNodeListenerClassNameBuilder.execute().getOutput());
 		
 		TreeNodeListener<NODE,HIERARCHY> listener = __inject__(treeNodeListenerClass);
 		return buildTreeNode(nodes, hierarchies, selectedNodes, listener);
@@ -297,7 +297,7 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 	
 	public <NODE extends DataIdentifiedByString,HIERARCHY extends Hierarchy<NODE>> TreeNode buildTreeNode(Class<NODE> klass,org.cyk.utility.client.controller.data.DataIdentifiedByString master) {
 		@SuppressWarnings("unchecked")
-		Collection<NODE> selectedNodes = (Collection<NODE>) __inject__(FieldValueGetter.class).execute(master, __inject__(StringHelper.class)
+		Collection<NODE> selectedNodes = (Collection<NODE>) __inject__(FieldValueGetter.class).execute(master, StringHelper
 				.getVariableNameFrom(klass.getSimpleName())+"s").getOutput();
 		return buildTreeNode(klass, selectedNodes);
 	}

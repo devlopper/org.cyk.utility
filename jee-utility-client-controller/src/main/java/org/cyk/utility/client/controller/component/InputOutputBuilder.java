@@ -2,7 +2,7 @@ package org.cyk.utility.client.controller.component;
 
 import java.lang.reflect.Field;
 
-import org.cyk.utility.string.Strings;
+import org.cyk.utility.__kernel__.string.Strings;
 
 public interface InputOutputBuilder<INPUT_OUTPUT extends InputOutput<VALUE>,VALUE> extends VisibleComponentBuilder<INPUT_OUTPUT> {
 

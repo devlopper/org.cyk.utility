@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.function.Function;
 import org.cyk.utility.client.controller.AbstractObject;
-import org.cyk.utility.object.Objects;
+import org.cyk.utility.__kernel__.object.Objects;
 import org.cyk.utility.programming.script.Script;
 
 public class EventImpl extends AbstractObject implements Event,Serializable {

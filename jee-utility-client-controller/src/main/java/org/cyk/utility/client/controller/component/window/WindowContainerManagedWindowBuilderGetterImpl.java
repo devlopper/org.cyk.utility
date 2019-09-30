@@ -2,10 +2,10 @@ package org.cyk.utility.client.controller.component.window;
 
 import java.io.Serializable;
 
-import org.cyk.utility.clazz.ClassHelper;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.throwable.ThrowableHelper;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 
 public class WindowContainerManagedWindowBuilderGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<WindowContainerManagedWindowBuilder> implements WindowContainerManagedWindowBuilderGetter,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -27,12 +27,12 @@ public class WindowContainerManagedWindowBuilderGetterImpl extends AbstractFunct
 		
 		if(windowContainerManagedWindowBuilderClass == null) {
 			if(systemAction == null)
-				windowContainerManagedWindowBuilderClass = (Class<WindowContainerManagedWindowBuilder>) __inject__(ClassHelper.class).getByName(WindowContainerManagedWindowBuilderBlank.class.getName());
+				windowContainerManagedWindowBuilderClass = (Class<WindowContainerManagedWindowBuilder>) ClassHelper.getByName(WindowContainerManagedWindowBuilderBlank.class.getName());
 		}
 		
 		WindowContainerManagedWindowBuilder windowContainerManagedWindowBuilder = null;
 		if(windowContainerManagedWindowBuilderClass==null) {
-			__inject__(ThrowableHelper.class).throwRuntimeException(getClass().getSimpleName()+" : No WindowContainerManagedWindowBuilder found for "+(systemAction == null ? "UNKNOWN_ACTION" : systemAction.getIdentifier()));
+			throw new RuntimeException(getClass().getSimpleName()+" : No WindowContainerManagedWindowBuilder found for "+(systemAction == null ? "UNKNOWN_ACTION" : systemAction.getIdentifier()));
 		}else {
 			windowContainerManagedWindowBuilder = (WindowContainerManagedWindowBuilder) __inject__(windowContainerManagedWindowBuilderClass);
 			windowContainerManagedWindowBuilder.setSystemAction(systemAction);	

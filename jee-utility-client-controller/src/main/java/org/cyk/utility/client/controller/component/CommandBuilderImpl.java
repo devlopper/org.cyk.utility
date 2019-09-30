@@ -2,6 +2,8 @@ package org.cyk.utility.client.controller.component;
 
 import java.io.Serializable;
 
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.client.controller.command.CommandFunction;
 import org.cyk.utility.client.controller.component.command.Command;
 import org.cyk.utility.client.controller.component.command.CommandBuilder;
@@ -24,12 +26,12 @@ public class CommandBuilderImpl extends AbstractInvisibleComponentBuilderImpl<Co
 		WindowContainerManaged windowContainerManaged = getWindowContainerManaged();
 		command.setWindowContainerManaged(windowContainerManaged);		
 		String containerContextDependencyInjectionBeanName = getContainerContextDependencyInjectionBeanName();
-		if(__injectStringHelper__().isBlank(containerContextDependencyInjectionBeanName)) {
+		if(StringHelper.isBlank(containerContextDependencyInjectionBeanName)) {
 			if(windowContainerManaged!=null)
 				containerContextDependencyInjectionBeanName = windowContainerManaged.getContextDependencyInjectionBeanName();
 		}
 		command.setContainerContextDependencyInjectionBeanName(containerContextDependencyInjectionBeanName);
-		Boolean isSynchronous = __injectValueHelper__().defaultToIfNull(getIsSynchronous(),Boolean.FALSE);
+		Boolean isSynchronous = ValueHelper.defaultToIfNull(getIsSynchronous(),Boolean.FALSE);
 		command.setIsSynchronous(isSynchronous);
 	}
 	

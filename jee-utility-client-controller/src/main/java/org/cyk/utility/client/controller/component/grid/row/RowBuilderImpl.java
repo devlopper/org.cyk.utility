@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller.component.grid.row;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.client.controller.component.grid.AbstractDimensionBuilderImpl;
 import org.cyk.utility.client.controller.component.grid.cell.Cell;
 import org.cyk.utility.client.controller.component.grid.cell.CellBuilder;
@@ -18,7 +19,7 @@ public class RowBuilderImpl extends AbstractDimensionBuilderImpl<Row> implements
 	protected void __execute__(Row row) {
 		super.__execute__(row);
 		CellBuilders cells = getCells();
-		if(__injectCollectionHelper__().isNotEmpty(cells)) {
+		if(CollectionHelper.isNotEmpty(cells)) {
 			row.setCells(__inject__(Cells.class));
 			Integer cellOrderNumber = 0;
 			for(CellBuilder index : cells.get()) {

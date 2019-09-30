@@ -2,6 +2,9 @@ package org.cyk.utility.client.controller.component.theme;
 
 import java.io.Serializable;
 
+import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.system.SystemHelper;
 
@@ -13,17 +16,17 @@ public abstract class AbstractThemeClassGetterImpl extends AbstractFunctionWithP
 	protected Class __execute__() throws Exception {
 		Class<?> klass = null;
 		String name = __inject__(SystemHelper.class).getProperty(CLASS_NAME_IDENTIFIER, Boolean.TRUE);
-		if(__injectStringHelper__().isBlank(name)) {
+		if(StringHelper.isBlank(name)) {
 			klass = CLASS;
 			if(klass == null)
-				name = __injectValueHelper__().returnOrThrowIfBlank("user interface theme class", CLASS_NAME);
+				name = ValueHelper.returnOrThrowIfBlank("user interface theme class", CLASS_NAME);
 		}
 		
-		if(klass!=null || __injectStringHelper__().isNotBlank(name))
+		if(klass!=null || StringHelper.isNotBlank(name))
 			__logConfig__("user interface theme class name is : "+(klass == null ? name : klass.getName()));
 		
 		if(klass == null)
-			klass =  __injectClassHelper__().getByName(name, Boolean.FALSE);
+			klass =  ClassHelper.getByName(name, Boolean.FALSE);
 		
 		return klass;
 	}

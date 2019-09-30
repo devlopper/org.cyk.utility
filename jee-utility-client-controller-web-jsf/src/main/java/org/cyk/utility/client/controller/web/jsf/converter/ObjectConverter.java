@@ -11,8 +11,8 @@ import javax.inject.Named;
 
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.random.RandomHelper;
-import org.cyk.utility.string.StringHelper;
 
 /**
  * Converter Using View Map to store and retrieve object.
@@ -21,7 +21,7 @@ import org.cyk.utility.string.StringHelper;
  *
  */
 @Named @ApplicationScoped 
-public class ObjectConverter extends AbstractObject implements Converter,Serializable {
+public class ObjectConverter extends AbstractObject implements Converter<Object>,Serializable {
 	private static final long serialVersionUID = -1615078449226502960L;
 	
 	private static final String OBJECT_MAP_KEY = ObjectConverter.class.getSimpleName();
@@ -42,7 +42,7 @@ public class ObjectConverter extends AbstractObject implements Converter,Seriali
 	private String getIdentifier(Object object){
 		if(object == null)
 			return null;
-		return __inject__(RandomHelper.class).getAlphabetic(6);
+		return RandomHelper.getAlphabetic(6);
 	}
 	
 	
@@ -52,7 +52,7 @@ public class ObjectConverter extends AbstractObject implements Converter,Seriali
 
 	@Override
 	public Object getAsObject(FacesContext context, UIComponent c, String identifier) {
-		if (__inject__(StringHelper.class).isEmpty(identifier)) {
+		if (StringHelper.isEmpty(identifier)) {
 			return null;
 		}
 		return getObjectMap(context).get(identifier);

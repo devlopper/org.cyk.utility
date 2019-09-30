@@ -8,17 +8,17 @@ import java.util.stream.Collectors;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.system.action.SystemActionCustom;
 import org.cyk.utility.client.controller.component.command.Commandable;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
 import org.cyk.utility.client.controller.web.jsf.primefaces.tag.Tree;
 import org.cyk.utility.client.controller.web.jsf.primefaces.tag.TreeSelectionMode;
-import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.playground.client.controller.api.SelectedNodeController;
 import org.cyk.utility.playground.client.controller.entities.Node;
 import org.cyk.utility.playground.client.controller.entities.SelectedNode;
-import org.cyk.utility.system.action.SystemActionCustom;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -35,7 +35,7 @@ public class NodeSelectManyUsingTreePage extends AbstractPageContainerManagedImp
 		super.__listenPostConstruct__();
 		Collection<Node> selectedNodes = null;
 		Collection<SelectedNode> __selectedNodes__ = __inject__(SelectedNodeController.class).read(new Properties().setIsPageable(Boolean.FALSE));
-		if(__inject__(CollectionHelper.class).isNotEmpty(__selectedNodes__)) {
+		if(CollectionHelper.isNotEmpty(__selectedNodes__)) {
 			selectedNodes = __selectedNodes__.stream().map(SelectedNode::getNode).collect(Collectors.toList());
 		}
 		
@@ -63,7 +63,7 @@ public class NodeSelectManyUsingTreePage extends AbstractPageContainerManagedImp
 		@SuppressWarnings("unchecked")
 		Collection<Node> nodes = (Collection<Node>) tree.getSelectedNodes();
 		Collection<SelectedNode> selectedNodes = null;
-		if(__inject__(CollectionHelper.class).isNotEmpty(nodes)) {
+		if(CollectionHelper.isNotEmpty(nodes)) {
 			selectedNodes = new ArrayList<>();
 			for(Node index : nodes) {
 				SelectedNode selectedNode = __inject__(SelectedNode.class);
@@ -72,7 +72,7 @@ public class NodeSelectManyUsingTreePage extends AbstractPageContainerManagedImp
 			}
 		}
 		__inject__(SelectedNodeController.class).deleteAll();
-		if(__inject__(CollectionHelper.class).isNotEmpty(selectedNodes)) {
+		if(CollectionHelper.isNotEmpty(selectedNodes)) {
 			__inject__(SelectedNodeController.class).createMany(selectedNodes);	
 		}
 		

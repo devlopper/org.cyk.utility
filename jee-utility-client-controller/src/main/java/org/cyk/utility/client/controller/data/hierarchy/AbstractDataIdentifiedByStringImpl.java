@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.cyk.utility.collection.CollectionHelperImpl;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 
 public abstract class AbstractDataIdentifiedByStringImpl<NODE> extends org.cyk.utility.client.controller.data.AbstractDataIdentifiedByStringImpl implements DataIdentifiedByString<NODE>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -62,7 +62,7 @@ public abstract class AbstractDataIdentifiedByStringImpl<NODE> extends org.cyk.u
 	
 	@Override
 	public DataIdentifiedByString<NODE> addParents(NODE...parents) {
-		addParents(CollectionHelperImpl.__instanciate__(parents));
+		addParents(CollectionHelper.listOf(parents));
 		return this;
 	}
 }

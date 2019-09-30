@@ -1,22 +1,25 @@
 package org.cyk.utility.client.controller;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
+import org.cyk.utility.__kernel__.internationalization.InternationalizationKeyStringType;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.throwable.ServiceNotFoundException;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.client.controller.data.DataRepresentationClassGetter;
 import org.cyk.utility.client.controller.data.DataTransferObjectClassGetter;
 import org.cyk.utility.client.controller.message.MessageRender;
 import org.cyk.utility.client.controller.message.MessageRenderTypeDialog;
 import org.cyk.utility.client.controller.proxy.ProxyGetter;
-import org.cyk.utility.internationalization.InternationalizationHelperImpl;
-import org.cyk.utility.internationalization.InternationalizationKeyStringType;
-import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.mapping.MappingHelper;
 import org.cyk.utility.notification.NotificationBuilder;
 import org.cyk.utility.notification.NotificationSeverityInformation;
@@ -26,8 +29,6 @@ import org.cyk.utility.server.representation.RepresentationEntity;
 import org.cyk.utility.server.representation.ResponseEntityDto;
 import org.cyk.utility.server.representation.ResponseHelper;
 import org.cyk.utility.system.AbstractSystemFunctionClientImpl;
-import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.exception.ServiceNotFoundException;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerController;
 
@@ -52,12 +53,12 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 	protected void __initialiseWorkingVariables__() {
 		super.__initialiseWorkingVariables__();
 		if(__entityClass__ != null) {
-			__representationEntityClass__ = __injectValueHelper__().returnOrThrowIfBlank(String.format("Data Transfer Class of %s", __entityClass__.getName())
+			__representationEntityClass__ = ValueHelper.returnOrThrowIfBlank(String.format("Data Transfer Class of %s", __entityClass__.getName())
 					, __inject__(DataTransferObjectClassGetter.class).setDataClass(__entityClass__).execute().getOutput());
-			__representationClass__ = __injectValueHelper__().returnOrThrowIfBlank(String.format("Data Representation Class of %s", __entityClass__.getName()),
+			__representationClass__ = ValueHelper.returnOrThrowIfBlank(String.format("Data Representation Class of %s", __entityClass__.getName()),
 					__inject__(DataRepresentationClassGetter.class).setDataClass(__entityClass__).execute().getOutput());
 			
-			__representation__ = __injectValueHelper__().returnOrThrowIfBlank(String.format("Data Representation of %s", __entityClass__.getName())
+			__representation__ = ValueHelper.returnOrThrowIfBlank(String.format("Data Representation of %s", __entityClass__.getName())
 					,__inject__(ProxyGetter.class).setClassUniformResourceIdentifierStringRequest(Properties.getFromPath(getProperties(), Properties.REQUEST))
 					.setClazz(__representationClass__).execute().getOutput())
 					;	
@@ -67,18 +68,18 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 	@Override
 	protected void __execute__(SystemAction action) {
 		if(__action__!=null) {
-			if(__injectClassHelper__().isInstanceOf(__representationClass__, RepresentationEntity.class)) {
+			if(ClassHelper.isInstanceOf(__representationClass__, RepresentationEntity.class)) {
 				//__representationEntities__ = (Collection<Object>) __injectInstanceHelper__().buildMany(__representationEntityClass__, __action__.getEntities().get());
-				if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(__entities__)))
+				if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(__entities__)))
 					__representationEntities__ = (Collection<Object>) __inject__(MappingHelper.class).getDestinations(__entities__, __representationEntityClass__);
 				__execute__(__action__, __representationEntityClass__,__representationClass__,__representationEntities__);
 			}else
-				__injectThrowableHelper__().throwRuntimeException("Data Representation Class of type "+__representationClass__+" is not an instanceof RepresentationEntity");
+				throw new RuntimeException("Data Representation Class of type "+__representationClass__+" is not an instanceof RepresentationEntity");
 		}
 	}
 	
 	protected void __execute__(SystemAction action,Class<?> dataTransferClass,Class<?> dataRepresentationClass,Collection<?> dataTransferObjects) {
-		if(__injectClassHelper__().isInstanceOf(dataRepresentationClass, RepresentationEntity.class)) {
+		if(ClassHelper.isInstanceOf(dataRepresentationClass, RepresentationEntity.class)) {
 			__execute__(action, __inject__(ProxyGetter.class).setClassUniformResourceIdentifierStringRequest(Properties.getFromPath(getProperties(), Properties.REQUEST))
 					.setClazz(dataRepresentationClass).execute().getOutput(), dataTransferObjects);
 		}
@@ -92,7 +93,7 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 			if(response == null) {
 				if(getProperties().getThrowable() == null) {
 					getProperties().setThrowable(new RuntimeException("No response for action <<"+action+">>")); 
-					//__injectThrowableHelper__().throwRuntimeException(getClass()+" : No response for action <<"+action+">>");
+					//throw new RuntimeException(getClass()+" : No response for action <<"+action+">>");
 				}
 			}else {
 				if(Boolean.TRUE.equals(__isProcessReponse__())) {
@@ -107,7 +108,7 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 						System.out.println("AbstractControllerFunctionImpl("+getClass().getSimpleName()+").__execute__() CLIENT ERROR : "+response.getStatusInfo()+" : "+response.readEntity(String.class));
 						/*String summary = null;
 						String summaryInternalizationStringKey = __getMessageSummaryInternalizationStringBuilderKey__(action,response);
-						if(__injectStringHelper__().isBlank(summaryInternalizationStringKey)) {
+						if(StringHelper.isBlank(summaryInternalizationStringKey)) {
 							summary = response.readEntity(String.class);
 						}else {
 							summary = __inject__(InternalizationStringBuilder.class).setKey(summaryInternalizationStringKey)
@@ -151,7 +152,7 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 		if(representation instanceof RepresentationEntity) {
 			//try {
 				__executeRepresentation__();
-				if(Boolean.TRUE.equals(__inject__(ResponseHelper.class).isStatusClientErrorNotFound(__response__)))
+				if(Boolean.TRUE.equals(ResponseHelper.isStatusClientErrorNotFound(__response__)))
 					__listenExecuteThrowServiceNotFoundException__();
 				else
 					__listenExecuteServiceFound__();
@@ -161,7 +162,7 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 				//response = Response.status(Response.Status.NOT_FOUND).entity(exception.getMessage()).build();
 			}*/
 		}else
-			__injectThrowableHelper__().throwRuntimeException("Data Representation of type "+representation.getClass()+" is not an instanceof RepresentationEntity");
+			throw new RuntimeException("Data Representation of type "+representation.getClass()+" is not an instanceof RepresentationEntity");
 		return __response__;
 	}
 	
@@ -170,7 +171,7 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 	protected void __listenExecuteThrowServiceNotFoundException__() {
 		System.out.println("AbstractControllerFunctionImpl.__listenExecuteThrowServiceNotFoundException__() : "+__response__.readEntity(String.class)
 		+" : "+__response__.getStatusInfo());
-		__injectThrowableHelper__().throw_(__inject__(ServiceNotFoundException.class).setSystemAction(__action__).setResponse(__response__));
+		throw ((RuntimeException) (__inject__(ServiceNotFoundException.class).setSystemAction(__action__).setResponse(__response__)));
 	}
 	
 	protected void __listenExecuteServiceFound__() {}
@@ -186,9 +187,9 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 	}
 	
 	protected Collection<Object> __getMessageSummaryInternalizationStringBuilderParameters__(SystemAction systemAction,Response response) {
-		return __injectCollectionHelper__().instanciate(
-				InternationalizationHelperImpl.__buildString__(InternationalizationHelperImpl.__buildKey__(systemAction, InternationalizationKeyStringType.NOUN))
-				,InternationalizationHelperImpl.__buildString__(InternationalizationHelperImpl.__buildKey__(systemAction.getEntityClass()))
+		return CollectionHelper.listOf(
+				InternationalizationHelper.buildString(InternationalizationHelper.buildKey(systemAction, InternationalizationKeyStringType.NOUN))
+				,InternationalizationHelper.buildString(InternationalizationHelper.buildKey(systemAction.getEntityClass()))
 				);
 	}
 	
@@ -238,14 +239,9 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 	
 	@Override
 	protected void __notifyOnThrowableIsNotNull__(Throwable throwable) {
-		throwable = __injectThrowableHelper__().getFirstCause(throwable);
+		throwable = ThrowableHelper.getFirstCause(throwable);
 		__inject__(MessageRender.class).addNotificationBuilders(__inject__(NotificationBuilder.class).setThrowable(throwable))
 			.setType(__inject__(MessageRenderTypeDialog.class)).execute();
 	}
 	
-	/**/
-	
-	public static ResponseHelper __injectResponseHelper__() {
-		return __inject__(ResponseHelper.class);
-	}
 }

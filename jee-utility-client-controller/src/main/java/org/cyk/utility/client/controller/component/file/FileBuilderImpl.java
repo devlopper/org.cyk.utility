@@ -3,6 +3,8 @@ package org.cyk.utility.client.controller.component.file;
 import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
 import org.cyk.utility.client.controller.navigation.NavigationBuilder;
 import org.cyk.utility.random.RandomHelper;
@@ -18,8 +20,8 @@ public class FileBuilderImpl extends AbstractVisibleComponentBuilderImpl<File> i
 		super.__execute__(file);
 		org.cyk.utility.file.FileBuilder value = getValue();
 		if(value != null) {
-			Boolean isEmbeddable = __injectValueHelper__().defaultToIfNull(getIsEmbbedable(),Boolean.FALSE);
-			Boolean isIdentifiable = __injectValueHelper__().defaultToIfNull(getIsIdentifiable(),__injectStringHelper__().isBlank(value.getPath()));
+			Boolean isEmbeddable = ValueHelper.defaultToIfNull(getIsEmbbedable(),Boolean.FALSE);
+			Boolean isIdentifiable = ValueHelper.defaultToIfNull(getIsIdentifiable(),StringHelper.isBlank(value.getPath()));
 			file.setIsEmbedded(isEmbeddable);
 			Object sessionAttributeIdentifier = null;
 			if(Boolean.FALSE.equals(isEmbeddable) || (value.getBytes() == null && value.getInputStream()==null && value.getClazz()==null)) {
@@ -27,12 +29,12 @@ public class FileBuilderImpl extends AbstractVisibleComponentBuilderImpl<File> i
 				if(Boolean.TRUE.equals(isIdentifiable)) {
 					//content will be identified by a derived uniform resource locator
 					String url = value.getUniformResourceLocator();
-					if(__injectStringHelper__().isBlank(url)) {
+					if(StringHelper.isBlank(url)) {
 						String identifier = null;
 						String location = null;
 						if(value.getIdentifier() == null) {
 							//file content is not persisted so it will be put in user session
-							sessionAttributeIdentifier = identifier = "file_identifier_"+__inject__(RandomHelper.class).getAlphanumeric(10);
+							sessionAttributeIdentifier = identifier = "file_identifier_"+RandomHelper.getAlphanumeric(10);
 							location = "session";
 						}else {
 							//file content is persisted durable in database

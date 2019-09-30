@@ -5,7 +5,7 @@ import java.io.Serializable;
 import javax.servlet.http.HttpServletRequest;
 
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
-import org.cyk.utility.request.RequestProperty;
+import org.cyk.utility.__kernel__.identifier.resource.RequestProperty;
 import org.cyk.utility.request.RequestPropertyValueGetter;
 @Deprecated //TODO to be deleted. use for utility instead
 public class RequestPropertyValueGetterFunctionRunnableImpl extends AbstractFunctionRunnableImpl<RequestPropertyValueGetter> implements Serializable {

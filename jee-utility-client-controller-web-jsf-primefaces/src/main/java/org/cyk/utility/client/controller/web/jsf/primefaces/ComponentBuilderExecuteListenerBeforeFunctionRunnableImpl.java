@@ -2,7 +2,7 @@ package org.cyk.utility.client.controller.web.jsf.primefaces;
 
 import java.io.Serializable;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.component.AbstractComponentBuilderExecuteListenerImpl;
 import org.cyk.utility.client.controller.component.Component;
@@ -16,7 +16,6 @@ import org.cyk.utility.client.controller.component.input.InputBuilder;
 import org.cyk.utility.client.controller.component.layout.LayoutBuilder;
 import org.cyk.utility.client.controller.component.layout.LayoutItemBuilder;
 import org.cyk.utility.client.controller.web.jsf.primefaces.annotation.Primefaces;
-import org.cyk.utility.collection.CollectionHelper;
 
 @Primefaces @Deprecated
 public class ComponentBuilderExecuteListenerBeforeFunctionRunnableImpl extends AbstractComponentBuilderExecuteListenerImpl implements  ComponentBuilderExecuteListenerBefore,Serializable {
@@ -31,7 +30,7 @@ public class ComponentBuilderExecuteListenerBeforeFunctionRunnableImpl extends A
 			VisibleComponent visibleComponent = (VisibleComponent) component;
 			//visibleComponentBuilder.getStyle(Boolean.TRUE).addClasses("cyk_component");
 			
-			//String identifierAsStyleClass = __inject__(RandomHelper.class).
+			//String identifierAsStyleClass = RandomHelper.
 			//visibleComponentBuilder.getStyle(Boolean.TRUE).addClasses("cyk_component");
 			
 			//String identifierAsStyleClass = visibleComponentBuilder.getOutputProperties().getIdentifier().toString();
@@ -42,20 +41,20 @@ public class ComponentBuilderExecuteListenerBeforeFunctionRunnableImpl extends A
 			//visibleComponentBuilder.addStyleClasses("AZERTY");
 			/*
 			ComponentRoles roles = visibleComponentBuilder.getRoles();
-			if(__inject__(CollectionHelper.class).isNotEmpty(roles)) {
+			if(CollectionHelper.isNotEmpty(roles)) {
 				for(ComponentRole index : roles.get()) {
 					String styleClass = __inject__(ComponentRoleStyleClassGetter.class).setRole(index).execute().getOutput();
-					if(__inject__(StringHelper.class).isNotBlank(styleClass))
+					if(StringHelper.isNotBlank(styleClass))
 						visibleComponentBuilder.addStyleClasses(styleClass);
 				}
 			}
 			*/
 			/*
-			if(__inject__(CollectionHelper.class).contains(visibleComponentBuilder.getRoles(), ComponentRole.TITLE))
+			if(CollectionHelper.contains(visibleComponentBuilder.getRoles(), ComponentRole.TITLE))
 				visibleComponentBuilder.getLayoutItemStyle(Boolean.TRUE).addClasses("cyk_layout_view_title");
-			if(__inject__(CollectionHelper.class).contains(visibleComponentBuilder.getRoles(), ComponentRole.GRID))
+			if(CollectionHelper.contains(visibleComponentBuilder.getRoles(), ComponentRole.GRID))
 				visibleComponentBuilder.getLayoutItemStyle(Boolean.TRUE).addClasses("cyk_layout_table");
-			if(__inject__(CollectionHelper.class).contains(visibleComponentBuilder.getRoles(), ComponentRole.ROW))
+			if(CollectionHelper.contains(visibleComponentBuilder.getRoles(), ComponentRole.ROW))
 				visibleComponentBuilder.getLayoutItemStyle(Boolean.TRUE).addClasses("cyk_layout_row");
 			*/
 			if(visibleComponent instanceof InputOutput<?>) {
@@ -78,7 +77,7 @@ public class ComponentBuilderExecuteListenerBeforeFunctionRunnableImpl extends A
 				// TODO ui-g must be get from function
 				//layoutBuilder.getStyle(Boolean.TRUE).addClasses("ui-g");
 				
-				if(DependencyInjection.inject(CollectionHelper.class).contains(layoutBuilder.getRoles(), ComponentRole.GRID))
+				if(CollectionHelper.contains(layoutBuilder.getRoles(), ComponentRole.GRID))
 					layoutBuilder.addStyleClasses("cyk_layout_grid");
 				
 				layoutBuilder.setOutputProperty(Properties.LAYOUT,"block");//.setLayout("block");

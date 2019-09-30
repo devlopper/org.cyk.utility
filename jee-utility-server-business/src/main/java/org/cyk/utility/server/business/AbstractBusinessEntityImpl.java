@@ -46,7 +46,7 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 	//TODO : an idea is to transform array content to json format and transform it java object
 	@Override
 	public BusinessEntity<ENTITY> saveFromArray(ArrayInstanceTwoDimensionString arrayInstanceTwoDimensionString,MapInstanceIntegerToString columnIndexFieldNameMap, Properties properties) {
-		__throwRuntimeExceptionIfEmpty__(arrayInstanceTwoDimensionString, "save from array : array instance");
+		ValueHelper.throwIfBlank("save from array : array instance", arrayInstanceTwoDimensionString);
 		Collection<ENTITY> entities = null;
 		for(Integer index  = 0; index < arrayInstanceTwoDimensionString.getFirstDimensionElementCount(); index = index + 1) {
 			ENTITY entitiy = ClassHelper.instanciate(__persistenceEntityClass__);
@@ -73,9 +73,9 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 	//TODO : an idea is to transform excel content to json format and transform it java object
 	@Override
 	public BusinessEntity<ENTITY> saveFromFileExcelSheet(InputStream workbookInputStream,String sheetName,MapInstanceIntegerToString columnIndexFieldNameMap,Properties properties) {
-		__throwRuntimeExceptionIfBlank__(workbookInputStream, "save many from file excel sheet : workbook input stream");
-		__throwRuntimeExceptionIfBlank__(sheetName, "save many from file excel sheet : sheet name");
-		__throwRuntimeExceptionIfEmpty__(columnIndexFieldNameMap, "create many from file excel sheet : column index and field name mapping");
+		ValueHelper.throwIfBlank("save many from file excel sheet : workbook input stream",workbookInputStream);
+		ValueHelper.throwIfBlank("save many from file excel sheet : sheet name",sheetName);
+		ValueHelper.throwIfBlank("create many from file excel sheet : column index and field name mapping",columnIndexFieldNameMap);
 		
 		FileExcelSheetDataArrayReader reader = __inject__(FileExcelSheetDataArrayReader.class);
 		reader.setWorkbookInputStream(workbookInputStream).setSheetName(sheetName);

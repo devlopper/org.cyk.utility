@@ -40,7 +40,7 @@ public class LogEventEntityRepositoryLog4j2Impl extends AbstractAppender impleme
 	}
 	
 	public LogEventEntityRepositoryLog4j2Impl() {
-		super(LogEventEntityRepositoryLog4j2Impl.class.getSimpleName()+DependencyInjection.inject(RandomHelper.class).getAlphanumeric(5), null, PatternLayout.createDefaultLayout(),false,null);
+		super(LogEventEntityRepositoryLog4j2Impl.class.getSimpleName()+RandomHelper.getAlphanumeric(5), null, PatternLayout.createDefaultLayout(),false,null);
 	}
 	
     @Override

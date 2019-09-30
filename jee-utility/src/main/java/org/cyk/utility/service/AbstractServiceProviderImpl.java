@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractSingleton;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
@@ -12,17 +13,13 @@ import org.cyk.utility.assertion.AssertionBuilderNull;
 import org.cyk.utility.enumeration.EnumCollectionGetter;
 import org.cyk.utility.enumeration.EnumGetter;
 import org.cyk.utility.enumeration.EnumerationHelper;
-import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.field.FieldValueSetter;
 import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.log.Log;
-import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.network.MailHelper;
 import org.cyk.utility.stream.distributed.Topic;
 import org.cyk.utility.system.SystemFunction;
-import org.cyk.utility.throwable.ThrowableHelper;
 import org.cyk.utility.type.TypeHelper;
-import org.cyk.utility.__kernel__.value.ValueHelper;
 
 public abstract class AbstractServiceProviderImpl extends AbstractSingleton implements ServiceProvider, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -55,16 +52,8 @@ public abstract class AbstractServiceProviderImpl extends AbstractSingleton impl
 		return __inject__(InstanceHelper.class);
 	}
 	
-	protected ThrowableHelper __injectThrowableHelper__(){
-		return __inject__(ThrowableHelper.class);
-	}
-	
 	protected FieldValueSetter __injectFieldValueSetter__(){
 		return __inject__(FieldValueSetter.class);
-	}
-	
-	protected FieldHelper __injectFieldHelper__(){
-		return __inject__(FieldHelper.class);
 	}
 	
 	protected AssertionBuilderNull __injectAssertionBuilderNull__(){
@@ -107,18 +96,6 @@ public abstract class AbstractServiceProviderImpl extends AbstractSingleton impl
 				exception.printStackTrace();
 			}
 		}
-	}
-	
-	protected void __throwRuntimeExceptionIfNull__(Object value, String message) {
-		__injectThrowableHelper__().throwRuntimeExceptionIfNull(value, message);
-	}
-	
-	protected void __throwRuntimeExceptionIfEmpty__(Object value, String message) {
-		__injectThrowableHelper__().throwRuntimeExceptionIfEmpty(value, message);
-	}
-	
-	protected void __throwRuntimeExceptionIfBlank__(Object value, String message) {
-		__injectThrowableHelper__().throwRuntimeExceptionIfBlank(value, message);
 	}
 	
 	/**/

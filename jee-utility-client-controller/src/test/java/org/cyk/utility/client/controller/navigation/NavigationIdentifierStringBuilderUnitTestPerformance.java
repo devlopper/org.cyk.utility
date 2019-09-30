@@ -1,8 +1,8 @@
 package org.cyk.utility.client.controller.navigation;
 
 import org.cyk.utility.client.controller.ApplicationScopeLifeCycleListener;
-import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.action.SystemActionCreate;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
 import org.cyk.utility.test.weld.AbstractWeldUnitTestPerformance;
 import org.junit.jupiter.api.Test;
 

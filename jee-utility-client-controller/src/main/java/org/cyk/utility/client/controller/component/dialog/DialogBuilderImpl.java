@@ -3,13 +3,13 @@ package org.cyk.utility.client.controller.component.dialog;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.internationalization.InternationalizationKey;
+import org.cyk.utility.__kernel__.internationalization.InternationalizationString;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.command.CommandableBuilders;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
-import org.cyk.utility.collection.CollectionHelperImpl;
-import org.cyk.utility.internationalization.InternationalizationKey;
-import org.cyk.utility.internationalization.InternationalizationString;
 
 public class DialogBuilderImpl extends AbstractVisibleComponentBuilderImpl<Dialog> implements DialogBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -25,7 +25,7 @@ public class DialogBuilderImpl extends AbstractVisibleComponentBuilderImpl<Dialo
 		dialog.setTitle(title.execute().getOutput());
 		CommandableBuilders commandables = getCommandables();
 		
-		if(CollectionHelperImpl.__isEmpty__(commandables)) {
+		if(CollectionHelper.isEmpty(commandables)) {
 			CommandableBuilder commandable = getOkCommandable(Boolean.TRUE);
 			if(commandable!=null) {
 				/*if(commandables!=null)
@@ -37,7 +37,7 @@ public class DialogBuilderImpl extends AbstractVisibleComponentBuilderImpl<Dialo
 				dialog.addCommandables(dialog.getOkCommandable());
 			}
 		}
-		if(CollectionHelperImpl.__isNotEmpty__(commandables)) {
+		if(CollectionHelper.isNotEmpty(commandables)) {
 			for(CommandableBuilder index : commandables.get()) {
 				__setRequestAndContextAndUniformResourceLocatorMapOf__(index);
 				dialog.addCommandables(index.execute().getOutput());

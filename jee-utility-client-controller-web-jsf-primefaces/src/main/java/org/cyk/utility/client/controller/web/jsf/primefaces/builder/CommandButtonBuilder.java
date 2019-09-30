@@ -5,6 +5,16 @@ import java.io.Serializable;
 import javax.el.ValueExpression;
 import javax.faces.context.FacesContext;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.object.Objects;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
+import org.cyk.utility.__kernel__.system.action.SystemActionDelete;
+import org.cyk.utility.__kernel__.system.action.SystemActionProcess;
+import org.cyk.utility.__kernel__.system.action.SystemActionRead;
+import org.cyk.utility.__kernel__.system.action.SystemActionSelect;
+import org.cyk.utility.__kernel__.system.action.SystemActionUpdate;
 import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.client.controller.component.VisibleComponent;
 import org.cyk.utility.client.controller.component.command.Commandable;
@@ -12,16 +22,6 @@ import org.cyk.utility.client.controller.event.Event;
 import org.cyk.utility.client.controller.event.Events;
 import org.cyk.utility.client.controller.web.ComponentHelper;
 import org.cyk.utility.client.controller.web.jsf.JavaServerFacesHelper;
-import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.object.Objects;
-import org.cyk.utility.string.StringHelper;
-import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.action.SystemActionCreate;
-import org.cyk.utility.system.action.SystemActionDelete;
-import org.cyk.utility.system.action.SystemActionProcess;
-import org.cyk.utility.system.action.SystemActionRead;
-import org.cyk.utility.system.action.SystemActionSelect;
-import org.cyk.utility.system.action.SystemActionUpdate;
 import org.primefaces.behavior.ajax.AjaxBehavior;
 import org.primefaces.behavior.ajax.AjaxBehaviorListenerImpl;
 import org.primefaces.component.commandbutton.CommandButton;
@@ -33,7 +33,7 @@ public class CommandButtonBuilder extends AbstractBuilder implements Serializabl
 	public CommandButton build(Commandable commandable) {
 		CommandButton commandButton = new CommandButton();
 		commandButton.setValue(commandable.getName());
-		if(__inject__(CollectionHelper.class).contains(commandable.getRoles(), ComponentRole.CREATOR)) {
+		if(CollectionHelper.contains(commandable.getRoles(), ComponentRole.CREATOR)) {
 			
 		}
 		String onClickValueExpressionString = null;
@@ -69,7 +69,7 @@ public class CommandButtonBuilder extends AbstractBuilder implements Serializabl
 				
 			
 			
-			if(__inject__(StringHelper.class).isNotBlank(url)) {
+			if(StringHelper.isNotBlank(url)) {
 				onClickValueExpressionString = "window.open('"+url+"','_self');return false";
 			}
 			
@@ -83,19 +83,19 @@ public class CommandButtonBuilder extends AbstractBuilder implements Serializabl
 			
 			Objects updatables = commandable.getUpdatables();
 			
-			if(__inject__(CollectionHelper.class).isNotEmpty(updatables))
+			if(CollectionHelper.isNotEmpty(updatables))
 				for(Object index : updatables.get()) {
 					String token = null;
 					if(index instanceof VisibleComponent) {
 						token = (String)((VisibleComponent)index).getProperties().getIdentifierAsStyleClass();
-						if(__inject__(StringHelper.class).isNotBlank(token))
+						if(StringHelper.isNotBlank(token))
 							update = update + " , @(."+token+")";		
 					}else
 						update = update + " , "+index;
 					
 				}
 			String commandableIdentifier = commandable.getIdentifier().toString();
-			if(__inject__(StringHelper.class).isNotBlank(commandable.getCommand().getContainerContextDependencyInjectionBeanName())) {
+			if(StringHelper.isNotBlank(commandable.getCommand().getContainerContextDependencyInjectionBeanName())) {
 				String actionExpressionLanguage = commandable.getCommand().getContainerContextDependencyInjectionBeanName()+".getCommandableByIdentifier('"+commandableIdentifier+"').command.function.executeToReturnVoid";
 				commandButton.setActionExpression(__inject__(JavaServerFacesHelper.class).buildMethodExpression(actionExpressionLanguage, Void.class,new Class<?>[] {}));	
 			}
@@ -112,13 +112,13 @@ public class CommandButtonBuilder extends AbstractBuilder implements Serializabl
 				onClickValueExpressionString = commandable.getProperties().getOnClick().toString();
 		}
 		
-		if(__inject__(StringHelper.class).isNotBlank(onClickValueExpressionString)) {
+		if(StringHelper.isNotBlank(onClickValueExpressionString)) {
 			ValueExpression valueExpression = __buildValueExpressionString__(onClickValueExpressionString);
 			__setValueExpression__(commandButton, "onclick", valueExpression);	
 		}
 		
 		Events events = commandable.getEvents();
-		if(__inject__(CollectionHelper.class).isNotEmpty(events)) {
+		if(CollectionHelper.isNotEmpty(events)) {
 			String commandableIdentifier = commandable.getIdentifier().toString();
 			for(Event index : events.get()) {
 				if(index.getScript()==null) {

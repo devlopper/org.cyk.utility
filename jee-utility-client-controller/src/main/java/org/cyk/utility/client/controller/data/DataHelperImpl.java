@@ -5,14 +5,14 @@ import java.lang.reflect.Field;
 
 import javax.enterprise.context.ApplicationScoped;
 
-import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.field.FieldHelperImpl;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.string.StringLocation;
+import org.cyk.utility.__kernel__.string.Strings;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.field.Fields;
 import org.cyk.utility.field.FieldsGetter;
 import org.cyk.utility.helper.AbstractHelper;
-import org.cyk.utility.string.StringLocation;
-import org.cyk.utility.string.Strings;
-import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionRelatedClassGetter;
 import org.cyk.utility.system.action.SystemActionRelatedClassesNamesGetter;
 
@@ -24,7 +24,7 @@ public class DataHelperImpl extends AbstractHelper implements DataHelper,Seriali
 	public Class<Data> getDataClass(Class<?> entityClass, Class<? extends SystemAction> systemActionClass) {
 		Strings names = __inject__(SystemActionRelatedClassesNamesGetter.class).setEntityClass(entityClass).setSystemActionClass(systemActionClass).setExtendedInterface(Data.class)
 				.setDefaultSuffix("Default").execute().getOutput();
-		__inject__(CollectionHelper.class).swap(names, 1, 2);
+		CollectionHelper.swap(names, 1, 2);
 		Class<Data> clazz = __inject__(SystemActionRelatedClassGetter.class).setNames(names).execute().getOutput();
 		return clazz;
 	}
@@ -105,10 +105,10 @@ public class DataHelperImpl extends AbstractHelper implements DataHelper,Seriali
 	public Strings getPropertiesFieldsNames(Class<?> anInterface) {
 		Strings names = null;
 		Fields fields = getPropertiesFields(anInterface);
-		if(__inject__(CollectionHelper.class).isNotEmpty(fields)) {
+		if(CollectionHelper.isNotEmpty(fields)) {
 			names = __inject__(Strings.class);
 			for(Field index : fields.get())
-				names.add(FieldHelperImpl.__readStatic__(index).toString());
+				names.add(FieldHelper.readStatic(index).toString());
 		}
 		return names;
 	}

@@ -2,7 +2,7 @@ package org.cyk.utility.client.controller.component;
 
 import java.io.Serializable;
 
-import org.cyk.utility.collection.AbstractCollectionInstanceImpl;
+import org.cyk.utility.__kernel__.collection.AbstractCollectionInstanceImpl;
 
 @SuppressWarnings("rawtypes")
 public class VisibleComponentBuildersImpl extends AbstractCollectionInstanceImpl<VisibleComponentBuilder> implements VisibleComponentBuilders,Serializable {

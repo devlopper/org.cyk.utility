@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller.message;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.notification.Notification;
 import org.cyk.utility.notification.NotificationBuilder;
@@ -45,7 +46,7 @@ public class MessagesBuilderImpl extends AbstractFunctionWithPropertiesAsInputIm
 	
 	@Override
 	public MessagesBuilder addNotificationsFromThrowables(Collection<Throwable> throwables) {
-		if(__injectCollectionHelper__().isNotEmpty(throwables)) {
+		if(CollectionHelper.isNotEmpty(throwables)) {
 			for(Throwable index : throwables)
 				addNotifications(__inject__(NotificationBuilder.class).setThrowable(index).execute().getOutput());
 		}
@@ -54,7 +55,7 @@ public class MessagesBuilderImpl extends AbstractFunctionWithPropertiesAsInputIm
 	
 	@Override
 	public MessagesBuilder addNotificationsFromThrowables(Throwable... throwables) {
-		return addNotificationsFromThrowables(__injectCollectionHelper__().instanciate(throwables));
+		return addNotificationsFromThrowables(CollectionHelper.listOf(throwables));
 	}
 
 	/**/

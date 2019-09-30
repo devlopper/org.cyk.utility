@@ -5,6 +5,10 @@ import java.io.Serializable;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.string.Case;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.client.controller.component.command.Commandable;
 import org.cyk.utility.client.controller.event.Event;
@@ -12,10 +16,6 @@ import org.cyk.utility.client.controller.event.Events;
 import org.cyk.utility.client.controller.web.ComponentHelper;
 import org.cyk.utility.client.controller.web.ValueExpressionMap;
 import org.cyk.utility.client.controller.web.jsf.JavaServerFacesHelper;
-import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.string.Case;
-import org.cyk.utility.string.StringHelper;
-import org.cyk.utility.system.action.SystemAction;
 import org.primefaces.behavior.ajax.AjaxBehavior;
 import org.primefaces.behavior.ajax.AjaxBehaviorListenerImpl;
 import org.primefaces.component.commandbutton.CommandButton;
@@ -42,15 +42,15 @@ public class CommandButtonBuilderImpl extends AbstractUIComponentBuilderImpl<Com
 		if(commandable.getNavigation()!=null) {
 			commandButton.setType("button");
 			String url = null;
-			if(__injectCollectionHelper__().contains(commandable.getRoles(), ComponentRole.COLLECTION_PROCESSOR)) {
+			if(CollectionHelper.contains(commandable.getRoles(), ComponentRole.COLLECTION_PROCESSOR)) {
 				url = commandable.getNavigation().getUniformResourceLocator().toString();
-			}else if(__injectCollectionHelper__().contains(commandable.getRoles(), ComponentRole.COLLECTION_ITEM_PROCESSOR)) {
+			}else if(CollectionHelper.contains(commandable.getRoles(), ComponentRole.COLLECTION_ITEM_PROCESSOR)) {
 				SystemAction action = commandable.getNavigation().getSystemAction();	
-				String methodName = __injectStringHelper__().applyCase(StringUtils.substringBefore(action.getClass().getSimpleName(),"Impl")+"Class",Case.FIRST_CHARACTER_LOWER);
-				if(__injectStringHelper__().isNotBlank(methodName))
+				String methodName = StringHelper.applyCase(StringUtils.substringBefore(action.getClass().getSimpleName(),"Impl")+"Class",Case.FIRST_CHARACTER_LOWER);
+				if(StringHelper.isNotBlank(methodName))
 					url = "#{indexRow.getUrlBySystemActionClass(request,componentHelper."+methodName+")}";
 			}
-			if(__inject__(StringHelper.class).isNotBlank(url))
+			if(StringHelper.isNotBlank(url))
 				valueExpressionMap.set("onclick",__buildValueExpressionString__("window.open('"+url+"','_self');return false;"));
 		}else if(commandable.getCommand()!=null) {
 			commandButton.setType("submit");
@@ -59,7 +59,7 @@ public class CommandButtonBuilderImpl extends AbstractUIComponentBuilderImpl<Com
 			commandButton.setUpdate(update);
 			
 			String commandableIdentifier = commandable.getIdentifier().toString();
-			if(__inject__(StringHelper.class).isNotBlank(commandable.getCommand().getContainerContextDependencyInjectionBeanName())) {
+			if(StringHelper.isNotBlank(commandable.getCommand().getContainerContextDependencyInjectionBeanName())) {
 				String actionExpressionLanguage = commandable.getCommand().getContainerContextDependencyInjectionBeanName()+".getCommandableByIdentifier('"+commandableIdentifier+"').command.function.executeToReturnVoid";
 				commandButton.setActionExpression(__inject__(JavaServerFacesHelper.class).buildMethodExpression(actionExpressionLanguage, Void.class,new Class<?>[] {}));	
 			}
@@ -78,7 +78,7 @@ public class CommandButtonBuilderImpl extends AbstractUIComponentBuilderImpl<Com
 			commandButton.setAjax((Boolean) ajax);
 		
 		Events events = commandable.getEvents();
-		if(__inject__(CollectionHelper.class).isNotEmpty(events)) {
+		if(CollectionHelper.isNotEmpty(events)) {
 			String commandableIdentifier = commandable.getIdentifier().toString();
 			for(Event index : events.get()) {
 				if(index.getScript()==null) {

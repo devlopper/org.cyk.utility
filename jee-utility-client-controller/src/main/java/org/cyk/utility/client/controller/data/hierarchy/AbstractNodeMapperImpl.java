@@ -3,12 +3,13 @@ package org.cyk.utility.client.controller.data.hierarchy;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.clazz.ClassHelperImpl;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.client.controller.data.AbstractMapperSourceDestinationImpl;
-import org.cyk.utility.collection.CollectionHelperImpl;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 
 import org.cyk.utility.server.representation.hierarchy.AbstractNodeCodedAndNamed;
 
+@Deprecated
 public abstract class AbstractNodeMapperImpl<SOURCE extends DataIdentifiedByStringAndCodedAndNamed<SOURCE>,DESTINATION extends AbstractNodeCodedAndNamed<DESTINATION,?>,DESTINATION_COLLECTION> extends AbstractMapperSourceDestinationImpl<SOURCE, DESTINATION> {
 	private static final long serialVersionUID = 1L;
  
@@ -25,7 +26,7 @@ public abstract class AbstractNodeMapperImpl<SOURCE extends DataIdentifiedByStri
 		node.set__actions__(destination.get__actions__());
 		node.setNumberOfChildren(destination.getNumberOfChildren());
 		node.setNumberOfParents(destination.getNumberOfParents());		
-		if(destination.getParents()!=null && CollectionHelperImpl.__isNotEmpty__(destination.getParents().getCollection())) {
+		if(destination.getParents()!=null && CollectionHelper.isNotEmpty(destination.getParents().getCollection())) {
 			for(DESTINATION index : destination.getParents().getCollection())
 				node.addParents(getSource(index));
 		}
@@ -38,14 +39,14 @@ public abstract class AbstractNodeMapperImpl<SOURCE extends DataIdentifiedByStri
 			return null;
 		if(__destinationClass__ == null)
 			throw new RuntimeException("Destination class cannot be null for "+getClass());
-		DESTINATION destination = ClassHelperImpl.__instanciateOne__(__destinationClass__);
+		DESTINATION destination = ClassHelper.instanciate(__destinationClass__);
 		destination.setIdentifier(source.getIdentifier());
 		destination.setCode(source.getCode());
 		destination.setName(source.getName());
 		destination.set__actions__(source.get__actions__());
 		destination.setNumberOfChildren(source.getNumberOfChildren());
 		destination.setNumberOfParents(source.getNumberOfParents());
-		if(CollectionHelperImpl.__isNotEmpty__(source.getParents())) {
+		if(CollectionHelper.isNotEmpty(source.getParents())) {
 			for(SOURCE index : source.getParents()) {
 				destination.addParents(getDestination(index));
 			}

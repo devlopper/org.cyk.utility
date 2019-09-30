@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.cyk.utility.client.controller.data.DataHelper;
 import org.cyk.utility.client.controller.data.Form;
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 
 public abstract class AbstractWindowContainerManagedWindowBuilderProcessImpl extends AbstractWindowContainerManagedWindowBuilderImpl implements WindowContainerManagedWindowBuilderProcess,Serializable {
 	private static final long serialVersionUID = 1L;

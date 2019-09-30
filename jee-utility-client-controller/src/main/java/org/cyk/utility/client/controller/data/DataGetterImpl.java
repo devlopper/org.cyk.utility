@@ -2,8 +2,9 @@ package org.cyk.utility.client.controller.data;
 
 import java.io.Serializable;
 
+import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.system.action.SystemAction;
 
 public class DataGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Data> implements DataGetter,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -16,7 +17,7 @@ public class DataGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Da
 	protected Data __execute__() throws Exception {
 		Data data = null;
 		SystemAction systemAction = getSystemAction();
-		Boolean isInjectIfNull = __injectValueHelper__().defaultToIfNull(getIsInjectIfNull(),Boolean.FALSE);
+		Boolean isInjectIfNull = ValueHelper.defaultToIfNull(getIsInjectIfNull(),Boolean.FALSE);
 		if(data == null) {
 			if(systemAction!=null)
 				data = (Data) systemAction.getEntities().getFirst();

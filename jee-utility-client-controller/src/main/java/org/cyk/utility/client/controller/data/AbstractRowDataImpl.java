@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.cyk.utility.clazz.ClassHelperImpl;
-import org.cyk.utility.identifier.resource.UniformResourceIdentifierHelperImpl;
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierHelper;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 
 public abstract class AbstractRowDataImpl<DATA extends Data> extends AbstractRowImpl implements RowData<DATA>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -17,7 +17,7 @@ public abstract class AbstractRowDataImpl<DATA extends Data> extends AbstractRow
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
-		dataClass = (Class<DATA>) ClassHelperImpl.__getParameterAt__(getClass(), 0, Data.class);
+		dataClass = (Class<DATA>) ClassHelper.getParameterAt(getClass(), 0);
 	}
 	
 	@Override
@@ -44,7 +44,7 @@ public abstract class AbstractRowDataImpl<DATA extends Data> extends AbstractRow
 		systemAction.getEntities(Boolean.TRUE).add(data);
 		*/
 		//url = UniformResourceIdentifierHelperImpl.__build__(request,systemAction);
-		url = UniformResourceIdentifierHelperImpl.__build__(request, aClass, null, (Class<DATA>)data.getClass(), (Collection<DATA>)Arrays.asList(data), null, null, null);
+		url = UniformResourceIdentifierHelper.build(request, aClass, null, (Class<DATA>)data.getClass(), (Collection<DATA>)Arrays.asList(data), null, null, null);
 		return url;
 	}
 	

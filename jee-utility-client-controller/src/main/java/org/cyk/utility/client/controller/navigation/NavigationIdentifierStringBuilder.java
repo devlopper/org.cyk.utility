@@ -1,7 +1,7 @@
 package org.cyk.utility.client.controller.navigation;
 
 import org.cyk.utility.string.StringFunction;
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 
 @Deprecated
 public interface NavigationIdentifierStringBuilder extends StringFunction {

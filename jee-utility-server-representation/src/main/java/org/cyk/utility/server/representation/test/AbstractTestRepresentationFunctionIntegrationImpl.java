@@ -66,7 +66,7 @@ public abstract class AbstractTestRepresentationFunctionIntegrationImpl extends 
 			if(__response__.getEntity() instanceof MessageDto) {
 				messages.add((MessageDto) __response__.getEntity());
 			}else if(__response__.getEntity() instanceof MessageDtoCollection) {
-				messages = CollectionHelper.add(ArrayList.class, messages, Boolean.TRUE, ((MessageDtoCollection)__response__.getEntity()).getCollection());
+				messages = CollectionHelper.add(ArrayList.class, messages, Boolean.TRUE, ((MessageDtoCollection)__response__.getEntity()).getElements());
 			}else if(__response__.getEntity() instanceof ResponseEntityDto) {
 				messages = CollectionHelper.add(ArrayList.class, messages, Boolean.TRUE, ((ResponseEntityDto)__response__.getEntity()).getMessages());
 			}

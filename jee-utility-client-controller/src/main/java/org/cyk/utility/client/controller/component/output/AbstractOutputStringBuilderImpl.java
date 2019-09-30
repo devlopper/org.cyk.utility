@@ -3,9 +3,9 @@ package org.cyk.utility.client.controller.component.output;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 
-import org.cyk.utility.internationalization.InternationalizationHelperImpl;
-import org.cyk.utility.internationalization.InternationalizationString;
-import org.cyk.utility.string.StringHelperImpl;
+import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
+import org.cyk.utility.__kernel__.internationalization.InternationalizationString;
+import org.cyk.utility.__kernel__.string.StringHelper;
 
 public abstract class AbstractOutputStringBuilderImpl<OUTPUT extends OutputString> extends AbstractOutputBuilderImpl<OUTPUT,String> implements OutputStringBuilder<OUTPUT>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -16,10 +16,10 @@ public abstract class AbstractOutputStringBuilderImpl<OUTPUT extends OutputStrin
 	protected void __execute__(OUTPUT output, Object object, Field field) {
 		super.__execute__(output, object, field);
 		String value = output.getValue();
-		if(StringHelperImpl.__isBlank__(value)) {
+		if(StringHelper.isBlank(value)) {
 			InternationalizationString valueInternationalizationString = getValueInternationalizationString();
 			if(valueInternationalizationString!=null) {
-				InternationalizationHelperImpl.__processStrings__(valueInternationalizationString);
+				InternationalizationHelper.processStrings(valueInternationalizationString);
 				output.setValue(valueInternationalizationString.getValue());
 			}
 		}

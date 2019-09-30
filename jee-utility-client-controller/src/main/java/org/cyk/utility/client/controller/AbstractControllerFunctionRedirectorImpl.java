@@ -6,19 +6,20 @@ import java.util.Collection;
 
 import javax.ws.rs.core.Response;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.object.Objects;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemActionRead;
+import org.cyk.utility.__kernel__.system.action.SystemActionRedirect;
+import org.cyk.utility.__kernel__.throwable.EntityNotFoundException;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.client.controller.navigation.Navigation;
 import org.cyk.utility.client.controller.navigation.NavigationBuilder;
 import org.cyk.utility.client.controller.navigation.NavigationRedirector;
 import org.cyk.utility.mapping.MappingHelper;
-import org.cyk.utility.object.Objects;
 import org.cyk.utility.server.representation.ResponseHelper;
-import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.action.SystemActionRead;
-import org.cyk.utility.system.action.SystemActionRedirect;
-import org.cyk.utility.system.exception.EntityNotFoundException;
 import org.cyk.utility.type.TypeHelper;
-import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractControllerFunctionRedirectorImpl extends AbstractControllerFunctionImpl implements ControllerFunctionRedirector , Serializable {
 	private static final long serialVersionUID = 1L;
@@ -38,11 +39,11 @@ public abstract class AbstractControllerFunctionRedirectorImpl extends AbstractC
 		//TODO is it necessary ?
 		//Object entity = __inject__(Controller.class).readBySystemIdentifier(__action__.getEntityClass(),__action__.getEntitiesIdentifiers().getFirst(),properties);
 		response = (Response) properties.getResponse();			
-		if(Boolean.TRUE.equals(__inject__(ResponseHelper.class).isStatusSuccessfulOk(response))) {
+		if(Boolean.TRUE.equals(ResponseHelper.isStatusSuccessfulOk(response))) {
 			/*
 			SystemActionRead systemActionRead = __inject__(SystemActionRead.class);
 			systemActionRead.setEntityClass(getEntityClass());
-			systemActionRead.getEntitiesIdentifiers(Boolean.TRUE).add(__injectFieldHelper__().getFieldValueSystemIdentifier(entity));
+			systemActionRead.getEntitiesIdentifiers(Boolean.TRUE).add(FieldHelper.readSystemIdentifier(entity));
 			*/
 			
 			SystemAction targetSystemAction = getTargetSystemAction();
@@ -60,8 +61,8 @@ public abstract class AbstractControllerFunctionRedirectorImpl extends AbstractC
 			response.close();
 			__inject__(NavigationRedirector.class).setNavigation(navigation).execute();
 			
-		}else if(Boolean.TRUE.equals(__inject__(ResponseHelper.class).isFamilyClientError(response))) {
-			__injectThrowableHelper__().throw_(__inject__(EntityNotFoundException.class).setSystemAction(__action__).setResponse(response));
+		}else if(Boolean.TRUE.equals(ResponseHelper.isFamilyClientError(response))) {
+			throw ((RuntimeException)(__inject__(EntityNotFoundException.class).setSystemAction(__action__).setResponse(response)));
 		}				
 	}
 	
@@ -77,7 +78,7 @@ public abstract class AbstractControllerFunctionRedirectorImpl extends AbstractC
 		Object object = null;
 		Class<?> dtoClass = __inject__(ControllerLayer.class).getDataTransferClassFromEntityClass(action.getEntityClass());
 		Objects identifiers = action.getEntitiesIdentifiers();
-		if(__injectCollectionHelper__().isEmpty(identifiers)) {
+		if(CollectionHelper.isEmpty(identifiers)) {
 			Collection<?> dtos = (Collection<?>) response.readEntity(__inject__(TypeHelper.class)
 					.instanciateGenericCollectionParameterizedTypeForJaxrs(Collection.class,dtoClass));
 			object = new ArrayList<Object>();

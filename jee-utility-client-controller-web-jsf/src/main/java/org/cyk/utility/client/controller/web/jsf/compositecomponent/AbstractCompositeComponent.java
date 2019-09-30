@@ -4,9 +4,8 @@ import java.io.Serializable;
 
 import javax.faces.component.UINamingContainer;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
-import org.cyk.utility.clazz.ClassHelper;
 
 public abstract class AbstractCompositeComponent<T> extends UINamingContainer implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -15,7 +14,7 @@ public abstract class AbstractCompositeComponent<T> extends UINamingContainer im
 	
 	@SuppressWarnings("unchecked")
 	public AbstractCompositeComponent() {
-		clazz = (Class<T>) DependencyInjection.inject(ClassHelper.class).getParameterAt(getClass(), 0, Object.class);
+		clazz = (Class<T>) ClassHelper.getParameterAt(getClass(), 0);
 	}
 	
 	public String getIdentifier() {

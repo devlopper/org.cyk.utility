@@ -10,8 +10,8 @@ import org.cyk.utility.client.controller.component.annotation.InputChoiceManyAut
 import org.cyk.utility.client.controller.component.annotation.InputChoiceOne;
 import org.cyk.utility.client.controller.component.annotation.InputChoiceOneAutoComplete;
 import org.cyk.utility.client.controller.data.AbstractDataImpl;
-import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.field.FieldHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 
 import lombok.ToString;
 
@@ -54,14 +54,14 @@ public abstract class AbstractDataSelectImpl<DATA> extends AbstractDataImpl impl
 		if(one != null) {
 			if(identifiers == null)
 				identifiers = new ArrayList<Object>();
-			identifiers.add(__inject__(FieldHelper.class).getFieldValueSystemIdentifier(one));
+			identifiers.add(FieldHelper.readSystemIdentifier(one));
 		}
 		Collection<DATA> many = getMany();
-		if(Boolean.TRUE.equals( __inject__(CollectionHelper.class).isNotEmpty(many))) {
+		if(Boolean.TRUE.equals( CollectionHelper.isNotEmpty(many))) {
 			if(identifiers == null)
 				identifiers = new ArrayList<Object>();
 			for(Object index : many) {
-				identifiers.add(__inject__(FieldHelper.class).getFieldValueSystemIdentifier(index));
+				identifiers.add(FieldHelper.readSystemIdentifier(index));
 			}
 		}
 		return identifiers;

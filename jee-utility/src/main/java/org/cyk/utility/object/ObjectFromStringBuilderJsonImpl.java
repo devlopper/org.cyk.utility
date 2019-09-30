@@ -65,7 +65,7 @@ public class ObjectFromStringBuilderJsonImpl extends AbstractObjectFromStringBui
 							else if(value instanceof Receivers) {
 								((Receivers)value).add(__inject__(Receiver.class).setIdentifier(indexToken));
 							} else {
-								__inject__(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented("objectfy field of type " + index.getType());
+								throw new RuntimeException(NotYetImplemented("objectfy field of type " + index.getType());
 							}
 						}						
 					}else if (Boolean.TRUE.equals(ClassHelper.isInstanceOf(index.getType(), Map.class))) {
@@ -73,7 +73,7 @@ public class ObjectFromStringBuilderJsonImpl extends AbstractObjectFromStringBui
 					}else if (Boolean.TRUE.equals(ClassHelper.isInstanceOf(index.getType(), Enum.class))) {
 						value = new ObjectMapper().readValue(fieldNode.asText(), index.getType());
 					}else
-						__inject__(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented("objectfy field of type " + index.getType());
+						throw new RuntimeException(NotYetImplemented("objectfy field of type " + index.getType());
 					
 					__inject__(FieldValueSetter.class).execute(object, index.getPath(), value);
 				}

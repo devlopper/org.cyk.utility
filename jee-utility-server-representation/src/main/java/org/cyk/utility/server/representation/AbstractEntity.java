@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@Getter @Setter @Accessors(chain=true) @NoArgsConstructor
+@Getter @Setter @Accessors(chain=true) @NoArgsConstructor @Deprecated
 public abstract class AbstractEntity extends AbstractRepresentationObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller.component.menu;
 import java.io.Serializable;
 import java.security.Principal;
 
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.request.RequestPrincipalGetter;
 import org.cyk.utility.scope.ScopeSession;
@@ -14,7 +15,7 @@ public abstract class AbstractMenuBuilderMapGetterImpl extends AbstractFunctionW
 	
 	@Override
 	protected MenuBuilderMap __execute__() throws Exception {
-		Object request = __injectValueHelper__().returnOrThrowIfBlank("Menu Builder Map Request", getRequest());
+		Object request = ValueHelper.returnOrThrowIfBlank("Menu Builder Map Request", getRequest());
 		Principal principal = __inject__(RequestPrincipalGetter.class).setRequest(request).execute().getOutput();
 		MenuBuilder sessionMenuBuilder = __instanciateSessionMenuBuilder__(request, principal);
 		____execute____(sessionMenuBuilder,request,principal);

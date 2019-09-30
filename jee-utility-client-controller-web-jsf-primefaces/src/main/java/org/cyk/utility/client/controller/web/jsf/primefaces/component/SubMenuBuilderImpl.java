@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import org.cyk.utility.client.controller.component.menu.MenuItem;
 import org.cyk.utility.client.controller.web.ValueExpressionMap;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.primefaces.model.menu.DefaultSubMenu;
 import org.primefaces.model.menu.MenuModel;
 
@@ -23,7 +23,7 @@ public class SubMenuBuilderImpl extends AbstractComponentBuilderImpl<org.primefa
     		((DefaultSubMenu)parent).addElement(subMenu);	
     	
     	Collection<MenuItem> children = model.getChildrenInstanceOf(MenuItem.class);
-    	if(__inject__(CollectionHelper.class).isNotEmpty(children)) {
+    	if(CollectionHelper.isNotEmpty(children)) {
 			for(MenuItem index : children)
 				MenuBuilderImpl.__buildItem__(subMenu, index);
     	}

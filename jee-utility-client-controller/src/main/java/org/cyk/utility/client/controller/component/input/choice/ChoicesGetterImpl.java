@@ -2,22 +2,27 @@ package org.cyk.utility.client.controller.component.input.choice;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Collection;
 
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.object.Objects;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.throwable.ServiceNotFoundException;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.client.controller.Controller;
-import org.cyk.utility.field.FieldsGetter;
-import org.cyk.utility.field.FieldType;
-import org.cyk.utility.field.FieldTypeGetter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.object.Objects;
 import org.cyk.utility.server.persistence.query.filter.FilterDto;
 import org.cyk.utility.server.representation.ResponseHelper;
-import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.exception.ServiceNotFoundException;
 import org.cyk.utility.system.layer.SystemLayerController;
 
 public class ChoicesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Objects> implements ChoicesGetter,Serializable {
@@ -31,7 +36,7 @@ public class ChoicesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl
 	
 	@Override
 	protected Objects __execute__() throws Exception {
-		Field field = __injectValueHelper__().returnOrThrowIfBlank("choices getter field", getField());
+		Field field = ValueHelper.returnOrThrowIfBlank("choices getter field", getField());
 		Class<?> fieldDeclaringClass = getFieldDeclaringClass();
 		if(fieldDeclaringClass == null)
 			fieldDeclaringClass = field.getDeclaringClass();
@@ -40,16 +45,19 @@ public class ChoicesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl
 		String query = StringUtils.trimToEmpty(getQuery());
 		Integer maximumNumberOfChoice = getMaximumNumberOfChoice();
 		Objects objects = __inject__(Objects.class);
+		/*
 		FieldType fieldType = __inject__(FieldTypeGetter.class).setFieldGetter(__inject__(FieldsGetter.class).setClazz(fieldDeclaringClass).setToken(field.getName())).execute()
 				.getOutput();
-		Class<?> choiceClass = fieldType.getType();
-		if(__injectClassHelper__().isInstanceOf(choiceClass, Collection.class)) {
-			choiceClass = fieldType.getParameterizedClasses().get(0); //__injectFieldHelper__().getParameterAt(field, 0, Object.class);
+		*/
+		Type fieldType = FieldHelper.getType(field, fieldDeclaringClass);
+		Class<?> choiceClass = (Class<?>) fieldType;
+		if(ClassHelper.isInstanceOf(choiceClass, Collection.class)) {
+			choiceClass = (Class<?>) ((ParameterizedType)fieldType).getActualTypeArguments()[0]; //FieldHelper.getParameterAt(field, 0, Object.class);
 		}
 		
 		if(choiceClass.isEnum()) {
 			for(Object index : choiceClass.getEnumConstants()) {
-				if(__injectStringHelper__().isEmpty(query) || StringUtils.containsIgnoreCase(((Enum<?>)index).name(), query)) {
+				if(StringHelper.isEmpty(query) || StringUtils.containsIgnoreCase(((Enum<?>)index).name(), query)) {
 					objects.add(index);
 					if(maximumNumberOfChoice!=null && --maximumNumberOfChoice == 0)
 						break;
@@ -74,15 +82,15 @@ public class ChoicesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl
 			try {
 				_objects_ = __inject__(Controller.class).read(choiceClass,properties);
 				Response response = (Response) properties.getResponse();					
-				if(Boolean.TRUE.equals(__inject__(ResponseHelper.class).isFamilyClientError(response)))
+				if(Boolean.TRUE.equals(ResponseHelper.isFamilyClientError(response)))
 					getProperties().setThrowable(__inject__(ServiceNotFoundException.class).setSystemAction((SystemAction) properties.getAction()).setResponse(response));
 			}catch(Exception exception) {
 				//Because we do not want to break view building we need to handle exception
 				exception.printStackTrace();
-				getProperties().setThrowable(__injectThrowableHelper__().getFirstCause(exception));	
+				getProperties().setThrowable(ThrowableHelper.getFirstCause(exception));	
 			}
 			
-			if(__injectCollectionHelper__().isNotEmpty(_objects_)) {
+			if(CollectionHelper.isNotEmpty(_objects_)) {
 				for(Object index : _objects_) {
 					objects.add(index);
 				}	

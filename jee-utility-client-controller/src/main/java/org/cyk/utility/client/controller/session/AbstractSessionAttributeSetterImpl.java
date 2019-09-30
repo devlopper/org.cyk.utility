@@ -2,6 +2,7 @@ package org.cyk.utility.client.controller.session;
 
 import java.io.Serializable;
 
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
 
 @Deprecated
@@ -14,7 +15,7 @@ public abstract class AbstractSessionAttributeSetterImpl extends AbstractFunctio
 
 	@Override
 	protected void ____execute____() throws Exception {
-		Object attribute = __injectValueHelper__().returnOrThrowIfBlank("user session attribute", getAttribute());
+		Object attribute = ValueHelper.returnOrThrowIfBlank("user session attribute", getAttribute());
 		if(attribute instanceof SessionAttributeEnumeration)
 			attribute = ((SessionAttributeEnumeration)attribute).name();
 		Object value = getValue();

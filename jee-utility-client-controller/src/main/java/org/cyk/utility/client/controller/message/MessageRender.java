@@ -7,7 +7,7 @@ import org.cyk.utility.notification.Notification;
 import org.cyk.utility.notification.NotificationBuilder;
 import org.cyk.utility.notification.NotificationBuilders;
 import org.cyk.utility.notification.Notifications;
-import org.cyk.utility.object.Objects;
+import org.cyk.utility.__kernel__.object.Objects;
 
 public interface MessageRender extends FunctionWithPropertiesAsInputAndVoidAsOutput {
 

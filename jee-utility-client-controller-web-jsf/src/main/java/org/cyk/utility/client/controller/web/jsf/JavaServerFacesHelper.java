@@ -10,9 +10,9 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.AbstractObject;
 import org.cyk.utility.client.controller.component.Component;
-import org.cyk.utility.string.StringHelper;
 
 @ApplicationScoped @Named
 public class JavaServerFacesHelper extends AbstractObject implements Serializable {
@@ -60,7 +60,7 @@ public class JavaServerFacesHelper extends AbstractObject implements Serializabl
 	public String getCommandFunctionCallExpressionLanguage(Component component) {
 		String expressionLanguage = null;
 		String format = component.getGetByIdentifierExpressionLanguageFormat();
-		if(__inject__(StringHelper.class).isNotBlank(format)) {
+		if(StringHelper.isNotBlank(format)) {
 			expressionLanguage = formatExpression(String.format(COMMAND_FUNCTION_CALL_EXPRESSION_FORMAT, String.format(format, component.getIdentifier().toString()))); 
 		}
 		return expressionLanguage;

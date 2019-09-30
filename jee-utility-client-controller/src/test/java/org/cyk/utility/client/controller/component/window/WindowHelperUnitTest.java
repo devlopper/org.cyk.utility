@@ -5,11 +5,11 @@ import org.cyk.utility.client.controller.component.window.WindowHelper;
 import org.cyk.utility.client.controller.entities.EntityUsingDefaultForm;
 import org.cyk.utility.client.controller.entities.VerySimpleEntity;
 import org.cyk.utility.client.controller.entities.VerySimpleEntityForm;
-import org.cyk.utility.system.action.SystemActionCreate;
-import org.cyk.utility.system.action.SystemActionCustom;
-import org.cyk.utility.system.action.SystemActionDelete;
-import org.cyk.utility.system.action.SystemActionRead;
-import org.cyk.utility.system.action.SystemActionUpdate;
+import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
+import org.cyk.utility.__kernel__.system.action.SystemActionCustom;
+import org.cyk.utility.__kernel__.system.action.SystemActionDelete;
+import org.cyk.utility.__kernel__.system.action.SystemActionRead;
+import org.cyk.utility.__kernel__.system.action.SystemActionUpdate;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.Test;
 

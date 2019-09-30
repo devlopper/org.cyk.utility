@@ -28,7 +28,7 @@ import org.cyk.utility.sql.builder.QueryStringBuilderSelect;
 import org.cyk.utility.sql.builder.Tuple;
 import org.cyk.utility.sql.jpql.JpqlQualifier;
 import org.cyk.utility.system.AbstractSystemServiceProviderImpl;
-import org.cyk.utility.throwable.ThrowableHelper;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 
 public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends AbstractSystemServiceProviderImpl implements PersistenceServiceProvider<OBJECT>, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -88,7 +88,7 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 					identifier = __buildQueryIdentifierString__(index);
 				}
 				if(StringHelper.isBlank(identifier))
-					__inject__(ThrowableHelper.class).throwRuntimeException("Query identifier is required.");
+					throw new RuntimeException("Query identifier is required.");
 				query.setIdentifier(identifier);
 				
 				String value = annotation.value();
@@ -96,12 +96,12 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 					
 				}
 				if(StringHelper.isBlank(value))
-					__inject__(ThrowableHelper.class).throwRuntimeException("Query value is required.");
+					throw new RuntimeException("Query value is required.");
 				query.setValue(value);
 				
 				Class<?> aClass = annotation.resultClass();
 				if(aClass == null)
-					__inject__(ThrowableHelper.class).throwRuntimeException("Query result class is required.");
+					throw new RuntimeException("Query result class is required.");
 				query.setResultClass(aClass);
 				
 				addQueries(query);
@@ -112,7 +112,7 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	protected final Object[] __getQueryParameters__(String queryIdentifier,Properties properties,Object...objects){
 		PersistenceQuery persistenceQuery = __inject__(PersistenceQueryRepository.class).getBySystemIdentifier(queryIdentifier);
 		if(persistenceQuery == null)
-			__inject__(ThrowableHelper.class).throwRuntimeException("persistence query with identifier "+queryIdentifier+" not found.");
+			throw new RuntimeException("persistence query with identifier "+queryIdentifier+" not found.");
 		return __getQueryParameters__(persistenceQuery, properties, objects);
 	}
 	
@@ -272,7 +272,7 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	
 	@Override
 	public PersistenceServiceProvider<OBJECT> deleteAll(Properties properties) {
-		__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
+		ThrowableHelper.throwNotYetImplemented();
 		return this;
 	}
 	

@@ -6,7 +6,6 @@ import org.cyk.utility.__kernel__.assertion.Assertion;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.throwable.ThrowableHelper;
 
 @Deprecated
 public abstract class AbstractAssertionBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Assertion> implements AssertionBuilder,Serializable {
@@ -21,7 +20,7 @@ public abstract class AbstractAssertionBuilderImpl extends AbstractFunctionWithP
 		Assertion assertion = __inject__(Assertion.class);
 		assertion.setValue(__computeValue__(assertion,isAffirmation));
 		if(assertion.getValue() == null)
-			__inject__(ThrowableHelper.class).throwRuntimeException("assertion value is required");
+			throw new RuntimeException("assertion value is required");
 		if(!isAffirmation)
 			assertion.setValue(!assertion.getValue());
 		if(Boolean.TRUE.equals(assertion.getValue())){

@@ -21,7 +21,7 @@ import org.cyk.utility.client.controller.tag.TagMetas;
 import org.cyk.utility.client.controller.tag.TagScript;
 import org.cyk.utility.client.controller.tag.TagScripts;
 import org.cyk.utility.file.FileHelper;
-import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
 
 public abstract class AbstractThemeImpl extends AbstractObject implements Theme,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -45,7 +45,7 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 		getTemplate().setIdentifier(__getTemplateIdentifier__());
 		
 		String logoFileName = __getConfigurationParameterValue__(Constant.CONTEXT_PARAMETER_NAME_THEME_LOGO_FILE_NAME,null);
-		if(__inject__(StringHelper.class).isBlank(logoFileName))
+		if(StringHelper.isBlank(logoFileName))
 			logoFileName = __inject__(FileHelper.class).concatenateNameAndExtension(__getConfigurationParameterValue__(Constant.CONTEXT_PARAMETER_NAME_THEME_LOGO_FILE_NAME_PREFIX,"logo")
 					, __getConfigurationParameterValue__(Constant.CONTEXT_PARAMETER_NAME_THEME_LOGO_FILE_NAME_EXTENSION,"png"));
 		FileImageBuilder fileImageBuilder = __inject__(FileImageBuilder.class);

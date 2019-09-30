@@ -6,7 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.device.Device;
 import org.cyk.utility.device.DeviceDesktop;
 import org.cyk.utility.device.DevicePhone;
@@ -38,7 +38,7 @@ public class VisibleComponentAreaDimensionImpl extends AbstractObject implements
 
 	@Override
 	public VisibleComponentAreaDimension setProportions(Integer proportion,Collection<Class<? extends Device>> classes) {
-		if(__inject__(CollectionHelper.class).isNotEmpty(classes)) {
+		if(CollectionHelper.isNotEmpty(classes)) {
 			Map<Class<? extends Device>, Integer> proportionMap = getProportionMap(Boolean.TRUE);
 			for(Class<? extends Device> index : classes)
 				proportionMap.put(index, proportion);
@@ -48,7 +48,7 @@ public class VisibleComponentAreaDimensionImpl extends AbstractObject implements
 
 	@Override
 	public VisibleComponentAreaDimension setProportions(Integer proportion, Class<? extends Device>... classes) {
-		return setProportions(proportion,__inject__(CollectionHelper.class).instanciate(classes));
+		return setProportions(proportion,CollectionHelper.listOf(classes));
 	}
 
 	@Override

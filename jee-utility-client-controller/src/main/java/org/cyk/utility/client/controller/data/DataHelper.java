@@ -2,8 +2,8 @@ package org.cyk.utility.client.controller.data;
 
 import org.cyk.utility.field.Fields;
 import org.cyk.utility.helper.Helper;
-import org.cyk.utility.string.Strings;
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.string.Strings;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 
 public interface DataHelper extends Helper {
 

@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.server.persistence.Persistence;
@@ -42,7 +43,7 @@ public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> im
 		Collection<Object> entities = null;
 		BusinessEntity<Object> business = (BusinessEntity<Object>)  __injectBusinessLayer__().injectInterfaceClassFromPersistenceEntityClass(aClass);
 		if(business == null){
-			__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
+			ThrowableHelper.throwNotYetImplemented();
 		}else{
 			entities = business.findByIdentifiers(identifiers, valueUsageType, properties);
 		}
@@ -100,7 +101,7 @@ public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> im
 		Collection<Object> identifiers = null;
 		BusinessEntity<ENTITY> business = (BusinessEntity<ENTITY>)  __injectBusinessLayer__().injectInterfaceClassFromPersistenceEntityClass(aClass);
 		if(business == null){
-			__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
+			ThrowableHelper.throwNotYetImplemented();
 		}else{
 			identifiers = business.findIdentifiers(valueUsageType, properties);
 		}
@@ -167,7 +168,7 @@ public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> im
 				@SuppressWarnings("unchecked")
 				BusinessEntity<Object> business = (BusinessEntity<Object>)  __injectBusinessLayer__().injectInterfaceClassFromPersistenceEntityClass(index);
 				if(business == null){
-					__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
+					ThrowableHelper.throwNotYetImplemented();
 				}else{
 					business.deleteAll();
 				}
@@ -199,7 +200,7 @@ public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> im
 		@SuppressWarnings("unchecked")
 		BusinessEntity<Object> business = (BusinessEntity<Object>)  __injectBusinessLayer__().injectInterfaceClassFromPersistenceEntityClass(klass);
 		if(business == null){
-			__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
+			ThrowableHelper.throwNotYetImplemented();
 		}else{
 			business.deleteByIdentifiers(identifiers, valueUsageType,properties);
 		}

@@ -12,7 +12,6 @@ import org.cyk.utility.repository.RepositoryType;
 import org.cyk.utility.repository.RepositoryTypeDatabase;
 import org.cyk.utility.repository.RepositoryTypeFolder;
 import org.cyk.utility.repository.RepositoryTypeSession;
-import org.cyk.utility.string.StringHelper;
 
 @ApplicationScoped
 public class WebHelper extends AbstractHelper implements Serializable {
@@ -34,7 +33,7 @@ public class WebHelper extends AbstractHelper implements Serializable {
 		String url = null;
 		File file = outputFile.getValue();
 		if(file!=null && file.getIdentifier()!=null)
-			url = buildFileUrl(__inject__(StringHelper.class).getString(file.getIdentifier()), outputFile.getRepositoryType(), request);
+			url = buildFileUrl(file.getIdentifier().toString(), outputFile.getRepositoryType(), request);
 		return url;
 	}
 	

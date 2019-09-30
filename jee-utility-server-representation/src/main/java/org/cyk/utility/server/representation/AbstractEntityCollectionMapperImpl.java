@@ -1,22 +1,18 @@
 package org.cyk.utility.server.representation;
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Collection;
-
 import static org.cyk.utility.__kernel__.DependencyInjection.inject;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.array.ArrayHelper;
-import org.cyk.utility.__kernel__.klass.ClassHelper;
+import java.io.Serializable;
+import java.util.Arrays;
+
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.collection.CollectionInstance;
-import org.cyk.utility.field.FieldHelper;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.mapping.MappingHelper;
-import org.cyk.utility.server.representation.AbstractEntityCollection;
-import org.cyk.utility.throwable.ThrowableHelper;
 import org.mapstruct.TargetType;
 
+@Deprecated
 public abstract class AbstractEntityCollectionMapperImpl<SOURCE,SOURCE_ITEM,DESTINATION,DESTINATION_ITEM> implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -44,9 +40,9 @@ public abstract class AbstractEntityCollectionMapperImpl<SOURCE,SOURCE_ITEM,DEST
         			AbstractEntityCollection<SOURCE_ITEM> sourceCollection = (AbstractEntityCollection<SOURCE_ITEM>) source;
     				sourceCollection.add(inject(MappingHelper.class).getSources(destinationCollection.get(),sourceItemClass));
         		}else
-        			inject(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented("Source of type "+sourceClass);
+        			ThrowableHelper.throwNotYetImplemented("Source of type "+sourceClass);
         	}else
-    			inject(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented("Destination of type "+destinationClass);	
+    			ThrowableHelper.throwNotYetImplemented("Destination of type "+destinationClass);	
     	}
         return source;
     }
@@ -78,10 +74,10 @@ public abstract class AbstractEntityCollectionMapperImpl<SOURCE,SOURCE_ITEM,DEST
     		    			}
     		    		}	
     				}else
-    					inject(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented("Destination of type "+destinationClass);
+    					ThrowableHelper.throwNotYetImplemented("Destination of type "+destinationClass);
     			}
         	}else
-    			inject(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented("Source of type "+sourceClass);	
+    			ThrowableHelper.throwNotYetImplemented("Source of type "+sourceClass);	
     	}
     	return destination;
     }

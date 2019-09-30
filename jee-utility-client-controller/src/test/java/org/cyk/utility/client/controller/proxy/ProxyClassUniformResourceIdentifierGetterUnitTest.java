@@ -5,9 +5,9 @@ import java.net.URI;
 
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.__kernel__.function.FunctionRunnableMap;
+import org.cyk.utility.__kernel__.identifier.resource.RequestProperty;
 import org.cyk.utility.request.RequestGetter;
 import org.cyk.utility.request.RequestGetterImpl;
-import org.cyk.utility.request.RequestProperty;
 import org.cyk.utility.request.RequestPropertyValueGetter;
 import org.cyk.utility.request.RequestPropertyValueGetterImpl;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;

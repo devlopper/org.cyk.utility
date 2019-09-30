@@ -1,11 +1,12 @@
 package org.cyk.utility.playground.server.representation.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
-import org.cyk.utility.server.representation.hierarchy.AbstractNodeCodedAndNamed;
+import org.cyk.utility.__kernel__.object.__static__.representation.hierarchy.AbstractIdentifiedByStringAndCodedAndNamedImpl;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,8 +15,11 @@ import lombok.experimental.Accessors;
 
 @XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor
 @XmlSeeAlso(NodeDtoCollection.class)
-public class NodeDto extends AbstractNodeCodedAndNamed<NodeDto,NodeDtoCollection> implements Serializable {	
+public class NodeDto extends AbstractIdentifiedByStringAndCodedAndNamedImpl<NodeDto> implements Serializable {	
 	private static final long serialVersionUID = 1L;
+	
+	private ArrayList<NodeDto> parents;
+	private ArrayList<NodeDto> children;
 	
 	@Override
 	public NodeDto setIdentifier(String identifier) {
@@ -32,8 +36,4 @@ public class NodeDto extends AbstractNodeCodedAndNamed<NodeDto,NodeDtoCollection
 		return (NodeDto) super.setName(name);
 	}
 	
-	@Override
-	public String toString() {
-		return getIdentifier()+"/"+getCode()+"/"+getName()+":"+getParents();
-	}
 }

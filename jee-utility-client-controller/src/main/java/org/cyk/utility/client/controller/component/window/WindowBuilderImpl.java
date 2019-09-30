@@ -14,7 +14,7 @@ import org.cyk.utility.client.controller.component.output.OutputStringTextBuilde
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilderMap;
 import org.cyk.utility.client.controller.component.output.OutputStringTextMap;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
-import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.system.node.SystemNodeClient;
 
 public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Window> implements WindowBuilder,Serializable {
@@ -57,7 +57,7 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 		
 		OutputStringTextBuilder title = getTitle();
 		if(title!=null) {
-			if(__inject__(StringHelper.class).isNotBlank(applicationName))
+			if(StringHelper.isNotBlank(applicationName))
 				title.setValue((Boolean.TRUE.equals(IS_TITLE_PREFIXED_WITH_APPLICATION_NAME) ? applicationName+"|" : ConstantEmpty.STRING) +title.getValue());
 			__setRequestAndContextAndUniformResourceLocatorMapOf__(title);
 			window.setTitle(title.execute().getOutput());

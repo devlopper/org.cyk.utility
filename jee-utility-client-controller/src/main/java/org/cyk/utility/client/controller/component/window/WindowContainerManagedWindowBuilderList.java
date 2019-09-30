@@ -2,7 +2,7 @@ package org.cyk.utility.client.controller.component.window;
 
 import java.util.Collection;
 
-import org.cyk.utility.string.Strings;
+import org.cyk.utility.__kernel__.string.Strings;
 
 public interface WindowContainerManagedWindowBuilderList extends WindowContainerManagedWindowBuilder {
 

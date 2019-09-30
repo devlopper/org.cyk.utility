@@ -5,7 +5,7 @@ import java.net.URI;
 
 import org.cyk.utility.client.controller.proxy.ProxyClassUniformResourceIdentifierGetterImpl;
 import org.cyk.utility.configuration.ConstantParameterName;
-import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
 
 public abstract class AbstractSystemContextListener<CONTEXT> extends  org.cyk.utility.context.AbstractSystemContextListenerImpl<CONTEXT> implements SystemContextListener<CONTEXT>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -14,7 +14,7 @@ public abstract class AbstractSystemContextListener<CONTEXT> extends  org.cyk.ut
 	protected void __initialize__(CONTEXT context) {
 		super.__initialize__(context);
 		String proxyClassUniformResourceIdentifier = getConfigurationParameterValue(ConstantParameterName.PROXY_UNIFORM_RESOURCE_IDENTIFIER);
-		if(__inject__(StringHelper.class).isNotBlank(proxyClassUniformResourceIdentifier))
+		if(StringHelper.isNotBlank(proxyClassUniformResourceIdentifier))
 			ProxyClassUniformResourceIdentifierGetterImpl.UNIFORM_RESOURCE_IDENTIFIER = URI.create(proxyClassUniformResourceIdentifier);
 	}
 	

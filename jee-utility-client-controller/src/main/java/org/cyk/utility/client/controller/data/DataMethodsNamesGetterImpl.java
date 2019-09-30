@@ -2,10 +2,13 @@ package org.cyk.utility.client.controller.data;
 
 import java.io.Serializable;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.string.Strings;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemActionRead;
 import org.cyk.utility.string.AbstractStringsFunctionImpl;
-import org.cyk.utility.string.Strings;
-import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.action.SystemActionRead;
 
 public class DataMethodsNamesGetterImpl extends AbstractStringsFunctionImpl implements DataMethodsNamesGetter,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -19,10 +22,10 @@ public class DataMethodsNamesGetterImpl extends AbstractStringsFunctionImpl impl
 		if(names == null) {
 			if(systemAction!=null) {
 				Data data = null;
-				if(__injectCollectionHelper__().isNotEmpty(systemAction.getEntities()))
+				if(CollectionHelper.isNotEmpty(systemAction.getEntities()))
 					data = (Data) systemAction.getEntities().getFirst();
-				Object dataIdentifier = __injectFieldHelper__().getFieldValueSystemOrBusinessIdentifier(data);
-				if(dataIdentifier!=null && Boolean.TRUE.equals(__injectClassHelper__().isInstanceOfOne(systemAction.getClass(), SystemActionRead.class))) {
+				Object dataIdentifier = FieldHelper.readSystemIdentifierOrBusinessIdentifier(data);
+				if(dataIdentifier!=null && Boolean.TRUE.equals(ClassHelper.isInstanceOfOne(systemAction.getClass(), SystemActionRead.class))) {
 					
 				}else {
 					names = __inject__(Strings.class).add(Form.METHOD_SUBMIT);	

@@ -5,6 +5,15 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.string.Strings;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemActionAdd;
+import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
+import org.cyk.utility.__kernel__.system.action.SystemActionFind;
+import org.cyk.utility.__kernel__.system.action.SystemActionRedirect;
+import org.cyk.utility.__kernel__.system.action.SystemActionUpdate;
 import org.cyk.utility.array.ArrayHelperImpl;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
 import org.cyk.utility.client.controller.component.Component;
@@ -22,15 +31,6 @@ import org.cyk.utility.client.controller.component.input.InputStringLineManyBuil
 import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
 import org.cyk.utility.client.controller.component.output.OutputBuilder;
 import org.cyk.utility.client.controller.data.FormData;
-import org.cyk.utility.collection.CollectionHelperImpl;
-import org.cyk.utility.field.FieldHelperImpl;
-import org.cyk.utility.string.Strings;
-import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.action.SystemActionAdd;
-import org.cyk.utility.system.action.SystemActionCreate;
-import org.cyk.utility.system.action.SystemActionFind;
-import org.cyk.utility.system.action.SystemActionRedirect;
-import org.cyk.utility.system.action.SystemActionUpdate;
 
 public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> implements ViewBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -52,12 +52,12 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 		ComponentsBuilder componentsBuilder = getComponentsBuilder();
 		
 		CommandableBuilders commandables = getCommandables();
-		if(CollectionHelperImpl.__isNotEmpty__(commandables)) {
+		if(CollectionHelper.isNotEmpty(commandables)) {
 			for(CommandableBuilder index : commandables.get()) {
 				componentsBuilder.addComponents(index);
 			}
 		}
-		if(componentsBuilder!=null && CollectionHelperImpl.__isNotEmpty__(componentsBuilder.getComponents())) {
+		if(componentsBuilder!=null && CollectionHelper.isNotEmpty(componentsBuilder.getComponents())) {
 			for(Object index : componentsBuilder.getComponents().get())
 				if(index instanceof ComponentBuilder<?>) {
 					if( ((ComponentBuilder<?>)index).getRequest() == null )
@@ -77,7 +77,7 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 		}
 		
 		Components components = view.getComponents();
-		if(CollectionHelperImpl.__isNotEmpty__(components)) {
+		if(CollectionHelper.isNotEmpty(components)) {
 			for(Component index : components.get()) {
 				if(index instanceof Commandable) {
 					Commandable commandable = (Commandable) index;
@@ -150,10 +150,10 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	
 	@Override
 	public InputBuilder<?, ?> addInputBuilderByFieldName(Object object, String... fieldNames) {
-		//Class<? extends InputBuilder<?,?>> inputBuilderClass =  __inject__(ComponentBuilderClassGetter.class).setField(FieldHelperImpl.__getFieldByNames__(object.getClass(), fieldNames))
+		//Class<? extends InputBuilder<?,?>> inputBuilderClass =  __inject__(ComponentBuilderClassGetter.class).setField(FieldHelper.getFieldByNames(object.getClass(), fieldNames))
 		//		.execute().getOutput();
 		Class<? extends InputBuilder<?,?>> inputBuilderClass =  (Class<? extends InputBuilder<?, ?>>) ComponentBuilderHelperImpl
-				.__getComponentBuilderClass__(null, null, FieldHelperImpl.__getByNames__(object.getClass(), fieldNames), null, null, null, null);
+				.__getComponentBuilderClass__(null, null, FieldHelper.getByName(object.getClass(), fieldNames), null, null, null, null);
 		return addInputBuilderByFieldName(inputBuilderClass, object, fieldNames);
 	}
 	
@@ -169,7 +169,7 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	@Override
 	public ComponentBuilder<?> addComponentBuilderByObjectByFieldNames(Object object,Class<?> componentBuilderBaseClass, String... fieldNames) {
 		//TODO key must contains isEditable value ?????
-		//String key = object.getClass().getName()+"."+(componentBuilderBaseClass == null ? "" : componentBuilderBaseClass.getName())+"."+FieldHelperImpl.__join__(fieldNames);
+		//String key = object.getClass().getName()+"."+(componentBuilderBaseClass == null ? "" : componentBuilderBaseClass.getName())+"."+FieldHelper.join(fieldNames);
 		Class<? extends ComponentBuilder<?>> builderClass = null;// BUILDERS_CLASSES_MAP.get(key);
 		if(builderClass == null) {
 			//TODO to be optimized
@@ -303,7 +303,7 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	
 	@Override
 	public ViewBuilder addNavigationCommandablesBySystemActionClasses(Collection<Class<? extends SystemAction>> systemActionClasses) {
-		if(CollectionHelperImpl.__isNotEmpty__(systemActionClasses)) {
+		if(CollectionHelper.isNotEmpty(systemActionClasses)) {
 			CommandableBuilders commandables = getCommandables(Boolean.TRUE);
 			for(Class<? extends SystemAction> index : systemActionClasses)
 				commandables.add(__inject__(CommandableBuilder.class).setNavigationSystemAction(__inject__(index)));
@@ -313,7 +313,7 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	
 	@Override
 	public ViewBuilder addNavigationCommandablesBySystemActionClasses(Class<? extends SystemAction>... systemActionClasses) {
-		addNavigationCommandablesBySystemActionClasses(CollectionHelperImpl.__instanciate__(systemActionClasses));
+		addNavigationCommandablesBySystemActionClasses(CollectionHelper.listOf(systemActionClasses));
 		return this;
 	}
 	

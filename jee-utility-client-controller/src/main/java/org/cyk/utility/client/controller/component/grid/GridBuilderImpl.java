@@ -28,10 +28,10 @@ import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.component.view.ViewBuilderMap;
 import org.cyk.utility.client.controller.component.view.ViewMap;
 import org.cyk.utility.client.controller.data.Data;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.object.ObjectByClassMap;
-import org.cyk.utility.object.Objects;
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.object.Objects;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 
 public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> implements GridBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -60,11 +60,11 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 		Class<? extends Data> rowDataClass = getRowDataClass();
 		
 		Objects objects = getObjects();
-		if(__injectCollectionHelper__().isNotEmpty(objects)) {
+		if(CollectionHelper.isNotEmpty(objects)) {
 			for(Object index : objects.get()) {
 				Object row = null;
 				if(!(index instanceof org.cyk.utility.client.controller.data.Data))
-					__injectThrowableHelper__().throwRuntimeException("class "+index.getClass().getName()+" must implement Data interface");
+					throw new RuntimeException("class "+index.getClass().getName()+" must implement Data interface");
 				
 				row = __inject__(org.cyk.utility.client.controller.data.RowBuilder.class).setGrid(this).setDataClass(rowDataClass).setData((Data) index).execute().getOutput();			
 				if(row!=null)
@@ -79,7 +79,7 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 			layout.setType(layoutType = __inject__(LayoutTypeGrid.class));
 		
 		ColumnBuilders columns = getColumns();
-		if(__injectCollectionHelper__().isNotEmpty(columns)) {
+		if(CollectionHelper.isNotEmpty(columns)) {
 			ColumnBuilder orderNumberColumn = getOrderNumberColumn();
 			if(orderNumberColumn == null && Boolean.TRUE.equals(layoutType.getIsHasOrderNumberColumn())) {
 				orderNumberColumn = getOrderNumberColumn(Boolean.TRUE);
@@ -98,7 +98,7 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 				
 				if(commandablesColumnView!=null) {
 					CommandableBuilders commandables = commandablesColumnView.getCommandables();
-					if(Boolean.TRUE.equals(__inject__(CollectionHelper.class).isNotEmpty(commandables))) {
+					if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(commandables))) {
 						commandablesColumnView.getComponentsBuilder(Boolean.TRUE).setIsCreateLayoutItemOnAddComponent(Boolean.TRUE);
 						for(CommandableBuilder index : commandables.get()) {
 							//__inject__(GridBuilderCommandableBuilderProcessor.class).setGridBuilder(this).setCommandableBuilder(index).execute();
@@ -108,7 +108,7 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 				}
 			}
 			if(commandablesColumn!=null && commandablesColumn.getBodyView()!=null && commandablesColumn.getBodyView().getComponentsBuilder()!=null 
-					&& __inject__(CollectionHelper.class).isNotEmpty(commandablesColumn.getBodyView().getComponentsBuilder().getComponents()))
+					&& CollectionHelper.isNotEmpty(commandablesColumn.getBodyView().getComponentsBuilder().getComponents()))
 				columns.add(commandablesColumn);
 			
 			grid.setColumns(__inject__(Columns.class));
@@ -119,7 +119,7 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 			}
 		}
 		RowBuilders rows = getRows();
-		if(__injectCollectionHelper__().isNotEmpty(rows)) {
+		if(CollectionHelper.isNotEmpty(rows)) {
 			grid.setRows(__inject__(Rows.class));
 			Integer orderNumber = 0;
 			for(RowBuilder index : rows.get()) {
@@ -127,9 +127,9 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 				Row row = index.execute().getOutput();
 				grid.getRows().add(row);
 				Cells cells = row.getCells();
-				if(__injectCollectionHelper__().isNotEmpty(cells)) {
+				if(CollectionHelper.isNotEmpty(cells)) {
 					for(Cell indexCell : cells.get())
-						indexCell.setColumn(__injectCollectionHelper__().getElementAt(grid.getColumns(), (Integer)indexCell.getOrderNumber()));	
+						indexCell.setColumn(CollectionHelper.getElementAt(grid.getColumns(), (Integer)indexCell.getOrderNumber()));	
 				}
 				
 			}
@@ -146,8 +146,8 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 					//.setIsHasFooter(Boolean.TRUE)
 					//.setIsHasOrderNumberColumn(Boolean.TRUE)
 					//.setIsHasCommandablesColumn(Boolean.TRUE)
-					.setRowCount(__injectCollectionHelper__().getSize(dataTableRows))
-					.setColumnCount(__injectCollectionHelper__().getSize(dataTableColumns))
+					.setRowCount(CollectionHelper.getSize(dataTableRows))
+					.setColumnCount(CollectionHelper.getSize(dataTableColumns))
 					;
 			
 			layout.addRoles(ComponentRole.GRID);
@@ -157,7 +157,7 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 		//for(Column indexColumn : dataTableColumns.get())
 		//	view.getComponentsBuilder(Boolean.TRUE).addComponents(dataTable.getCell(indexColumn, indexRow));
 		
-		if(__injectCollectionHelper__().isNotEmpty(dataTableRows)) {
+		if(CollectionHelper.isNotEmpty(dataTableRows)) {
 			for(Row indexRow : dataTableRows.get()) {
 				for(Column indexColumn : dataTableColumns.get())
 					componentsBuilder.addComponents(grid.getCell(indexColumn, indexRow));
@@ -203,7 +203,7 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 			*/
 			
 			Collection<Map.Entry<String,ViewBuilder>> entries = viewMap.getEntries();
-			if(__injectCollectionHelper__().isNotEmpty(entries)) {
+			if(CollectionHelper.isNotEmpty(entries)) {
 				grid.setViewMap(__inject__(ViewMap.class));
 				for(Map.Entry<String,ViewBuilder> index : entries) {
 					index.getValue().setPropertyIfNull(Properties.CONTEXT, Properties.getFromPath(getProperties(), Properties.CONTEXT));
@@ -258,7 +258,7 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	
 	@Override
 	public GridBuilder addColumnsByFieldNames(Collection<String> fieldNames) {
-		if(__injectCollectionHelper__().isNotEmpty(fieldNames)) {
+		if(CollectionHelper.isNotEmpty(fieldNames)) {
 			for(String index : fieldNames)
 				addColumnByFieldNameStrings(index);
 		}
@@ -267,7 +267,7 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	
 	@Override
 	public GridBuilder addColumnsByFieldNames(String... fieldNames) {
-		return addColumnsByFieldNames(__injectCollectionHelper__().instanciate(fieldNames));
+		return addColumnsByFieldNames(CollectionHelper.listOf(fieldNames));
 	}
 	
 	@Override
@@ -278,7 +278,7 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	
 	@Override
 	public ColumnBuilder getColumnByFieldNameStrings(String... fieldNameStrings) {
-		return getColumnByFieldNameStrings(__injectCollectionHelper__().instanciate(fieldNameStrings));
+		return getColumnByFieldNameStrings(CollectionHelper.listOf(fieldNameStrings));
 	}
 	
 	@Override
@@ -454,7 +454,7 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	
 	@Override
 	public GridBuilder addCommandablesToColumnBodyView(Collection<CommandableBuilder> commandables) {
-		if(__injectCollectionHelper__().isNotEmpty(commandables))
+		if(CollectionHelper.isNotEmpty(commandables))
 			for(CommandableBuilder index : commandables) {
 				index.setPropertyIfNull(Properties.CONTEXT, getContext());
 				index.setPropertyIfNull(Properties.UNIFORM_RESOURCE_LOCATOR_MAP, getUniformResourceLocatorMap());
@@ -465,7 +465,7 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	
 	@Override
 	public GridBuilder addCommandablesToColumnBodyView(CommandableBuilder... commandables) {
-		return addCommandablesToColumnBodyView(__injectCollectionHelper__().instanciate(commandables));
+		return addCommandablesToColumnBodyView(CollectionHelper.listOf(commandables));
 	}
 	
 	@Override

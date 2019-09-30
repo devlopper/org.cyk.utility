@@ -7,6 +7,12 @@ import javax.inject.Named;
 
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractSingleton;
+import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
+import org.cyk.utility.__kernel__.system.action.SystemActionDelete;
+import org.cyk.utility.__kernel__.system.action.SystemActionProcess;
+import org.cyk.utility.__kernel__.system.action.SystemActionRead;
+import org.cyk.utility.__kernel__.system.action.SystemActionSelect;
+import org.cyk.utility.__kernel__.system.action.SystemActionUpdate;
 import org.cyk.utility.client.controller.component.command.Commandable;
 import org.cyk.utility.client.controller.component.command.CommandableRenderTypeButton;
 import org.cyk.utility.client.controller.component.command.CommandableRenderTypeLink;
@@ -42,23 +48,12 @@ import org.cyk.utility.client.controller.component.output.OutputStringMessage;
 import org.cyk.utility.client.controller.component.output.OutputStringText;
 import org.cyk.utility.client.controller.component.text.Text;
 import org.cyk.utility.client.controller.component.view.View;
-import org.cyk.utility.random.RandomHelper;
-import org.cyk.utility.system.action.SystemActionCreate;
-import org.cyk.utility.system.action.SystemActionDelete;
-import org.cyk.utility.system.action.SystemActionProcess;
-import org.cyk.utility.system.action.SystemActionRead;
-import org.cyk.utility.system.action.SystemActionSelect;
-import org.cyk.utility.system.action.SystemActionUpdate;
 
 @ApplicationScoped @Named
 public class ComponentHelper extends AbstractSingleton implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private String globalMessagesTargetsIdentifiers;
-	
-	public RandomHelper getRandomHelper() {
-		return __inject__(RandomHelper.class);
-	}
 	
 	public Boolean isInputStringEditor(Object object) {
 		return object instanceof InputStringEditor;

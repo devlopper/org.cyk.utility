@@ -2,8 +2,8 @@ package org.cyk.utility.client.controller.event;
 
 import java.io.Serializable;
 
-import org.cyk.utility.collection.AbstractCollectionInstanceImpl;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.AbstractCollectionInstanceImpl;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 
 public class EventBuildersImpl extends AbstractCollectionInstanceImpl<EventBuilder> implements EventBuilders,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -11,7 +11,7 @@ public class EventBuildersImpl extends AbstractCollectionInstanceImpl<EventBuild
 	@Override
 	public EventBuilder getByName(EventName name, Boolean injectIfNull) {
 		EventBuilder builder = null;
-		if(__inject__(CollectionHelper.class).isNotEmpty(collection)) {
+		if(CollectionHelper.isNotEmpty(collection)) {
 			for(EventBuilder index : collection)
 				if(name.equals(index.getName())) {
 					builder= index;

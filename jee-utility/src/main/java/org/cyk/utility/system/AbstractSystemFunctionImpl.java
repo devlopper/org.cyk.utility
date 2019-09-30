@@ -39,7 +39,7 @@ import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.notification.NotificationBuilders;
 import org.cyk.utility.notification.Notifications;
 import org.cyk.utility.system.layer.SystemLayer;
-import org.cyk.utility.throwable.ThrowableHelper;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.type.BooleanHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 
@@ -106,7 +106,7 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	protected void ____execute____() {
 		Boolean isActionRequired = ValueHelper.defaultToIfNull(getIsActionRequired(),Boolean.TRUE);
 		if(__action__ == null && Boolean.TRUE.equals(isActionRequired)) {			
-			__inject__(ThrowableHelper.class).throwRuntimeException(getClass().getSimpleName()+" : action must not be null");
+			throw new RuntimeException(getClass().getSimpleName()+" : action must not be null");
 		} else {
 			__initialiseWorkingVariables__();
 			__execute__(__action__);	

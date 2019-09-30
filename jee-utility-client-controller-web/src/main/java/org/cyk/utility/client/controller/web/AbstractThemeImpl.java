@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.file.MimeTypeGetter;
-import org.cyk.utility.string.StringHelper;
 
 public abstract class AbstractThemeImpl extends org.cyk.utility.client.controller.component.theme.AbstractThemeImpl implements Theme,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -62,7 +62,7 @@ public abstract class AbstractThemeImpl extends org.cyk.utility.client.controlle
 		String size = width+"x"+height;
 		String fileName = __getFaviconFileName__(request, width, height);
 		String fileExtension = __getFaviconFileExtension__(request, width, height);
-		if(__inject__(StringHelper.class).isNotBlank(fileExtension))
+		if(StringHelper.isNotBlank(fileExtension))
 			fileName += "." + fileExtension;
 		String mimeType = __inject__(MimeTypeGetter.class).setExtension(fileExtension).execute().getOutput();
 		String folder = __getImageFolder__(request);

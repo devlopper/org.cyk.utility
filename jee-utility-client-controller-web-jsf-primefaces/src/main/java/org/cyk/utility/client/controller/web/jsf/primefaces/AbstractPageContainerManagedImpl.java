@@ -5,13 +5,13 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.window.WindowBuilder;
 import org.cyk.utility.client.controller.event.EventBuilder;
 import org.cyk.utility.client.controller.event.EventName;
 import org.cyk.utility.client.controller.navigation.NavigationBuilder;
 import org.cyk.utility.client.controller.web.jsf.primefaces.tag.BlockUI;
-import org.cyk.utility.string.StringHelper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -44,13 +44,13 @@ public abstract class AbstractPageContainerManagedImpl extends org.cyk.utility.c
 		String script = __injectPrimefacesHelper__().getScriptInstructionHide(widgetVar);
 		
 		String url = __processWindowDialogOkCommandableGetUrl__(window, commandable);
-		if(__inject__(StringHelper.class).isBlank(url)) {
+		if(StringHelper.isBlank(url)) {
 			NavigationBuilder navigation = commandable.getNavigation();
 			if(navigation!=null)
 				url = navigation.execute().getOutput().getUniformResourceLocator().toString();	
 		}
 		
-		if(__inject__(StringHelper.class).isNotBlank(url))
+		if(StringHelper.isNotBlank(url))
 			script = script + __injectJavaServerFacesHelper__().getScriptInstructionGoToUrlIfMessageMaximumSeverityIsInfo(url);
 				
 		EventBuilder event = __inject__(EventBuilder.class).setName(EventName.CLICK).addScriptInstructions(script);

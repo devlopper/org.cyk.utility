@@ -13,7 +13,7 @@ public abstract class AbstractPageContainerManagedImpl extends AbstractWindowCon
 	@Override
 	protected void __listenBeforePostConstruct__() {
 		super.__listenBeforePostConstruct__();
-		__isInternalLoggable__ = __inject__(BooleanHelper.class).get(__inject__(HttpServletRequest.class).getParameter("__isInternalLoggable__"));
+		__isInternalLoggable__ = BooleanHelper.get(__inject__(HttpServletRequest.class).getParameter("__isInternalLoggable__"));
 	}
 	
 	

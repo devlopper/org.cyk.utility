@@ -1,20 +1,12 @@
 package org.cyk.utility.playground.client.controller.entities;
 
 import org.cyk.utility.client.controller.data.MappingInstantiator;
-import org.cyk.utility.client.controller.data.hierarchy.AbstractNodeMapperImpl;
+import org.cyk.utility.mapping.AbstractMapperSourceDestinationImpl;
 import org.cyk.utility.playground.server.representation.entities.NodeDto;
-import org.cyk.utility.playground.server.representation.entities.NodeDtoCollection;
 import org.mapstruct.Mapper;
 
 @Mapper(uses= {MappingInstantiator.class})
-public abstract class NodeMapper extends AbstractNodeMapperImpl<Node, NodeDto,NodeDtoCollection> {
+public abstract class NodeMapper extends AbstractMapperSourceDestinationImpl<Node, NodeDto> {
 	private static final long serialVersionUID = 1L;
-	
-	@Override
-	public void __listenPostConstruct__() {
-		super.__listenPostConstruct__();
-		__sourceClass__ = Node.class;
-		__destinationClass__ = NodeDto.class;
-	}
 	
 }

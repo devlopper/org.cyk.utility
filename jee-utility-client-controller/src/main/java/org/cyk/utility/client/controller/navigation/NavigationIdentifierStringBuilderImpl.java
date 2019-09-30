@@ -5,13 +5,14 @@ import java.io.Serializable;
 import javax.enterprise.context.Dependent;
 
 import org.apache.commons.lang.StringUtils;
+import org.cyk.utility.__kernel__.string.Case;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
+import org.cyk.utility.__kernel__.system.action.SystemActionDelete;
+import org.cyk.utility.__kernel__.system.action.SystemActionUpdate;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
-import org.cyk.utility.string.Case;
 import org.cyk.utility.string.StringFormat;
-import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.action.SystemActionCreate;
-import org.cyk.utility.system.action.SystemActionDelete;
-import org.cyk.utility.system.action.SystemActionUpdate;
 
 @Dependent @Deprecated
 public class NavigationIdentifierStringBuilderImpl extends AbstractStringFunctionImpl implements NavigationIdentifierStringBuilder,Serializable {
@@ -30,7 +31,7 @@ public class NavigationIdentifierStringBuilderImpl extends AbstractStringFunctio
 		SystemAction systemAction = getSystemAction();
 		if(systemAction != null) {
 			if(systemAction.getEntities()!=null && systemAction.getEntities().getElementClass()!=null)
-				format.setArguments( FORMAT_ARGUMENT_ENTITY,__injectStringHelper__().applyCase(systemAction.getEntities().getElementClass().getSimpleName(), Case.FIRST_CHARACTER_LOWER));
+				format.setArguments( FORMAT_ARGUMENT_ENTITY,StringHelper.applyCase(systemAction.getEntities().getElementClass().getSimpleName(), Case.FIRST_CHARACTER_LOWER));
 			else
 				format.setArguments( FORMAT_ARGUMENT_ENTITY,__ENTITY__);
 			

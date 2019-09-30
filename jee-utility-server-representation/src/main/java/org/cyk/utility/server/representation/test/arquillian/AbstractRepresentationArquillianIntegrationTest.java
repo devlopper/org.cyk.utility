@@ -11,7 +11,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.field.FieldHelper;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.server.representation.AbstractEntityCollection;
 import org.cyk.utility.server.representation.AbstractEntityFromPersistenceEntity;
 import org.cyk.utility.server.representation.Representation;

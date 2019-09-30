@@ -8,7 +8,7 @@ import org.cyk.utility.client.controller.component.annotation.CommandableButton;
 import org.cyk.utility.client.controller.component.annotation.Output;
 import org.cyk.utility.client.controller.component.annotation.OutputString;
 import org.cyk.utility.client.controller.component.annotation.OutputStringText;
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 
 public abstract class AbstractFormImpl extends AbstractObject implements Form,Serializable {
 	private static final long serialVersionUID = 1L;

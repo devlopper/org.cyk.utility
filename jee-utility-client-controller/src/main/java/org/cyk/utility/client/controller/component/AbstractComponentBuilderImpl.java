@@ -7,9 +7,16 @@ import java.util.Map;
 
 import org.cyk.utility.__kernel__.AbstractObjectLifeCycleListenerImpl;
 import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.function.Function;
+import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
+import org.cyk.utility.__kernel__.internationalization.InternationalizationKeyStringType;
+import org.cyk.utility.__kernel__.internationalization.InternationalizationString;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.object.Objects;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.clazz.ClassHelperImpl;
+import org.cyk.utility.__kernel__.string.Case;
+import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.clazz.Classes;
 import org.cyk.utility.client.controller.command.CommandFunction;
 import org.cyk.utility.client.controller.event.Event;
@@ -18,19 +25,12 @@ import org.cyk.utility.client.controller.event.EventBuilders;
 import org.cyk.utility.client.controller.event.EventName;
 import org.cyk.utility.client.controller.session.AbstractSessionHelperImpl;
 import org.cyk.utility.client.controller.session.SessionHelper;
-import org.cyk.utility.collection.CollectionHelperImpl;
 import org.cyk.utility.css.Style;
 import org.cyk.utility.device.Device;
 import org.cyk.utility.device.DeviceScreenArea;
 import org.cyk.utility.device.DeviceScreenDimensionProportions;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.internationalization.InternationalizationHelperImpl;
-import org.cyk.utility.internationalization.InternationalizationKeyStringType;
-import org.cyk.utility.internationalization.InternationalizationString;
 import org.cyk.utility.internationalization.InternationalizationStringMap;
-import org.cyk.utility.object.Objects;
-import org.cyk.utility.string.Case;
-import org.cyk.utility.string.Strings;
 import org.cyk.utility.type.BooleanMap;
 
 public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> extends AbstractFunctionWithPropertiesAsInputImpl<COMPONENT> implements ComponentBuilder<COMPONENT> , Serializable {
@@ -58,7 +58,7 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 		super.__listenPostConstruct__();
 		if(componentClass == null) {
 			if(componentClass == null) {
-				componentClass = (Class<COMPONENT>) ClassHelperImpl.__getByName__(ClassHelperImpl.__getParameterAt__(getClass(), 0, Object.class).getName());
+				componentClass = (Class<COMPONENT>) ClassHelper.getByName(ClassHelper.getParameterAt(getClass(), 0).getName());
 			}	
 		}
 		AbstractObjectLifeCycleListenerImpl.getInstance().listenPostConstruct(this);
@@ -68,7 +68,7 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	public Function<Properties, COMPONENT> execute() {
 		Classes qualifiers = getQualifiers();
 		COMPONENT component = null;
-		if(CollectionHelperImpl.__isEmpty__(qualifiers))
+		if(CollectionHelper.isEmpty(qualifiers))
 			component = DependencyInjection.inject(componentClass);
 		else
 			component = DependencyInjection.injectByQualifiersClasses(componentClass, qualifiers.get().toArray(new Class[] {}));		
@@ -94,7 +94,7 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 		component.setUpdatables(updatables);
 		
 		EventBuilders events = getEvents();
-		if(CollectionHelperImpl.__isNotEmpty__(events)) {
+		if(CollectionHelper.isNotEmpty(events)) {
 			for(EventBuilder index : events.get()) {
 				Event event = index.execute().getOutput();
 				component.getEvents(Boolean.TRUE).add(event);
@@ -105,8 +105,8 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 		Throwable throwable = getThrowable();
 		component.setThrowable(throwable);
 		if(component.getThrowable() != null)
-			component.setThrowableInternalizationMessage(InternationalizationHelperImpl.__buildString__(InternationalizationHelperImpl
-					.__buildKey__(component.getThrowable())));
+			component.setThrowableInternalizationMessage(InternationalizationHelper.buildString(InternationalizationHelper
+					.buildKey(component.getThrowable())));
 		setProperty(Properties.OUTPUT, component);
 		return this;
 	}
@@ -117,7 +117,7 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 		Class<COMPONENT> componentClass = getComponentClass();
 		Classes qualifiers = getQualifiers();
 		COMPONENT component = null;
-		if(__injectCollectionHelper__().isEmpty(qualifiers))
+		if(CollectionHelper.isEmpty(qualifiers))
 			component = __inject__(componentClass);
 		else
 			component = __injectByQualifiersClasses__(componentClass, qualifiers.get().toArray(new Class[] {}));
@@ -147,7 +147,7 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 		component.setUpdatables(updatables);
 		
 		EventBuilders events = getEvents();
-		if(__injectCollectionHelper__().isNotEmpty(events)) {
+		if(CollectionHelper.isNotEmpty(events)) {
 			for(EventBuilder index : events.get()) {
 				Event event = index.execute().getOutput();
 				component.getEvents(Boolean.TRUE).add(event);
@@ -200,14 +200,14 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	
 	@Override
 	public ComponentBuilder<COMPONENT> addQualifiers(@SuppressWarnings("rawtypes") Collection<Class> qualifiers) {
-		if(__injectCollectionHelper__().isNotEmpty(qualifiers))
+		if(CollectionHelper.isNotEmpty(qualifiers))
 			getQualifiers(Boolean.TRUE).add(qualifiers);
 		return this;
 	}
 	
 	@Override
 	public ComponentBuilder<COMPONENT> addQualifiers(@SuppressWarnings("rawtypes") Class... qualifiers) {
-		return addQualifiers(__injectCollectionHelper__().instanciate(qualifiers));
+		return addQualifiers(CollectionHelper.listOf(qualifiers));
 	}
 	
 	@Override
@@ -493,7 +493,7 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	
 	@Override
 	public ComponentBuilder<COMPONENT> addEvents(EventBuilder... events) {
-		return addEvents(__injectCollectionHelper__().instanciate(events));
+		return addEvents(CollectionHelper.listOf(events));
 	}
 	
 	@Override
@@ -675,19 +675,19 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	}
 	
 	protected static String __buildInternationalizationString__(Object key,InternationalizationKeyStringType keyType,Object[] arguments,Locale locale,Case kase) {
-		return InternationalizationHelperImpl.__buildString__(InternationalizationHelperImpl.__buildKey__(key, keyType),arguments,locale,kase);
+		return InternationalizationHelper.buildString(InternationalizationHelper.buildKey(key, keyType),arguments,locale,kase);
 	}
 	
 	protected static String __buildInternationalizationString__(Object key,InternationalizationKeyStringType keyType,Case kase) {
-		return InternationalizationHelperImpl.__buildString__(InternationalizationHelperImpl.__buildKey__(key, keyType),null,null,kase);
+		return InternationalizationHelper.buildString(InternationalizationHelper.buildKey(key, keyType),null,null,kase);
 	}
 	
 	protected static String __buildInternationalizationString__(Object key,Case kase) {
-		return InternationalizationHelperImpl.__buildString__(InternationalizationHelperImpl.__buildKey__(key, null),null,null,kase);
+		return InternationalizationHelper.buildString(InternationalizationHelper.buildKey(key, null),null,null,kase);
 	}
 	
 	protected static String __buildInternationalizationString__(Object key) {
-		return InternationalizationHelperImpl.__buildString__(InternationalizationHelperImpl.__buildKey__(key, null),null,null,null);
+		return InternationalizationHelper.buildString(InternationalizationHelper.buildKey(key, null),null,null,null);
 	}
 	
 	/**/

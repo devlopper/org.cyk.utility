@@ -3,7 +3,7 @@ package org.cyk.utility.client.controller.component.tree;
 import org.cyk.utility.client.controller.component.VisibleComponentBuilder;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.menu.MenuBuilder;
-import org.cyk.utility.object.Objects;
+import org.cyk.utility.__kernel__.object.Objects;
 
 public interface TreeBuilder extends VisibleComponentBuilder<Tree> {
 

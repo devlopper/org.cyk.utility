@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import org.cyk.utility.client.controller.component.theme.Theme;
 import org.cyk.utility.client.controller.session.SessionAttributeEnumeration;
-import org.cyk.utility.collection.CollectionHelperImpl;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.css.CascadeStyleSheetHelperImpl;
 import org.cyk.utility.css.Style;
 import org.cyk.utility.device.DeviceScreenArea;
@@ -23,11 +23,11 @@ public abstract class AbstractVisibleComponentBuilderImpl<COMPONENT extends Visi
 		//Style
 		Style style = getStyle();		
 		ComponentRoles roles = component.getRoles();
-		if(CollectionHelperImpl.__isNotEmpty__(roles)) {
+		if(CollectionHelper.isNotEmpty(roles)) {
 			if(style == null)
 				style = __inject__(Style.class);
 			Collection<String> styleClasses = CascadeStyleSheetHelperImpl.__getStyleClassesFromRoles__(roles.get());
-			if(CollectionHelperImpl.__isNotEmpty__(styleClasses))
+			if(CollectionHelper.isNotEmpty(styleClasses))
 				style.getClasses(Boolean.TRUE).add(styleClasses);
 		}		
 		if(style!=null) {

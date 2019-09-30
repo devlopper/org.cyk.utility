@@ -5,8 +5,8 @@ import java.io.Serializable;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentImpl;
 import org.cyk.utility.client.controller.component.command.Commandable;
 import org.cyk.utility.client.controller.component.menu.Menu;
-import org.cyk.utility.object.Objects;
-import org.cyk.utility.throwable.ThrowableHelper;
+import org.cyk.utility.__kernel__.object.Objects;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 
 public abstract class AbstractTreeImpl extends AbstractVisibleComponentImpl implements Tree,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -103,13 +103,13 @@ public abstract class AbstractTreeImpl extends AbstractVisibleComponentImpl impl
 	
 	@Override
 	public Tree addData(Object data) {
-		__inject__(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented();
+		ThrowableHelper.throwNotYetImplemented();
 		return null;
 	}
 	
 	@Override
 	public Tree removeData(Object data) {
-		__inject__(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented();
+		ThrowableHelper.throwNotYetImplemented();
 		return null;
 	}
 	
@@ -120,13 +120,13 @@ public abstract class AbstractTreeImpl extends AbstractVisibleComponentImpl impl
 	
 	@Override
 	public <T> T getSelectedNodeAs(Class<T> aClass) {
-		__inject__(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented();
+		ThrowableHelper.throwNotYetImplemented();
 		return null;
 	}
 
 	@Override
 	public Object getSelectedNodeDataValue() {
-		__inject__(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented();
+		ThrowableHelper.throwNotYetImplemented();
 		return null;
 	}
 	

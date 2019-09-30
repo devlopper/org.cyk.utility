@@ -3,7 +3,7 @@ package org.cyk.utility.client.controller.component.input.choice;
 import java.util.Collection;
 
 import org.cyk.utility.client.controller.component.input.InputBuilder;
-import org.cyk.utility.object.Objects;
+import org.cyk.utility.__kernel__.object.Objects;
 
 public interface InputChoiceBuilder<INPUT extends InputChoice<CHOICE>,CHOICE> extends InputBuilder<INPUT,CHOICE> {
 

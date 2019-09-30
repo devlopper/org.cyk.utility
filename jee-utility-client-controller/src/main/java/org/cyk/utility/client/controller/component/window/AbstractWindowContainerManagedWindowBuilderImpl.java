@@ -3,7 +3,25 @@ package org.cyk.utility.client.controller.component.window;
 import java.io.Serializable;
 import java.util.Locale;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.identifier.resource.ParameterName;
+import org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierHelper;
+import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
+import org.cyk.utility.__kernel__.internationalization.InternationalizationKeyStringType;
+import org.cyk.utility.__kernel__.internationalization.InternationalizationPhrase;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.string.Case;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemActionAdd;
+import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
+import org.cyk.utility.__kernel__.system.action.SystemActionDelete;
+import org.cyk.utility.__kernel__.system.action.SystemActionProcess;
+import org.cyk.utility.__kernel__.system.action.SystemActionRead;
+import org.cyk.utility.__kernel__.system.action.SystemActionRedirect;
+import org.cyk.utility.__kernel__.system.action.SystemActionUpdate;
+import org.cyk.utility.__kernel__.system.action.SystemActionView;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.client.controller.Controller;
 import org.cyk.utility.client.controller.component.menu.MenuBuilderMap;
 import org.cyk.utility.client.controller.component.menu.MenuBuilderMapGetter;
@@ -13,20 +31,6 @@ import org.cyk.utility.client.controller.data.Row;
 import org.cyk.utility.client.controller.session.SessionAttributeEnumeration;
 import org.cyk.utility.client.controller.session.SessionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.internationalization.InternationalizationHelperImpl;
-import org.cyk.utility.internationalization.InternationalizationKeyStringType;
-import org.cyk.utility.internationalization.InternationalizationPhrase;
-import org.cyk.utility.request.RequestParameterValueMapper;
-import org.cyk.utility.string.Case;
-import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.action.SystemActionAdd;
-import org.cyk.utility.system.action.SystemActionCreate;
-import org.cyk.utility.system.action.SystemActionDelete;
-import org.cyk.utility.system.action.SystemActionProcess;
-import org.cyk.utility.system.action.SystemActionRead;
-import org.cyk.utility.system.action.SystemActionRedirect;
-import org.cyk.utility.system.action.SystemActionUpdate;
-import org.cyk.utility.system.action.SystemActionView;
 
 public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<WindowBuilder> implements WindowContainerManagedWindowBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -44,7 +48,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 	//TODO improve build logic to reduce build time
 	@Override
 	protected WindowBuilder __execute__() throws Exception {
-		Object request = __injectValueHelper__().returnOrThrowIfBlank("request for "+getClass(), getRequest());
+		Object request = ValueHelper.returnOrThrowIfBlank("request for "+getClass(), getRequest());
 		Object context = getContext();
 		WindowBuilder window = getWindow();
 		if(window == null)
@@ -53,7 +57,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		
 		WindowRenderType windowRenderType = getWindowRenderType();
 		if(windowRenderType == null) {
-			Class<?> windowRenderTypeClass = __inject__(RequestParameterValueMapper.class).setParameterNameAsWindowRenderTypeClass().execute().getOutputAs(Class.class);
+			Class<?> windowRenderTypeClass = (Class<?>) UniformResourceIdentifierHelper.mapParameterValue(ParameterName.WINDOW_RENDER_TYPE_CLASS.getValue(), null);
 			if(windowRenderTypeClass!=null)
 				windowRenderType = (WindowRenderType) __inject__(windowRenderTypeClass);
 		}
@@ -83,7 +87,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		if(systemAction == null) {
 			
 		}else {
-			if(window.getTitle()==null || __injectStringHelper__().isBlank(window.getTitle().getValue())) {
+			if(window.getTitle()==null || StringHelper.isBlank(window.getTitle().getValue())) {
 				/*InternalizationPhraseBuilder windowTitleInternalizationPhraseBuilder = __getWindowTitleInternalizationPhraseBuilder__(systemAction);
 				if(windowTitleInternalizationPhraseBuilder == null) {
 					windowTitleInternalizationPhraseBuilder = __inject__(InternalizationPhraseBuilder.class)
@@ -95,7 +99,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 				*/
 				InternationalizationPhrase phrase = __getWindowTitleInternationalizationPhrase__(systemAction);
 				if(phrase != null) {
-					InternationalizationHelperImpl.__processPhrases__(phrase);
+					InternationalizationHelper.processPhrases(phrase);
 					window.setTitleValue(phrase.getValue());
 				}
 			}
@@ -144,7 +148,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		Object entity = null;
 		if(systemAction instanceof SystemActionRead || systemAction instanceof SystemActionUpdate || systemAction instanceof SystemActionDelete 
 				|| systemAction instanceof SystemActionProcess || systemAction instanceof SystemActionView) {
-			Object identifier = __injectCollectionHelper__().getFirst(systemAction.getEntitiesIdentifiers());
+			Object identifier = CollectionHelper.getFirst(systemAction.getEntitiesIdentifiers());
 			if(identifier == null) {
 				
 			}else {
@@ -338,18 +342,18 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 	/**/
 	
 	protected static String __buildInternationalizationString__(Object key,InternationalizationKeyStringType keyType,Object[] arguments,Locale locale,Case kase) {
-		return InternationalizationHelperImpl.__buildString__(InternationalizationHelperImpl.__buildKey__(key, keyType),arguments,locale,kase);
+		return InternationalizationHelper.buildString(InternationalizationHelper.buildKey(key, keyType),arguments,locale,kase);
 	}
 	
 	protected static String __buildInternationalizationString__(Object key,InternationalizationKeyStringType keyType,Case kase) {
-		return InternationalizationHelperImpl.__buildString__(InternationalizationHelperImpl.__buildKey__(key, keyType),null,null,kase);
+		return InternationalizationHelper.buildString(InternationalizationHelper.buildKey(key, keyType),null,null,kase);
 	}
 	
 	protected static String __buildInternationalizationString__(Object key,Case kase) {
-		return InternationalizationHelperImpl.__buildString__(InternationalizationHelperImpl.__buildKey__(key, null),null,null,kase);
+		return InternationalizationHelper.buildString(InternationalizationHelper.buildKey(key, null),null,null,kase);
 	}
 	
 	protected static String __buildInternationalizationString__(Object key) {
-		return InternationalizationHelperImpl.__buildString__(InternationalizationHelperImpl.__buildKey__(key, null),null,null,null);
+		return InternationalizationHelper.buildString(InternationalizationHelper.buildKey(key, null),null,null,null);
 	}
 }

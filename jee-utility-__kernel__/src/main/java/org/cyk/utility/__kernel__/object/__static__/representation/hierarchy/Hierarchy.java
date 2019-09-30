@@ -15,11 +15,11 @@ public interface Hierarchy<IDENTIFIER,IDENTIFIED> extends org.cyk.utility.__kern
 	}
 	
 	@SuppressWarnings("unchecked")
-	default IDENTIFIED getChildren() {
+	default IDENTIFIED getChild() {
 		return (IDENTIFIED) FieldHelper.read(this, PROPERTY_CHILD);
 	}
 	
-	default Hierarchy<IDENTIFIER,IDENTIFIED> setChildren(IDENTIFIED child) {
+	default Hierarchy<IDENTIFIER,IDENTIFIED> setChild(IDENTIFIED child) {
 		FieldHelper.write(this, PROPERTY_CHILD, child);
 		return this;
 	}

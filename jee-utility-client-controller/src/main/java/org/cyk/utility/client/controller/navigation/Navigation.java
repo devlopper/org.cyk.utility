@@ -3,8 +3,8 @@ package org.cyk.utility.client.controller.navigation;
 import java.net.URL;
 
 import org.cyk.utility.client.controller.Objectable;
-import org.cyk.utility.string.Strings;
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.string.Strings;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 
 public interface Navigation extends Objectable {
 

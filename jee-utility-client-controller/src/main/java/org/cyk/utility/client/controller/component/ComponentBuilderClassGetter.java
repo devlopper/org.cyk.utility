@@ -6,7 +6,7 @@ import java.lang.reflect.Method;
 
 import org.cyk.utility.annotation.Annotations;
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
-import org.cyk.utility.string.Strings;
+import org.cyk.utility.__kernel__.string.Strings;
 
 @SuppressWarnings("rawtypes") @Deprecated
 public interface ComponentBuilderClassGetter extends FunctionWithPropertiesAsInput<Class> {

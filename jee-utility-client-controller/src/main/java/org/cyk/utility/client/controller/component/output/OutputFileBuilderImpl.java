@@ -4,12 +4,11 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.component.file.FileBuilder;
 import org.cyk.utility.client.controller.component.file.FileImageBuilder;
 import org.cyk.utility.client.controller.component.link.LinkBuilder;
-import org.cyk.utility.identifier.resource.UniformResourceIdentifierStringBuilder;
 import org.cyk.utility.repository.RepositoryType;
-import org.cyk.utility.resource.locator.UniformResourceLocatorStringBuilder;
 
 public class OutputFileBuilderImpl extends AbstractOutputBuilderImpl<OutputFile,org.cyk.utility.file.File> implements OutputFileBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -60,12 +59,14 @@ public class OutputFileBuilderImpl extends AbstractOutputBuilderImpl<OutputFile,
 			//Link
 			LinkBuilder link = getLink();
 			if(link == null /*&& Boolean.TRUE.equals(__getIsFieldNameDerivable__(PROPERTY_LINK))*/) {			
-				if(__injectStringHelper__().isNotBlank(__file__.getUniformResourceLocator())) {
+				if(StringHelper.isNotBlank(__file__.getUniformResourceLocator())) {
 					link = __inject__(LinkBuilder.class);
 					//link.setTextCharacters(__file__.getName());
 					link.setTextCharacters("cliquer ici pour voir le fichier.");
+					/*
 					link.setUniformResourceLocator(__inject__(UniformResourceLocatorStringBuilder.class)
 							.setUniformResourceIdentifierString(__inject__(UniformResourceIdentifierStringBuilder.class).setString(__file__.getUniformResourceLocator())));	
+					*/
 				}
 			}
 			
@@ -82,7 +83,7 @@ public class OutputFileBuilderImpl extends AbstractOutputBuilderImpl<OutputFile,
 			//Thumbnail
 			FileImageBuilder thumbnail = getThumbnail();
 			if(thumbnail == null) {
-				if(__injectStringHelper__().isNotBlank(__file__.getUniformResourceLocator())) {
+				if(StringHelper.isNotBlank(__file__.getUniformResourceLocator())) {
 					//Thumbnail will be an icon based on mime type
 					thumbnail = __inject__(FileImageBuilder.class);
 					thumbnail.getFile(Boolean.TRUE).getValue(Boolean.TRUE).setPath("image/icon");

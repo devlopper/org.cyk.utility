@@ -5,9 +5,10 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.clazz.Classes;
-import org.cyk.utility.__kernel__.value.ValueHelper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -39,9 +40,9 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	@Override
 	public <ENTITY> Collection<ENTITY> readByIdentifiers(Class<ENTITY> aClass, Collection<Object> identifiers,ValueUsageType valueUsageType, Properties properties) {
 		if(aClass == null)
-			__injectThrowableHelper__().throwRuntimeException("class is required");
+			throw new RuntimeException("class is required");
 		if(Boolean.TRUE.equals(CollectionHelper.isEmpty(identifiers)))
-			__injectThrowableHelper__().throwRuntimeException("identifiers are required");
+			throw new RuntimeException("identifiers are required");
 		PersistenceEntity<ENTITY> persistence = __injectPersistenceLayer__().injectInterfaceClassFromEntityClass(aClass);
 		Collection<ENTITY> entities;
 		if(persistence == null){
@@ -69,9 +70,9 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	@Override
 	public <ENTITY> ENTITY readByIdentifier(Class<ENTITY> aClass, Object identifier,Properties properties) {
 		if(aClass == null)
-			__injectThrowableHelper__().throwRuntimeException("class is required");
+			throw new RuntimeException("class is required");
 		if(identifier == null)
-			__injectThrowableHelper__().throwRuntimeException("identifier is required");
+			throw new RuntimeException("identifier is required");
 		ValueUsageType valueUsageType = properties == null ? ValueUsageType.SYSTEM : (ValueUsageType) ValueHelper.defaultToIfNull(properties.getValueUsageType(),ValueUsageType.SYSTEM);
 		PersistenceEntity<ENTITY> persistence = __injectPersistenceLayer__().injectInterfaceClassFromEntityClass(aClass);
 		ENTITY entity;
@@ -119,7 +120,7 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 		PersistenceEntity<ENTITY> persistence = __injectPersistenceLayer__().injectInterfaceClassFromEntityClass(aClass);
 		Collection<Object> identifiers = null;
 		if(persistence == null){
-			__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
+			ThrowableHelper.throwNotYetImplemented();
 		}else{
 			identifiers =  persistence.readIdentifiers(valueUsageType,properties);
 		}
@@ -137,7 +138,7 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 		PersistenceEntity<ENTITY> persistence = __injectPersistenceLayer__().injectInterfaceClassFromEntityClass(aClass);
 		Long count = null;
 		if(persistence == null){
-			__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
+			ThrowableHelper.throwNotYetImplemented();
 		}else{
 			count =  persistence.count(properties);
 		}
@@ -195,7 +196,7 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	public <ENTITY> Persistence deleteByIdentifiers(Class<ENTITY> aClass, Collection<Object> identifiers,ValueUsageType valueUsageType, Properties properties) {
 		PersistenceEntity<ENTITY> persistence = __injectPersistenceLayer__().injectInterfaceClassFromEntityClass(aClass);
 		if(persistence == null){
-			__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
+			ThrowableHelper.throwNotYetImplemented();
 		}else{
 			persistence.deleteByIdentifiers(identifiers, valueUsageType, properties);
 		}
@@ -233,7 +234,7 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	public <ENTITY> Persistence deleteByEntityClass(Class<ENTITY> aClass, Properties properties) {
 		PersistenceEntity<ENTITY> persistence = __injectPersistenceLayer__().injectInterfaceClassFromEntityClass(aClass);
 		if(persistence == null){
-			__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
+			ThrowableHelper.throwNotYetImplemented();
 		}else{
 			persistence.deleteAll();
 		}

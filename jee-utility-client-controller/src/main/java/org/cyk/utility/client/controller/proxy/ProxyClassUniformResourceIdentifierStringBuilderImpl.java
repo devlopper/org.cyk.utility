@@ -4,9 +4,10 @@ import java.io.Serializable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
+import org.cyk.utility.__kernel__.identifier.resource.RequestProperty;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierStringBuilder;
 import org.cyk.utility.request.RequestGetter;
-import org.cyk.utility.request.RequestProperty;
 import org.cyk.utility.request.RequestPropertyValueGetter;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
 
@@ -25,8 +26,8 @@ public class ProxyClassUniformResourceIdentifierStringBuilderImpl extends Abstra
 			if(request == null)
 				request = __inject__(RequestGetter.class).execute().getOutput();
 			String context = (String) __inject__(RequestPropertyValueGetter.class).setRequest(request).setProperty(RequestProperty.CONTEXT).execute().getOutput();
-			context = __injectStringHelper__().addToBeginIfDoesNotStartWith(context, ConstantCharacter.SLASH.toString());
-			context = __injectStringHelper__().addToEndIfDoesNotEndWith(context, ConstantCharacter.SLASH.toString());
+			context = StringHelper.addToBeginIfDoesNotStartWith(context, ConstantCharacter.SLASH.toString());
+			context = StringHelper.addToEndIfDoesNotEndWith(context, ConstantCharacter.SLASH.toString());
 			
 			if(StringUtils.endsWith(context, CLIENT))
 				context = StringUtils.replace(context, CLIENT, SERVER);

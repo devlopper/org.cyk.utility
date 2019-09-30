@@ -3,6 +3,8 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.component;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.component.tree.TreeNode;
 import org.cyk.utility.client.controller.component.tree.TreeNodeBuilder;
 import org.cyk.utility.client.controller.web.ValueExpressionMap;
@@ -23,7 +25,7 @@ public class OrganigramNodeBuilderImpl extends AbstractComponentBuilderImpl<Orga
 		Object data = model.getData();
 		node.setData(data);
 		String family = model.getFamily();
-		if(__injectStringHelper__().isNotBlank(family))
+		if(StringHelper.isNotBlank(family))
 			node.setType(family);
 		node.setCollapsible(Boolean.TRUE.equals(model.getIsCollapsible()));
 		node.setDraggable(Boolean.TRUE.equals(model.getIsDraggable()));
@@ -31,7 +33,7 @@ public class OrganigramNodeBuilderImpl extends AbstractComponentBuilderImpl<Orga
 		node.setSelectable(Boolean.TRUE.equals(model.getIsSelectable()));
 		node.setExpanded(Boolean.TRUE.equals(model.getIsExpanded()));
 		Collection<Object> children = model.getChildren();
-		if(__injectCollectionHelper__().isNotEmpty(children)) {
+		if(CollectionHelper.isNotEmpty(children)) {
 			for(Object index : children) {
 				TreeNode indexTreeNode = null;
 				if(index instanceof TreeNode)

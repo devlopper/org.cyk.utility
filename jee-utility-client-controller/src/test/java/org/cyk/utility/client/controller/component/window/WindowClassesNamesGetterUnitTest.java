@@ -2,8 +2,8 @@ package org.cyk.utility.client.controller.component.window;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.cyk.utility.system.action.SystemActionCreate;
-import org.cyk.utility.system.action.SystemActionCreateImpl;
+import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
+import org.cyk.utility.__kernel__.system.action.SystemActionCreateImpl;
 import org.cyk.utility.system.action.SystemActionRelatedClassesNamesGetter;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.Test;

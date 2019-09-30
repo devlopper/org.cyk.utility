@@ -8,12 +8,12 @@ import javax.ws.rs.core.Response;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.clazz.ClassHelper;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.client.controller.Controller;
 import org.cyk.utility.client.controller.component.grid.Grid;
 import org.cyk.utility.client.controller.component.grid.GridBuilder;
 import org.cyk.utility.client.controller.data.Data;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.server.representation.ResponseHelper;
 import org.primefaces.model.SortOrder;
 
@@ -43,8 +43,8 @@ public class LazyDataModel<DATA> extends org.primefaces.model.LazyDataModel<DATA
 			grid.getObjects(Boolean.TRUE).removeAll();
 			builder = (GridBuilder) grid.getBuilder();
 			if(dataClass == null)
-				dataClass = (Class<DATA>) DependencyInjection.inject(ClassHelper.class).getByName(builder.getRowDataClass().getName());
-			//Class<Object> klass = (Class<Object>) DependencyInjection.inject(ClassHelper.class).getByName(builder.getRowDataClass().getName());	
+				dataClass = (Class<DATA>) ClassHelper.getByName(builder.getRowDataClass().getName());
+			//Class<Object> klass = (Class<Object>) ClassHelper.getByName(builder.getRowDataClass().getName());	
 		}
 		
 		Properties properties = new Properties();
@@ -62,21 +62,21 @@ public class LazyDataModel<DATA> extends org.primefaces.model.LazyDataModel<DATA
 			if(response == null) {
 				
 			}else {
-				if(Boolean.TRUE.equals(DependencyInjection.inject(ResponseHelper.class).isFamilyClientError(response))) {
+				if(Boolean.TRUE.equals(ResponseHelper.isFamilyClientError(response))) {
 					;//getProperties().setThrowable(__inject__(ServiceNotFoundException.class).setSystemAction((SystemAction) properties.getAction()).setResponse(response));
 				}else {
 					if(grid != null) {
-						if(DependencyInjection.inject(CollectionHelper.class).isNotEmpty(objects)) {
+						if(CollectionHelper.isNotEmpty(objects)) {
 							for(Object index : objects) {
 								Object row = DependencyInjection.inject(org.cyk.utility.client.controller.data.RowBuilder.class).setGrid(builder)
-										.setDataClass((Class<? extends Data>) DependencyInjection.inject(ClassHelper.class).getByName(dataClass.getName()))
+										.setDataClass((Class<? extends Data>) ClassHelper.getByName(dataClass.getName()))
 										.setData((Data) index).setOrderNumberOffset(first)
 										.execute().getOutput();			
 								grid.getObjects(Boolean.TRUE).add(row);						
 							}
 						}	
 					}					
-					__count__ = DependencyInjection.inject(ResponseHelper.class).getHeaderXTotalCount(response);					
+					__count__ = ResponseHelper.getHeaderXTotalCount(response);					
 					if(__count__ == null)
 						__count__ = controller.count(dataClass, properties);	
 				}	

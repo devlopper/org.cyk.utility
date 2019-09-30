@@ -3,7 +3,7 @@ package org.cyk.utility.client.controller;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 public interface ControllerEntity<ENTITY> extends ControllerServiceProvider<ENTITY> {
 

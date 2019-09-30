@@ -12,6 +12,7 @@ import org.cyk.utility.service.AbstractServiceProviderImpl;
 import org.cyk.utility.service.ServiceProvider;
 import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 
 public abstract class AbstractSystemServiceProviderImpl extends AbstractServiceProviderImpl implements SystemServiceProvider, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -29,7 +30,7 @@ public abstract class AbstractSystemServiceProviderImpl extends AbstractServiceP
 				if(Boolean.TRUE.equals(isPersisted(object))){
 					__validateOne__(object,null);
 				}else{
-					__injectThrowableHelper__().throwRuntimeException("object must be persisted");
+					throw new RuntimeException("object must be persisted");
 				}
 			}else {
 				__validateOne__(object, action);
@@ -39,7 +40,7 @@ public abstract class AbstractSystemServiceProviderImpl extends AbstractServiceP
 	}
 	
 	protected void __validateOne__(Object object, SystemAction action){
-		__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
+		ThrowableHelper.throwNotYetImplemented();
 	}
 	
 	@Override

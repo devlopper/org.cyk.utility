@@ -6,11 +6,13 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.client.controller.data.DataIdentifiedByStringAndCoded;
 import org.cyk.utility.client.controller.data.DataIdentifiedByStringAndCodedAndNamed;
 import org.cyk.utility.random.RandomHelper;
-import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractControllerEntityPersistedInCollectionImpl<ENTITY> extends AbstractControllerEntityImpl<ENTITY> implements ControllerEntityPersistedInCollection<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -41,14 +43,14 @@ public abstract class AbstractControllerEntityPersistedInCollectionImpl<ENTITY> 
 	
 	protected ENTITY __instanciateOneRandomly__(Integer index) {
 		ENTITY entity = __inject__(__entityClass__);
-		__injectFieldHelper__().setFieldValueSystemIdentifier(entity, index);
-		__injectFieldHelper__().setFieldValueBusinessIdentifier(entity, __inject__(RandomHelper.class).getAlphanumeric(4));
+		FieldHelper.writeSystemIdentifier(entity, index);
+		FieldHelper.writeBusinessIdentifier(entity, RandomHelper.getAlphanumeric(4));
 		return entity;
 	}
 	
 	@Override
 	public ControllerServiceProvider<ENTITY> create(ENTITY entity, Properties properties) {
-		__injectFieldHelper__().setFieldValueSystemIdentifier(entity, __inject__(RandomHelper.class).getNumeric(4).toString());
+		FieldHelper.writeSystemIdentifier(entity, RandomHelper.getNumeric(4).toString());
 		collection.add(entity);
 		return this;
 	}
@@ -62,10 +64,10 @@ public abstract class AbstractControllerEntityPersistedInCollectionImpl<ENTITY> 
 	public ENTITY readByIdentifier(Object identifier, ValueUsageType valueUsageType, Properties properties) {
 		for(ENTITY index : collection) {
 			if(ValueUsageType.BUSINESS.equals(valueUsageType)) {
-				if(__injectFieldHelper__().getFieldValueBusinessIdentifier(index).toString().equals(identifier.toString()))
+				if(FieldHelper.readBusinessIdentifier(index).toString().equals(identifier.toString()))
 					return index;
 			}else {
-				if(__injectFieldHelper__().getFieldValueSystemIdentifier(index).toString().equals(identifier.toString()))
+				if(FieldHelper.readSystemIdentifier(index).toString().equals(identifier.toString()))
 					return index;
 			}
 		}
@@ -86,17 +88,17 @@ public abstract class AbstractControllerEntityPersistedInCollectionImpl<ENTITY> 
 	
 	@Override
 	public Long count(Properties properties) {
-		Integer count = __injectCollectionHelper__().getSize(__filter__(collection, properties,Boolean.TRUE));
-		return count == null ? null : new Long(count);
+		Integer count = CollectionHelper.getSize(__filter__(collection, properties,Boolean.TRUE));
+		return count == null ? null : Long.valueOf(count);
 	}
 	
 	protected Collection<ENTITY> __filter__(Collection<ENTITY> entities,Properties properties,Boolean counting) {
 		Collection<ENTITY> result = null;
 		Integer from = counting ? null : (Integer) Properties.getFromPath(properties,Properties.FROM);
 		Integer count = counting ? null :(Integer) Properties.getFromPath(properties,Properties.COUNT);
-		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(entities))) {
+		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(entities))) {
 			result = new ArrayList<ENTITY>();
-			String query = __injectCollectionHelper__().getFirst((List<String>) Properties.getFromPath(properties,Properties.FILTERS));
+			String query = CollectionHelper.getFirst((List<String>) Properties.getFromPath(properties,Properties.FILTERS));
 			for(ENTITY index : entities) {
 				if( StringUtils.isEmpty(query)
 						|| (index instanceof DataIdentifiedByStringAndCoded && StringUtils.contains(((DataIdentifiedByStringAndCoded)index).getCode(), query))

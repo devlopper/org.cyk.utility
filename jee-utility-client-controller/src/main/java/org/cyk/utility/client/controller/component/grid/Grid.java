@@ -8,7 +8,7 @@ import org.cyk.utility.client.controller.component.grid.row.Row;
 import org.cyk.utility.client.controller.component.grid.row.Rows;
 import org.cyk.utility.client.controller.component.view.View;
 import org.cyk.utility.client.controller.component.view.ViewMap;
-import org.cyk.utility.object.Objects;
+import org.cyk.utility.__kernel__.object.Objects;
 
 public interface Grid extends VisibleComponent {
 

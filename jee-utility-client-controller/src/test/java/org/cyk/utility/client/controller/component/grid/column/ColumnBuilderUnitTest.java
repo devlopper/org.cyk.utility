@@ -2,7 +2,7 @@ package org.cyk.utility.client.controller.component.grid.column;
 
 import org.cyk.utility.client.controller.component.output.OutputStringText;
 import org.cyk.utility.client.controller.component.view.ViewMap;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.Test;
 
@@ -19,7 +19,7 @@ public class ColumnBuilderUnitTest extends AbstractWeldUnitTest {
 		builder.addFieldNameStrings("person");
 		Column column = builder.execute().getOutput();
 		assertionHelper.assertNotNull(column);
-		assertionHelper.assertEquals(1, __inject__(CollectionHelper.class).getSize(column.getView(ViewMap.HEADER).getComponents()));
+		assertionHelper.assertEquals(1, CollectionHelper.getSize(column.getView(ViewMap.HEADER).getComponents()));
 		OutputStringText title = (OutputStringText) column.getView(ViewMap.HEADER).getComponents().getAt(0);
 		assertionHelper.assertNotNull(title);
 		assertionHelper.assertEquals("Personne",title.getValue());
@@ -31,7 +31,7 @@ public class ColumnBuilderUnitTest extends AbstractWeldUnitTest {
 		builder.addFieldNameStrings("person","code");
 		Column column = builder.execute().getOutput();
 		assertionHelper.assertNotNull(column);
-		assertionHelper.assertEquals(1, __inject__(CollectionHelper.class).getSize(column.getView(ViewMap.HEADER).getComponents()));
+		assertionHelper.assertEquals(1, CollectionHelper.getSize(column.getView(ViewMap.HEADER).getComponents()));
 		OutputStringText title = (OutputStringText) column.getView(ViewMap.HEADER).getComponents().getAt(0);
 		assertionHelper.assertNotNull(title);
 		assertionHelper.assertEquals("Code",title.getValue());

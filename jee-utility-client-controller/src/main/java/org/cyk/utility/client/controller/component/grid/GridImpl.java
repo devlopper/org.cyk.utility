@@ -11,8 +11,8 @@ import org.cyk.utility.client.controller.component.grid.row.Row;
 import org.cyk.utility.client.controller.component.grid.row.Rows;
 import org.cyk.utility.client.controller.component.view.View;
 import org.cyk.utility.client.controller.component.view.ViewMap;
-import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.object.Objects;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.object.Objects;
 
 public class GridImpl extends AbstractVisibleComponentImpl implements Grid,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -62,11 +62,11 @@ public class GridImpl extends AbstractVisibleComponentImpl implements Grid,Seria
 		Cell cell = null;
 		if(column!=null && row!=null) {
 			Rows rows = getRows();
-			if(__inject__(CollectionHelper.class).isNotEmpty(rows))
+			if(CollectionHelper.isNotEmpty(rows))
 				for(Row indexRow : rows.get())
 					if(indexRow == row) {
 						Cells cells = row.getCells();
-						if(__inject__(CollectionHelper.class).isNotEmpty(cells))
+						if(CollectionHelper.isNotEmpty(cells))
 							cell = cells.getAt(column.getOrderNumber());
 						break;
 					}	

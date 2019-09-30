@@ -2,11 +2,12 @@ package org.cyk.utility.client.controller.component.tree;
 
 import java.io.Serializable;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.object.Objects;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.menu.MenuBuilder;
 import org.cyk.utility.client.controller.component.menu.MenuRenderTypeColumnContext;
-import org.cyk.utility.object.Objects;
 
 public class TreeBuilderImpl extends AbstractVisibleComponentBuilderImpl<Tree> implements TreeBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -35,7 +36,7 @@ public class TreeBuilderImpl extends AbstractVisibleComponentBuilderImpl<Tree> i
 		}
 		
 		Objects defaultNodeFamilies = getDefaultNodeFamilies();
-		if(__injectCollectionHelper__().isNotEmpty(defaultNodeFamilies)) {
+		if(CollectionHelper.isNotEmpty(defaultNodeFamilies)) {
 			tree.getNodeFamilies(Boolean.TRUE).add(defaultNodeFamilies);
 		}
 		

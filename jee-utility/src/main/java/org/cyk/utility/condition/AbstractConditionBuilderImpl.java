@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.throwable.ThrowableHelper;
 
 @Deprecated
 public abstract class AbstractConditionBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Condition> implements ConditionBuilder,Serializable {
@@ -15,7 +14,7 @@ public abstract class AbstractConditionBuilderImpl extends AbstractFunctionWithP
 		Condition condition = new Condition();
 		condition.setValue(__computeConditionValue__(condition));
 		if(condition.getValue() == null)
-			__inject__(ThrowableHelper.class).throwRuntimeException("condition value is required");
+			throw new RuntimeException("condition value is required");
 		condition.setMessage(__computeConditionMessage__(condition));
 		condition.setIdentifier(__computeConditionIdentifier__(condition));
 		return condition;

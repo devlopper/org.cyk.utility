@@ -3,13 +3,13 @@ package org.cyk.utility.client.controller.component.layout;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.runnable.RunnableHelper;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
 import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.client.controller.component.ComponentRoles;
-import org.cyk.utility.collection.CollectionHelperImpl;
 import org.cyk.utility.css.CascadeStyleSheetHelper;
 import org.cyk.utility.function.FunctionHelperImpl;
-import org.cyk.utility.runnable.RunnableHelperImpl;
 
 public class LayoutBuilderImpl extends AbstractVisibleComponentBuilderImpl<Layout> implements LayoutBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -27,7 +27,7 @@ public class LayoutBuilderImpl extends AbstractVisibleComponentBuilderImpl<Layou
 		layout.setType(type);
 		if(items==null) {
 			if(layout.getType() instanceof LayoutTypeGrid) {
-				if(CollectionHelperImpl.__isEmpty__(roles))
+				if(CollectionHelper.isEmpty(roles))
 					layout.getRoles(Boolean.TRUE).add(ComponentRole.GRID);
 				LayoutTypeGrid table = (LayoutTypeGrid) layout.getType();
 				items = __inject__(LayoutItemBuilders.class);
@@ -45,7 +45,7 @@ public class LayoutBuilderImpl extends AbstractVisibleComponentBuilderImpl<Layou
 				Integer columnWidth = width / table.getColumnCount();
 				Integer remainder = width % table.getColumnCount();
 				for(Integer index = 0 ; index < table.getRowCount() ; index++) {
-					Collection<ComponentRole> rowRoles = CollectionHelperImpl.__instanciate__(ComponentRole.ROW,index % 2 == 0 ? ComponentRole.EVEN : ComponentRole.ODD);
+					Collection<ComponentRole> rowRoles = CollectionHelper.listOf(ComponentRole.ROW,index % 2 == 0 ? ComponentRole.EVEN : ComponentRole.ODD);
 					
 					if(Boolean.TRUE.equals(table.getIsHasOrderNumberColumn())) {
 						items.add(__inject__(LayoutItemBuilder.class).setAreaWidthProportionsNotPhone(orderNumberColumnWidth).addRoles(rowRoles));
@@ -65,8 +65,8 @@ public class LayoutBuilderImpl extends AbstractVisibleComponentBuilderImpl<Layou
 			}
 		}
 				
-		if(CollectionHelperImpl.__isNotEmpty__(items)) {
-			RunnableHelperImpl.__run__(FunctionHelperImpl.__getRunnables__(items.get()), "layout items builders");
+		if(CollectionHelper.isNotEmpty(items)) {
+			RunnableHelper.run(FunctionHelperImpl.__getRunnables__(items.get()), "layout items builders");
 			for(LayoutItemBuilder index : items.get()) {
 				LayoutItem layoutItem = index.getComponent();
 				if(layoutItem!=null)
@@ -95,14 +95,14 @@ public class LayoutBuilderImpl extends AbstractVisibleComponentBuilderImpl<Layou
 
 	@Override
 	public LayoutBuilder addItems(Collection<LayoutItemBuilder> items) {
-		if(CollectionHelperImpl.__isNotEmpty__(items))
+		if(CollectionHelper.isNotEmpty(items))
 			getItems(Boolean.TRUE).add(items);
 		return this;
 	}
 	
 	@Override
 	public LayoutBuilder addItems(LayoutItemBuilder... items) {
-		return addItems(CollectionHelperImpl.__instanciate__(items));
+		return addItems(CollectionHelper.listOf(items));
 	}
 
 	@Override

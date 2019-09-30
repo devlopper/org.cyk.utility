@@ -5,7 +5,7 @@ import java.util.Collection;
 import org.cyk.utility.client.controller.data.Row;
 import org.cyk.utility.client.controller.data.RowListener;
 import org.cyk.utility.client.controller.data.RowListeners;
-import org.cyk.utility.collection.CollectionInstance;
+import org.cyk.utility.__kernel__.collection.CollectionInstance;
 
 public interface RowBuilders extends CollectionInstance<RowBuilder> {
 

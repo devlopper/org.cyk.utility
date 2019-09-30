@@ -8,7 +8,7 @@ import org.cyk.utility.client.controller.data.Row;
 import org.cyk.utility.client.controller.message.MessageRender;
 import org.cyk.utility.client.controller.message.MessageRenderTypeInline;
 import org.cyk.utility.client.controller.message.MessagesBuilder;
-import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 
 public class WindowContainerManagedWindowBuilderThrowableImpl extends AbstractWindowContainerManagedWindowBuilderImpl implements WindowContainerManagedWindowBuilderThrowable,Serializable {
 	private static final long serialVersionUID = 1L;

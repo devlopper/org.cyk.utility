@@ -13,7 +13,7 @@ import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerController;
 import org.cyk.utility.test.arquillian.AbstractSystemClientArquillianIntegrationTestImpl;
 import org.cyk.utility.test.arquillian.SystemClientIntegrationTest;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 @SuppressWarnings({"rawtypes"})
 public abstract class AbstractControllerArquillianIntegrationTest extends AbstractSystemClientArquillianIntegrationTestImpl<ControllerEntity> implements SystemClientIntegrationTest<ControllerEntity>, Serializable {

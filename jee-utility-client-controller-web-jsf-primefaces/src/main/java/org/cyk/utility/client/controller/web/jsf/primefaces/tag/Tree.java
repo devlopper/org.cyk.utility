@@ -8,14 +8,14 @@ import java.util.Collections;
 import java.util.List;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.client.controller.Controller;
 import org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString;
 import org.cyk.utility.client.controller.web.jsf.primefaces.PrimefacesHelper;
-import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.server.persistence.query.filter.FilterDto;
-import org.cyk.utility.value.ValueUsageType;
 import org.primefaces.event.NodeExpandEvent;
 
 import lombok.Getter;
@@ -88,7 +88,7 @@ public class Tree extends AbstractObject implements Serializable {
 			nodesNotHavingParent = __inject__(Controller.class).read(nodeClass,new Properties().setFilters(new FilterDto().addField(DataIdentifiedByString.PROPERTY_PARENTS, null))
 				.setIsPageable(Boolean.FALSE).setFields(fields));
 		
-		if(__inject__(CollectionHelper.class).isNotEmpty(nodesNotHavingParent))
+		if(CollectionHelper.isNotEmpty(nodesNotHavingParent))
 			for(Object index : nodesNotHavingParent)
 				new TreeNode(type, index, root);
 		
@@ -99,7 +99,7 @@ public class Tree extends AbstractObject implements Serializable {
 			
 			if(TreeSelectionMode.REMOVE_ADD.equals(selectionMode)) {
 				selection = new TreeNode();
-				if(__inject__(CollectionHelper.class).isNotEmpty(initialSelectedNodes)) {
+				if(CollectionHelper.isNotEmpty(initialSelectedNodes)) {
 					//Expand nodes
 					Collection<Object> expandables = new ArrayList<>(initialSelectedNodes);
 					do {
@@ -124,7 +124,7 @@ public class Tree extends AbstractObject implements Serializable {
 					}
 				}
 			}else if(TreeSelectionMode.CHECKBOX.equals(selectionMode)) {
-				/*if(__inject__(CollectionHelper.class).isNotEmpty(selectedNodes)) {
+				/*if(CollectionHelper.isNotEmpty(selectedNodes)) {
 					Collection<TreeNode> collection = new ArrayList<TreeNode>();
 					for(NODE index : selectedNodes) {
 						
@@ -202,7 +202,7 @@ public class Tree extends AbstractObject implements Serializable {
 	}
 
 	public void select(Object...nodes) {
-		select(__inject__(CollectionHelper.class).instanciate(nodes));
+		select(CollectionHelper.listOf(nodes));
 	}
 	
 	public void selectOne(Object node) {
@@ -216,7 +216,7 @@ public class Tree extends AbstractObject implements Serializable {
 	}
 	
 	public void deselect(Object...nodes) {
-		deselect(__inject__(CollectionHelper.class).instanciate(nodes));
+		deselect(CollectionHelper.listOf(nodes));
 	}
 	
 	public void deselectOne(Object node) {
@@ -234,7 +234,7 @@ public class Tree extends AbstractObject implements Serializable {
 		Object node = treeNode.getData();
 		Collection<?> children = __inject__(Controller.class).read(nodeClass,new Properties().setFilters(new FilterDto().addField("parents"
 				, Arrays.asList( ((org.cyk.utility.client.controller.data.DataIdentifiedByString)node).getIdentifier()),ValueUsageType.SYSTEM)).setIsPageable(Boolean.FALSE).setFields(fields));
-		if(__inject__(CollectionHelper.class).isNotEmpty(children))
+		if(CollectionHelper.isNotEmpty(children))
 			for(Object index : children)
 				new TreeNode(type, index, treeNode);
     }

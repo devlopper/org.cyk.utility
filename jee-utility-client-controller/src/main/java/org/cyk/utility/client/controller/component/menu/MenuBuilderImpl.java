@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller.component.menu;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
 
 public class MenuBuilderImpl extends AbstractVisibleComponentBuilderImpl<Menu> implements MenuBuilder,Serializable {
@@ -16,7 +17,7 @@ public class MenuBuilderImpl extends AbstractVisibleComponentBuilderImpl<Menu> i
 	protected void __execute__(Menu menu) {
 		super.__execute__(menu);
 		MenuItemBuilders items = getItems();
-		if(__injectCollectionHelper__().isNotEmpty(items)) {
+		if(CollectionHelper.isNotEmpty(items)) {
 			menu.setItems(__inject__(MenuItems.class));
 			for(MenuItemBuilder index : items.get()) {
 				if(index.getRequest() == null)

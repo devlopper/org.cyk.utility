@@ -8,11 +8,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.reflect.MethodUtils;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
+import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.annotation.Annotations;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.input.InputBooleanButtonBuilder;
@@ -34,7 +40,6 @@ import org.cyk.utility.client.controller.component.output.OutputFileBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringLinkBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.string.Strings;
 
 @SuppressWarnings("rawtypes") @Deprecated
 public class ComponentBuilderClassGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Class> implements ComponentBuilderClassGetter,Serializable {
@@ -58,22 +63,22 @@ public class ComponentBuilderClassGetterImpl extends AbstractFunctionWithPropert
 		Annotations annotations = getAnnotations();
 		Collection<Annotation> annotationCollection = new HashSet<>();
 		String key = ConstantEmpty.STRING;
-		if(__injectCollectionHelper__().isNotEmpty(annotations))
+		if(CollectionHelper.isNotEmpty(annotations))
 			annotationCollection.addAll(annotations.get());
 		
-		if(__injectCollectionHelper__().isEmpty(annotationCollection)) {
+		if(CollectionHelper.isEmpty(annotationCollection)) {
 			Class clazz = getClazz();
 			Field field = getField();
 			if(field == null) {
 				Strings fieldNameStrings = getFieldNameStrings();
-				if(clazz!=null && __injectCollectionHelper__().isNotEmpty(fieldNameStrings)) {
-					field = __injectFieldHelper__().getField(clazz, fieldNameStrings.get());
+				if(clazz!=null && CollectionHelper.isNotEmpty(fieldNameStrings)) {
+					field = FieldHelper.getByName(clazz, (List<String>)fieldNameStrings.get());
 				}
 			}
 			Method method = getMethod();
 			if(method == null) {
 				String methodName = getMethodName();
-				if(clazz!=null && __injectStringHelper__().isNotBlank(methodName)) {
+				if(clazz!=null && StringHelper.isNotBlank(methodName)) {
 					method = MethodUtils.getMatchingMethod(clazz, methodName);
 				}
 			}
@@ -104,17 +109,17 @@ public class ComponentBuilderClassGetterImpl extends AbstractFunctionWithPropert
 		}
 		
 		builderClass = __getBuilderClassFromAnnotations__(annotationCollection);
-		if(builderClass!=null && baseClass!=null && !Boolean.TRUE.equals(__injectClassHelper__().isInstanceOf(builderClass, baseClass))) {
-			if(__injectClassHelper__().isInstanceOf(builderClass, InputBuilder.class)) {
+		if(builderClass!=null && baseClass!=null && !Boolean.TRUE.equals(ClassHelper.isInstanceOf(builderClass, baseClass))) {
+			if(ClassHelper.isInstanceOf(builderClass, InputBuilder.class)) {
 				if(baseClass.equals(OutputBuilder.class))
 					if(InputFileBuilder.class.equals(builderClass))
 						baseClass = OutputFileBuilder.class;
 					
-				if(__injectClassHelper__().isInstanceOf(baseClass, OutputFileBuilder.class))
+				if(ClassHelper.isInstanceOf(baseClass, OutputFileBuilder.class))
 					builderClass = OutputFileBuilder.class;
-				else if(__injectClassHelper__().isInstanceOf(baseClass, OutputStringLinkBuilder.class))
+				else if(ClassHelper.isInstanceOf(baseClass, OutputStringLinkBuilder.class))
 					builderClass = OutputStringLinkBuilder.class;
-				else if(__injectClassHelper__().isInstanceOf(baseClass, OutputBuilder.class))
+				else if(ClassHelper.isInstanceOf(baseClass, OutputBuilder.class))
 					builderClass = OutputStringTextBuilder.class;
 			}						
 			

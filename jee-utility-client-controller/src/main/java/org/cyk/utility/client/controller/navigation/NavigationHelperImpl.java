@@ -6,22 +6,13 @@ import javax.enterprise.context.ApplicationScoped;
 
 import org.apache.commons.lang.StringUtils;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.collection.CollectionHelperImpl;
+import org.cyk.utility.__kernel__.string.Case;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
+import org.cyk.utility.__kernel__.system.action.SystemActionDelete;
+import org.cyk.utility.__kernel__.system.action.SystemActionUpdate;
 import org.cyk.utility.helper.AbstractHelper;
-import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterNameStringBuilder;
-import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterValueStringBuilder;
-import org.cyk.utility.object.ObjectByObjectMap;
-import org.cyk.utility.object.Objects;
-import org.cyk.utility.resource.locator.UrlBuilder;
-import org.cyk.utility.string.Case;
-import org.cyk.utility.string.StringFormat;
-import org.cyk.utility.string.StringHelperImpl;
-import org.cyk.utility.string.Strings;
-import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.action.SystemActionCreate;
-import org.cyk.utility.system.action.SystemActionDelete;
-import org.cyk.utility.system.action.SystemActionUpdate;
-import org.cyk.utility.throwable.ThrowableHelperImpl;
 
 @ApplicationScoped
 public class NavigationHelperImpl extends AbstractHelper implements NavigationHelper,Serializable {
@@ -31,7 +22,7 @@ public class NavigationHelperImpl extends AbstractHelper implements NavigationHe
 		Object[] arguments = new Object[2];
 		if(systemAction != null) {
 			if(systemAction.getEntities()!=null && systemAction.getEntities().getElementClass()!=null)
-				arguments[0] = StringHelperImpl.__applyCase__(systemAction.getEntities().getElementClass().getSimpleName(), Case.FIRST_CHARACTER_LOWER);
+				arguments[0] = StringHelper.applyCase(systemAction.getEntities().getElementClass().getSimpleName(), Case.FIRST_CHARACTER_LOWER);
 			else
 				arguments[0] = __ENTITY__;
 			

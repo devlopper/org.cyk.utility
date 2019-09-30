@@ -24,7 +24,7 @@ import org.cyk.utility.server.persistence.PersistableClassesGetter;
 import org.cyk.utility.server.persistence.entities.MyEntity;
 import org.cyk.utility.server.persistence.entities.Node;
 import org.cyk.utility.server.persistence.query.filter.Filter;
-import org.cyk.utility.throwable.ThrowableHelper;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -498,7 +498,7 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 		test.addObjects(new MyEntity()).setName("MyEntity.code notnull")
 		.setExpectedThrowableCauseClassIsConstraintViolationException().execute();
 		
-		assertThat(__inject__(ThrowableHelper.class).getInstanceOf(test.getThrowable(), ConstraintViolationException.class).getMessage())
+		assertThat(ThrowableHelper.getInstanceOf(test.getThrowable(), ConstraintViolationException.class).getMessage())
 			.contains("propertyPath=code");
 	}
 	

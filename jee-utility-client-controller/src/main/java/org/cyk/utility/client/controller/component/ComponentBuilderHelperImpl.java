@@ -12,6 +12,13 @@ import java.util.Map;
 import javax.enterprise.context.ApplicationScoped;
 
 import org.apache.commons.lang3.reflect.MethodUtils;
+import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
+import org.cyk.utility.__kernel__.internationalization.InternationalizationKey;
+import org.cyk.utility.__kernel__.internationalization.InternationalizationKeyStringType;
+import org.cyk.utility.__kernel__.string.Case;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.annotation.Annotations;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.input.InputBooleanButtonBuilder;
@@ -32,14 +39,7 @@ import org.cyk.utility.client.controller.component.output.OutputBuilder;
 import org.cyk.utility.client.controller.component.output.OutputFileBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringLinkBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
-import org.cyk.utility.field.FieldHelperImpl;
 import org.cyk.utility.helper.AbstractHelper;
-import org.cyk.utility.internationalization.InternationalizationHelperImpl;
-import org.cyk.utility.internationalization.InternationalizationKey;
-import org.cyk.utility.internationalization.InternationalizationKeyStringType;
-import org.cyk.utility.string.Case;
-import org.cyk.utility.string.StringHelperImpl;
-import org.cyk.utility.system.action.SystemAction;
 
 @ApplicationScoped
 public class ComponentBuilderHelperImpl extends AbstractHelper implements ComponentBuilderHelper,Serializable {
@@ -80,7 +80,7 @@ public class ComponentBuilderHelperImpl extends AbstractHelper implements Compon
 			if(annotationCollection == null) {
 				annotationCollection = new HashSet<>();
 				if(field == null && fieldNames!=null) {
-					field = FieldHelperImpl.__getByNames__(klass, fieldNames);
+					field = FieldHelper.getByName(klass, fieldNames);
 				}else if(method == null && methodName!=null) {
 					method = MethodUtils.getMatchingMethod(klass, methodName);
 				}
@@ -221,8 +221,8 @@ public class ComponentBuilderHelperImpl extends AbstractHelper implements Compon
 		if(object == null)
 			return null;
 		if(field == null && fieldNames!=null)
-			field = FieldHelperImpl.__getByNames__(object.getClass(), fieldNames);
-		else if(method == null && StringHelperImpl.__isNotBlank__(methodName))
+			field = FieldHelper.getByName(object.getClass(), fieldNames);
+		else if(method == null && StringHelper.isNotBlank(methodName))
 			method = MethodUtils.getMatchingAccessibleMethod(object.getClass(), methodName);
 
 		if(klass!=null)
@@ -245,7 +245,7 @@ public class ComponentBuilderHelperImpl extends AbstractHelper implements Compon
 					//inputBuilder.getLabelBuilder(Boolean.TRUE).setOutputPropertyValue(inputBuilder.getField().getName());
 					//inputBuilder.getLabel(Boolean.TRUE).setValue(inputBuilder.getField().getName());
 					inputBuilder.getLabel(Boolean.TRUE).getValueInternationalizationString(Boolean.TRUE).setKey(new InternationalizationKey().setValue(
-							InternationalizationHelperImpl.__buildKey__(inputBuilder.getField().getName()).getValue()));
+							InternationalizationHelper.buildKey(inputBuilder.getField().getName()).getValue()));
 				}
 			}else if(builder instanceof CommandableBuilder) {
 				org.cyk.utility.client.controller.component.annotation.Commandable commandableAnnotation = method.getAnnotation(org.cyk.utility.client.controller.component.annotation.Commandable.class);
@@ -276,7 +276,7 @@ public class ComponentBuilderHelperImpl extends AbstractHelper implements Compon
 					commandableBuilder.getNameInternalization(Boolean.TRUE).getKeyBuilder(Boolean.TRUE).setType(InternationalizationKeyStringType.VERB);
 					commandableBuilder.getNameInternalization(Boolean.TRUE).setCase(Case.FIRST_CHARACTER_UPPER);
 					*/
-					commandableBuilder.getNameInternationalization(Boolean.TRUE).setKey(InternationalizationHelperImpl.__buildKey__(
+					commandableBuilder.getNameInternationalization(Boolean.TRUE).setKey(InternationalizationHelper.buildKey(
 							commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).getAction(),InternationalizationKeyStringType.VERB));
 					commandableBuilder.getNameInternationalization(Boolean.TRUE).setKase(Case.FIRST_CHARACTER_UPPER);
 				}

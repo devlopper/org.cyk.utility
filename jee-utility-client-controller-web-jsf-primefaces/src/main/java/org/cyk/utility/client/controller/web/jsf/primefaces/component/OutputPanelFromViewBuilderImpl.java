@@ -8,7 +8,7 @@ import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.component.Components;
 import org.cyk.utility.client.controller.component.view.View;
 import org.cyk.utility.client.controller.web.ValueExpressionMap;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.primefaces.component.outputpanel.OutputPanel;
 
 public class OutputPanelFromViewBuilderImpl extends AbstractUIComponentBuilderImpl<OutputPanel,View> implements OutputPanelFromViewBuilder,Serializable {
@@ -18,7 +18,7 @@ public class OutputPanelFromViewBuilderImpl extends AbstractUIComponentBuilderIm
 	protected OutputPanel __execute__(View view, ValueExpressionMap valueExpressionMap) throws Exception {
 		OutputPanel outputPanel = null;
 		Components components = view.getComponents();
-		if(__inject__(CollectionHelper.class).isNotEmpty(components)) {
+		if(CollectionHelper.isNotEmpty(components)) {
 			outputPanel = new OutputPanel();
 			outputPanel.setStyleClass(components.getLayout().getStyle().getClassesAsString());
 			for(Component index : components.get()) {

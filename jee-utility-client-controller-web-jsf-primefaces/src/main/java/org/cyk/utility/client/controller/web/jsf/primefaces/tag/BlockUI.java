@@ -13,7 +13,7 @@ public class BlockUI extends AbstractObject implements Serializable {
 		setProperty(Properties.ANIMATE, Boolean.TRUE);
 		setProperty(Properties.BLOCKED, Boolean.FALSE);
 		setProperty(Properties.RENDERED, Boolean.TRUE);
-		setProperty(Properties.IDENTIFIER, __inject__(RandomHelper.class).getAlphabetic(5));
+		setProperty(Properties.IDENTIFIER, RandomHelper.getAlphabetic(5));
 	}
 	
 }

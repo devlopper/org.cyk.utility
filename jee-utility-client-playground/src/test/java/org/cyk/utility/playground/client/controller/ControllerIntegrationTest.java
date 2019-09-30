@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import javax.ws.rs.core.Response;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.client.controller.ControllerFunctionReaderImpl;
 import org.cyk.utility.client.controller.test.arquillian.AbstractControllerArquillianIntegrationTestWithDefaultDeployment;
 import org.cyk.utility.playground.client.controller.api.MyEntityController;
@@ -20,7 +21,6 @@ import org.cyk.utility.playground.client.controller.entities.Node;
 import org.cyk.utility.playground.client.controller.impl.ApplicationScopeLifeCycleListener;
 import org.cyk.utility.server.persistence.query.filter.FilterDto;
 import org.cyk.utility.server.representation.ResponseHelper;
-import org.cyk.utility.value.ValueUsageType;
 import org.junit.Test;
 
 public class ControllerIntegrationTest extends AbstractControllerArquillianIntegrationTestWithDefaultDeployment {
@@ -73,7 +73,7 @@ public class ControllerIntegrationTest extends AbstractControllerArquillianInteg
 		assertThat(collection).isNotNull();
 		assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
 		assertThat(collection).hasSize(ControllerFunctionReaderImpl.COUNT.intValue());
-		assertThat(__inject__(ResponseHelper.class).getHeaderXTotalCount(response)).isEqualTo(numberOfEntities.longValue());
+		assertThat(ResponseHelper.getHeaderXTotalCount(response)).isEqualTo(numberOfEntities.longValue());
 		
 		ControllerFunctionReaderImpl.COUNT = 30l;
 		properties = new Properties();
@@ -83,7 +83,7 @@ public class ControllerIntegrationTest extends AbstractControllerArquillianInteg
 		assertThat(collection).isNotNull();
 		assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
 		assertThat(collection).hasSize(ControllerFunctionReaderImpl.COUNT.intValue());
-		assertThat(__inject__(ResponseHelper.class).getHeaderXTotalCount(response)).isEqualTo(numberOfEntities.longValue());
+		assertThat(ResponseHelper.getHeaderXTotalCount(response)).isEqualTo(numberOfEntities.longValue());
 	}
 	
 	@Test
@@ -121,7 +121,7 @@ public class ControllerIntegrationTest extends AbstractControllerArquillianInteg
 		assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
 		assertThat(collection).hasSize(1);
 		assertThat(collection.stream().map(MyEntity::getIdentifier).collect(Collectors.toList())).containsOnly("0");
-		assertThat(__inject__(ResponseHelper.class).getHeaderXTotalCount(response)).isEqualTo(1l);
+		assertThat(ResponseHelper.getHeaderXTotalCount(response)).isEqualTo(1l);
 		
 		properties = new Properties().setFilters(new FilterDto().addField("identifier", Arrays.asList("0","10","21"), ValueUsageType.SYSTEM));
 		collection = __inject__(MyEntityController.class).read(properties);
@@ -131,7 +131,7 @@ public class ControllerIntegrationTest extends AbstractControllerArquillianInteg
 		assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
 		assertThat(collection).hasSize(3);
 		assertThat(collection.stream().map(MyEntity::getIdentifier).collect(Collectors.toList())).containsOnly("0","10","21");
-		assertThat(__inject__(ResponseHelper.class).getHeaderXTotalCount(response)).isEqualTo(3l);
+		assertThat(ResponseHelper.getHeaderXTotalCount(response)).isEqualTo(3l);
 	}
 	
 	@Test

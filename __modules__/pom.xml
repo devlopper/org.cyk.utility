@@ -4,7 +4,7 @@
 
 	<groupId>org.cyk.jee.utility.modules</groupId>
 	<artifactId>jee-utility-modules</artifactId>
-	<version>0.0.1</version>
+	<version>0.1.0</version>
 	<packaging>pom</packaging>
 
 	<name>JEE utility modules</name>

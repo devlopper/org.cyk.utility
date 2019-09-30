@@ -2,12 +2,13 @@ package org.cyk.utility.client.controller.component.window;
 
 import java.io.Serializable;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemActionRead;
 import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.client.controller.data.DataHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.request.RequestParameterValueMapper;
-import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.action.SystemActionRead;
 
 public class WindowContainerManagedPropertyValueGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Object> implements WindowContainerManagedPropertyValueGetter,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -23,7 +24,7 @@ public class WindowContainerManagedPropertyValueGetterImpl extends AbstractFunct
 		WindowContainerManagedWindowBuilder container = getContainer();
 		WindowContainerManagedProperty property = getProperty();
 		if(property == null)
-			throwRuntimeExceptionIfIsNull(property, "property");
+			throw new RuntimeException(getClass()+" : property is required");
 		switch(property) {
 		case WINDOW:
 			value = __inject__(WindowBuilder.class);
@@ -31,7 +32,7 @@ public class WindowContainerManagedPropertyValueGetterImpl extends AbstractFunct
 		case SYSTEM_ACTION:
 			SystemAction systemAction = __inject__(RequestParameterValueMapper.class).setParameterNameAsActionClass().execute().getOutputAs(SystemAction.class);
 			if(systemAction instanceof SystemActionRead) {
-				if(__injectCollectionHelper__().isEmpty(systemAction.getEntitiesIdentifiers())) {
+				if(CollectionHelper.isEmpty(systemAction.getEntitiesIdentifiers())) {
 					Data data = (Data) __inject__(systemAction.getEntityClass());
 					systemAction.getEntities(Boolean.TRUE).add(data);
 				}

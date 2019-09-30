@@ -5,8 +5,8 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentImpl;
-import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
 
 public class LayoutImpl extends AbstractVisibleComponentImpl implements Layout, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -23,18 +23,18 @@ public class LayoutImpl extends AbstractVisibleComponentImpl implements Layout, 
 	
 	@Override
 	public Layout addItemFromClasses(Collection<String> classes) {
-		return addItemFromClass(__inject__(StringHelper.class).concatenate(classes,ConstantCharacter.SPACE.toString()));
+		return addItemFromClass(StringHelper.concatenate(classes,ConstantCharacter.SPACE.toString()));
 	}
 	
 	@Override
 	public Layout addItemFromClasses(String... classes) {
-		return addItemFromClasses(__inject__(CollectionHelper.class).instanciate(classes));
+		return addItemFromClasses(CollectionHelper.listOf(classes));
 	}
 	/*
 	@Override
 	public Layout addItemFromWidthClassBuilders(Collection<StyleClassBuilderWidth> styleClassBuilderWidths) {
 		Collection<String> classes = new LinkedHashSet<>();
-		if(__inject__(CollectionHelper.class).isNotEmpty(styleClassBuilderWidths))
+		if(CollectionHelper.isNotEmpty(styleClassBuilderWidths))
 			for(StyleClassBuilderWidth index : styleClassBuilderWidths)
 				classes.add(index.execute().getOutput());
 		return addItemFromClasses(classes);
@@ -42,7 +42,7 @@ public class LayoutImpl extends AbstractVisibleComponentImpl implements Layout, 
 	
 	@Override
 	public Layout addItemFromWidthClassBuilders(StyleClassBuilderWidth... styleClassBuilderWidths) {
-		return addItemFromWidthClassBuilders(__inject__(CollectionHelper.class).instanciate(styleClassBuilderWidths));
+		return addItemFromWidthClassBuilders(CollectionHelper.listOf(styleClassBuilderWidths));
 	}
 	
 	@Override

@@ -4,8 +4,8 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.data.Data;
-import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 public interface Controller extends ControllerServiceProvider<Object> {
 

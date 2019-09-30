@@ -6,10 +6,11 @@ import java.util.Collection;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.proxy.ProxyGetter;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.server.representation.RepresentationEntity;
-import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractControllerServiceProviderImpl<ENTITY> implements ControllerEntity<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -24,7 +25,7 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 		if(__entityClass__ == null) {
 			String name = StringUtils.substringBefore(getClass().getName() , "ControllerImpl");
 			name = StringUtils.replaceOnce(name, ".api.", ".entities.");
-			__entityClass__ = (Class<ENTITY>) __injectClassHelper__().getByName(name);
+			__entityClass__ = (Class<ENTITY>) ClassHelper.getByName(name);
 		}
 		if(__entityClass__ == null)
 			System.err.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+getClass()+" : controller entity class cannot be derived <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
@@ -182,7 +183,7 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 	
 	@Override
 	public ControllerEntity<ENTITY> select(Collection<Object> identifiers, Properties properties) {
-		return redirect(__inject__(CollectionHelper.class).getFirst(identifiers), properties);
+		return redirect(CollectionHelper.getFirst(identifiers), properties);
 	}
 	
 	@Override
@@ -210,11 +211,11 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 			e1.printStackTrace();
 		}
 		if(entity == null)
-			__injectThrowableHelper__().throwRuntimeException("Le code "+identifier+" n'existe pas.");
+			throw new RuntimeException("Le code "+identifier+" n'existe pas.");
 		else {
 			SystemActionRead systemActionRead = __inject__(SystemActionRead.class);
 			systemActionRead.setEntityClass(getEntityClass());
-			systemActionRead.getEntitiesIdentifiers(Boolean.TRUE).add(__injectFieldHelper__().getFieldValueSystemIdentifier(entity));
+			systemActionRead.getEntitiesIdentifiers(Boolean.TRUE).add(FieldHelper.readSystemIdentifier(entity));
 			
 			NavigationBuilder navigationBuilder = __inject__(NavigationBuilder.class).setIdentifierBuilderSystemAction(systemActionRead);
 			Navigation navigation = navigationBuilder.execute().getOutput();
@@ -235,7 +236,7 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 	protected RepresentationEntity<?, ?, ?> getRepresentation(){
 		RepresentationEntity<?, ?, ?> representation = null;
 		if(__representationClass__ == null) {
-			__injectThrowableHelper__().throwRuntimeException("No representation class found for "+__entityClass__);
+			throw new RuntimeException("No representation class found for "+__entityClass__);
 		}else {
 			representation = (RepresentationEntity<?, ?, ?>) __inject__(ProxyGetter.class).setClazz(__representationClass__).execute().getOutput();
 		}

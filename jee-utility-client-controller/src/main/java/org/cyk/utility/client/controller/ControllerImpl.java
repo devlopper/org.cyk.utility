@@ -6,11 +6,12 @@ import java.util.Collection;
 import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.client.controller.proxy.ProxyGetter;
 import org.cyk.utility.server.representation.Representation;
-import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.value.ValueUsageType;
 
 @ApplicationScoped
 public class ControllerImpl extends AbstractControllerServiceProviderImpl<Object> implements Controller,Serializable {
@@ -66,7 +67,7 @@ public class ControllerImpl extends AbstractControllerServiceProviderImpl<Object
 		Collection<ENTITY> entities = null;
 		ControllerEntity<ENTITY> controller = (ControllerEntity<ENTITY>)  __injectControllerLayer__().injectInterfaceClassFromEntityClass(aClass);
 		if(controller == null){
-			__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
+			ThrowableHelper.throwNotYetImplemented();
 		}else{
 			entities = controller.readByIdentifiers(identifiers, valueUsageType, properties);
 		}
@@ -103,7 +104,7 @@ public class ControllerImpl extends AbstractControllerServiceProviderImpl<Object
 		ENTITY entity = null;
 		ControllerEntity<ENTITY> controller = (ControllerEntity<ENTITY>)  __injectControllerLayer__().injectInterfaceClassFromEntityClass(aClass);
 		if(controller == null){
-			__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
+			ThrowableHelper.throwNotYetImplemented();
 		}else{
 			entity = controller.readByIdentifier(identifier, valueUsageType, properties);
 		}
@@ -186,7 +187,7 @@ public class ControllerImpl extends AbstractControllerServiceProviderImpl<Object
 	public <ENTITY> Controller select(Class<ENTITY> aClass, Collection<Object> identifiers, Properties properties) {
 		ControllerEntity<Object> controller = (ControllerEntity<Object>)  __injectControllerLayer__().injectInterfaceClassFromEntityClass(aClass);
 		if(controller == null){
-			__injectThrowableHelper__().throwRuntimeException("No controller found for <<"+aClass+">> to do select action");
+			throw new RuntimeException("No controller found for <<"+aClass+">> to do select action");
 		}else{
 			controller.select(identifiers, properties);
 		}
@@ -202,7 +203,7 @@ public class ControllerImpl extends AbstractControllerServiceProviderImpl<Object
 	public <ENTITY> Controller redirect(Class<ENTITY> aClass, Object identifier, Properties properties) {
 		ControllerEntity<Object> controller = (ControllerEntity<Object>)  __injectControllerLayer__().injectInterfaceClassFromEntityClass(aClass);
 		if(controller == null){
-			__injectThrowableHelper__().throwRuntimeException("No controller found for <<"+aClass+">> to do redirect action");
+			throw new RuntimeException("No controller found for <<"+aClass+">> to do redirect action");
 		}else{
 			controller.redirect(identifier, properties);
 		}

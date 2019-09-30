@@ -6,7 +6,7 @@ import org.cyk.utility.client.controller.component.grid.DimensionBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.component.view.ViewBuilderMap;
-import org.cyk.utility.string.Strings;
+import org.cyk.utility.__kernel__.string.Strings;
 
 public interface ColumnBuilder extends DimensionBuilder<Column> {
 

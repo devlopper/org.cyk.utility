@@ -10,7 +10,6 @@ import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl;
-import org.cyk.utility.throwable.ThrowableHelper;
 
 public abstract class AbstractQueryClauseStringBuilderImpl extends AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl implements QueryClauseStringBuilder, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -19,16 +18,16 @@ public abstract class AbstractQueryClauseStringBuilderImpl extends AbstractFunct
 	protected String __execute__() throws Exception {
 		String format = getFormat();
 		if(StringHelper.isBlank(format))
-			__inject__(ThrowableHelper.class).throwRuntimeException("Sql query format is required");
+			throw new RuntimeException("Sql query format is required");
 		String keyword = getKeyword();
 		if(StringHelper.isBlank(keyword))
-			__inject__(ThrowableHelper.class).throwRuntimeException("Sql clause keyword is required");
+			throw new RuntimeException("Sql clause keyword is required");
 		Collection<Tuple> tuples = getTuples();
 		if(CollectionHelper.isEmpty(tuples) && Boolean.TRUE.equals(getProperties().getFromPath(Properties.IS,Properties.TUPLE,Properties.REQUIRED)))
-			__inject__(ThrowableHelper.class).throwRuntimeException("Sql clause select tuples are required");	
+			throw new RuntimeException("Sql clause select tuples are required");	
 		Collection<String> arguments = __executeGetArguments__(tuples,getArguments());
 		if(CollectionHelper.isEmpty(arguments))
-			__inject__(ThrowableHelper.class).throwRuntimeException("Sql clause arguments are required");		
+			throw new RuntimeException("Sql clause arguments are required");		
 		return __execute__(format,keyword,arguments);		
 	}
 	

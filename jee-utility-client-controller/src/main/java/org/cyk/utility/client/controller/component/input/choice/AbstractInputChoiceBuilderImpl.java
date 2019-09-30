@@ -3,8 +3,10 @@ package org.cyk.utility.client.controller.component.input.choice;
 import java.lang.reflect.Field;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.object.Objects;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.client.controller.component.input.AbstractInputBuilderImpl;
-import org.cyk.utility.object.Objects;
 
 public abstract class AbstractInputChoiceBuilderImpl<INPUT extends InputChoice<CHOICE>,CHOICE> extends AbstractInputBuilderImpl<INPUT,CHOICE> implements InputChoiceBuilder<INPUT,CHOICE> {
 	private static final long serialVersionUID = 1L;
@@ -29,7 +31,7 @@ public abstract class AbstractInputChoiceBuilderImpl<INPUT extends InputChoice<C
 		
 		Objects choices = getChoices();
 		if(choices == null) {
-			Boolean isGetChoices = __injectValueHelper__().defaultToIfNull(getIsGetChoices(),Boolean.TRUE);
+			Boolean isGetChoices = ValueHelper.defaultToIfNull(getIsGetChoices(),Boolean.TRUE);
 			if(Boolean.TRUE.equals(isGetChoices)) {
 				ChoicesGetter choicesGetter = __inject__(choicesGetterClass);
 				choices = choicesGetter.setFieldDeclaringClass(object.getClass()).setField(field).setRequest(getProperties().getRequest()).setContext(getProperties().getContext())
@@ -37,7 +39,7 @@ public abstract class AbstractInputChoiceBuilderImpl<INPUT extends InputChoice<C
 					.execute().getOutput();
 			}
 		}
-		if(__injectCollectionHelper__().isNotEmpty(choices))
+		if(CollectionHelper.isNotEmpty(choices))
 			inputChoice.addChoices(choices.get());
 		
 		ChoicesLayout choicesLayout = getChoicesLayout();

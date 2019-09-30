@@ -6,7 +6,6 @@ import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl;
-import org.cyk.utility.throwable.ThrowableHelper;
 
 public abstract class AbstractQueryAttributeNameBuilderImpl extends AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl
 		implements QueryAttributeNameBuilder, Serializable {
@@ -22,7 +21,7 @@ public abstract class AbstractQueryAttributeNameBuilderImpl extends AbstractFunc
 			isPrefixedWithTuple = attribute.getIsPrefixedWithTuple();
 		if(Boolean.TRUE.equals(isPrefixedWithTuple)){
 			if(attribute.getTuple() == null)
-				__inject__(ThrowableHelper.class).throwRuntimeException("Sql query attribute name : tuple is required");
+				throw new RuntimeException("Sql query attribute name : tuple is required");
 			prefix = attribute.getTuple().getAlias()+ConstantCharacter.DOT;
 		}
 		return prefix+attribute.getName();

@@ -6,7 +6,7 @@ import org.cyk.utility.bean.Property;
 import org.cyk.utility.client.controller.AbstractObject;
 import org.cyk.utility.client.controller.component.layout.LayoutItem;
 import org.cyk.utility.client.controller.event.Events;
-import org.cyk.utility.object.Objects;
+import org.cyk.utility.__kernel__.object.Objects;
 
 public abstract class AbstractComponentImpl extends AbstractObject implements Component,Serializable {
 	private static final long serialVersionUID = 1L;

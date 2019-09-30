@@ -8,7 +8,7 @@ import java.util.List;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.StringHelper;
-import org.cyk.utility.throwable.ThrowableHelper;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 
 public abstract class AbstractQueryClauseStringBuilderSelectImpl extends AbstractQueryClauseStringBuilderImpl implements QueryClauseStringBuilderSelect, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -35,7 +35,7 @@ public abstract class AbstractQueryClauseStringBuilderSelectImpl extends Abstrac
 		if(CollectionHelper.isEmpty(arguments)){
 			String allColumns = getAllColumnsArgument(tuples);
 			if(StringHelper.isBlank(allColumns))
-				__inject__(ThrowableHelper.class).throwRuntimeException("Sql clause select all columns are required");
+				throw new RuntimeException("Sql clause select all columns are required");
 			return List.of(allColumns);
 		}
 		return arguments;

@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
 import javax.el.ELContext;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.method.MethodGetter;
 
 /**
@@ -55,7 +55,7 @@ public class BeanELResolver extends javax.el.BeanELResolver implements Serializa
 	}
 
 	private static Method getSetterMethod(ELContext context, Object base, String name) {
-		return DependencyInjection.inject(CollectionHelper.class).getFirst(DependencyInjection.inject(MethodGetter.class).setClazz(base.getClass()).execute().getOutput());
+		return CollectionHelper.getFirst(DependencyInjection.inject(MethodGetter.class).setClazz(base.getClass()).execute().getOutput());
 	}
 
 }
