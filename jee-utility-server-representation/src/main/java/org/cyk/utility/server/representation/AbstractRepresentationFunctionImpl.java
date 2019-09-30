@@ -18,6 +18,7 @@ import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.server.business.Business;
 import org.cyk.utility.system.AbstractSystemFunctionServerImpl;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerRepresentation;
 
@@ -140,7 +141,7 @@ public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemF
 	
 	protected void __computeResponseEntity__(ResponseEntityDto responseEntityDto,Throwable throwable){
 		responseEntityDto.setStatusUsingEnumeration(ResponseEntityDto.Status.FAILURE);
-		Throwable cause = __injectThrowableHelper__().getFirstCause(throwable);	
+		Throwable cause = ThrowableHelper.getFirstCause(throwable);	
 		//TODO cause can be null , find the cause which is not null otherwise use throwable itself
 		//throwable.printStackTrace();
 		responseEntityDto.addMessage(new MessageDto().setHead("Une erreur est survenue lors de "+getAction().getIdentifier()+" de "+getPersistenceEntityClass()+". "+cause.getMessage()));

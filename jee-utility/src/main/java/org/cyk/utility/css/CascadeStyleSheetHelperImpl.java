@@ -10,7 +10,7 @@ import javax.enterprise.context.ApplicationScoped;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.device.Device;
 import org.cyk.utility.helper.AbstractHelper;
-import org.cyk.utility.throwable.ThrowableHelperImpl;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 
 @ApplicationScoped
@@ -75,8 +75,7 @@ public class CascadeStyleSheetHelperImpl extends AbstractHelper implements Casca
 		proportion = ValueHelper.defaultToIfNull(proportion, defaultProportion);
 		ValueHelper.throwIfBlank("style class proportion",proportion);
 		ValueHelper.throwIfBlank("style class maximal proportion",maximalProportion);
-		if(proportion > maximalProportion)
-			ThrowableHelperImpl.__throwRuntimeException__(String.format("style class proportion (%s) must be less than or equal to maximal proportion (%s)",proportion,maximalProportion));
+		ThrowableHelper.throwRuntimeExceptionIfTrue(proportion > maximalProportion,String.format("style class proportion (%s) must be less than or equal to maximal proportion (%s)",proportion,maximalProportion));
 		ValueHelper.throwIfBlank("style class proportion format",format);
 		return String.format(format, proportion);
 	}

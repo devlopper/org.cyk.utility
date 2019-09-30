@@ -34,7 +34,7 @@ public abstract class AbstractPersistenceFunctionCreatorImpl extends AbstractPer
 							if(String.class.equals(fieldInstance.getType()) || index instanceof AbstractIdentifiedByString)
 								value = UUID.randomUUID().toString();
 							else
-								__injectThrowableHelper__().throwRuntimeException("cannot generate value of type "+fieldInstance.getType());
+								throw new RuntimeException("cannot generate value of type "+fieldInstance.getType());
 						}
 						if(value != null)
 							FieldHelper.write(index, __entityClassSystemIdentifierField__, value);

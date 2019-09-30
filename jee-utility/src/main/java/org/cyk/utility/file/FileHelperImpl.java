@@ -28,15 +28,15 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantSeparator;
+import org.cyk.utility.__kernel__.runnable.RunnableHelper;
 import org.cyk.utility.__kernel__.string.RegularExpressionHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.string.Strings;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.array.ArrayHelperImpl;
 import org.cyk.utility.byte_.ByteHelperImpl;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.number.Intervals;
-import org.cyk.utility.runnable.RunnableHelperImpl;
-import org.cyk.utility.__kernel__.value.ValueHelper;
 
 @ApplicationScoped
 public class FileHelperImpl extends AbstractHelper implements FileHelper,Serializable {
@@ -315,7 +315,7 @@ public class FileHelperImpl extends AbstractHelper implements FileHelper,Seriali
 		}
 		if(runnables == null)
 			return;
-		RunnableHelperImpl.__run__(runnables, "compute checksum");
+		RunnableHelper.run(runnables, "compute checksum");
 	}
 	
 	public static void __computeChecksum__(Files files) {

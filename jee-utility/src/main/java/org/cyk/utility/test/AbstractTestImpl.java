@@ -18,7 +18,6 @@ import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.assertion.AssertionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
-import org.cyk.utility.throwable.ThrowableHelper;
 
 public abstract class AbstractTestImpl extends AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl implements Test,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -77,7 +76,7 @@ public abstract class AbstractTestImpl extends AbstractFunctionWithPropertiesAsI
 	}
 	
 	protected void ______execute______() throws Exception {
-		__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
+		org.cyk.utility.__kernel__.throwable.ThrowableHelper.throwNotYetImplemented();
 	}
 	
 	protected void __assert__() {
@@ -226,7 +225,7 @@ public abstract class AbstractTestImpl extends AbstractFunctionWithPropertiesAsI
 	protected void __endTransaction__() throws Exception {}
 	
 	protected void __createOne__(Object object) throws Exception {
-		__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
+		org.cyk.utility.__kernel__.throwable.ThrowableHelper.throwNotYetImplemented();
 	}
 	
 	protected void __createMany__(Collection<Object> objects) throws Exception {
@@ -245,7 +244,7 @@ public abstract class AbstractTestImpl extends AbstractFunctionWithPropertiesAsI
 	}
 	
 	protected void __deleteOne__(Object object) throws Exception {
-		__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
+		org.cyk.utility.__kernel__.throwable.ThrowableHelper.throwNotYetImplemented();
 	}
 	
 	protected void __deleteMany__(Collection<Object> objects) throws Exception {
@@ -301,7 +300,7 @@ public abstract class AbstractTestImpl extends AbstractFunctionWithPropertiesAsI
 	
 	@Override
 	public Test assertThrowableCauseIsInstanceOf(Class<?> aClass) {
-		assertionHelper.assertTrue(__inject__(ThrowableHelper.class).getInstanceOf(getThrowable(), aClass) != null);
+		assertionHelper.assertTrue(org.cyk.utility.__kernel__.throwable.ThrowableHelper.getInstanceOf(getThrowable(), aClass) != null);
 		return this;
 	}
 	
@@ -310,7 +309,7 @@ public abstract class AbstractTestImpl extends AbstractFunctionWithPropertiesAsI
 		Throwable throwable = getThrowable();
 		//if(throwable!=null)
 		//	throwable.printStackTrace();
-		assertionHelper.assertTrue(throwable == null ? null : __inject__(ThrowableHelper.class).getFirstCause(throwable).getMessage(),throwable == null);
+		assertionHelper.assertTrue(throwable == null ? null : org.cyk.utility.__kernel__.throwable.ThrowableHelper.getFirstCause(throwable).getMessage(),throwable == null);
 		return this;
 	}
 	

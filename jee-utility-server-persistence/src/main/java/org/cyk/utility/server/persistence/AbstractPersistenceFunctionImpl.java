@@ -3,13 +3,13 @@ package org.cyk.utility.server.persistence;
 import java.io.Serializable;
 import java.util.Map;
 
+import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.StringHelper;
-import org.cyk.utility.__kernel__.log.LogLevel;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.server.persistence.query.PersistenceQueryRepository;
 import org.cyk.utility.system.AbstractSystemFunctionServerImpl;
-import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerPersistence;
 import org.cyk.utility.system.node.SystemNodeServer;
@@ -39,7 +39,7 @@ public abstract class AbstractPersistenceFunctionImpl extends AbstractSystemFunc
 			PersistenceQuery persistenceQuery = __inject__(PersistenceQueryRepository.class).getBySystemIdentifier(queryIdentifier);
 			if(persistenceQuery == null){
 				if(StringHelper.isBlank(queryValue))
-					__injectThrowableHelper__().throwRuntimeException("persistence query with identifier "+queryIdentifier+" not found.");	
+					throw new RuntimeException("persistence query with identifier "+queryIdentifier+" not found.");	
 				persistenceQuery = new PersistenceQuery().setValue(queryValue).setResultClass(getQueryResultClass());	
 			}
 			__executeQuery__(action, persistenceQuery);

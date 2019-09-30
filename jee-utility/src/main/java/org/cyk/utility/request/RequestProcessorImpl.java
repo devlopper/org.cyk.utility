@@ -43,7 +43,7 @@ public class RequestProcessorImpl extends AbstractFunctionWithPropertiesAsInputI
 		}
 		
 		if(StringHelper.isBlank(uniformResourceIdentifier))
-			__injectThrowableHelper__().throwRuntimeException("request processor uniform resource locator cannot be derived");
+			throw new RuntimeException("request processor uniform resource locator cannot be derived");
 		
 		Client client = getClient();
 		//if(client == null)

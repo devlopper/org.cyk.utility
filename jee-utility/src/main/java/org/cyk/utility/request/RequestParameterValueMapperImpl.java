@@ -104,7 +104,7 @@ public class RequestParameterValueMapperImpl extends AbstractFunctionWithPropert
 				}
 				
 				if(value == null)
-					__injectThrowableHelper__().throwRuntimeException("request parameter "+parameterName+":"+parameterValue+" cannot be mapped.");
+					throw new RuntimeException("request parameter "+parameterName+":"+parameterValue+" cannot be mapped.");
 			}
 		}
 		return value;

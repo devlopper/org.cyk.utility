@@ -22,18 +22,15 @@ public abstract class AbstractQueryClauseStringBuilderOrderByImpl extends Abstra
 	@Override
 	protected Collection<String> __executeGetArguments__(Collection<Tuple> tuples,Collection<String> arguments) {
 		if(CollectionHelper.isEmpty(arguments)){
-			Collection<Attribute> attributes = getAttributes();	
-			if(CollectionHelper.isEmpty(attributes))
-				__injectThrowableHelper__().throwRuntimeException(getClass()+" : attribute(s) are required");
-			else{
-				QueryAttributeNameBuilder attributeNameBuilder = getAttributeNameBuilder();
-				attributeNameBuilder.setIsPrefixedWithTuple(getIsAttributeNamePrefixedWithTuple());
-				for(Attribute index : attributes){
-					if(arguments == null)
-						arguments = new LinkedHashSet<String>();
-					SortOrder sortOrder = ValueHelper.defaultToIfNull(index.getSortOrder(), SortOrder.ASCENDING);
-					arguments.add(attributeNameBuilder.setAttribute(index).execute().getOutput()+ConstantCharacter.SPACE+(SortOrder.ASCENDING.equals(sortOrder)?"ASC":"DESC"));
-				}
+			Collection<Attribute> attributes = getAttributes();
+			ValueHelper.throwIfBlank("query clause attribute(s)", attributes);
+			QueryAttributeNameBuilder attributeNameBuilder = getAttributeNameBuilder();
+			attributeNameBuilder.setIsPrefixedWithTuple(getIsAttributeNamePrefixedWithTuple());
+			for(Attribute index : attributes){
+				if(arguments == null)
+					arguments = new LinkedHashSet<String>();
+				SortOrder sortOrder = ValueHelper.defaultToIfNull(index.getSortOrder(), SortOrder.ASCENDING);
+				arguments.add(attributeNameBuilder.setAttribute(index).execute().getOutput()+ConstantCharacter.SPACE+(SortOrder.ASCENDING.equals(sortOrder)?"ASC":"DESC"));
 			}
 		}
 		return arguments;

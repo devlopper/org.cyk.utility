@@ -13,6 +13,7 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 
 @Dependent @Deprecated
 public class UniformResourceIdentifierParameterValueStringBuilderImpl extends AbstractStringFunctionImpl implements UniformResourceIdentifierParameterValueStringBuilder,Serializable {
@@ -54,8 +55,7 @@ public class UniformResourceIdentifierParameterValueStringBuilderImpl extends Ab
 				if(StringUtils.isNotBlank(key))
 					VALUES_MAP.put(key, _value);
 			}
-			if(StringHelper.isBlank(_value))
-				__injectThrowableHelper__().throwRuntimeException("Parameter value cannot be found for <<"+value+">>");
+			ValueHelper.throwIfBlank("Parameter value for <<"+value+">>", value);
 		}
 		setProperty(Properties.OUTPUT, _value);
 		return this;
@@ -90,7 +90,7 @@ public class UniformResourceIdentifierParameterValueStringBuilderImpl extends Ab
 					VALUES_MAP.put(key, _value);
 			}
 			if(StringHelper.isBlank(_value))
-				__injectThrowableHelper__().throwRuntimeException("Parameter value cannot be found for <<"+value+">>");
+				throw new RuntimeException("Parameter value cannot be found for <<"+value+">>");
 		}
 		return _value;
 	}

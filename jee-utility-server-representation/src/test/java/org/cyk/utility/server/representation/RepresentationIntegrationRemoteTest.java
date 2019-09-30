@@ -14,6 +14,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.cyk.utility.__kernel__.test.arquillian.archive.builder.WebArchiveBuilder;
 import org.cyk.utility.server.representation.api.MyEntityRepresentation;
+import org.cyk.utility.server.representation.api.NodeHierarchyRepresentation;
 import org.cyk.utility.server.representation.api.NodeRepresentation;
 import org.cyk.utility.server.representation.entities.MyEntityDto;
 import org.cyk.utility.server.representation.entities.MyEntityDtoCollection;
@@ -63,6 +64,7 @@ public class RepresentationIntegrationRemoteTest  {
 	
 	@Test
 	public void node_create_one() throws Exception{
+		__getProxy__(NodeHierarchyRepresentation.class,url).deleteAll();
 		NodeRepresentation nodeRepresentation = __getProxy__(NodeRepresentation.class,url);
 		nodeRepresentation.deleteAll();
 		NodeDto nodeDto = new NodeDto();
@@ -73,6 +75,7 @@ public class RepresentationIntegrationRemoteTest  {
 	
 	@Test
 	public void node_create_one_with_parents() throws Exception{
+		__getProxy__(NodeHierarchyRepresentation.class,url).deleteAll();
 		NodeRepresentation nodeRepresentation = __getProxy__(NodeRepresentation.class,url);
 		nodeRepresentation.deleteAll();
 		NodeDto nodeDto = new NodeDto();
@@ -88,6 +91,7 @@ public class RepresentationIntegrationRemoteTest  {
 	
 	@Test
 	public void node_create_many_collection_custom() throws Exception{
+		__getProxy__(NodeHierarchyRepresentation.class,url).deleteAll();
 		NodeRepresentation nodeRepresentation = __getProxy__(NodeRepresentation.class,url);
 		nodeRepresentation.deleteAll();
 		NodeDtoCollection nodeDtoCollection = new NodeDtoCollection();

@@ -10,6 +10,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.network.message.Message;
 import org.cyk.utility.network.message.Receiver;
 import org.cyk.utility.network.message.Receivers;
@@ -46,16 +47,16 @@ public class SenderMailImpl extends AbstractSenderImpl implements SenderMail,Ser
 		MimeMessage mimeMessage = new MimeMessage(session);
 
 		String title = message.getTitle();
-		throwRuntimeExceptionIfIsBlank(title, "title");
+		ValueHelper.throwIfBlank("title",title);
 		mimeMessage.setSubject(title);
 		
 		String body = message.getBody();
-		throwRuntimeExceptionIfIsBlank(body, "body");
+		ValueHelper.throwIfBlank("body",body);
 		mimeMessage.setContent(body, "text/html");//for a html email
 		//emailMessage.setText(emailBody);// for a text email
 		
 		Receivers receivers = message.getReceivers();
-		throwRuntimeExceptionIfIsEmpty(receivers, "receivers");
+		ValueHelper.throwIfBlank("receivers",receivers);
 		for (Receiver index : receivers.get())
 			mimeMessage.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress((String) index.getIdentifier()));
 

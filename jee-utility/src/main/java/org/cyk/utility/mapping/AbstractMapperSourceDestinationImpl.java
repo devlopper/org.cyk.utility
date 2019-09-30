@@ -4,18 +4,16 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.concurrent.TimeUnit;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.clazz.ClassInstance;
-import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
-import org.cyk.utility.field.FieldHelperImpl;
 import org.cyk.utility.__kernel__.field.FieldInstance;
 import org.cyk.utility.__kernel__.field.FieldInstancesRuntime;
+import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.runnable.RunnableHelper;
+import org.cyk.utility.clazz.ClassInstance;
+import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.instance.InstanceHelper;
-import org.cyk.utility.runnable.RunnablesExecutor;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.MappingTarget;
@@ -104,31 +102,29 @@ public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> ex
 	
 	@Override
 	public Collection<SOURCE> getSources(Collection<DESTINATION> destinations, Properties properties) {
-		final Collection<SOURCE> sources = new ArrayList<>();
-		if(CollectionHelper.isNotEmpty(destinations)) {
-			Integer executorCorePoolSize = EXECUTOR_CORE_POOL_SIZE;
-			if(executorCorePoolSize!=null && executorCorePoolSize>0) {
-				//Parrallel processing
-				RunnablesExecutor runner = DependencyInjection.inject(RunnablesExecutor.class);
-				runner.getExecutorServiceBuilder(Boolean.TRUE).setCorePoolSize(executorCorePoolSize);
-				runner.getExecutorServiceBuilder(Boolean.TRUE).setQueueSize(destinations.size());
-				runner.setTimeOut(1l).setTimeOutUnit(TimeUnit.SECONDS);
-				for(DESTINATION destination : destinations) {
-					runner.addRunnables(new Runnable() {
-						@Override
-						public void run() {
-							sources.add(getSource(destination, properties));
-						}
-					});
-				}
-				runner.execute();
-			}else {
-				//Serial processing
-				for(DESTINATION destination : destinations) {
-					sources.add(getSource(destination, properties));
-				}
+		if(destinations == null || destinations.isEmpty())
+			return null;		
+		final Collection<SOURCE> sources = new ArrayList<>();		
+		Integer executorCorePoolSize = EXECUTOR_CORE_POOL_SIZE;
+		if(executorCorePoolSize!=null && executorCorePoolSize>0) {
+			//Parrallel processing
+			Collection<Runnable> runnables = new ArrayList<>();
+			for(DESTINATION destination : destinations) {
+				runnables.add(new Runnable() {
+					@Override
+					public void run() {
+						sources.add(getSource(destination, properties));
+					}
+				});
+			}
+			RunnableHelper.run(runnables, "mapper get sources", RunnableHelper.instanciateExecutorService(executorCorePoolSize));
+		}else {
+			//Serial processing
+			for(DESTINATION destination : destinations) {
+				sources.add(getSource(destination, properties));
 			}
 		}
+		
 		return sources;
 	}
 	

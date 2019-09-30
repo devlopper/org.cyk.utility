@@ -6,6 +6,7 @@ import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 
 @Dependent
 public class ResponseEntityDtoBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<ResponseEntityDto> implements ResponseEntityDtoBuilder,Serializable {
@@ -24,7 +25,7 @@ public class ResponseEntityDtoBuilderImpl extends AbstractFunctionWithProperties
 		Throwable throwable = getThrowable();
 		if(throwable == null) {
 			responseEntityDto.setStatusUsingEnumeration(ResponseEntityDto.Status.FAILURE);
-			Throwable cause = __injectThrowableHelper__().getFirstCause(throwable);	
+			Throwable cause = ThrowableHelper.getFirstCause(throwable);	
 			//TODO cause can be null , find the cause which is not null otherwise use throwable itself
 			//throwable.printStackTrace();
 			String persistenceEntityClassAsString = systemAction.getEntityClass().getName();

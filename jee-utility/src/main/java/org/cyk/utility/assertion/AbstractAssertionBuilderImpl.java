@@ -32,7 +32,7 @@ public abstract class AbstractAssertionBuilderImpl extends AbstractFunctionWithP
 		}
 		
 		if(!Boolean.TRUE.equals(assertion.getValue()) && Boolean.TRUE.equals(getIsThrownWhenValueIsNotTrue())){
-			__injectThrowableHelper__().throwRuntimeException(assertion.getMessageWhenValueIsNotTrue());
+			throw new RuntimeException(assertion.getMessageWhenValueIsNotTrue());
 		}
 		
 		return assertion;

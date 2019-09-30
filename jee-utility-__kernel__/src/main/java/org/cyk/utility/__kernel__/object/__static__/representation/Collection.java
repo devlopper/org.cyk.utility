@@ -3,8 +3,6 @@ package org.cyk.utility.__kernel__.object.__static__.representation;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.json.bind.annotation.JsonbTransient;
-
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
@@ -19,18 +17,17 @@ import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
  */
 public interface Collection<ELEMENT> extends Objectable {
 	
-	@SuppressWarnings("unchecked") @JsonbTransient
+	@SuppressWarnings("unchecked")
 	default Class<ELEMENT> getElementClass() {
 		return (Class<ELEMENT>) FieldHelper.read(this, PROPERTY_ELEMENT_CLASS);
 	}
 	
-	@JsonbTransient
 	default Collection<ELEMENT> setElementClass(Class<ELEMENT> elementClass) {
 		FieldHelper.write(this, PROPERTY_ELEMENT_CLASS, elementClass);
 		return this;
 	}
 	
-	@SuppressWarnings("unchecked") @JsonbTransient
+	@SuppressWarnings("unchecked")
 	default ELEMENT instantiateElement() {
 		Class<ELEMENT> elementClass = getElementClass();
 		if(elementClass == null)

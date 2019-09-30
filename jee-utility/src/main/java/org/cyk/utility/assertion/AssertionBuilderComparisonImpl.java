@@ -21,7 +21,7 @@ public class AssertionBuilderComparisonImpl extends AbstractAssertionBuilderImpl
 			Number number2 = (Number) getAssertedValue2().getValueFromSource();
 			ComparisonOperator operator = getOperator();
 			if(operator == null)
-				__injectThrowableHelper__().throwRuntimeException(getClass()+" : operator is required.");
+				throw new RuntimeException(getClass()+" : operator is required.");
 			value = NumberHelper.compare(number1, number2, operator);
 		}
 		return value;

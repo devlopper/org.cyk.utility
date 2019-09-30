@@ -22,9 +22,11 @@ public abstract class AbstractSenderReaderImpl extends AbstractFunctionWithPrope
 		Protocol protocol = getProtocol();
 		if(protocol == null)
 			protocol = __inject__(ProtocolDefaults.class).get(__getProtocolClass__());
-		throwRuntimeExceptionIfIsNull(protocol,"protocol");
+		if(protocol == null)
+			throw new RuntimeException("message sender/reader : protocol is required");
 		if(Boolean.TRUE.equals(protocol.getIsAuthenticationRequired()))
-			throwRuntimeExceptionIfIsNull(protocol.getAuthenticationCredentials(),"credentials");
+			if(protocol.getAuthenticationCredentials() == null)
+				throw new RuntimeException("message sender/reader : protocol credentials are required");
 		______execute______(protocol);
 	}
 	

@@ -39,7 +39,7 @@ public class UniformResourceIdentifierParameterNameStringBuilderImpl extends Abs
 			}
 				
 			if(StringHelper.isBlank(value))
-				__injectThrowableHelper__().throwRuntimeException("Parameter name cannot be found for <<"+name+">>");
+				throw new RuntimeException("Parameter name cannot be found for <<"+name+">>");
 		}
 		return value;
 	}

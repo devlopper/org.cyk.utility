@@ -14,7 +14,7 @@ public abstract class AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl e
 	}
 	
 	protected void ____execute____() throws Exception {
-		__injectThrowableHelper__().throwRuntimeExceptionImplementationOrRunnableRequired(getClass());
+		throw new RuntimeException(getClass()+" : implementation or runnable required");
 	}
 	
 }

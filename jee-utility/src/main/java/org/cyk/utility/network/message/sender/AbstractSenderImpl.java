@@ -2,6 +2,7 @@ package org.cyk.utility.network.message.sender;
 
 import java.io.Serializable;
 
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.network.message.AbstractSenderReaderImpl;
 import org.cyk.utility.network.message.Message;
 import org.cyk.utility.network.protocol.Protocol;
@@ -15,8 +16,9 @@ public abstract class AbstractSenderImpl extends AbstractSenderReaderImpl implem
 	@Override
 	protected void ______execute______(Protocol protocol) throws Exception {
 		Message message = getMessage();
-		throwRuntimeExceptionIfIsNull(message,"message");
-		throwRuntimeExceptionIfIsEmpty(message.getReceivers(), "receivers");
+		if(message == null)
+			throw new RuntimeException("message sender : message is required");
+		ValueHelper.throwIfBlank("message sender : receivers", message.getReceivers());
 		________execute________(protocol,message);
 		System.out.println("Message sent.");
 	}

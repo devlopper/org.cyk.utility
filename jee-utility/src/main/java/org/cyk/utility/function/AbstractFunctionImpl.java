@@ -1,16 +1,14 @@
 package org.cyk.utility.function;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
-import org.cyk.utility.__kernel__.collection.CollectionHelper;
-import org.cyk.utility.__kernel__.collection.CollectionInstance;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.function.FunctionRunnable;
+import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.assertion.AssertionBuilder;
@@ -19,11 +17,8 @@ import org.cyk.utility.css.CascadeStyleSheetHelperImpl;
 import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.instance.InstanceHelperImpl;
 import org.cyk.utility.log.Log;
-import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.map.MapHelper;
 import org.cyk.utility.map.MapHelperImpl;
-import org.cyk.utility.throwable.ThrowableHelper;
-import org.cyk.utility.throwable.ThrowableHelperImpl;
 import org.cyk.utility.type.TypeHelper;
 import org.cyk.utility.type.TypeHelperImpl;
 
@@ -255,34 +250,8 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 	
 	/**/
 	
-	protected void throwRuntimeExceptionIfIsNull(Object object,String name) {
-		if(object == null)
-			__injectThrowableHelper__().throwRuntimeException(name+" must not be null");
-	}
-	
-	protected void throwRuntimeExceptionIfIsBlank(String string,String name) {
-		if(string == null || string.isBlank())
-			__injectThrowableHelper__().throwRuntimeException(name+" must not be blank");
-	}
-	
-	protected void throwRuntimeExceptionIfIsEmpty(Collection<?> collection,String name) {
-		if(CollectionHelper.isEmpty(collection))
-			__injectThrowableHelper__().throwRuntimeException(name+" must not be empty");
-	}
-	
-	protected void throwRuntimeExceptionIfIsEmpty(CollectionInstance<?> collectionInstance,String name) {
-		if(CollectionHelper.isEmpty(collectionInstance))
-			__injectThrowableHelper__().throwRuntimeException(name+" must not be empty");
-	}
-	
-	/**/
-	
 	protected static MapHelper __injectMapHelper__(){
 		return MapHelperImpl.getInstance();
-	}
-	
-	protected static ThrowableHelper __injectThrowableHelper__(){
-		return ThrowableHelperImpl.getInstance();
 	}
 	
 	protected static InstanceHelper __injectInstanceHelper__(){

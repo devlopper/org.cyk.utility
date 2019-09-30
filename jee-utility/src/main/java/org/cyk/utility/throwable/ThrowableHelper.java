@@ -2,7 +2,7 @@ package org.cyk.utility.throwable;
 
 import org.cyk.utility.__kernel__.throwable.SystemException;
 import org.cyk.utility.helper.Helper;
-
+@Deprecated
 public interface ThrowableHelper extends Helper {
 
 	Throwable getInstanceOf(Throwable throwable, Class<?> aClass);

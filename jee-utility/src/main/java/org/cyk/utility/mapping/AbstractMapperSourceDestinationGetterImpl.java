@@ -36,8 +36,7 @@ public abstract class AbstractMapperSourceDestinationGetterImpl extends Abstract
 		if(klass != null) {
 			return (MapperSourceDestination) __inject__(klass);
 		}
-		__injectThrowableHelper__().throwRuntimeException(String.format("mapper of %s and %s not found", sourceClass,destinationClass));
-		return null;
+		throw new RuntimeException(String.format("mapper of %s and %s not found", sourceClass,destinationClass));
 	}
 	
 	@Override

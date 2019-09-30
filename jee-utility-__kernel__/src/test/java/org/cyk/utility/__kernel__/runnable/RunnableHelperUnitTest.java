@@ -1,6 +1,8 @@
-package org.cyk.utility.runnable;
+package org.cyk.utility.__kernel__.runnable;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.cyk.utility.__kernel__.runnable.RunnableHelper.instanciateExecutorService;
+import static org.cyk.utility.__kernel__.runnable.RunnableHelper.run;
 
 import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
@@ -8,7 +10,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.cyk.utility.__kernel__.string.StringHelper;
-import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 
 import lombok.AllArgsConstructor;
@@ -21,41 +23,41 @@ public class RunnableHelperUnitTest extends AbstractWeldUnitTest {
 
 	@Test
 	public void run_null(){
-		ExecutorService executorService = RunnableHelperImpl.__instanciateExecutorService__();
-		RunnableHelperImpl.__run__(null,"MyRunnables01",  executorService);
+		ExecutorService executorService = instanciateExecutorService();
+		run(null,"MyRunnables01",  executorService);
 		ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) executorService;
 		assertThat(threadPoolExecutor.getCompletedTaskCount()).isEqualTo(0);
 	}
 	
 	@Test
 	public void run_empty(){
-		ExecutorService executorService = RunnableHelperImpl.__instanciateExecutorService__();
-		RunnableHelperImpl.__run__(Arrays.asList(),"MyRunnables01",  executorService);
+		ExecutorService executorService = instanciateExecutorService();
+		run(Arrays.asList(),"MyRunnables01",  executorService);
 		ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) executorService;
 		assertThat(threadPoolExecutor.getCompletedTaskCount()).isEqualTo(0);
 	}
 	
 	@Test
 	public void run_one(){
-		ExecutorService executorService = RunnableHelperImpl.__instanciateExecutorService__();
-		RunnableHelperImpl.__run__(Arrays.asList(new Runnable("job 01",1000l * 1)),"MyRunnables01",  executorService);
+		ExecutorService executorService = instanciateExecutorService();
+		run(Arrays.asList(new Runnable("job 01",1000l * 1)),"MyRunnables01",  executorService);
 		ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) executorService;
 		assertThat(threadPoolExecutor.getCompletedTaskCount()).isEqualTo(1);
 	}
 	
 	@Test
 	public void run_two(){
-		ExecutorService executorService = RunnableHelperImpl.__instanciateExecutorService__();
-		RunnableHelperImpl.__run__(Arrays.asList(new Runnable("job 01",1000l * 1),new Runnable("job 02",1000l * 1)),"MyRunnables01",  executorService);
+		ExecutorService executorService = instanciateExecutorService();
+		run(Arrays.asList(new Runnable("job 01",1000l * 1),new Runnable("job 02",1000l * 1)),"MyRunnables01",  executorService);
 		ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) executorService;
 		assertThat(threadPoolExecutor.getCompletedTaskCount()).isEqualTo(2);
 	}
 	
 	@Test
 	public void run_two_timeOut(){
-		ExecutorService executorService = RunnableHelperImpl.__instanciateExecutorService__();
+		ExecutorService executorService = instanciateExecutorService();
 		try {
-			RunnableHelperImpl.__run__(Arrays.asList(new Runnable("job 01",1000l * 1),new Runnable("job 02",1000l * 5)),"MyRunnables01",  executorService,3l,TimeUnit.SECONDS);
+			run(Arrays.asList(new Runnable("job 01",1000l * 1),new Runnable("job 02",1000l * 5)),"MyRunnables01",  executorService,3l,TimeUnit.SECONDS);
 		} catch (Exception exception) {}
 		ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) executorService;
 		assertThat(threadPoolExecutor.getTaskCount()).isEqualTo(2);

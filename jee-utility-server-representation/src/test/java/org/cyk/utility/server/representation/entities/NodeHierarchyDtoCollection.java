@@ -1,6 +1,7 @@
 package org.cyk.utility.server.representation.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
@@ -17,5 +18,5 @@ import lombok.experimental.Accessors;
 public class NodeHierarchyDtoCollection extends AbstractCollectionOfIdentifiedByStringImpl<NodeHierarchyDto> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	
+	private ArrayList<NodeHierarchyDto> elements;
 }

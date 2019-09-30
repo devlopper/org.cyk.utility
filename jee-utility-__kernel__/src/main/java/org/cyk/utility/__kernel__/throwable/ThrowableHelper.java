@@ -7,6 +7,8 @@ import org.cyk.utility.__kernel__.value.ValueHelper;
 
 public interface ThrowableHelper {
 
+	String NOT_YET_IMPLEMENTED_MESSAGE = "not yet implemented";
+	
 	static Throwable getInstanceOf(Throwable throwable,Collection<Class<?>> classes){
 		if(throwable == null || classes == null || classes.isEmpty())
 			return null;
@@ -40,6 +42,11 @@ public interface ThrowableHelper {
 		return cause;
 	}
 
+	static void throwRuntimeExceptionIfTrue(Boolean condition, String message) {
+		if(Boolean.TRUE.equals(condition))
+			throw new RuntimeException(message);
+	}
+	
 	static void throwIllegalArgumentException(String name, Object value) {
 		throw new IllegalArgumentException(name+" has an illegal value <<"+value+">>");
 	}
@@ -54,7 +61,17 @@ public interface ThrowableHelper {
 			throwIllegalArgumentException(name, value);
 	}
 	
+	static void throwNotYetImplemented(String name) {
+		throw new RuntimeException(name+" "+NOT_YET_IMPLEMENTED_MESSAGE);
+	}
+	
+	static void throwNotYetImplemented() {
+		throw NOT_YET_IMPLEMENTED;
+	}
+	
 	/**/
 	
-	RuntimeException NOT_YET_IMPLEMENTED = new RuntimeException("not yet implemented");
+	RuntimeException NOT_YET_IMPLEMENTED = new RuntimeException(NOT_YET_IMPLEMENTED_MESSAGE);
+	
+	
 }

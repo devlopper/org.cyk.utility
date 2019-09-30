@@ -13,7 +13,7 @@ import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.helper.AbstractHelper;
 
-@ApplicationScoped
+@ApplicationScoped @Deprecated
 public class ThrowableHelperImpl extends AbstractHelper implements ThrowableHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 
