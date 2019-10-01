@@ -1,21 +1,25 @@
 package org.cyk.utility.__kernel__.klass;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.cyk.utility.__kernel__.klass.ClassHelper.filter;
 import static org.cyk.utility.__kernel__.klass.ClassHelper.getByName;
+import static org.cyk.utility.__kernel__.klass.ClassHelper.getImplementationClass;
 import static org.cyk.utility.__kernel__.klass.ClassHelper.getImplementationClassSimpleNameFromInterfaceClass;
 import static org.cyk.utility.__kernel__.klass.ClassHelper.getInterfaceSimpleNameFromImplementationClass;
 import static org.cyk.utility.__kernel__.klass.ClassHelper.getInterfaces;
+import static org.cyk.utility.__kernel__.klass.ClassHelper.getParameterAt;
 import static org.cyk.utility.__kernel__.klass.ClassHelper.instanciate;
 import static org.cyk.utility.__kernel__.klass.ClassHelper.instanciateMany;
 import static org.cyk.utility.__kernel__.klass.ClassHelper.isInstanceOf;
-import static org.cyk.utility.__kernel__.klass.ClassHelper.isInstanceOfOne;
 import static org.cyk.utility.__kernel__.klass.ClassHelper.isInstanceOfNumber;
-import static org.cyk.utility.__kernel__.klass.ClassHelper.getParameterAt;
-import static org.cyk.utility.__kernel__.klass.ClassHelper.getImplementationClass;
+import static org.cyk.utility.__kernel__.klass.ClassHelper.isInstanceOfOne;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
+import org.cyk.utility.__kernel__.string.RegularExpressionHelper;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -163,6 +167,30 @@ public class ClassHelperUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	/* get parameter */
+	
+	/* filter */
+	
+	@Test
+	public void filter_packageIsNull_basesClassesIsNull() {
+		assertThat(filter(null, null) ).isNull();
+	}
+	
+	@Test
+	public void filter_packageIsNull_basesClassesIsObject() {
+		assertThat(filter(null, List.of(Object.class)) ).isNull();
+	}
+	
+	@Test
+	public void filter_packageIsCurrent_basesClassesIsInterface() {
+		Collection<java.lang.Class<?>> classes = filter(List.of(ClassHelperUnitTest.class.getPackage()), List.of(Interface.class));
+		assertThat(classes).containsExactlyInAnyOrder(ImplementationImpl.class);
+	}
+	
+	//@Test
+	public void filter_packageIsCurrent_basesClassesIsObject() {
+		Collection<java.lang.Class<?>> classes = filter(List.of(SystemAction.class.getPackage()),  RegularExpressionHelper.buildIsDoNotEndWith("Impl"),List.of(SystemAction.class),null,null);
+		assertThat(classes).containsExactlyInAnyOrder(ImplementationImpl.class);
+	}
 	
 	/**/
 	

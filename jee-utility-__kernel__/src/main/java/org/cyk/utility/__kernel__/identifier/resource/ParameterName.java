@@ -6,12 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.string.RegularExpressionHelper;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
-import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
-import org.cyk.utility.__kernel__.system.action.SystemActionDelete;
-import org.cyk.utility.__kernel__.system.action.SystemActionList;
-import org.cyk.utility.__kernel__.system.action.SystemActionRead;
-import org.cyk.utility.__kernel__.system.action.SystemActionUpdate;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -82,7 +79,7 @@ public enum ParameterName {
 	
 	public static void initialise() {
 		MAP.clear();
-		Collection<Class<?>> classes = List.of(SystemActionCreate.class,SystemActionRead.class,SystemActionUpdate.class,SystemActionDelete.class,SystemActionList.class);
+		Collection<Class<?>> classes = ClassHelper.filter(List.of(SystemAction.class.getPackage()),  RegularExpressionHelper.buildIsDoNotEndWith("Impl"),List.of(SystemAction.class),null,null);
 		if(classes != null && !classes.isEmpty())
 			for(Class<?> index : classes)
 				MAP.put(index, StringUtils.substringAfter(index.getSimpleName(),SystemAction.class.getSimpleName()).toLowerCase());

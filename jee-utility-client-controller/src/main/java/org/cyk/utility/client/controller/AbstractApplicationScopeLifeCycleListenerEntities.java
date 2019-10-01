@@ -23,7 +23,7 @@ public abstract class AbstractApplicationScopeLifeCycleListenerEntities extends 
 		__inject__(org.cyk.utility.client.controller.ApplicationScopeLifeCycleListener.class).initialize(null);	
 		InternationalizationHelper.addResourceBundlesFromNames(getClass(),0,ConstantString.MESSAGE);
 		
-		ParameterName.ENTITY_CLASS.setType(DataIdentifiedByStringAndCoded.class);
+		ParameterName.ENTITY_CLASS.setType(Data.class);
 		Class<?>[] basesClasses = __getUniformResourceIdentifierParameterValueMatrixClassesBasesClasses__();
 		if(__inject__(ArrayHelper.class).isNotEmpty(basesClasses)) {
 			String packageName = getClass().getPackage().getName();	
@@ -32,7 +32,6 @@ public abstract class AbstractApplicationScopeLifeCycleListenerEntities extends 
 			if(CollectionHelper.isNotEmpty(classes)) {
 				for(@SuppressWarnings("rawtypes") Class index : classes.get())
 					ParameterName.MAP.put(index, index.getSimpleName().toLowerCase());
-					//__inject__(UniformResourceIdentifierParameterValueMatrix.class).setClasses(index);
 			}
 		}
 	}

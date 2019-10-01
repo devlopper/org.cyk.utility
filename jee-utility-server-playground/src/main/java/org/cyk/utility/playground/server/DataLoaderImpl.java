@@ -6,7 +6,9 @@ import java.util.Collection;
 
 import javax.ws.rs.core.Response;
 
+import org.cyk.utility.playground.server.business.api.NodeBusiness;
 import org.cyk.utility.playground.server.business.api.PersonBusiness;
+import org.cyk.utility.playground.server.persistence.entities.Node;
 import org.cyk.utility.playground.server.persistence.entities.Person;
 import org.cyk.utility.random.RandomHelper;
 import org.cyk.utility.server.representation.impl.AbstractDataLoaderImpl;
@@ -28,7 +30,29 @@ public class DataLoaderImpl extends AbstractDataLoaderImpl implements Serializab
 		}
 		__logInfo__("Persisting "+persons.size()+" persons");
 		__inject__(PersonBusiness.class).createByBatch(persons, 100);
+		
+		Collection<Node> nodes = new ArrayList<>();
+		for(Integer index = 0 ; index < 7 ; index = index + 1) {
+			String code = index.toString();
+			String name = RandomHelper.getAlphanumeric(4);
+			Node node = new Node().setCode(code).setName(name);
+			nodes.add(node);
+			__instanciateChildren__(node, 3, nodes);
+		}		
+		java.lang.System.out.println("Creating "+nodes.size()+" nodes");
+		__inject__(NodeBusiness.class).createMany(nodes);
+		
 		return Response.ok().build();
 	}
 	
+	private void __instanciateChildren__(Node parent,Integer level,Collection<Node> nodes) {
+		if(level!=null && level>0)
+			for(Integer index = 0 ; index < 5 ; index = index + 1) {
+				String code = parent.getCode()+"."+index.toString();
+				String name = RandomHelper.getAlphanumeric(4);
+				Node node = new Node().setCode(code).setName(name).addParents(parent);
+				nodes.add(node);
+				__instanciateChildren__(node, level-1, nodes);
+			}
+	}
 }

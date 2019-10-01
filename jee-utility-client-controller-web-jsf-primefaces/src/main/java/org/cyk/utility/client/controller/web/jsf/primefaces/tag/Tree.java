@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
@@ -40,6 +42,8 @@ public class Tree extends AbstractObject implements Serializable {
 	@Getter @Setter private BlockUI rootBlockUI,blockUI;
 	
 	/* working variables */
+	
+	private Map<Object,TreeNode> __nodes__ = new HashMap<Object, TreeNode>();
 	
 	/**/
 	
@@ -90,7 +94,7 @@ public class Tree extends AbstractObject implements Serializable {
 		
 		if(CollectionHelper.isNotEmpty(nodesNotHavingParent))
 			for(Object index : nodesNotHavingParent)
-				new TreeNode(type, index, root);
+				new TreeNode(type, index, root,__nodes__);
 		
 		if(Boolean.TRUE.equals(selectable)) {
 			rootIdentifier = "tree1";
@@ -187,10 +191,10 @@ public class Tree extends AbstractObject implements Serializable {
 			
 			Collections.reverse(nodesToBeCreated);
 			for(Object index : nodesToBeCreated) {
-				destinationRoot = new TreeNode(type, index, destinationRoot);
+				destinationRoot = new TreeNode(type, index, destinationRoot,__nodes__);
 				destinationRoot.setExpanded(Boolean.TRUE);
 			}
-			destinationRoot = new TreeNode(type, node,null, destinationRoot);
+			destinationRoot = new TreeNode(type, node,null, destinationRoot,__nodes__);
 		}
 		
 	}
@@ -236,11 +240,16 @@ public class Tree extends AbstractObject implements Serializable {
 				, Arrays.asList( ((org.cyk.utility.client.controller.data.DataIdentifiedByString)node).getIdentifier()),ValueUsageType.SYSTEM)).setIsPageable(Boolean.FALSE).setFields(fields));
 		if(CollectionHelper.isNotEmpty(children))
 			for(Object index : children)
-				new TreeNode(type, index, treeNode);
+				new TreeNode(type, index, treeNode,__nodes__);
     }
 	
 	public void expand(Object node) {
-		expand((TreeNode) ((AbstractObject)node).getProperties().getTreeNode());
+		if(node == null)
+			return;
+		TreeNode treeNode = __nodes__.get(node);
+		if(treeNode == null)
+			throw new RuntimeException("tree node to expand has not been found for data <<"+node+">>");
+		expand(treeNode);
     }
 	
 }

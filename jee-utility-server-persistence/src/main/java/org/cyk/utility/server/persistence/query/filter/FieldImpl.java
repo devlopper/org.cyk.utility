@@ -2,11 +2,17 @@ package org.cyk.utility.server.persistence.query.filter;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
-import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.__kernel__.field.FieldInstance;
+import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
+@Getter @Setter @Accessors(chain=true)
 public class FieldImpl extends AbstractObject implements Field,Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -17,58 +23,8 @@ public class FieldImpl extends AbstractObject implements Field,Serializable {
 	private ArithmeticOperator arithmeticOperator;
 	
 	@Override
-	public String getName() {
-		return name;
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this);
 	}
 	
-	@Override
-	public Field setName(String name) {
-		this.name = name;
-		return this;
-	}
-	
-	@Override
-	public FieldInstance getInstance() {
-		return instance;
-	}
-
-	@Override
-	public Field setInstance(FieldInstance instance) {
-		this.instance = instance;
-		return this;
-	}
-
-	@Override
-	public Object getValue() {
-		return value;
-	}
-
-	@Override
-	public Field setValue(Object value) {
-		this.value = value;
-		return this;
-	}
-	
-	@Override
-	public ValueUsageType getValueUsageType() {
-		return valueUsageType;
-	}
-	
-	@Override
-	public Field setValueUsageType(ValueUsageType valueUsageType) {
-		this.valueUsageType = valueUsageType;
-		return this;
-	}
-
-	@Override
-	public ArithmeticOperator getArithmeticOperator() {
-		return arithmeticOperator;
-	}
-
-	@Override
-	public Field setArithmeticOperator(ArithmeticOperator arithmeticOperator) {
-		this.arithmeticOperator = arithmeticOperator;
-		return this;
-	}
-
 }

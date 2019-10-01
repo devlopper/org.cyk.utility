@@ -5,14 +5,19 @@ import java.util.Collection;
 
 import javax.enterprise.context.Dependent;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
+import org.cyk.utility.__kernel__.field.FieldInstancesRuntime;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.__kernel__.field.FieldInstancesRuntime;
 
-@Dependent
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
+@Dependent @Getter @Setter @Accessors(chain=true)
 public class FilterImpl extends AbstractObject implements Filter,Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -36,17 +41,6 @@ public class FilterImpl extends AbstractObject implements Filter,Serializable {
 	}
 	
 	@Override
-	public Class<?> getKlass() {
-		return klass;
-	}
-	
-	@Override
-	public Filter setKlass(Class<?> klass) {
-		this.klass = klass;
-		return this;
-	}
-	
-	@Override
 	public Boolean hasFieldWithPath(String... paths) {
 		return fields == null ? Boolean.FALSE : fields.hasPath(paths);
 	}
@@ -63,21 +57,10 @@ public class FilterImpl extends AbstractObject implements Filter,Serializable {
 	}
 	
 	@Override
-	public Fields getFields() {
-		return fields;
-	}
-
-	@Override
 	public Fields getFields(Boolean injectIfNull) {
 		if(fields == null && Boolean.TRUE.equals(injectIfNull))
 			fields = __inject__(Fields.class);
 		return fields;
-	}
-
-	@Override
-	public Filter setFields(Fields fields) {
-		this.fields = fields;
-		return this;
 	}
 
 	@Override
@@ -115,13 +98,7 @@ public class FilterImpl extends AbstractObject implements Filter,Serializable {
 	}
 	
 	@Override
-	public String getValue() {
-		return value;
-	}
-	
-	@Override
-	public Filter setValue(String value) {
-		this.value = value;
-		return this;
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this);
 	}
 }

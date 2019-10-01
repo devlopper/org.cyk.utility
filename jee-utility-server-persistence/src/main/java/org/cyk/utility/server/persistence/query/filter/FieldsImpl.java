@@ -8,7 +8,6 @@ import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.__kernel__.field.FieldInstance;
 
-
 public class FieldsImpl extends AbstractCollectionInstanceImpl<Field> implements Fields,Serializable {
 	private static final long serialVersionUID = 1L;
 

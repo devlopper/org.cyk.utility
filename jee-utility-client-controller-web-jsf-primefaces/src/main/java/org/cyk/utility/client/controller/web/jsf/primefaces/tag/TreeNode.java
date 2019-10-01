@@ -2,12 +2,12 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.tag;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Map;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString;
 import org.cyk.utility.client.controller.web.jsf.primefaces.PrimefacesHelper;
-import org.cyk.utility.__kernel__.collection.CollectionHelper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +19,7 @@ public class TreeNode extends org.primefaces.model.DefaultTreeNode implements Se
 
 	private Long numberOfChildren;
 	
-	public TreeNode(String type, Object data,Long numberOfChildren, org.primefaces.model.TreeNode parent) {
+	public TreeNode(String type, Object data,Long numberOfChildren, org.primefaces.model.TreeNode parent,Map<Object,TreeNode> map) {
 		super(data, parent);
 		if(type != null)
 			setType(type);
@@ -34,18 +34,16 @@ public class TreeNode extends org.primefaces.model.DefaultTreeNode implements Se
 			numberOfChildren = 0l;
 		
 		this.numberOfChildren = numberOfChildren;
-		
-		if(data instanceof AbstractObject) {
-			((AbstractObject)data).getProperties().setTreeNode(this);
-		}
+		if(map != null)
+			map.put(data, this);
 	}
 	
-	public TreeNode(String type, Object data, org.primefaces.model.TreeNode parent) {
-		this(type,data,null, parent);
+	public TreeNode(String type, Object data, org.primefaces.model.TreeNode parent,Map<Object,TreeNode> map) {
+		this(type,data,null, parent,map);
 	}
 	
 	public TreeNode() {
-		this(null,null,null);
+		this(null,null,null,null);
 	}
 
 	public TreeNode incrementNumberOfChildren() {

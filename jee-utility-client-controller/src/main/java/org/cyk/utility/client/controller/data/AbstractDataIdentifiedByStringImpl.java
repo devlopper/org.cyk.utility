@@ -4,11 +4,14 @@ import java.io.Serializable;
 
 import javax.validation.constraints.NotNull;
 
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.component.annotation.Input;
 import org.cyk.utility.client.controller.component.annotation.InputString;
 import org.cyk.utility.client.controller.component.annotation.InputStringLineOne;
-import org.cyk.utility.__kernel__.string.StringHelper;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode(callSuper = false,of = "identifier")
 public abstract class AbstractDataIdentifiedByStringImpl extends AbstractDataImpl implements DataIdentifiedByString,Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -26,7 +29,7 @@ public abstract class AbstractDataIdentifiedByStringImpl extends AbstractDataImp
 		this.identifier = identifier;
 		return this;
 	}
-
+	
 	@Override
 	public String toString() {
 		String string = getIdentifier();

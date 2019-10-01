@@ -34,6 +34,20 @@ public interface RegularExpressionHelper {
 		return buildIsNotExactly(List.of(strings));
 	}
 	
+	static String buildIsDoNotEndWith(Collection<String> strings) {
+		if(strings == null || strings.isEmpty())
+			return null;
+		return StringUtils.join(strings.stream().map(string -> ".*(?<!"+string+")$").collect(Collectors.toList()),ConstantEmpty.STRING);
+	}
+	
+	static String buildIsDoNotEndWith(String...strings) {
+		if(strings == null || strings.length == 0)
+			return null;
+		return buildIsDoNotEndWith(List.of(strings));
+	}
+	
+	
+	
 	static Boolean match(String string, Pattern pattern) {
 		if(string == null || string.isEmpty() || pattern == null)
 			return Boolean.FALSE;

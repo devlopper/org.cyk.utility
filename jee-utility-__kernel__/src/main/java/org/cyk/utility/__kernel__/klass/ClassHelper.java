@@ -8,10 +8,17 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.Helper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
+import org.reflections.util.ConfigurationBuilder;
 
 public interface ClassHelper {
 
@@ -184,6 +191,57 @@ public interface ClassHelper {
 			return implementationClass;
 		}else
 			return interfaceClass;
+	}
+	
+	static Collection<Class<?>> filter(Collection<Package> packages,String classNameRegularExpression,Collection<Class<?>> basesClasses,Collection<Integer> modifiersIncluded,Collection<Integer> modifiersExcluded) {
+		if(packages == null || packages.isEmpty())
+			return null;
+		if(basesClasses == null || basesClasses.isEmpty())
+			return null;
+		if(classNameRegularExpression!= null && classNameRegularExpression.isBlank())
+			classNameRegularExpression = null;
+		Collection<Class<?>> classes = null;	
+		Pattern pattern = null;
+		if(classNameRegularExpression!=null)
+			pattern = Pattern.compile(classNameRegularExpression);
+		if(modifiersIncluded != null && modifiersIncluded.isEmpty())
+			modifiersIncluded = null;
+		if(modifiersExcluded != null && modifiersExcluded.isEmpty())
+			modifiersIncluded = null;
+		SubTypesScanner subTypesScanner = new SubTypesScanner(false);
+		for(@SuppressWarnings("rawtypes") Class indexBaseClass : basesClasses) {			
+			ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
+			configurationBuilder.setScanners(subTypesScanner);
+			configurationBuilder.forPackages(packages.stream().map(Package::getName).collect(Collectors.toList()).toArray(new String[] {}));
+			@SuppressWarnings({ "unchecked" })
+			Collection<Class<?>> result = new Reflections(configurationBuilder).getSubTypesOf(indexBaseClass);
+			if(CollectionHelper.isNotEmpty(result)) {
+				for(@SuppressWarnings("rawtypes") Class index : result) {
+					if(pattern != null && !pattern.matcher(index.getName()).find())
+						continue;
+					if(modifiersIncluded != null && !Helper.isHaveAllModifiers(index.getModifiers(), modifiersIncluded))
+						continue;	
+					if(modifiersExcluded != null && Helper.isHaveAllModifiers(index.getModifiers(), modifiersExcluded))
+						continue;
+					if(classes == null)
+						classes = new ArrayList<>();
+					classes.add(index);
+				}
+			}
+		}		
+		return classes;
+	}
+	
+	static Collection<Class<?>> filter(Collection<Package> packages,String classNameRegularExpression,Collection<Class<?>> basesClasses,Collection<Integer> modifiers) {
+		return filter(packages,classNameRegularExpression, basesClasses, modifiers,null);
+	}
+	
+	static Collection<Class<?>> filter(Collection<Package> packages,String classNameRegularExpression,Collection<Class<?>> basesClasses) {
+		return filter(packages,classNameRegularExpression, basesClasses, null,null);
+	}
+	
+	static Collection<Class<?>> filter(Collection<Package> packages,Collection<Class<?>> basesClasses) {
+		return filter(packages,null, basesClasses, null,null);
 	}
 	
 	/* get parameter */
