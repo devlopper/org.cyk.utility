@@ -226,8 +226,8 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 	@Override
 	protected void __notifyOnThrowableIsNull__() {
 		getNotificationBuilders(Boolean.TRUE).addAt(__inject__(NotificationBuilder.class)
-				.setSummaryInternalizationStringKeyValue("operation.execution.success.summary")
-				.setDetailsInternalizationStringKeyValue("operation.execution.success.details"),0);
+				.setSummaryInternationalizationStringKeyValue("operation.execution.success.summary")
+				.setDetailsInternationalizationStringKeyValue("operation.execution.success.details"),0);
 		
 		Notifications notifications = __inject__(Notifications.class);
 		if(getProperties().getNotifications() instanceof Notifications)

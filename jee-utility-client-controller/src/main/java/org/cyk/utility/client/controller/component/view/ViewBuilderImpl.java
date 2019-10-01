@@ -306,7 +306,7 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 		if(CollectionHelper.isNotEmpty(systemActionClasses)) {
 			CommandableBuilders commandables = getCommandables(Boolean.TRUE);
 			for(Class<? extends SystemAction> index : systemActionClasses)
-				commandables.add(__inject__(CommandableBuilder.class).setNavigationSystemAction(__inject__(index)));
+				commandables.add(__inject__(CommandableBuilder.class).setUniformResourceIdentifierSystemActionClass(index));
 		}
 		return this;
 	}
@@ -319,11 +319,13 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	
 	@Override
 	public ViewBuilder addNavigationCommandableBySystemAction(SystemAction systemAction, Object... parameters) {
-		CommandableBuilder commandable = __inject__(CommandableBuilder.class).setNavigationSystemAction(systemAction);
+		throw new RuntimeException("to be done better");
+		/*CommandableBuilder commandable = __inject__(CommandableBuilder.class).setNavigationSystemAction(systemAction);
 		if(ArrayHelperImpl.__isNotEmpty__(parameters))
 			commandable.setNavigationParameters(parameters);
 		getCommandables(Boolean.TRUE).add(commandable);
-		return this;
+		*/
+		//return this;
 	}
 	
 	@Override

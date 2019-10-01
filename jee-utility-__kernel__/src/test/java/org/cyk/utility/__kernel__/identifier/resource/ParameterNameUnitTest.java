@@ -2,6 +2,8 @@ package org.cyk.utility.__kernel__.identifier.resource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -12,7 +14,7 @@ public class ParameterNameUnitTest extends AbstractWeldUnitTest {
 	@Override
 	protected void __listenBefore__() {
 		super.__listenBefore__();
-		ParameterName.MAP.clear();
+		ParameterName.initialise();
 	}
 	
 	@Test
@@ -47,6 +49,16 @@ public class ParameterNameUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	@Test
+	public void stringify_class_SystemAction() {
+		assertThat(ParameterName.stringify(SystemAction.class)).isEqualTo("systemaction");
+	}
+	
+	@Test
+	public void stringify_class_SystemActionCreate() {
+		assertThat(ParameterName.stringify(SystemActionCreate.class)).isEqualTo("create");
+	}
+	
+	@Test
 	public void stringify_string_Abc() {
 		assertThat(ParameterName.stringify("Abc")).isEqualTo("abc");
 	}
@@ -59,6 +71,11 @@ public class ParameterNameUnitTest extends AbstractWeldUnitTest {
 	@Test
 	public void stringify_enum_parameterName_ENTITY_CLASS() {
 		assertThat(ParameterName.stringify(ParameterName.ENTITY_CLASS)).isEqualTo("entityclass");
+	}
+	
+	@Test
+	public void getFromMap_SystemActionCreate() {
+		assertThat(ParameterName.MAP.get(SystemActionCreate.class)).isEqualTo("create");
 	}
 	
 	/**/

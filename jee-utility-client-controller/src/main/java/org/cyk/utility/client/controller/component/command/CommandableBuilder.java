@@ -2,14 +2,14 @@ package org.cyk.utility.client.controller.component.command;
 
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierAsFunctionParameter;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.client.controller.command.CommandFunction;
 import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.client.controller.component.VisibleComponentBuilder;
 import org.cyk.utility.client.controller.component.window.WindowRenderType;
 import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.client.controller.icon.Icon;
-import org.cyk.utility.client.controller.navigation.NavigationBuilder;
-import org.cyk.utility.__kernel__.system.action.SystemAction;
 
 public interface CommandableBuilder extends VisibleComponentBuilder<Commandable> {
 
@@ -26,20 +26,20 @@ public interface CommandableBuilder extends VisibleComponentBuilder<Commandable>
 	Icon getIcon();
 	CommandableBuilder setIcon(Icon icon);
 	
+	SystemAction getSystemAction();
+	CommandableBuilder setSystemAction(SystemAction systemAction);
+	
 	CommandBuilder getCommand();
 	CommandableBuilder setCommand(CommandBuilder command);
 	CommandBuilder getCommand(Boolean injectIfNull);
 	
-	NavigationBuilder getNavigation();
-	NavigationBuilder getNavigation(Boolean injectIfNull);
-	CommandableBuilder injectNavigationIfNull();
-	CommandableBuilder setNavigation(NavigationBuilder navigation);
-	CommandableBuilder setNavigationIdentifier(Object identifier);
-	CommandableBuilder setNavigationParameters(Object...keyValues);
-	CommandableBuilder setNavigationIdentifierAndParameters(Object identifier,Object[] keyValues);
-	CommandableBuilder addNavigationDynamicParameterNames(Object...names);
-	CommandableBuilder setNavigationSystemAction(SystemAction systemAction);
-	CommandableBuilder setNavigationIdentifierBuilderSystemAction(SystemAction systemAction);
+	UniformResourceIdentifierAsFunctionParameter getUniformResourceIdentifier();
+	UniformResourceIdentifierAsFunctionParameter getUniformResourceIdentifier(Boolean injectIfNull);
+	CommandableBuilder setUniformResourceIdentifier(UniformResourceIdentifierAsFunctionParameter uniformResourceIdentifier);
+	CommandableBuilder setUniformResourceIdentifierSystemAction(SystemAction systemAction);
+	CommandableBuilder setUniformResourceIdentifierSystemActionClass(Class<? extends SystemAction> systemActionClass);
+	CommandableBuilder setUniformResourceIdentifierSystemActionEntityClass(Class<?> systemActionEntityClass);
+	
 	
 	CommandableBuilder setCommandFunction(CommandFunction function);
 	CommandableBuilder setCommandFunctionAction(SystemAction systemAction);

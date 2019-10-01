@@ -39,19 +39,19 @@ public class CommandButtonBuilderImpl extends AbstractUIComponentBuilderImpl<Com
 		if(onComplete!=null)
 			commandButton.setOncomplete(onComplete.toString());
 		
-		if(commandable.getNavigation()!=null) {
+		if(StringHelper.isNotBlank(commandable.getUniformResourceIdentifier())) {
 			commandButton.setType("button");
 			String url = null;
 			if(CollectionHelper.contains(commandable.getRoles(), ComponentRole.COLLECTION_PROCESSOR)) {
-				url = commandable.getNavigation().getUniformResourceLocator().toString();
+				url = commandable.getUniformResourceIdentifier();
 			}else if(CollectionHelper.contains(commandable.getRoles(), ComponentRole.COLLECTION_ITEM_PROCESSOR)) {
-				SystemAction action = commandable.getNavigation().getSystemAction();	
+				SystemAction action = commandable.getSystemAction();	
 				String methodName = StringHelper.applyCase(StringUtils.substringBefore(action.getClass().getSimpleName(),"Impl")+"Class",Case.FIRST_CHARACTER_LOWER);
 				if(StringHelper.isNotBlank(methodName))
 					url = "#{indexRow.getUrlBySystemActionClass(request,componentHelper."+methodName+")}";
-			}
-			if(StringHelper.isNotBlank(url))
-				valueExpressionMap.set("onclick",__buildValueExpressionString__("window.open('"+url+"','_self');return false;"));
+			}else
+				url = commandable.getUniformResourceIdentifier();
+			valueExpressionMap.set("onclick",__buildValueExpressionString__("window.open('"+url+"','_self');return false;"));
 		}else if(commandable.getCommand()!=null) {
 			commandButton.setType("submit");
 			

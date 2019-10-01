@@ -8,8 +8,8 @@ import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.window.WindowRenderType;
 import org.cyk.utility.client.controller.component.window.WindowRenderTypeDialog;
 import org.cyk.utility.client.controller.component.window.WindowRenderTypeNormal;
-import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
 
+@Deprecated
 public abstract class AbstractGridBuilderCommandableBuilderProcessorFunctionRunnableImpl extends AbstractFunctionRunnableImpl<GridBuilderCommandableBuilderProcessor> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -22,7 +22,7 @@ public abstract class AbstractGridBuilderCommandableBuilderProcessorFunctionRunn
 				CommandableBuilder commandableBuilder = function.getCommandableBuilder();
 				Class<? extends WindowRenderType> windowRenderTypeClass = commandableBuilder.getWindowRenderTypeClass();
 				if(windowRenderTypeClass == null || ClassHelper.isInstanceOf(windowRenderTypeClass, WindowRenderTypeNormal.class)) {
-					commandableBuilder.getNavigation(Boolean.TRUE).setIdentifierBuilderSystemAction(__inject__(SystemActionCreate.class).setEntityClass(gridBuilder.getRowDataClass()));
+					;//commandableBuilder.getNavigation(Boolean.TRUE).setIdentifierBuilderSystemAction(__inject__(SystemActionCreate.class).setEntityClass(gridBuilder.getRowDataClass()));
 				}else if(ClassHelper.isInstanceOf(windowRenderTypeClass, WindowRenderTypeDialog.class)){
 					__runWithWindowRenderTypeDialog__(gridBuilder, commandableBuilder);
 				}

@@ -21,6 +21,8 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 import org.assertj.core.util.diff.Delta.TYPE;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.object.marker.IdentifiableBusiness;
+import org.cyk.utility.__kernel__.object.marker.IdentifiableSystem;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 import lombok.AllArgsConstructor;
@@ -384,24 +386,42 @@ public interface FieldHelper {
 	}
 	
 	static Object readSystemIdentifier(Object object,Boolean isGettable) {
+		if(object == null)
+			return null;
+		if(object instanceof IdentifiableSystem<?>)
+			return ((IdentifiableSystem<?>)object).getSystemIdentifier();
 		return read(object, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, isGettable);
 	}
 	
 	static Object readSystemIdentifier(Object object) {
+		if(object == null)
+			return null;
+		if(object instanceof IdentifiableSystem<?>)
+			return ((IdentifiableSystem<?>)object).getSystemIdentifier();
 		return read(object, FieldName.IDENTIFIER, ValueUsageType.SYSTEM);
 	}
 	
 	static Object readBusinessIdentifier(Object object,Boolean isGettable) {
+		if(object == null)
+			return null;
+		if(object instanceof IdentifiableBusiness<?>)
+			return ((IdentifiableBusiness<?>)object).getBusinessIdentifier();
 		return read(object, FieldName.IDENTIFIER, ValueUsageType.BUSINESS, isGettable);
 	}
 	
 	static Object readBusinessIdentifier(Object object) {
+		if(object == null)
+			return null;
+		if(object instanceof IdentifiableBusiness<?>)
+			return ((IdentifiableBusiness<?>)object).getBusinessIdentifier();
 		return read(object, FieldName.IDENTIFIER, ValueUsageType.BUSINESS);
 	}
 	
 	static Object readSystemIdentifierOrBusinessIdentifier(Object object) {
-		Object identifier = readSystemIdentifier(object);
 		if(object == null)
+			return null;
+		Object identifier = readSystemIdentifier(object);
+		if(identifier != null)
 			return identifier;
 		return readBusinessIdentifier(object);
 	}
@@ -443,7 +463,10 @@ public interface FieldHelper {
 	static Collection<Object> readSystemIdentifiers(Collection<?> objects) {
 		if(objects == null || objects.isEmpty())
 			return null;
-		return readMany(objects, FieldName.IDENTIFIER, ValueUsageType.SYSTEM);
+		Collection<Object> identifiers = new ArrayList<>();
+		for(Object index : objects)
+			identifiers.add(readSystemIdentifier(index));
+		return identifiers;
 	}
 	
 	static Collection<Object> readBusinessIdentifiers(Collection<?> objects) {

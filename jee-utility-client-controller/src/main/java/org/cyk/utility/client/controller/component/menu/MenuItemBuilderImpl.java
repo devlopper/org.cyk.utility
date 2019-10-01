@@ -78,21 +78,23 @@ public class MenuItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<Men
 	
 	@Override
 	public MenuItemBuilder setCommandableNavigationIdentifier(Object identifier) {
-		getCommandable(Boolean.TRUE).setNavigationIdentifier(identifier);
+		if(identifier != null)
+			getCommandable(Boolean.TRUE).getUniformResourceIdentifier(Boolean.TRUE).getPath(Boolean.TRUE).setIdentifier(identifier.toString());
 		return this;
 	}
 	
 	@Override
 	public MenuItemBuilder setCommandableNavigationIdentifierAndParameters(Object identifier,Object[] parameters) {
-		getCommandable(Boolean.TRUE).setNavigationIdentifierAndParameters(identifier,parameters);
-		return this;
+		//getCommandable(Boolean.TRUE).setNavigationIdentifierAndParameters(identifier,parameters);
+		//return this;
+		throw new RuntimeException("to be improved");
 	}
 	
 	@Override
 	public MenuItemBuilder setCommandableNavigationIdentifierBuilderSystemAction(SystemAction systemAction,Object... parameters) {
-		getCommandable(Boolean.TRUE).setNavigationIdentifierBuilderSystemAction(systemAction)/*.setNavigationParameters(parameters)*/;
+		getCommandable(Boolean.TRUE).getUniformResourceIdentifier(Boolean.TRUE).setSystemAction(systemAction);
 		if(__inject__(ArrayHelper.class).isNotEmpty(parameters))
-			getCommandable(Boolean.TRUE).setNavigationParameters(parameters);
+			throw new RuntimeException("to be improved");//getCommandable(Boolean.TRUE).setNavigationParameters(parameters);
 		return this;
 	}
 	

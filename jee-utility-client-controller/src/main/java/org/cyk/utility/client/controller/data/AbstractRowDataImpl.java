@@ -1,8 +1,8 @@
 package org.cyk.utility.client.controller.data;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
@@ -32,20 +32,8 @@ public abstract class AbstractRowDataImpl<DATA extends Data> extends AbstractRow
 	}
 	
 	@Override
-	public String getUrlBySystemActionClass(Object request,Class<? extends SystemAction> aClass) {
-		String url = null;		
-		Data data = getData();
-		/*Class<DATA> dataClass = getDataClass();
-		if(dataClass == null)
-			if(data!=null)
-				dataClass = (Class<DATA>) data.getClass();
-		*/
-		/*SystemAction systemAction = __inject__(aClass).setEntityClass(dataClass);
-		systemAction.getEntities(Boolean.TRUE).add(data);
-		*/
-		//url = UniformResourceIdentifierHelperImpl.__build__(request,systemAction);
-		url = UniformResourceIdentifierHelper.build(request, aClass, null, (Class<DATA>)data.getClass(), (Collection<DATA>)Arrays.asList(data), null, null, null);
-		return url;
+	public String getUrlBySystemActionClass(Object request,Class<? extends SystemAction> aClass) {		
+		return UniformResourceIdentifierHelper.build(request, aClass, null, dataClass, (Collection<DATA>)List.of(data), null, null, null);
 	}
 	
 	@Override

@@ -16,11 +16,7 @@ import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
-import org.cyk.utility.__kernel__.identifier.resource.Component;
-import org.cyk.utility.__kernel__.identifier.resource.ParameterName;
-import org.cyk.utility.__kernel__.identifier.resource.Protocol;
-import org.cyk.utility.__kernel__.identifier.resource.QueryParameterValueGetter;
-import org.cyk.utility.__kernel__.identifier.resource.RequestHelper;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
@@ -74,11 +70,10 @@ public interface UniformResourceIdentifierHelper {
 	static Object mapParameterValue(String parameterName,QueryParameterValueGetter parameterValueGetter) {
 		if(parameterName == null)
 			return null;
-		String parameterValue = null;
-		if(parameterValueGetter == null) {
-			//TODO based on environment get parameter value from request
-		}else
-			parameterValue = parameterValueGetter.get(parameterName);
+		String parameterValue;
+		if(parameterValueGetter == null)
+			parameterValueGetter = QueryParameterValueGetter.INSTANCE;		
+		parameterValue = parameterValueGetter.get(parameterName);
 		if(parameterValue == null || parameterValue.isBlank())
 			return null;
 		Object value = null;	
@@ -204,13 +199,7 @@ public interface UniformResourceIdentifierHelper {
 			parameters.put(ParameterName.ENTITY_CLASS,Arrays.asList(entityClass));
 		List<Object> list = null;
 		if(entities!=null) {
-			list = new ArrayList<Object>();
-			for(Object index : entities)
-				if(index instanceof Objectable) {
-					Object identifier = ((Objectable)index).getIdentifier();
-					if(identifier != null)
-						list.add(identifier);
-				}		
+			list = (List<Object>) FieldHelper.readSystemIdentifiers(entities);
 		}
 		if(identifiers != null) {
 			if(list == null)
@@ -239,31 +228,29 @@ public interface UniformResourceIdentifierHelper {
 	
 	@SuppressWarnings("unchecked")
 	static String buildQuery(SystemAction systemAction) {
-		/*Map<Object,List<Object>> parameters = new LinkedHashMap<>();
-		if(systemAction.getEntities()!=null) {
-			if(systemAction.getEntities().getElementClass()!=null)
-				parameters.put(ParameterName.ENTITY_CLASS,Arrays.asList(systemAction.getEntities().getElementClass()));						
-			if(CollectionHelper.isNotEmpty(systemAction.getEntities()))
-				parameters.put(ParameterName.ENTITY_IDENTIFIER,Arrays.asList(systemAction.getEntities().getFirst()));
-			if(CollectionHelper.isNotEmpty(systemAction.getEntitiesIdentifiers()))
-				parameters.put(ParameterName.ENTITY_IDENTIFIER,Arrays.asList(systemAction.getEntitiesIdentifiers().getFirst()));				
-		}
-		parameters.put(ParameterName.ACTION_CLASS,Arrays.asList(systemAction.getClass()));	
-		parameters.put(ParameterName.ACTION_IDENTIFIER,Arrays.asList(systemAction));		
-		if(systemAction.getNextAction()!=null) {
-			parameters.put(ParameterName.NEXT_ACTION_CLASS,Arrays.asList(systemAction.getNextAction().getClass()));	
-			parameters.put(ParameterName.NEXT_ACTION_IDENTIFIER,Arrays.asList(systemAction.getNextAction()));
-		}
-		return buildQuery(parameters);
-		*/
-		
 		return systemAction == null ? null : buildQuery(systemAction.getClass(), systemAction.getIdentifier() == null ? null : systemAction.getIdentifier().toString().toLowerCase()
 				, (Class<Object>)systemAction.getEntityClass(), systemAction.getEntities() == null ? null : systemAction.getEntities().get()
 				, systemAction.getEntitiesIdentifiers() == null ? null : systemAction.getEntitiesIdentifiers().get()
 				, systemAction.getNextAction() == null ? null : systemAction.getNextAction().getClass()
 				, systemAction.getNextAction() == null ? null : systemAction.getNextAction().getIdentifier());
-		
 	}
+	
+	@SuppressWarnings("unchecked")
+	static String buildQuery(QueryAsFunctionParameter parameter) {
+		if(parameter == null)
+			return null;
+		if(StringHelper.isNotBlank(parameter.getValue()))
+			return parameter.getValue();
+		if(parameter.getSystemAction() != null) {
+			return buildQuery(parameter.getSystemAction().getKlass(), parameter.getSystemAction().getIdentifier(), (Class<Object>) parameter.getSystemAction().getEntityClass()
+					, (Collection<Object>) parameter.getSystemAction().getEntitiesCollection(), parameter.getSystemAction().getEntitiesIdentifiersCollection()
+					, parameter.getSystemAction().getNext() == null ? null : parameter.getSystemAction().getNext().getKlass()
+					, parameter.getSystemAction().getNext() == null ? null : parameter.getSystemAction().getNext().getEntityClass());
+		}
+		throw new RuntimeException("building query from parameter <<"+parameter+">> not yet handled");
+	}
+
+	/**/
 	
 	static String build(String scheme,String user,String password,String host,Integer port,String path,String query,String fragment,String model) {	
 		String uniformResourceIdentifier = ConstantEmpty.STRING;
@@ -337,6 +324,20 @@ public interface UniformResourceIdentifierHelper {
 	static String build(Object request,SystemAction systemAction) {
 		return build(RequestHelper.getPropertyScheme(request), RequestHelper.getPropertyHost(request), RequestHelper.getPropertyPort(request)
 				, systemAction);
+	}
+	
+	static String build(UniformResourceIdentifierAsFunctionParameter parameter) {
+		if(parameter == null)
+			return null;
+		if(StringHelper.isNotBlank(parameter.getValue()))
+			return parameter.getValue();
+		String path = null;
+		if(parameter.getPath() != null)
+			path = buildPath(parameter.getPath());
+		String query = null;
+		if(parameter.getQuery() != null)
+			query = buildQuery(parameter.getQuery());
+		return build(parameter.getScheme(), parameter.getHost(), parameter.getPort(), path, query, parameter.getFragment(), parameter.getModel());
 	}
 	
 	/* Path */
@@ -425,6 +426,20 @@ public interface UniformResourceIdentifierHelper {
 	
 	static String buildPath(SystemAction systemAction) {
 		return buildPath(systemAction, null, Boolean.TRUE);
+	}
+	
+	static String buildPath(PathAsFunctionParameter parameter) {
+		if(parameter == null)
+			return null;
+		if(StringHelper.isNotBlank(parameter.getValue()))
+			return parameter.getValue();
+		if(StringHelper.isNotBlank(parameter.getIdentifier()))
+			return buildPath(parameter.getIdentifier());
+		if(parameter.getSystemAction()!=null) {
+			if(parameter.getSystemAction().getKlass()!=null && parameter.getSystemAction().getEntityClass()!=null)
+				return buildPath(parameter.getSystemAction().getKlass(), parameter.getSystemAction().getEntityClass(), null, Boolean.TRUE);
+		}
+		throw new RuntimeException("building path from parameter <<"+parameter+">> not yet handled");
 	}
 	
 	static String buildPathIdentifier(Class<? extends SystemAction> systemActionClass,Class<?> entityClass,Boolean isUseGeneric) {

@@ -3,6 +3,8 @@ package org.cyk.utility.client.controller.component.window;
 import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.identifier.resource.ParameterName;
+import org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierHelper;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.__kernel__.system.action.SystemActionRead;
 import org.cyk.utility.client.controller.data.Data;
@@ -30,7 +32,7 @@ public class WindowContainerManagedPropertyValueGetterImpl extends AbstractFunct
 			value = __inject__(WindowBuilder.class);
 			break;
 		case SYSTEM_ACTION:
-			SystemAction systemAction = __inject__(RequestParameterValueMapper.class).setParameterNameAsActionClass().execute().getOutputAs(SystemAction.class);
+			SystemAction systemAction = (SystemAction) UniformResourceIdentifierHelper.mapParameterValue(ParameterName.ACTION_CLASS.getValue(), null);
 			if(systemAction instanceof SystemActionRead) {
 				if(CollectionHelper.isEmpty(systemAction.getEntitiesIdentifiers())) {
 					Data data = (Data) __inject__(systemAction.getEntityClass());

@@ -5,12 +5,12 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.window.WindowBuilder;
 import org.cyk.utility.client.controller.event.EventBuilder;
 import org.cyk.utility.client.controller.event.EventName;
-import org.cyk.utility.client.controller.navigation.NavigationBuilder;
 import org.cyk.utility.client.controller.web.jsf.primefaces.tag.BlockUI;
 
 import lombok.Getter;
@@ -39,20 +39,13 @@ public abstract class AbstractPageContainerManagedImpl extends org.cyk.utility.c
 	}
 	
 	protected void __processWindowDialogOkCommandable__(WindowBuilder window,CommandableBuilder commandable) {
-		String widgetVar = (String) window.getDialog(Boolean.TRUE).getOutputProperties().getWidgetVar();
-		
-		String script = __injectPrimefacesHelper__().getScriptInstructionHide(widgetVar);
-		
+		String widgetVar = (String) window.getDialog(Boolean.TRUE).getOutputProperties().getWidgetVar();		
+		String script = __injectPrimefacesHelper__().getScriptInstructionHide(widgetVar);		
 		String url = __processWindowDialogOkCommandableGetUrl__(window, commandable);
-		if(StringHelper.isBlank(url)) {
-			NavigationBuilder navigation = commandable.getNavigation();
-			if(navigation!=null)
-				url = navigation.execute().getOutput().getUniformResourceLocator().toString();	
-		}
-		
+		if(StringHelper.isBlank(url) && commandable.getUniformResourceIdentifier()!=null)
+			url = UniformResourceIdentifierHelper.build(commandable.getUniformResourceIdentifier());			
 		if(StringHelper.isNotBlank(url))
-			script = script + __injectJavaServerFacesHelper__().getScriptInstructionGoToUrlIfMessageMaximumSeverityIsInfo(url);
-				
+			script = script + __injectJavaServerFacesHelper__().getScriptInstructionGoToUrlIfMessageMaximumSeverityIsInfo(url);				
 		EventBuilder event = __inject__(EventBuilder.class).setName(EventName.CLICK).addScriptInstructions(script);
 		commandable.addEvents(event);
 	}

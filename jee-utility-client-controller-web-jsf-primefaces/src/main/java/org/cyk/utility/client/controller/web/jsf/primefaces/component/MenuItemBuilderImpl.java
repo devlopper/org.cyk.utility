@@ -1,11 +1,10 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces.component;
 
 import java.io.Serializable;
-import java.net.URL;
 
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.component.menu.MenuItem;
 import org.cyk.utility.client.controller.web.ValueExpressionMap;
-import org.cyk.utility.__kernel__.string.StringHelper;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultSubMenu;
 import org.primefaces.model.menu.MenuModel;
@@ -16,12 +15,8 @@ public class MenuItemBuilderImpl extends AbstractComponentBuilderImpl<org.primef
 	@Override
 	protected org.primefaces.model.menu.MenuItem __execute__(MenuItem model, ValueExpressionMap valueExpressionMap) throws Exception {
 		DefaultMenuItem item = new DefaultMenuItem(model.getCommandable().getName());
-    	if(model.getCommandable().getNavigation()!=null) {
-    		URL url = model.getCommandable().getNavigation().getUniformResourceLocator();
-    		if(url!=null)
-    			item.setUrl(url.toString());	
-    	}
-    	
+    	if(StringHelper.isNotBlank(model.getCommandable().getUniformResourceIdentifier()))
+    		item.setUrl(model.getCommandable().getUniformResourceIdentifier());
     	if(model.getCommandable().getCommand()!=null) {
     		item.setCommand(__injectJavaServerFacesHelper__().getCommandFunctionCallExpressionLanguage(model.getCommandable()));
 			item.setUpdate(__injectPrimefacesHelper__().computeAttributeUpdate(model.getCommandable()));

@@ -4,10 +4,11 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierAsFunctionParameter;
+import org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierHelper;
 import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
 import org.cyk.utility.__kernel__.internationalization.InternationalizationKeyStringType;
 import org.cyk.utility.__kernel__.internationalization.InternationalizationString;
-import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.Case;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
@@ -19,17 +20,22 @@ import org.cyk.utility.client.controller.component.ComponentRoles;
 import org.cyk.utility.client.controller.component.window.WindowRenderType;
 import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.client.controller.icon.Icon;
-import org.cyk.utility.client.controller.navigation.NavigationBuilder;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
+@Getter @Setter @Accessors(chain=true)
 public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<Commandable> implements CommandableBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private CommandBuilder command;
 	private String name;
 	private CommandableRenderType renderType;
-	private NavigationBuilder navigation;
 	private Class<? extends WindowRenderType> windowRenderTypeClass;
 	private Icon icon;
+	private SystemAction systemAction;
+	private UniformResourceIdentifierAsFunctionParameter uniformResourceIdentifier;
 	
 	@Override
 	protected void __execute__(Commandable commandable) {
@@ -40,50 +46,29 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 		if(command!=null)
 			commandable.setCommand(command.execute().getOutput());
 		
+		SystemAction systemAction = getSystemAction();
+		if(systemAction == null && command!=null && command.getFunction() != null)
+			systemAction = command.getFunction().getAction();
+		commandable.setSystemAction(systemAction);
+		
 		CommandableRenderType renderType = getRenderType();
 		if(renderType == null)
 			renderType = __inject__(CommandableRenderTypeButton.class);
 		commandable.setRenderType(renderType);
 		
-		NavigationBuilder navigation = getNavigation();
-		if(navigation!=null) {
-			navigation.setPropertyIfNull(Properties.CONTEXT, getContext());
-			navigation.setPropertyIfNull(Properties.UNIFORM_RESOURCE_LOCATOR_MAP, getUniformResourceLocatorMap());
-			try {
-				commandable.setNavigation(navigation.execute().getOutput());
-			} catch (Exception exception) {
-				exception.printStackTrace();
-				name = exception.getMessage();
-			}
+		UniformResourceIdentifierAsFunctionParameter uniformResourceIdentifierAsFunctionParameter = getUniformResourceIdentifier();
+		if(uniformResourceIdentifierAsFunctionParameter != null) {
+			uniformResourceIdentifierAsFunctionParameter.setSystemAction(systemAction);
+			uniformResourceIdentifierAsFunctionParameter.setRequest(getRequest());
+			commandable.setUniformResourceIdentifier(UniformResourceIdentifierHelper.build(uniformResourceIdentifierAsFunctionParameter));
 		}
-		
 		String derivedName = null;
 		if(StringHelper.isBlank(derivedName)) {
 			InternationalizationString nameInternationalization = getNameInternationalization();
 			if(nameInternationalization==null) {
-				SystemAction systemAction = null;
-				if(systemAction == null && command!=null)
-					systemAction = command.getFunction().getAction();
-				if(systemAction == null && navigation!=null)
-					systemAction = navigation.getSystemAction();
-				if(systemAction == null && navigation!=null && navigation.getIdentifierBuilder()!=null)
-					systemAction = navigation.getIdentifierBuilder().getSystemAction();
-				
 				if(systemAction!=null)
 					derivedName = InternationalizationHelper.buildString(InternationalizationHelper
 							.buildKey(systemAction,InternationalizationKeyStringType.VERB), null, null, Case.FIRST_CHARACTER_UPPER);
-				
-				/*
-				if(navigation!=null) {
-					SystemAction systemAction = navigation.getSystemAction();
-					if(systemAction == null && navigation.getIdentifierBuilder()!=null)
-						systemAction = navigation.getIdentifierBuilder().getSystemAction();
-					
-					if(systemAction!=null) {
-						builtName = __inject__(InternalizationStringBuilder.class).setKeyValue(systemAction).setCase(Case.FIRST_CHARACTER_UPPER).setKeyType(InternalizationKeyStringType.VERB).execute().getOutput();
-					}
-				}	
-				*/
 			}else {
 				InternationalizationHelper.processStrings(nameInternationalization);
 				derivedName = nameInternationalization.getValue();
@@ -125,19 +110,15 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 	}
 	
 	@Override
+	public UniformResourceIdentifierAsFunctionParameter getUniformResourceIdentifier(Boolean injectIfNull) {
+		if(uniformResourceIdentifier == null && Boolean.TRUE.equals(injectIfNull))
+			setUniformResourceIdentifier(uniformResourceIdentifier = new UniformResourceIdentifierAsFunctionParameter());
+		return uniformResourceIdentifier;
+	}
+	
+	@Override
 	public CommandableBuilder addRoles(ComponentRole... roles) {
 		return (CommandableBuilder) super.addRoles(roles);
-	}
-	
-	@Override
-	public String getName() {
-		return name;
-	}
-	
-	@Override
-	public CommandableBuilder setName(String name) {
-		this.name = name;
-		return this;
 	}
 	
 	@Override
@@ -146,29 +127,23 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 	}
 	
 	@Override
-	public Icon getIcon() {
-		return icon;
-	}
-	@Override
-	public CommandableBuilder setIcon(Icon icon) {
-		this.icon = icon;
+	public CommandableBuilder setUniformResourceIdentifierSystemAction(SystemAction systemAction) {
+		getUniformResourceIdentifier(Boolean.TRUE).setSystemAction(systemAction);
+		if(this.systemAction == null)
+			this.systemAction = systemAction;
 		return this;
 	}
 	
 	@Override
-	public CommandableRenderType getRenderType() {
-		return renderType;
-	}
-	
-	@Override
-	public CommandableBuilder setRenderType(CommandableRenderType renderType) {
-		this.renderType = renderType;
+	public CommandableBuilder setUniformResourceIdentifierSystemActionClass(Class<? extends SystemAction> systemActionClass) {
+		getUniformResourceIdentifier(Boolean.TRUE).setSystemActionClass(systemActionClass);
 		return this;
 	}
 	
 	@Override
-	public CommandBuilder getCommand() {
-		return command;
+	public CommandableBuilder setUniformResourceIdentifierSystemActionEntityClass(Class<?> systemActionEntityClass) {
+		getUniformResourceIdentifier(Boolean.TRUE).setSystemActionEntityClass(systemActionEntityClass);
+		return this;
 	}
 	
 	@Override
@@ -176,12 +151,6 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 		if(command == null && Boolean.TRUE.equals(injectIfNull))
 			command = __inject__(CommandBuilder.class);
 		return command;
-	}
-	
-	@Override
-	public CommandableBuilder setCommand(CommandBuilder command) {
-		this.command = command;
-		return this;
 	}
 	
 	@Override
@@ -229,80 +198,5 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 	public CommandableBuilder setCommandFunctionData(Data data) {
 		getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).getProperties().setData(data);
 		return this;
-	}
-	
-	@Override
-	public NavigationBuilder getNavigation() {
-		return navigation;
-	}
-	
-	@Override
-	public CommandableBuilder injectNavigationIfNull() {
-		getNavigation(Boolean.TRUE);
-		return this;
-	}
-	
-	@Override
-	public NavigationBuilder getNavigation(Boolean injectIfNull) {
-		if(navigation == null && Boolean.TRUE.equals(injectIfNull))
-			navigation = __inject__(NavigationBuilder.class);
-		return navigation;
-	}
-	
-	@Override
-	public CommandableBuilder setNavigation(NavigationBuilder navigation) {
-		this.navigation = navigation;
-		return this;
-	}
-	
-	@Override
-	public CommandableBuilder setNavigationIdentifier(Object identifier) {
-		getNavigation(Boolean.TRUE).setIdentifier(identifier);
-		return this;
-	}
-	
-	@Override
-	public CommandableBuilder setNavigationParameters(Object... keyValues) {
-		getNavigation(Boolean.TRUE).setParameters(keyValues);
-		return this;
-	}
-	
-	@Override
-	public CommandableBuilder setNavigationIdentifierAndParameters(Object identifier, Object[] keyValues) {
-		setNavigationIdentifier(identifier);
-		setNavigationParameters(keyValues);
-		return this;
-	}
-	
-	@Override
-	public CommandableBuilder addNavigationDynamicParameterNames(Object... names) {
-		getNavigation(Boolean.TRUE).getDynamicParameterNames(Boolean.TRUE).add(names);
-		return this;
-	}
-	
-	@Override
-	public CommandableBuilder setNavigationSystemAction(SystemAction systemAction) {
-		getNavigation(Boolean.TRUE).setSystemAction(systemAction);
-		return this;
-	}
-	
-	@Override
-	public CommandableBuilder setNavigationIdentifierBuilderSystemAction(SystemAction systemAction) {
-		getNavigation(Boolean.TRUE).setIdentifierBuilderSystemAction(systemAction);
-		return this;
-	}
-	
-	@Override
-	public Class<? extends WindowRenderType> getWindowRenderTypeClass() {
-		return windowRenderTypeClass;
-	}
-	
-	@Override
-	public CommandableBuilder setWindowRenderTypeClass(Class<? extends WindowRenderType> windowRenderTypeClass) {
-		this.windowRenderTypeClass = windowRenderTypeClass;
-		return this;
-	}
-	
-	/**/
-
+	}	
 }

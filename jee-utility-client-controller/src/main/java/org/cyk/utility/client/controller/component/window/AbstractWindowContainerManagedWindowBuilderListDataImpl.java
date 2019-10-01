@@ -46,24 +46,25 @@ public abstract class AbstractWindowContainerManagedWindowBuilderListDataImpl ex
 			gridBuilder.getViewMap(Boolean.TRUE).set(ViewMap.HEADER,__inject__(ViewBuilder.class));
 			
 			/* Create new instance */
-			SystemAction systemActionCreate = __inject__(SystemActionCreate.class).setEntityClass(gridBuilder.getRowDataClass());			
-			gridBuilder.addComponentBuildersToViewHeader(__inject__(CommandableBuilder.class).setDerivableFieldNames(CommandableBuilder.PROPERTY_NAME,Boolean.FALSE).addRoles(ComponentRole.COLLECTION_PROCESSOR,ComponentRole.CREATOR)
-					.setNavigationIdentifierBuilderSystemAction(systemActionCreate));
+			CommandableBuilder commandableBuilder = null;
+			commandableBuilder = __inject__(CommandableBuilder.class).setUniformResourceIdentifierSystemAction(__inject__(SystemActionCreate.class).setEntityClass(gridBuilder.getRowDataClass()));
+			commandableBuilder.setDerivableFieldNames(CommandableBuilder.PROPERTY_NAME,Boolean.FALSE).addRoles(ComponentRole.COLLECTION_PROCESSOR,ComponentRole.CREATOR);
+			gridBuilder.addComponentBuildersToViewHeader(commandableBuilder);
 			
 			/* Read current instance */
-			SystemAction systemActionRead = __inject__(SystemActionRead.class).setEntityClass(gridBuilder.getRowDataClass());
-			gridBuilder.addCommandablesToColumnBodyView(__inject__(CommandableBuilder.class).setDerivableFieldNames(CommandableBuilder.PROPERTY_NAME,Boolean.FALSE).addRoles(ComponentRole.COLLECTION_ITEM_PROCESSOR,ComponentRole.READER)
-					.setNavigationIdentifierBuilderSystemAction(systemActionRead));
+			commandableBuilder = __inject__(CommandableBuilder.class).setUniformResourceIdentifierSystemAction(__inject__(SystemActionRead.class).setEntityClass(gridBuilder.getRowDataClass()));
+			commandableBuilder.setDerivableFieldNames(CommandableBuilder.PROPERTY_NAME,Boolean.FALSE).addRoles(ComponentRole.COLLECTION_ITEM_PROCESSOR,ComponentRole.READER);
+			gridBuilder.addCommandablesToColumnBodyView(commandableBuilder);
 			
 			/* Update current instance */
-			SystemAction systemActionUpdate = __inject__(SystemActionUpdate.class).setEntityClass(gridBuilder.getRowDataClass());
-			gridBuilder.addCommandablesToColumnBodyView(__inject__(CommandableBuilder.class).setDerivableFieldNames(CommandableBuilder.PROPERTY_NAME,Boolean.FALSE).addRoles(ComponentRole.COLLECTION_ITEM_PROCESSOR,ComponentRole.MODIFIER)
-					.setNavigationIdentifierBuilderSystemAction(systemActionUpdate));
+			commandableBuilder = __inject__(CommandableBuilder.class).setUniformResourceIdentifierSystemAction(__inject__(SystemActionUpdate.class).setEntityClass(gridBuilder.getRowDataClass()));
+			commandableBuilder.setDerivableFieldNames(CommandableBuilder.PROPERTY_NAME,Boolean.FALSE).addRoles(ComponentRole.COLLECTION_ITEM_PROCESSOR,ComponentRole.MODIFIER);
+			gridBuilder.addCommandablesToColumnBodyView(commandableBuilder);
 			
 			/* Remove current instance */
-			SystemAction systemActionDelete = __inject__(SystemActionDelete.class).setEntityClass(gridBuilder.getRowDataClass());
-			gridBuilder.addCommandablesToColumnBodyView(__inject__(CommandableBuilder.class).setDerivableFieldNames(CommandableBuilder.PROPERTY_NAME,Boolean.FALSE).addRoles(ComponentRole.COLLECTION_ITEM_PROCESSOR,ComponentRole.REMOVER)
-					.setNavigationIdentifierBuilderSystemAction(systemActionDelete));
+			commandableBuilder = __inject__(CommandableBuilder.class).setUniformResourceIdentifierSystemAction(__inject__(SystemActionDelete.class).setEntityClass(gridBuilder.getRowDataClass()));
+			commandableBuilder.setDerivableFieldNames(CommandableBuilder.PROPERTY_NAME,Boolean.FALSE).addRoles(ComponentRole.COLLECTION_ITEM_PROCESSOR,ComponentRole.REMOVER);
+			gridBuilder.addCommandablesToColumnBodyView(commandableBuilder);
 			
 			/* Create new instance using normal window */
 			/*

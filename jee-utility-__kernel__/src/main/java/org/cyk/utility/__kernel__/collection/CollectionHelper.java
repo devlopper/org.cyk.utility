@@ -82,7 +82,8 @@ public interface CollectionHelper {
 			return;
 		if(collection instanceof List)
 			((List<ELEMENT>)collection).set(indexValue.intValue(),value);
-		throw new RuntimeException("collection helper set at");
+		else
+			throw new RuntimeException("collection helper : set at index in collection of type "+collection.getClass()+" not yet implemented");
 	}
 
 	static <ELEMENT> void setElementAt(CollectionInstance<ELEMENT> collectionInstance, Object index,ELEMENT value) {

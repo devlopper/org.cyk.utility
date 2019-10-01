@@ -48,12 +48,14 @@ public class DeviceScreenDimensionProportionsImpl extends AbstractObject impleme
 
 	@Override
 	public DeviceScreenDimensionProportions setByClasses(Integer value, Class<? extends Device>... classes) {
-		return setByClasses(value,List.of(classes));
+		return setByClasses(value,CollectionHelper.listOf(classes));
 	}
 
 	@Override
 	public DeviceScreenDimensionProportions setAllClasses(Integer _default, Integer television, Integer desktop,Integer tablet, Integer phone) {
-		setByClasses(_default, (Class<? extends Device>)null);
+		List<Class<? extends Device>> classes = new ArrayList<>();
+		classes.add(null);
+		setByClasses(_default, classes);
 		setByClasses(television, DeviceTelevision.class);
 		setByClasses(desktop, DeviceDesktop.class);
 		setByClasses(tablet, DeviceTablet.class);

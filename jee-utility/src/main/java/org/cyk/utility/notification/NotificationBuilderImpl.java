@@ -4,21 +4,26 @@ import java.io.Serializable;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
+import org.cyk.utility.__kernel__.internationalization.InternationalizationString;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.internationalization.InternalizationStringBuilder;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 
-@Dependent
+@Dependent @Getter @Setter @Accessors(chain=true)
 public class NotificationBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Notification> implements NotificationBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Throwable throwable;
 	private NotificationSeverity severity;
 	private String summary;
-	private InternalizationStringBuilder summaryInternalizationString;
+	private InternationalizationString summaryInternationalizationString;
 	private String details;
-	private InternalizationStringBuilder detailsInternalizationString;
+	private InternationalizationString detailsInternationalizationString;
 	
 	@Override
 	protected Notification __execute__() throws Exception {
@@ -35,27 +40,31 @@ public class NotificationBuilderImpl extends AbstractFunctionWithPropertiesAsInp
 		
 		String summary = getSummary();
 		if(StringHelper.isBlank(summary)) {
-			InternalizationStringBuilder summaryInternalizationString = getSummaryInternalizationString();
-			if(summaryInternalizationString==null) {
+			InternationalizationString summaryInternationalizationString = getSummaryInternationalizationString();
+			if(summaryInternationalizationString==null) {
 				if(throwable!=null) {
-					throwable.printStackTrace();//TODO to be removed or to be logged to a specific file named notification
-					summary = __inject__(InternalizationStringBuilder.class).setKeyValue(throwable).execute().getOutput();
+					__log__(throwable);
+					summary = InternationalizationHelper.buildString(InternationalizationHelper.buildKey(throwable));
 				}
-			}else
-				summary = summaryInternalizationString.execute().getOutput();	
+			}else {
+				InternationalizationHelper.processStrings(summaryInternationalizationString);
+				summary = summaryInternationalizationString.getValue();
+			}
 		}
 		notification.setSummary(summary);
 		
 		String details = getDetails();
 		if(StringHelper.isBlank(details)) {
-			InternalizationStringBuilder detailsInternalizationString = getDetailsInternalizationString();
-			if(detailsInternalizationString==null) {
+			InternationalizationString detailsInternationalizationString = getDetailsInternationalizationString();
+			if(detailsInternationalizationString==null) {
 				if(throwable!=null) {
-					//TODO find a way to get the stack trace as lines in order to build the details
-					details = throwable.getMessage();//__inject__(StackTraceHelper.class).getStackTraceAsString();
+					__log__(throwable);
+					details = InternationalizationHelper.buildString(InternationalizationHelper.buildKey(throwable));
 				}
-			}else
-				details = detailsInternalizationString.execute().getOutput();	
+			}else {
+				InternationalizationHelper.processStrings(detailsInternationalizationString);
+				details = detailsInternationalizationString.getValue();
+			}
 		}
 		notification.setDetails(details);
 		
@@ -63,93 +72,29 @@ public class NotificationBuilderImpl extends AbstractFunctionWithPropertiesAsInp
 	}
 	
 	@Override
-	public Throwable getThrowable() {
-		return throwable;
+	public InternationalizationString getSummaryInternationalizationString(Boolean injectIfNull) {
+		if(summaryInternationalizationString == null && Boolean.TRUE.equals(injectIfNull))
+			summaryInternationalizationString = new InternationalizationString();
+		return summaryInternationalizationString;
 	}
 	
 	@Override
-	public NotificationBuilder setThrowable(Throwable throwable) {
-		this.throwable = throwable;
-		return this;
-	}
-	
-	@Override
-	public NotificationSeverity getSeverity() {
-		return severity;
-	}
-
-	@Override
-	public NotificationBuilder setSeverity(NotificationSeverity severity) {
-		this.severity = severity;
+	public NotificationBuilder setSummaryInternationalizationStringKeyValue(Object value) {
+		getSummaryInternationalizationString(Boolean.TRUE).setKey(InternationalizationHelper.buildKey(value));
 		return this;
 	}
 
 	@Override
-	public InternalizationStringBuilder getSummaryInternalizationString() {
-		return summaryInternalizationString;
-	}
-	
-	@Override
-	public InternalizationStringBuilder getSummaryInternalizationString(Boolean injectIfNull) {
-		return (InternalizationStringBuilder) __getInjectIfNull__(FIELD_SUMMARY_INTERNALIZATION_STRING, injectIfNull);
+	public InternationalizationString getDetailsInternationalizationString(Boolean injectIfNull) {
+		if(detailsInternationalizationString == null && Boolean.TRUE.equals(injectIfNull))
+			detailsInternationalizationString = new InternationalizationString();
+		return detailsInternationalizationString;
 	}
 
 	@Override
-	public NotificationBuilder setSummaryInternalizationString(InternalizationStringBuilder summaryInternalizationString) {
-		this.summaryInternalizationString = summaryInternalizationString;
+	public NotificationBuilder setDetailsInternationalizationStringKeyValue(Object value) {
+		getDetailsInternationalizationString(Boolean.TRUE).setKey(InternationalizationHelper.buildKey(value));
 		return this;
 	}
 	
-	@Override
-	public NotificationBuilder setSummaryInternalizationStringKeyValue(Object value) {
-		getSummaryInternalizationString(Boolean.TRUE).setKeyValue(value);
-		return this;
-	}
-
-	@Override
-	public InternalizationStringBuilder getDetailsInternalizationString() {
-		return detailsInternalizationString;
-	}
-	
-	@Override
-	public InternalizationStringBuilder getDetailsInternalizationString(Boolean injectIfNull) {
-		return (InternalizationStringBuilder) __getInjectIfNull__(FIELD_DETAILS_INTERNALIZATION_STRING, injectIfNull);
-	}
-
-	@Override
-	public NotificationBuilder setDetailsInternalizationString(InternalizationStringBuilder detailsInternalizationString) {
-		this.detailsInternalizationString = detailsInternalizationString;
-		return this;
-	}
-	
-	@Override
-	public NotificationBuilder setDetailsInternalizationStringKeyValue(Object value) {
-		getDetailsInternalizationString(Boolean.TRUE).setKeyValue(value);
-		return this;
-	}
-	
-	@Override
-	public String getDetails() {
-		return details;
-	}
-	
-	@Override
-	public NotificationBuilder setDetails(String details) {
-		this.details = details;
-		return this;
-	}
-	@Override
-	public String getSummary() {
-		return summary;
-	}
-	
-	@Override
-	public NotificationBuilder setSummary(String summary) {
-		this.summary = summary;
-		return this;
-	}
-	
-	public static final String FIELD_SUMMARY_INTERNALIZATION_STRING = "summaryInternalizationString";
-	public static final String FIELD_DETAILS_INTERNALIZATION_STRING = "detailsInternalizationString";
-
 }
