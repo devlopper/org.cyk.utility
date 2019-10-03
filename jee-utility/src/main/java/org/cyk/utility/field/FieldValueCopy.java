@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.cyk.utility.function.FunctionWithPropertiesAsInputAndVoidAsOutput;
 
+@Deprecated
 public interface FieldValueCopy extends FunctionWithPropertiesAsInputAndVoidAsOutput {
 
 	FieldValueCopy execute(Object source,Object destination,String fieldName);

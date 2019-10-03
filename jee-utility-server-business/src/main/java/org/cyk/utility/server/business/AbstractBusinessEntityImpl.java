@@ -382,7 +382,7 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 			__inject__(Business.class).deleteMany((Collection<Object>) objects);
 	}
 	
-	protected <T> Collection<T> __getDeletableInstances__(CollectionInstance<?> finalInstances,Collection<T> persistedInstances,String fieldName) {
+	protected <T> Collection<T> __getDeletableInstances__(Collection<?> finalInstances,Collection<T> persistedInstances,String fieldName) {
 		Collection<T> collection = null;
 		if(CollectionHelper.isNotEmpty(persistedInstances))
 			for(T index : persistedInstances) {
@@ -395,17 +395,26 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 		return collection;
 	}
 	
-	@SuppressWarnings("unchecked")
-	protected <T> void __delete__(CollectionInstance<?> finalInstances,Collection<T> persistedInstances,String fieldName) {
-		Collection<T> collection = __getDeletableInstances__(finalInstances, persistedInstances, fieldName);
-		if(CollectionHelper.isNotEmpty(collection))
-			__inject__(Business.class).deleteMany((Collection<Object>) collection);
+	protected <T> Collection<T> __getDeletableInstances__(CollectionInstance<?> finalInstances,Collection<T> persistedInstances,String fieldName) {
+		return __getDeletableInstances__(finalInstances == null ? null : finalInstances.get(), persistedInstances, fieldName);
 	}
 	
-	protected <M,D> Collection<D> __getSavableInstances__(Class<D> klass,CollectionInstance<M> finalInstances,Collection<M> persistedInstances,String fieldName,Object master,String masterFieldName) {
+	@SuppressWarnings("unchecked")
+	protected <T> void __delete__(Collection<?> finalInstances,Collection<T> persistedInstances,String fieldName) {
+		Collection<T> collection = __getDeletableInstances__(finalInstances, persistedInstances, fieldName);
+		if(CollectionHelper.isEmpty(collection))
+			return;
+		__inject__(Business.class).deleteMany((Collection<Object>) collection);
+	}
+	
+	protected <T> void __delete__(CollectionInstance<?> finalInstances,Collection<T> persistedInstances,String fieldName) {
+		__delete__(finalInstances == null ? null : finalInstances.get() , persistedInstances, fieldName);
+	}
+	
+	protected <M,D> Collection<D> __getSavableInstances__(Class<D> klass,Collection<M> finalInstances,Collection<M> persistedInstances,String fieldName,Object master,String masterFieldName) {
 		Collection<D> collection = null;
 		if(CollectionHelper.isNotEmpty(finalInstances)) {
-			for(Object index : finalInstances.get()) {
+			for(Object index : finalInstances) {
 				//check if not yet created
 				if(!Boolean.TRUE.equals(CollectionHelper.contains(persistedInstances, index))) {
 					if(collection == null)
@@ -420,11 +429,20 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 		return collection;
 	}
 	
+	protected <M,D> Collection<D> __getSavableInstances__(Class<D> klass,CollectionInstance<M> finalInstances,Collection<M> persistedInstances,String fieldName,Object master,String masterFieldName) {
+		return __getSavableInstances__(klass, finalInstances == null ? null : finalInstances.get(), persistedInstances, fieldName, master, masterFieldName);
+	}
+	
 	@SuppressWarnings("unchecked")
-	protected <M,D> void __save__(Class<D> klass,CollectionInstance<M> finalInstances,Collection<M> persistedInstances,String fieldName,Object master,String masterFieldName) {
+	protected <M,D> void __save__(Class<D> klass,Collection<M> finalInstances,Collection<M> persistedInstances,String fieldName,Object master,String masterFieldName) {
 		Collection<D> collection = __getSavableInstances__(klass, finalInstances, persistedInstances, fieldName, master, masterFieldName);
-		if(CollectionHelper.isNotEmpty(collection))
-			__inject__(Business.class).saveMany((Collection<Object>) collection);
+		if(CollectionHelper.isEmpty(collection))
+			return;
+		__inject__(Business.class).saveMany((Collection<Object>) collection);
+	}
+	
+	protected <M,D> void __save__(Class<D> klass,CollectionInstance<M> finalInstances,Collection<M> persistedInstances,String fieldName,Object master,String masterFieldName) {
+		__save__(klass, finalInstances == null ? null : finalInstances.get(), persistedInstances, fieldName, master, masterFieldName);
 	}
 	
 }

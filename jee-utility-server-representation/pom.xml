@@ -30,7 +30,7 @@
 				<org.cyk.test.jboss.deployment.structure.file>org/cyk/utility/server/representation/jboss-deployment-structure.xml</org.cyk.test.jboss.deployment.structure.file>
 				<org.cyk.test.swarm.project.defaults.file>org/cyk/utility/server/representation/project-defaults.yml</org.cyk.test.swarm.project.defaults.file>
 				<org.cyk.test.jpa.persistence.file>org/cyk/utility/server/representation/persistence.xml</org.cyk.test.jpa.persistence.file>
-				<org.cyk.test.classes>org.cyk.utility.server.persistence.entities.MyEntity,org.cyk.utility.server.persistence.entities.Node,org.cyk.utility.server.persistence.entities.NodeHierarchy,org.cyk.utility.server.representation.DataSourceDefinition,org.cyk.utility.server.representation.PersistableClassesGetterImpl,org.cyk.utility.server.representation.ApplicationScopeLifeCycleListenerEntities,org.cyk.utility.server.representation.ContainerRequestFilterImpl</org.cyk.test.classes>
+				<org.cyk.test.classes>org.cyk.utility.server.persistence.entities.MyEntity,org.cyk.utility.server.persistence.entities.Parent,org.cyk.utility.server.persistence.entities.ParentChild,org.cyk.utility.server.persistence.entities.ParentType,org.cyk.utility.server.persistence.entities.Child,org.cyk.utility.server.persistence.entities.Node,org.cyk.utility.server.persistence.entities.NodeHierarchy,org.cyk.utility.server.representation.DataSourceDefinition,org.cyk.utility.server.representation.PersistableClassesGetterImpl,org.cyk.utility.server.representation.ApplicationScopeLifeCycleListenerEntities,org.cyk.utility.server.representation.ContainerRequestFilterImpl</org.cyk.test.classes>
 			</properties>
 			<dependencies>
 				<dependency>

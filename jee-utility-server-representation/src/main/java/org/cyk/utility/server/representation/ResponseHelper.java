@@ -9,6 +9,7 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Response.Status.Family;
 
 import org.cyk.utility.__kernel__.number.NumberHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.helper.Helper;
 
 public interface ResponseHelper extends Helper {
@@ -71,18 +72,18 @@ public interface ResponseHelper extends Helper {
 	}
 	
 	static String getHeader(Response response, String name) {
-		String value = null;
-		if(response != null && !name.isBlank())
-			value = response.getHeaderString(name);
-		return value;
+		if(response == null || name == null || name.isBlank())
+			return null;
+		return response.getHeaderString(name);
 	}
 	
 	static Collection<String> getHeaderAndDisjoin(Response response, String name) {
-		Collection<String> strings = null;
+		if(response == null || name == null || name.isBlank())
+			return null;
 		String value = getHeader(response, name);
-		if(!value.isBlank())
-			strings = disjoin(value);
-		return strings;
+		if(StringHelper.isBlank(value))
+			return null;
+		return disjoin(value);
 	}
 	
 	static Long getHeaderXTotalCount(Response response) {

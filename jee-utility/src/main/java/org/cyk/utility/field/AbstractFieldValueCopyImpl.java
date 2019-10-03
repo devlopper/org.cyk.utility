@@ -18,6 +18,7 @@ import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.map.MapHelper;
 import org.cyk.utility.value.ValueConverter;
 
+@Deprecated
 public abstract class AbstractFieldValueCopyImpl extends AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl implements FieldValueCopy,Serializable {
 	private static final long serialVersionUID = 1L;
 

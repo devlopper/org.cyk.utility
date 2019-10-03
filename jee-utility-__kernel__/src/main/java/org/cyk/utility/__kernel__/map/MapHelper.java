@@ -10,6 +10,18 @@ import org.cyk.utility.__kernel__.klass.ClassHelper;
 
 public interface MapHelper {
 
+	static Boolean isEmpty(Map<?,?> map) {
+		if(map == null)
+			return Boolean.TRUE;
+		return map.isEmpty();
+	}
+	
+	static Boolean isNotEmpty(Map<?,?> map) {
+		if(map == null)
+			return Boolean.FALSE;
+		return !isEmpty(map);
+	}
+	
 	static <K,V> Collection<K> getKeys(Map<K,V> map,Collection<Class<?>> keysTypesInstanceOfClasses,Collection<Class<?>> keysInstanceOfClasses,Collection<V> values) {
 		if(map == null || map.isEmpty())
 			return null;

@@ -8,7 +8,7 @@ import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
-@Dependent
+@Dependent @Deprecated
 public class ValueConverterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Object> implements ValueConverter,Serializable {
 	private static final long serialVersionUID = 1L;
 

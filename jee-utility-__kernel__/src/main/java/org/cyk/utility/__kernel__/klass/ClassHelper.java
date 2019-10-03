@@ -257,6 +257,14 @@ public interface ClassHelper {
 		return (Class<?>) parameterizedType.getActualTypeArguments()[index];
 	}
 	
+	/**/
+	
+	static Boolean isPersistable(Class<?> klass) {
+		return Boolean.TRUE.equals(Property.getProperty(klass, Property.PERSISTABLE));
+	}
+	
+	/**/
+	
 	Map<Class<?>,Class<?>> IMPLEMENTATIONS = new HashMap<>();
 	String IMPL = "Impl";
 }

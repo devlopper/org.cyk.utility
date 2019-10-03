@@ -10,6 +10,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.ListUtils;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
 
 import one.util.streamex.StreamEx;
@@ -281,5 +282,29 @@ public interface CollectionHelper {
 		if(__size__!= null && __size__ > 0)
 			return ListUtils.partition(collection, __size__);
 		return null;
+	}
+
+	static <ELEMENT> Collection<ELEMENT> getElementsNotIn(Collection<ELEMENT> collection1,Collection<ELEMENT> collection2) {
+		if(isEmpty(collection1))
+			return null;
+		Collection<ELEMENT> collection = null;
+		for(ELEMENT index : collection1) {
+			if(contains(collection2, index))
+				continue;			
+			if(collection == null)
+				collection = new ArrayList<>();
+			collection.add(index);			
+		}
+		return collection;
+	}
+	
+	static <ELEMENT> Collection<ELEMENT> getElementsNotIn(Collection<ELEMENT> collection1,Collection<?> collection2,Collection<String> fieldNames) {
+		@SuppressWarnings("unchecked")
+		Collection<ELEMENT> __collection2__ = (Collection<ELEMENT>) FieldHelper.readMany(collection2, FieldHelper.join(fieldNames));
+		return getElementsNotIn(collection1, __collection2__);
+	}
+	
+	static <ELEMENT> Collection<ELEMENT> getElementsNotIn(Collection<ELEMENT> collection1,Collection<?> collection2,String...fieldNames) {
+		return getElementsNotIn(collection1, collection2, listOf(fieldNames));
 	}
 }

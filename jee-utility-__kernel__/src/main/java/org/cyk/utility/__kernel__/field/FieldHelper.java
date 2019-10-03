@@ -23,6 +23,8 @@ import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.object.marker.IdentifiableBusiness;
 import org.cyk.utility.__kernel__.object.marker.IdentifiableSystem;
+import org.cyk.utility.__kernel__.value.Identifier;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 import lombok.AllArgsConstructor;
@@ -206,7 +208,27 @@ public interface FieldHelper {
 			return null;
 		return filter(klass, fieldNameRegularExpression, modifiers == null ? null : CollectionHelper.listOf(modifiers), null);
 	}
-	
+	/*
+	static Collection<Field> getPersistables(Class<?> klass) {
+		if(klass == null)
+			return null;
+		Collection<Field> fields = PERSISTABLES_MAP.get(klass);
+		if(fields != null)
+			return fields;
+		Collection<Field> __fields__ = get(klass);
+		if(__fields__ == null || __fields__.isEmpty())
+			fields = List.of();
+		else {
+			fields = new ArrayList<>();
+			for(Field index : __fields__) {
+				Type type = getType(index, klass);
+				
+			}
+		}
+		PERSISTABLES_MAP.put(klass, fields);
+		return fields;
+	}
+	*/
 	/* get set type */
 	
 	static Type getType(Field field,Class<?> klass) {
@@ -417,6 +439,24 @@ public interface FieldHelper {
 		return read(object, FieldName.IDENTIFIER, ValueUsageType.BUSINESS);
 	}
 	
+	static Identifier readIdentifier(Object object,Boolean isGettable) {
+		if(object == null)
+			return null;
+		Object identifier = readSystemIdentifier(object, isGettable);
+		if(identifier != null)
+			return new Identifier().setValue(identifier).setUsageType(ValueUsageType.SYSTEM);
+		identifier = readBusinessIdentifier(object, isGettable);
+		if(identifier != null)
+			return new Identifier().setValue(identifier).setUsageType(ValueUsageType.BUSINESS);
+		return null;
+	}
+	
+	static Identifier readIdentifier(Object object) {
+		if(object == null)
+			return null;
+		return readIdentifier(object, null);
+	}
+	
 	static Object readSystemIdentifierOrBusinessIdentifier(Object object) {
 		if(object == null)
 			return null;
@@ -445,7 +485,7 @@ public interface FieldHelper {
 	static Collection<Object> readMany(Collection<?> objects,String fieldName) {
 		if(objects == null || objects.isEmpty() || fieldName == null || fieldName.isBlank())
 			return null;
-		return readMany(objects,fieldName);
+		return readMany(objects,fieldName,null);
 	}
 	
 	static Collection<Object> readMany(Collection<?> objects,FieldName fieldName,ValueUsageType valueUsageType,Boolean isGettable) {
@@ -472,7 +512,19 @@ public interface FieldHelper {
 	static Collection<Object> readBusinessIdentifiers(Collection<?> objects) {
 		if(objects == null || objects.isEmpty())
 			return null;
-		return readMany(objects, FieldName.IDENTIFIER, ValueUsageType.BUSINESS);
+		Collection<Object> identifiers = new ArrayList<>();
+		for(Object index : objects)
+			identifiers.add(readBusinessIdentifier(index));
+		return identifiers;
+	}
+	
+	static Collection<Identifier> readIdentifiers(Collection<?> objects) {
+		if(objects == null || objects.isEmpty())
+			return null;
+		Collection<Identifier> identifiers = new ArrayList<>();
+		for(Object index : objects)
+			identifiers.add(readIdentifier(index));
+		return identifiers;
 	}
 	
 	/* write value*/
@@ -623,8 +675,24 @@ public interface FieldHelper {
 	}*/
 	
 	/**/
+	/*
+	static Boolean isPersistable(Field field,Class<?> klass) {
+		
+	}
+	*/
+	/**/
+		
+	static void copy(Object sourceObject,Field sourceObjectField,Object sourceObjectFieldValue,Object destinationObject,Field destinationObjectField) {
+		if(sourceObject == null || sourceObjectField == null || destinationObject == null || destinationObjectField == null)
+			return;
+		Object destinationObjectFieldValue = ValueHelper.convert(sourceObjectField, sourceObjectFieldValue, destinationObjectField);
+		write(destinationObject, destinationObjectField, destinationObjectFieldValue);
+	}
+	
+	/**/
 	
 	Map<Class<?>,List<Field>> CLASS_FIELDS_MAP = new HashMap<>();
+	Map<Class<?>,Collection<Field>> PERSISTABLES_MAP = new HashMap<>();
 	Map<String,Field> FIELDS_MAP = new HashMap<>();
 	Map<String,Type> TYPES_MAP = new HashMap<>();
 	String DOT = ".";

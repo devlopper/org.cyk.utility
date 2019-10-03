@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldInstance;
 import org.cyk.utility.__kernel__.field.FieldInstancesRuntime;
 import org.cyk.utility.__kernel__.properties.Properties;
@@ -59,9 +58,13 @@ public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> ex
 		if(classInstance.getFields() != null) {
 			for(Field index : classInstance.getFields().get()) {
 				FieldInstance fieldInstance = DependencyInjection.inject(FieldInstancesRuntime.class).get(destination.getClass(), index.getName());
-				if(fieldInstance.getType() instanceof Class<?> && 
-						Boolean.TRUE.equals(DependencyInjection.inject(ClassInstancesRuntime.class).get((Class<?>) fieldInstance.getType()).getIsPersistable()) && 
-						fieldInstance.getField().isAnnotationPresent(javax.persistence.ManyToOne.class)) {
+				if(
+					(fieldInstance.getType() instanceof Class<?> && 
+					Boolean.TRUE.equals(DependencyInjection.inject(ClassInstancesRuntime.class).get((Class<?>) fieldInstance.getType()).getIsPersistable()) && 
+					fieldInstance.getField().isAnnotationPresent(javax.persistence.ManyToOne.class))
+					//||
+					//(fieldInstance.getType() instanceof Collection<?>)
+					) {
 					if(fields == null)
 						fields = new ArrayList<>();
 					fields.add(index);
@@ -79,16 +82,21 @@ public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> ex
 	 * @return
 	 */
 	protected void __processPersistableFields__(SOURCE source,DESTINATION destination,Collection<Field> fields) {
-		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(fields))) {
-			for(Field index : fields) {
+		if(fields == null || fields.isEmpty())
+			return;		
+		for(Field index : fields) {
+			//Type type = FieldHelper.getType(index, null);
+			//if(type instanceof Collection<?>) {
+				
+			//}else {
 				Object value = org.cyk.utility.__kernel__.field.FieldHelper.read(destination, index);
 				if(value != null) {
 					Object persisted = DependencyInjection.inject(InstanceHelper.class).getBySystemIdentifierOrBusinessIdentifier(value);
 					if(persisted != null)
 						org.cyk.utility.__kernel__.field.FieldHelper.write(destination, index, persisted);
 				}
-			}
-		}
+			//}			
+		}		
 	}
 	
 	/* Source */

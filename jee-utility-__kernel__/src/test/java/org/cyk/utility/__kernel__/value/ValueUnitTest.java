@@ -49,4 +49,5 @@ public class ValueUnitTest extends AbstractWeldUnitTest {
 		private String f01;
 		
 	}
+	
 }

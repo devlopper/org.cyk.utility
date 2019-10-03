@@ -23,11 +23,16 @@ import org.cyk.utility.server.persistence.PersistableClassesGetter;
 import org.cyk.utility.server.persistence.entities.MyEntity;
 import org.cyk.utility.server.persistence.entities.Node;
 import org.cyk.utility.server.persistence.query.filter.FilterDto;
+import org.cyk.utility.server.representation.api.ChildRepresentation;
 import org.cyk.utility.server.representation.api.MyEntityRepresentation;
 import org.cyk.utility.server.representation.api.NodeRepresentation;
+import org.cyk.utility.server.representation.api.ParentChildRepresentation;
+import org.cyk.utility.server.representation.api.ParentRepresentation;
+import org.cyk.utility.server.representation.entities.ChildDto;
 import org.cyk.utility.server.representation.entities.MyEntityDto;
 import org.cyk.utility.server.representation.entities.MyEntityDtoCollection;
 import org.cyk.utility.server.representation.entities.NodeDto;
+import org.cyk.utility.server.representation.entities.ParentDto;
 import org.cyk.utility.server.representation.test.TestRepresentationRead;
 import org.cyk.utility.server.representation.test.arquillian.AbstractRepresentationArquillianIntegrationTestWithDefaultDeployment;
 import org.junit.Test;
@@ -42,6 +47,57 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 		DependencyInjection.setQualifierClassTo(org.cyk.utility.__kernel__.annotation.Test.Class.class, PersistableClassesGetter.class);
 		__inject__(ApplicationScopeLifeCycleListenerEntities.class).initialize(null);
 		__inject__(ClassInstancesRuntime.class).get(MyEntity.class).setIsActionable(Boolean.TRUE);
+	}
+	
+	@Test
+	public void create_parent() throws Exception{
+		ParentRepresentation parentRepresentation = __inject__(ParentRepresentation.class);
+		ParentDto parent = new ParentDto().setCode("cyk").setFirstName("komenan").setLastNames("Yao christian");
+		parentRepresentation.createOne(parent);
+		parent = (ParentDto) parentRepresentation.getOne("cyk", "business", null).getEntity();
+		assertThat(parent).isNotNull();
+		assertThat(parent.getFirstName()).isEqualTo("komenan");
+	}
+	
+	@Test
+	public void create_parent_withChildren() throws Exception{
+		ParentChildRepresentation parentChildRepresentation = __inject__(ParentChildRepresentation.class);
+		ChildRepresentation childRepresentation = __inject__(ChildRepresentation.class);
+		ChildDto child = new ChildDto().setIdentifier("i01").setCode("kybe").setFirstName("komenan").setLastNames("Yao bryan emmanuel");
+		childRepresentation.createOne(child);
+		child = new ChildDto().setIdentifier("i02").setCode("kkpme").setFirstName("komenan").setLastNames("Kouassi paul-marie ethan");
+		childRepresentation.createOne(child);
+		
+		ParentRepresentation parentRepresentation = __inject__(ParentRepresentation.class);
+		ParentDto parent = new ParentDto().setCode("cyk").setFirstName("komenan").setLastNames("Yao christian");
+		//parent.addChildrenByIdentifiers("i01");
+		parent.addChildrenByCodes("kybe");
+		assertThat(parentRepresentation.count(null).getEntity()).isEqualTo(0l);
+		assertThat(parentChildRepresentation.count(null).getEntity()).isEqualTo(0l);
+		parentRepresentation.createOne(parent);	
+		assertThat(parentRepresentation.count(null).getEntity()).isEqualTo(1l);
+		assertThat(parentChildRepresentation.count(null).getEntity()).isEqualTo(1l);
+		parent = (ParentDto) parentRepresentation.getOne("cyk", "business", null).getEntity();
+		assertThat(parent.getChildren()).isNull();
+		parent = (ParentDto) parentRepresentation.getOne("cyk", "business", "identifier,children").getEntity();
+		assertThat(parent.getChildren()).isNotNull();
+		assertThat(parent.getChildren().stream().map(x -> x.getCode())).containsExactlyInAnyOrder("kybe");
+		
+		parent.setChildren(null);
+		assertThat(parent.getChildren()).isNull();
+		parentRepresentation.updateOne(parent, "children");
+		assertThat(parentRepresentation.count(null).getEntity()).isEqualTo(1l);
+		assertThat(parentChildRepresentation.count(null).getEntity()).isEqualTo(0l);
+		parent = (ParentDto) parentRepresentation.getOne("cyk", "business", "identifier,children").getEntity();
+		assertThat(parent.getChildren()).isNull();
+		parent.addChildrenByCodes("kybe","kkpme");
+		assertThat(parent.getChildren().size()).isEqualTo(2);
+		parentRepresentation.updateOne(parent, "children");
+		assertThat(parentRepresentation.count(null).getEntity()).isEqualTo(1l);
+		assertThat(parentChildRepresentation.count(null).getEntity()).isEqualTo(2l);
+		parent = (ParentDto) parentRepresentation.getOne("cyk", "business", "identifier,children").getEntity();
+		assertThat(parent.getChildren()).isNotNull();
+		assertThat(parent.getChildren().stream().map(x -> x.getCode())).containsExactlyInAnyOrder("kybe","kkpme");
 	}
 	
 	@Test
