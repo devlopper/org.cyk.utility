@@ -49,10 +49,9 @@ public abstract class AbstractRepresentationFunctionModifierImpl extends Abstrac
 			return;		
 		for(Object index : persistenceEnities) {
 			Object entity = __getEntity__(__entities__, index);
-			if(entity != null) {
-				/* Copy field value from representation entity to persistence entity*/
-				InstanceHelper.copy(entity, index, fieldNames.get());				
-			}
+			if(entity == null)
+				continue;
+			InstanceHelper.copy(entity, index, fieldNames.get());				
 		}
 		__injectBusiness__().updateMany(persistenceEnities,new Properties().setFields(fieldNames));					
 	}

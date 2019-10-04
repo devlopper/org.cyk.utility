@@ -2,6 +2,9 @@ package org.cyk.utility.__kernel__.field.container;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.json.bind.annotation.JsonbTransient;
+import javax.xml.bind.annotation.XmlTransient;
+
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
@@ -10,6 +13,8 @@ import org.cyk.utility.__kernel__.klass.ClassHelper;
 public interface FieldContainerCollectionChildren<CHILD> extends FieldContainerCollection {
 
 	@SuppressWarnings("unchecked")
+	@JsonbTransient
+	@XmlTransient
 	default Class<CHILD> getChildrenClass() {
 		return (Class<CHILD>) ClassHelper.getParameterAt(getClass(), 0);
 	}
