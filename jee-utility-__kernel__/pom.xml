@@ -21,6 +21,7 @@
 		<commons-beanutils-commons-beanutils>1.9.4</commons-beanutils-commons-beanutils>
 		<org.apache.commons.commons-collections4.version>4.3</org.apache.commons.commons-collections4.version>
 		<org.reflections.reflections.version>0.9.10</org.reflections.reflections.version>
+		<org.keycloak.keycloak-admin-client.version>4.8.3.Final</org.keycloak.keycloak-admin-client.version>
 	</properties> 
 	
 	<build>
@@ -60,6 +61,13 @@
 		    <groupId>org.reflections</groupId>
 		    <artifactId>reflections</artifactId>
 		    <version>${org.reflections.reflections.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.keycloak</groupId>
+			<artifactId>keycloak-admin-client</artifactId>
+			<version>${org.keycloak.keycloak-admin-client.version}</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 </project>

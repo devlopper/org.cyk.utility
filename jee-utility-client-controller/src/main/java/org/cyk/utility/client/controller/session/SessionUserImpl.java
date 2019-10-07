@@ -5,6 +5,7 @@ import java.security.Principal;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 
+@Deprecated
 public class SessionUserImpl extends AbstractObject implements SessionUser,Serializable {
 	private static final long serialVersionUID = 1L;
 

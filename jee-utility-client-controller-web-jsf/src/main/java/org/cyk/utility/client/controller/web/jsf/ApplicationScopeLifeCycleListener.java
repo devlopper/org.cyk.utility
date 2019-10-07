@@ -34,5 +34,5 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 	
 	/**/
 	
-	public static final Integer LEVEL = new Integer(org.cyk.utility.client.controller.web.ApplicationScopeLifeCycleListener.LEVEL+1);
+	public static final Integer LEVEL = Integer.valueOf(org.cyk.utility.client.controller.web.ApplicationScopeLifeCycleListener.LEVEL+1);
 }

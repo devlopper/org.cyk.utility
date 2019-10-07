@@ -68,7 +68,7 @@
 	</context-param>
 	
 	<!-- Security -->
-	<!--
+	
 	<security-role>
 		<role-name>*</role-name>
 	</security-role>	
@@ -85,5 +85,5 @@
 	<login-config>
 		<auth-method>KEYCLOAK</auth-method>
 	</login-config>
-	-->	
+	
 </web-app>

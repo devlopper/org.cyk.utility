@@ -2,8 +2,15 @@ package org.cyk.utility.__kernel__.identifier.resource;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
+
 public interface RequestHelper  {
 
+	static Object get() {
+		//TODO must be based on environment features
+		return DependencyInjection.inject(HttpServletRequest.class);
+	}
+	
 	static Object getProperty(Object request,RequestProperty property) {
 		if(request == null || property == null)
 			return null;

@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller.component.theme;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.AbstractObject;
 import org.cyk.utility.client.controller.Constant;
 import org.cyk.utility.client.controller.component.file.File;
@@ -21,8 +22,12 @@ import org.cyk.utility.client.controller.tag.TagMetas;
 import org.cyk.utility.client.controller.tag.TagScript;
 import org.cyk.utility.client.controller.tag.TagScripts;
 import org.cyk.utility.file.FileHelper;
-import org.cyk.utility.__kernel__.string.StringHelper;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
+@Getter @Setter @Accessors(chain=true)
 public abstract class AbstractThemeImpl extends AbstractObject implements Theme,Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -37,6 +42,7 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 	private TagMap tagMap;
 	private Scripts scripts;
 	private Object request;
+	
 	
 	@Override
 	public Theme build() {

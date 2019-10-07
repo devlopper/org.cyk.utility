@@ -4,6 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.cyk.utility.__kernel__.session.Session;
+import org.cyk.utility.__kernel__.session.SessionHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.client.controller.AbstractObject;
 import org.cyk.utility.client.controller.component.command.Commandable;
@@ -25,10 +30,6 @@ import org.cyk.utility.notification.NotificationSeverityError;
 import org.cyk.utility.notification.NotificationSeverityInformation;
 import org.cyk.utility.notification.NotificationSeverityWarning;
 import org.cyk.utility.request.RequestGetter;
-import org.cyk.utility.__kernel__.string.StringHelper;
-import org.cyk.utility.__kernel__.system.action.SystemAction;
-import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
-import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.time.DurationBuilder;
 import org.cyk.utility.time.DurationStringBuilder;
 
@@ -42,6 +43,7 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 	protected WindowBuilder __windowBuilder__;
 	protected String contextDependencyInjectionBeanName;
 	protected SessionUser sessionUser;
+	@Getter protected Session session;
 	
 	@Getter protected Boolean __isInternalLoggable__;
 	@Getter protected String __windowBuildDuration__;
@@ -52,6 +54,7 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 		setContextDependencyInjectionBeanName(StringHelper.getVariableNameFrom(getClass().getSimpleName()));
 		setSessionUser(__getSessionUser__());
 		setSystemAction(__getProperty__(WindowContainerManagedProperty.SYSTEM_ACTION, SystemAction.class));
+		session = SessionHelper.getAttributeSession(Boolean.TRUE);
 	}
 	
 	protected <THEME extends Theme> Class<THEME> __getThemeClass__(){

@@ -17,22 +17,23 @@ public class MenuBuilderMapGetterImpl extends AbstractMenuBuilderMapGetterImpl i
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected void ____executePrincipalIsNotNull____(MenuBuilder sessionMenuBuilder, Object request, Principal principal) throws Exception {
-		
-	}
-
-	@Override
-	protected void ____executePrincipalIsNull____(MenuBuilder sessionMenuBuilder, Object request) throws Exception {
-		if(sessionMenuBuilder == null) {
-			
-		}//else {
+	protected void ____execute____(MenuBuilder sessionMenuBuilder, Object request, Principal principal) throws Exception {
 		sessionMenuBuilder.addItems(
 				__inject__(MenuItemBuilder.class).setCommandableName("Non hierarchique").setCommandableIcon(Icon.QUESTION)
 					.list(Person.class,MyEntity.class,SelectedNode.class)
 				,__inject__(MenuItemBuilder.class).setCommandableName("Hierarchique").setCommandableIcon(Icon.FILE)
 					.tree(Node.class)
 				);	
-		//}
+	}
+	
+	@Override
+	protected void ____executePrincipalIsNotNull____(MenuBuilder sessionMenuBuilder, Object request, Principal principal) throws Exception {
+		
+	}
+
+	@Override
+	protected void ____executePrincipalIsNull____(MenuBuilder sessionMenuBuilder, Object request) throws Exception {
+		
 	}
 
 	

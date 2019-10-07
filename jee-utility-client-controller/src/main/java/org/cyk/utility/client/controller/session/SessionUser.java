@@ -4,6 +4,7 @@ import java.security.Principal;
 
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 
+@Deprecated
 public interface SessionUser extends Objectable {
 
 	Principal getPrincipal();
