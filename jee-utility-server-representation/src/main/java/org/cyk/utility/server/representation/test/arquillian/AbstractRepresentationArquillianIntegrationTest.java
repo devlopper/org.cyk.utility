@@ -115,7 +115,10 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 		 return object == null ? null : JsonbBuilder.create().toJson(object);
 	}
 
-	protected abstract <ENTITY> Class<? extends AbstractEntityCollection<ENTITY>> __getEntityCollectionClass__(Class<ENTITY> aClass);
+	@Deprecated
+	protected <ENTITY> Class<? extends AbstractEntityCollection<ENTITY>> __getEntityCollectionClass__(Class<ENTITY> aClass) {
+		return null;
+	}
 
 	/**/
 	

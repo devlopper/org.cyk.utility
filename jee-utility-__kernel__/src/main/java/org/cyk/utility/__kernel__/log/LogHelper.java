@@ -1,9 +1,67 @@
 package org.cyk.utility.__kernel__.log;
 
+import java.util.Collection;
 import java.util.logging.Level;
+
+import org.cyk.utility.__kernel__.array.ArrayHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.constant.ConstantEmpty;
+import org.cyk.utility.__kernel__.string.StringHelper;
 
 public interface LogHelper {
 
+	static String concatenateMessageTemplateWith(String template,String string) {
+		if(string == null)
+			return template;
+		if(template == null)
+			template = ConstantEmpty.STRING;
+		if(!template.isEmpty())
+			template = template + " ";
+		template = template + string;
+		return template;
+	}
+	
+	static String concatenateMessageTemplateWithArgument(String template,String name) {
+		if(StringHelper.isBlank(name))
+			return template;
+		return concatenateMessageTemplateWith(template, name + "=%s");
+	}
+	
+	static void addStringToMessage(LogMessage message,String string) {
+		if(message == null || string == null)
+			return;
+		message.setTemplate(concatenateMessageTemplateWith(message.getTemplate(), string));
+	}
+	
+	static void addArgumentToMessage(LogMessage message,String name,Object value) {
+		if(message == null || StringHelper.isBlank(name))
+			return;
+		message.setTemplate(concatenateMessageTemplateWithArgument(message.getTemplate(), name));
+		message.getArguments(Boolean.TRUE).add(value);
+	}
+	
+	static String buildMessage(String template,Collection<Object> arguments) {
+		if(StringHelper.isBlank(template))
+			return null;
+		if(CollectionHelper.isEmpty(arguments))
+			return template;
+		return String.format(template, arguments.toArray());
+	}
+	
+	static String buildMessage(String template,Object...arguments) {
+		if(StringHelper.isBlank(template))
+			return null;
+		if(ArrayHelper.isEmpty(arguments))
+			return template;
+		return buildMessage(template, CollectionHelper.listOf(arguments));
+	}
+	
+	static String buildMessage(LogMessage message) {
+		if(message == null)
+			return null;
+		return buildMessage(message.getTemplate(), message.getArguments());
+	}
+	
 	static void log(String message,Level level,Class<?> klass) {
 		if(message == null || message.isBlank())
 			return;
@@ -62,5 +120,13 @@ public interface LogHelper {
 		logSevere(throwable.toString(),klass);
 	}
 
+	static void log(LogMessage message,Level level,Class<?> klass) {
+		if(message == null)
+			return;
+		String string = buildMessage(message);
+		if(StringHelper.isBlank(string))
+			return;
+		log(string,level,klass);
+	}
 	
 }

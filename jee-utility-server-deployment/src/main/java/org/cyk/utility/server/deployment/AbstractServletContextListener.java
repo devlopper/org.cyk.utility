@@ -4,12 +4,9 @@ import java.io.Serializable;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.__kernel__.annotation.Web;
+import org.cyk.utility.__kernel__.configuration.ConstantParameterName;
+import org.cyk.utility.__kernel__.context.ContextHelper;
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
-import org.cyk.utility.configuration.ConstantParameterName;
-import org.cyk.utility.context.ContextGetter;
-import org.cyk.utility.context.ContextParameterValueGetter;
 import org.cyk.utility.network.protocol.ProtocolDefaults;
 import org.cyk.utility.security.Credentials;
 import org.cyk.utility.server.representation.impl.ApplicationScopeLifeCycleListener;
@@ -27,9 +24,8 @@ public abstract class AbstractServletContextListener extends org.cyk.utility.con
 	
 	@Override
 	public void __initialize__(ServletContext context) {
-		AbstractContextGetterImpl.SERVLET_CONTEXT = context;
+		ContextHelper.set(context);
 		super.__initialize__(context);
-		DependencyInjection.setQualifierClassTo(Web.class, ContextGetter.class,ContextParameterValueGetter.class);
 		__inject__(SystemNodeServer.class).setName(getConfigurationParameterValue(ConstantParameterName.SYSTEM_NAME));
 		
 		if(Boolean.TRUE.equals(getConfigurationParameterValueAsBoolean(ConstantParameterName.PROTOCOL_DEFAULTS_SIMPLE_MAIL_TRANSFER_IS_ENABLE))) {

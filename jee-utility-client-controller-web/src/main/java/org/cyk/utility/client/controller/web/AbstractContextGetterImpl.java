@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.servlet.ServletContext;
 
+@Deprecated
 public abstract class AbstractContextGetterImpl extends org.cyk.utility.context.AbstractContextGetterImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 

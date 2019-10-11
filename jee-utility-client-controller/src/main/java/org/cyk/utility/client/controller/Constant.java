@@ -1,9 +1,6 @@
 package org.cyk.utility.client.controller;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.__kernel__.annotation.Configuration;
-import org.cyk.utility.configuration.ConfigurationParameterValueGetter;
-import org.cyk.utility.value.IsNullChecker;
+import org.cyk.utility.__kernel__.configuration.ConstantParameterName;
 
 public interface Constant {
 	
@@ -38,8 +35,7 @@ public interface Constant {
 	/**/
 	
 	static String getConfigurationParameterValue(String name,Object context,Object request,String nullValue) {
-		return (String) DependencyInjection.inject(ConfigurationParameterValueGetter.class).setName(name).setContext(context).setRequest(request)
-				.setIsNullValueCheckerClass(IsNullChecker.class).setIsNullValueCheckerQualifierClass(Configuration.class).setNullValue(nullValue).execute().getOutput();
+		return (String) ConstantParameterName.get(name, context, request, nullValue);
 	}
 	
 }

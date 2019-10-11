@@ -3,6 +3,7 @@ package org.cyk.utility.__kernel__.identifier.resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.string.StringHelper;
 
 public interface RequestHelper  {
 
@@ -51,4 +52,15 @@ public interface RequestHelper  {
 		return (Integer) getProperty(request, RequestProperty.PORT);
 	}
 	
+	static Object getParameter(String name,Object request) {
+		if(request == null || StringHelper.isBlank(name))
+			return null;
+		if(request instanceof HttpServletRequest)
+			return ((HttpServletRequest)request).getParameter(name);
+		throw new RuntimeException("get parameter from request of type <<"+request.getClass()+">> not yet implemented");
+	}
+	
+	static Object getParameter(String name) {
+		return getParameter(name, get());
+	}
 }

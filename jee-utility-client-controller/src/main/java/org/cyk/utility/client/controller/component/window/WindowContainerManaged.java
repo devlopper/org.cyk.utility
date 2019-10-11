@@ -15,6 +15,9 @@ public interface WindowContainerManaged extends Objectable {
 	String getContextDependencyInjectionBeanName();
 	WindowContainerManaged setContextDependencyInjectionBeanName(String contextDependencyInjectionBeanName);
 
+	@Deprecated
 	SessionUser getSessionUser();
+	
+	@Deprecated
 	WindowContainerManaged setSessionUser(SessionUser sessionUser);
 }

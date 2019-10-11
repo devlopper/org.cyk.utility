@@ -5,6 +5,7 @@ import java.io.Serializable;
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.request.RequestParameterValueGetter;
 
+@Deprecated
 public class RequestParameterValueGetterFunctionRunnableImpl extends AbstractFunctionRunnableImpl<RequestParameterValueGetter> implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

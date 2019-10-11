@@ -14,6 +14,26 @@ import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 
 public interface ValueHelper {
 
+	static Boolean isNull(Object value,Checker checker) {
+		if(checker == null)
+			checker = Checker.INSTANCE;
+		return checker.isNull(value);
+	}
+	
+	static Boolean isNull(Object value) {
+		return isNull(value,Checker.INSTANCE);
+	}
+	
+	static Boolean isNotNull(Object value,Checker checker) {
+		if(value == null)
+			return Boolean.FALSE;
+		return !isNull(value);
+	}
+	
+	static Boolean isNotNull(Object value) {
+		return isNotNull(value, Checker.INSTANCE);
+	}
+	
 	static Boolean isEmpty(Object value) {
 		if(value == null)
 			return Boolean.TRUE;
@@ -84,8 +104,21 @@ public interface ValueHelper {
 				return (T) value.toString();
 		}
 		if(ClassHelper.isInstanceOfNumber(klass))
-			return NumberHelper.get(klass, value);		
+			return NumberHelper.get(klass, value);	
+		if(Boolean.class.equals(klass)) {
+			if(value instanceof String) {
+				return (T) Boolean.valueOf((String)value);
+			}else if(value instanceof Number) {
+				return (T) NumberHelper.isGreaterThanZero((Number)value);
+			}
+		}
 		throw new RuntimeException("convert type <<"+value.getClass()+">> to type "+klass+" not yet implemented");
+	}
+	
+	static Boolean convertToBoolean(Object value)  {
+		if(value == null)
+			return null;
+		return convert(value, Boolean.class);
 	}
 	
 	static Object convert(Field sourceField,Object sourceFieldValue,Field destinationField) {

@@ -3,7 +3,7 @@ import java.io.Serializable;
 
 import javax.servlet.ServletContext;
 
-import org.cyk.utility.configuration.ConstantParameterName;
+import org.cyk.utility.__kernel__.configuration.ConstantParameterName;
 import org.cyk.utility.system.node.SystemNodeClient;
 
 public abstract class AbstractServletContextListener extends org.cyk.utility.client.controller.web.jsf.primefaces.AbstractServletContextListener implements Serializable {

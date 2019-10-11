@@ -2,6 +2,7 @@ package org.cyk.utility.system;
 
 import org.cyk.utility.helper.Helper;
 
+@Deprecated
 public interface SystemHelper extends Helper {
 
 	String getProperty(String name,String defaultToIfBlank);

@@ -2,6 +2,7 @@ package org.cyk.utility.type;
 
 import org.cyk.utility.helper.Helper;
 
+@Deprecated
 public interface BooleanHelper extends Helper {
 
 	static Boolean get(Object object) {

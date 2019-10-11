@@ -42,6 +42,7 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 	protected Window window;
 	protected WindowBuilder __windowBuilder__;
 	protected String contextDependencyInjectionBeanName;
+	@Deprecated
 	protected SessionUser sessionUser;
 	@Getter protected Session session;
 	
@@ -129,12 +130,12 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 		return this;
 	}
 	
-	@Override
+	@Override @Deprecated
 	public SessionUser getSessionUser() {
 		return sessionUser;
 	}
 	
-	@Override
+	@Override @Deprecated
 	public WindowContainerManaged setSessionUser(SessionUser sessionUser) {
 		this.sessionUser = sessionUser;
 		return this;
@@ -244,6 +245,7 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 		return this;
 	}
 	
+	@Deprecated
 	protected static SessionUser __getSessionUser__() {
 		return __inject__(SessionUserGetter.class).execute().getOutput();
 	}

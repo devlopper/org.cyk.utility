@@ -1,11 +1,7 @@
-package org.cyk.utility.configuration;
+package org.cyk.utility.__kernel__.configuration;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.__kernel__.annotation.Configuration;
 import org.cyk.utility.__kernel__.value.ValueHelper;
-import org.cyk.utility.value.IsNullChecker;
 
-@Deprecated
 public interface ConstantParameterName {
 	
 	String CYK_PARAMETER_NAME_FORMAT = "cyk.parameter.%s";
@@ -47,8 +43,7 @@ public interface ConstantParameterName {
 	/**/
 	
 	static String get(String name,Object context,Object request,String nullValue) {
-		return (String) DependencyInjection.inject(ConfigurationParameterValueGetter.class).setName(name).setContext(context).setRequest(request)
-				.setIsNullValueCheckerClass(IsNullChecker.class).setIsNullValueCheckerQualifierClass(Configuration.class).setNullValue(nullValue).execute().getOutput();
+		return (String) ConfigurationHelper.get(name, request, context, nullValue);
 	}
 	
 	/**/

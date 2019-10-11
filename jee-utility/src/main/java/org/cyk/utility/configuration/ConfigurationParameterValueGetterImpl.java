@@ -17,7 +17,7 @@ import org.cyk.utility.system.OperatingSystemHelper;
 import org.cyk.utility.system.SystemHelper;
 import org.cyk.utility.value.IsNullChecker;
 
-@Dependent
+@Dependent @Deprecated
 public class ConfigurationParameterValueGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Object> implements ConfigurationParameterValueGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -30,4 +30,15 @@ public class Session implements Serializable {
 		return user;
 	}
 	
+	public String getUserName() {
+		if(user == null)
+			return null;
+		return user.getName();
+	}
+	
+	public Object getUserUuid() {
+		if(user == null)
+			return null;
+		return user.getUuid();
+	}
 }

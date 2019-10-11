@@ -1,8 +1,10 @@
 package org.cyk.utility.__kernel__.session;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.identifier.resource.RequestHelper;
 
 public interface SessionHelper {
@@ -91,5 +93,16 @@ public interface SessionHelper {
 		if(session == null)
 			return;
 		setAttributeValue(Session.class, value, session);
+	}
+	
+	static void destroy() {
+		//TODO must environment based
+		
+		//in servlet world it consist to call logout to a request
+		try {
+			DependencyInjection.inject(HttpServletRequest.class).logout();
+		} catch (ServletException exception) {
+			throw new RuntimeException(exception);
+		}
 	}
 }

@@ -9,7 +9,7 @@ import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 
-@ApplicationScoped
+@ApplicationScoped @Deprecated
 public class SystemHelperImpl extends AbstractHelper implements SystemHelper, Serializable {
 	private static final long serialVersionUID = 1L;
 

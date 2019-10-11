@@ -6,7 +6,7 @@ import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.helper.AbstractHelper;
 
-@ApplicationScoped
+@ApplicationScoped @Deprecated
 public class OperatingSystemHelperImpl extends AbstractHelper implements OperatingSystemHelper, Serializable {
 	private static final long serialVersionUID = 1L;
 

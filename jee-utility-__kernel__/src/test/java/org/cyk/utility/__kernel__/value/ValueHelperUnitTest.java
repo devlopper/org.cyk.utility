@@ -36,6 +36,36 @@ public class ValueHelperUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	@Test
+	public void convert_null_to_boolean() {
+		assertThat(convert(null, Boolean.class)).isNull();
+	}
+	
+	@Test
+	public void convert_empty_string_to_boolean() {
+		assertThat(convert("", Boolean.class)).isInstanceOf(Boolean.class).isFalse();
+	}
+	
+	@Test
+	public void convert_blank_string_to_boolean() {
+		assertThat(convert(" ", Boolean.class)).isInstanceOf(Boolean.class).isFalse();
+	}
+	
+	@Test
+	public void convert_bad_string_to_boolean() {
+		assertThat(convert("a", Boolean.class)).isInstanceOf(Boolean.class).isFalse();
+	}
+	
+	@Test
+	public void convert_false_string_to_boolean() {
+		assertThat(convert("false", Boolean.class)).isInstanceOf(Boolean.class).isFalse();
+	}
+	
+	@Test
+	public void convert_true_string_to_boolean() {
+		assertThat(convert("true", Boolean.class)).isInstanceOf(Boolean.class).isTrue();
+	}
+	
+	@Test
 	public void convert_2_int_to_string() {
 		assertThat(convert(2, String.class)).isInstanceOf(String.class).isEqualTo("2");
 	}

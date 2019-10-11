@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.net.URI;
 
 import org.cyk.utility.client.controller.proxy.ProxyClassUniformResourceIdentifierGetterImpl;
-import org.cyk.utility.configuration.ConstantParameterName;
+import org.cyk.utility.__kernel__.configuration.ConstantParameterName;
 import org.cyk.utility.__kernel__.string.StringHelper;
 
 public abstract class AbstractSystemContextListener<CONTEXT> extends  org.cyk.utility.context.AbstractSystemContextListenerImpl<CONTEXT> implements SystemContextListener<CONTEXT>,Serializable {

@@ -14,6 +14,7 @@ import org.cyk.utility.value.IsNullChecker;
  * @author CYK
  *
  */
+@Deprecated
 public interface ConfigurationParameterValueGetter extends FunctionWithPropertiesAsInput<Object> {
 
 	Object getContext();
