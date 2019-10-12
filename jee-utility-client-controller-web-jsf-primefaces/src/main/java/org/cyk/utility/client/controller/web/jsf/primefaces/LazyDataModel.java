@@ -83,7 +83,6 @@ public class LazyDataModel<DATA> extends org.primefaces.model.LazyDataModel<DATA
 			}
 		}catch(Exception exception) {
 			//Because we do not want to break view building we need to handle exception
-			System.out.println("LazyDataModel.load()");
 			exception.printStackTrace();
 			//getProperties().setThrowable(__injectThrowableHelper__().getFirstCause(exception));	
 		}

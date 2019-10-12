@@ -37,6 +37,10 @@ public interface SessionHelper {
 		throw new RuntimeException("get session attribute value from type "+session.getClass()+" not yet implemented");
 	}
 	
+	static Object getAttributeValue(Object name) {
+		return getAttributeValue(name, get());
+	}
+	
 	static void setAttributeValue(Object name,Object value,Object session) {
 		if(name == null || session == null)
 			return;
@@ -44,6 +48,10 @@ public interface SessionHelper {
 			((HttpSession)session).setAttribute(buildAttributeName(name),value);
 		else
 			throw new RuntimeException("set session attribute value from type "+session.getClass()+" not yet implemented");
+	}
+	
+	static void setAttributeValue(Object name,Object value) {
+		setAttributeValue(name, value, get());
 	}
 	
 	static Object getAttributeValueFromRequest(Object name,Object request) {

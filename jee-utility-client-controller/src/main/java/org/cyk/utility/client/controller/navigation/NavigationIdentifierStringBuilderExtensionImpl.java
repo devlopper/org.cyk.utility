@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import org.cyk.utility.string.AbstractStringFunctionImpl;
 
+@Deprecated
 public class NavigationIdentifierStringBuilderExtensionImpl extends AbstractStringFunctionImpl implements NavigationIdentifierStringBuilderExtension,Serializable {
 	private static final long serialVersionUID = 1L;
 

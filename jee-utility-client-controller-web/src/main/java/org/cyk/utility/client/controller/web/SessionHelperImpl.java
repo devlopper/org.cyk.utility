@@ -9,7 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.cyk.utility.__kernel__.annotation.Web;
 import org.cyk.utility.client.controller.session.SessionHelper;
 
-@ApplicationScoped @Web
+@ApplicationScoped @Web @Deprecated
 public class SessionHelperImpl extends AbstractSessionHelperImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

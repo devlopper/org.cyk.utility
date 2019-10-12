@@ -15,7 +15,7 @@ import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 import org.reflections.util.ConfigurationBuilder;
 
-@Dependent
+@Dependent @Deprecated
 public class ClassesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Classes> implements ClassesGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 

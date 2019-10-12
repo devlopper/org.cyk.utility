@@ -13,8 +13,6 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.css.CascadeStyleSheetHelper;
 import org.cyk.utility.css.CascadeStyleSheetHelperImpl;
-import org.cyk.utility.instance.InstanceHelper;
-import org.cyk.utility.instance.InstanceHelperImpl;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.map.MapHelper;
 import org.cyk.utility.map.MapHelperImpl;
@@ -251,10 +249,6 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 	
 	protected static MapHelper __injectMapHelper__(){
 		return MapHelperImpl.getInstance();
-	}
-	
-	protected static InstanceHelper __injectInstanceHelper__(){
-		return InstanceHelperImpl.getInstance();
 	}
 	
 	protected static TypeHelper __injectTypeHelper__(){

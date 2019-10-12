@@ -16,7 +16,6 @@ import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.mapping.MappingHelper;
 import org.cyk.utility.server.persistence.query.filter.FilterDto;
 import org.cyk.utility.server.representation.RepresentationEntity;
-import org.cyk.utility.type.BooleanHelper;
 import org.cyk.utility.type.TypeHelper;
 
 public class ControllerFunctionReaderImpl extends AbstractControllerFunctionImpl implements ControllerFunctionReader , Serializable {
@@ -38,7 +37,7 @@ public class ControllerFunctionReaderImpl extends AbstractControllerFunctionImpl
 		Properties properties = getProperties();
 		String fields = (String) Properties.getFromPath(properties, Properties.FIELDS);
 		if(__isMany__ == null || __isMany__) {
-			Boolean isPageable = ValueHelper.defaultToIfNull(BooleanHelper.get(Properties.getFromPath(properties,Properties.IS_PAGEABLE)),IS_PAGEABLE);
+			Boolean isPageable = ValueHelper.defaultToIfNull(ValueHelper.convertToBoolean(Properties.getFromPath(properties,Properties.IS_PAGEABLE)),IS_PAGEABLE);
 			Long from = ValueHelper.defaultToIfNull(NumberHelper.getLong(Properties.getFromPath(properties,Properties.FROM))
 					,Boolean.TRUE.equals(isPageable) ? FROM : null);
 			Long count = ValueHelper.defaultToIfNull(NumberHelper.getLong(Properties.getFromPath(properties,Properties.COUNT))

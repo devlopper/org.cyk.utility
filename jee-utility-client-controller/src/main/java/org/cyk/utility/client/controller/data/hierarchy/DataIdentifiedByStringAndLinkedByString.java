@@ -1,9 +1,9 @@
 package org.cyk.utility.client.controller.data.hierarchy;
 
-public interface DataIdentifiedByStringAndLinkedByString extends DataIdentifiedByString {
+public interface DataIdentifiedByStringAndLinkedByString<NODE> extends DataIdentifiedByString<NODE> {
 	
 	String getLink();
-	DataIdentifiedByStringAndLinkedByString setLink(String link);
+	DataIdentifiedByStringAndLinkedByString<NODE> setLink(String link);
 	
 	public static final String PROPERTY_LINK = "link";
 	

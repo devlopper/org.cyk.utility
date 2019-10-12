@@ -10,7 +10,7 @@ import org.cyk.utility.client.controller.component.file.FileImageBuilder;
 import org.cyk.utility.client.controller.component.link.LinkBuilder;
 import org.cyk.utility.repository.RepositoryType;
 
-public class OutputFileBuilderImpl extends AbstractOutputBuilderImpl<OutputFile,org.cyk.utility.file.File> implements OutputFileBuilder,Serializable {
+public class OutputFileBuilderImpl extends AbstractOutputBuilderImpl<OutputFile,org.cyk.utility.__kernel__.file.File> implements OutputFileBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private FileBuilder file;
@@ -23,7 +23,7 @@ public class OutputFileBuilderImpl extends AbstractOutputBuilderImpl<OutputFile,
 	protected void __execute__(OutputFile outputFile, Object object, Field field) {
 		super.__execute__(outputFile, object, field);
 		FileBuilder file = getFile();
-		org.cyk.utility.file.File __file__ = outputFile.getValue();
+		org.cyk.utility.__kernel__.file.File __file__ = outputFile.getValue();
 		if(file == null && __file__!=null) {
 			file = __inject__(FileBuilder.class);
 		}
@@ -43,7 +43,7 @@ public class OutputFileBuilderImpl extends AbstractOutputBuilderImpl<OutputFile,
 				if(file.getValue(Boolean.TRUE).getSize() == null)
 					file.getValue(Boolean.TRUE).setSize(__file__.getSize());
 				if(file.getValue(Boolean.TRUE).getUniformResourceLocator() == null)
-					file.getValue(Boolean.TRUE).setUniformResourceLocator(__file__.getUniformResourceLocator());
+					file.getValue(Boolean.TRUE).setUniformResourceLocatorValue(__file__.getUniformResourceLocator());
 				if(file.getValue(Boolean.TRUE).getIdentifier() == null)
 					file.getValue(Boolean.TRUE).setIdentifier(__file__.getIdentifier());
 			}
@@ -108,8 +108,8 @@ public class OutputFileBuilderImpl extends AbstractOutputBuilderImpl<OutputFile,
 	}
 	
 	@Override
-	protected org.cyk.utility.file.File __getValue__(Object object, Field field, Object value) {
-		return (org.cyk.utility.file.File) value;
+	protected org.cyk.utility.__kernel__.file.File __getValue__(Object object, Field field, Object value) {
+		return (org.cyk.utility.__kernel__.file.File) value;
 	}
 	
 	@Override

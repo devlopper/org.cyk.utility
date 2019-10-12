@@ -3,10 +3,8 @@ package org.cyk.utility.stream.distributed.kafka;
 import java.io.Serializable;
 import java.util.Map;
 
-import org.cyk.utility.__kernel__.annotation.JavaScriptObjectNotation;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
-import org.cyk.utility.object.ObjectFromStringBuilder;
 
 public abstract class AbstractMessageDeserializer<MESSAGE> extends AbstractObject implements org.apache.kafka.common.serialization.Deserializer<MESSAGE>,Objectable, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -23,10 +21,13 @@ public abstract class AbstractMessageDeserializer<MESSAGE> extends AbstractObjec
 
 	@Override
 	public MESSAGE deserialize(String string, byte[] bytes) {
+		return null;
+		/*
 		return (MESSAGE) __injectByQualifiersClasses__(ObjectFromStringBuilder.class,
 				JavaScriptObjectNotation.Class.class).setString(new String(bytes))
 						.setKlass(__inject__(org.cyk.utility.__kernel__.klass.ClassHelper.getParameterAt(getClass(), 0)).getClass())
 						.addFieldNamesStrings(__getFieldNamesStrings__()).execute().getOutput();
+		*/
 	}
 
 	protected abstract String[] __getFieldNamesStrings__();

@@ -6,13 +6,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.field.FieldInstance;
 import org.cyk.utility.__kernel__.field.FieldInstancesRuntime;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.runnable.RunnableHelper;
 import org.cyk.utility.clazz.ClassInstance;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
-import org.cyk.utility.instance.InstanceHelper;
+import org.cyk.utility.__kernel__.instance.InstanceHelper;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.MappingTarget;
@@ -91,7 +92,7 @@ public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> ex
 			//}else {
 				Object value = org.cyk.utility.__kernel__.field.FieldHelper.read(destination, index);
 				if(value != null) {
-					Object persisted = DependencyInjection.inject(InstanceHelper.class).getBySystemIdentifierOrBusinessIdentifier(value);
+					Object persisted = InstanceHelper.getByIdentifier(Object.class,FieldHelper.readIdentifier(value));
 					if(persisted != null)
 						org.cyk.utility.__kernel__.field.FieldHelper.write(destination, index, persisted);
 				}

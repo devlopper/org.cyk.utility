@@ -2,8 +2,6 @@ package org.cyk.utility.client.controller.component.view;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
@@ -14,7 +12,6 @@ import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
 import org.cyk.utility.__kernel__.system.action.SystemActionFind;
 import org.cyk.utility.__kernel__.system.action.SystemActionRedirect;
 import org.cyk.utility.__kernel__.system.action.SystemActionUpdate;
-import org.cyk.utility.array.ArrayHelperImpl;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
 import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.component.ComponentBuilder;
@@ -35,7 +32,7 @@ import org.cyk.utility.client.controller.data.FormData;
 public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> implements ViewBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private static final Map<String,Class<? extends ComponentBuilder<?>>> BUILDERS_CLASSES_MAP = new HashMap<>();
+	//private static final Map<String,Class<? extends ComponentBuilder<?>>> BUILDERS_CLASSES_MAP = new HashMap<>();
 	
 	private ComponentsBuilder componentsBuilder;
 	private ViewType type;

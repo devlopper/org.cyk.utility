@@ -1,12 +1,13 @@
 package org.cyk.utility.client.controller.component.file;
 
+import org.cyk.utility.__kernel__.file.FileAsFunctionParameter;
 import org.cyk.utility.client.controller.component.VisibleComponentBuilder;
 
 public interface FileBuilder extends VisibleComponentBuilder<File> {
 
-	org.cyk.utility.file.FileBuilder getValue();
-	org.cyk.utility.file.FileBuilder getValue(Boolean injectIfNull);
-	FileBuilder setValue(org.cyk.utility.file.FileBuilder value);
+	FileAsFunctionParameter getValue();
+	FileAsFunctionParameter getValue(Boolean injectIfNull);
+	FileBuilder setValue(FileAsFunctionParameter value);
 	
 	Boolean getIsEmbbedable();
 	FileBuilder setIsEmbeddable(Boolean isEmbeddable);

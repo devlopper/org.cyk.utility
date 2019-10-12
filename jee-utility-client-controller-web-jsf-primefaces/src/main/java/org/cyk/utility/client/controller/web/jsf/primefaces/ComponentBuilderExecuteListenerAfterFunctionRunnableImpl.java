@@ -242,7 +242,7 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 				});
 			}else if(component instanceof File) {
 				File file = (File) component;
-				org.cyk.utility.file.File __file__ = file.getValue();
+				org.cyk.utility.__kernel__.file.File __file__ = file.getValue();
 				if(Boolean.TRUE.equals(file.getIsEmbedded())) {
 					byte[] bytes = __file__.getBytes();
 					if(bytes == null) {

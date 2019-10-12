@@ -2,6 +2,7 @@ package org.cyk.utility.client.controller.session;
 
 import org.cyk.utility.helper.Helper;
 
+@Deprecated
 public interface SessionHelper extends Helper {
 
 	String getAttributeNameAsString(Object name);

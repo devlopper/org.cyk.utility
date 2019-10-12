@@ -5,9 +5,9 @@ import java.util.stream.Collectors;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.system.action.SystemActionDelete;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.server.representation.RepresentationEntity;
-import org.cyk.utility.type.BooleanHelper;
 
 public class ControllerFunctionRemoverImpl extends AbstractControllerFunctionImpl implements ControllerFunctionRemover , Serializable {
 	private static final long serialVersionUID = 1L;
@@ -20,7 +20,7 @@ public class ControllerFunctionRemoverImpl extends AbstractControllerFunctionImp
 	
 	@Override
 	protected void __executeRepresentation__() {
-		Boolean isAll = getProperties().getAll() == null ? Boolean.FALSE : BooleanHelper.get(getProperties().getAll());
+		Boolean isAll = getProperties().getAll() == null ? Boolean.FALSE : ValueHelper.convertToBoolean(getProperties().getAll());
 		if(Boolean.TRUE.equals(isAll)) {
 			if(__representation__ instanceof RepresentationEntity<?, ?, ?>)
 				__response__ = ((RepresentationEntity<?,?,?>)__representation__).deleteAll();

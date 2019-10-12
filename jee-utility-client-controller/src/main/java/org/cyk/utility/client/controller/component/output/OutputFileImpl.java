@@ -7,7 +7,7 @@ import org.cyk.utility.client.controller.component.file.FileImage;
 import org.cyk.utility.client.controller.component.link.Link;
 import org.cyk.utility.repository.RepositoryType;
 
-public class OutputFileImpl extends AbstractOutputImpl<org.cyk.utility.file.File> implements OutputFile,Serializable {
+public class OutputFileImpl extends AbstractOutputImpl<org.cyk.utility.__kernel__.file.File> implements OutputFile,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private File file;

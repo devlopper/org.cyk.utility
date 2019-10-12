@@ -2,33 +2,36 @@ package org.cyk.utility.client.controller.component.file;
 
 import java.io.Serializable;
 
-import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.file.FileAsFunctionParameter;
+import org.cyk.utility.__kernel__.file.FileHelper;
+import org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierAsFunctionParameter;
+import org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierHelper;
+import org.cyk.utility.__kernel__.session.SessionHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
-import org.cyk.utility.client.controller.navigation.NavigationBuilder;
 import org.cyk.utility.random.RandomHelper;
 
 public class FileBuilderImpl extends AbstractVisibleComponentBuilderImpl<File> implements FileBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private org.cyk.utility.file.FileBuilder value;
+	private FileAsFunctionParameter value;
 	private Boolean isEmbeddable,isIdentifiable;
 	
 	@Override
 	protected void __execute__(File file) {
 		super.__execute__(file);
-		org.cyk.utility.file.FileBuilder value = getValue();
+		FileAsFunctionParameter value = getValue();
 		if(value != null) {
 			Boolean isEmbeddable = ValueHelper.defaultToIfNull(getIsEmbbedable(),Boolean.FALSE);
 			Boolean isIdentifiable = ValueHelper.defaultToIfNull(getIsIdentifiable(),StringHelper.isBlank(value.getPath()));
 			file.setIsEmbedded(isEmbeddable);
 			Object sessionAttributeIdentifier = null;
-			if(Boolean.FALSE.equals(isEmbeddable) || (value.getBytes() == null && value.getInputStream()==null && value.getClazz()==null)) {
+			if(Boolean.FALSE.equals(isEmbeddable) || (value.getBytes() == null && value.getInputStream()==null && value.getClassToGetResourceAsStream()==null)) {
 				//content is not embeddable
 				if(Boolean.TRUE.equals(isIdentifiable)) {
 					//content will be identified by a derived uniform resource locator
-					String url = value.getUniformResourceLocator();
+					String url = value.getUniformResourceLocator() == null ? null : UniformResourceIdentifierHelper.build(value.getUniformResourceLocator());
 					if(StringHelper.isBlank(url)) {
 						String identifier = null;
 						String location = null;
@@ -41,35 +44,33 @@ public class FileBuilderImpl extends AbstractVisibleComponentBuilderImpl<File> i
 							identifier = value.getIdentifier().toString();
 							location = "database";
 						}
-						
-						NavigationBuilder navigation = __inject__(NavigationBuilder.class).setIdentifier("__file__GetFunction").setParameters("identifier",identifier,"location",location);					
-						navigation.setProperty(Properties.UNIFORM_RESOURCE_LOCATOR_MAP, getUniformResourceLocatorMap());
-						navigation.setProperty(Properties.CONTEXT, getContext());
-						url = navigation.execute().getOutput().getUniformResourceLocator().toString();	
-						value.setUniformResourceLocator(url);	
+						UniformResourceIdentifierAsFunctionParameter parameter = new UniformResourceIdentifierAsFunctionParameter();
+						parameter.getPath(Boolean.TRUE).setIdentifier("__file__GetFunction");
+						parameter.getQuery(Boolean.TRUE).setValue("identifier="+identifier+"&location="+location);
+						value.getUniformResourceLocator(Boolean.TRUE).setValue(UniformResourceIdentifierHelper.build(parameter));
 					}	
 				}
 			}
-			file.setValue(value.execute().getOutput());
+			file.setValue(FileHelper.build(value));
 			if(sessionAttributeIdentifier!=null)
-				__injectSessionHelper__().setAttributeValue(sessionAttributeIdentifier, file.getValue(), getRequest());
+				SessionHelper.setAttributeValueFromRequest(sessionAttributeIdentifier, file.getValue(),getRequest());
 		}
 	}
 	
 	@Override
-	public org.cyk.utility.file.FileBuilder getValue() {
+	public FileAsFunctionParameter getValue() {
 		return value;
 	}
 
 	@Override
-	public org.cyk.utility.file.FileBuilder getValue(Boolean injectIfNull) {
+	public FileAsFunctionParameter getValue(Boolean injectIfNull) {
 		if(value == null && Boolean.TRUE.equals(injectIfNull))
-			value = __inject__(org.cyk.utility.file.FileBuilder.class);
+			value = new FileAsFunctionParameter();
 		return value;
 	}
 
 	@Override
-	public FileBuilder setValue(org.cyk.utility.file.FileBuilder value) {
+	public FileBuilder setValue(FileAsFunctionParameter value) {
 		this.value = value;
 		return this;
 	}
@@ -110,7 +111,7 @@ public class FileBuilderImpl extends AbstractVisibleComponentBuilderImpl<File> i
 	
 	@Override
 	public FileBuilder setValueClazz(Class<?> clazz) {
-		getValue(Boolean.TRUE).setClazz(clazz);
+		getValue(Boolean.TRUE).setClassToGetResourceAsStream(clazz);
 		return this;
 	}
 
@@ -122,7 +123,7 @@ public class FileBuilderImpl extends AbstractVisibleComponentBuilderImpl<File> i
 	
 	@Override
 	public FileBuilder setValueUniformResourceLocator(String uniformResourceLocator) {
-		getValue(Boolean.TRUE).setUniformResourceLocator(uniformResourceLocator);
+		getValue(Boolean.TRUE).getUniformResourceLocator(Boolean.TRUE).setValue(uniformResourceLocator);
 		return this;
 	}
 	

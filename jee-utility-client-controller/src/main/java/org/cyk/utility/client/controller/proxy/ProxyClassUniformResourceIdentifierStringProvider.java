@@ -1,7 +1,7 @@
 package org.cyk.utility.client.controller.proxy;
 
 import org.cyk.utility.string.StringFunction;
-
+@Deprecated
 public interface ProxyClassUniformResourceIdentifierStringProvider extends StringFunction {
 
 	Object getRequest();

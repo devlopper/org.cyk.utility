@@ -186,6 +186,18 @@ public class ClassHelperUnitTest extends AbstractWeldUnitTest {
 		assertThat(classes).containsExactlyInAnyOrder(ImplementationImpl.class);
 	}
 	
+	@Test
+	public void filter_packageIsCurrent_basesClassesIsFilterBase() {
+		Collection<java.lang.Class<?>> classes = filter(List.of(ClassHelperUnitTest.class.getPackage()), List.of(FilterBase.class));
+		assertThat(classes).containsExactlyInAnyOrder(FilterInterface.class,FilterClass.class);
+	}
+	
+	@Test
+	public void filter_packageIsCurrent_basesClassesIsFilterBase_interfaceOnly() {
+		Collection<java.lang.Class<?>> classes = filter(List.of(ClassHelperUnitTest.class.getPackage()), List.of(FilterBase.class),Boolean.TRUE);
+		assertThat(classes).containsExactlyInAnyOrder(FilterInterface.class);
+	}
+	
 	//@Test
 	public void filter_packageIsCurrent_basesClassesIsObject() {
 		Collection<java.lang.Class<?>> classes = filter(List.of(SystemAction.class.getPackage()),  RegularExpressionHelper.buildIsDoNotEndWith("Impl"),List.of(SystemAction.class),null,null);
@@ -242,6 +254,18 @@ public class ClassHelperUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	public static class ParameterizedInteger extends Parameterized<Integer> {
+		
+	}
+	
+	public static interface FilterBase {
+		
+	}
+	
+	public static interface FilterInterface extends FilterBase {
+		
+	}
+	
+	public static class FilterClass implements FilterBase {
 		
 	}
 }

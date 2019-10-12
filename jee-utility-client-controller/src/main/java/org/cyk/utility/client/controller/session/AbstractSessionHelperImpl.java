@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import org.cyk.utility.helper.AbstractHelper;
 
+@Deprecated
 public abstract class AbstractSessionHelperImpl extends AbstractHelper implements SessionHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 

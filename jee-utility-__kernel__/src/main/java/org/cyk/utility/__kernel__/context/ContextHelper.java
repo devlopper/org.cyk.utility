@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.string.StringHelper;
 
 public interface ContextHelper {
@@ -20,7 +19,8 @@ public interface ContextHelper {
 	static Object get() {
 		Object context;
 		if(CONSTANTS.size() == 0)
-			set(context = DependencyInjection.inject(ServletContext.class));
+			context = null;
+			//set(context = DependencyInjection.inject(ServletContext.class));
 		else
 			context = CONSTANTS.get(0);
 		return context;

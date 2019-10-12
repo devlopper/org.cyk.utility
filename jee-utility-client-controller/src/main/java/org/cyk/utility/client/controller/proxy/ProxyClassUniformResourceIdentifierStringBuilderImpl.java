@@ -11,6 +11,7 @@ import org.cyk.utility.request.RequestGetter;
 import org.cyk.utility.request.RequestPropertyValueGetter;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
 
+@Deprecated
 public class ProxyClassUniformResourceIdentifierStringBuilderImpl extends AbstractStringFunctionImpl implements ProxyClassUniformResourceIdentifierStringBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 	

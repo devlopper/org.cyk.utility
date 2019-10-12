@@ -12,7 +12,6 @@ import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.enumeration.EnumCollectionGetter;
 import org.cyk.utility.enumeration.EnumGetter;
 import org.cyk.utility.enumeration.EnumerationHelper;
-import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.network.MailHelper;
 import org.cyk.utility.stream.distributed.Topic;
@@ -44,10 +43,6 @@ public abstract class AbstractServiceProviderImpl extends AbstractSingleton impl
 	
 	protected void __logWarn__(String message){
 		__inject__(Log.class).executeWarn(message);
-	}
-	
-	protected InstanceHelper __injectInstanceHelper__(){
-		return __inject__(InstanceHelper.class);
 	}
 	
 	protected TypeHelper __injectTypeHelper__(){

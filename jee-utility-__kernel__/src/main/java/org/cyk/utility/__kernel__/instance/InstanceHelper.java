@@ -202,6 +202,12 @@ public interface InstanceHelper {
 		return instance;
 	}
 	
+	static Boolean isPersistable(Object instance) {
+		if(instance == null)
+			return Boolean.FALSE;
+		return ClassHelper.isPersistable(instance.getClass());
+	}
+	
 	/**/
 	
 	String METHOD_GETTER_PREFIX = "get";

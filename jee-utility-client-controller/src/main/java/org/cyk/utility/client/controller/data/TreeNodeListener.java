@@ -1,9 +1,7 @@
 package org.cyk.utility.client.controller.data;
 import java.util.List;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.field.FieldHelper;
-import org.cyk.utility.field.FieldValueGetter;
 
 public interface TreeNodeListener<NODE> {
 
@@ -16,7 +14,7 @@ public interface TreeNodeListener<NODE> {
 		if(value instanceof DataIdentifiedByStringAndCoded)
 			value = ((DataIdentifiedByStringAndCoded)value).getCode();
 		else if(value instanceof org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByStringAndCoded)
-			value = ((org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByStringAndCoded)value).getCode();
+			value = ((org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByStringAndCoded<?>)value).getCode();
 		return value == null ? null : value.toString();
 	}
 	

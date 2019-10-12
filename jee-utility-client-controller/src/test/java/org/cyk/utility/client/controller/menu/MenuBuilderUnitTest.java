@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.__kernel__.function.FunctionRunnableMap;
+import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
+import org.cyk.utility.__kernel__.system.action.SystemActionList;
 import org.cyk.utility.client.controller.component.menu.MenuBuilder;
 import org.cyk.utility.client.controller.component.menu.MenuItemBuilder;
 import org.cyk.utility.client.controller.component.menu.MenuRenderTypeRowBar;
@@ -11,10 +13,7 @@ import org.cyk.utility.client.controller.navigation.NavigationIdentifierStringBu
 import org.cyk.utility.client.controller.navigation.NavigationIdentifierStringBuilderExtensionImpl;
 import org.cyk.utility.client.controller.navigation.NavigationIdentifierToUrlStringMapper;
 import org.cyk.utility.client.controller.navigation.NavigationIdentifierToUrlStringMapperImpl;
-import org.cyk.utility.request.RequestParameterValueGetterImpl;
 import org.cyk.utility.request.RequestPropertyValueGetterImpl;
-import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
-import org.cyk.utility.__kernel__.system.action.SystemActionList;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.time.DurationBuilder;
 import org.cyk.utility.time.DurationStringBuilder;
@@ -27,7 +26,6 @@ public class MenuBuilderUnitTest extends AbstractWeldUnitTest {
 		__inject__(FunctionRunnableMap.class).set(NavigationIdentifierToUrlStringMapperImpl.class, NavigationIdentifierToUrlStringMapperFunctionRunnableImpl.class,1);
 		__inject__(FunctionRunnableMap.class).set(NavigationIdentifierToUrlStringMapperImpl.class, NavigationIdentifierToUrlStringMapperFunctionRunnableImpl.class);
 		__inject__(FunctionRunnableMap.class).set(RequestPropertyValueGetterImpl.class, RequestPropertyValueGetterFunctionRunnableImpl.class);
-		__inject__(FunctionRunnableMap.class).set(RequestParameterValueGetterImpl.class, RequestParameterValueGetterFunctionRunnableImpl.class);
 		__inject__(FunctionRunnableMap.class).set(NavigationIdentifierStringBuilderExtensionImpl.class, NavigationIdentifierStringBuilderExtensionFunctionRunnableImpl.class,1);
 	}
 	

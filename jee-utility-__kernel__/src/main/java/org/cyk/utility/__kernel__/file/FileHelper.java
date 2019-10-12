@@ -251,6 +251,14 @@ public interface FileHelper {
 		return file;
 	}
 	
+	static File build(FileAsFunctionParameter parameter) {
+		if(parameter == null)
+			return null;
+		return build(parameter.getUniformResourceLocator() == null ? null : UniformResourceIdentifierHelper.build(parameter.getUniformResourceLocator())
+				, parameter.getPath(), parameter.getName(), parameter.getExtension(), parameter.getMimeType(), parameter.getBytes(), parameter.getInputStream()
+				, parameter.getClassToGetResourceAsStream(), parameter.getSize(), parameter.getChecksum(), parameter.getIsChecksumComputable());
+	}
+	
 	static String computeChecksum(byte[] bytes) {
 		return ByteHelper.buildMessageDigest(bytes);
 	}

@@ -1,19 +1,20 @@
 package org.cyk.utility.server.persistence;
 import java.io.Serializable;
 import java.lang.reflect.Modifier;
+import java.util.Collection;
+import java.util.List;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantString;
+import org.cyk.utility.__kernel__.field.FieldInstance;
+import org.cyk.utility.__kernel__.field.FieldInstancesRuntime;
 import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.object.__static__.identifiable.AbstractIdentifiedPersistableByLong;
 import org.cyk.utility.__kernel__.object.__static__.identifiable.AbstractIdentifiedPersistableByString;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.clazz.ClassInstance;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
-import org.cyk.utility.clazz.Classes;
-import org.cyk.utility.clazz.ClassesGetter;
-import org.cyk.utility.__kernel__.field.FieldInstance;
-import org.cyk.utility.__kernel__.field.FieldInstancesRuntime;
 import org.cyk.utility.server.persistence.jpa.AbstractIdentifiedByString;
 import org.cyk.utility.server.persistence.jpa.AbstractIdentifiedByStringAndCoded;
 import org.cyk.utility.server.persistence.jpa.AbstractIdentifiedByStringAndCodedAndNamed;
@@ -30,14 +31,12 @@ public abstract class AbstractApplicationScopeLifeCycleListenerEntities extends 
 	@Override
 	public void __initialize__(Object object) {
 		__inject__(org.cyk.utility.server.persistence.ApplicationScopeLifeCycleListener.class).initialize(null);
-		String packageName = getClass().getPackage().getName();		
-		InternationalizationHelper.addResourceBundlesFromNames(getClass(),0, ConstantString.MESSAGE);
-		
+		InternationalizationHelper.addResourceBundlesFromNames(getClass(),0, ConstantString.MESSAGE);		
 		Class<?>[] basesClasses = __getClassesBasesClasses__();
 		if(__inject__(ArrayHelper.class).isNotEmpty(basesClasses)) {
-			Classes classes = __inject__(ClassesGetter.class).addPackageNames(packageName).addBasesClasses(basesClasses).setIsInterface(Boolean.FALSE).execute().getOutput();
+			Collection<Class<?>> classes = ClassHelper.filter(List.of(getClass().getPackage()), List.of(basesClasses), Boolean.FALSE);
 			if(CollectionHelper.isNotEmpty(classes)) {
-				for(@SuppressWarnings("rawtypes") Class index : classes.get()) {
+				for(@SuppressWarnings("rawtypes") Class index : classes) {
 					if(!Modifier.isAbstract(index.getModifiers())) {
 						ClassInstance classInstance = __inject__(ClassInstancesRuntime.class).get(index);
 						classInstance.setIsActionable(IS_ACTIONABLE);

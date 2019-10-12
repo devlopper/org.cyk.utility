@@ -2,7 +2,7 @@ package org.cyk.utility.client.controller.data.hierarchy;
 
 import java.io.Serializable;
 
-public abstract class AbstractHierarchyImpl<NODE extends DataIdentifiedByString> extends org.cyk.utility.client.controller.data.AbstractDataIdentifiedByStringImpl implements Hierarchy<NODE>,Serializable {
+public abstract class AbstractHierarchyImpl<NODE extends DataIdentifiedByString<?>> extends org.cyk.utility.client.controller.data.AbstractDataIdentifiedByStringImpl implements Hierarchy<NODE>,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private NODE parent,child;

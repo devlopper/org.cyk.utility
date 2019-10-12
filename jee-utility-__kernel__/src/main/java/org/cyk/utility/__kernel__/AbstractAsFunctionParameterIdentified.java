@@ -5,7 +5,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
-public abstract class AbstractAsFunctionParameterIdentified<IDENTIFIER,VALUE> extends AbstractAsFunctionParameter<VALUE> {
+public abstract class AbstractAsFunctionParameterIdentified<VALUE,IDENTIFIER> extends AbstractAsFunctionParameter<VALUE> {
 
 	private IDENTIFIER identifier;
 	

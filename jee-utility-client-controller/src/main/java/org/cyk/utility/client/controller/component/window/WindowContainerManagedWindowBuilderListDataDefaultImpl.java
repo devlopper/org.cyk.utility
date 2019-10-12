@@ -18,19 +18,18 @@ public class WindowContainerManagedWindowBuilderListDataDefaultImpl extends Abst
 	@Override
 	protected void __execute__(GridBuilder gridBuilder) {
 		Strings fieldNames = __inject__(DataHelper.class).getPropertiesFieldsNames(getSystemAction().getEntityClass());
-		if(CollectionHelper.isNotEmpty(fieldNames)) {
-			if(fieldNames.getSize() > 1) {
-				if(CollectionHelper.contains(fieldNames, DataIdentifiedByStringAndCoded.PROPERTY_CODE))
-					fieldNames.remove(DataIdentifiedByString.PROPERTY_IDENTIFIER);
-			}
-			if(ClassHelper.isInstanceOf(getSystemAction().getEntityClass(), org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString.class)) {
-				fieldNames.removeMany(org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString.PROPERTY_PARENTS
-						,org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString.PROPERTY_NUMBER_OF_PARENTS
-						,org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString.PROPERTY_NUMBER_OF_CHILDREN);
-			}
-			for(String index : fieldNames.get()) {
-				gridBuilder.addColumnsByFieldNames(FieldHelper.join(RowData.PROPERTY_DATA,index));				
-			}
+		if(CollectionHelper.isEmpty(fieldNames))
+			return;
+		if(fieldNames.getSize() > 1 && CollectionHelper.contains(fieldNames, DataIdentifiedByStringAndCoded.PROPERTY_CODE))
+			fieldNames.remove(DataIdentifiedByString.PROPERTY_IDENTIFIER);
+		
+		if(ClassHelper.isInstanceOf(getSystemAction().getEntityClass(), org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString.class)) {
+			fieldNames.removeMany(org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString.PROPERTY_PARENTS
+					,org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString.PROPERTY_NUMBER_OF_PARENTS
+					,org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString.PROPERTY_NUMBER_OF_CHILDREN);
+		}
+		for(String index : fieldNames.get()) {
+			gridBuilder.addColumnsByFieldNames(FieldHelper.join(RowData.PROPERTY_DATA,index));				
 		}
 	}
 

@@ -11,6 +11,7 @@ import org.cyk.utility.bean.PropertyValueGetter;
 import org.cyk.utility.client.controller.command.CommandFunction;
 import org.cyk.utility.client.controller.component.ComponentRoleStyleClassGetterImpl;
 import org.cyk.utility.client.controller.component.ComponentTargetModelBuilder;
+import org.cyk.utility.client.controller.component.ComponentTargetModelBuilderImpl;
 import org.cyk.utility.client.controller.component.grid.GridBuilderCommandableBuilderProcessorImpl;
 import org.cyk.utility.client.controller.component.layout.LayoutWidthGetterImpl;
 import org.cyk.utility.client.controller.component.layout.StyleClassBuilderWidthCssPrimefacesGridFunctionRunnableImpl;
@@ -50,5 +51,5 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 	
 	/**/
 	
-	public static final Integer LEVEL = new Integer(org.cyk.utility.client.controller.web.jsf.ApplicationScopeLifeCycleListener.LEVEL+1);
+	public static final Integer LEVEL = Integer.valueOf(org.cyk.utility.client.controller.web.jsf.ApplicationScopeLifeCycleListener.LEVEL+1);
 }

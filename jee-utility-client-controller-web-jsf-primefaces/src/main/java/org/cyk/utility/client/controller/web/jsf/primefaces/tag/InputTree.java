@@ -29,15 +29,15 @@ public class InputTree extends AbstractObject implements Serializable {
 		this.root = root;
 	}
 	
-	public <NODE extends DataIdentifiedByString,HIERARCHY extends Hierarchy<NODE>> void select(Collection<NODE> nodes) {
+	public <NODE extends DataIdentifiedByString<NODE>,HIERARCHY extends Hierarchy<NODE>> void select(Collection<NODE> nodes) {
 		__select__(nodes, Boolean.TRUE);
 	}
 	
-	public <NODE extends DataIdentifiedByString,HIERARCHY extends Hierarchy<NODE>> void unselect(Collection<NODE> nodes) {
+	public <NODE extends DataIdentifiedByString<NODE>,HIERARCHY extends Hierarchy<NODE>> void unselect(Collection<NODE> nodes) {
 		__select__(nodes, Boolean.FALSE);
 	}
 	
-	public <NODE extends DataIdentifiedByString,HIERARCHY extends Hierarchy<NODE>> void __select__(Collection<NODE> nodes,Boolean isSelected) {
+	public <NODE extends DataIdentifiedByString<NODE>,HIERARCHY extends Hierarchy<NODE>> void __select__(Collection<NODE> nodes,Boolean isSelected) {
 		if(CollectionHelper.isNotEmpty(nodes)) {
 			PrimefacesHelper primefacesHelper = __inject__(PrimefacesHelper.class);
 			primefacesHelper.setTreeNodesSelected(root, nodes,isSelected);

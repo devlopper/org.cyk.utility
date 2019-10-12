@@ -8,7 +8,6 @@ import javax.ws.rs.core.Response;
 
 import org.cyk.utility.client.controller.proxy.ProxyClassUniformResourceIdentifierGetter;
 import org.cyk.utility.client.controller.proxy.ProxyGetter;
-import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.type.TypeHelper;
 
@@ -16,10 +15,6 @@ public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.d
 	private static final long serialVersionUID = 1L;
 
 	/**/
-	
-	protected static InstanceHelper __injectInstanceHelper__() {
-		return __inject__(InstanceHelper.class);
-	}
 	
 	/* URI */
 	

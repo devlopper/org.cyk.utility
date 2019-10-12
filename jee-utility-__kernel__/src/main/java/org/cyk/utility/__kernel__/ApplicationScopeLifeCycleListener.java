@@ -6,6 +6,7 @@ import javax.enterprise.context.ApplicationScoped;
 
 import org.apache.commons.beanutils.FluentPropertyBeanIntrospector;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.cyk.utility.__kernel__.identifier.resource.ProxyUniformResourceIdentifierGetter;
 import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
 import org.cyk.utility.__kernel__.locale.LocaleHelper;
 
@@ -18,6 +19,7 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 		PropertyUtils.addBeanIntrospector(new FluentPropertyBeanIntrospector());
 		LocaleHelper.LOCALES.add(Locale.FRENCH);
 		InternationalizationHelper.addResourceBundlesFromNames(null,null, "word","phrase","throwable","assertion");
+		ProxyUniformResourceIdentifierGetter.UNIFORM_RESOURCE_IDENTIFIER.initialize();
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller.component.theme;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.file.FileHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.AbstractObject;
 import org.cyk.utility.client.controller.Constant;
@@ -21,7 +22,6 @@ import org.cyk.utility.client.controller.tag.TagMeta;
 import org.cyk.utility.client.controller.tag.TagMetas;
 import org.cyk.utility.client.controller.tag.TagScript;
 import org.cyk.utility.client.controller.tag.TagScripts;
-import org.cyk.utility.file.FileHelper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -52,7 +52,7 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 		
 		String logoFileName = __getConfigurationParameterValue__(Constant.CONTEXT_PARAMETER_NAME_THEME_LOGO_FILE_NAME,null);
 		if(StringHelper.isBlank(logoFileName))
-			logoFileName = __inject__(FileHelper.class).concatenateNameAndExtension(__getConfigurationParameterValue__(Constant.CONTEXT_PARAMETER_NAME_THEME_LOGO_FILE_NAME_PREFIX,"logo")
+			logoFileName = FileHelper.concatenateNameAndExtension(__getConfigurationParameterValue__(Constant.CONTEXT_PARAMETER_NAME_THEME_LOGO_FILE_NAME_PREFIX,"logo")
 					, __getConfigurationParameterValue__(Constant.CONTEXT_PARAMETER_NAME_THEME_LOGO_FILE_NAME_EXTENSION,"png"));
 		FileImageBuilder fileImageBuilder = __inject__(FileImageBuilder.class);
 		

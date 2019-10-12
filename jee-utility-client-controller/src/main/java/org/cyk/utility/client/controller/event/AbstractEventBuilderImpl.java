@@ -51,7 +51,9 @@ public abstract class AbstractEventBuilderImpl extends AbstractFunctionWithPrope
 	
 	@Override
 	public ScriptBuilder getScript(Boolean injectIfNull) {
-		return (ScriptBuilder) __getInjectIfNull__(FIELD_SCRIPT, injectIfNull);
+		if(script == null && Boolean.TRUE.equals(injectIfNull))
+			script = __inject__(ScriptBuilder.class);
+		return script;
 	}
 	
 	@Override
@@ -79,7 +81,9 @@ public abstract class AbstractEventBuilderImpl extends AbstractFunctionWithPrope
 	
 	@Override
 	public CommandFunction getFunction(Boolean injectIfNull) {
-		return (CommandFunction) __getInjectIfNull__(FIELD_FUNCTION, injectIfNull);
+		if(function == null && Boolean.TRUE.equals(injectIfNull))
+			function = __inject__(CommandFunction.class);
+		return function;
 	}
 
 	@Override
@@ -95,7 +99,9 @@ public abstract class AbstractEventBuilderImpl extends AbstractFunctionWithPrope
 	
 	@Override
 	public Objects getUpdatables(Boolean injectIfNull) {
-		return (Objects) __getInjectIfNull__(FIELD_UPDATABLES, injectIfNull);
+		if(updatables == null && Boolean.TRUE.equals(injectIfNull))
+			updatables = __inject__(Objects.class);
+		return updatables;
 	}
 	
 	@Override

@@ -5,7 +5,7 @@ import org.cyk.utility.client.controller.component.file.FileImage;
 import org.cyk.utility.client.controller.component.link.Link;
 import org.cyk.utility.repository.RepositoryType;
 
-public interface OutputFile extends Output<org.cyk.utility.file.File> {
+public interface OutputFile extends Output<org.cyk.utility.__kernel__.file.File> {
 	
 	File getFile();
 	OutputFile setFile(File file);

@@ -5,7 +5,6 @@ import java.io.Serializable;
 import javax.enterprise.context.ApplicationScoped;
 
 import org.apache.commons.lang.StringUtils;
-import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.Case;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
@@ -14,7 +13,7 @@ import org.cyk.utility.__kernel__.system.action.SystemActionDelete;
 import org.cyk.utility.__kernel__.system.action.SystemActionUpdate;
 import org.cyk.utility.helper.AbstractHelper;
 
-@ApplicationScoped
+@ApplicationScoped @Deprecated
 public class NavigationHelperImpl extends AbstractHelper implements NavigationHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -32,11 +31,6 @@ public class NavigationHelperImpl extends AbstractHelper implements NavigationHe
 				arguments[1] = StringUtils.substringBetween(systemAction.getClass().getSimpleName(), SystemAction.class.getSimpleName(), "Impl") ;
 		}
 		return String.format(IDENTIFIER_FORMAT, arguments);
-	}
-	
-	private static void __process__(NavigationIdentifierToUrlStringMapper identifierToUrlStringMapper,Object context,Object uniformResourceLocatorMap) {
-		identifierToUrlStringMapper.setPropertyIfNull(Properties.CONTEXT,context);
-		identifierToUrlStringMapper.setPropertyIfNull(Properties.UNIFORM_RESOURCE_LOCATOR_MAP,uniformResourceLocatorMap);
 	}
 	
 	/**/

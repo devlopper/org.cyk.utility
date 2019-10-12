@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.session.SessionHelper;
 import org.cyk.utility.client.controller.session.SessionAttributeEnumeration;
-import org.cyk.utility.client.controller.session.SessionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.scope.Scope;
 import org.cyk.utility.scope.ScopeSession;
@@ -22,7 +22,7 @@ public class MenuGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Me
 		Menu menu = null;
 		Class<? extends Scope> scopeClass = getScopeClass();
 		if(ClassHelper.isInstanceOf(scopeClass, ScopeSession.class)) {
-			menu = (Menu) __inject__(SessionHelper.class).getAttributeValue(SessionAttributeEnumeration.MENU,request);
+			menu = (Menu) SessionHelper.getAttributeValue(SessionAttributeEnumeration.MENU);
 		}
 		if(menu == null) {
 			MenuBuilderMap map = __inject__(MenuBuilderMapGetter.class).setRequest(request).execute().getOutput();
@@ -41,7 +41,7 @@ public class MenuGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Me
 			}
 			
 			if(ClassHelper.isInstanceOf(scopeClass, ScopeSession.class)) {
-				__inject__(SessionHelper.class).setAttributeValue(SessionAttributeEnumeration.MENU,menu,request);
+				SessionHelper.setAttributeValue(SessionAttributeEnumeration.MENU,menu);
 			}
 		}
 		

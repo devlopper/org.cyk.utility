@@ -2,16 +2,10 @@ package org.cyk.utility.client.controller.navigation;
 
 import java.io.Serializable;
 
-import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.object.Objects;
-import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.__kernel__.string.StringHelper;
-import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterNameStringBuilder;
-import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterValueStringBuilder;
 import org.cyk.utility.object.ObjectByObjectMap;
 
 @Deprecated
@@ -143,10 +137,11 @@ public class NavigationBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 		 */
 	}
 	
+	/*@Deprecated
 	private void __process__(NavigationIdentifierToUrlStringMapper identifierToUrlStringMapper,Object context,Object uniformResourceLocatorMap) {
 		identifierToUrlStringMapper.setPropertyIfNull(Properties.CONTEXT,context);
 		identifierToUrlStringMapper.setPropertyIfNull(Properties.UNIFORM_RESOURCE_LOCATOR_MAP,uniformResourceLocatorMap);
-	}
+	}*/
 	
 	@Override
 	public NavigationIdentifierStringBuilder getIdentifierBuilder() {

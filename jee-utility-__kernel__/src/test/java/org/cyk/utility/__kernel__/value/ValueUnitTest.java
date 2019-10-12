@@ -33,6 +33,17 @@ public class ValueUnitTest extends AbstractWeldUnitTest {
 		assertThat(__inject__(Value.class).setObject(new Class()).set("v01").get()).isEqualTo("v01");
 	}
 	
+	@Test
+	public void get_configuration_isNull() {
+		assertThat(__inject__(Value.class).setConfigurationValueName("env01").get()).isNull();
+	}
+	
+	@Test
+	public void get_configuration_isNotNull() {
+		System.setProperty("myprop01", "v001");
+		assertThat(__inject__(Value.class).setConfigurationValueName("myprop01").get()).isEqualTo("v001");
+	}
+	
 	/**/
 	
 	@Getter @Setter @Accessors(chain=true)

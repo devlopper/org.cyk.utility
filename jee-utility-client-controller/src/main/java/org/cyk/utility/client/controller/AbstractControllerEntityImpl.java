@@ -234,6 +234,7 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 	/**/
 	
 	protected RepresentationEntity<?, ?, ?> getRepresentation(){
+		System.out.println("AbstractControllerEntityImpl.getRepresentation()");
 		RepresentationEntity<?, ?, ?> representation = null;
 		if(__representationClass__ == null) {
 			throw new RuntimeException("No representation class found for "+__entityClass__);

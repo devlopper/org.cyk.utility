@@ -4,9 +4,6 @@ import org.cyk.utility.__kernel__.function.FunctionRunnableMap;
 import org.cyk.utility.client.controller.component.menu.MenuBuilderMapGetterImpl;
 import org.cyk.utility.client.controller.component.menu.MenuGetter;
 import org.cyk.utility.client.controller.navigation.NavigationIdentifierToUrlStringMapperImpl;
-import org.cyk.utility.client.controller.session.SessionAttributeGetterImpl;
-import org.cyk.utility.client.controller.session.SessionAttributeSetterImpl;
-import org.cyk.utility.request.RequestParameterValueGetterImpl;
 import org.cyk.utility.request.RequestPropertyValueGetterImpl;
 import org.cyk.utility.scope.ScopeSession;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
@@ -19,9 +16,6 @@ public class MenuGetterUnitTest extends AbstractWeldUnitTest {
 		__inject__(FunctionRunnableMap.class).set(NavigationIdentifierToUrlStringMapperImpl.class, NavigationIdentifierToUrlStringMapperFunctionRunnableImpl.class,1);
 		__inject__(FunctionRunnableMap.class).set(NavigationIdentifierToUrlStringMapperImpl.class, NavigationIdentifierToUrlStringMapperFunctionRunnableImpl.class);
 		__inject__(FunctionRunnableMap.class).set(RequestPropertyValueGetterImpl.class, RequestPropertyValueGetterFunctionRunnableImpl.class);
-		__inject__(FunctionRunnableMap.class).set(RequestParameterValueGetterImpl.class, RequestParameterValueGetterFunctionRunnableImpl.class);
-		__inject__(FunctionRunnableMap.class).set(SessionAttributeGetterImpl.class, SessionAttributeGetterFunctionRunnableImpl.class);
-		__inject__(FunctionRunnableMap.class).set(SessionAttributeSetterImpl.class, SessionAttributeSetterFunctionRunnableImpl.class);
 		__inject__(FunctionRunnableMap.class).set(MenuBuilderMapGetterImpl.class, MenuBuilderMapGetterFunctionRunnableImpl.class);
 	}
 	

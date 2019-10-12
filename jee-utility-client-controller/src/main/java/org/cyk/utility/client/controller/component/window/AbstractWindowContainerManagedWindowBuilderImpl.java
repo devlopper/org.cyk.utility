@@ -10,6 +10,7 @@ import org.cyk.utility.__kernel__.internationalization.InternationalizationHelpe
 import org.cyk.utility.__kernel__.internationalization.InternationalizationKeyStringType;
 import org.cyk.utility.__kernel__.internationalization.InternationalizationPhrase;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.session.SessionHelper;
 import org.cyk.utility.__kernel__.string.Case;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
@@ -29,7 +30,6 @@ import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.data.Form;
 import org.cyk.utility.client.controller.data.Row;
 import org.cyk.utility.client.controller.session.SessionAttributeEnumeration;
-import org.cyk.utility.client.controller.session.SessionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
 public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<WindowBuilder> implements WindowContainerManagedWindowBuilder,Serializable {
@@ -65,10 +65,10 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		if(windowRenderType == null || windowRenderType instanceof WindowRenderTypeNormal) {
 			MenuBuilderMap menuMap = getMenuMap();
 			if(menuMap == null)
-				menuMap = (MenuBuilderMap) __inject__(SessionHelper.class).getAttributeValue(SessionAttributeEnumeration.MENU_BUILDER_MAP,request);
+				menuMap = (MenuBuilderMap) SessionHelper.getAttributeValue(SessionAttributeEnumeration.MENU_BUILDER_MAP);
 			if(menuMap == null) {
 				menuMap = __inject__(MenuBuilderMapGetter.class).setRequest(request).execute().getOutput();
-				__inject__(SessionHelper.class).setAttributeValue(SessionAttributeEnumeration.MENU_BUILDER_MAP,menuMap,request);
+				SessionHelper.setAttributeValue(SessionAttributeEnumeration.MENU_BUILDER_MAP,menuMap);
 			}
 			window.setMenuMap(menuMap);	
 		}

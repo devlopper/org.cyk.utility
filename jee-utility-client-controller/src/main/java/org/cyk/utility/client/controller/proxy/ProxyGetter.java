@@ -2,6 +2,7 @@ package org.cyk.utility.client.controller.proxy;
 
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
 
+@Deprecated
 public interface ProxyGetter extends FunctionWithPropertiesAsInput<Object> {
 	
 	ProxyClassUniformResourceIdentifierStringBuilder getClassUniformResourceIdentifierString();

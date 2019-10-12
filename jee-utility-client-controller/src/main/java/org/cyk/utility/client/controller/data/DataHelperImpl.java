@@ -7,11 +7,9 @@ import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
-import org.cyk.utility.__kernel__.string.StringLocation;
 import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.field.Fields;
-import org.cyk.utility.field.FieldsGetter;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.system.action.SystemActionRelatedClassGetter;
 import org.cyk.utility.system.action.SystemActionRelatedClassesNamesGetter;
@@ -98,7 +96,7 @@ public class DataHelperImpl extends AbstractHelper implements DataHelper,Seriali
 
 	@Override
 	public Fields getPropertiesFields(Class<?> anInterface) {
-		return __inject__(FieldsGetter.class).setClazz(anInterface).setToken("PROPERTY_").setTokenLocation(StringLocation.START).execute().getOutput();
+		return (Fields) __inject__(Fields.class).add(FieldHelper.filter(anInterface, "^PROPERTY_", null));
 	}
 	
 	@Override

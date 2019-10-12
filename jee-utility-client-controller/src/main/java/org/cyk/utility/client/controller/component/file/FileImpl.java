@@ -7,16 +7,16 @@ import org.cyk.utility.client.controller.component.AbstractVisibleComponentImpl;
 public class FileImpl extends AbstractVisibleComponentImpl implements File,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private org.cyk.utility.file.File value;
+	private org.cyk.utility.__kernel__.file.File value;
 	private Boolean isEmbedded;
 	
 	@Override
-	public org.cyk.utility.file.File getValue() {
+	public org.cyk.utility.__kernel__.file.File getValue() {
 		return value;
 	}
 
 	@Override
-	public File setValue(org.cyk.utility.file.File value) {
+	public File setValue(org.cyk.utility.__kernel__.file.File value) {
 		this.value = value;
 		return this;
 	} 

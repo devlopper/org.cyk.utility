@@ -3,9 +3,8 @@ package org.cyk.utility.client.controller.component.window;
 import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.klass.ClassHelper;
-import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
-import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
+import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
 public class WindowContainerManagedWindowBuilderGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<WindowContainerManagedWindowBuilder> implements WindowContainerManagedWindowBuilderGetter,Serializable {
 	private static final long serialVersionUID = 1L;

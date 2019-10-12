@@ -20,10 +20,7 @@ import org.cyk.utility.client.controller.component.theme.ThemeClassGetter;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.message.MessageRender;
 import org.cyk.utility.client.controller.message.MessageRenderType;
-import org.cyk.utility.client.controller.session.AbstractSessionHelperImpl;
 import org.cyk.utility.client.controller.session.SessionAttributeEnumeration;
-import org.cyk.utility.client.controller.session.SessionUser;
-import org.cyk.utility.client.controller.session.SessionUserGetter;
 import org.cyk.utility.notification.NotificationBuilder;
 import org.cyk.utility.notification.NotificationSeverity;
 import org.cyk.utility.notification.NotificationSeverityError;
@@ -34,6 +31,8 @@ import org.cyk.utility.time.DurationBuilder;
 import org.cyk.utility.time.DurationStringBuilder;
 
 import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 public abstract class AbstractWindowContainerManagedImpl extends AbstractObject implements WindowContainerManaged,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -42,9 +41,7 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 	protected Window window;
 	protected WindowBuilder __windowBuilder__;
 	protected String contextDependencyInjectionBeanName;
-	@Deprecated
-	protected SessionUser sessionUser;
-	@Getter protected Session session;
+	@Getter @Setter @Accessors(chain=true) protected Session session;
 	
 	@Getter protected Boolean __isInternalLoggable__;
 	@Getter protected String __windowBuildDuration__;
@@ -53,7 +50,6 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
 		setContextDependencyInjectionBeanName(StringHelper.getVariableNameFrom(getClass().getSimpleName()));
-		setSessionUser(__getSessionUser__());
 		setSystemAction(__getProperty__(WindowContainerManagedProperty.SYSTEM_ACTION, SystemAction.class));
 		session = SessionHelper.getAttributeSession(Boolean.TRUE);
 	}
@@ -127,17 +123,6 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 	@Override
 	public WindowContainerManaged setWindow(Window window) {
 		this.window = window;
-		return this;
-	}
-	
-	@Override @Deprecated
-	public SessionUser getSessionUser() {
-		return sessionUser;
-	}
-	
-	@Override @Deprecated
-	public WindowContainerManaged setSessionUser(SessionUser sessionUser) {
-		this.sessionUser = sessionUser;
 		return this;
 	}
 	
@@ -245,11 +230,6 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 		return this;
 	}
 	
-	@Deprecated
-	protected static SessionUser __getSessionUser__() {
-		return __inject__(SessionUserGetter.class).execute().getOutput();
-	}
-	
 	protected Object __getRequest__() {
 		return __inject__(RequestGetter.class).execute().getOutput();
 	}
@@ -312,10 +292,10 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 	/**/
 	
 	protected void setSessionAttribute(Object attribute,Object value) {
-		AbstractSessionHelperImpl.getInstance().setAttributeValue(attribute, value, __getRequest__());
+		SessionHelper.setAttributeValue(attribute, value);
 	}
 	
 	protected Object getSessionAttribute(Object attribute) {
-		return AbstractSessionHelperImpl.getInstance().getAttributeValue(attribute, __getRequest__());
+		return SessionHelper.getAttributeValue(attribute);
 	}
 }

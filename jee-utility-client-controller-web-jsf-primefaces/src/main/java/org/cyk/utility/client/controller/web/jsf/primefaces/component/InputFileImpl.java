@@ -6,7 +6,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.cyk.utility.client.controller.component.InputOutput;
 import org.cyk.utility.client.controller.component.input.AbstractInputFileImpl;
 import org.cyk.utility.client.controller.web.jsf.primefaces.annotation.Primefaces;
-import org.cyk.utility.file.File;
+import org.cyk.utility.__kernel__.file.File;
 import org.primefaces.model.UploadedFile;
 
 import lombok.Getter;

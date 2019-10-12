@@ -193,7 +193,7 @@ public interface ClassHelper {
 			return interfaceClass;
 	}
 	
-	static Collection<Class<?>> filter(Collection<Package> packages,String classNameRegularExpression,Collection<Class<?>> basesClasses,Collection<Integer> modifiersIncluded,Collection<Integer> modifiersExcluded) {
+	static Collection<Class<?>> filter(Collection<Package> packages,String classNameRegularExpression,Collection<Class<?>> basesClasses,Boolean isInterface,Collection<Integer> modifiersIncluded,Collection<Integer> modifiersExcluded) {
 		if(packages == null || packages.isEmpty())
 			return null;
 		if(basesClasses == null || basesClasses.isEmpty())
@@ -223,6 +223,8 @@ public interface ClassHelper {
 						continue;	
 					if(modifiersExcluded != null && Helper.isHaveAllModifiers(index.getModifiers(), modifiersExcluded))
 						continue;
+					if(isInterface != null && isInterface ^ index.isInterface())
+						continue;
 					if(classes == null)
 						classes = new ArrayList<>();
 					classes.add(index);
@@ -232,16 +234,20 @@ public interface ClassHelper {
 		return classes;
 	}
 	
-	static Collection<Class<?>> filter(Collection<Package> packages,String classNameRegularExpression,Collection<Class<?>> basesClasses,Collection<Integer> modifiers) {
-		return filter(packages,classNameRegularExpression, basesClasses, modifiers,null);
+	static Collection<Class<?>> filter(Collection<Package> packages,String classNameRegularExpression,Collection<Class<?>> basesClasses,Boolean isInterface,Collection<Integer> modifiers) {
+		return filter(packages,classNameRegularExpression, basesClasses,isInterface, modifiers,null);
 	}
 	
-	static Collection<Class<?>> filter(Collection<Package> packages,String classNameRegularExpression,Collection<Class<?>> basesClasses) {
-		return filter(packages,classNameRegularExpression, basesClasses, null,null);
+	static Collection<Class<?>> filter(Collection<Package> packages,String classNameRegularExpression,Collection<Class<?>> basesClasses,Boolean isInterface) {
+		return filter(packages,classNameRegularExpression, basesClasses,isInterface, null,null);
+	}
+	
+	static Collection<Class<?>> filter(Collection<Package> packages,Collection<Class<?>> basesClasses,Boolean isInterface) {
+		return filter(packages,null, basesClasses,isInterface, null,null);
 	}
 	
 	static Collection<Class<?>> filter(Collection<Package> packages,Collection<Class<?>> basesClasses) {
-		return filter(packages,null, basesClasses, null,null);
+		return filter(packages,null, basesClasses,null, null,null);
 	}
 	
 	/* get parameter */

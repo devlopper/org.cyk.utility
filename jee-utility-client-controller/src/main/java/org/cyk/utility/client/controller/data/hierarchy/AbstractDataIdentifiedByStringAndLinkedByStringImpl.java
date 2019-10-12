@@ -11,7 +11,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
-public abstract class AbstractDataIdentifiedByStringAndLinkedByStringImpl extends AbstractDataIdentifiedByStringImpl implements DataIdentifiedByStringAndLinkedByString,Serializable {
+public abstract class AbstractDataIdentifiedByStringAndLinkedByStringImpl<NODE> extends AbstractDataIdentifiedByStringImpl<NODE> implements DataIdentifiedByStringAndLinkedByString<NODE>,Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Output @OutputString @OutputStringText

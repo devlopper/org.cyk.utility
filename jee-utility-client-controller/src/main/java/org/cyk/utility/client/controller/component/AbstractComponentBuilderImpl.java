@@ -23,8 +23,6 @@ import org.cyk.utility.client.controller.event.Event;
 import org.cyk.utility.client.controller.event.EventBuilder;
 import org.cyk.utility.client.controller.event.EventBuilders;
 import org.cyk.utility.client.controller.event.EventName;
-import org.cyk.utility.client.controller.session.AbstractSessionHelperImpl;
-import org.cyk.utility.client.controller.session.SessionHelper;
 import org.cyk.utility.css.Style;
 import org.cyk.utility.device.Device;
 import org.cyk.utility.device.DeviceScreenArea;
@@ -668,10 +666,6 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 			component.setContext(getContext());
 		if(component.getUniformResourceLocatorMap() == null)
 			component.setUniformResourceLocatorMap(getUniformResourceLocatorMap());
-	}
-	
-	protected static SessionHelper __injectSessionHelper__(){
-		return AbstractSessionHelperImpl.getInstance();
 	}
 	
 	protected static String __buildInternationalizationString__(Object key,InternationalizationKeyStringType keyType,Object[] arguments,Locale locale,Case kase) {

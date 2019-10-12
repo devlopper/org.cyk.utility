@@ -4,9 +4,11 @@ import java.io.Serializable;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.field.FieldInstance;
-import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
+import org.cyk.utility.__kernel__.object.AbstractObject;
+import org.cyk.utility.__kernel__.string.StringHelper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -19,6 +21,7 @@ public class ValueImpl extends AbstractObject implements Value, Serializable {
 	@Getter @Setter @Accessors(chain=true) private String name;
 	@Getter @Setter @Accessors(chain=true) private Object object;
 	@Getter @Setter @Accessors(chain=true) private FieldInstance fieldInstance;
+	@Getter @Setter @Accessors(chain=true) private String configurationValueName;
 	
 	private Object __value__;
 	private Boolean __isValueHashBeenSet__;
@@ -32,10 +35,24 @@ public class ValueImpl extends AbstractObject implements Value, Serializable {
 	
 	@Override
 	public Object get() {
-		if(Boolean.TRUE.equals(__isValueHashBeenSet__) || fieldInstance == null)
+		if(isHasBeenSet() || (fieldInstance == null && StringHelper.isBlank(configurationValueName)))
 			return __value__;
-		__value__ = FieldHelper.read(object, fieldInstance.getPath());
+		if(fieldInstance != null)
+			__value__ = FieldHelper.read(object, fieldInstance.getPath());
+		else if(StringHelper.isNotBlank(configurationValueName))
+			__value__ = ConfigurationHelper.get(configurationValueName, null, null);
 		return __value__;
 	}
 	
+	@Override
+	public Value initialize() {
+		Object value = get();
+		set(value);
+		return this;
+	}
+	
+	@Override
+	public Boolean isHasBeenSet() {
+		return Boolean.TRUE.equals(__isValueHashBeenSet__);
+	}
 }

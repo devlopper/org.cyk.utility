@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.array.ArrayHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.string.RegularExpressionHelper;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
@@ -83,6 +85,19 @@ public enum ParameterName {
 		if(classes != null && !classes.isEmpty())
 			for(Class<?> index : classes)
 				MAP.put(index, StringUtils.substringAfter(index.getSimpleName(),SystemAction.class.getSimpleName()).toLowerCase());
+	}
+	
+	public static void addClasses(Collection<Class<?>> classes) {
+		if(CollectionHelper.isEmpty(classes))
+			return;
+		for(@SuppressWarnings("rawtypes") Class index : classes)
+			ParameterName.MAP.put(index, index.getSimpleName().toLowerCase());
+	}
+	
+	public static void addClasses(Class<?>...classes) {
+		if(ArrayHelper.isEmpty(classes))
+			return;
+		addClasses(CollectionHelper.listOf(classes));
 	}
 	
 	static {

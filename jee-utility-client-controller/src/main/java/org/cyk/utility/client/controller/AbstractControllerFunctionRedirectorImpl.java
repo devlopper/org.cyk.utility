@@ -14,9 +14,6 @@ import org.cyk.utility.__kernel__.system.action.SystemActionRead;
 import org.cyk.utility.__kernel__.system.action.SystemActionRedirect;
 import org.cyk.utility.__kernel__.throwable.EntityNotFoundException;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.client.controller.navigation.Navigation;
-import org.cyk.utility.client.controller.navigation.NavigationBuilder;
-import org.cyk.utility.client.controller.navigation.NavigationRedirector;
 import org.cyk.utility.mapping.MappingHelper;
 import org.cyk.utility.server.representation.ResponseHelper;
 import org.cyk.utility.type.TypeHelper;
@@ -55,11 +52,12 @@ public abstract class AbstractControllerFunctionRedirectorImpl extends AbstractC
 			targetSystemAction.getEntitiesIdentifiers(Boolean.TRUE).add(__action__.getEntitiesIdentifiers().getFirst());
 			
 			//Object navigationIdentifier = getProperty(Properties.NAVIGATION_IDENTIFIER);
-			NavigationBuilder navigationBuilder = __inject__(NavigationBuilder.class).setIdentifierBuilderSystemAction(targetSystemAction);
+			/*NavigationBuilder navigationBuilder = __inject__(NavigationBuilder.class).setIdentifierBuilderSystemAction(targetSystemAction);
 			
 			Navigation navigation = navigationBuilder.execute().getOutput();
 			response.close();
 			__inject__(NavigationRedirector.class).setNavigation(navigation).execute();
+			*/
 			
 		}else if(Boolean.TRUE.equals(ResponseHelper.isFamilyClientError(response))) {
 			throw ((RuntimeException)(__inject__(EntityNotFoundException.class).setSystemAction(__action__).setResponse(response)));

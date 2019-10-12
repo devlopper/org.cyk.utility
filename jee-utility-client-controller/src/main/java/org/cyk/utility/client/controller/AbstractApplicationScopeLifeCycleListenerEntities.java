@@ -1,15 +1,15 @@
 package org.cyk.utility.client.controller;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantString;
 import org.cyk.utility.__kernel__.identifier.resource.ParameterName;
-import org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierHelper;
 import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.array.ArrayHelper;
-import org.cyk.utility.clazz.Classes;
-import org.cyk.utility.clazz.ClassesGetter;
 import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.client.controller.data.DataIdentifiedByString;
 import org.cyk.utility.client.controller.data.DataIdentifiedByStringAndCoded;
@@ -21,18 +21,13 @@ public abstract class AbstractApplicationScopeLifeCycleListenerEntities extends 
 	@Override
 	public void __initialize__(Object object) {
 		__inject__(org.cyk.utility.client.controller.ApplicationScopeLifeCycleListener.class).initialize(null);	
-		InternationalizationHelper.addResourceBundlesFromNames(getClass(),0,ConstantString.MESSAGE);
-		
+		InternationalizationHelper.addResourceBundlesFromNames(getClass(),0,ConstantString.MESSAGE);		
 		ParameterName.ENTITY_CLASS.setType(Data.class);
 		Class<?>[] basesClasses = __getUniformResourceIdentifierParameterValueMatrixClassesBasesClasses__();
 		if(__inject__(ArrayHelper.class).isNotEmpty(basesClasses)) {
-			String packageName = getClass().getPackage().getName();	
-			Classes classes = __inject__(ClassesGetter.class).addPackageNames(packageName).addBasesClasses(basesClasses)
-					.setIsInterface(Boolean.TRUE).execute().getOutput();
-			if(CollectionHelper.isNotEmpty(classes)) {
-				for(@SuppressWarnings("rawtypes") Class index : classes.get())
-					ParameterName.MAP.put(index, index.getSimpleName().toLowerCase());
-			}
+			Collection<Class<?>> classes = ClassHelper.filter(List.of(getClass().getPackage()), List.of(basesClasses), Boolean.TRUE);
+			if(CollectionHelper.isNotEmpty(classes))
+				ParameterName.addClasses(classes);				
 		}
 	}
 	

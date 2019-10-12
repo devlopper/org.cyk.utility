@@ -3,7 +3,7 @@ package org.cyk.utility.client.controller.proxy;
 import java.io.Serializable;
 
 import org.cyk.utility.string.AbstractStringFunctionImpl;
-
+@Deprecated
 public class ProxyClassUniformResourceIdentifierStringProviderImpl extends AbstractStringFunctionImpl implements ProxyClassUniformResourceIdentifierStringProvider,Serializable {
 	private static final long serialVersionUID = 1L;
 

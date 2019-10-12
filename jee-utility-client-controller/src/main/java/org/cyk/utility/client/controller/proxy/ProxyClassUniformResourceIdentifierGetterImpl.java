@@ -4,11 +4,12 @@ import java.io.Serializable;
 import java.net.URI;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.__kernel__.string.StringHelper;
-import org.cyk.utility.system.OperatingSystemHelper;
-import org.cyk.utility.system.SystemHelper;
+import org.cyk.utility.__kernel__.system.OperatingSystemHelper;
+import org.cyk.utility.__kernel__.system.SystemHelper;
+import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
+@Deprecated
 public class ProxyClassUniformResourceIdentifierGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<URI> implements ProxyClassUniformResourceIdentifierGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -29,10 +30,10 @@ public class ProxyClassUniformResourceIdentifierGetterImpl extends AbstractFunct
 					if(aClass == null)
 						throw new RuntimeException(getClass()+" : class is required");
 					String identifier = StringUtils.substringBefore(aClass.getName(), ".server")+".server"+".uri";
-					string = __inject__(SystemHelper.class).getProperty(identifier);
+					string = SystemHelper.getProperty(identifier);
 					if(StringHelper.isBlank(string)) {
 						//3 - from operating system properties 
-						string = __inject__(OperatingSystemHelper.class).getProperty(identifier);
+						string = OperatingSystemHelper.getProperty(identifier);
 						if(StringHelper.isBlank(string)) {
 							//4 - from request
 							ProxyClassUniformResourceIdentifierStringBuilder stringBuilder = getStringBuilder(Boolean.TRUE);

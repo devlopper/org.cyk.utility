@@ -448,6 +448,13 @@ public class FieldHelperUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	@Test
+	public void filter_FilterStartsWith_nameRegularExpression_PROPERTY_(){
+		Collection<Field> fields = filter(FilterStartsWith.class,"^PROPERTY_",null);
+		assertThat(fields).isNotNull();
+		assertThat(getNames(fields)).containsExactly("PROPERTY_CODE");
+	}
+	
+	@Test
 	public void nullify_ClassFilter_identifier(){
 		ClassFilter object = new ClassFilter().setIdentifier("i01");
 		nullify(object, RegularExpressionHelper.buildIsExactly("identifier"), null);
@@ -553,5 +560,10 @@ public class FieldHelperUnitTest extends AbstractWeldUnitTest {
 	public static class ClassFilterSub extends ClassFilter {
 		private static final long serialVersionUID = 1L;
 		private String name;
+	}
+
+	public static interface FilterStartsWith {
+		public static final String ID = "id";
+		public static final String PROPERTY_CODE = "code";
 	}
 }

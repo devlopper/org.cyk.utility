@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.cyk.utility.client.controller.component.theme.Theme;
 import org.cyk.utility.client.controller.session.SessionAttributeEnumeration;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.session.SessionHelper;
 import org.cyk.utility.css.CascadeStyleSheetHelperImpl;
 import org.cyk.utility.css.Style;
 import org.cyk.utility.device.DeviceScreenArea;
@@ -53,7 +54,7 @@ public abstract class AbstractVisibleComponentBuilderImpl<COMPONENT extends Visi
 		Theme theme = getTheme();
 		if(theme == null) {
 			if(request != null)
-				theme = (Theme) __injectSessionHelper__().getAttributeValue(SessionAttributeEnumeration.THEME, request);
+				theme = (Theme) SessionHelper.getAttributeValueFromRequest(SessionAttributeEnumeration.THEME,request);
 		}
 		component.setTheme(theme);
 	}

@@ -4,9 +4,9 @@ import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.system.SystemHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.system.SystemHelper;
 
 @SuppressWarnings("rawtypes")
 public abstract class AbstractThemeClassGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Class> implements ThemeClassGetter,Serializable {
@@ -15,7 +15,7 @@ public abstract class AbstractThemeClassGetterImpl extends AbstractFunctionWithP
 	@Override
 	protected Class __execute__() throws Exception {
 		Class<?> klass = null;
-		String name = __inject__(SystemHelper.class).getProperty(CLASS_NAME_IDENTIFIER, Boolean.TRUE);
+		String name = SystemHelper.getProperty(CLASS_NAME_IDENTIFIER, Boolean.TRUE);
 		if(StringHelper.isBlank(name)) {
 			klass = CLASS;
 			if(klass == null)

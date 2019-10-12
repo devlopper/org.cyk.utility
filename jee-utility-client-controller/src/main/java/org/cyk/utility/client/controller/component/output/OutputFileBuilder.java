@@ -5,7 +5,7 @@ import org.cyk.utility.client.controller.component.file.FileImageBuilder;
 import org.cyk.utility.client.controller.component.link.LinkBuilder;
 import org.cyk.utility.repository.RepositoryType;
 
-public interface OutputFileBuilder extends OutputBuilder<OutputFile,org.cyk.utility.file.File> {
+public interface OutputFileBuilder extends OutputBuilder<OutputFile,org.cyk.utility.__kernel__.file.File> {
 	
 	RepositoryType getRepositoryType();
 	OutputFileBuilder setRepositoryType(RepositoryType repositoryType);

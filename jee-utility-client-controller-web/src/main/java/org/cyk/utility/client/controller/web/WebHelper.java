@@ -4,10 +4,9 @@ import java.io.Serializable;
 
 import javax.enterprise.context.ApplicationScoped;
 
+import org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierHelper;
 import org.cyk.utility.client.controller.component.output.OutputFile;
-import org.cyk.utility.file.File;
 import org.cyk.utility.helper.AbstractHelper;
-import org.cyk.utility.identifier.resource.UniformResourceIdentifierStringBuilder;
 import org.cyk.utility.repository.RepositoryType;
 import org.cyk.utility.repository.RepositoryTypeDatabase;
 import org.cyk.utility.repository.RepositoryTypeFolder;
@@ -25,15 +24,15 @@ public class WebHelper extends AbstractHelper implements Serializable {
 			location = "database";
 		else if(repositoryType instanceof RepositoryTypeFolder)
 			location = "folder";
-		return __inject__(UniformResourceIdentifierStringBuilder.class).setRequest(request).setPath(String.format(FILE_URL_PATH_FORMAT
-				, identifier,location)).execute().getOutput();
+		return UniformResourceIdentifierHelper.build(null, null, null, String.format(FILE_URL_PATH_FORMAT, identifier,location), null, null, null);
 	}
 	
 	public String buildFileUrl(OutputFile outputFile,Object request) {
 		String url = null;
-		File file = outputFile.getValue();
+		/*File file = outputFile.getValue();
 		if(file!=null && file.getIdentifier()!=null)
 			url = buildFileUrl(file.getIdentifier().toString(), outputFile.getRepositoryType(), request);
+		*/
 		return url;
 	}
 	

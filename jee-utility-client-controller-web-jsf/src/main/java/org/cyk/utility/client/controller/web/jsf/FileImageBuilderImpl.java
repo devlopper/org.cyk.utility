@@ -2,8 +2,6 @@ package org.cyk.utility.client.controller.web.jsf;
 import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.annotation.JavaServerFaces;
-import org.cyk.utility.__kernel__.string.StringHelper;
-import org.cyk.utility.client.controller.component.file.FileBuilder;
 import org.cyk.utility.client.controller.component.file.FileImage;
 
 @JavaServerFaces
@@ -12,6 +10,7 @@ public class FileImageBuilderImpl extends org.cyk.utility.client.controller.comp
 
 	@Override
 	protected void __execute__(FileImage fileImage) {
+		/*
 		FileBuilder file = getFile();
 		if(file!=null && file.getValue()!=null) {
 			String uniformResourceLocator = file.getValue().getUniformResourceLocator();
@@ -26,6 +25,7 @@ public class FileImageBuilderImpl extends org.cyk.utility.client.controller.comp
 				}	
 			}	
 		}
+		*/
 		super.__execute__(fileImage);
 	}
 	

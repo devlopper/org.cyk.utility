@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
+@Deprecated
 public class ProxyGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Object> implements ProxyGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 

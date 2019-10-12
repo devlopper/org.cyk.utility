@@ -4,6 +4,7 @@ import java.net.URI;
 
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
 
+@Deprecated
 public interface ProxyClassUniformResourceIdentifierGetter extends FunctionWithPropertiesAsInput<URI> {
 
 	Class<?> getClazz();

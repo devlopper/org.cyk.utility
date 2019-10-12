@@ -10,7 +10,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
-public class SystemActionAsFunctionParameter extends AbstractAsFunctionParameterIdentified<Object,SystemAction> {
+public class SystemActionAsFunctionParameter extends AbstractAsFunctionParameterIdentified<SystemAction,Object> {
 	
 	private CollectionInstanceAsFunctionParameter entities;
 	private CollectionInstanceAsFunctionParameter entitiesIdentifiers;

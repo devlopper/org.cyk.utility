@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
 import org.cyk.utility.__kernel__.string.Strings;
 
+@Deprecated
 public interface ClassesGetter extends FunctionWithPropertiesAsInput<Classes> {
 
 	Strings getPackageNames();

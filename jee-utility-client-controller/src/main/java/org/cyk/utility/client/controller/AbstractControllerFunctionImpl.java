@@ -6,11 +6,11 @@ import java.util.Collection;
 import javax.ws.rs.core.Response;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.identifier.resource.ProxyHelper;
 import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
 import org.cyk.utility.__kernel__.internationalization.InternationalizationKeyStringType;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.log.LogLevel;
-import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.__kernel__.throwable.ServiceNotFoundException;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
@@ -19,7 +19,6 @@ import org.cyk.utility.client.controller.data.DataRepresentationClassGetter;
 import org.cyk.utility.client.controller.data.DataTransferObjectClassGetter;
 import org.cyk.utility.client.controller.message.MessageRender;
 import org.cyk.utility.client.controller.message.MessageRenderTypeDialog;
-import org.cyk.utility.client.controller.proxy.ProxyGetter;
 import org.cyk.utility.mapping.MappingHelper;
 import org.cyk.utility.notification.NotificationBuilder;
 import org.cyk.utility.notification.NotificationSeverityInformation;
@@ -58,10 +57,7 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 			__representationClass__ = ValueHelper.returnOrThrowIfBlank(String.format("Data Representation Class of %s", __entityClass__.getName()),
 					__inject__(DataRepresentationClassGetter.class).setDataClass(__entityClass__).execute().getOutput());
 			
-			__representation__ = ValueHelper.returnOrThrowIfBlank(String.format("Data Representation of %s", __entityClass__.getName())
-					,__inject__(ProxyGetter.class).setClassUniformResourceIdentifierStringRequest(Properties.getFromPath(getProperties(), Properties.REQUEST))
-					.setClazz(__representationClass__).execute().getOutput())
-					;	
+			__representation__ = ValueHelper.returnOrThrowIfBlank(String.format("Data Representation of %s", __entityClass__.getName()),ProxyHelper.get(__representationClass__));	
 		}
 	}
 	
@@ -80,8 +76,7 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 	
 	protected void __execute__(SystemAction action,Class<?> dataTransferClass,Class<?> dataRepresentationClass,Collection<?> dataTransferObjects) {
 		if(ClassHelper.isInstanceOf(dataRepresentationClass, RepresentationEntity.class)) {
-			__execute__(action, __inject__(ProxyGetter.class).setClassUniformResourceIdentifierStringRequest(Properties.getFromPath(getProperties(), Properties.REQUEST))
-					.setClazz(dataRepresentationClass).execute().getOutput(), dataTransferObjects);
+			__execute__(action, ProxyHelper.get(dataRepresentationClass), dataTransferObjects);
 		}
 	}
 	

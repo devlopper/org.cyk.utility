@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller.proxy;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierStringBuilder;
 import org.cyk.utility.string.StringFunction;
 
+@Deprecated
 public interface ProxyClassUniformResourceIdentifierStringBuilder extends StringFunction {
 
 	UniformResourceIdentifierStringBuilder getUniformResourceIdentifierString();

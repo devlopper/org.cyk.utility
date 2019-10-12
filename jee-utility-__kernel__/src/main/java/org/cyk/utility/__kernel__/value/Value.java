@@ -1,7 +1,7 @@
 package org.cyk.utility.__kernel__.value;
 
 import org.cyk.utility.__kernel__.field.FieldInstance;
-import org.cyk.utility.__kernel__.object.dynamic.Objectable;
+import org.cyk.utility.__kernel__.object.Objectable;
 
 public interface Value extends Objectable {
 
@@ -14,7 +14,14 @@ public interface Value extends Objectable {
 	FieldInstance getFieldInstance();
 	Value setFieldInstance(FieldInstance fieldInstance);
 	
+	String getConfigurationValueName();
+	Value setConfigurationValueName(String configurationValueName);
+	
 	Object get();
 	Value set(Object value);
+	
+	Value initialize();
+	
+	Boolean isHasBeenSet();
 	
 }

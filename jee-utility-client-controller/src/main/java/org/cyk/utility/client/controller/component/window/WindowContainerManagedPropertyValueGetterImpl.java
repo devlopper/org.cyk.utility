@@ -10,7 +10,6 @@ import org.cyk.utility.__kernel__.system.action.SystemActionRead;
 import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.client.controller.data.DataHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.request.RequestParameterValueMapper;
 
 public class WindowContainerManagedPropertyValueGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Object> implements WindowContainerManagedPropertyValueGetter,Serializable {
 	private static final long serialVersionUID = 1L;
