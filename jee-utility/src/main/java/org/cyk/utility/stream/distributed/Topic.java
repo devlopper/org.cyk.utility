@@ -4,9 +4,8 @@ import java.util.Collection;
 import java.util.List;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.system.SystemHelper;
 import org.cyk.utility.array.ArrayHelper;
-import org.cyk.utility.system.SystemHelper;
-import org.cyk.utility.type.BooleanHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 
 import lombok.Getter;
@@ -37,7 +36,7 @@ public enum Topic {
 			String suffix = name().toLowerCase();
 			String systemPropertyName = String.format(SYSTEM_PROPERTY_NAME_FORMAT, suffix);
 			identifier = ValueHelper.defaultToIfNull(
-					DependencyInjection.inject(SystemHelper.class).getProperty(systemPropertyName,Boolean.TRUE),suffix);	
+					SystemHelper.getProperty(systemPropertyName,Boolean.TRUE),suffix);	
 		}else {
 			
 		}
@@ -51,7 +50,7 @@ public enum Topic {
 				return;
 			}
 			if(isStartable == null)
-				isStartable = BooleanHelper.get(DependencyInjection.inject(SystemHelper.class)
+				isStartable = ValueHelper.convertToBoolean(SystemHelper
 					.getProperty(String.format(IS_STARTABLE_FORMAT, name().toLowerCase()),Boolean.TRUE));
 			if(Boolean.TRUE.equals(isStartable)) {
 				Consumer consumer = DependencyInjection.inject(ConsumerBuilder.class).setTopic(this).execute().getOutput();

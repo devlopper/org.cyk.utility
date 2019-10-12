@@ -6,6 +6,7 @@ import java.util.Collection;
 import org.cyk.utility.__kernel__.collection.CollectionInstance;
 import org.cyk.utility.__kernel__.string.Strings;
 
+@Deprecated
 public interface Paths extends CollectionInstance<Path> {
 
 	Paths removeByUniformResourceIdentifiers(Collection<String> uniformResourceIdentifiers);

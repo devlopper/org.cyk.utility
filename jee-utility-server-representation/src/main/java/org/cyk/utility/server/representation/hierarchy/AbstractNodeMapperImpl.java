@@ -8,6 +8,7 @@ import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.server.representation.AbstractEntityCollection;
 import org.cyk.utility.server.representation.AbstractMapperSourceDestinationImpl;
 
+@Deprecated
 public abstract class AbstractNodeMapperImpl<SOURCE,DESTINATION,SOURCE_COLLECTION,DESTINATION_COLLECTION> extends AbstractMapperSourceDestinationImpl<SOURCE, DESTINATION> {
 	private static final long serialVersionUID = 1L;
 	

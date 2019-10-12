@@ -5,6 +5,7 @@ import java.io.Serializable;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
+@Deprecated
 public abstract class AbstractFieldValueCopyFieldsGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Fields> implements FieldValueCopyFieldsGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 

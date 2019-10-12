@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.helper.AbstractHelper;
 
-@ApplicationScoped
+@ApplicationScoped @Deprecated
 public class ByteHelperImpl extends AbstractHelper implements ByteHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 

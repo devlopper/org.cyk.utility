@@ -1,10 +1,11 @@
-package org.cyk.utility.file;
+package org.cyk.utility.__kernel__.file;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.cyk.utility.file.FileHelperImpl.__concatenateNameAndExtension__;
-import static org.cyk.utility.file.FileHelperImpl.__getExtension__;
-import static org.cyk.utility.file.FileHelperImpl.__getPaths__;
+import static org.cyk.utility.__kernel__.file.FileHelper.concatenateNameAndExtension;
+import static org.cyk.utility.__kernel__.file.FileHelper.getExtension;
+import static org.cyk.utility.__kernel__.file.FileHelper.getPaths;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.string.RegularExpressionHelper;
-import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 
 public class FileHelperUnitTest extends AbstractWeldUnitTest {
@@ -46,8 +47,8 @@ public class FileHelperUnitTest extends AbstractWeldUnitTest {
 				}
 			}
 		}
-		Paths paths = __getPaths__(Arrays.asList(root.toString()),null, Boolean.TRUE, Boolean.TRUE, null);
-		assertThat(paths.get().stream().map(x -> StringUtils.substringAfter(x.toString(), root.toString()+"\\")).collect(Collectors.toList()))
+		Collection<Path> paths = getPaths(Arrays.asList(root.toString()),null, Boolean.TRUE, Boolean.TRUE, null);
+		assertThat(paths.stream().map(x -> StringUtils.substringAfter(x.toString(), root.toString()+"\\")).collect(Collectors.toList()))
 		.hasSize(files.size())
 		.containsExactlyInAnyOrder(files.stream().map(x -> StringUtils.substringAfter(x.toString(), root.toString()+"\\")).collect(Collectors.toList()).toArray(new String[] {}));
 	}
@@ -78,8 +79,8 @@ public class FileHelperUnitTest extends AbstractWeldUnitTest {
 				}
 			}
 		}
-		Paths paths = __getPaths__(Arrays.asList(root.toString()),null, Boolean.FALSE, Boolean.TRUE, null);
-		assertThat(paths.get().stream().map(x -> StringUtils.substringAfter(x.toString(), root.toString()+"\\")).collect(Collectors.toList()))
+		Collection<Path> paths = getPaths(Arrays.asList(root.toString()),null, Boolean.FALSE, Boolean.TRUE, null);
+		assertThat(paths.stream().map(x -> StringUtils.substringAfter(x.toString(), root.toString()+"\\")).collect(Collectors.toList()))
 		.hasSize(files.size())
 		.containsExactly(files.stream().map(x -> StringUtils.substringAfter(x.toString(), root.toString()+"\\")).collect(Collectors.toList()).toArray(new String[] {}));
 	}
@@ -98,14 +99,14 @@ public class FileHelperUnitTest extends AbstractWeldUnitTest {
 			__file__.createNewFile();
 			files.add(__file__);
 		}
-		Paths paths = __getPaths__(Arrays.asList(root.toString()),null, Boolean.TRUE, Boolean.TRUE, null);
-		assertThat(paths.get().stream().map(x -> StringUtils.substringAfter(x.toString(), root.toString()+"\\")).collect(Collectors.toList()))
+		Collection<Path> paths = getPaths(Arrays.asList(root.toString()),null, Boolean.TRUE, Boolean.TRUE, null);
+		assertThat(paths.stream().map(x -> StringUtils.substringAfter(x.toString(), root.toString()+"\\")).collect(Collectors.toList()))
 		.hasSize(files.size())
 		.containsExactlyInAnyOrder("f0.txt","f1.txt","f2.txt","f3.txt","f4.txt");
-		paths.removeByUniformResourceIdentifiers(new java.io.File(root,"f1.txt").toURI().toString()
+		FileHelper.removePathsByUniformResourceIdentifiers(paths,new java.io.File(root,"f1.txt").toURI().toString()
 				,new java.io.File(root,"f4.txt").toURI().toString());
 		
-		assertThat(paths.get().stream().map(x -> StringUtils.substringAfter(x.toString(), root.toString()+"\\")).collect(Collectors.toList()))
+		assertThat(paths.stream().map(x -> StringUtils.substringAfter(x.toString(), root.toString()+"\\")).collect(Collectors.toList()))
 		.hasSize(files.size()-2)
 		.containsExactlyInAnyOrder("f0.txt","f2.txt","f3.txt");
 	}
@@ -129,53 +130,53 @@ public class FileHelperUnitTest extends AbstractWeldUnitTest {
 			__file__.createNewFile();
 			files.add(__file__);
 		}
-		Paths paths = __getPaths__(Arrays.asList(root.toString()),null, Boolean.TRUE, Boolean.TRUE, null);
-		assertThat(paths.get().stream().map(x -> StringUtils.substringAfter(x.toString(), root.toString()+"\\")).collect(Collectors.toList()))
+		Collection<Path> paths = getPaths(Arrays.asList(root.toString()),null, Boolean.TRUE, Boolean.TRUE, null);
+		assertThat(paths.stream().map(x -> StringUtils.substringAfter(x.toString(), root.toString()+"\\")).collect(Collectors.toList()))
 		.hasSize(files.size())
 		.containsExactlyInAnyOrder("f0.txt","f1.png","f2.txt","f3.png","f4.txt");
 		
-		paths = __getPaths__(Arrays.asList(root.toString()),RegularExpressionHelper.formatFileNameHavingExtensions("png","jpeg","pdf"), Boolean.TRUE, Boolean.TRUE, null);
+		paths = getPaths(Arrays.asList(root.toString()),RegularExpressionHelper.formatFileNameHavingExtensions("png","jpeg","pdf"), Boolean.TRUE, Boolean.TRUE, null);
 		assertThat(paths).isNotNull();
-		assertThat(paths.get()).isNotNull();
-		assertThat(paths.get().stream().map(x -> StringUtils.substringAfter(x.toString(), root.toString()+"\\")).collect(Collectors.toList()))
+		assertThat(paths).isNotNull();
+		assertThat(paths.stream().map(x -> StringUtils.substringAfter(x.toString(), root.toString()+"\\")).collect(Collectors.toList()))
 		.hasSize(2)
 		.containsExactlyInAnyOrder("f1.png","f3.png");
 	}
 	
 	@Test
 	public void getExtension_name_dot_txt() {
-		assertThat(__getExtension__("name.txt")).isEqualTo("txt");
+		assertThat(getExtension("name.txt")).isEqualTo("txt");
 	}
 	
 	@Test
 	public void getExtension_dot_txt() {
-		assertThat(__getExtension__(".txt")).isEqualTo("txt");
+		assertThat(getExtension(".txt")).isEqualTo("txt");
 	}
 	
 	@Test
 	public void getExtension_txt() {
-		assertThat(__getExtension__("txt")).isNull();
+		assertThat(getExtension("txt")).isNull();
 	}
 	
 	@Test
 	public void concatenateNameAndExtension_name_txt() {
-		assertThat(__concatenateNameAndExtension__("name", "txt")).isEqualTo("name.txt");
+		assertThat(concatenateNameAndExtension("name", "txt")).isEqualTo("name.txt");
 	}
 	
 	@Test
 	public void concatenateNameAndExtension_null_txt() {
-		assertThat(__concatenateNameAndExtension__(null, "txt")).isEqualTo(".txt");
+		assertThat(concatenateNameAndExtension(null, "txt")).isEqualTo(".txt");
 	}
 	
 	@Test
 	public void concatenateNameAndExtension_name_null() {
-		assertThat(__concatenateNameAndExtension__("name", null)).isEqualTo("name");
+		assertThat(concatenateNameAndExtension("name", null)).isEqualTo("name");
 	}
 	
 	//@Test
 	public void extractText() {
 		//java.io.File file = new java.io.File(System.getProperty("user.dir")+"\\src\\test\\resources\\org\\cyk\\utility\\file\\pdf\\ALLONS TOUS AU FESTIN.pdf");
-		//String text = __extractText__(file);
+		//String text = extractText(file);
 	}
 	
 }

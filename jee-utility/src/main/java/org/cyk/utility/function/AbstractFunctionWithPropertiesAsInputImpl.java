@@ -16,7 +16,9 @@ public abstract class AbstractFunctionWithPropertiesAsInputImpl<OUTPUT> extends 
 	
 	@Override
 	public Properties getOutputProperties(Boolean injectIfNull) {
-		return (Properties) __getInjectIfNull__(FIELD_OUTPUT_PROPERTIES, injectIfNull);
+		if(outputProperties == null && Boolean.TRUE.equals(injectIfNull))
+			outputProperties = new Properties();
+		return outputProperties;
 	}
 	
 	@Override

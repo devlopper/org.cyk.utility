@@ -15,7 +15,7 @@ import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.array.ArrayHelperImpl;
 import org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierHelper;
 
-@Dependent
+@Dependent @Deprecated
 public class PathsImpl extends AbstractCollectionInstanceImpl<Path> implements Paths,Serializable {
 	private static final long serialVersionUID = 1L;
 

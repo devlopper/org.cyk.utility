@@ -8,13 +8,13 @@ import javax.ws.rs.core.Response;
 
 import org.cyk.utility.__kernel__.constant.ConstantNull;
 import org.cyk.utility.__kernel__.field.FieldName;
+import org.cyk.utility.__kernel__.instance.InstanceHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.object.__static__.representation.AbstractCollectionOfIdentifiedImpl;
 import org.cyk.utility.__kernel__.string.StringLocation;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.map.MapHelper;
 import org.cyk.utility.random.RandomHelper;
-import org.cyk.utility.server.representation.AbstractEntityCollection;
 import org.cyk.utility.server.representation.RepresentationEntity;
 import org.cyk.utility.server.representation.RepresentationLayer;
 import org.cyk.utility.server.representation.ResponseEntityDto;
@@ -50,7 +50,7 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 	@Test
 	public void createOne_businessIdentifierMustBeUnique() throws Exception{
 		Object object1 = __instanciateEntity__(null);
-		Object object2 = __inject__(InstanceHelper.class).buildOne(object1.getClass(), object1);
+		Object object2 = InstanceHelper.build(object1.getClass(), object1,(Collection<String>)null);
 		__inject__(TestRepresentationCreate.class).addObjectsToBeCreatedArray(object1).addObjects(object2)
 		.setExpectedResponseStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
 		.setExpectedResponseEntityClass(ResponseEntityDto.class)
@@ -188,10 +188,10 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected <T> Class<? extends AbstractEntityCollection<T>> __getEntityCollectionClass__(Class<T> aClass) {
+	protected <T> Class<? extends AbstractCollectionOfIdentifiedImpl<T,?>> __getEntityCollectionClass__(Class<T> aClass) {
 		aClass = (Class<T>) ClassHelper.getParameterAt(getClass(), 0);
 		try {
-			return (Class<? extends AbstractEntityCollection<T>>) Class.forName(aClass.getName()+"Collection");
+			return (Class<? extends AbstractCollectionOfIdentifiedImpl<T,?>>) Class.forName(aClass.getName()+"Collection");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			return null;

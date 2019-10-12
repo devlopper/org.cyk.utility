@@ -52,7 +52,9 @@ public class MessageImpl extends AbstractObject implements Message , Serializabl
 	
 	@Override
 	public Receivers getReceivers(Boolean injectIfNull) {
-		return (Receivers) __getInjectIfNull__(FIELD_RECEIVERS, injectIfNull);
+		if(receivers == null && Boolean.TRUE.equals(injectIfNull))
+			receivers = __inject__(Receivers.class);
+		return receivers;
 	}
 	
 	@Override

@@ -2,6 +2,7 @@ package org.cyk.utility.file;
 
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 
+@Deprecated
 public interface File extends Objectable {
 
 	@Override File setIdentifier(Object identifier);

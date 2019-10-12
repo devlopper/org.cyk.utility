@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@Getter @Setter @Accessors(chain=true)
+@Getter @Setter @Accessors(chain=true) @Deprecated
 public abstract class AbstractNodeCodedAndNamed<ENTITY extends AbstractNodeCodedAndNamed<ENTITY,?>,COLLECTION extends AbstractNodeCollection<ENTITY>> extends org.cyk.utility.server.representation.AbstractEntityFromPersistenceEntityCodedAndNamed implements Serializable {	
 	private static final long serialVersionUID = 1L;
 

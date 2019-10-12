@@ -26,7 +26,9 @@ public abstract class AbstractObjectToOrFromStringBuilderImpl<OUTPUT> extends Ab
 
 	@Override
 	public Strings getFieldNamesStrings(Boolean injectIfNull) {
-		return (Strings) __getInjectIfNull__(FIELD_FIELD_NAMES_STRINGS, injectIfNull);
+		if(fieldNamesStrings == null && Boolean.TRUE.equals(injectIfNull))
+			fieldNamesStrings = __inject__(Strings.class);
+		return fieldNamesStrings;
 	}
 
 	@Override

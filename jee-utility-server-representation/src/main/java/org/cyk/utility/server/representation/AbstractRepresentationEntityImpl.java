@@ -5,10 +5,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import javax.json.bind.JsonbBuilder;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.__kernel__.annotation.JavaScriptObjectNotation;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
@@ -18,7 +18,6 @@ import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.clazz.ClassNameBuilder;
 import org.cyk.utility.map.MapInstanceIntegerToString;
-import org.cyk.utility.object.ObjectFromStringBuilder;
 import org.cyk.utility.server.business.BusinessEntity;
 import org.cyk.utility.server.persistence.query.filter.FilterDto;
 
@@ -165,8 +164,6 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 			return null;
 		if(collection instanceof org.cyk.utility.__kernel__.object.__static__.representation.Collection)
 			return ((org.cyk.utility.__kernel__.object.__static__.representation.Collection<ENTITY>)collection).getElements();
-		if(collection instanceof AbstractEntityCollection<?>)
-			return (Collection<ENTITY>) ((AbstractEntityCollection<?>)collection).getCollection();
 		throw new RuntimeException("we cannot get entities from collection of type "+collection.getClass());
 	}
 	
@@ -176,28 +173,26 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 		return StringUtils.isBlank(string) ? null : StringUtils.split(string,ConstantCharacter.COMA.toString());
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") @Deprecated
 	protected Map<String,Object> __getFiltersMap__(String filters) {
 		Map<String,Object> __filters__ = null;
 		if(StringHelper.isNotBlank(filters)) {
 			/*
 			 * Convert filters from json to map
 			 */
-			__filters__ = (Map<String, Object>) __injectByQualifiersClasses__(ObjectFromStringBuilder.class,JavaScriptObjectNotation.Class.class)
-				.setString(filters).setKlass(Map.class).execute().getOutput();
+			__filters__ = (Map<String, Object>) JsonbBuilder.create().fromJson(filters, Map.class);
 		}
 		return __filters__;
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") @Deprecated
 	protected Map<String,Object> __buildMapFromString__(String string) {
 		Map<String,Object> map = null;
 		if(StringHelper.isNotBlank(string)) {
 			/*
 			 * Convert string from json to map
 			 */
-			map = (Map<String, Object>) __injectByQualifiersClasses__(ObjectFromStringBuilder.class,JavaScriptObjectNotation.Class.class)
-				.setString(string).setKlass(Map.class).execute().getOutput();
+			map = (Map<String, Object>) JsonbBuilder.create().fromJson(string, Map.class);
 		}
 		return map;
 	}

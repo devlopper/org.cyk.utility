@@ -2,6 +2,7 @@ package org.cyk.utility.field;
 
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
 
+@Deprecated
 public interface FieldValueCopyFieldsGetter extends FunctionWithPropertiesAsInput<Fields> {
 
 	Class<?> getSourceClass();

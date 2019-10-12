@@ -2,6 +2,7 @@ package org.cyk.utility.file;
 
 import org.cyk.utility.helper.Helper;
 
+@Deprecated
 public interface FileHelper extends Helper {
 
 	String getName(String string);

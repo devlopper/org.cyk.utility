@@ -10,7 +10,7 @@ import org.apache.commons.io.IOUtils;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
-@Dependent
+@Dependent @Deprecated
 public class FileBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<File> implements FileBuilder,Serializable{
 	private static final long serialVersionUID = 1L;
 
@@ -63,7 +63,7 @@ public class FileBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 		Long size = getSize();
 		if(size == null) {
 			if(file.getBytes()!=null)
-				size = new Long(file.getBytes().length);
+				size = Long.valueOf(file.getBytes().length);
 		}
 		file.setSize(size);
 		

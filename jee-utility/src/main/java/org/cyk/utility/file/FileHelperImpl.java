@@ -38,7 +38,7 @@ import org.cyk.utility.byte_.ByteHelperImpl;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.number.Intervals;
 
-@ApplicationScoped
+@ApplicationScoped @Deprecated
 public class FileHelperImpl extends AbstractHelper implements FileHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 

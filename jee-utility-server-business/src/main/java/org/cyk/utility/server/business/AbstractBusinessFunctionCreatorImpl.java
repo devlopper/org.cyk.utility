@@ -6,14 +6,13 @@ import java.util.Collection;
 
 import javax.transaction.Transactional;
 
-import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
-import org.cyk.utility.server.persistence.Persistence;
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
-import org.cyk.utility.type.BooleanHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
+import org.cyk.utility.server.persistence.Persistence;
 
 public abstract class AbstractBusinessFunctionCreatorImpl extends AbstractBusinessFunctionTransactionImpl implements BusinessFunctionCreator, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -43,7 +42,7 @@ public abstract class AbstractBusinessFunctionCreatorImpl extends AbstractBusine
 						entities = new ArrayList<>();
 					entities.add(index);
 				}else {
-					if(Boolean.TRUE.equals(BooleanHelper.get(isCreateIfSystemIdentifierIsBlank))) {
+					if(Boolean.TRUE.equals(ValueHelper.convertToBoolean(isCreateIfSystemIdentifierIsBlank))) {
 						Object identifier = FieldHelper.readSystemIdentifier(index);
 						if(ValueHelper.isBlank(identifier)) {
 							if(entities == null)

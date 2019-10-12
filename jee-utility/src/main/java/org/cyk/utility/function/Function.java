@@ -1,10 +1,9 @@
 package org.cyk.utility.function;
 
 import org.cyk.utility.__kernel__.function.FunctionRunnable;
-import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.assertion.AssertionBuilder;
-import org.cyk.utility.log.Log;
 import org.cyk.utility.__kernel__.log.LogLevel;
+import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.log.Log;
 
 public interface Function<INPUT,OUTPUT> extends org.cyk.utility.__kernel__.function.Function<INPUT, OUTPUT> {
 
@@ -38,7 +37,7 @@ public interface Function<INPUT,OUTPUT> extends org.cyk.utility.__kernel__.funct
 	@Deprecated ExecutionPhase getPostExecutionPhase();
 	@Deprecated Function<INPUT,OUTPUT> setPostExecutionPhase(ExecutionPhase executionPhase);
 	
-	@Deprecated Function<INPUT, OUTPUT> addExecutionPhaseAssertions(Boolean isPre,AssertionBuilder...assertionBuilders);
+	//@Deprecated Function<INPUT, OUTPUT> addExecutionPhaseAssertions(Boolean isPre,AssertionBuilder...assertionBuilders);
 	@Deprecated Function<INPUT, OUTPUT> addExecutionPhaseRunnables(Boolean isPre,Runnable...runnables);
 	@Deprecated Function<INPUT, OUTPUT> addExecutionPhaseFunctionRunnables(Boolean isPre, FunctionRunnable<?>... functionRunnables);
 }

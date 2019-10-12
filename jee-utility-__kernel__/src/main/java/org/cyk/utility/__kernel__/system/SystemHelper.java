@@ -14,6 +14,14 @@ public interface SystemHelper {
 	}
 	
 	static String getProperty(String name) {
-		return getProperty(name, null);
+		return getProperty(name, (String)null);
+	}
+	
+	static String getProperty(String name, Boolean defaultOnOperatingSystemIfBlank) {
+		String value = getProperty(name);
+		if(StringHelper.isBlank(value) && Boolean.TRUE.equals(defaultOnOperatingSystemIfBlank)) {
+			value = OperatingSystemHelper.getProperty(name);
+		}
+		return value;
 	}
 }

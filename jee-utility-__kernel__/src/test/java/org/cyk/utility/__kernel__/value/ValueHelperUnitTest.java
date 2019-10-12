@@ -66,6 +66,11 @@ public class ValueHelperUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	@Test
+	public void convert_true_boolean_to_boolean() {
+		assertThat(convert(Boolean.TRUE, Boolean.class)).isInstanceOf(Boolean.class).isTrue();
+	}
+	
+	@Test
 	public void convert_2_int_to_string() {
 		assertThat(convert(2, String.class)).isInstanceOf(String.class).isEqualTo("2");
 	}

@@ -8,15 +8,14 @@ import java.util.Collections;
 import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
-import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.field.FieldName;
-import org.cyk.utility.helper.AbstractHelper;
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
+import org.cyk.utility.helper.AbstractHelper;
 
-@ApplicationScoped
+@ApplicationScoped @Deprecated
 public class InstanceHelperImpl extends AbstractHelper implements InstanceHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 

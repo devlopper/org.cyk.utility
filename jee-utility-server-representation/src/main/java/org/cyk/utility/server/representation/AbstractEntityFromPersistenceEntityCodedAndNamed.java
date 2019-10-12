@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@Getter @Setter @Accessors(chain=true) @NoArgsConstructor
+@Getter @Setter @Accessors(chain=true) @NoArgsConstructor @Deprecated
 public abstract class AbstractEntityFromPersistenceEntityCodedAndNamed extends AbstractEntityFromPersistenceEntityCoded implements Serializable {
 	private static final long serialVersionUID = 1L;
 

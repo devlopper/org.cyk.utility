@@ -7,6 +7,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
+import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.object.__static__.representation.AbstractRepresentationObject;
 import org.cyk.utility.__kernel__.object.__static__.representation.Action;
@@ -19,7 +21,6 @@ import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.clazz.ClassInstance;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.clazz.ClassNameBuilder;
-import org.cyk.utility.identifier.resource.UniformResourceIdentifierStringBuilder;
 
 public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> extends org.cyk.utility.mapping.AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> {
 	private static final long serialVersionUID = 1L;
@@ -82,8 +83,7 @@ public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> ex
 					HttpServletRequest request = DependencyInjection.inject(HttpServletRequest.class);
 					Object[] pathFormatParameters = __getPathFormatParameters__(actionIdentifier,request,destination, source);
 					String path = DependencyInjection.inject(ArrayHelper.class).isEmpty(pathFormatParameters) ? pathFormat : String.format(pathFormat, pathFormatParameters);
-					String uniformResourceLocator = DependencyInjection.inject(UniformResourceIdentifierStringBuilder.class)
-							.setRequest(request).setPath(path).execute().getOutput();
+					String uniformResourceLocator = UniformResourceIdentifierHelper.build(null, null, null, path, null, null, null);
 					if(StringHelper.isNotBlank(uniformResourceLocator)) {
 						String actionMethod = __getActionMethod__(actionIdentifier, destination, source);
 						representationObject.add__action__(actionIdentifier, uniformResourceLocator, actionMethod);	
@@ -109,8 +109,9 @@ public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> ex
 	
 	protected Object[] __getPathFormatParameters__(String actionIdentifier,HttpServletRequest request,DESTINATION destination, SOURCE source) {
 		if(Action.IDENTIFIER_READ.equals(actionIdentifier) || Action.IDENTIFIER_DELETE.equals(actionIdentifier)) {
-			if(source instanceof AbstractEntityFromPersistenceEntity)
-				return new Object[] {__resourcePath__,((AbstractEntityFromPersistenceEntity)source).getIdentifier()};
+			Object identifier = FieldHelper.readSystemIdentifier(source);
+			if(identifier != null)
+				return new Object[] {__resourcePath__,identifier};
 		}
 		return new Object[] {__resourcePath__};
 	}

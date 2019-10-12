@@ -39,7 +39,8 @@ public abstract class AbstractProducerConsumerImpl extends AbstractFunctionWithP
 	
 	@Override
 	public Strings getTopics(Boolean injectIfNull) {
-		Strings topics = (Strings) __getInjectIfNull__(FIELD_TOPICS, injectIfNull);
+		if(topics == null && Boolean.TRUE.equals(injectIfNull))
+			topics = __inject__(Strings.class);
 		topics.setCollectionClass(Set.class);
 		return topics;
 	}

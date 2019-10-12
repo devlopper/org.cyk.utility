@@ -6,6 +6,7 @@ import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.system.SystemHelper;
 
+@Deprecated
 public abstract class AbstractContextParameterValueGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Object> implements ContextParameterValueGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 

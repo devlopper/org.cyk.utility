@@ -9,11 +9,9 @@ import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractSingleton;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
-import org.cyk.utility.assertion.AssertionBuilderNull;
 import org.cyk.utility.enumeration.EnumCollectionGetter;
 import org.cyk.utility.enumeration.EnumGetter;
 import org.cyk.utility.enumeration.EnumerationHelper;
-import org.cyk.utility.field.FieldValueSetter;
 import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.network.MailHelper;
@@ -50,14 +48,6 @@ public abstract class AbstractServiceProviderImpl extends AbstractSingleton impl
 	
 	protected InstanceHelper __injectInstanceHelper__(){
 		return __inject__(InstanceHelper.class);
-	}
-	
-	protected FieldValueSetter __injectFieldValueSetter__(){
-		return __inject__(FieldValueSetter.class);
-	}
-	
-	protected AssertionBuilderNull __injectAssertionBuilderNull__(){
-		return __inject__(AssertionBuilderNull.class);
 	}
 	
 	protected TypeHelper __injectTypeHelper__(){

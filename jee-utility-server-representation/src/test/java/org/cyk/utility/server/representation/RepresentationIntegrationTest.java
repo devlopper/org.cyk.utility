@@ -12,7 +12,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.__kernel__.object.__static__.representation.Action;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.assertion.AssertionsProviderClassMap;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
@@ -118,7 +117,7 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 		assertThat(entity.getIdentifier()).isNotBlank();
 		entity = (MyEntityDto) myEntityRepresentation.getOne(entity.getIdentifier(), "system", null).getEntity();
 		assertThat(entity).isNotNull();
-		Action action = null;
+		/*Action action = null;
 		/*
 		action = entity.__get__action__byIdentifier(Action.IDENTIFIER_READ);
 		assertThat(action).isNotNull();
@@ -760,11 +759,5 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 		assertThat(myEntity.getLong2()).as("long2 not match").isEqualTo(expectedLong2);
 		assertThat(myEntity.getIntegerValue()).as("integer value does not match").isEqualTo(expectedIntegerValue);		
 	}
-	
-	@Override
-	protected <ENTITY> Class<? extends AbstractEntityCollection<ENTITY>> __getEntityCollectionClass__(Class<ENTITY> aClass) {
-		return null;
-	}
-	
 
 }

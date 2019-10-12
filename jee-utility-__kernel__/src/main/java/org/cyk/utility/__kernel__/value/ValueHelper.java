@@ -100,17 +100,18 @@ public interface ValueHelper {
 		if(String.class.equals(klass)) {
 			if(value instanceof String)
 				return (T) value;
-			else
-				return (T) value.toString();
+			return (T) value.toString();
 		}
 		if(ClassHelper.isInstanceOfNumber(klass))
 			return NumberHelper.get(klass, value);	
 		if(Boolean.class.equals(klass)) {
-			if(value instanceof String) {
+			if(value instanceof Boolean)
+				return (T) value;
+			if(value instanceof String)
 				return (T) Boolean.valueOf((String)value);
-			}else if(value instanceof Number) {
+			if(value instanceof Number)
 				return (T) NumberHelper.isGreaterThanZero((Number)value);
-			}
+			
 		}
 		throw new RuntimeException("convert type <<"+value.getClass()+">> to type "+klass+" not yet implemented");
 	}

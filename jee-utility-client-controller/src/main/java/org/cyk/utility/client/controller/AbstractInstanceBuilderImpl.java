@@ -6,6 +6,7 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.data.DataIdentifiedByString;
 import org.cyk.utility.server.representation.AbstractEntityFromPersistenceEntity;
 
+@Deprecated
 public abstract class AbstractInstanceBuilderImpl extends org.cyk.utility.instance.AbstractInstanceBuilderImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 

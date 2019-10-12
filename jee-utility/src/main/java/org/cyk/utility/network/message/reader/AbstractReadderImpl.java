@@ -55,7 +55,9 @@ public abstract class AbstractReadderImpl extends AbstractSenderReaderImpl imple
 	
 	@Override
 	public Messages getMessages(Boolean injectIfNull) {
-		return (Messages) __getInjectIfNull__(FIELD_MESSAGES, injectIfNull);
+		if(messages == null && Boolean.TRUE.equals(injectIfNull))
+			messages = __inject__(Messages.class);
+		return messages;
 	}
 	
 	@Override

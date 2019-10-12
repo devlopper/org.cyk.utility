@@ -12,7 +12,7 @@ import javax.enterprise.context.Dependent;
 import org.cyk.utility.__kernel__.collection.AbstractCollectionInstanceImpl;
 import org.cyk.utility.thread.ExecutorServiceBuilder;
 
-@Dependent
+@Dependent @Deprecated
 public class FilesImpl extends AbstractCollectionInstanceImpl<File> implements Files,Serializable {
 	private static final long serialVersionUID = 1L;
 

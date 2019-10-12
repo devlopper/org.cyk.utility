@@ -4,6 +4,7 @@ import java.io.InputStream;
 
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
 
+@Deprecated
 public interface FileBuilder extends FunctionWithPropertiesAsInput<File> {
 
 	InputStream getInputStream();

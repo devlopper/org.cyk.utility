@@ -29,13 +29,11 @@ import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.clazz.ClassInstance;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.map.MapHelper;
-import org.cyk.utility.request.RequestProcessor;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.server.persistence.query.PersistenceQueryContext;
 import org.cyk.utility.server.persistence.query.filter.Filter;
 import org.cyk.utility.sql.builder.QueryStringBuilder;
 import org.cyk.utility.sql.builder.QueryStringBuilderSelect;
-import org.cyk.utility.type.BooleanHelper;
 
 public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPersistenceServiceProviderImpl<ENTITY> implements PersistenceEntity<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -486,7 +484,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	
 	protected PersistenceFunctionReader __getReader__(Properties properties,Object...parameters) {
 		PersistenceFunctionReader reader = __getFunction__(PersistenceFunctionReader.class,properties, parameters);
-		reader.setIsQueryResultPaginated(BooleanHelper.get(Properties.getFromPath(properties, Properties.IS_QUERY_RESULT_PAGINATED)));
+		reader.setIsQueryResultPaginated(ValueHelper.convertToBoolean(Properties.getFromPath(properties, Properties.IS_QUERY_RESULT_PAGINATED)));
 		reader.setQueryFirstTupleIndex(NumberHelper.getLong(Properties.getFromPath(properties, Properties.QUERY_FIRST_TUPLE_INDEX)));
 		reader.setQueryNumberOfTuple(NumberHelper.getLong(Properties.getFromPath(properties, Properties.QUERY_NUMBER_OF_TUPLE)));
 		return reader;
@@ -546,11 +544,11 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 			}
 		}
 				
-		Strings uniformResourceIdentifierStringFormats = __getReadOneUniformResourceIdentifierFormats__();
+		/*Strings uniformResourceIdentifierStringFormats = __getReadOneUniformResourceIdentifierFormats__();
 		if(CollectionHelper.isNotEmpty(uniformResourceIdentifierStringFormats)) {
 			for(String index : uniformResourceIdentifierStringFormats.get())
 				__inject__(RequestProcessor.class).setUniformResourceIdentifierStringFormat(index).setResponseEntity(entity).execute();		
-		}
+		}*/
 	}
 	
 	protected void __listenExecuteReadAfterSetFieldValueToNull__(ENTITY entity,Field field,Properties properties) {

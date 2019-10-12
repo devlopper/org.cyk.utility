@@ -14,7 +14,7 @@ import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.byte_.HashFunction;
 
 
-@Dependent
+@Dependent @Deprecated
 public class FileImpl extends AbstractObject implements File,Serializable {
 	private static final long serialVersionUID = 1L;
 

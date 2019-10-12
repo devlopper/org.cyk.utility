@@ -14,7 +14,7 @@ import org.cyk.utility.array.ArrayHelperImpl;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.helper.AbstractHelper;
 
-@ApplicationScoped
+@ApplicationScoped @Deprecated
 public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Serializable {
 	private static final long serialVersionUID = -5367150176793830358L;
 

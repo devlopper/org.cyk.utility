@@ -7,7 +7,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import org.cyk.utility.__kernel__.FileHelper;
+import org.cyk.utility.__kernel__.file.FileHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 
 @Dependent

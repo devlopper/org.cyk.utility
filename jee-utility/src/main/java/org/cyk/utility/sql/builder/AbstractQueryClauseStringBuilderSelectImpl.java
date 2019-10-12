@@ -8,7 +8,6 @@ import java.util.List;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.StringHelper;
-import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 
 public abstract class AbstractQueryClauseStringBuilderSelectImpl extends AbstractQueryClauseStringBuilderImpl implements QueryClauseStringBuilderSelect, Serializable {
 	private static final long serialVersionUID = 1L;

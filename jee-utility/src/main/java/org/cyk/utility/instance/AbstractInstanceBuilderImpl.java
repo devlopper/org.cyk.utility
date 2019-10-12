@@ -5,6 +5,7 @@ import java.io.Serializable;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
+@Deprecated
 public abstract class AbstractInstanceBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Object> implements InstanceBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -31,6 +32,7 @@ public abstract class AbstractInstanceBuilderImpl extends AbstractFunctionWithPr
 		__copy__(source, destination,properties);
 	}
 	
+	@Deprecated
 	protected void __copy__(Object source,Object destination,Properties properties) {
 		__inject__(org.cyk.utility.field.FieldHelper.class).copy(source, destination,properties);
 	}

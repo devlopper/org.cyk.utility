@@ -2,6 +2,7 @@ package org.cyk.utility.instance;
 
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
 
+@Deprecated
 public interface InstanceBuilder extends FunctionWithPropertiesAsInput<Object> {
 
 	Class<?> getClazz();

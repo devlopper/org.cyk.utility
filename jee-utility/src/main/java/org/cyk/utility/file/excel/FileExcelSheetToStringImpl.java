@@ -19,7 +19,9 @@ public class FileExcelSheetToStringImpl extends AbstractFunctionWithPropertiesAs
 
 	@Override
 	public FileExcelSheetDataArrayReader getDataArrayReader(Boolean injectIfNull) {
-		return (FileExcelSheetDataArrayReader) __getInjectIfNull__(FIELD_DATA_ARRAY_READER, injectIfNull);
+		if(dataArrayReader == null && Boolean.TRUE.equals(injectIfNull))
+			dataArrayReader = __inject__(FileExcelSheetDataArrayReader.class);
+		return dataArrayReader;
 	}
 
 	@Override
@@ -30,5 +32,4 @@ public class FileExcelSheetToStringImpl extends AbstractFunctionWithPropertiesAs
 
 	/**/
 	
-	private static final String FIELD_DATA_ARRAY_READER = "dataArrayReader";
 }

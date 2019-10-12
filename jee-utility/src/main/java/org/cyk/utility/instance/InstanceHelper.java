@@ -7,6 +7,7 @@ import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.helper.Helper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 
+@Deprecated
 public interface InstanceHelper extends Helper {
 
 	<INSTANCE> Collection<INSTANCE> getByFieldNameByValueUsageType(Class<INSTANCE> aClass,FieldName fieldName,ValueUsageType valueUsageType,Object value,Properties properties);

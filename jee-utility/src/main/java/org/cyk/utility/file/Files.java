@@ -2,6 +2,7 @@ package org.cyk.utility.file;
 
 import org.cyk.utility.__kernel__.collection.CollectionInstance;
 
+@Deprecated
 public interface Files extends CollectionInstance<File> {
 
 	Boolean getIsDuplicateChecksumAllowed();

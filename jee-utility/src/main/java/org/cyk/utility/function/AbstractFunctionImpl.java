@@ -11,7 +11,6 @@ import org.cyk.utility.__kernel__.function.FunctionRunnable;
 import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.array.ArrayHelper;
-import org.cyk.utility.assertion.AssertionBuilder;
 import org.cyk.utility.css.CascadeStyleSheetHelper;
 import org.cyk.utility.css.CascadeStyleSheetHelperImpl;
 import org.cyk.utility.instance.InstanceHelper;
@@ -205,7 +204,7 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 	
 	/**/
 	
-	@Override @Deprecated
+	/*@Override @Deprecated
 	public Function<INPUT, OUTPUT> addExecutionPhaseAssertions(Boolean isPre,AssertionBuilder...assertionBuilders){
 		String pre = Boolean.TRUE.equals(isPre) ? Properties.PRE : Properties.POST;
 		ExecutionPhase executionPhase = (ExecutionPhase) getProperties().getFromPath(Properties.EXECUTION,pre);
@@ -213,7 +212,7 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 			getProperties().setFromPath(new Object[]{Properties.EXECUTION,pre}, executionPhase = new ExecutionPhase());
 		executionPhase.addAssertionBuilders(assertionBuilders);
 		return this;
-	}
+	}*/
 	
 	@Override @Deprecated
 	public Function<INPUT, OUTPUT> addExecutionPhaseRunnables(Boolean isPre,Runnable...runnables){

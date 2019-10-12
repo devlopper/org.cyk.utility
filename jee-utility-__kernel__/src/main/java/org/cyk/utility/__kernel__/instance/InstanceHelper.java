@@ -12,6 +12,7 @@ import org.apache.commons.lang3.reflect.MethodUtils;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.value.Identifier;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
@@ -183,6 +184,22 @@ public interface InstanceHelper {
 		for(String index : fieldsNames)
 			map.put(index, index);
 		copy(source, destination, map);
+	}
+	
+	static <T> T build(Class<T> klass,Object object,Map<String,String> fieldsNames) {
+		if(klass == null || object == null)
+			return null;
+		T instance = ClassHelper.instanciate(klass);
+		copy(object, instance, fieldsNames);
+		return instance;
+	}
+	
+	static <T> T build(Class<T> klass,Object object,Collection<String> fieldsNames) {
+		if(klass == null || object == null)
+			return null;
+		T instance = ClassHelper.instanciate(klass);
+		copy(object, instance, fieldsNames);
+		return instance;
 	}
 	
 	/**/

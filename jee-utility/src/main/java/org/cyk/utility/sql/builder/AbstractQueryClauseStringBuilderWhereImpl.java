@@ -9,7 +9,6 @@ import org.cyk.utility.__kernel__.computation.LogicalOperator;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.criteria.Criteria;
 import org.cyk.utility.filter.Filter;
-import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 
 public abstract class AbstractQueryClauseStringBuilderWhereImpl extends AbstractQueryClauseStringBuilderImpl implements QueryClauseStringBuilderWhere, Serializable {
 	private static final long serialVersionUID = 1L;

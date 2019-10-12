@@ -11,8 +11,10 @@ import org.cyk.utility.device.DevicePhone;
 import org.cyk.utility.device.DeviceTablet;
 import org.cyk.utility.device.DeviceTelevision;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+@Deprecated @Disabled
 public class StyleClassBuilderWidthUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 

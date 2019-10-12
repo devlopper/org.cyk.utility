@@ -9,15 +9,13 @@ import javax.json.bind.JsonbBuilder;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.cyk.utility.__kernel__.object.__static__.representation.AbstractCollectionOfIdentifiedImpl;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.__kernel__.field.FieldHelper;
-import org.cyk.utility.server.representation.AbstractEntityCollection;
-import org.cyk.utility.server.representation.AbstractEntityFromPersistenceEntity;
 import org.cyk.utility.server.representation.Representation;
 import org.cyk.utility.server.representation.RepresentationEntity;
 import org.cyk.utility.server.representation.ResponseHelper;
-import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerRepresentation;
 import org.cyk.utility.test.arquillian.AbstractSystemServerArquillianIntegrationTestImpl;
@@ -52,7 +50,7 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 	
 	@Override
 	protected <ENTITY> void ____createEntity____(Collection<ENTITY> entities,RepresentationEntity representation) {
-		AbstractEntityCollection<ENTITY> collection = (AbstractEntityCollection<ENTITY>) instanciateOne(__getEntityCollectionClass__(entities.iterator().next().getClass()));
+		AbstractCollectionOfIdentifiedImpl<ENTITY,?> collection = (AbstractCollectionOfIdentifiedImpl<ENTITY,?>) instanciateOne(__getEntityCollectionClass__(entities.iterator().next().getClass()));
 		collection.add(entities);		
 		Response response = representation.createMany(collection,null);
 		assertThat(response.getStatus()).isEqualTo(Response.Status.CREATED.getStatusCode());
@@ -86,7 +84,7 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 
 	@Override
 	protected <ENTITY> void ____deleteEntity____(ENTITY entity, RepresentationEntity representation) {
-		representation.deleteOne(((AbstractEntityFromPersistenceEntity)entity));
+		representation.deleteOne(entity);
 	}
 	
 	@Override
@@ -116,7 +114,7 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 	}
 
 	@Deprecated
-	protected <ENTITY> Class<? extends AbstractEntityCollection<ENTITY>> __getEntityCollectionClass__(Class<ENTITY> aClass) {
+	protected <ENTITY> Class<? extends AbstractCollectionOfIdentifiedImpl<ENTITY,?>> __getEntityCollectionClass__(Class<ENTITY> aClass) {
 		return null;
 	}
 

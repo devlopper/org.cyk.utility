@@ -103,10 +103,4 @@ public class RepresentationIntegrationTestPerformance extends AbstractRepresenta
 		t = System.currentTimeMillis() - t;
 		System.out.println("Representation Executor "+executorCorePoolSize+" - "+numberOfEntities+" : "+t);
 	}
-
-	@Override
-	protected <ENTITY> Class<? extends AbstractEntityCollection<ENTITY>> __getEntityCollectionClass__(Class<ENTITY> aClass) {
-		return null;
-	}
-
 }

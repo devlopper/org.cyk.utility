@@ -10,8 +10,10 @@ import org.cyk.utility.device.DeviceDesktop;
 import org.cyk.utility.device.DevicePhone;
 import org.cyk.utility.device.DeviceTablet;
 import org.cyk.utility.test.weld.AbstractWeldUnitTestBenchmark;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+@Deprecated @Disabled
 public class CascadeStyleSheetHelperUnitTestBenchmark extends AbstractWeldUnitTestBenchmark {
 	private static final long serialVersionUID = 1L;
 
