@@ -19,7 +19,7 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 		PropertyUtils.addBeanIntrospector(new FluentPropertyBeanIntrospector());
 		LocaleHelper.LOCALES.add(Locale.FRENCH);
 		InternationalizationHelper.addResourceBundlesFromNames(null,null, "word","phrase","throwable","assertion");
-		ProxyUniformResourceIdentifierGetter.UNIFORM_RESOURCE_IDENTIFIER.initialize();
+		ProxyUniformResourceIdentifierGetter.UNIFORM_RESOURCE_IDENTIFIER_STRING.initialize();
 	}
 
 	@Override

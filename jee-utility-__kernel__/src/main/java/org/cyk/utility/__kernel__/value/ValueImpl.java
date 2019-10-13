@@ -40,7 +40,7 @@ public class ValueImpl extends AbstractObject implements Value, Serializable {
 		if(fieldInstance != null)
 			__value__ = FieldHelper.read(object, fieldInstance.getPath());
 		else if(StringHelper.isNotBlank(configurationValueName))
-			__value__ = ConfigurationHelper.get(configurationValueName, null, null);
+			__value__ = ConfigurationHelper.getValue(configurationValueName, null, null,null,null);
 		return __value__;
 	}
 	

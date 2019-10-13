@@ -11,53 +11,62 @@ import org.cyk.utility.__kernel__.value.ValueHelper;
 
 public interface ConfigurationHelper {
 
-	static Object get(String name,Object request,Object context) {
+	static Variable getVariable(String name,Object context,Object request) {
 		if(StringHelper.isBlank(name))
 			return null;
-		Object value = null;
+		Variable variable = new Variable().setName(name);
 		
-		//request
-		if(request != null)
-			value = RequestHelper.getParameter(name, request);
-		if(value != null)
-			return value;
+		//operating system
+		if(variable.getValue() == null)
+			variable.setValue(OperatingSystemHelper.getProperty(name));
+		if(variable.getValue() != null)
+			return variable.setLocation(Location.ENVIRONMENT);
 		
 		//system
-		value = SystemHelper.getProperty(name);
-		if(value != null)
-			return value;
+		variable.setValue(SystemHelper.getProperty(name));
+		if(variable.getValue() != null)
+			return variable.setLocation(Location.SYSTEM);
 		
 		//context
 		if(context == null)
 			context = ContextHelper.get();
 		if(context!=null)
-			value = ContextHelper.getParameter(name,context);
-		if(value != null)
-			return value;
+			variable.setValue(ContextHelper.getParameter(name,context));
+		if(variable.getValue() != null)
+			return variable.setLocation(Location.CONTEXT);
 		
-		//operating system
-		if(value == null)
-			value = OperatingSystemHelper.getProperty(name);
-		if(value != null)
-			return value;
+		//request
+		if(request != null)
+			variable.setValue(RequestHelper.getParameter(name, request));
+		if(variable.getValue() != null)
+			return variable.setLocation(Location.REQUEST);
 		
 		LogHelper.log("configuration parameter "+name+" not found");
-
-		return value;
+		return null;
 	}
 	
-	static Object get(String name,Object request,Object context,Object nullValue,Checker valueChecker) {
+	static Variable getVariable(String name) {
+		return getVariable(name, null, null);
+	}
+	
+	static Object getValue(String name,Object request,Object context,Object nullValue,Checker valueChecker) {
 		if(StringHelper.isBlank(name))
 			return null;
-		Object value = get(name, request, context);
-		
+		Variable variable = getVariable(name, request, context);
+		if(variable == null)
+			return null;
+		Object value = variable.getValue();
 		if(ValueHelper.isNull(value, valueChecker))
 			value = nullValue;
 		return value;
 	}
 	
-	static Object get(String name,Object request,Object context,Object nullValue) {
-		return get(name, request, context, nullValue,ValueCheckerImpl.INSTANCE);
+	static Object getValue(String name,Object request,Object context,Object nullValue) {
+		return getValue(name, request, context, nullValue,ValueCheckerImpl.INSTANCE);
+	}
+	
+	static Object getValue(String name,Object request,Object context) {
+		return getValue(name, request, context, null,ValueCheckerImpl.INSTANCE);
 	}
 	
 }

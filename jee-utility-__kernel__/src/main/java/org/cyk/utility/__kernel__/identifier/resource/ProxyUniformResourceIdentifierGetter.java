@@ -18,15 +18,16 @@ public interface ProxyUniformResourceIdentifierGetter {
 	ProxyUniformResourceIdentifierGetter INSTANCE = new ProxyUniformResourceIdentifierGetter() {		
 		@Override
 		public URI get(Class<?> klass) {
-			if(ProxyHelperVariables.UNIFORM_RESOURCE_IDENTIFIER != null)
-				return ProxyHelperVariables.UNIFORM_RESOURCE_IDENTIFIER;
-			if(!UNIFORM_RESOURCE_IDENTIFIER.isHasBeenSet())
-				UNIFORM_RESOURCE_IDENTIFIER.initialize();
-			ThrowableHelper.throwIllegalArgumentExceptionIfBlank("proxy uniform resource identifier", UNIFORM_RESOURCE_IDENTIFIER.get());
-			ProxyHelperVariables.UNIFORM_RESOURCE_IDENTIFIER = URI.create((String)UNIFORM_RESOURCE_IDENTIFIER.get());
-			return ProxyHelperVariables.UNIFORM_RESOURCE_IDENTIFIER;
+			if(UNIFORM_RESOURCE_IDENTIFIER.isHasBeenSet())
+				return (URI) UNIFORM_RESOURCE_IDENTIFIER.get();
+			if(!UNIFORM_RESOURCE_IDENTIFIER_STRING.isHasBeenSet())
+				UNIFORM_RESOURCE_IDENTIFIER_STRING.initialize();
+			ThrowableHelper.throwIllegalArgumentExceptionIfBlank("proxy uniform resource identifier", UNIFORM_RESOURCE_IDENTIFIER_STRING.get());
+			UNIFORM_RESOURCE_IDENTIFIER.set(URI.create((String)UNIFORM_RESOURCE_IDENTIFIER_STRING.get()));
+			return (URI) UNIFORM_RESOURCE_IDENTIFIER.get();
 		}
 	};
 	
-	Value UNIFORM_RESOURCE_IDENTIFIER = DependencyInjection.inject(Value.class).setConfigurationValueName(ConstantParameterName.PROXY_UNIFORM_RESOURCE_IDENTIFIER);
+	Value UNIFORM_RESOURCE_IDENTIFIER_STRING = DependencyInjection.inject(Value.class).setConfigurationValueName(ConstantParameterName.PROXY_UNIFORM_RESOURCE_IDENTIFIER);
+	Value UNIFORM_RESOURCE_IDENTIFIER = DependencyInjection.inject(Value.class);
 }

@@ -43,7 +43,7 @@ public interface ConstantParameterName {
 	/**/
 	
 	static String get(String name,Object context,Object request,String nullValue) {
-		return (String) ConfigurationHelper.get(name, request, context, nullValue);
+		return (String) ConfigurationHelper.getValue(name, request, context, nullValue);
 	}
 	
 	/**/

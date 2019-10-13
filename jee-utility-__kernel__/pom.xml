@@ -32,7 +32,13 @@
 				<configuration>
 					<systemPropertyVariables>
 						<unittest.property.01>value01</unittest.property.01>
+						<unittest.config.var.01>sys</unittest.config.var.01>
+						<unittest.config.var.03>sys</unittest.config.var.03>
 					</systemPropertyVariables>
+					<environmentVariables>
+						<unittest.config.var.01>env</unittest.config.var.01>
+						<unittest.config.var.02>env</unittest.config.var.02>
+					</environmentVariables>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -42,7 +48,6 @@
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>${commons-io.commons-io.version}</version>
 		</dependency>
 		
 		<dependency>
