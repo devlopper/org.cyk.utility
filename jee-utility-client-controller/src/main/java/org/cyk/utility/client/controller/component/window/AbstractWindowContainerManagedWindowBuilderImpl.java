@@ -68,7 +68,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 				menuMap = (MenuBuilderMap) SessionHelper.getAttributeValue(SessionAttributeEnumeration.MENU_BUILDER_MAP);
 			if(menuMap == null) {
 				menuMap = __inject__(MenuBuilderMapGetter.class).setRequest(request).execute().getOutput();
-				SessionHelper.setAttributeValue(SessionAttributeEnumeration.MENU_BUILDER_MAP,menuMap);
+				SessionHelper.setAttributeValueFromRequest(SessionAttributeEnumeration.MENU_BUILDER_MAP,menuMap,request);
 			}
 			window.setMenuMap(menuMap);	
 		}

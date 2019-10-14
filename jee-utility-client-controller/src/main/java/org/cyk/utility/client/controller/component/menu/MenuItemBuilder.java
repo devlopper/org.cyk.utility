@@ -1,12 +1,12 @@
 package org.cyk.utility.client.controller.component.menu;
 
+import org.cyk.utility.__kernel__.icon.Icon;
 import org.cyk.utility.__kernel__.internationalization.InternationalizationKeyStringType;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.client.controller.component.VisibleComponentBuilder;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.event.EventName;
-import org.cyk.utility.client.controller.icon.Icon;
 
 public interface MenuItemBuilder extends VisibleComponentBuilder<MenuItem> {
 	

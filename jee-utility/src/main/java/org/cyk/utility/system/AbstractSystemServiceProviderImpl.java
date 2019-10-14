@@ -20,7 +20,7 @@ public abstract class AbstractSystemServiceProviderImpl extends AbstractServiceP
 
 	@Override
 	public Boolean isPersisted(Object object) {
-		return Boolean.TRUE.equals(InstanceHelper.isPersistable(object));
+		return InstanceHelper.isPersisted(object);
 	}
 	
 	@Override

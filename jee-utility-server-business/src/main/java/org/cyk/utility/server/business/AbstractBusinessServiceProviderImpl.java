@@ -224,7 +224,7 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 	
 	@Override @Transactional
 	public BusinessServiceProvider<OBJECT> save(OBJECT object, Properties properties) {
-		if(Boolean.TRUE.equals(isPersisted(object)))
+		if(isPersisted(object))		
 			update(object,properties);
 		else
 			create(object,properties);

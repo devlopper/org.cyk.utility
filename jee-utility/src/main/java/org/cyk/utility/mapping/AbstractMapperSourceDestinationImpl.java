@@ -2,6 +2,7 @@ package org.cyk.utility.mapping;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -86,15 +87,15 @@ public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> ex
 		if(fields == null || fields.isEmpty())
 			return;		
 		for(Field index : fields) {
-			//Type type = FieldHelper.getType(index, null);
+			Type type = FieldHelper.getType(index, null);
 			//if(type instanceof Collection<?>) {
 				
 			//}else {
-				Object value = org.cyk.utility.__kernel__.field.FieldHelper.read(destination, index);
+				Object value = FieldHelper.read(destination, index);
 				if(value != null) {
-					Object persisted = InstanceHelper.getByIdentifier(Object.class,FieldHelper.readIdentifier(value));
+					Object persisted = InstanceHelper.getByIdentifier((Class<?>)type,FieldHelper.readIdentifier(value));
 					if(persisted != null)
-						org.cyk.utility.__kernel__.field.FieldHelper.write(destination, index, persisted);
+						FieldHelper.write(destination, index, persisted);
 				}
 			//}			
 		}		

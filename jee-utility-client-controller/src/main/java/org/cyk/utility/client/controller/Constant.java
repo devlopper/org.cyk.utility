@@ -1,7 +1,5 @@
 package org.cyk.utility.client.controller;
 
-import org.cyk.utility.__kernel__.configuration.ConstantParameterName;
-
 public interface Constant {
 	
 	String CYK_CONTEXT_PARAMETER_NAME_FORMAT = "cyk.context.parameter.%s";
@@ -31,11 +29,5 @@ public interface Constant {
 	String CONTEXT_PARAMETER_NAME_THEME_LOGO_FILE_NAME = formatCykContextParameterName("theme.logo.file.name");
 	String CONTEXT_PARAMETER_NAME_THEME_LOGO_FILE_NAME_PREFIX = formatCykContextParameterName("theme.logo.file.name.prefix");
 	String CONTEXT_PARAMETER_NAME_THEME_LOGO_FILE_NAME_EXTENSION = formatCykContextParameterName("theme.logo.file.name.extension");
-	
-	/**/
-	
-	static String getConfigurationParameterValue(String name,Object context,Object request,String nullValue) {
-		return (String) ConstantParameterName.get(name, context, request, nullValue);
-	}
 	
 }

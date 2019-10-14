@@ -2,9 +2,9 @@ package org.cyk.utility.client.controller.component.command;
 
 import java.io.Serializable;
 
+import org.cyk.utility.__kernel__.icon.Icon;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentImpl;
-import org.cyk.utility.client.controller.icon.Icon;
 
 import lombok.Getter;
 import lombok.Setter;

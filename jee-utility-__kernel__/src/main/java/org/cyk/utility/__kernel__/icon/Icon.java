@@ -1,4 +1,4 @@
-package org.cyk.utility.client.controller.icon;
+package org.cyk.utility.__kernel__.icon;
 
 public enum Icon {
 

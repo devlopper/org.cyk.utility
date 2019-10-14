@@ -41,7 +41,7 @@ public class MenuGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Me
 			}
 			
 			if(ClassHelper.isInstanceOf(scopeClass, ScopeSession.class)) {
-				SessionHelper.setAttributeValue(SessionAttributeEnumeration.MENU,menu);
+				SessionHelper.setAttributeValueFromRequest(SessionAttributeEnumeration.MENU,menu,request);
 			}
 		}
 		

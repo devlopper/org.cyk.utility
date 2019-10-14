@@ -46,6 +46,8 @@ public class ValueImpl extends AbstractObject implements Value, Serializable {
 	
 	@Override
 	public Value initialize() {
+		__value__ = null;
+		__isValueHashBeenSet__ = null;
 		Object value = get();
 		set(value);
 		return this;

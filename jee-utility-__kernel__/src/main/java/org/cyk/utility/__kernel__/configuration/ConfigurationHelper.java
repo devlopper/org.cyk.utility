@@ -1,5 +1,8 @@
 package org.cyk.utility.__kernel__.configuration;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.cyk.utility.__kernel__.context.ContextHelper;
 import org.cyk.utility.__kernel__.identifier.resource.RequestHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
@@ -11,35 +14,40 @@ import org.cyk.utility.__kernel__.value.ValueHelper;
 
 public interface ConfigurationHelper {
 
+	static Variable mapVariable(String name,Object value,Location location) {
+		Variable variable = VARIABLES.get(name);
+		if(variable == null) {
+			variable = new Variable().setName(name).setValue(value).setLocation(location);
+			VARIABLES.put(name, variable);
+			LogHelper.logInfo("configuration variable mapped : "+variable, ConfigurationHelper.class);
+		}else {
+			variable.setValue(value).setLocation(location);
+		}
+		return variable;
+	}
+	
 	static Variable getVariable(String name,Object context,Object request) {
 		if(StringHelper.isBlank(name))
 			return null;
-		Variable variable = new Variable().setName(name);
+		Variable variable = VARIABLES.get(name);
+		if(variable != null)
+			return variable;
+		Object value;
+		new Variable().setName(name);
 		
-		//operating system
-		if(variable.getValue() == null)
-			variable.setValue(OperatingSystemHelper.getProperty(name));
-		if(variable.getValue() != null)
-			return variable.setLocation(Location.ENVIRONMENT);
+		if((value = OperatingSystemHelper.getProperty(name)) != null)
+			return mapVariable(name,value,Location.ENVIRONMENT);
 		
-		//system
-		variable.setValue(SystemHelper.getProperty(name));
-		if(variable.getValue() != null)
-			return variable.setLocation(Location.SYSTEM);
+		if((value = SystemHelper.getProperty(name)) != null)
+			return mapVariable(name,value,Location.SYSTEM);
 		
-		//context
 		if(context == null)
 			context = ContextHelper.get();
-		if(context!=null)
-			variable.setValue(ContextHelper.getParameter(name,context));
-		if(variable.getValue() != null)
-			return variable.setLocation(Location.CONTEXT);
+		if(context!=null && (value = ContextHelper.getParameter(name,context)) != null)
+			return mapVariable(name,value,Location.CONTEXT);
 		
-		//request
-		if(request != null)
-			variable.setValue(RequestHelper.getParameter(name, request));
-		if(variable.getValue() != null)
-			return variable.setLocation(Location.REQUEST);
+		if(request != null && (value = RequestHelper.getParameter(name, request)) != null)
+			return mapVariable(name,value,Location.REQUEST);
 		
 		LogHelper.log("configuration parameter "+name+" not found");
 		return null;
@@ -49,10 +57,10 @@ public interface ConfigurationHelper {
 		return getVariable(name, null, null);
 	}
 	
-	static Object getValue(String name,Object request,Object context,Object nullValue,Checker valueChecker) {
+	static Object getValue(String name,Object context,Object request,Object nullValue,Checker valueChecker) {
 		if(StringHelper.isBlank(name))
 			return null;
-		Variable variable = getVariable(name, request, context);
+		Variable variable = getVariable(name, context,request);
 		if(variable == null)
 			return null;
 		Object value = variable.getValue();
@@ -61,12 +69,37 @@ public interface ConfigurationHelper {
 		return value;
 	}
 	
-	static Object getValue(String name,Object request,Object context,Object nullValue) {
-		return getValue(name, request, context, nullValue,ValueCheckerImpl.INSTANCE);
+	static Object getValue(String name,Object context,Object request,Object nullValue) {
+		return getValue(name, context,request, nullValue,ValueCheckerImpl.INSTANCE);
 	}
 	
-	static Object getValue(String name,Object request,Object context) {
-		return getValue(name, request, context, null,ValueCheckerImpl.INSTANCE);
+	static Object getValue(String name,Object context,Object request) {
+		return getValue(name, context,request, null,ValueCheckerImpl.INSTANCE);
 	}
 	
+	static Boolean getValueAsBoolean(String name,Object context,Object request) {
+		return ValueHelper.convertToBoolean(getValue(name, context, request, Boolean.FALSE.toString()));
+	}
+	
+	static Boolean getValueAsBoolean(String name,Object context) {
+		return getValueAsBoolean(name,context, null);
+	}
+	
+	static Boolean getValueAsBoolean(String name) {
+		return getValueAsBoolean(name,null,null);
+	}
+	
+	static Boolean is(String name,Object context,Object request) {
+		return getValueAsBoolean(name, context, request);
+	}
+	
+	static Boolean is(String name,Object context) {
+		return getValueAsBoolean(name, context, null);
+	}
+	
+	static Boolean is(String name) {
+		return getValueAsBoolean(name, null, null);
+	}
+	
+	Map<String,Variable> VARIABLES = new HashMap<>();
 }

@@ -4,13 +4,13 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.client.controller.proxy.ProxyGetter;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.identifier.resource.ProxyHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
-import org.cyk.utility.server.representation.RepresentationEntity;
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
+import org.cyk.utility.server.representation.RepresentationEntity;
 
 public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractControllerServiceProviderImpl<ENTITY> implements ControllerEntity<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -239,7 +239,7 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 		if(__representationClass__ == null) {
 			throw new RuntimeException("No representation class found for "+__entityClass__);
 		}else {
-			representation = (RepresentationEntity<?, ?, ?>) __inject__(ProxyGetter.class).setClazz(__representationClass__).execute().getOutput();
+			representation = (RepresentationEntity<?, ?, ?>) ProxyHelper.get(__representationClass__);
 		}
 		return representation;
 	}

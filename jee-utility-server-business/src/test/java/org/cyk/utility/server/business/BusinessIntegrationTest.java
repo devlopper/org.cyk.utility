@@ -445,7 +445,12 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 	public void save_many() {
 		List<MyEntity> list = List.of(new MyEntity().setCode("a").setTimestamp(1l));
 		assertThat(__inject__(MyEntityBusiness.class).count()).isEqualTo(0);
-		__inject__(MyEntityBusiness.class).saveMany(list);
+		try {
+			__inject__(MyEntityBusiness.class).saveMany(list);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		assertThat(__inject__(MyEntityBusiness.class).count()).isEqualTo(1);
 	}
 	

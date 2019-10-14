@@ -10,7 +10,12 @@ import javax.faces.context.FacesContext;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.icon.Icon;
+import org.cyk.utility.__kernel__.icon.IconHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.client.controller.AbstractObjectLifeCycleListenerImpl;
 import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.component.ComponentBuilder;
@@ -58,17 +63,12 @@ import org.cyk.utility.client.controller.component.tree.TreeBuilder;
 import org.cyk.utility.client.controller.event.Event;
 import org.cyk.utility.client.controller.event.EventName;
 import org.cyk.utility.client.controller.event.Events;
-import org.cyk.utility.client.controller.icon.Icon;
-import org.cyk.utility.client.controller.icon.IconIdentifierGetter;
 import org.cyk.utility.client.controller.web.ComponentHelper;
 import org.cyk.utility.client.controller.web.jsf.converter.DateConverter;
 import org.cyk.utility.client.controller.web.jsf.converter.ObjectConverter;
 import org.cyk.utility.client.controller.web.jsf.primefaces.annotation.Primefaces;
-import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.css.Style;
 import org.cyk.utility.random.RandomHelper;
-import org.cyk.utility.__kernel__.string.StringHelper;
-import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.primefaces.model.DefaultStreamedContent;
 
 @ApplicationScoped @Primefaces
@@ -217,7 +217,7 @@ public class ObjectLifeCycleListenerImpl extends AbstractObjectLifeCycleListener
 			if(component instanceof Commandable) {
 				Icon icon = ((Commandable)component).getIcon();
 				if(icon != null)
-					((Commandable)visibleComponent).setProperty(Properties.ICON, DependencyInjection.inject(IconIdentifierGetter.class).setIcon(icon).execute().getOutput());
+					((Commandable)visibleComponent).setProperty(Properties.ICON, IconHelper.getIdentifier(icon));
 			}
 			
 			if(component instanceof InputOutput<?>) {

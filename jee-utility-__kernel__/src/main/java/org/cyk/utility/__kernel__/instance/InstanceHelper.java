@@ -4,34 +4,39 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.value.Identifier;
+import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 public interface InstanceHelper {
 
 	static void setInstanceGetter(InstanceGetter instanceGetter) {
-		if(CONSTANTS.isEmpty())
-			CONSTANTS.add(instanceGetter);
-		else
-			CONSTANTS.set(CONSTANT_INSTANCE_GETTER_INDEX, instanceGetter);
+		INSTANCE_GETTER.set(instanceGetter);
+		LogHelper.logInfo("Instance getter has been set. Class is "+instanceGetter.getClass(), InstanceGetter.class);
+	}
+	
+	static void setInstanceGetter(Class<? extends InstanceGetter> klass) {
+		if(klass == null)
+			return;
+		setInstanceGetter(DependencyInjection.inject(klass));
 	}
 	
 	static InstanceGetter getInstanceGetter() {
-		InstanceGetter instanceGetter = null;
-		if(!CONSTANTS.isEmpty())
-			instanceGetter = (InstanceGetter) CONSTANTS.get(CONSTANT_INSTANCE_GETTER_INDEX);
-		if(instanceGetter == null)
-			instanceGetter = InstanceGetter.INSTANCE;
+		InstanceGetter instanceGetter = (InstanceGetter) INSTANCE_GETTER.get();
+		if(instanceGetter != null)
+			return instanceGetter;
+		setInstanceGetter(instanceGetter = DependencyInjection.inject(InstanceGetter.class));
 		return instanceGetter;
 	}
 	
@@ -205,7 +210,16 @@ public interface InstanceHelper {
 	static Boolean isPersistable(Object instance) {
 		if(instance == null)
 			return Boolean.FALSE;
+		Object identifier = FieldHelper.readSystemIdentifier(instance);
+		if(identifier != null)
+			return Boolean.FALSE;
 		return ClassHelper.isPersistable(instance.getClass());
+	}
+	
+	static Boolean isPersisted(Object instance) {
+		if(instance == null)
+			return Boolean.FALSE;
+		return !isPersistable(instance);
 	}
 	
 	/**/
@@ -213,6 +227,5 @@ public interface InstanceHelper {
 	String METHOD_GETTER_PREFIX = "get";
 	String METHOD_SETTER_PREFIX = "set";
 	
-	List<Object> CONSTANTS = new ArrayList<>(1);
-	Integer CONSTANT_INSTANCE_GETTER_INDEX = 0;
+	Value INSTANCE_GETTER = DependencyInjection.inject(Value.class);
 }

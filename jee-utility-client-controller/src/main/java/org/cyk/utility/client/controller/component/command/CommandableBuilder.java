@@ -2,6 +2,7 @@ package org.cyk.utility.client.controller.component.command;
 
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.icon.Icon;
 import org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierAsFunctionParameter;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.client.controller.command.CommandFunction;
@@ -9,7 +10,6 @@ import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.client.controller.component.VisibleComponentBuilder;
 import org.cyk.utility.client.controller.component.window.WindowRenderType;
 import org.cyk.utility.client.controller.data.Data;
-import org.cyk.utility.client.controller.icon.Icon;
 
 public interface CommandableBuilder extends VisibleComponentBuilder<Commandable> {
 

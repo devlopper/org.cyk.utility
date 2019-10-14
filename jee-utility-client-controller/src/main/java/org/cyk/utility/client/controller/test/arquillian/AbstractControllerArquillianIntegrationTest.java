@@ -5,15 +5,15 @@ import java.net.URI;
 import java.util.Collection;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.identifier.resource.ProxyUniformResourceIdentifierGetter;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.client.controller.Controller;
 import org.cyk.utility.client.controller.ControllerEntity;
-import org.cyk.utility.client.controller.proxy.ProxyClassUniformResourceIdentifierGetterImpl;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerController;
 import org.cyk.utility.test.arquillian.AbstractSystemClientArquillianIntegrationTestImpl;
 import org.cyk.utility.test.arquillian.SystemClientIntegrationTest;
-import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 @SuppressWarnings({"rawtypes"})
 public abstract class AbstractControllerArquillianIntegrationTest extends AbstractSystemClientArquillianIntegrationTestImpl<ControllerEntity> implements SystemClientIntegrationTest<ControllerEntity>, Serializable {
@@ -23,7 +23,7 @@ public abstract class AbstractControllerArquillianIntegrationTest extends Abstra
 	protected void __listenBefore__() {
 		String systemIdentifier = __getSystemIdentifier__();
 		if(StringUtils.isNotBlank(systemIdentifier))
-			ProxyClassUniformResourceIdentifierGetterImpl.UNIFORM_RESOURCE_IDENTIFIER = URI.create(String.format("http://localhost:8080/%s/server/",systemIdentifier));
+			ProxyUniformResourceIdentifierGetter.UNIFORM_RESOURCE_IDENTIFIER.set(URI.create(String.format("http://localhost:8080/%s/server/",systemIdentifier)));
 		super.__listenBefore__();
 		__inject__(Controller.class).deleteAll();
 	}

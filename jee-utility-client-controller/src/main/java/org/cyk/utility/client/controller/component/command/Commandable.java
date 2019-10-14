@@ -1,8 +1,8 @@
 package org.cyk.utility.client.controller.component.command;
 
+import org.cyk.utility.__kernel__.icon.Icon;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.client.controller.component.VisibleComponent;
-import org.cyk.utility.client.controller.icon.Icon;
 
 public interface Commandable extends VisibleComponent {
 

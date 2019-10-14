@@ -1,7 +1,5 @@
 package org.cyk.utility.__kernel__.configuration;
 
-import org.cyk.utility.__kernel__.value.ValueHelper;
-
 public interface ConstantParameterName {
 	
 	String CYK_PARAMETER_NAME_FORMAT = "cyk.parameter.%s";
@@ -39,36 +37,4 @@ public interface ConstantParameterName {
 	/* Stream Distributed*/
 	
 	String STREAM_DISTRIBUTED_DELEGATE_SYSTEM_IS_ENABLE = formatCykParameterName("stream.distributed.delegate.system.is.enable");
-	
-	/**/
-	
-	static String get(String name,Object context,Object request,String nullValue) {
-		return (String) ConfigurationHelper.getValue(name, request, context, nullValue);
-	}
-	
-	/**/
-	
-	static String get(String name,Object context,Object request) {
-		return get(name, context, request, null);
-	}
-	
-	static String get(String name,Object context) {
-		return get(name,context, null);
-	}
-	
-	static String get(String name) {
-		return get(name,null);
-	}
-	
-	static Boolean is(String name,Object context,Object request) {
-		return ValueHelper.convertToBoolean(get(name, context, request, Boolean.FALSE.toString()));
-	}
-	
-	static Boolean is(String name,Object context) {
-		return is(name,context, null);
-	}
-	
-	static Boolean is(String name) {
-		return is(name,null);
-	}
 }

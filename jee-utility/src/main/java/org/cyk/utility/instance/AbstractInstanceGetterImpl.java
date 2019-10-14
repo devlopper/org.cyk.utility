@@ -7,6 +7,7 @@ import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 
+@Deprecated
 public abstract class AbstractInstanceGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Collection<Object>> implements InstanceGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 

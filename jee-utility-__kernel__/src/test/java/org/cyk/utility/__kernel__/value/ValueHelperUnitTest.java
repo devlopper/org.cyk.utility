@@ -12,11 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.field.FieldHelper;
-import org.cyk.utility.__kernel__.instance.InstanceGetter;
-import org.cyk.utility.__kernel__.instance.InstanceHelper;
-import org.cyk.utility.__kernel__.test.InstanceGetterImpl;
+import org.cyk.utility.__kernel__.instance.InstanceGetterImpl;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 
@@ -30,8 +27,6 @@ public class ValueHelperUnitTest extends AbstractWeldUnitTest {
 	@Override
 	protected void __listenBefore__() {
 		super.__listenBefore__();
-		DependencyInjection.setQualifierClassTo(org.cyk.utility.__kernel__.annotation.Test.Class.class, InstanceGetter.class);
-		InstanceHelper.setInstanceGetter(DependencyInjection.inject(InstanceGetter.class));
 		InstanceGetterImpl.clear();
 	}
 	

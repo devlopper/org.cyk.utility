@@ -66,28 +66,29 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 	}
 	
 	protected void __buildWindow__() {
+		Object request = __getRequest__();
 		DurationBuilder durationBuilder = __inject__(DurationBuilder.class).setBeginToNow();
 		List<String> subDurations = new ArrayList<String>();
 		try {
 			__windowBuilder__ = __getWindowBuilder__(subDurations);
 		} catch (Exception exception) {
-			__windowBuilder__ = __inject__(WindowContainerManagedWindowBuilderThrowable.class).setThrowable(exception).setRequest(__getRequest__())
+			__windowBuilder__ = __inject__(WindowContainerManagedWindowBuilderThrowable.class).setThrowable(exception).setRequest(request)
 					.setContext(__getContext__()).execute().getOutput();
 			exception.printStackTrace();
 		}
 		
 		DurationBuilder subDurationBuilder = __inject__(DurationBuilder.class).setBeginToNow();
 		if(__windowBuilder__.getRequest() == null)
-			__windowBuilder__.setRequest(__getRequest__());
+			__windowBuilder__.setRequest(request);
 		
 		//TODO you won't be able to customize a page with a specific theme one it has been set to session. how to make it possible then ???
-		Theme theme = (Theme) getSessionAttribute(SessionAttributeEnumeration.THEME);
+		Theme theme = (Theme) SessionHelper.getAttributeValueFromRequest(SessionAttributeEnumeration.THEME,request);
 		if(theme == null) {
 			Class<? extends Theme> themeClass = __getThemeClass__();
 			if(themeClass!=null) {
 				theme = __inject__(themeClass);
-				theme.setRequest(__getRequest__()).build();
-				setSessionAttribute(SessionAttributeEnumeration.THEME, theme);
+				theme.setRequest(request).build();
+				SessionHelper.setAttributeValueFromRequest(SessionAttributeEnumeration.THEME, theme,request);
 				__windowBuilder__.setTheme(theme);
 			}
 		}
@@ -285,17 +286,6 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 		return __inject__(WindowContainerManagedPropertyValueGetter.class).setContainerManaged(this).setProperty(property).execute().getOutputAs(aClass);
 	}
 	
-	protected <T> T ____getProxy____(Class<T> aClass) {
-		return __getProxyByRequest__(aClass,__getRequest__());
-	}
-	
 	/**/
-	
-	protected void setSessionAttribute(Object attribute,Object value) {
-		SessionHelper.setAttributeValue(attribute, value);
-	}
-	
-	protected Object getSessionAttribute(Object attribute) {
-		return SessionHelper.getAttributeValue(attribute);
-	}
+
 }

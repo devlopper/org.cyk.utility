@@ -5,9 +5,9 @@ import java.io.Serializable;
 import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.AbstractApplicationScopeLifeCycleListener;
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.annotation.Persistence;
-import org.cyk.utility.__kernel__.instance.InstanceHelper;
-import org.cyk.utility.instance.InstanceGetter;
+import org.cyk.utility.__kernel__.instance.InstanceGetter;
 
 @ApplicationScoped
 public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeLifeCycleListener implements Serializable {
@@ -15,8 +15,7 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 
 	@Override
 	public void __initialize__(Object object) {
-		__setQualifierClassTo__(Persistence.class, InstanceGetter.class,org.cyk.utility.__kernel__.instance.InstanceGetter.class);
-		InstanceHelper.setInstanceGetter(__inject__(org.cyk.utility.__kernel__.instance.InstanceGetter.class));
+		DependencyInjection.setQualifierClassTo(Persistence.Class.class, InstanceGetter.class);
 		__inject__(org.cyk.utility.server.persistence.ApplicationScopeLifeCycleListener.class).initialize(null);
 	}
 	

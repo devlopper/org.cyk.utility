@@ -14,4 +14,8 @@ public class Variable implements Serializable {
 	private Object value;
 	private Location location;
 	
+	@Override
+	public String toString() {
+		return name+":"+value+"@"+location;
+	}
 }

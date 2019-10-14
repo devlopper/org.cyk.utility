@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller.component.theme;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
 import org.cyk.utility.__kernel__.file.FileHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.AbstractObject;
@@ -384,7 +385,7 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 	
 	protected String __getConfigurationParameterValue__(String name,String nullValue) {
 		Object request = getRequest();
-		return Constant.getConfigurationParameterValue(name, __getContext__(request), request, nullValue);
+		return (String) ConfigurationHelper.getValue(name, __getContext__(request), request, nullValue);
 	}
 	
 	/**/

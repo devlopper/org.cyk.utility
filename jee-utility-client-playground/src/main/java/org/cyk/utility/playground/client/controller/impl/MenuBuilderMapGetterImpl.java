@@ -3,10 +3,10 @@ package org.cyk.utility.playground.client.controller.impl;
 import java.io.Serializable;
 import java.security.Principal;
 
+import org.cyk.utility.__kernel__.icon.Icon;
 import org.cyk.utility.client.controller.component.menu.AbstractMenuBuilderMapGetterImpl;
 import org.cyk.utility.client.controller.component.menu.MenuBuilder;
 import org.cyk.utility.client.controller.component.menu.MenuItemBuilder;
-import org.cyk.utility.client.controller.icon.Icon;
 import org.cyk.utility.playground.client.controller.entities.MyEntity;
 import org.cyk.utility.playground.client.controller.entities.Node;
 import org.cyk.utility.playground.client.controller.entities.Person;
