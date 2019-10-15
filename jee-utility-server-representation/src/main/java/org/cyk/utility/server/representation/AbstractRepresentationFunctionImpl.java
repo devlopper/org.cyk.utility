@@ -1,7 +1,6 @@
 package org.cyk.utility.server.representation;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -12,13 +11,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
-import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.__kernel__.log.LogLevel;
-import org.cyk.utility.server.business.Business;
-import org.cyk.utility.system.AbstractSystemFunctionServerImpl;
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
+import org.cyk.utility.server.business.Business;
+import org.cyk.utility.system.AbstractSystemFunctionServerImpl;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerRepresentation;
 
@@ -67,19 +65,17 @@ public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemF
 				Collection<String> identifiersSystem = new ArrayList<String>();
 				Collection<String> identifiersBusiness = new ArrayList<String>();
 				//TODO use instanceof interface to gain speed in processing. create an interface for PersistenceEntity and use it
-				Field persistenceSystemIdentifierField = __inject__(ClassInstancesRuntime.class).get(__persistenceEntityClass__).getSystemIdentifierField();
-				Field persistenceBusinessIdentifierField = __inject__(ClassInstancesRuntime.class).get(__persistenceEntityClass__).getBusinessIdentifierField();
 				Integer count = 0;
 				for(Object index : __persistenceEntities__) {
 					Object dto = CollectionHelper.getElementAt(__entities__, count);
-					Object identifier = FieldHelper.read(index, persistenceSystemIdentifierField); 
+					Object identifier = FieldHelper.readSystemIdentifier(index); 
 					if(identifier != null) {
 						identifiersSystem.add(identifier.toString());
 						if(__entityClassSystemIdentifierField__ != null) {
 							FieldHelper.write(dto, __entityClassSystemIdentifierField__, identifier.toString());
 						}
 					}					
-					identifier = FieldHelper.read(index, persistenceBusinessIdentifierField);
+					identifier = FieldHelper.readBusinessIdentifier(index);
 					if(identifier != null) {
 						identifiersBusiness.add(identifier.toString());
 						if(__entityClassBusinessIdentifierField__ != null) {

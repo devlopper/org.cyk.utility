@@ -77,6 +77,26 @@ public interface ConfigurationHelper {
 		return getValue(name, context,request, null,ValueCheckerImpl.INSTANCE);
 	}
 	
+	static Object getValue(String name,Object context) {
+		return getValue(name, context,null, null,ValueCheckerImpl.INSTANCE);
+	}
+	
+	static Object getValue(String name) {
+		return getValue(name, null,null, null,ValueCheckerImpl.INSTANCE);
+	}
+	
+	static String getValueAsString(String name,Object context,Object request) {
+		return (String) getValue(name, context, request, null,ValueCheckerImpl.INSTANCE);
+	}
+	
+	static String getValueAsString(String name,Object context) {
+		return (String) getValue(name, context, null, null,ValueCheckerImpl.INSTANCE);
+	}
+	
+	static String getValueAsString(String name) {
+		return (String) getValue(name, null, null, null,ValueCheckerImpl.INSTANCE);
+	}
+	
 	static Boolean getValueAsBoolean(String name,Object context,Object request) {
 		return ValueHelper.convertToBoolean(getValue(name, context, request, Boolean.FALSE.toString()));
 	}

@@ -5,7 +5,6 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.assertion.AssertionsProviderClassMap;
-import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.server.business.api.MyEntityAssertionsProvider;
 import org.cyk.utility.server.business.api.MyEntityBusiness;
 import org.cyk.utility.server.persistence.PersistableClassesGetter;
@@ -68,7 +67,7 @@ public class RepresentationIntegrationTestPerformance extends AbstractRepresenta
 	@Test
 	public void read_isNotActionable() {
 		System.out.println("IS NOT ACTIONABLE");
-		__inject__(ClassInstancesRuntime.class).get(MyEntity.class).setIsActionable(Boolean.FALSE);
+		//__inject__(ClassInstancesRuntime.class).get(MyEntity.class).setIsActionable(Boolean.FALSE);
 		Integer numberOfEntities = 1000;
 		System.out.println("Generating entities : "+numberOfEntities);
 		Collection<MyEntity> entities = new ArrayList<>();

@@ -54,6 +54,7 @@ public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> ex
 			__resourcePath__ = StringUtils.removeStart(__resourcePath__, "/");
 			__resourcePath__ = StringUtils.substringBefore(__resourcePath__,"/");	
 		}
+		super.__listenPostConstruct__();
     }
 	
 	@Override

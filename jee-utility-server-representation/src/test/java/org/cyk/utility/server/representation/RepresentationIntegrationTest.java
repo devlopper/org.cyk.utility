@@ -14,7 +14,6 @@ import javax.ws.rs.core.Response.Status;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.assertion.AssertionsProviderClassMap;
-import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.server.business.api.MyEntityAssertionsProvider;
 import org.cyk.utility.server.business.api.MyEntityBusiness;
 import org.cyk.utility.server.business.api.NodeBusiness;
@@ -45,7 +44,7 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 		__inject__(AssertionsProviderClassMap.class).set(MyEntity.class, MyEntityAssertionsProvider.class);
 		DependencyInjection.setQualifierClassTo(org.cyk.utility.__kernel__.annotation.Test.Class.class, PersistableClassesGetter.class);
 		__inject__(ApplicationScopeLifeCycleListenerEntities.class).initialize(null);
-		__inject__(ClassInstancesRuntime.class).get(MyEntity.class).setIsActionable(Boolean.TRUE);
+		//__inject__(ClassInstancesRuntime.class).get(MyEntity.class).setIsActionable(Boolean.TRUE);
 	}
 	
 	@Test
