@@ -5,6 +5,10 @@ import static org.cyk.utility.__kernel__.field.FieldHelper.disjoin;
 import static org.cyk.utility.__kernel__.field.FieldHelper.filter;
 import static org.cyk.utility.__kernel__.field.FieldHelper.get;
 import static org.cyk.utility.__kernel__.field.FieldHelper.getByName;
+import static org.cyk.utility.__kernel__.field.FieldHelper.getIdentifiers;
+import static org.cyk.utility.__kernel__.field.FieldHelper.getSystemIdentifier;
+import static org.cyk.utility.__kernel__.field.FieldHelper.getBusinessIdentifier;
+import static org.cyk.utility.__kernel__.field.FieldHelper.getPersistablesSingleValueAssociation;
 import static org.cyk.utility.__kernel__.field.FieldHelper.getName;
 import static org.cyk.utility.__kernel__.field.FieldHelper.getNames;
 import static org.cyk.utility.__kernel__.field.FieldHelper.getType;
@@ -22,6 +26,10 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.cyk.utility.__kernel__.string.RegularExpressionHelper;
@@ -39,7 +47,7 @@ public class FieldHelperUnitTest extends AbstractWeldUnitTest {
 	@Override
 	protected void __listenBefore__() {
 		super.__listenBefore__();
-		FieldHelper.CLASSES_FIELDNAMES_MAP.clear();
+		FieldHelper.clear();
 	}
 	
 	@Test
@@ -199,6 +207,102 @@ public class FieldHelperUnitTest extends AbstractWeldUnitTest {
 		assertThat(field).isNotNull();
 		assertThat(field.getDeclaringClass()).isEqualTo(ClassParent.class);
 		assertThat(field.getName()).isEqualTo("parent_string_f01");
+	}
+	
+	@Test
+	public void getSystemIdentifier_null() {
+		Field field = getSystemIdentifier(null);
+		assertThat(field).isNull();
+	}
+	
+	@Test
+	public void getSystemIdentifier_HasSystemIdentifier() {
+		Field field = getSystemIdentifier(HasSystemIdentifier.class);
+		assertThat(field).isEqualTo(FieldUtils.getField(HasSystemIdentifier.class, "identifier", Boolean.TRUE));
+	}
+	
+	@Test
+	public void getSystemIdentifier_HasBusinessIdentifier() {
+		Field field = getSystemIdentifier(HasBusinessIdentifier.class);
+		assertThat(field).isEqualTo(null);
+	}
+	
+	@Test
+	public void getSystemIdentifier_HasNoIdentifiers() {
+		Field field = getSystemIdentifier(HasNoIdentifiers.class);
+		assertThat(field).isEqualTo(null);
+	}
+	
+	@Test
+	public void getSystemIdentifier_HasSystemAndBusinessIdentifiers() {
+		Field field = getSystemIdentifier(HasSystemAndBusinessIdentifiers.class);
+		assertThat(field).isEqualTo(FieldUtils.getField(HasSystemAndBusinessIdentifiers.class, "identifier", Boolean.TRUE));
+	}
+	
+	@Test
+	public void getBusinessIdentifier_null() {
+		Field field = getBusinessIdentifier(null);
+		assertThat(field).isNull();
+	}
+	
+	@Test
+	public void getBusinessIdentifier_HasSystemIdentifier() {
+		Field field = getBusinessIdentifier(HasSystemIdentifier.class);
+		assertThat(field).isEqualTo(null);
+	}
+	
+	@Test
+	public void getBusinessIdentifier_HasBusinessIdentifier() {
+		Field field = getBusinessIdentifier(HasBusinessIdentifier.class);
+		assertThat(field).isEqualTo(FieldUtils.getField(HasBusinessIdentifier.class, "code", Boolean.TRUE));
+	}
+	
+	@Test
+	public void getBusinessIdentifier_HasNoIdentifiers() {
+		Field field = getBusinessIdentifier(HasNoIdentifiers.class);
+		assertThat(field).isEqualTo(null);
+	}
+	
+	@Test
+	public void getBusinessIdentifier_HasSystemAndBusinessIdentifiers() {
+		Field field = getBusinessIdentifier(HasSystemAndBusinessIdentifiers.class);
+		assertThat(field).isEqualTo(FieldUtils.getField(HasSystemAndBusinessIdentifiers.class, "code", Boolean.TRUE));
+	}
+	
+	@Test
+	public void getIdentifiers_null() {
+		Collection<Field> fields = getIdentifiers(null);
+		assertThat(fields).isEqualTo(null);
+	}
+	
+	@Test
+	public void getIdentifiers_HasSystemIdentifier() {
+		Collection<Field> fields = getIdentifiers(HasSystemIdentifier.class);
+		assertThat(fields.stream().map(Field::getName).collect(Collectors.toList())).containsExactlyInAnyOrder("identifier");
+	}
+	
+	@Test
+	public void getIdentifiers_HasBusinessIdentifier() {
+		Collection<Field> fields = getIdentifiers(HasBusinessIdentifier.class);
+		assertThat(fields.stream().map(Field::getName).collect(Collectors.toList())).containsExactlyInAnyOrder("code");
+	}
+	
+	@Test
+	public void getIdentifiers_HasNoIdentifiers() {
+		Collection<Field> fields = getIdentifiers(HasNoIdentifiers.class);
+		assertThat(fields).isNull();
+	}
+	
+	@Test
+	public void getIdentifiers_HasSystemAndBusinessIdentifiers() {
+		Collection<Field> fields = getIdentifiers(HasSystemAndBusinessIdentifiers.class);
+		assertThat(fields.stream().map(Field::getName).collect(Collectors.toList())).containsExactlyInAnyOrder("identifier","code");
+	}
+	
+	@Test
+	public void getPersistablesSingleValueAssociation_Persistables() {
+		Collection<Field> fields = getPersistablesSingleValueAssociation(Persistables.class);
+		assertThat(fields.stream().map(Field::getName).collect(Collectors.toList())).containsExactlyInAnyOrder("classWithEntityWithManyToOne");
 	}
 	
 	@Test
@@ -565,5 +669,51 @@ public class FieldHelperUnitTest extends AbstractWeldUnitTest {
 	public static interface FilterStartsWith {
 		public static final String ID = "id";
 		public static final String PROPERTY_CODE = "code";
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class HasSystemIdentifier implements Serializable {
+		private static final long serialVersionUID = 1L;
+		private String identifier;
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class HasBusinessIdentifier implements Serializable {
+		private static final long serialVersionUID = 1L;
+		private String code;
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class HasSystemAndBusinessIdentifiers implements Serializable {
+		private static final long serialVersionUID = 1L;
+		private String identifier;
+		private String code;
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class HasNoIdentifiers implements Serializable {
+		private static final long serialVersionUID = 1L;
+		
+	}
+	
+	@Getter @Setter @Accessors(chain=true) @Entity
+	public static class PersistablesClassWithEntity implements Serializable {
+		private static final long serialVersionUID = 1L;
+		
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class PersistablesClassWithNoEntity implements Serializable {
+		private static final long serialVersionUID = 1L;
+		
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class Persistables implements Serializable {
+		private static final long serialVersionUID = 1L;
+		@ManyToOne private PersistablesClassWithEntity classWithEntityWithManyToOne;
+		private PersistablesClassWithEntity classWithEntityWithNoManyToOne;
+		private PersistablesClassWithNoEntity classWithNoEntity;
+		private Integer integer;
 	}
 }

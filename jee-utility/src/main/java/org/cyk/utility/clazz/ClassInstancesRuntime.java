@@ -2,6 +2,7 @@ package org.cyk.utility.clazz;
 
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 
+@Deprecated
 public interface ClassInstancesRuntime extends Objectable {
 
 	ClassInstances getInstances();

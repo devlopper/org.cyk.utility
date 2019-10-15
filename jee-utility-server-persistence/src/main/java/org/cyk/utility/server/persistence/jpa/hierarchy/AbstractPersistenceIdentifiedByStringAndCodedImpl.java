@@ -11,6 +11,7 @@ import org.cyk.utility.server.persistence.PersistenceFunctionReader;
 import org.cyk.utility.server.persistence.query.PersistenceQueryContext;
 import org.cyk.utility.server.persistence.query.filter.Field;
 import org.cyk.utility.server.persistence.query.filter.Filter;
+import static org.cyk.utility.__kernel__.klass.ClassHelper.getTupleName;
 
 public abstract class AbstractPersistenceIdentifiedByStringAndCodedImpl<ENTITY extends AbstractIdentifiedByStringAndCoded<ENTITY>,HIERARCHY extends AbstractHierarchy<ENTITY>,HIERARCHIES extends Hierarchies<HIERARCHY,ENTITY>,HIERARCHY_PERSISTENCE extends HierarchyPersistence<HIERARCHY,ENTITY, HIERARCHIES>> extends AbstractPersistenceIdentifiedByStringImpl<ENTITY,HIERARCHY,HIERARCHIES,HIERARCHY_PERSISTENCE> implements PersistenceIdentifiedByStringAndCoded<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -21,7 +22,7 @@ public abstract class AbstractPersistenceIdentifiedByStringAndCodedImpl<ENTITY e
 	protected void __listenPostConstructPersistenceQueries__() {
 		super.__listenPostConstructPersistenceQueries__();
 		addQueryCollectInstances(readByParentsCodes, String.format("SELECT node FROM %1$s node WHERE EXISTS(SELECT tuple FROM %2$s tuple WHERE tuple.child = node AND tuple.parent.code IN :parentsCodes)"
-				,__getTupleName__(),__getTupleName__(__hierarchyClass__)));
+				,__tupleName__,getTupleName(__hierarchyClass__)));
 	}
 	
 	@Override

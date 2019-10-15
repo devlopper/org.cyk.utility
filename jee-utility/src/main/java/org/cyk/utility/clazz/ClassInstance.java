@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 import org.cyk.utility.field.Fields;
 
+@Deprecated
 public interface ClassInstance extends Objectable {
 
 	Class<?> getClazz();

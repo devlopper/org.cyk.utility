@@ -163,10 +163,15 @@ public class MapperUnitTest extends AbstractWeldUnitTest {
 	
 	@Mapper
 	public static abstract class RepresentationEntityMapper extends AbstractMapperSourceDestinationImpl<RepresentationEntity, PersistenceEntity> {
-		private static final long serialVersionUID = 1L;
-		
+		private static final long serialVersionUID = 1L;		
 		public static final RepresentationEntityMapper INSTANCE = Mappers.getMapper(RepresentationEntityMapper.class);
-	 
+		
+		@Override
+		protected void __listenPostConstruct__() {
+			__sourceClass__ = RepresentationEntity.class;
+			__destinationClass__ = PersistenceEntity.class;
+			super.__listenPostConstruct__();
+		}
 	}
 	
 	@Mapper

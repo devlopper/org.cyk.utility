@@ -4,11 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.persistence.Entity;
+import javax.xml.bind.annotation.XmlRootElement;
 
 public enum Property {
 
 	PERSISTABLE
-	
+	,TUPLE_NAME
+	,TRANSFERABLE
+	,ACTIONABLE
+	,PROJECTIONABLE
 	;
 	
 	public static void setProperty(Class<?> klass,Property property,Object value) {
@@ -30,6 +34,14 @@ public enum Property {
 		if(value == null) {
 			if(PERSISTABLE.equals(property)) {
 				value = klass.getAnnotation(Entity.class) != null;
+			}else if(TUPLE_NAME.equals(property)) {
+				value = klass.getSimpleName();
+			}else if(TRANSFERABLE.equals(property)) {
+				value = klass.getAnnotation(XmlRootElement.class) != null;
+			}else if(ACTIONABLE.equals(property)) {
+				
+			}else if(PROJECTIONABLE.equals(property)) {
+				
 			}
 			map.put(property, value);
 		}

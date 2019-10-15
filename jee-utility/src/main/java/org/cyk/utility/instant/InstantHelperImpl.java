@@ -8,9 +8,9 @@ import java.util.Locale;
 import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
-import org.cyk.utility.helper.AbstractHelper;
-import org.cyk.utility.locale.LocaleHelper;
+import org.cyk.utility.__kernel__.locale.LocaleHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
+import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.value.ValueLength;
 
 @ApplicationScoped
@@ -19,7 +19,7 @@ public class InstantHelperImpl extends AbstractHelper implements InstantHelper,S
 
 	@Override
 	public InstantPattern getPattern(Locale locale,InstantPart part,ValueLength length){
-		locale = ValueHelper.defaultToIfNull(__inject__(LocaleHelper.class).getDefaultLocale(), Locale.FRENCH);
+		locale = ValueHelper.defaultToIfNull(LocaleHelper.getDefault(), Locale.FRENCH);
 		part = ValueHelper.defaultToIfNull(part, InstantPart.DATE_ONLY);
 		length = ValueHelper.defaultToIfNull(length, ValueLength.SHORT);
 		
@@ -27,7 +27,7 @@ public class InstantHelperImpl extends AbstractHelper implements InstantHelper,S
 			if(locale.equals(pattern.getLocale()) && part.equals(pattern.getPart()) && length.equals(pattern.getLength()))
 				return pattern;
 		
-		if(!Locale.FRENCH.equals(length))
+		if(!Locale.FRENCH.equals(locale))
 			return getPattern(Locale.FRENCH, part, length);
 		
 		return null;

@@ -14,8 +14,7 @@ import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.stacktrace.StackTraceHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
-import org.cyk.utility.clazz.ClassInstance;
-import org.cyk.utility.clazz.ClassInstancesRuntime;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.method.MethodGetter;
 import org.cyk.utility.server.persistence.annotation.Query;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
@@ -28,7 +27,6 @@ import org.cyk.utility.sql.builder.QueryStringBuilderSelect;
 import org.cyk.utility.sql.builder.Tuple;
 import org.cyk.utility.sql.jpql.JpqlQualifier;
 import org.cyk.utility.system.AbstractSystemServiceProviderImpl;
-import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 
 public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends AbstractSystemServiceProviderImpl implements PersistenceServiceProvider<OBJECT>, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -416,18 +414,4 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 		return properties == null ? null :__isFilterByKeys__((Filter) properties.getQueryFilters(), keys);
 	}
 	
-	protected static String __getTupleName__(Class<?> klass) {
-		String name = null;
-		if(klass != null) {
-			ClassInstance classInstance = __inject__(ClassInstancesRuntime.class).get(klass);
-			if(classInstance != null) {
-				name = classInstance.getTupleName();
-			}
-			
-			if(StringHelper.isBlank(name))
-				name = klass.getSimpleName();
-		}
-		return name;
-	}
-
 }

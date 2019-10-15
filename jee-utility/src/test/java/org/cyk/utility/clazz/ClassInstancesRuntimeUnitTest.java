@@ -2,8 +2,10 @@ package org.cyk.utility.clazz;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+@Deprecated @Disabled
 public class ClassInstancesRuntimeUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 

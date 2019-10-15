@@ -6,14 +6,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.Case;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.array.ArrayHelper;
-import org.cyk.utility.clazz.ClassInstance;
-import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.server.persistence.AbstractPersistenceEntityImpl;
 import org.cyk.utility.server.persistence.PersistenceFunctionReader;
 import org.cyk.utility.server.persistence.PersistenceQueryIdentifierStringBuilder;
@@ -34,20 +33,17 @@ public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends Abstrac
 	protected void __listenPostConstructPersistenceQueries__() {
 		super.__listenPostConstructPersistenceQueries__();
 		@SuppressWarnings("unchecked")
-		Class<ENTITY> entityClass = (Class<ENTITY>) ClassHelper.getParameterAt(getClass(), 1);
-		ClassInstance classInstance = __inject__(ClassInstancesRuntime.class).get(entityClass);
-		if(classInstance != null) {
-			addQueryCollectInstances(readWhereParentDoesNotHaveParent, String.format(READ_WHERE_PARENT_DOES_NOT_HAVE_PARENT_FORMAT,__getTupleName__()));
-			addQueryCollectInstancesReadByParentsOrChildren(readByParentsIdentifiers,readByChildrenIdentifiers,classInstance.getSystemIdentifierField());			
-			addQueryCollectInstancesReadByParentsOrChildren(readByParentsBusinessIdentifiers,readByChildrenBusinessIdentifiers,classInstance.getBusinessIdentifierField());
-			addQueryCollectInstances(readWhereIsParentOrChildIdentifiers, String.format("SELECT tuple FROM %s tuple WHERE tuple.parent.identifier IN :identifiers OR tuple.child.identifier IN :identifiers"
-					, __getTupleName__()));
-		}
+		Class<ENTITY> entityClass = (Class<ENTITY>) ClassHelper.getParameterAt(getClass(), 1);		
+		addQueryCollectInstances(readWhereParentDoesNotHaveParent, String.format(READ_WHERE_PARENT_DOES_NOT_HAVE_PARENT_FORMAT,__tupleName__));
+		addQueryCollectInstancesReadByParentsOrChildren(readByParentsIdentifiers,readByChildrenIdentifiers,FieldHelper.getSystemIdentifier(entityClass));			
+		addQueryCollectInstancesReadByParentsOrChildren(readByParentsBusinessIdentifiers,readByChildrenBusinessIdentifiers,FieldHelper.getBusinessIdentifier(entityClass));
+		addQueryCollectInstances(readWhereIsParentOrChildIdentifiers, String.format("SELECT tuple FROM %s tuple WHERE tuple.parent.identifier IN :identifiers OR tuple.child.identifier IN :identifiers"
+				, __tupleName__));		
 	}
 	
 	protected void addQueryCollectInstancesReadByParentsOrChildren(String queryIdentifier,Field identifierField,String parentOrChildFieldName) {
 		if(identifierField != null) {
-			addQueryCollectInstances(queryIdentifier, String.format("SELECT tuple FROM %s tuple WHERE tuple.%s.%s IN :%s", __getTupleName__()
+			addQueryCollectInstances(queryIdentifier, String.format("SELECT tuple FROM %s tuple WHERE tuple.%s.%s IN :%s", __tupleName__
 					,parentOrChildFieldName,identifierField.getName(),parentOrChildFieldName+StringHelper.applyCase(identifierField.getName(), Case.FIRST_CHARACTER_UPPER))+"s");
 		}
 	}

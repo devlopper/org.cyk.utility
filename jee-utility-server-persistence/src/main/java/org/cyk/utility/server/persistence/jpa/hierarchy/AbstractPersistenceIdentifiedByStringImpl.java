@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import static org.cyk.utility.__kernel__.klass.ClassHelper.getTupleName;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.array.ArrayHelper;
@@ -17,6 +18,7 @@ import org.cyk.utility.server.persistence.query.PersistenceQueryContext;
 import org.cyk.utility.server.persistence.query.filter.Field;
 import org.cyk.utility.server.persistence.query.filter.Filter;
 import org.cyk.utility.__kernel__.string.Strings;
+
 
 public abstract class AbstractPersistenceIdentifiedByStringImpl<ENTITY extends AbstractIdentifiedByString<ENTITY>,HIERARCHY extends AbstractHierarchy<ENTITY>,HIERARCHIES extends Hierarchies<HIERARCHY,ENTITY>,HIERARCHY_PERSISTENCE extends HierarchyPersistence<HIERARCHY,ENTITY, HIERARCHIES>> extends AbstractPersistenceEntityImpl<ENTITY> implements PersistenceIdentifiedByString<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -38,21 +40,21 @@ public abstract class AbstractPersistenceIdentifiedByStringImpl<ENTITY extends A
 		super.__listenPostConstructPersistenceQueries__();
 		addQueryCollectInstances(readWhereNotHavingParent, String.format("SELECT node FROM %1$s node "
 				+ "WHERE EXISTS(SELECT tuple FROM %2$s tuple WHERE tuple.parent = node AND NOT EXISTS(SELECT subTuple FROM %2$s subTuple WHERE subTuple.child = tuple.parent))"
-				,__getTupleName__(),__getTupleName__(__hierarchyClass__)));
+				,__tupleName__,getTupleName(__hierarchyClass__)));
 		addQueryCollectInstances(readByParentsIdentifiers, String.format("SELECT node FROM %1$s node WHERE EXISTS(SELECT tuple FROM %2$s tuple WHERE tuple.child = node "
-				+ "AND tuple.parent.identifier IN :parentsIdentifiers)",__getTupleName__(),__getTupleName__(__hierarchyClass__)));
+				+ "AND tuple.parent.identifier IN :parentsIdentifiers)",__tupleName__,getTupleName(__hierarchyClass__)));
 		
 		//TODO it has been copy paste , think and do the necessary
 		addQueryCollectInstances(readWhereNotHavingChild, String.format("SELECT node FROM %1$s node "
 				+ "WHERE EXISTS(SELECT tuple FROM %2$s tuple WHERE tuple.parent = node AND NOT EXISTS(SELECT subTuple FROM %2$s subTuple WHERE subTuple.child = tuple.parent))"
-				,__getTupleName__(),__getTupleName__(__hierarchyClass__)));
+				,__tupleName__,getTupleName(__hierarchyClass__)));
 		
 		addQueryCollectInstances(readByChildrenIdentifiers, String.format(
 				"SELECT node FROM %1$s node WHERE EXISTS("
 				+ "SELECT tuple FROM %2$s tuple WHERE tuple.parent = node AND tuple.child.identifier IN :childrenIdentifiers"
 				+ ")"
 				//Arguments
-				,__getTupleName__(),__getTupleName__(__hierarchyClass__)
+				,__tupleName__,getTupleName(__hierarchyClass__)
 				));
 	}
 	

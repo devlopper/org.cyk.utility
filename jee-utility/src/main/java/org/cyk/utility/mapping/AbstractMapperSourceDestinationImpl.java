@@ -6,15 +6,11 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.field.FieldHelper;
-import org.cyk.utility.__kernel__.field.FieldInstance;
-import org.cyk.utility.__kernel__.field.FieldInstancesRuntime;
+import org.cyk.utility.__kernel__.instance.InstanceHelper;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.runnable.RunnableHelper;
-import org.cyk.utility.clazz.ClassInstance;
-import org.cyk.utility.clazz.ClassInstancesRuntime;
-import org.cyk.utility.__kernel__.instance.InstanceHelper;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.MappingTarget;
@@ -27,6 +23,18 @@ public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> ex
 	
 	protected Class<SOURCE> __sourceClass__;
 	protected Class<DESTINATION> __destinationClass__;
+	protected Collection<Field> __persistableFields__;
+	
+	@Override
+	protected void __listenPostConstruct__() {
+		super.__listenPostConstruct__();
+		if(__sourceClass__ == null)
+			__sourceClass__ = (Class<SOURCE>) ClassHelper.getParameterAt(getClass(), 0);
+		if(__destinationClass__ == null)
+			__destinationClass__ = (Class<DESTINATION>) ClassHelper.getParameterAt(getClass(), 1);
+		if(__persistableFields__ == null)
+			__persistableFields__ = FieldHelper.getPersistablesSingleValueAssociation(__destinationClass__);
+	}
 	
 	@BeforeMapping
 	protected void listenGetDestinationBefore(SOURCE source,@MappingTarget DESTINATION destination) {
@@ -43,37 +51,8 @@ public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> ex
 	}
 	
 	protected void __listenGetDestinationAfter__(SOURCE source,DESTINATION destination) {
-		Collection<Field> fields = null;
-		fields = __getPersistableFields__(source, destination);
-		__processPersistableFields__(source, destination, fields);
-	}
-	
-	/**
-	 * Find all persistable fields
-	 * @param source
-	 * @param destination
-	 * @return
-	 */
-	protected Collection<Field> __getPersistableFields__(SOURCE source,DESTINATION destination) {
-		Collection<Field> fields = null;
-		ClassInstance classInstance = DependencyInjection.inject(ClassInstancesRuntime.class).get(destination.getClass());
-		if(classInstance.getFields() != null) {
-			for(Field index : classInstance.getFields().get()) {
-				FieldInstance fieldInstance = DependencyInjection.inject(FieldInstancesRuntime.class).get(destination.getClass(), index.getName());
-				if(
-					(fieldInstance.getType() instanceof Class<?> && 
-					Boolean.TRUE.equals(DependencyInjection.inject(ClassInstancesRuntime.class).get((Class<?>) fieldInstance.getType()).getIsPersistable()) && 
-					fieldInstance.getField().isAnnotationPresent(javax.persistence.ManyToOne.class))
-					//||
-					//(fieldInstance.getType() instanceof Collection<?>)
-					) {
-					if(fields == null)
-						fields = new ArrayList<>();
-					fields.add(index);
-				}
-			}
-		}
-		return fields;
+		if(__persistableFields__ != null)
+			__processPersistableFields__(source, destination, __persistableFields__);
 	}
 	
 	/**

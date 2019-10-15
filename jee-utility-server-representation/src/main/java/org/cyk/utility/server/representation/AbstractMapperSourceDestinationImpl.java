@@ -18,8 +18,6 @@ import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.array.ArrayHelper;
-import org.cyk.utility.clazz.ClassInstance;
-import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.clazz.ClassNameBuilder;
 
 public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> extends org.cyk.utility.mapping.AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> {
@@ -43,10 +41,9 @@ public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> ex
 					,(Class<DESTINATION>) ClassHelper.getByName(classNameBuilder.execute().getOutput()));
 		}
 		
-		ClassInstance classInstance = DependencyInjection.inject(ClassInstancesRuntime.class).get(__destinationClass__);
-		__isDestinationPersistable__ = Boolean.TRUE.equals(classInstance.getIsPersistable());
-		__isDestinationProjectionable__ = Boolean.TRUE.equals(ValueHelper.defaultToIfNull(classInstance.getIsProjectionable(),Boolean.TRUE));
-		__isDestinationActionable__ = Boolean.TRUE.equals(ValueHelper.defaultToIfNull(classInstance.getIsActionable(),Boolean.TRUE));
+		__isDestinationPersistable__ = ClassHelper.isPersistable(__destinationClass__);
+		__isDestinationProjectionable__ = ValueHelper.defaultToIfNull(ClassHelper.isProjectionable(__destinationClass__),Boolean.TRUE);
+		__isDestinationActionable__ = ValueHelper.defaultToIfNull(ClassHelper.isActionable(__destinationClass__),Boolean.TRUE);
 		if(Boolean.TRUE.equals(__isDestinationActionable__)) {			
 			if(__isDestinationPersistable__) {
 				__actionsIdentifiers__ = DependencyInjection.inject(Strings.class);

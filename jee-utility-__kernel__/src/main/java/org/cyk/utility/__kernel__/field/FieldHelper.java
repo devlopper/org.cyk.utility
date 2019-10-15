@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -21,6 +22,7 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 import org.assertj.core.util.diff.Delta.TYPE;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.object.marker.IdentifiableBusiness;
 import org.cyk.utility.__kernel__.object.marker.IdentifiableSystem;
 import org.cyk.utility.__kernel__.value.Identifier;
@@ -131,6 +133,28 @@ public interface FieldHelper {
 		return fields;
 	}
 	
+	static Collection<Field> getPersistablesSingleValueAssociation(Class<?> klass) {
+		if(klass == null)
+			return null;
+		Collection<Field> persistables = PERSISTABLES_SINGLE_VALUE_ASSOCIATION_MAP.get(klass);
+		if(persistables != null)
+			return persistables;
+		Collection<Field> fields = get(klass);
+		if(fields == null)
+			return null;		
+		for(Field index : fields) {
+			Type type = FieldHelper.getType(index, klass);
+			if(!(type instanceof Class<?>) || !ClassHelper.isPersistable((Class<?>) type) || !index.isAnnotationPresent(javax.persistence.ManyToOne.class))
+				continue;
+			if(persistables == null)
+				persistables = new ArrayList<>();
+			persistables.add(index);
+		}
+		if(persistables != null)
+			PERSISTABLES_SINGLE_VALUE_ASSOCIATION_MAP.put(klass, persistables);
+		return persistables;
+	}
+	
 	static Field getByName(Class<?> klass, List<String> fieldNames) {
 		if(klass == null || fieldNames == null || fieldNames.isEmpty())
 			return null;
@@ -170,7 +194,58 @@ public interface FieldHelper {
 	}
 	
 	static Field getByName(Class<?> klass,FieldName fieldName,ValueUsageType valueUsageType) {
-		return klass == null || fieldName == null || valueUsageType == null ? null : getByName(klass, getName(klass, fieldName, valueUsageType));
+		if(klass == null || fieldName == null || valueUsageType == null)
+			return null;
+		Field field = CLASS_FIELD_NAME_VALUE_USAGE_TYPE_FIELDS.get(new ClassFieldNameValueUsageType(klass, fieldName, valueUsageType));
+		if(field != null)
+			return field;
+		field = getByName(klass, getName(klass, fieldName, valueUsageType));
+		if(field != null)
+			CLASS_FIELD_NAME_VALUE_USAGE_TYPE_FIELDS.put(new ClassFieldNameValueUsageType(klass, fieldName, valueUsageType), field);
+		return field;
+	}
+	
+	static Field getSystemIdentifier(Class<?> klass) {
+		if(klass == null)
+			return null;
+		Field field = SYSTEM_IDENTIFIERS.get(klass);
+		if(field != null)
+			return field;
+		field = getByName(klass, FieldName.IDENTIFIER, ValueUsageType.SYSTEM);
+		if(field != null)
+			SYSTEM_IDENTIFIERS.put(klass, field);
+		return field;
+	}
+	
+	static Field getBusinessIdentifier(Class<?> klass) {
+		if(klass == null)
+			return null;
+		Field field = BUSINESS_IDENTIFIERS.get(klass);
+		if(field != null)
+			return field;
+		field = getByName(klass, FieldName.IDENTIFIER, ValueUsageType.BUSINESS);
+		if(field != null)
+			BUSINESS_IDENTIFIERS.put(klass, field);
+		return field;
+	}
+	
+	static Collection<Field> getIdentifiers(Class<?> klass) {
+		if(klass == null)
+			return null;
+		Collection<Field> identifiers = IDENTIFIERS.get(klass);
+		if(identifiers != null)
+			return identifiers;
+		Field[] fields = new Field[] { getSystemIdentifier(klass),getBusinessIdentifier(klass) };
+		for(Field field : fields) {
+			if(field == null)
+				continue;
+			if(identifiers == null)
+				identifiers = new ArrayList<>();
+			identifiers.add(field);
+		}
+		if(identifiers != null)
+			IDENTIFIERS.put(klass, identifiers = Set.of(identifiers.toArray(new Field[] {})));
+		return identifiers;
 	}
 	
 	static Collection<Field> filter(Class<?> klass, String fieldNameRegularExpression,Collection<Integer> modifiersIncluded,Collection<Integer> modifiersExcluded) {
@@ -691,12 +766,30 @@ public interface FieldHelper {
 	
 	/**/
 	
+	static void clear() {
+		CLASS_FIELDS_MAP.clear();
+		PERSISTABLES_SINGLE_VALUE_ASSOCIATION_MAP.clear();
+		FIELDS_MAP.clear();
+		TYPES_MAP.clear();
+		CLASSES_FIELDNAMES_MAP.clear();
+		CLASS_FIELD_NAME_VALUE_USAGE_TYPE_FIELDS.clear();
+		SYSTEM_IDENTIFIERS.clear();
+		BUSINESS_IDENTIFIERS.clear();
+		IDENTIFIERS.clear();
+	}
+	
+	/**/
+	
 	Map<Class<?>,List<Field>> CLASS_FIELDS_MAP = new HashMap<>();
-	Map<Class<?>,Collection<Field>> PERSISTABLES_MAP = new HashMap<>();
+	Map<Class<?>,Collection<Field>> PERSISTABLES_SINGLE_VALUE_ASSOCIATION_MAP = new HashMap<>();
 	Map<String,Field> FIELDS_MAP = new HashMap<>();
 	Map<String,Type> TYPES_MAP = new HashMap<>();
 	String DOT = ".";
 	Map<ClassFieldNameValueUsageType,String> CLASSES_FIELDNAMES_MAP = new HashMap<>();
+	Map<ClassFieldNameValueUsageType,Field> CLASS_FIELD_NAME_VALUE_USAGE_TYPE_FIELDS = new HashMap<>();
+	Map<Class<?>,Field> SYSTEM_IDENTIFIERS = new HashMap<>();
+	Map<Class<?>,Field> BUSINESS_IDENTIFIERS = new HashMap<>();
+	Map<Class<?>,Collection<Field>> IDENTIFIERS = new HashMap<>();
 	
 	@Getter @Setter @Accessors(chain=true) @EqualsAndHashCode(of= {"klass","fieldName","valueUsageType"}) @AllArgsConstructor
 	static class ClassFieldNameValueUsageType implements Serializable {

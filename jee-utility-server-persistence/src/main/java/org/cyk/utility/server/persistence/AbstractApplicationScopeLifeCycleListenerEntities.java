@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantString;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.field.FieldInstance;
 import org.cyk.utility.__kernel__.field.FieldInstancesRuntime;
 import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
@@ -13,8 +14,6 @@ import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.object.__static__.identifiable.AbstractIdentifiedPersistableByLong;
 import org.cyk.utility.__kernel__.object.__static__.identifiable.AbstractIdentifiedPersistableByString;
 import org.cyk.utility.array.ArrayHelper;
-import org.cyk.utility.clazz.ClassInstance;
-import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.server.persistence.jpa.AbstractIdentifiedByString;
 import org.cyk.utility.server.persistence.jpa.AbstractIdentifiedByStringAndCoded;
 import org.cyk.utility.server.persistence.jpa.AbstractIdentifiedByStringAndCodedAndNamed;
@@ -25,7 +24,7 @@ import org.cyk.utility.server.persistence.jpa.hierarchy.AbstractIdentifiedByStri
 public abstract class AbstractApplicationScopeLifeCycleListenerEntities extends AbstractApplicationScopeLifeCycleListener implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	public static Boolean IS_ACTIONABLE = Boolean.FALSE; //FIXME should be true after computation process optimisation done!
+	public static Boolean IS_ACTIONABLE = Boolean.FALSE; //FIXME should be true after computation process optimization done!
 	public static Boolean IS_PROJECTIONABLE = Boolean.TRUE;
 	
 	@Override
@@ -38,10 +37,9 @@ public abstract class AbstractApplicationScopeLifeCycleListenerEntities extends 
 			if(CollectionHelper.isNotEmpty(classes)) {
 				for(@SuppressWarnings("rawtypes") Class index : classes) {
 					if(!Modifier.isAbstract(index.getModifiers())) {
-						ClassInstance classInstance = __inject__(ClassInstancesRuntime.class).get(index);
-						classInstance.setIsActionable(IS_ACTIONABLE);
-						classInstance.setIsProjectionable(IS_PROJECTIONABLE);
-						FieldInstance fieldInstance = __inject__(FieldInstancesRuntime.class).get(index,classInstance.getSystemIdentifierField().getName());
+						org.cyk.utility.__kernel__.klass.Property.setProperty(index, org.cyk.utility.__kernel__.klass.Property.ACTIONABLE, IS_ACTIONABLE);
+						org.cyk.utility.__kernel__.klass.Property.setProperty(index, org.cyk.utility.__kernel__.klass.Property.PROJECTIONABLE, IS_PROJECTIONABLE);
+						FieldInstance fieldInstance = __inject__(FieldInstancesRuntime.class).get(index,FieldHelper.getSystemIdentifier(index).getName());
 						if(org.cyk.utility.__kernel__.klass.ClassHelper.isInstanceOf(index, AbstractIdentifiedPersistableByString.class))
 							fieldInstance.setType(String.class);
 						else if(org.cyk.utility.__kernel__.klass.ClassHelper.isInstanceOf(index, AbstractIdentifiedPersistableByLong.class))

@@ -14,7 +14,7 @@ import org.cyk.utility.log.Log;
 import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 
-@ApplicationScoped
+@ApplicationScoped @Deprecated
 public class ClassInstancesRuntimeImpl extends AbstractObject implements ClassInstancesRuntime,Serializable {
 	private static final long serialVersionUID = 1L;
 

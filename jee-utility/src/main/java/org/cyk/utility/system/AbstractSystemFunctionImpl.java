@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.__kernel__.function.FunctionExecutionPhase;
 import org.cyk.utility.__kernel__.function.FunctionExecutionPhaseMoment;
@@ -31,8 +32,6 @@ import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.assertion.AssertionsProvider;
 import org.cyk.utility.assertion.AssertionsProviderClassMap;
 import org.cyk.utility.assertion.AssertionsProviderFor;
-import org.cyk.utility.clazz.ClassInstance;
-import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.enumeration.EnumGetter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
 import org.cyk.utility.function.FunctionHelper;
@@ -65,7 +64,6 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	/* Working variables */
 	protected Class<?> __entityClass__;
 	protected SystemAction __action__;
-	protected ClassInstance __classInstance__;
 	protected Throwable __throwable__;
 	protected Collection<Object> __entities__,__entitiesSystemIdentifiers__,__entitiesBusinessIdentifiers__;
 	protected Field __entityClassSystemIdentifierField__,__entityClassBusinessIdentifierField__;
@@ -113,9 +111,8 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	
 	protected void __initialiseWorkingVariables__() {
 		if(getEntityClass() != null) {
-			__classInstance__ = __inject__(ClassInstancesRuntime.class).get(getEntityClass());
-			__entityClassSystemIdentifierField__ = __classInstance__.getSystemIdentifierField();
-			__entityClassBusinessIdentifierField__ = __classInstance__.getBusinessIdentifierField();	
+			__entityClassSystemIdentifierField__ = FieldHelper.getSystemIdentifier(__entityClass__);
+			__entityClassBusinessIdentifierField__ = FieldHelper.getBusinessIdentifier(__entityClass__);	
 		}
 		
 		__entityIdentifierValueUsageType__ = getEntityIdentifierValueUsageType();

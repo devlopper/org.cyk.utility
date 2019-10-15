@@ -8,7 +8,7 @@ import javax.enterprise.context.ApplicationScoped;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 
-@ApplicationScoped
+@ApplicationScoped @Deprecated
 public class LocaleHelperImpl extends AbstractHelper implements LocaleHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 

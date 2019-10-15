@@ -269,6 +269,22 @@ public interface ClassHelper {
 		return Boolean.TRUE.equals(Property.getProperty(klass, Property.PERSISTABLE));
 	}
 	
+	static Boolean isTransferable(Class<?> klass) {
+		return Boolean.TRUE.equals(Property.getProperty(klass, Property.TRANSFERABLE));
+	}
+	
+	static Boolean isActionable(Class<?> klass) {
+		return Boolean.TRUE.equals(Property.getProperty(klass, Property.ACTIONABLE));
+	}
+	
+	static Boolean isProjectionable(Class<?> klass) {
+		return Boolean.TRUE.equals(Property.getProperty(klass, Property.PROJECTIONABLE));
+	}
+	
+	static String getTupleName(Class<?> klass) {
+		return (String) Property.getProperty(klass, Property.TUPLE_NAME);
+	}
+	
 	/**/
 	
 	Map<Class<?>,Class<?>> IMPLEMENTATIONS = new HashMap<>();
