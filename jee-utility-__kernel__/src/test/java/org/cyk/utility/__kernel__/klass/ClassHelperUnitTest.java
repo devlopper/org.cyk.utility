@@ -13,11 +13,13 @@ import static org.cyk.utility.__kernel__.klass.ClassHelper.instanciateMany;
 import static org.cyk.utility.__kernel__.klass.ClassHelper.isInstanceOf;
 import static org.cyk.utility.__kernel__.klass.ClassHelper.isInstanceOfNumber;
 import static org.cyk.utility.__kernel__.klass.ClassHelper.isInstanceOfOne;
+import static org.cyk.utility.__kernel__.klass.ClassHelper.buildName;
 
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.string.RegularExpressionHelper;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
@@ -31,6 +33,144 @@ import lombok.experimental.Accessors;
 public class ClassHelperUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
+	/* build name */
+	
+		/* Persistence to Others*/
+	
+	@Test
+	public void build_server_persistence_entities_To_server_persistence_api() {
+		__assert__("server", "persistence", "entities",null, "server", "persistence", "api","Persistence");
+	}
+	
+	@Test
+	public void build_server_persistence_entities_To_server_persistence_impl() {
+		__assert__("server", "persistence", "entities",null, "server", "persistence", "impl","PersistenceImpl");
+	}
+	
+	@Test
+	public void build_server_persistence_entities_To_server_business_api() {
+		__assert__("server", "persistence", "entities",null, "server", "business", "api","Business");
+	}
+	
+	@Test
+	public void build_server_persistence_entities_To_server_business_impl() {
+		__assert__("server", "persistence", "entities",null, "server", "business", "impl","BusinessImpl");
+	}
+	
+	@Test
+	public void build_server_persistence_entities_To_server_representation_entities() {
+		__assert__("server", "persistence", "entities",null, "server", "representation", "entities","Dto");
+	}
+	
+	@Test
+	public void build_server_persistence_entities_To_server_representation_api() {
+		__assert__("server", "persistence", "entities",null, "server", "representation", "api","Representation");
+	}
+	
+	@Test
+	public void build_server_persistence_entities_To_server_representation_impl() {
+		__assert__("server", "persistence", "entities",null, "server", "representation", "impl","RepresentationImpl");
+	}
+	
+	@Test
+	public void build_server_persistence_entities_To_client_controller_entities() {
+		__assert__("server", "persistence", "entities",null, "client", "controller", "entities","");
+	}
+	
+	@Test
+	public void build_server_persistence_entities_To_client_controller_api() {
+		__assert__("server", "persistence", "entities",null, "client", "controller", "api","Controller");
+	}
+	
+	@Test
+	public void build_server_persistence_entities_To_client_controller_impl() {
+		__assert__("server", "persistence", "entities",null, "client", "controller", "impl","ControllerImpl");
+	}
+	
+	/* Representation to Others*/
+	
+	@Test
+	public void build_server_representation_entities_To_server_persistence_entities() {
+		__assert__("server", "representation", "entities","Dto", "server", "persistence", "entities","");
+	}
+	
+	@Test
+	public void build_server_representation_entities_To_server_persistence_api() {
+		__assert__("server", "representation", "entities","Dto", "server", "persistence", "api","Persistence");
+	}
+	
+	@Test
+	public void build_server_representation_entities_To_server_persistence_impl() {
+		__assert__("server", "representation", "entities","Dto", "server", "persistence", "impl","PersistenceImpl");
+	}
+	
+	@Test
+	public void build_server_representation_entities_To_server_business_api() {
+		__assert__("server", "representation", "entities","Dto", "server", "business", "api","Business");
+	}
+	
+	@Test
+	public void build_server_representation_entities_To_server_business_impl() {
+		__assert__("server", "representation", "entities","Dto", "server", "business", "impl","BusinessImpl");
+	}
+	
+	@Test
+	public void build_server_representation_entities_To_client_controller_entities() {
+		__assert__("server", "representation", "entities","Dto", "client", "controller", "entities","");
+	}
+	
+	@Test
+	public void build_server_representation_entities_To_client_controller_api() {
+		__assert__("server", "representation", "entities","Dto", "client", "controller", "api","Controller");
+	}
+	
+	@Test
+	public void build_server_representation_entities_To_client_controller_impl() {
+		__assert__("server", "representation", "entities","Dto", "client", "controller", "impl","ControllerImpl");
+	}
+	
+	/* Controller to Others*/
+	
+	@Test
+	public void build_client_controller_entities_To_server_persistence_entities() {
+		__assert__("client", "controller", "entities","", "server", "persistence", "entities","");
+	}
+	
+	@Test
+	public void build_client_controller_entities_To_server_persistence_api() {
+		__assert__("client", "controller", "entities","", "server", "persistence", "api","Persistence");
+	}
+	
+	@Test
+	public void build_client_controller_entities_To_server_persistence_impl() {
+		__assert__("client", "controller", "entities","", "server", "persistence", "impl","PersistenceImpl");
+	}
+	
+	@Test
+	public void build_client_controller_entities_To_server_business_api() {
+		__assert__("client", "controller", "entities","", "server", "business", "api","Business");
+	}
+	
+	@Test
+	public void build_client_controller_entities_To_server_business_impl() {
+		__assert__("client", "controller", "entities","", "server", "business", "impl","BusinessImpl");
+	}
+	
+	@Test
+	public void build_client_controller_entities_To_server_representation_entities() {
+		__assert__("client", "controller", "entities","", "server", "representation", "entities","Dto");
+	}
+	
+	@Test
+	public void build_client_controller_entities_To_server_representation_api() {
+		__assert__("client", "controller", "entities","", "server", "representation", "api","Representation");
+	}
+	
+	@Test
+	public void build_client_controller_entities_To_server_representation_impl() {
+		__assert__("client", "controller", "entities","", "server", "representation", "impl","RepresentationImpl");
+	}
+	
 	/* get name*/
 	
 	@Test
@@ -205,6 +345,14 @@ public class ClassHelperUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	/**/
+	
+	private void __assert__(String sourceNode,String sourceLayer,String sourceSubLayer,String sourceSuffix,String destinationNode,String destinationLayer,String destinationSubLayer,String expectedSuffix) {
+		assertThat("p1.p2."+destinationNode+"."+destinationLayer+"."+destinationSubLayer+".Entity"+expectedSuffix)
+			.isEqualTo(buildName("p1.p2."+sourceNode+"."+sourceLayer+"."+sourceSubLayer, "Entity"+StringUtils.defaultIfBlank(sourceSuffix, "")
+			, new NamingModel().setNode(sourceNode).setLayer(sourceLayer).setSubLayer(sourceSubLayer).setSuffix(sourceSuffix)
+			, new NamingModel().setNode(destinationNode).setLayer(destinationLayer).setSubLayer(destinationSubLayer)
+			));
+	}
 	
 	public static interface Interface {
 		

@@ -16,12 +16,49 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.string.Case;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 import org.reflections.util.ConfigurationBuilder;
 
 public interface ClassHelper {
 
+	/* build name */
+	
+	static String buildName(String packageName,String simpleName,NamingModel sourceNamingModel,NamingModel destinationNamingModel) {
+		String name = null;
+		if(sourceNamingModel!=null && destinationNamingModel!=null) {
+			name = StringUtils.replaceOnce(packageName, sourceNamingModel.getNode(), destinationNamingModel.getNode());
+			name = StringUtils.replaceOnce(name, sourceNamingModel.getLayer(), destinationNamingModel.getLayer());
+			name = StringUtils.replaceOnce(name, sourceNamingModel.getSubLayer(), destinationNamingModel.getSubLayer());
+			if(!name.endsWith("."))
+				name = name + ".";
+			
+			if(StringUtils.isNotBlank(sourceNamingModel.getSuffix()))
+				simpleName = StringUtils.replaceOnce(simpleName, sourceNamingModel.getSuffix(), "");
+			String suffix = destinationNamingModel.getSuffix();
+			if(StringHelper.isBlank(suffix)) {
+				Boolean isSuffixedByLayer = destinationNamingModel.getIsSuffixedByLayer();
+				if(isSuffixedByLayer == null || isSuffixedByLayer) {
+					if("representation".equals(destinationNamingModel.getLayer()) && "entities".equals(destinationNamingModel.getSubLayer()))
+						suffix = "Dto";
+					else if(("persistence".equals(destinationNamingModel.getLayer()) || "controller".equals(destinationNamingModel.getLayer())) 
+							&& "entities".equals(destinationNamingModel.getSubLayer()))
+						suffix = "";
+					else if("impl".equals(destinationNamingModel.getSubLayer()))
+						suffix = StringHelper.applyCase(destinationNamingModel.getLayer(),Case.FIRST_CHARACTER_UPPER)+"Impl";
+					else
+						suffix = StringHelper.applyCase(destinationNamingModel.getLayer(),Case.FIRST_CHARACTER_UPPER);
+				}
+			}
+			if(StringHelper.isNotBlank(suffix))
+				simpleName = simpleName + suffix;
+			name = name + simpleName;
+		}
+		return name;
+	}
+	
 	/* get name*/
 	
 	static String getInterfaceSimpleNameFromImplementationClass(Class<?> klass) {

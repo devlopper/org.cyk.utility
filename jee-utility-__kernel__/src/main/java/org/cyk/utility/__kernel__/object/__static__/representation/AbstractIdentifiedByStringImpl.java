@@ -2,8 +2,15 @@ package org.cyk.utility.__kernel__.object.__static__.representation;
 
 import java.io.Serializable;
 
+import javax.json.bind.annotation.JsonbTransient;
+
 import org.cyk.utility.__kernel__.object.marker.IdentifiableSystem;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+@JsonInclude(Include.NON_NULL)
 public abstract class AbstractIdentifiedByStringImpl extends AbstractIdentifiedImpl<String> implements IdentifiedByString,IdentifiableSystem<String>,Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -20,12 +27,12 @@ public abstract class AbstractIdentifiedByStringImpl extends AbstractIdentifiedI
 		return this;
 	}
 	
-	@Override
+	@Override @JsonbTransient @JsonIgnore
 	public String getSystemIdentifier() {
 		return getIdentifier();
 	}
 	
-	@Override
+	@Override @JsonbTransient @JsonIgnore
 	public IdentifiableSystem<String> setSystemIdentifier(String identifier) {
 		setIdentifier(identifier);
 		return this;

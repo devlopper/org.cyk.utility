@@ -2,8 +2,15 @@ package org.cyk.utility.__kernel__.object.__static__.representation;
 
 import java.io.Serializable;
 
+import javax.json.bind.annotation.JsonbTransient;
+
 import org.cyk.utility.__kernel__.object.marker.IdentifiableBusiness;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+@JsonInclude(Include.NON_NULL)
 public abstract class AbstractIdentifiedByStringAndCodedImpl extends AbstractIdentifiedByStringImpl implements IdentifiedByStringAndCoded,IdentifiableBusiness<String>,Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -25,12 +32,12 @@ public abstract class AbstractIdentifiedByStringAndCodedImpl extends AbstractIde
 		return (IdentifiedByStringAndCoded) super.setIdentifier(identifier);
 	}
 	
-	@Override
+	@Override @JsonbTransient @JsonIgnore
 	public String getBusinessIdentifier() {
 		return getCode();
 	}
 	
-	@Override
+	@Override @JsonbTransient @JsonIgnore
 	public IdentifiableBusiness<String> setBusinessIdentifier(String identifier) {
 		setCode(identifier);
 		return this;

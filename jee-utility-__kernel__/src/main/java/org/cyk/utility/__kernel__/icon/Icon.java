@@ -15,4 +15,6 @@ public enum Icon {
 	,USERS
 	,USER
 	,FLASH
+	,SUITCASE
+	,PENCIL
 }

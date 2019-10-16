@@ -13,7 +13,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.json.bind.JsonbBuilder;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
@@ -30,54 +29,6 @@ import lombok.experimental.Accessors;
 
 public class RepresentationBasedJaxbUnitTest {
 
-	@Test
-	public void action_01_to_json() {
-		Action action01 = new Action();
-		String string = JsonbBuilder.create().toJson(action01);
-		__assertAction__(action01, string);
-	}
-	
-	@Test
-	public void action_02_to_json() {
-		Action action01 = new Action();
-		action01.setIdentifier("action01");
-		String string = JsonbBuilder.create().toJson(action01);
-		__assertAction__(action01, string);
-	}
-	
-	@Test
-	public void action_03_to_json() {
-		Action action01 = new Action();
-		action01.setIdentifier("action01").setMethod("method01");
-		String string = JsonbBuilder.create().toJson(action01);
-		__assertAction__(action01, string);
-	}
-	
-	@Test
-	public void action_04_to_json() {
-		Action action01 = new Action();
-		action01.setIdentifier("action01").setMethod("method01").setUniformResourceLocator("url01");
-		String string = JsonbBuilder.create().toJson(action01);
-		__assertAction__(action01, string);
-	}
-	
-	@Test
-	public void actions_to_json() {
-		Actions actions01 = new Actions();
-		actions01.add("action01","method01","url01").add("action02","method02","url02");
-		String string = JsonbBuilder.create().toJson(actions01,Actions.class);
-		__assertActions__(actions01, string);
-	}
-	
-	@Test
-	public void representation_to_json() {
-		Representation representation01 = new Representation();
-		representation01.add__action__("action01","method01","url01").add__action__("action02","method02","url02");
-		String string = JsonbBuilder.create().toJson(representation01);
-		Representation representation02 = JsonbBuilder.create().fromJson(string, Representation.class);
-		__assertActions__(representation01.get__actions__(), representation02.get__actions__());
-	}
-	
 	@Test
 	public void one_marshal() {
 		try {
@@ -482,37 +433,6 @@ public class RepresentationBasedJaxbUnitTest {
 	}
 	
 	/**/
-	
-	private void __assertAction__(Action action01,String json) {
-		Action action02 = JsonbBuilder.create().fromJson(json, Action.class);
-		__assertAction__(action01, action02);
-	}
-	
-	private void __assertAction__(Action action01,Action action02) {
-		assertThat(action02).isNotNull();
-		assertThat(action02.getIdentifier()).isEqualTo(action01.getIdentifier());
-		assertThat(action02.getMethod()).isEqualTo(action01.getMethod());
-		assertThat(action02.getUniformResourceLocator()).isEqualTo(action01.getUniformResourceLocator());
-	}
-	
-	private void __assertActions__(Actions actions01,String json) {
-		Actions actions02 = JsonbBuilder.create().fromJson(json, Actions.class);
-		__assertActions__(actions01, actions02);
-	}
-	
-	private void __assertActions__(Actions actions01,Actions actions02) {
-		assertThat(actions02).isNotNull();
-		if(actions01.getCollection() == null)
-			assertThat(actions02.getCollection()).isNull();
-		else {
-			assertThat(actions02.getCollection()).isNotNull();
-			assertThat(actions02.getCollection()).hasSize(actions01.getCollection().size());
-			List<Action> list01 = new ArrayList<>(actions01.getCollection());
-			List<Action> list02 = new ArrayList<>(actions02.getCollection());
-			for(Integer index = 0; index < list01.size(); index = index + 1)
-				__assertAction__(list01.get(index), list02.get(index));
-		}
-	}
 	
 	/**/
 	
