@@ -107,5 +107,5 @@ public class CollectionHelperUnitTest extends AbstractWeldUnitTest {
 	public void getElementsFromTo_(){
 		assertThat(getElementsFromTo(List.of(5,7,4,2,9),1,3)).containsExactly(7,4);
 	}
-	
+
 }

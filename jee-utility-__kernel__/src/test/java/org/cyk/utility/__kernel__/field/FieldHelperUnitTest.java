@@ -17,6 +17,8 @@ import static org.cyk.utility.__kernel__.field.FieldHelper.nullify;
 import static org.cyk.utility.__kernel__.field.FieldHelper.read;
 import static org.cyk.utility.__kernel__.field.FieldHelper.setName;
 import static org.cyk.utility.__kernel__.field.FieldHelper.write;
+import static org.cyk.utility.__kernel__.field.FieldHelper.getSimpleNames;
+import static org.cyk.utility.__kernel__.field.FieldHelper.getNamesMap;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -80,6 +82,27 @@ public class FieldHelperUnitTest extends AbstractWeldUnitTest {
 	public void getName_identifier_business_isCod() {
 		setName(Name.class, FieldName.IDENTIFIER, ValueUsageType.BUSINESS, "cod");
 		assertThat(getName(Name.class, FieldName.IDENTIFIER, ValueUsageType.BUSINESS)).isEqualTo("cod");
+	}
+	
+	@Test
+	public void getSimpleNames_isGetFromNestedTrue() {
+		assertThat(getSimpleNames(List.of("user","account.identifier","function.type.name"),Boolean.TRUE)).containsExactlyInAnyOrder("user","account","function");
+	}
+	
+	@Test
+	public void getSimpleNames_isGetFromNestedFalse() {
+		assertThat(getSimpleNames(List.of("user","account.identifier","function.type.name"),Boolean.FALSE)).containsExactlyInAnyOrder("user");
+	}
+	
+	@Test
+	public void getSimpleNames_isGetFromNestedNull() {
+		assertThat(getSimpleNames(List.of("user","account.identifier","function.type.name"),null)).containsExactlyInAnyOrder("user");
+	}
+	
+	@Test
+	public void getNamesMap_() {
+		assertThat(getNamesMap(List.of("user","user.functions","function.type.name","account")).entrySet())
+			.containsExactlyInAnyOrder(Map.entry("user",List.of("functions")),Map.entry("function",List.of("type.name")));
 	}
 	
 	@Test

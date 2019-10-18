@@ -7,11 +7,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.ListUtils;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
 
 import one.util.streamex.StreamEx;
 
@@ -306,5 +308,20 @@ public interface CollectionHelper {
 	
 	static <ELEMENT> Collection<ELEMENT> getElementsNotIn(Collection<ELEMENT> collection1,Collection<?> collection2,String...fieldNames) {
 		return getElementsNotIn(collection1, collection2, listOf(fieldNames));
+	}
+
+	static Collection<String> getStringsMatching(Collection<String> strings,String regularExpression) {
+		if(isEmpty(strings) || StringHelper.isBlank(regularExpression))
+			return null;
+		Pattern pattern = Pattern.compile(regularExpression);
+		Collection<String> collection = null;
+		for(String index : strings) {
+			if(!pattern.matcher(index).find())
+				continue;
+			if(collection == null)
+				collection = new ArrayList<>();
+			collection.add(index);
+		}
+		return collection;
 	}
 }

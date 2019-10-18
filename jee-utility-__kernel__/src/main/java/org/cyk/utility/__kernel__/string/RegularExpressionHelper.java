@@ -46,8 +46,6 @@ public interface RegularExpressionHelper {
 		return buildIsDoNotEndWith(List.of(strings));
 	}
 	
-	
-	
 	static Boolean match(String string, Pattern pattern) {
 		if(string == null || string.isEmpty() || pattern == null)
 			return Boolean.FALSE;

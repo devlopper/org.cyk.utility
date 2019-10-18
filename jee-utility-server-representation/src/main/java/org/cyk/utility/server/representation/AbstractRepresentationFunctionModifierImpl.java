@@ -51,7 +51,7 @@ public abstract class AbstractRepresentationFunctionModifierImpl extends Abstrac
 			Object entity = __getEntity__(__entities__, index);
 			if(entity == null)
 				continue;
-			InstanceHelper.copy(entity, index, fieldNames.get());				
+			InstanceHelper.copy(entity, index, fieldNames.get());
 		}
 		__injectBusiness__().updateMany(persistenceEnities,new Properties().setFields(fieldNames));					
 	}

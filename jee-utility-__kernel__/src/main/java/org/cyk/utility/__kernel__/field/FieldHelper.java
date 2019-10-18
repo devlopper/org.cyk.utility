@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,6 +26,7 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.object.marker.IdentifiableBusiness;
 import org.cyk.utility.__kernel__.object.marker.IdentifiableSystem;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.Identifier;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
@@ -104,9 +106,74 @@ public interface FieldHelper {
 		return fields.stream().map(Field::getName).collect(Collectors.toList());
 	}
 	
+	static Boolean isSimpleName(String name) {
+		if(StringHelper.isBlank(name))
+			return Boolean.FALSE;
+		return !name.contains(DOT);
+	}
+	
+	static Boolean isNestedName(String name) {
+		if(StringHelper.isBlank(name))
+			return Boolean.FALSE;
+		return name.contains(DOT);
+	}
+	
+	static Collection<String> getSimpleNames(Collection<String> fieldsNames,Boolean isGetFromNested) {
+		if(CollectionHelper.isEmpty(fieldsNames))
+			return null;
+		Collection<String> names = null;
+		for(String index : fieldsNames) {
+			index = getSimpleName(index, isGetFromNested);
+			if(StringHelper.isBlank(index))
+				continue;
+			if(names == null)
+				names = new LinkedHashSet<>();
+			names.add(index);
+		}
+		return names;
+	}
+	
+	static String getSimpleName(String fieldName,Boolean isGetFromNested) {
+		if(StringHelper.isBlank(fieldName))
+			return null;
+		if(isNestedName(fieldName) && !Boolean.TRUE.equals(isGetFromNested))
+			return null;
+		if(isNestedName(fieldName))
+			return StringUtils.substringBefore(fieldName, DOT);
+		return fieldName;
+	}
+	
+	static Collection<String> filterNames(Collection<String> fieldsNames,Boolean isNested) {
+		if(CollectionHelper.isEmpty(fieldsNames))
+			return null;
+		return fieldsNames.stream().filter(x -> Boolean.TRUE.equals(isNested) ? isNestedName(x) : isSimpleName(x)).collect(Collectors.toList());
+	}
+	
+	static Map<String,Collection<String>> getNamesMap(Collection<String> fieldsNames) {
+		if(CollectionHelper.isEmpty(fieldsNames))
+			return null;
+		Collection<String> simpleNames = getSimpleNames(fieldsNames, Boolean.TRUE);
+		if(CollectionHelper.isEmpty(simpleNames))
+			return null;
+		Map<String,Collection<String>> map = new HashMap<>();
+		for(String index : simpleNames) {
+			Collection<String> collection = null;
+			for(String fieldName : fieldsNames) {
+				if(index.equals(fieldName) || !fieldName.startsWith(index+DOT))
+					continue;
+				if(collection == null)
+					collection = new ArrayList<>();
+				collection.add(StringUtils.substringAfter(fieldName, DOT));
+			}
+			if(collection != null)
+				map.put(index, collection);
+		}
+		return map;
+	}
+	
 	/* get field */
 	
-	static Collection<Field> get(Class<?> klass) {
+ 	static Collection<Field> get(Class<?> klass) {
 		if(klass == null)
 			return null;
 		List<Field> fields = CLASS_FIELDS_MAP.get(klass);
@@ -727,34 +794,6 @@ public interface FieldHelper {
 		writeMany(object, fieldNameRegularExpression, modifiers,null);
 	}
 	
-	/*
-	static void writeManyFieldsWithSameValue(Object object, Collection<List<String>> fieldsNamesCollection,Object value,Boolean isEqual) {
-		Collection<String> collection = null;
-		if(Boolean.TRUE.equals(isEqual)) {
-			collection = fieldsNames;
-		}else {
-			Fields fields = __inject__(ClassInstancesRuntime.class).get(object.getClass()).getFields();
-			if(CollectionHelper.isNotEmpty(fields)) {
-				collection = new ArrayList<>();
-				for(Field index : fields.get()) {
-					String fieldName = index.getName();
-					if(!Modifier.isFinal(index.getModifiers()) && !Modifier.isStatic(index.getModifiers()) && !index.getType().isPrimitive() && !fieldsNames.contains(fieldName))
-						collection.add(fieldName);
-				}	
-			}
-		}
-		if(CollectionHelper.isNotEmpty(collection)) {
-			for(String index : collection)
-				__write__(object, index, null);
-		}
-	}*/
-	
-	/**/
-	/*
-	static Boolean isPersistable(Field field,Class<?> klass) {
-		
-	}
-	*/
 	/**/
 		
 	static void copy(Object sourceObject,Field sourceObjectField,Object sourceObjectFieldValue,Object destinationObject,Field destinationObjectField) {

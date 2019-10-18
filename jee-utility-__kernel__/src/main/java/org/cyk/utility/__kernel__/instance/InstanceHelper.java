@@ -1,6 +1,5 @@
 package org.cyk.utility.__kernel__.instance;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -13,7 +12,6 @@ import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
-import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.value.Identifier;
 import org.cyk.utility.__kernel__.value.Value;
@@ -21,30 +19,11 @@ import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 public interface InstanceHelper {
 
-	static void setInstanceGetter(InstanceGetter instanceGetter) {
-		INSTANCE_GETTER.set(instanceGetter);
-		LogHelper.logInfo("Instance getter has been set. Class is "+instanceGetter.getClass(), InstanceGetter.class);
-	}
-	
-	static void setInstanceGetter(Class<? extends InstanceGetter> klass) {
-		if(klass == null)
-			return;
-		setInstanceGetter(DependencyInjection.inject(klass));
-	}
-	
-	static InstanceGetter getInstanceGetter() {
-		InstanceGetter instanceGetter = (InstanceGetter) INSTANCE_GETTER.get();
-		if(instanceGetter != null)
-			return instanceGetter;
-		setInstanceGetter(instanceGetter = DependencyInjection.inject(InstanceGetter.class));
-		return instanceGetter;
-	}
-	
 	static <INSTANCE> INSTANCE getByIdentifier(Class<INSTANCE> klass,Object identifier,ValueUsageType valueUsageType,InstanceGetter getter) {
 		if(klass == null || identifier == null)
 			return null;
 		if(getter == null)
-			getter = getInstanceGetter();
+			getter = InstanceGetter.getInstance();
 		return getter.getByIdentifier(klass, identifier,valueUsageType);
 	}
 	
@@ -52,28 +31,28 @@ public interface InstanceHelper {
 		if(klass == null || identifier == null)
 			return null;
 		if(getter == null)
-			getter = getInstanceGetter();
+			getter = InstanceGetter.getInstance();
 		return getter.getBySystemIdentifier(klass, identifier);
 	}
 	
 	static <INSTANCE> INSTANCE getBySystemIdentifier(Class<INSTANCE> klass,Object identifier) {
 		if(klass == null || identifier == null)
 			return null;
-		return getInstanceGetter().getBySystemIdentifier(klass, identifier);
+		return getBySystemIdentifier(klass, identifier,InstanceGetter.getInstance());
 	}
 	
 	static <INSTANCE> INSTANCE getByBusinessIdentifier(Class<INSTANCE> klass,Object identifier,InstanceGetter getter) {
 		if(klass == null || identifier == null)
 			return null;
 		if(getter == null)
-			getter = getInstanceGetter();
+			getter = InstanceGetter.getInstance();
 		return getter.getByBusinessIdentifier(klass, identifier);
 	}
 	
 	static <INSTANCE> INSTANCE getByBusinessIdentifier(Class<INSTANCE> klass,Object identifier) {
 		if(klass == null || identifier == null)
 			return null;
-		return getInstanceGetter().getByBusinessIdentifier(klass, identifier);
+		return getByBusinessIdentifier(klass, identifier,InstanceGetter.getInstance());
 	}
 	
 	static <INSTANCE> Collection<INSTANCE> getByIdentifiers(Class<INSTANCE> klass,Collection<Identifier> identifiers) {
@@ -167,28 +146,33 @@ public interface InstanceHelper {
 		}
 	}
 	
-	static void copy(Object source,Object destination,Map<String,String> fieldsNames) {
+	static void copy(Object source,Object destination,Map<String,String> fieldsNames,InstanceCopier copier) {
 		if(source == null || destination == null || MapHelper.isEmpty(fieldsNames))
-			return;	
-		for(Map.Entry<String, String> entry : fieldsNames.entrySet()) {
-			Field sourceField = FieldHelper.getByName(source.getClass(), entry.getKey());
-			if(sourceField == null)
-				throw new RuntimeException("field "+source.getClass()+"."+entry.getKey()+" not found");
-			Field destinationField = FieldHelper.getByName(destination.getClass(), entry.getValue());
-			if(destinationField == null)
-				throw new RuntimeException("field "+destination.getClass()+"."+entry.getValue()+" not found");			
-			Object sourceFieldValue = FieldHelper.read(source, sourceField);
-			FieldHelper.copy(source,sourceField,sourceFieldValue,destination,destinationField);
-		}
+			return;
+		if(copier == null)
+			copier = InstanceCopier.getInstance();
+		copier.copy(source, destination, fieldsNames);
 	}
 	
-	static void copy(Object source,Object destination,Collection<String> fieldsNames) {
+	static void copy(Object source,Object destination,Map<String,String> fieldsNames) {
+		if(source == null || destination == null || MapHelper.isEmpty(fieldsNames))
+			return;
+		copy(source, destination, fieldsNames,InstanceCopier.getInstance());
+	}
+	
+	static void copy(Object source,Object destination,Collection<String> fieldsNames,InstanceCopier copier) {
 		if(source == null || destination == null || CollectionHelper.isEmpty(fieldsNames))
 			return;	
 		Map<String,String> map = new LinkedHashMap<>();
 		for(String index : fieldsNames)
 			map.put(index, index);
-		copy(source, destination, map);
+		copy(source, destination, map,copier);
+	}
+	
+	static void copy(Object source,Object destination,Collection<String> fieldsNames) {
+		if(source == null || destination == null || CollectionHelper.isEmpty(fieldsNames))
+			return;	
+		copy(source, destination, fieldsNames,InstanceCopier.getInstance());
 	}
 	
 	static <T> T build(Class<T> klass,Object object,Map<String,String> fieldsNames) {

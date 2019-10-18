@@ -5,9 +5,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.constant.ConstantSeparator;
 
@@ -123,6 +126,22 @@ public interface StringHelper {
 		return string;
 	}
 	
+	static Collection<String> removeFromString(Collection<String> strings,String regularExpression) {
+		if(CollectionHelper.isEmpty(strings) || isBlank(regularExpression))
+			return null;
+		Pattern pattern = Pattern.compile(regularExpression);
+		Collection<String> collection = null;
+		for(String index : strings) {
+			if(index == null)
+				continue;
+			index  =RegExUtils.removeFirst(index, pattern);
+			if(collection == null)
+				collection = new ArrayList<>();
+			collection.add(index);
+		}
+		return collection;
+	}
+
 	static String get(Object object) {
 		return object == null ? ConstantEmpty.STRING : object.toString();
 	}
@@ -165,5 +184,37 @@ public interface StringHelper {
 		Collection<String> invalidLines = getInvalidLines(string, invalidLinesRegularExpressions);
 		lines.removeAll(invalidLines);
 		return StringUtils.join(lines,"");
+	}
+
+	/* filter */
+	
+	static Collection<String> filter(Collection<String> strings,String regularExpression,Boolean isRemoveMatchingExpression) {
+		if(CollectionHelper.isEmpty(strings) || isBlank(regularExpression))
+			return null;
+		Pattern pattern = Pattern.compile(regularExpression);
+		Collection<String> collection = null;
+		for(String index : strings) {
+			if(index == null)
+				continue;
+			if(Boolean.TRUE.equals(isRemoveMatchingExpression)) {
+				String temp = RegExUtils.removeFirst(index, pattern);
+				if(index.equals(temp))
+					continue;
+				index = temp;
+			}else {
+				if(!pattern.matcher(index).find())
+					continue;	
+			}			
+			if(collection == null)
+				collection = new ArrayList<>();
+			collection.add(index);
+		}
+		return collection;
+	}
+	
+	static Collection<String> filter(Collection<String> strings,String regularExpression) {
+		if(CollectionHelper.isEmpty(strings) || isBlank(regularExpression))
+			return null;
+		return filter(strings, regularExpression, null);
 	}
 }

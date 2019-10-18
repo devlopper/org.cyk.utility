@@ -1,0 +1,37 @@
+package org.cyk.utility.__kernel__.instance;
+
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.log.LogHelper;
+import org.cyk.utility.__kernel__.value.Value;
+
+public interface InstanceCopier {
+
+	void copy(Object source,Object destination,Map<String,String> fieldsNames);
+	
+	default void copy(Object source,Object destination,Collection<String> fieldsNames) {
+		if(source == null || destination == null || CollectionHelper.isEmpty(fieldsNames))
+			return;	
+		Map<String,String> map = new LinkedHashMap<>();
+		for(String index : fieldsNames)
+			map.put(index, index);
+		copy(source, destination, map);
+	}
+	
+	/**/
+	
+	static InstanceCopier getInstance() {
+		InstanceCopier instance = (InstanceCopier) INSTANCE.get();
+		if(instance != null)
+			return instance;
+		INSTANCE.set(instance = DependencyInjection.inject(InstanceCopier.class));
+		LogHelper.logInfo("instance has been set. <<"+instance.getClass()+">>", InstanceCopier.class);
+		return instance;
+	}
+	
+	Value INSTANCE = DependencyInjection.inject(Value.class);
+}

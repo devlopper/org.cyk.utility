@@ -11,6 +11,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
@@ -46,8 +47,13 @@ public abstract class AbstractRepresentationFunctionReaderImpl extends AbstractR
 			__isCollectionable__ = Boolean.TRUE;
 		}
 		
+		Properties properties = new Properties();
 		Strings entityFieldNames = getEntityFieldNames();
-		Properties properties = new Properties().setFields(entityFieldNames);
+		if(CollectionHelper.isNotEmpty(entityFieldNames)) {
+			Collection<String> simpleAndNestedFieldsNames = FieldHelper.getSimpleNames(entityFieldNames.get(), Boolean.TRUE);
+			simpleAndNestedFieldsNames.addAll(entityFieldNames.get());
+			properties.setFields(__inject__(Strings.class).add(simpleAndNestedFieldsNames));
+		}
 		if(Boolean.TRUE.equals(__isCollectionable__)) {
 			if(Boolean.TRUE.equals(CollectionHelper.isEmpty(__entitiesSystemIdentifiers__)) && Boolean.TRUE.equals(CollectionHelper.isEmpty(__entitiesBusinessIdentifiers__))) {
 				FilterDto filterDto = (FilterDto) getProperty(Properties.QUERY_FILTERS);

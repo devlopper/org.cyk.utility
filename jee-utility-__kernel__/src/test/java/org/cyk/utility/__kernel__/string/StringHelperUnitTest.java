@@ -6,6 +6,7 @@ import static org.cyk.utility.__kernel__.string.StringHelper.addToEndIfDoesNotEn
 import static org.cyk.utility.__kernel__.string.StringHelper.applyCase;
 import static org.cyk.utility.__kernel__.string.StringHelper.concatenate;
 import static org.cyk.utility.__kernel__.string.StringHelper.defaultIfBlank;
+import static org.cyk.utility.__kernel__.string.StringHelper.filter;
 import static org.cyk.utility.__kernel__.string.StringHelper.get;
 import static org.cyk.utility.__kernel__.string.StringHelper.getInvalidLines;
 import static org.cyk.utility.__kernel__.string.StringHelper.getLines;
@@ -13,6 +14,7 @@ import static org.cyk.utility.__kernel__.string.StringHelper.getVariableNameFrom
 import static org.cyk.utility.__kernel__.string.StringHelper.removeInvalidLines;
 import static org.cyk.utility.__kernel__.string.StringHelper.removeToBeginIfDoesStartWith;
 import static org.cyk.utility.__kernel__.string.StringHelper.splitByCharacterTypeCamelCase;
+import static org.cyk.utility.__kernel__.string.StringHelper.removeFromString;
 
 import java.util.List;
 
@@ -80,5 +82,37 @@ public class StringHelperUnitTest extends AbstractWeldUnitTest {
 	@Test
 	public void removeInvalidLines_(){
 		assertThat(removeInvalidLines("l1\nl2\n   \nl3",null)).isEqualTo("l1\nl2\nl3");
+	}
+	
+	/* filter */
+	
+	@Test
+	public void filter_null_null(){
+		assertThat(filter(null,null)).isNull();
+	}
+	
+	@Test
+	public void filter_null_notNull(){
+		assertThat(filter(null,"a")).isNull();
+	}
+	
+	@Test
+	public void filter_notNull_null(){
+		assertThat(filter(List.of("s1"),null)).isNull();
+	}
+	
+	@Test
+	public void filter_notNull_notNull(){
+		assertThat(filter(List.of("user","user.name","user.f1.f2","account","account.user","username"),"^user\\.")).containsExactlyInAnyOrder("user.name","user.f1.f2");
+	}
+	
+	@Test
+	public void filter_notNull_notNull_isRemoveTrue(){
+		assertThat(filter(List.of("user","user.name","user.f1.f2","account","account.user","username"),"^user\\.",Boolean.TRUE)).containsExactlyInAnyOrder("name","f1.f2");
+	}
+	
+	@Test
+	public void removeFromString_notNull_notNull(){
+		assertThat(removeFromString(List.of("user.name","user.f1.f2"),"^user\\.")).containsExactlyInAnyOrder("name","f1.f2");
 	}
 }

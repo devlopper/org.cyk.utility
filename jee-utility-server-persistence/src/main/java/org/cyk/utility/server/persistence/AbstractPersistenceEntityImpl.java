@@ -522,15 +522,16 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	}
 	
 	protected void __listenExecuteReadAfter__(ENTITY entity,Properties properties) {
-		Strings fields = __getFieldsFromProperties__(properties);
+		Strings fieldsNames = __getFieldsFromProperties__(properties);
 		Collection<Field> fieldsToBeSet = new ArrayList<>();
 		Collection<Field> fieldsToBeSetToNull = new ArrayList<>();
 		Collection<String> fieldsToBeSetNames = new ArrayList<>();
-		if(CollectionHelper.isNotEmpty(fields) && CollectionHelper.isNotEmpty(__entityFields__)) {
+		if(CollectionHelper.isNotEmpty(fieldsNames) && CollectionHelper.isNotEmpty(__entityFields__)) {
+			//Collection<String> simpleFieldsNames = FieldHelper.getSimpleNames(fieldsNames.get(), Boolean.TRUE);
 			for(Field index : __entityFields__) {
 				String indexName = index.getName();
 				if(!Modifier.isStatic(index.getModifiers()) && !Modifier.isFinal(index.getModifiers()) 
-						&& !__systemIdentifierField__.getName().equals(indexName) && !fields.contains(indexName)) {
+						&& !__systemIdentifierField__.getName().equals(indexName) && !fieldsNames.contains(indexName)) {
 					fieldsToBeSetToNull.add(index);
 					fieldsToBeSetNames.add(indexName);
 				}else if(index.getAnnotation(Transient.class)!=null) {
@@ -544,7 +545,13 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 			for(Field index : fieldsToBeSetToNull)
 				__listenExecuteReadAfterSetFieldValueToNull__(entity, index,properties);
 			
-			for(String index : fields.get()) {
+			/*Map<String,Collection<String>> nestedFieldsNames = FieldHelper.getNamesMap(fieldsNames.get());
+			if(org.cyk.utility.__kernel__.map.MapHelper.isNotEmpty(nestedFieldsNames)) {
+				for(Map.Entry<String, Collection<String>> entry : nestedFieldsNames.entrySet())
+					;	
+			}*/
+						
+			for(String index : fieldsNames.get()) {
 				if(!fieldsToBeSetNames.contains(index))
 					__listenExecuteReadAfterSetFieldValue__(entity, index, properties);
 			}
