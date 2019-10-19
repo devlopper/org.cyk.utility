@@ -85,6 +85,10 @@ public interface ConfigurationHelper {
 		return getValue(name, null,null, null,ValueCheckerImpl.INSTANCE);
 	}
 	
+	static String getValueAsString(String name,Object context,Object request,Object nullValue) {
+		return (String) getValue(name, context, request, nullValue,ValueCheckerImpl.INSTANCE);
+	}
+	
 	static String getValueAsString(String name,Object context,Object request) {
 		return (String) getValue(name, context, request, null,ValueCheckerImpl.INSTANCE);
 	}

@@ -13,6 +13,10 @@ public interface ConstantParameterName {
 	/* System */
 	
 	String SYSTEM_NAME = formatCykParameterName("system.name");
+	String SYSTEM_VERSION = formatCykParameterName("system.version");
+	String SYSTEM_HOST = formatCykParameterName("system.host");
+	String SYSTEM_PORT = formatCykParameterName("system.port");
+	String SYSTEM_WEB_CONTEXT = formatCykParameterName("system.web.context");
 	String SYSTEM_NODE_CLIENT_NAME = formatCykParameterName("system.node.client.name");
 	String SYSTEM_NODE_SERVER_NAME = formatCykParameterName("system.node.server.name");
 	
@@ -37,4 +41,8 @@ public interface ConstantParameterName {
 	/* Stream Distributed*/
 	
 	String STREAM_DISTRIBUTED_DELEGATE_SYSTEM_IS_ENABLE = formatCykParameterName("stream.distributed.delegate.system.is.enable");
+	
+	/* Swagger */
+	
+	String SWAGGER_BEAN_CONFIG_RESOURCE_PACKAGE = formatCykParameterName("swagger.bean.config.resource.package");
 }

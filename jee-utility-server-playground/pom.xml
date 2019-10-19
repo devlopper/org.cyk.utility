@@ -18,6 +18,7 @@
 
 	<properties>
 		<data.source.jndi.name>java:/playground/server/dataSource</data.source.jndi.name>
+		<web.context>playground/server</web.context>
 	</properties>
 
 	<dependencies>
@@ -44,5 +45,5 @@
 			<version>0.1.0</version>
 		</dependency>
 	</dependencies>
-
+			
 </project>

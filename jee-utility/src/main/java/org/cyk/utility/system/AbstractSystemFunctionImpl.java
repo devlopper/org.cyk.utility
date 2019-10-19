@@ -111,8 +111,9 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	
 	protected void __initialiseWorkingVariables__() {
 		if(getEntityClass() != null) {
-			__entityClassSystemIdentifierField__ = FieldHelper.getSystemIdentifier(__entityClass__);
-			__entityClassBusinessIdentifierField__ = FieldHelper.getBusinessIdentifier(__entityClass__);	
+			Class<?> klass = __entityClass__.isInterface() ? __inject__(__entityClass__).getClass() : __entityClass__;//FIXME do it better
+			__entityClassSystemIdentifierField__ = FieldHelper.getSystemIdentifier(klass);
+			__entityClassBusinessIdentifierField__ = FieldHelper.getBusinessIdentifier(klass);	
 		}
 		
 		__entityIdentifierValueUsageType__ = getEntityIdentifierValueUsageType();

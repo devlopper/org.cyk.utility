@@ -84,6 +84,12 @@ public class MenuItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<Men
 	}
 	
 	@Override
+	public MenuItemBuilder setCommandableNavigationValue(String value) {
+		getCommandable(Boolean.TRUE).getUniformResourceIdentifier(Boolean.TRUE).setValue(value);
+		return this;
+	}
+	
+	@Override
 	public MenuItemBuilder setCommandableNavigationIdentifierAndParameters(Object identifier,Object[] parameters) {
 		//getCommandable(Boolean.TRUE).setNavigationIdentifierAndParameters(identifier,parameters);
 		//return this;

@@ -17,11 +17,14 @@ import javax.ws.rs.core.Response;
 
 import org.cyk.utility.server.persistence.query.filter.FilterDto;
 
+import io.swagger.annotations.Api;
+
 /**
  * 
  * @author Christian
  *
  */
+@Api
 public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY,ENTITY_COLLECTION> extends RepresentationServiceProvider {
 
 	/* Create */

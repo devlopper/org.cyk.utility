@@ -3,6 +3,7 @@ package org.cyk.utility.server.persistence.jpa;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
@@ -39,39 +40,45 @@ public abstract class AbstractIdentifiedByString extends AbstractIdentifiedPersi
 		return identifier == null ? null : __inject__(org.cyk.utility.server.persistence.Persistence.class).readByIdentifier(aClass,identifier,new Properties().setValueUsageType(valueUsageType));
 	}
 	
-	public AbstractIdentifiedByString setFromIdentifier(Field field,Object identifier,ValueUsageType valueUsageType){
+	@JsonbTransient
+	public AbstractIdentifiedByString __setFromIdentifier__(Field field,Object identifier,ValueUsageType valueUsageType){
 		FieldHelper.write(this, field, __getFromIdentifier__((Class<?>) FieldHelper.getType(field, getClass()), identifier,valueUsageType));
 		return this;
 	}
 	
-	public AbstractIdentifiedByString setFromIdentifier(String fieldName,Object identifier,ValueUsageType valueUsageType){
-		return setFromIdentifier(FieldHelper.getByName(getClass(), fieldName), identifier,valueUsageType);
+	@JsonbTransient
+	public AbstractIdentifiedByString __setFromIdentifier__(String fieldName,Object identifier,ValueUsageType valueUsageType){
+		return __setFromIdentifier__(FieldHelper.getByName(getClass(), fieldName), identifier,valueUsageType);
 	}
 	
 	protected <T> T __getFromBusinessIdentifier__(Class<T> aClass,Object identifier){
 		return __getFromIdentifier__(aClass,identifier,ValueUsageType.BUSINESS);
 	}
 	
-	public AbstractIdentifiedByString setFromBusinessIdentifier(Field field,Object identifier){
-		setFromIdentifier(field, identifier, ValueUsageType.BUSINESS);
+	@JsonbTransient
+	public AbstractIdentifiedByString __setFromBusinessIdentifier__(Field field,Object identifier){
+		__setFromIdentifier__(field, identifier, ValueUsageType.BUSINESS);
 		return this;
 	}
 	
-	public AbstractIdentifiedByString setFromBusinessIdentifier(String fieldName,Object identifier){
-		return setFromIdentifier(fieldName, identifier, ValueUsageType.BUSINESS);
+	@JsonbTransient
+	public AbstractIdentifiedByString __setFromBusinessIdentifier__(String fieldName,Object identifier){
+		return __setFromIdentifier__(fieldName, identifier, ValueUsageType.BUSINESS);
 	}
 	
 	protected <T> T __getFromSystemIdentifier__(Class<T> aClass,Object identifier){
 		return __getFromIdentifier__(aClass,identifier,ValueUsageType.SYSTEM);
 	}
 	
-	public AbstractIdentifiedByString setFromSystemIdentifier(Field field,Object identifier){
-		setFromIdentifier(field, identifier, ValueUsageType.SYSTEM);
+	@JsonbTransient
+	public AbstractIdentifiedByString __setFromSystemIdentifier__(Field field,Object identifier){
+		__setFromIdentifier__(field, identifier, ValueUsageType.SYSTEM);
 		return this;
 	}
 	
-	public AbstractIdentifiedByString setFromSystemIdentifier(String fieldName,Object identifier){
-		return setFromIdentifier(fieldName, identifier, ValueUsageType.SYSTEM);
+	@JsonbTransient
+	public AbstractIdentifiedByString __setFromSystemIdentifier__(String fieldName,Object identifier){
+		return __setFromIdentifier__(fieldName, identifier, ValueUsageType.SYSTEM);
 	}
 	
 	/**/

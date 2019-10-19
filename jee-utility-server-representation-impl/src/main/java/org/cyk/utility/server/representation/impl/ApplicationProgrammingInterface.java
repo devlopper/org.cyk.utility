@@ -15,17 +15,20 @@ import javax.ws.rs.core.Response;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.system.node.SystemNodeServer;
 
-@ApplicationPath("/")
+import io.swagger.annotations.Api;
+
+@ApplicationPath(ApplicationProgrammingInterface.PATH)
 @Path("/")
 @ApplicationScoped
-public class Application extends javax.ws.rs.core.Application implements Serializable {
+@Api
+public class ApplicationProgrammingInterface extends javax.ws.rs.core.Application implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@GET
 	@Path("/")
 	@Produces(javax.ws.rs.core.MediaType.TEXT_PLAIN)
 	public String get() {
-		return DependencyInjection.inject(SystemNodeServer.class).getName()+" REST API is running. Time is "+new java.util.Date();
+		return DependencyInjection.inject(SystemNodeServer.class).getName()+" API. Time is "+new java.util.Date();
 	}
 	
 	@POST
@@ -34,5 +37,9 @@ public class Application extends javax.ws.rs.core.Application implements Seriali
 	public Response loadData() {
 		return DependencyInjection.inject(DataLoader.class).execute().getOutput();
 	}
+	
+	/**/
+	
+	public static final String PATH = "/api";
 	
 }

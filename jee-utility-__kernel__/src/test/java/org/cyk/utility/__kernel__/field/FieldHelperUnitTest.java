@@ -133,6 +133,13 @@ public class FieldHelperUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	@Test
+	public void get_Interface() {
+		Collection<Field> fields = get(Interface.class);
+		assertThat(fields).isNull();
+		//assertThat(getNames(fields)).containsExactly("PROPERTY_F01","PROPERTY_F02","PROPERTY_F03","NOT_PROPERTY_F01");
+	}
+	
+	@Test
 	public void get_I01() {
 		Collection<Field> fields = get(I01.class);
 		assertThat(fields).isNotNull();
@@ -738,5 +745,19 @@ public class FieldHelperUnitTest extends AbstractWeldUnitTest {
 		private PersistablesClassWithEntity classWithEntityWithNoManyToOne;
 		private PersistablesClassWithNoEntity classWithNoEntity;
 		private Integer integer;
+	}
+
+	public static interface Interface {
+		String getIdentifier();
+		Interface setIdentifier(String identifier);
+		
+		String getCode();
+		Interface setCode(String code);
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class Implementation implements Interface {
+		private String identifier;
+		private String code;
 	}
 }

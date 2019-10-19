@@ -196,6 +196,8 @@ public interface FieldHelper {
 			}else
 				indexClass = indexClass.getSuperclass();
 		}while(indexClass!=null && !Object.class.equals(indexClass));
+		if(fields == null)
+			return null;
 		CLASS_FIELDS_MAP.put(klass, Collections.unmodifiableList(fields));
 		return fields;
 	}
