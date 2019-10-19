@@ -15,10 +15,10 @@
 		<param-name>cyk.parameter.system.web.context</param-name>
 		<param-value>playground/server</param-value>
 	</context-param>	
-	<!--
+	
 	<context-param>
 		<param-name>cyk.parameter.swagger.bean.config.resource.package</param-name>
 		<param-value>org.cyk.utility.playground.server.representation.api</param-value>
 	</context-param>
-	-->	
+		
 </web-app>
