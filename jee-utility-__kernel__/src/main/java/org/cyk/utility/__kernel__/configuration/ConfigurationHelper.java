@@ -1,9 +1,17 @@
 package org.cyk.utility.__kernel__.configuration;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.cyk.utility.__kernel__.array.ArrayHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.context.ContextHelper;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.identifier.resource.RequestHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
@@ -123,6 +131,69 @@ public interface ConfigurationHelper {
 	
 	static Boolean is(String name) {
 		return getValueAsBoolean(name, null, null);
+	}
+	
+	/**/
+	
+	static void setClassUniformResourceIdentifier(Class<?> klass,String uniformResourceIdentifier) {
+		if(klass == null)
+			return;
+		mapVariable(ConstantParameterName.formatCykParameterNameClassUniformResourceIdentifier(klass), uniformResourceIdentifier, Location.SYSTEM);
+	}
+	
+	static void setClassUniformResourceIdentifier(Class<?> klass,URI uri) {
+		if(klass == null)
+			return;
+		setClassUniformResourceIdentifier(klass, uri == null ? null : uri.toString());
+	}
+	
+	static void setClassUniformResourceIdentifier(Class<?> klass,URL url) {
+		if(klass == null)
+			return;
+		try {
+			setClassUniformResourceIdentifier(klass, url == null ? null : url.toURI());
+		} catch (URISyntaxException exception) {
+			throw new RuntimeException(exception);
+		}
+	}
+	
+	static String getClassUniformResourceIdentifier(Class<?> klass) {
+		if(klass == null)
+			return null;
+		return getValueAsString(ConstantParameterName.formatCykParameterNameClassUniformResourceIdentifier(klass));
+	}
+	
+	static void setFieldName(Class<?> klass,Collection<String> paths,String value) {
+		if(klass == null || CollectionHelper.isEmpty(paths))
+			return;
+		mapVariable(ConstantParameterName.formatCykParameterNameFieldName(klass, paths), value, Location.SYSTEM);
+	}
+	
+	static void setFieldName(Class<?> klass,String path,String value) {
+		if(klass == null || StringHelper.isBlank(path))
+			return;
+		setFieldName(klass,List.of(path),value);
+	}
+	
+	static String getFieldName(Class<?> klass,Collection<String> paths) {
+		if(klass == null || CollectionHelper.isEmpty(paths))
+			return null;
+		String fieldName = FieldHelper.join(paths);
+		if(StringHelper.isBlank(fieldName))
+			return null;
+		return getValueAsString(ConstantParameterName.formatCykParameterNameFieldName(klass, paths));
+	}
+	
+	static String getFieldName(Class<?> klass,String...paths) {
+		if(klass == null || ArrayHelper.isEmpty(paths))
+			return null;
+		return getFieldName(klass, CollectionHelper.listOf(paths));
+	}
+	
+	
+	
+	static void clear() {
+		VARIABLES.clear();
 	}
 	
 	Map<String,Variable> VARIABLES = new HashMap<>();

@@ -1,12 +1,17 @@
 package org.cyk.utility.__kernel__.map;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.json.bind.JsonbBuilder;
+
 import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
 
 public interface MapHelper {
 
@@ -88,5 +93,19 @@ public interface MapHelper {
 			}
 		}
 	}
+
+	@SuppressWarnings("unchecked")
+	static Map<String,?> instantiateFromJson(String json,Class<?> mapClass) {
+		if(StringHelper.isBlank(json))
+			return null;
+		Type mapType = null;
+		if(mapClass == null) {
+			mapType = new LinkedHashMap<String,Object>() {private static final long serialVersionUID = 1L;}.getClass().getGenericSuperclass();
+		}
+		return (Map<String,?>) JsonbBuilder.create().fromJson(json, mapType);
+	}
 	
+	static Map<String,?> instantiateFromJson(String json) {
+		return instantiateFromJson(json, null);
+	}
 }

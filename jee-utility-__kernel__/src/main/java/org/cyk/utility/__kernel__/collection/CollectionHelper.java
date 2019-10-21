@@ -1,17 +1,28 @@
 package org.cyk.utility.__kernel__.collection;
 
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import javax.json.bind.JsonbBuilder;
+
 import org.apache.commons.collections4.ListUtils;
+import org.apache.commons.io.IOUtils;
+import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.instance.InstanceHelper;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 
@@ -27,6 +38,157 @@ public interface CollectionHelper {
 		if(klass.equals(Set.class))
 			return Set.of(elements);
 		throw new RuntimeException("instantiate collection of type "+klass+" not yet handled");
+	}
+	
+	@SuppressWarnings("unchecked")
+	static <T> Collection<T> instantiateFromJson(Class<T> elementClass,String json,Class<?> collectionClass) {
+		if(elementClass == null || StringHelper.isBlank(json))
+			return null;
+		Type collectionType = null;
+		if(collectionClass == null) {
+			collectionType = new ArrayList<T>() {private static final long serialVersionUID = 1L;}.getClass().getGenericSuperclass();
+		}
+		return (Collection<T>) JsonbBuilder.create().fromJson(json, collectionType);
+	}
+	
+	static <T> Collection<T> instantiateFromJson(Class<T> elementClass,String json) {
+		if(elementClass == null || StringHelper.isBlank(json))
+			return null;
+		return instantiateFromJson(elementClass, json, null);
+	}
+	
+	@SuppressWarnings("unchecked")
+	static <T> Collection<T> instantiateFromJson(Type elementType,String json,Class<?> collectionClass) {
+		if(elementType == null || StringHelper.isBlank(json))
+			return null;
+		Type collectionType = null;
+		if(collectionClass == null) {
+			collectionType = new ArrayList<T>() {private static final long serialVersionUID = 1L;}.getClass().getGenericSuperclass();
+		}
+		return (Collection<T>) JsonbBuilder.create().fromJson(json, collectionType);
+	}
+	
+	static <T> Collection<T> instantiateFromJson(Type elementType,String json) {
+		if(elementType == null || StringHelper.isBlank(json))
+			return null;
+		return instantiateFromJson(elementType,json,null);
+	}
+	
+	static Collection<Map<String,?>> instantiateFromJson(String json) {
+		if(StringHelper.isBlank(json))
+			return null;
+		return instantiateFromJson(new HashMap<String,Object>() {private static final long serialVersionUID = 1L;}.getClass().getGenericSuperclass(), json, null);
+	}
+	
+	static <T> Collection<T> instantiateFromJson(Class<T> elementClass,URI uri) {
+		if(uri == null)
+			return null;
+		try {
+			return instantiateFromJson(elementClass,IOUtils.toString(uri, "UTF-8"));
+		} catch (IOException exception) {
+			throw new RuntimeException(exception);
+		}
+	}
+	
+	static <T> Collection<T> instantiateFromJson(Type elementType,URI uri) {
+		if(uri == null)
+			return null;
+		try {
+			return instantiateFromJson(elementType,IOUtils.toString(uri, "UTF-8"));
+		} catch (IOException exception) {
+			throw new RuntimeException(exception);
+		}
+	}
+	
+	static <T> Collection<T> instantiateFromJsonLocatedAt(Class<T> elementClass,String uniformResourceIdentifier) {
+		if(StringHelper.isBlank(uniformResourceIdentifier))
+			return null;
+		try {
+			URI uri = new URI(uniformResourceIdentifier);
+			return instantiateFromJson(elementClass,uri);
+		} catch (URISyntaxException exception) {
+			throw new RuntimeException(exception);
+		}
+	}
+	
+	static <T> Collection<T> instantiateFromJsonLocatedAt(Type elementType,String uniformResourceIdentifier) {
+		if(StringHelper.isBlank(uniformResourceIdentifier))
+			return null;
+		try {
+			URI uri = new URI(uniformResourceIdentifier);
+			return instantiateFromJson(elementType,uri);
+		} catch (URISyntaxException exception) {
+			throw new RuntimeException(exception);
+		}
+	}
+	
+	static <T> Collection<T> instantiateFromMaps(Class<T> elementClass,Collection<Map<String,?>> maps,Map<String,String> fieldsNames,Class<?> collectionClass) {
+		if(elementClass == null || isEmpty(maps))
+			return null;
+		Collection<T> elements = new ArrayList<>();
+		for(Map<String,?> index : maps) {
+			T element = ClassHelper.instanciate(elementClass);
+			InstanceHelper.copy(index, element, fieldsNames);
+			elements.add(element);
+		}
+		return elements;
+	}
+	
+	static <INSTANCE> Collection<INSTANCE> getFromJsonLocatedAtUniformResourceIdentifier(Class<INSTANCE> klass,URI uri,Map<String,String> fieldsNames) {
+		if(klass == null)
+			return null;
+		if(uri == null) {
+			String uniformResourceIdentifier = ConfigurationHelper.getClassUniformResourceIdentifier(klass);
+			if(StringHelper.isBlank(uniformResourceIdentifier))
+				return null;
+			try {
+				uri = new URI(uniformResourceIdentifier);
+			} catch (URISyntaxException exception) {
+				throw new RuntimeException(exception);
+			}
+		}
+		Collection<Map<String,?>> maps = instantiateFromJson(new ArrayList<Map<String,?>>().getClass().getGenericSuperclass(), uri);
+		Collection<INSTANCE> instances = instantiateFromMaps(klass, maps, fieldsNames, null);
+		return instances;
+	}
+	
+	static <INSTANCE> Collection<INSTANCE> getFromJsonLocatedAtUniformResourceIdentifier(Class<INSTANCE> klass,URI uri,Collection<String> fieldsNames) {
+		if(klass == null)
+			return null;
+		Map<String,String> map = FieldHelper.getFieldsNamesMapping(klass, fieldsNames);
+		return getFromJsonLocatedAtUniformResourceIdentifier(klass,uri,map);
+	}
+	
+	static <INSTANCE> Collection<INSTANCE> getFromJsonLocatedAtUniformResourceIdentifier(Class<INSTANCE> klass,URI uri,String...fieldsNames) {
+		if(klass == null)
+			return null;
+		Map<String,String> map = FieldHelper.getFieldsNamesMapping(klass, fieldsNames);
+		return getFromJsonLocatedAtUniformResourceIdentifier(klass,uri,map);
+	}
+	
+	static <INSTANCE> Collection<INSTANCE> getFromJsonLocatedAtUniformResourceIdentifier(Class<INSTANCE> klass,String uniformResourceIdentifier,Map<String,String> fieldsNames) {
+		if(klass == null)
+			return null;
+		try {
+			URI uri = StringHelper.isBlank(uniformResourceIdentifier) ? null : new URI(uniformResourceIdentifier);
+			return getFromJsonLocatedAtUniformResourceIdentifier(klass, uri, fieldsNames);
+		} catch (URISyntaxException exception) {
+			throw new RuntimeException(exception);
+		}
+	}
+	
+	static <INSTANCE> Collection<INSTANCE> getFromJsonLocatedAtUniformResourceIdentifier(Class<INSTANCE> klass,String uniformResourceIdentifier,Collection<String> fieldsNames) {
+		if(klass == null)
+			return null;
+		Map<String,String> map = FieldHelper.getFieldsNamesMapping(klass, fieldsNames);
+		return getFromJsonLocatedAtUniformResourceIdentifier(klass,uniformResourceIdentifier,map);
+	}
+	
+	static <INSTANCE> Collection<INSTANCE> getFromJsonLocatedAtUniformResourceIdentifier(Class<INSTANCE> klass,String uniformResourceIdentifier,String...fieldsNames) {
+		if(klass == null)
+			return null;
+		Map<String,String> map = FieldHelper.getFieldsNamesMapping(klass, fieldsNames);
+		return getFromJsonLocatedAtUniformResourceIdentifier(klass,uniformResourceIdentifier,map);	
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -310,18 +472,5 @@ public interface CollectionHelper {
 		return getElementsNotIn(collection1, collection2, listOf(fieldNames));
 	}
 
-	static Collection<String> getStringsMatching(Collection<String> strings,String regularExpression) {
-		if(isEmpty(strings) || StringHelper.isBlank(regularExpression))
-			return null;
-		Pattern pattern = Pattern.compile(regularExpression);
-		Collection<String> collection = null;
-		for(String index : strings) {
-			if(!pattern.matcher(index).find())
-				continue;
-			if(collection == null)
-				collection = new ArrayList<>();
-			collection.add(index);
-		}
-		return collection;
-	}
+	
 }

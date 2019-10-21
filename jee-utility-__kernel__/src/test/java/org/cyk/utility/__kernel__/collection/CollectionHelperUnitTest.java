@@ -8,16 +8,58 @@ import static org.cyk.utility.__kernel__.collection.CollectionHelper.getSize;
 import static org.cyk.utility.__kernel__.collection.CollectionHelper.isEmpty;
 import static org.cyk.utility.__kernel__.collection.CollectionHelper.isNotEmpty;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
+import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
+
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.Accessors;
 
 public class CollectionHelperUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
+	@Override
+	protected void __listenBefore__() {
+		super.__listenBefore__();
+		ConfigurationHelper.clear();
+	}
+	
+	@Test
+	public void instantiateFromJson_(){
+		@SuppressWarnings("rawtypes")
+		Collection<Map> maps = CollectionHelper.instantiateFromJson(Map.class, "[{\"name\":\"zadi\",\"age\":\"12\"},{\"name\":\"konan\",\"age\":\"28\"}]");
+		assertThat(maps).isNotNull();
+		assertThat(maps).containsExactly(Map.of("name","zadi","age","12"),Map.of("name","konan","age","28"));
+	}
+	
+	@Test
+	public void getFromJsonLocatedAtUniformResourceIdentifier_() throws URISyntaxException{
+		Collection<Person> persons = CollectionHelper.getFromJsonLocatedAtUniformResourceIdentifier(Person.class, getClass().getResource("person.json").toURI()
+				,"identifier","name","age");
+		assertThat(persons).isNotNull();
+		assertThat(persons).containsExactly(new Person("1","zadi",12),new Person("2","konan",28));
+	}
+	
+	@Test
+	public void getFromJsonLocatedAtUniformResourceIdentifier_uriIsNull() throws URISyntaxException{
+		ConfigurationHelper.setClassUniformResourceIdentifier(Person.class, getClass().getResource("person.json"));
+		Collection<Person> persons = CollectionHelper.getFromJsonLocatedAtUniformResourceIdentifier(Person.class, (URI)null,"identifier","name","age");
+		assertThat(persons).isNotNull();
+		assertThat(persons).containsExactly(new Person("1","zadi",12),new Person("2","konan",28));
+	}
+	
 	@Test
 	public void isEmpty_null(){
 		assertThat(isEmpty((Collection<?>)null)).isTrue();
@@ -108,4 +150,14 @@ public class CollectionHelperUnitTest extends AbstractWeldUnitTest {
 		assertThat(getElementsFromTo(List.of(5,7,4,2,9),1,3)).containsExactly(7,4);
 	}
 
+	/**/
+	
+	@Getter @Setter @Accessors(chain=true) 
+	@EqualsAndHashCode(of = {"identifier"}) @ToString
+	@NoArgsConstructor @AllArgsConstructor
+	public static class Person {
+		private String identifier;
+		private String name;
+		private Integer age;
+	}
 }

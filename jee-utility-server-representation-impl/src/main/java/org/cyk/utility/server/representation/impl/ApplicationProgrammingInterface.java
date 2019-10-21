@@ -22,8 +22,7 @@ import org.cyk.utility.system.node.SystemNodeServer;
 import io.swagger.annotations.Api;
 import io.swagger.jaxrs.config.BeanConfig;
 
-@ApplicationPath(ApplicationProgrammingInterface.PATH)
-@Path("/")
+@ApplicationPath(ApplicationProgrammingInterface.PATH) @Path("/")
 @ApplicationScoped
 @Api
 public class ApplicationProgrammingInterface extends javax.ws.rs.core.Application implements Serializable {

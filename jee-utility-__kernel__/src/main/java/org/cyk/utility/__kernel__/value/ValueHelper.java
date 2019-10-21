@@ -113,6 +113,11 @@ public interface ValueHelper {
 				return (T) NumberHelper.isGreaterThanZero((Number)value);
 			
 		}
+		if(Object.class.equals(klass)) {
+			if(value instanceof String)
+				return (T) value;
+			return (T) value.toString();
+		}
 		throw new RuntimeException("convert type <<"+value.getClass()+">> to type "+klass+" not yet implemented");
 	}
 	

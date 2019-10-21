@@ -34,6 +34,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
 import org.cyk.utility.__kernel__.string.RegularExpressionHelper;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
@@ -50,6 +51,7 @@ public class FieldHelperUnitTest extends AbstractWeldUnitTest {
 	protected void __listenBefore__() {
 		super.__listenBefore__();
 		FieldHelper.clear();
+		ConfigurationHelper.clear();
 	}
 	
 	@Test
@@ -611,6 +613,49 @@ public class FieldHelperUnitTest extends AbstractWeldUnitTest {
 		assertThat(object.getCode()).isNull();
 	}	
 	
+	/* copy */
+	
+	@Test
+	public void copy_fromMap_string(){
+		CopyFromMap object = new CopyFromMap();
+		assertThat(object.getString()).isNull();
+		assertThat(object.getInteger()).isNull();
+		assertThat(object.getLong_()).isNull();
+		FieldHelper.copy(Map.of("string","my string","integer","12","long_","159"), "string", object);
+		assertThat(object.getString()).isEqualTo("my string");
+		assertThat(object.getInteger()).isNull();
+		assertThat(object.getLong_()).isNull();
+	}
+	
+	@Test
+	public void copy_fromMap_string_keyDifferentToFieldName(){
+		ConfigurationHelper.setFieldName(CopyFromMap.class, "the_string", "string");
+		CopyFromMap object = new CopyFromMap();
+		assertThat(object.getString()).isNull();
+		assertThat(object.getInteger()).isNull();
+		assertThat(object.getLong_()).isNull();
+		FieldHelper.copy(Map.of("the_string","my string","integer","12","long_","159"), "the_string", object);
+		assertThat(object.getString()).isEqualTo("my string");
+		assertThat(object.getInteger()).isNull();
+		assertThat(object.getLong_()).isNull();
+	}
+	
+	@Test
+	public void getFieldsNamesMapping_(){
+		//ConfigurationHelper.setFieldName(CopyFromMap.class, "the_string", "string");
+		Map<String,String> map = FieldHelper.getFieldsNamesMapping(CopyFromMap.class, "the_string");
+		assertThat(map).isNotNull();
+		assertThat(map).containsExactly(Map.entry("the_string", "the_string"));
+	}
+	
+	@Test
+	public void getFieldsNamesMapping_setConfigurationVariable(){
+		ConfigurationHelper.setFieldName(CopyFromMap.class, "the_string", "string");
+		Map<String,String> map = FieldHelper.getFieldsNamesMapping(CopyFromMap.class, "the_string");
+		assertThat(map).isNotNull();
+		assertThat(map).containsExactly(Map.entry("the_string", "string"));
+	}
+	
 	/**/
 	
 	@Getter @Setter @Accessors(chain=true)
@@ -759,5 +804,12 @@ public class FieldHelperUnitTest extends AbstractWeldUnitTest {
 	public static class Implementation implements Interface {
 		private String identifier;
 		private String code;
+	}
+
+	@Getter @Setter @Accessors(chain=true)
+	public static class CopyFromMap {
+		private String string;
+		private Integer integer;
+		private Long long_;
 	}
 }

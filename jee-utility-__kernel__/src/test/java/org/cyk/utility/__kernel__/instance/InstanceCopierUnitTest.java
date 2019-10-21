@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.persistence.Entity;
@@ -11,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 
@@ -25,6 +27,7 @@ public class InstanceCopierUnitTest extends AbstractWeldUnitTest {
 	protected void __listenBefore__() {
 		super.__listenBefore__();
 		InstanceGetterImpl.clear();
+		ConfigurationHelper.clear();
 	}
 	
 	@Test
@@ -75,6 +78,45 @@ public class InstanceCopierUnitTest extends AbstractWeldUnitTest {
 		assertThat(userAccount.getUser().getFunctions()).isNotNull();
 		assertThat(userAccount.getUser().getFunctions()).isNotEmpty();
 		assertThat(userAccount.getUser().getFunctions().stream().map(x -> x == null ? null : x.getCode()).collect(Collectors.toList())).containsExactlyInAnyOrder("f01");
+	}
+	
+	@Test
+	public void copy_fromMap_string(){
+		CopyFromMap object = new CopyFromMap();
+		assertThat(object.getString()).isNull();
+		assertThat(object.getInteger()).isNull();
+		assertThat(object.getLong_()).isNull();
+		InstanceHelper.copy(Map.of("string","my string","integer","12","long_","159"), object,Map.of("string","string"));
+		assertThat(object.getString()).isEqualTo("my string");
+		assertThat(object.getInteger()).isNull();
+		assertThat(object.getLong_()).isNull();
+	}
+	
+	@Test
+	public void copy_fromMap_keyDifferentToFieldName(){
+		ConfigurationHelper.setFieldName(CopyFromMap.class, "the_string", "string");
+		CopyFromMap object = new CopyFromMap();
+		assertThat(object.getString()).isNull();
+		assertThat(object.getInteger()).isNull();
+		assertThat(object.getLong_()).isNull();
+		Map<String,String> map = Map.of("the_string","my string","integer","12","long_","159");
+		InstanceHelper.copy(map, object,map.keySet());
+		assertThat(object.getString()).isEqualTo("my string");
+		assertThat(object.getInteger()).isEqualTo(12);
+		assertThat(object.getLong_()).isEqualTo(159l);
+	}
+	
+	@Test
+	public void copyFromJson_keyDifferentToFieldName(){
+		ConfigurationHelper.setFieldName(CopyFromMap.class, "the_string", "string");
+		CopyFromMap object = new CopyFromMap();
+		assertThat(object.getString()).isNull();
+		assertThat(object.getInteger()).isNull();
+		assertThat(object.getLong_()).isNull();
+		InstanceCopier.getInstance().copyFromJson("{\"the_string\":\"my string\",\"integer\":\"12\",\"long_\":\"159\"}", object);
+		assertThat(object.getString()).isEqualTo("my string");
+		assertThat(object.getInteger()).isEqualTo(12);
+		assertThat(object.getLong_()).isEqualTo(159l);
 	}
 	
 	/**/
@@ -129,5 +171,12 @@ public class InstanceCopierUnitTest extends AbstractWeldUnitTest {
 	@Getter @Setter @Accessors(chain=true) @XmlRootElement
 	public static class FunctionTypeDto {
 		private String identifier,code;
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class CopyFromMap {
+		private String string;
+		private Integer integer;
+		private Long long_;
 	}
 }

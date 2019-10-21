@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.assertj.core.util.diff.Delta.TYPE;
 import org.cyk.utility.__kernel__.Helper;
+import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.object.marker.IdentifiableBusiness;
 import org.cyk.utility.__kernel__.object.marker.IdentifiableSystem;
@@ -224,7 +227,7 @@ public interface FieldHelper {
 		return persistables;
 	}
 	
-	static Field getByName(Class<?> klass, List<String> fieldNames) {
+	static Field getByName(Class<?> klass, List<String> fieldNames,Boolean isThrowExceptionIfNull) {
 		if(klass == null || fieldNames == null || fieldNames.isEmpty())
 			return null;
 		String fieldName = join(fieldNames);
@@ -253,13 +256,27 @@ public interface FieldHelper {
 				}
 			count++;			
 		}while(count < numberOfFieldNames && !indexClass.equals(Object.class));
+		if(Boolean.TRUE.equals(isThrowExceptionIfNull))
+			throw new RuntimeException("field "+klass.getName()+"."+fieldName+" not found");
 		return field;
+	}
+	
+	static Field getByName(Class<?> klass, List<String> fieldNames) {
+		if(klass == null || fieldNames == null || fieldNames.isEmpty())
+			return null;
+		return getByName(klass, fieldNames,Boolean.FALSE);
+	}
+	
+	static Field getByName(Class<?> klass,Boolean isThrowExceptionIfNull, String... fieldNames) {
+		if(klass == null || fieldNames == null || fieldNames.length == 0)
+			return null;
+		return getByName(klass,CollectionHelper.listOf(fieldNames),isThrowExceptionIfNull);
 	}
 	
 	static Field getByName(Class<?> klass, String... fieldNames) {
 		if(klass == null || fieldNames == null || fieldNames.length == 0)
 			return null;
-		return getByName(klass,CollectionHelper.listOf(fieldNames));
+		return getByName(klass, Boolean.FALSE, fieldNames);
 	}
 	
 	static Field getByName(Class<?> klass,FieldName fieldName,ValueUsageType valueUsageType) {
@@ -803,6 +820,56 @@ public interface FieldHelper {
 			return;
 		Object destinationObjectFieldValue = ValueHelper.convert(sourceObjectField, sourceObjectFieldValue, destinationObjectField);
 		write(destinationObject, destinationObjectField, destinationObjectFieldValue);
+	}
+	
+	static void copy(Map<String,?> map,String key,Object destinationObject,Field destinationObjectField) {
+		if(map == null || StringHelper.isBlank(key) || !map.containsKey(key) || destinationObject == null)
+			return;
+		if(destinationObjectField == null) {
+			String destinationObjectFieldName = ConfigurationHelper.getFieldName(destinationObject.getClass(),key);
+			if(StringHelper.isBlank(destinationObjectFieldName))
+				destinationObjectFieldName = key;
+			destinationObjectField = getByName(destinationObject.getClass(),Boolean.TRUE, destinationObjectFieldName);
+		}
+		Object value = map.get(key);
+		Object destinationObjectFieldValue = ValueHelper.convert(value, (Class<?>)getType(destinationObjectField,null));
+		write(destinationObject, destinationObjectField, destinationObjectFieldValue);
+	}
+	
+	static void copy(Map<String,?> map,String key,Object destinationObject,String destinationObjectFieldName) {
+		if(map == null || StringHelper.isBlank(key) || !map.containsKey(key) || destinationObject == null)
+			return;
+		copy(map, key, destinationObject,StringHelper.isBlank(destinationObjectFieldName) ? null : getByName(destinationObject.getClass(), destinationObjectFieldName));
+	}
+	
+	static void copy(Map<String,?> map,String key,Object destinationObject) {
+		if(map == null || StringHelper.isBlank(key) || !map.containsKey(key) || destinationObject == null)
+			return;
+		copy(map, key, destinationObject, (Field)null);	
+	}
+	
+	static Map<String,String> getFieldsNamesMapping(Class<?> klass,Collection<String> fieldsNames) {
+		if(klass == null || CollectionHelper.isEmpty(fieldsNames))
+			return null;
+		Map<String,String> map = null;
+		for(String index : fieldsNames) {
+			if(StringHelper.isBlank(index))
+				continue;
+			String value = ConfigurationHelper.getFieldName(klass, index);
+			if(StringHelper.isBlank(value)) {
+				value = index;
+			}
+			if(map == null)
+				map = new LinkedHashMap<>();
+			map.put(index, value);
+		}
+		return map;
+	}
+	
+	static Map<String,String> getFieldsNamesMapping(Class<?> klass,String...fieldsNames) {
+		if(klass == null || ArrayHelper.isEmpty(fieldsNames))
+			return null;
+		return getFieldsNamesMapping(klass,CollectionHelper.listOf(fieldsNames));
 	}
 	
 	/**/

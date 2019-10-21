@@ -31,6 +31,11 @@ public class ValueHelperUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	@Test
+	public void convert_string_to_object() {
+		assertThat(convert("string", Object.class)).isEqualTo("string");
+	}
+	
+	@Test
 	public void convert_null_to_boolean() {
 		assertThat(convert(null, Boolean.class)).isNull();
 	}

@@ -1,13 +1,32 @@
 package org.cyk.utility.__kernel__.configuration;
 
+import java.util.Collection;
+
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
+import org.cyk.utility.__kernel__.field.FieldHelper;
+
 public interface ConstantParameterName {
 	
 	String CYK_PARAMETER_NAME_FORMAT = "cyk.parameter.%s";
 	static String formatCykParameterName(String string) {
 		return String.format(CYK_PARAMETER_NAME_FORMAT,string);
 	}
+	
 	static String formatCykParameterNameProtocolDefaultsSimpleMailTransfer(String string) {
 		return formatCykParameterName("protocol.defaults.simple.mail.transfer."+string);
+	}
+	
+	static String formatCykParameterNameClassUniformResourceIdentifier(Class<?> klass) {
+		return formatCykParameterName(klass.getName()+ConstantCharacter.UNDESCORE+"uri");
+	}
+	
+	static String formatCykParameterNameFieldName(Class<?> klass,Collection<String> paths) {
+		return formatCykParameterName(klass.getName()+FieldHelper.DOT+FieldHelper.join(paths));
+	}
+	
+	static String formatCykParameterNameFieldName(Class<?> klass,String...paths) {
+		return formatCykParameterNameFieldName(klass, CollectionHelper.listOf(paths));
 	}
 	
 	/* System */

@@ -14,10 +14,15 @@ import org.cyk.utility.__kernel__.map.MapHelper;
 public abstract class AbstractInstanceCopierImpl implements InstanceCopier,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void copy(Object source, Object destination, Map<String, String> fieldsNames) {
 		if(source == null || destination == null || MapHelper.isEmpty(fieldsNames))
 			return;
+		if(source instanceof Map && !(destination instanceof Map)) {
+			__copy__((Map<String, ?>) source, destination, fieldsNames);
+			return;
+		}
 		//process only simple name first.
 		//collect nested fields names and process them last.
 		Collection<String> processedSourceSimpleNames = new ArrayList<>();
@@ -64,4 +69,9 @@ public abstract class AbstractInstanceCopierImpl implements InstanceCopier,Seria
 		}
 	}
 	
+	protected static void __copy__(Map<String,?> source, Object destination, Map<String, String> fieldsNames) {
+		for(Map.Entry<String, String> entry : fieldsNames.entrySet()) {
+			FieldHelper.copy(source, entry.getKey(), destination,entry.getValue());
+		}
+	}
 }
