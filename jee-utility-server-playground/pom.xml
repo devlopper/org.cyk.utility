@@ -18,7 +18,7 @@
 
 	<properties>
 		<data.source.jndi.name>java:/playground/server/dataSource</data.source.jndi.name>
-		<web.context>playground/server</web.context>
+		<web.context>${jboss-web.context-root}</web.context>
 	</properties>
 
 	<dependencies>

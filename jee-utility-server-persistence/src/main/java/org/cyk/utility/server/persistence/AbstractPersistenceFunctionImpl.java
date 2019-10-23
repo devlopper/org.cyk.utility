@@ -3,17 +3,18 @@ package org.cyk.utility.server.persistence;
 import java.io.Serializable;
 import java.util.Map;
 
+import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
+import org.cyk.utility.__kernel__.configuration.VariableName;
 import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.server.persistence.query.PersistenceQueryRepository;
 import org.cyk.utility.system.AbstractSystemFunctionServerImpl;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerPersistence;
-import org.cyk.utility.system.node.SystemNodeServer;
-import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 
 public abstract class AbstractPersistenceFunctionImpl extends AbstractSystemFunctionServerImpl implements PersistenceFunction, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -50,7 +51,7 @@ public abstract class AbstractPersistenceFunctionImpl extends AbstractSystemFunc
 		
 		__produceFunction__(entityName+"."+action.getIdentifier()
 		, __injectMapHelper__().instanciateKeyAsStringValueAsString(
-				"system.identifier",__inject__(SystemNodeServer.class).getIdentifier()
+				"system.identifier",ConfigurationHelper.getValueAsString(VariableName.SYSTEM_IDENTIFIER)
 				,"action.identifier",action.getIdentifier()
 				,"entity.name",entityName
 				)

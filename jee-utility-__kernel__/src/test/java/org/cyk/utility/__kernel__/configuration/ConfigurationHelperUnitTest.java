@@ -33,7 +33,7 @@ public class ConfigurationHelperUnitTest extends AbstractWeldUnitTest {
 	public void getVariable_name_unittest_config_var_01_os_env_sys_sys_ctx_null_req_null_is_env(){
 		Variable variable = getVariable("unittest.config.var.01");
 		assertThat(variable).isNotNull();
-		assertThat(variable.getLocation()).isEqualTo(Location.ENVIRONMENT);
+		assertThat(variable.getLocation()).isEqualTo(VariableLocation.ENVIRONMENT);
 		assertThat(variable.getValue()).isEqualTo("env");
 	}
 	
@@ -41,7 +41,7 @@ public class ConfigurationHelperUnitTest extends AbstractWeldUnitTest {
 	public void getVariable_name_unittest_config_var_02_os_env_sys_null_ctx_null_req_null_is_env(){
 		Variable variable = getVariable("unittest.config.var.02");
 		assertThat(variable).isNotNull();
-		assertThat(variable.getLocation()).isEqualTo(Location.ENVIRONMENT);
+		assertThat(variable.getLocation()).isEqualTo(VariableLocation.ENVIRONMENT);
 		assertThat(variable.getValue()).isEqualTo("env");
 	}
 	
@@ -49,7 +49,7 @@ public class ConfigurationHelperUnitTest extends AbstractWeldUnitTest {
 	public void getVariable_name_unittest_config_var_03_os_null_sys_sys_ctx_null_req_null_is_sys(){
 		Variable variable = getVariable("unittest.config.var.03");
 		assertThat(variable).isNotNull();
-		assertThat(variable.getLocation()).isEqualTo(Location.SYSTEM);
+		assertThat(variable.getLocation()).isEqualTo(VariableLocation.SYSTEM);
 		assertThat(variable.getValue()).isEqualTo("sys");
 	}
 }

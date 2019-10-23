@@ -12,7 +12,7 @@ public class Variable implements Serializable {
 	
 	private String name;
 	private Object value;
-	private Location location;
+	private VariableLocation location;
 	
 	@Override
 	public String toString() {

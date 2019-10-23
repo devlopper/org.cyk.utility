@@ -2,6 +2,7 @@ package org.cyk.utility.server.representation;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
@@ -106,7 +107,8 @@ public class RepresentationIntegrationRemoteTest  {
 		Client client = ClientBuilder.newClient();
         WebTarget webTarget;
 		try {
-			webTarget = client.target(url.toURI());
+			URI uri = url.toURI();
+			webTarget = client.target(new URI(uri.getScheme(), uri.getUserInfo(), uri.getHost(), uri.getPort(), uri.getPath()+"api", uri.getQuery(), uri.getFragment()));
 		} catch (URISyntaxException exception) {
 			throw new RuntimeException(exception);
 		}

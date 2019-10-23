@@ -1,6 +1,6 @@
 package org.cyk.utility.__kernel__.configuration;
 
-public enum Location {
+public enum VariableLocation {
 
 	ENVIRONMENT
 	,SYSTEM

@@ -22,7 +22,7 @@ import org.cyk.utility.__kernel__.value.ValueHelper;
 
 public interface ConfigurationHelper {
 
-	static Variable mapVariable(String name,Object value,Location location) {
+	static Variable mapVariable(String name,Object value,VariableLocation location) {
 		Variable variable = VARIABLES.get(name);
 		if(variable == null) {
 			variable = new Variable().setName(name).setValue(value).setLocation(location);
@@ -44,18 +44,18 @@ public interface ConfigurationHelper {
 		new Variable().setName(name);
 		
 		if((value = OperatingSystemHelper.getProperty(name)) != null)
-			return mapVariable(name,value,Location.ENVIRONMENT);
+			return mapVariable(name,value,VariableLocation.ENVIRONMENT);
 		
 		if((value = SystemHelper.getProperty(name)) != null)
-			return mapVariable(name,value,Location.SYSTEM);
+			return mapVariable(name,value,VariableLocation.SYSTEM);
 		
 		if(context == null)
 			context = ContextHelper.get();
 		if(context!=null && (value = ContextHelper.getParameter(name,context)) != null)
-			return mapVariable(name,value,Location.CONTEXT);
+			return mapVariable(name,value,VariableLocation.CONTEXT);
 		
 		if(request != null && (value = RequestHelper.getParameter(name, request)) != null)
-			return mapVariable(name,value,Location.REQUEST);
+			return mapVariable(name,value,VariableLocation.REQUEST);
 		
 		LogHelper.log("configuration parameter "+name+" not found");
 		return null;
@@ -138,7 +138,7 @@ public interface ConfigurationHelper {
 	static void setClassUniformResourceIdentifier(Class<?> klass,String uniformResourceIdentifier) {
 		if(klass == null)
 			return;
-		mapVariable(ConstantParameterName.formatCykParameterNameClassUniformResourceIdentifier(klass), uniformResourceIdentifier, Location.SYSTEM);
+		mapVariable(ConstantParameterName.formatCykParameterNameClassUniformResourceIdentifier(klass), uniformResourceIdentifier, VariableLocation.SYSTEM);
 	}
 	
 	static void setClassUniformResourceIdentifier(Class<?> klass,URI uri) {
@@ -166,7 +166,7 @@ public interface ConfigurationHelper {
 	static void setFieldName(Class<?> klass,Collection<String> paths,String value) {
 		if(klass == null || CollectionHelper.isEmpty(paths))
 			return;
-		mapVariable(ConstantParameterName.formatCykParameterNameFieldName(klass, paths), value, Location.SYSTEM);
+		mapVariable(ConstantParameterName.formatCykParameterNameFieldName(klass, paths), value, VariableLocation.SYSTEM);
 	}
 	
 	static void setFieldName(Class<?> klass,String path,String value) {

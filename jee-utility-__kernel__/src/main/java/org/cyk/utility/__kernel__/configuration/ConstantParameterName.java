@@ -6,6 +6,7 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 
+//TODO to be rename to VariableName and as enumeration
 public interface ConstantParameterName {
 	
 	String CYK_PARAMETER_NAME_FORMAT = "cyk.parameter.%s";
