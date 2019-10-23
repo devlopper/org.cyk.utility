@@ -22,6 +22,11 @@
 	</context-param>	
 	
 	<context-param>
+		<param-name>cyk.variable.swagger.enabled</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	
+	<context-param>
 		<param-name>cyk.variable.swagger.bean.config.resource.package</param-name>
 		<param-value>org.cyk.utility.playground.server.representation.api</param-value>
 	</context-param>
