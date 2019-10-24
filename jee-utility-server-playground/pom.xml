@@ -19,7 +19,7 @@
 	<properties>
 		<data.source.jndi.name>java:/playground/server/dataSource</data.source.jndi.name>
 		<jboss-web.context-root>playground/server</jboss-web.context-root>
-		<web.context>${jboss-web.context-root}</web.context>
+		<web.context>/${jboss-web.context-root}</web.context>
 	</properties>
 
 	<dependencies>
@@ -46,5 +46,15 @@
 			<version>0.1.0</version>
 		</dependency>
 	</dependencies>
+	
+	<profiles>
+		<profile>
+			<id>deployment.thorntail.local</id>
+			<properties>
+				<deployment.standalone.port.offset>1</deployment.standalone.port.offset>
+			</properties>
+		</profile>
+	</profiles>
+	
 			
 </project>

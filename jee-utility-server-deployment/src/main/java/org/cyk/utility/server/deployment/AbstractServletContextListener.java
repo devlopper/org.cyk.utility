@@ -4,6 +4,7 @@ import java.io.Serializable;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 
+import org.apache.commons.lang3.RegExUtils;
 import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
 import org.cyk.utility.__kernel__.configuration.ConstantParameterName;
 import org.cyk.utility.__kernel__.configuration.VariableName;
@@ -54,10 +55,12 @@ public abstract class AbstractServletContextListener extends org.cyk.utility.con
 			String host = ValueHelper.defaultToIfBlank(ConfigurationHelper.getValueAsString(VariableName.SYSTEM_HOST),"localhost");
 			String port = ValueHelper.defaultToIfBlank(ConfigurationHelper.getValueAsString(VariableName.SYSTEM_PORT),"8080");
 			beanConfig.setHost(host+":"+port);
-			beanConfig.setBasePath("/"+ConfigurationHelper.getValueAsString(VariableName.SYSTEM_WEB_CONTEXT, null, null,ConstantEmpty.STRING)+ApplicationProgrammingInterface.PATH);
-			
-			beanConfig.setResourcePackage(ConfigurationHelper.getValueAsString(VariableName.SWAGGER_BEAN_CONFIG_RESOURCE_PACKAGE));
-			
+			String contextPath = "/"+ValueHelper.defaultToIfBlank(ConfigurationHelper.getValueAsString(VariableName.SYSTEM_WEB_CONTEXT),ConstantEmpty.STRING)+ApplicationProgrammingInterface.PATH;
+			contextPath = RegExUtils.replaceAll(contextPath, "////", "/");
+			contextPath = RegExUtils.replaceAll(contextPath, "///", "/");
+			contextPath = RegExUtils.replaceAll(contextPath, "//", "/");				
+			beanConfig.setBasePath(contextPath);			
+			beanConfig.setResourcePackage(ConfigurationHelper.getValueAsString(VariableName.SWAGGER_BEAN_CONFIG_RESOURCE_PACKAGE));			
 			beanConfig.setTitle(ValueHelper.defaultToIfBlank(ConfigurationHelper.getValueAsString(VariableName.SYSTEM_NAME),"System name not defined")
 					+" : Application Programming Interface Documentation");
 			beanConfig.setDescription("Documentation of API using Swagger");

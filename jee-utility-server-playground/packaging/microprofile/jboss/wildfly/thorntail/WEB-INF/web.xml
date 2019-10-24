@@ -4,11 +4,31 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	id="WebApp_ID" version="3.1">
 	
-	<display-name>usermanagement Server</display-name>
+	<display-name>Playground Server</display-name>
 	
 	<context-param>
-		<param-name>cyk.parameter.system.name</param-name>
-		<param-value>${cyk.parameter.system.name}</param-value>
+		<param-name>cyk.variable.system.identifier</param-name>
+		<param-value>playground.server</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>cyk.variable.system.name</param-name>
+		<param-value>Playground Server</param-value>
+	</context-param>
+		
+	<context-param>
+		<param-name>cyk.variable.system.web.context</param-name>
+		<param-value>${jboss-web.context-root}</param-value>
+	</context-param>	
+	
+	<context-param>
+		<param-name>cyk.variable.swagger.enabled</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>cyk.variable.swagger.bean.config.resource.package</param-name>
+		<param-value>org.cyk.utility.playground.server.representation.api</param-value>
 	</context-param>
 	
 	<!-- keycloak -->
