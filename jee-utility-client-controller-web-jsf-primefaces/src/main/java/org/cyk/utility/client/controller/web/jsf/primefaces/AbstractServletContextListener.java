@@ -4,8 +4,9 @@ import java.io.Serializable;
 
 import javax.servlet.ServletContext;
 
+import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
+import org.cyk.utility.__kernel__.configuration.VariableName;
 import org.cyk.utility.__kernel__.string.StringHelper;
-import org.cyk.utility.client.controller.web.Constant;
 import org.cyk.utility.client.controller.web.jsf.primefaces.theme.ThemeDesktopDefault;
 
 public abstract class AbstractServletContextListener extends org.cyk.utility.client.controller.web.jsf.AbstractServletContextListener implements Serializable {
@@ -14,7 +15,7 @@ public abstract class AbstractServletContextListener extends org.cyk.utility.cli
 	@Override
 	protected void __initialize__(ServletContext context) {
 		super.__initialize__(context);
-		String primefacesTheme = getConfigurationParameterValue(Constant.CONTEXT_PARAMETER_NAME_THEME_PRIMEFACES);
+		String primefacesTheme = ConfigurationHelper.getValueAsString(VariableName.USER_INTERFACE_THEME_PRIMEFACES);
 		if(StringHelper.isNotBlank(primefacesTheme)) {
 			context.setInitParameter("primefaces.THEME", primefacesTheme);
 		}

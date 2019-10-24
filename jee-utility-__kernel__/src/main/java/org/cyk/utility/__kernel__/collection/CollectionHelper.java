@@ -30,14 +30,27 @@ import one.util.streamex.StreamEx;
 
 public interface CollectionHelper {
 
-	static <T> Collection<T> instantiate(Class<?> klass,@SuppressWarnings("unchecked") T...elements) {
+	static <T> Collection<T> instantiate(Class<?> klass,Boolean ignoreNullElement,@SuppressWarnings("unchecked") T...elements) {
 		if(klass == null || elements == null || elements.length == 0)
 			return null;
-		if(klass.equals(List.class))
-			return List.of(elements);
+		if(klass.equals(List.class)) {
+			Collection<T> collection = new ArrayList<>();
+			for(T element : elements) {
+				if(element == null && Boolean.TRUE.equals(ignoreNullElement))
+					continue;
+				if(collection == null)
+					collection = new ArrayList<>();
+				collection.add(element);
+			}
+			return collection;
+		}
 		if(klass.equals(Set.class))
 			return Set.of(elements);
 		throw new RuntimeException("instantiate collection of type "+klass+" not yet handled");
+	}
+	
+	static <T> Collection<T> instantiate(Class<?> klass,@SuppressWarnings("unchecked") T...elements) {
+		return instantiate(klass,Boolean.FALSE, elements);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -134,11 +147,11 @@ public interface CollectionHelper {
 		return elements;
 	}
 	
-	static <INSTANCE> Collection<INSTANCE> getFromJsonLocatedAtUniformResourceIdentifier(Class<INSTANCE> klass,URI uri,Map<String,String> fieldsNames) {
+	static <INSTANCE> Collection<INSTANCE> getFromJsonLocatedAtUniformResourceIdentifier(Class<INSTANCE> klass,Object classifier,URI uri,Map<String,String> fieldsNames) {
 		if(klass == null)
 			return null;
 		if(uri == null) {
-			String uniformResourceIdentifier = ConfigurationHelper.getClassUniformResourceIdentifier(klass);
+			String uniformResourceIdentifier = ConfigurationHelper.getClassUniformResourceIdentifier(klass,classifier);
 			if(StringHelper.isBlank(uniformResourceIdentifier))
 				return null;
 			try {
@@ -152,50 +165,128 @@ public interface CollectionHelper {
 		return instances;
 	}
 	
+	static <INSTANCE> Collection<INSTANCE> getFromJsonLocatedAtUniformResourceIdentifier(Class<INSTANCE> klass,URI uri,Map<String,String> fieldsNames) {
+		if(klass == null)
+			return null;
+		return getFromJsonLocatedAtUniformResourceIdentifier(klass,null,uri,fieldsNames);
+	}
+	
+	static <INSTANCE> Collection<INSTANCE> getFromJsonLocatedAtUniformResourceIdentifier(Class<INSTANCE> klass,Object classifier,URI uri,Collection<String> fieldsNames) {
+		if(klass == null)
+			return null;
+		Map<String,String> map = FieldHelper.getFieldsNamesMapping(klass,classifier, fieldsNames);
+		return getFromJsonLocatedAtUniformResourceIdentifier(klass,classifier,uri,map);
+	}
+	
 	static <INSTANCE> Collection<INSTANCE> getFromJsonLocatedAtUniformResourceIdentifier(Class<INSTANCE> klass,URI uri,Collection<String> fieldsNames) {
 		if(klass == null)
 			return null;
-		Map<String,String> map = FieldHelper.getFieldsNamesMapping(klass, fieldsNames);
-		return getFromJsonLocatedAtUniformResourceIdentifier(klass,uri,map);
+		return getFromJsonLocatedAtUniformResourceIdentifier(klass,null,uri,fieldsNames);
+	}
+	
+	static <INSTANCE> Collection<INSTANCE> getFromJsonLocatedAtUniformResourceIdentifier(Class<INSTANCE> klass,Object classifier,URI uri,String...fieldsNames) {
+		if(klass == null)
+			return null;
+		Map<String,String> map = FieldHelper.getFieldsNamesMapping(klass,classifier, fieldsNames);
+		return getFromJsonLocatedAtUniformResourceIdentifier(klass,classifier,uri,map);
 	}
 	
 	static <INSTANCE> Collection<INSTANCE> getFromJsonLocatedAtUniformResourceIdentifier(Class<INSTANCE> klass,URI uri,String...fieldsNames) {
 		if(klass == null)
 			return null;
-		Map<String,String> map = FieldHelper.getFieldsNamesMapping(klass, fieldsNames);
-		return getFromJsonLocatedAtUniformResourceIdentifier(klass,uri,map);
+		return getFromJsonLocatedAtUniformResourceIdentifier(klass,null,uri,fieldsNames);
 	}
 	
-	static <INSTANCE> Collection<INSTANCE> getFromJsonLocatedAtUniformResourceIdentifier(Class<INSTANCE> klass,String uniformResourceIdentifier,Map<String,String> fieldsNames) {
+	static <INSTANCE> Collection<INSTANCE> getFromJsonLocatedAtUniformResourceIdentifier(Class<INSTANCE> klass,Object classifier,String uniformResourceIdentifier,Map<String,String> fieldsNames) {
 		if(klass == null)
 			return null;
 		try {
 			URI uri = StringHelper.isBlank(uniformResourceIdentifier) ? null : new URI(uniformResourceIdentifier);
-			return getFromJsonLocatedAtUniformResourceIdentifier(klass, uri, fieldsNames);
+			return getFromJsonLocatedAtUniformResourceIdentifier(klass,classifier, uri, fieldsNames);
 		} catch (URISyntaxException exception) {
 			throw new RuntimeException(exception);
 		}
 	}
 	
-	static <INSTANCE> Collection<INSTANCE> getFromJsonLocatedAtUniformResourceIdentifier(Class<INSTANCE> klass,String uniformResourceIdentifier,Collection<String> fieldsNames) {
+	static <INSTANCE> Collection<INSTANCE> getFromJsonLocatedAtUniformResourceIdentifier(Class<INSTANCE> klass,String uniformResourceIdentifier,Map<String,String> fieldsNames) {
+		if(klass == null)
+			return null;
+		return getFromJsonLocatedAtUniformResourceIdentifier(klass, null,uniformResourceIdentifier, fieldsNames);
+	}
+	
+	static <INSTANCE> Collection<INSTANCE> getFromJsonLocatedAtUniformResourceIdentifier(Class<INSTANCE> klass,Object classifier,String uniformResourceIdentifier,Collection<String> fieldsNames) {
 		if(klass == null)
 			return null;
 		Map<String,String> map = FieldHelper.getFieldsNamesMapping(klass, fieldsNames);
-		return getFromJsonLocatedAtUniformResourceIdentifier(klass,uniformResourceIdentifier,map);
+		return getFromJsonLocatedAtUniformResourceIdentifier(klass,classifier,uniformResourceIdentifier,map);
+	}
+	
+	static <INSTANCE> Collection<INSTANCE> getFromJsonLocatedAtUniformResourceIdentifier(Class<INSTANCE> klass,String uniformResourceIdentifier,Collection<String> fieldsNames) {
+		if(klass == null)
+			return null;
+		return getFromJsonLocatedAtUniformResourceIdentifier(klass,null,uniformResourceIdentifier,fieldsNames);
+	}
+	
+	static <INSTANCE> Collection<INSTANCE> getFromJsonLocatedAtUniformResourceIdentifier(Class<INSTANCE> klass,Object classifier,String uniformResourceIdentifier,String...fieldsNames) {
+		if(klass == null)
+			return null;
+		Map<String,String> map = FieldHelper.getFieldsNamesMapping(klass, fieldsNames);
+		return getFromJsonLocatedAtUniformResourceIdentifier(klass,classifier,uniformResourceIdentifier,map);	
 	}
 	
 	static <INSTANCE> Collection<INSTANCE> getFromJsonLocatedAtUniformResourceIdentifier(Class<INSTANCE> klass,String uniformResourceIdentifier,String...fieldsNames) {
 		if(klass == null)
 			return null;
-		Map<String,String> map = FieldHelper.getFieldsNamesMapping(klass, fieldsNames);
-		return getFromJsonLocatedAtUniformResourceIdentifier(klass,uniformResourceIdentifier,map);	
+		return getFromJsonLocatedAtUniformResourceIdentifier(klass,null,uniformResourceIdentifier,fieldsNames);	
 	}
 	
 	@SuppressWarnings("unchecked")
-	static <T> List<T> listOf(T...elements) {
+	static <INSTANCE> Collection<INSTANCE> build(Class<INSTANCE> klass,CollectionAsFunctionParameter parameter) {
+		if(parameter == null)
+			return null;
+		if(parameter.getValue() != null)
+			return (Collection<INSTANCE>) parameter.getValue();
+		Collection<INSTANCE> instances = null;
+		if(parameter.getElementClass()!= null && StringHelper.isNotBlank(parameter.getUniformResourceIdentifier())) {
+			Collection<?> collection = getFromJsonLocatedAtUniformResourceIdentifier(parameter.getElementClass(), parameter.getUniformResourceIdentifier(), parameter.getFieldsNames());
+			if(isNotEmpty(collection)) {
+				if(instances == null)
+					instances = new ArrayList<>();
+				instances.addAll((Collection<? extends INSTANCE>) collection);
+			}
+		}
+		return instances;
+	}
+	
+	@SuppressWarnings("unchecked")
+	static <INSTANCE> Collection<INSTANCE> build(Class<INSTANCE> klass,CollectionsAsFunctionParameter parameter) {
+		if(parameter == null)
+			return null;
+		if(parameter.getValue() != null)
+			return (Collection<INSTANCE>) parameter.getValue();
+		Collection<INSTANCE> instances = null;
+		if(isNotEmpty(parameter.getCollectionAsFunctionParameters())) {
+			for(CollectionAsFunctionParameter index : parameter.getCollectionAsFunctionParameters()) {
+				Collection<?> collection = build(klass, index);
+				if(isNotEmpty(collection)) {
+					if(instances == null)
+						instances = new ArrayList<>();
+					instances.addAll((Collection<? extends INSTANCE>) collection);
+				}
+			}
+		}
+		return instances;
+	}
+	
+	@SuppressWarnings("unchecked")
+	static <T> List<T> listOf(Boolean ignoreNullElement,T...elements) {
 		if(elements == null || elements.length == 0)
 			return null;
-		return (List<T>) instantiate(List.class,elements);
+		return (List<T>) instantiate(List.class,ignoreNullElement,elements);
+	}
+	
+	static <T> List<T> listOf(@SuppressWarnings("unchecked") T...elements) {
+		return listOf(Boolean.FALSE,elements);
 	}
 	
 	@SuppressWarnings("unchecked")

@@ -16,12 +16,12 @@ public interface ValueHelper {
 
 	static Boolean isNull(Object value,Checker checker) {
 		if(checker == null)
-			checker = Checker.INSTANCE;
+			checker = Checker.getInstance();
 		return checker.isNull(value);
 	}
 	
 	static Boolean isNull(Object value) {
-		return isNull(value,Checker.INSTANCE);
+		return isNull(value,Checker.getInstance());
 	}
 	
 	static Boolean isNotNull(Object value,Checker checker) {
@@ -31,7 +31,7 @@ public interface ValueHelper {
 	}
 	
 	static Boolean isNotNull(Object value) {
-		return isNotNull(value, Checker.INSTANCE);
+		return isNotNull(value, Checker.getInstance());
 	}
 	
 	static Boolean isEmpty(Object value) {
@@ -125,6 +125,12 @@ public interface ValueHelper {
 		if(value == null)
 			return null;
 		return convert(value, Boolean.class);
+	}
+	
+	static Integer convertToInteger(Object value)  {
+		if(value == null)
+			return null;
+		return convert(value, Integer.class);
 	}
 	
 	static Object convert(Field sourceField,Object sourceFieldValue,Field destinationField) {

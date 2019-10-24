@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 
+import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
+import org.cyk.utility.__kernel__.configuration.VariableName;
 import org.cyk.utility.__kernel__.context.ContextHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
@@ -29,7 +31,7 @@ public abstract class AbstractServletContextListener extends AbstractSystemConte
 		org.cyk.utility.__kernel__.identifier.resource.Component.PATH_ROOT = context.getContextPath();		
 		ContextHelper.set(context);
 		super.__initialize__(context);
-		AbstractThemeClassGetterImpl.CLASS_NAME = getConfigurationParameterValue(Constant.CONTEXT_PARAMETER_NAME_THEME_CLASS_NAME);
+		AbstractThemeClassGetterImpl.CLASS_NAME = ConfigurationHelper.getValueAsString(VariableName.USER_INTERFACE_THEME_CLASS_NAME);
 		if(StringHelper.isBlank(AbstractThemeClassGetterImpl.CLASS_NAME))
 			AbstractThemeClassGetterImpl.CLASS = __getThemeClass__();
 		else

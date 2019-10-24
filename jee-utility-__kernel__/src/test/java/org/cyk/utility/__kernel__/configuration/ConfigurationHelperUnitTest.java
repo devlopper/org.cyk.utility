@@ -52,4 +52,17 @@ public class ConfigurationHelperUnitTest extends AbstractWeldUnitTest {
 		assertThat(variable.getLocation()).isEqualTo(VariableLocation.SYSTEM);
 		assertThat(variable.getValue()).isEqualTo("sys");
 	}
+	
+	@Test
+	public void getVariable_notdef(){
+		Variable variable = getVariable("unittest.config.var.notdef");
+		assertThat(variable).isNotNull();
+		assertThat(variable.getLocation()).isEqualTo(VariableLocation.ENVIRONMENT);
+		assertThat(variable.getValue()).isEqualTo("${value}");
+	}
+	
+	@Test
+	public void getValue_notdef(){
+		assertThat(ConfigurationHelper.getValue("unittest.config.var.notdef")).isNull();
+	}
 }

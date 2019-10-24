@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
+import org.cyk.utility.__kernel__.configuration.VariableName;
 import org.cyk.utility.__kernel__.file.FileHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.AbstractObject;
-import org.cyk.utility.client.controller.Constant;
 import org.cyk.utility.client.controller.component.file.File;
 import org.cyk.utility.client.controller.component.file.FileImage;
 import org.cyk.utility.client.controller.component.file.FileImageBuilder;
@@ -43,24 +43,24 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 	private TagMap tagMap;
 	private Scripts scripts;
 	private Object request;
-	
-	
+
 	@Override
 	public Theme build() {
 		setIdentifier(__getIdentifier__());
 		setTemplate(__inject__(ThemeTemplate.class));
 		getTemplate().setIdentifier(__getTemplateIdentifier__());
 		
-		String logoFileName = __getConfigurationParameterValue__(Constant.CONTEXT_PARAMETER_NAME_THEME_LOGO_FILE_NAME,null);
+		String logoFileName = ConfigurationHelper.getValueAsString(VariableName.USER_INTERFACE_THEME_LOGO_FILE_NAME);
 		if(StringHelper.isBlank(logoFileName))
-			logoFileName = FileHelper.concatenateNameAndExtension(__getConfigurationParameterValue__(Constant.CONTEXT_PARAMETER_NAME_THEME_LOGO_FILE_NAME_PREFIX,"logo")
-					, __getConfigurationParameterValue__(Constant.CONTEXT_PARAMETER_NAME_THEME_LOGO_FILE_NAME_EXTENSION,"png"));
+			logoFileName = FileHelper.concatenateNameAndExtension(ConfigurationHelper
+					.getValueAsString(VariableName.USER_INTERFACE_THEME_LOGO_FILE_NAME_PREFIX,null,null,"logo")
+					, ConfigurationHelper.getValueAsString(VariableName.USER_INTERFACE_THEME_LOGO_FILE_NAME_EXTENSION,null,null,"png"));
 		FileImageBuilder fileImageBuilder = __inject__(FileImageBuilder.class);
 		
 		fileImageBuilder.setRequest(getRequest());
-		fileImageBuilder.setResourcesFolderName(__getConfigurationParameterValue__(Constant.CONTEXT_PARAMETER_NAME_THEME_LOGO_FILE_RESOURCES_FOLDER,null));
+		fileImageBuilder.setResourcesFolderName(ConfigurationHelper.getValueAsString(VariableName.USER_INTERFACE_THEME_LOGO_FILE_RESOURCES_FOLDER));
 		fileImageBuilder.getFile(Boolean.TRUE)
-		.setValuePath(__getConfigurationParameterValue__(Constant.CONTEXT_PARAMETER_NAME_THEME_LOGO_FILE_FOLDER,"image"))
+		.setValuePath(ConfigurationHelper.getValueAsString(VariableName.USER_INTERFACE_THEME_LOGO_FILE_FOLDER,null,null,"image"))
 		.setValueName(logoFileName);
 		setLogo(fileImageBuilder.execute().getOutput());
 		
@@ -382,11 +382,6 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 	}
 	
 	/**/
-	
-	protected String __getConfigurationParameterValue__(String name,String nullValue) {
-		Object request = getRequest();
-		return (String) ConfigurationHelper.getValue(name, __getContext__(request), request, nullValue);
-	}
 	
 	/**/
 

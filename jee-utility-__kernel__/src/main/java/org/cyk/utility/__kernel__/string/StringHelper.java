@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
-import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.constant.ConstantSeparator;
 
 public interface StringHelper {
@@ -78,9 +77,19 @@ public interface StringHelper {
 	}
 	
 	static String concatenate(Collection<String> strings,String separator) {
-		if(strings == null || strings.isEmpty())
+		if(CollectionHelper.isEmpty(strings))
 			return null;
 		return StringUtils.join(strings,separator);
+	}
+	
+	static String concatenateFromObjects(Collection<Object> objects,Object separator) {
+		if(CollectionHelper.isEmpty(objects))
+			return null;
+		Collection<String> strings = get(objects);
+		if(CollectionHelper.isEmpty(strings))
+			return null;
+		String separatorAsString = get(separator);
+		return concatenate(strings, separatorAsString);
 	}
 	
 	static String applyCase(String string, Case kase) {
@@ -143,7 +152,30 @@ public interface StringHelper {
 	}
 
 	static String get(Object object) {
-		return object == null ? ConstantEmpty.STRING : object.toString();
+		if(object == null)
+			return null;
+		if(object instanceof String)
+			return (String) object;
+		if(object instanceof Class)
+			return ((Class<?>) object).getName();
+		return object.toString();
+	}
+	
+	static Collection<String> get(Collection<Object> objects) {
+		if(CollectionHelper.isEmpty(objects))
+			return null;
+		Collection<String> strings = null;
+		for(Object index : objects) {
+			if(index == null)
+				continue;
+			String string = get(index);
+			if(isBlank(string))
+				continue;
+			if(strings == null)
+				strings = new ArrayList<>();
+			strings.add(string);
+		}
+		return strings;
 	}
 	
 	static Collection<String> getLines(String string) {

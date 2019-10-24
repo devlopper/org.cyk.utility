@@ -38,6 +38,7 @@
 					<environmentVariables>
 						<unittest.config.var.01>env</unittest.config.var.01>
 						<unittest.config.var.02>env</unittest.config.var.02>
+						<unittest.config.var.notdef>$${value}</unittest.config.var.notdef>					
 					</environmentVariables>
 				</configuration>
 			</plugin>

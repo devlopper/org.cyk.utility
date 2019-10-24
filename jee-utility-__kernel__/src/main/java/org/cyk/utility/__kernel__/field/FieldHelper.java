@@ -848,14 +848,14 @@ public interface FieldHelper {
 		copy(map, key, destinationObject, (Field)null);	
 	}
 	
-	static Map<String,String> getFieldsNamesMapping(Class<?> klass,Collection<String> fieldsNames) {
+	static Map<String,String> getFieldsNamesMapping(Class<?> klass,Object classifier,Collection<String> fieldsNames) {
 		if(klass == null || CollectionHelper.isEmpty(fieldsNames))
 			return null;
 		Map<String,String> map = null;
 		for(String index : fieldsNames) {
 			if(StringHelper.isBlank(index))
 				continue;
-			String value = ConfigurationHelper.getFieldName(klass, index);
+			String value = ConfigurationHelper.getFieldName(klass,classifier, index);
 			if(StringHelper.isBlank(value)) {
 				value = index;
 			}
@@ -866,10 +866,22 @@ public interface FieldHelper {
 		return map;
 	}
 	
+	static Map<String,String> getFieldsNamesMapping(Class<?> klass,Collection<String> fieldsNames) {
+		if(klass == null || CollectionHelper.isEmpty(fieldsNames))
+			return null;
+		return getFieldsNamesMapping(klass, null, fieldsNames);
+	}
+	
+	static Map<String,String> getFieldsNamesMapping(Class<?> klass,Object classifier,String...fieldsNames) {
+		if(klass == null || ArrayHelper.isEmpty(fieldsNames))
+			return null;
+		return getFieldsNamesMapping(klass,classifier,CollectionHelper.listOf(fieldsNames));
+	}
+	
 	static Map<String,String> getFieldsNamesMapping(Class<?> klass,String...fieldsNames) {
 		if(klass == null || ArrayHelper.isEmpty(fieldsNames))
 			return null;
-		return getFieldsNamesMapping(klass,CollectionHelper.listOf(fieldsNames));
+		return getFieldsNamesMapping(klass,null,fieldsNames);
 	}
 	
 	/**/

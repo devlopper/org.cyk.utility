@@ -3,7 +3,7 @@ package org.cyk.utility.__kernel__.identifier.resource;
 import java.net.URI;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.__kernel__.configuration.ConstantParameterName;
+import org.cyk.utility.__kernel__.configuration.VariableName;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.Value;
 
@@ -28,6 +28,6 @@ public interface ProxyUniformResourceIdentifierGetter {
 		}
 	};
 	
-	Value UNIFORM_RESOURCE_IDENTIFIER_STRING = DependencyInjection.inject(Value.class).setConfigurationValueName(ConstantParameterName.PROXY_UNIFORM_RESOURCE_IDENTIFIER);
+	Value UNIFORM_RESOURCE_IDENTIFIER_STRING = DependencyInjection.inject(Value.class).setConfigurationValueName(VariableName.PROXY_UNIFORM_RESOURCE_IDENTIFIER);
 	Value UNIFORM_RESOURCE_IDENTIFIER = DependencyInjection.inject(Value.class);
 }

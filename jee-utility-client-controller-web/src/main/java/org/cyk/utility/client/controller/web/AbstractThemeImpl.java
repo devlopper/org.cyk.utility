@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
+import org.cyk.utility.__kernel__.configuration.VariableName;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.file.MimeTypeGetter;
 
@@ -82,11 +84,11 @@ public abstract class AbstractThemeImpl extends org.cyk.utility.client.controlle
 	}
 	
 	protected String __getFaviconFileExtension__(Object request,Integer width,Integer height) {
-		return __getConfigurationParameterValue__(Constant.CONTEXT_PARAMETER_NAME_THEME_FAVICON_FILE_NAME_EXTENSION, "png");
+		return ConfigurationHelper.getValueAsString(VariableName.USER_INTERFACE_THEME_FAVICON_FILE_NAME_EXTENSION,null,null, "png");
 	}
 	
 	protected String __getFaviconFileNamePrefix__(Object request,Integer width,Integer height) {
-		return __getConfigurationParameterValue__(Constant.CONTEXT_PARAMETER_NAME_THEME_FAVICON_FILE_NAME_PREFIX, "favicon");
+		return ConfigurationHelper.getValueAsString(VariableName.USER_INTERFACE_THEME_FAVICON_FILE_NAME_PREFIX,null,null, "favicon");
 	}
 	
 	protected String __getFaviconFileName__(Object request,Integer width,Integer height) {
@@ -94,7 +96,7 @@ public abstract class AbstractThemeImpl extends org.cyk.utility.client.controlle
 	}
 	
 	protected String __getImageFolder__(Object request) {
-		return __getConfigurationParameterValue__(Constant.CONTEXT_PARAMETER_NAME_THEME_FAVICON_FILE_FOLDER, "image");
+		return ConfigurationHelper.getValueAsString(VariableName.USER_INTERFACE_THEME_FAVICON_FILE_FOLDER,null,null, "image");
 	}
 	
 	protected void __addTagMetaByHttpEquivByContent__(String httpEquiv, String content) {
