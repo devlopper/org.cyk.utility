@@ -18,6 +18,7 @@ import javax.ws.rs.core.Response;
 import org.cyk.utility.server.persistence.query.filter.FilterDto;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 /**
  * 
@@ -28,27 +29,27 @@ import io.swagger.annotations.Api;
 public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY,ENTITY_COLLECTION> extends RepresentationServiceProvider {
 
 	/* Create */
+	
 	@POST
 	@Path(PATH_CREATE_ONE)
 	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+	@ApiOperation(value = "create one",tags = {"create"})
 	Response createOne(ENTITY entity);
 	
 	@POST
 	@Path(PATH_CREATE_MANY)
 	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+	@ApiOperation(value = "create many using collection",tags = {"create"})
 	Response createMany(Collection<ENTITY> entities,@QueryParam(PARAMETER_PROPERTIES) String properties);
 	
 	@POST
 	@Path(PATH_CREATE_MANY_COLLECTION)
 	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+	@ApiOperation(value = "create many using custom collection",tags = {"create"})
 	Response createMany(ENTITY_COLLECTION entityCollection,@QueryParam(PARAMETER_PROPERTIES) String properties);
 	
 	/* Read */ 
-	/*@GET
-	@Path(PATH_GET_MANY)
-	@Produces({ MediaType.APPLICATION_XML })
-	Response getMany();
-	*/
+	
 	@GET
 	@Path(PATH_GET_MANY)
 	@Produces({ MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML })
@@ -62,6 +63,7 @@ public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY,ENTITY_COLLECTIO
 	Response getOne(@PathParam(PARAMETER_IDENTIFIER) String identifier,@QueryParam(PARAMETER_TYPE) String type,@QueryParam(PARAMETER_FIELDS) String fields);
 	
 	/* Update */
+	
 	/* Using partial */
 	//@PATCH FIXME Not working so we will use PUT for the moment
 	@PUT
@@ -76,6 +78,7 @@ public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY,ENTITY_COLLECTIO
 	Response updateMany(Collection<ENTITY> entities,@QueryParam(PARAMETER_FIELDS) String fields);
 	
 	/* Delete */
+	
 	@DELETE
 	@Path(PATH_DELETE_ONE)
 	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
@@ -102,22 +105,16 @@ public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY,ENTITY_COLLECTIO
 			,@QueryParam(PARAMETER_COLUMN_INDEX_FIELD_NAME) List<String> columnIndexFieldNames);
 	
 	/* Count */
+	
 	@GET
 	@Path(PATH_GET_COUNT)
 	Response count(@QueryParam(PARAMETER_FILTER) FilterDto filter);
 	
-	/**/
+	/* Import */
 
-	/* Instantiate */
-	/*ENTITY instantiate(PERSISTENCE_ENTITY persistenceEntity);
-	Collection<ENTITY> instantiate(Collection<PERSISTENCE_ENTITY> persistenceEntities);
-	PERSISTENCE_ENTITY instantiatePersistenceEntity(ENTITY entity);
-	Collection<PERSISTENCE_ENTITY> instantiatePersistenceEntity(Collection<ENTITY> entities);
-	PERSISTENCE_ENTITY getPersistenceEntityByIdentifier(ENTITY entity);
-	Collection<PERSISTENCE_ENTITY> getPersistenceEntityByIdentifier(Collection<ENTITY> entities);
-	
-	Class<ENTITY> getEntityClass();
-	Class<PERSISTENCE_ENTITY> getPersistenceEntityClass();
-	*/
-	
+	@POST
+	@Path(PATH_IMPORT)
+	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+	@Produces({ MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML })
+	Response import_(@QueryParam(PARAMETER_UNIFORM_RESOURCE_IDENTIFIER) List<String> uniformResourceIdentifiers,Boolean ignoreKnownUniformResourceIdentifiers);
 }

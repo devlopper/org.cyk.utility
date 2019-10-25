@@ -14,6 +14,7 @@ import org.cyk.utility.__kernel__.collection.CollectionInstance;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.array.ArrayInstanceTwoDimensionString;
@@ -330,6 +331,15 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 		deleteAll(null);
 		return this;
 	}
+	
+	/* Import */
+	
+	@Override
+	public BusinessEntity<ENTITY> import_(Properties properties) {
+		ThrowableHelper.throwNotYetImplemented();
+		return this;
+	}
+	
 	
 	/**/
 	

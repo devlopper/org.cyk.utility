@@ -128,15 +128,15 @@ public interface ConfigurationHelper {
 	}
 	
 	static Boolean is(String name,Object context,Object request) {
-		return getValueAsBoolean(name, context, request);
+		return Boolean.TRUE.equals(getValueAsBoolean(name, context, request));
 	}
 	
 	static Boolean is(String name,Object context) {
-		return getValueAsBoolean(name, context, null);
+		return Boolean.TRUE.equals(getValueAsBoolean(name, context, null));
 	}
 	
 	static Boolean is(String name) {
-		return getValueAsBoolean(name, null, null);
+		return Boolean.TRUE.equals(getValueAsBoolean(name, null, null));
 	}
 	
 	static Integer getValueAsInteger(String name,Object context,Object request) {

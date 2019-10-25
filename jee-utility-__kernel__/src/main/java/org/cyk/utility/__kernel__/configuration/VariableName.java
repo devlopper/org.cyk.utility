@@ -119,7 +119,7 @@ public interface VariableName {
 	/* Field */
 	
 	static String buildFieldName(Class<?> klass,Object classifier,Collection<String> paths) {
-		return build(klass,FieldHelper.join(paths));
+		return build(klass,classifier,FieldHelper.join(paths));
 	}
 	
 	static String buildFieldName(Class<?> klass,Collection<String> paths) {

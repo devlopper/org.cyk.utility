@@ -156,6 +156,11 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 		return function.execute().getResponse();
 	}
 
+	@Override
+	public Response import_(List<String> uniformResourceIdentifiers, Boolean ignoreKnownUniformResourceIdentifiers) {
+		return Response.serverError().entity("Not yet implemented").build();
+	}
+	
 	/**/
 	
 	@SuppressWarnings("unchecked")

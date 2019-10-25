@@ -45,6 +45,7 @@ public interface RepresentationServiceProvider {
 	String PARAMETER_WORKBOOK_NAME = ConstantString.WORKBOOK_NAME;
 	String PARAMETER_SHEET_NAME = ConstantString.SHEET_NAME;
 	String PARAMETER_COLUMN_INDEX_FIELD_NAME = ConstantString.COLUMN_INDEX_FIELD_NAME;
+	String PARAMETER_UNIFORM_RESOURCE_IDENTIFIER = "uniformResourceIdentifier";
 	String PARAMETER_PROPERTIES = ConstantString.PROPERTIES;
 	
 	/* Format */
@@ -81,6 +82,8 @@ public interface RepresentationServiceProvider {
 	
 	String PATH_SAVE_FROM_FILE_EXCEL_SHEET = __SAVE__+__SLASH__+__FROM__+__SLASH__+__FILE__+__SLASH__+__EXCEL__+__SLASH__+__SHEET__;
 	
+	String PATH_IMPORT = "import";
+			
 	/**/
 	
 	
