@@ -25,6 +25,8 @@ import org.cyk.utility.__kernel__.value.ValueHelper;
 
 public interface ConfigurationHelper {
 
+	/* variable mapping */
+	
 	static Variable mapVariable(String name,Object value,VariableLocation location) {
 		Variable variable = VARIABLES.get(name);
 		if(variable == null) {
@@ -36,6 +38,8 @@ public interface ConfigurationHelper {
 		}
 		return variable;
 	}
+	
+	/* get variable */
 	
 	static Variable getVariable(String name,Object context,Object request) {
 		if(StringHelper.isBlank(name) || VARIABLES_NAMES_NOT_BOUND.contains(name))

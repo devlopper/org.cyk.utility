@@ -27,7 +27,6 @@ public abstract class AbstractPersistenceIdentifiedByStringImpl<ENTITY extends A
 	protected Class<HIERARCHY> __hierarchyClass__;
 	protected Class<HIERARCHY_PERSISTENCE> __hierarchyPersistenceClass__;
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void __listenBeforePostConstruct__() {
 		super.__listenBeforePostConstruct__();

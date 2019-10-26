@@ -10,7 +10,7 @@ import org.cyk.utility.client.controller.component.grid.GridBuilder;
 import org.cyk.utility.client.controller.data.DataHelper;
 import org.cyk.utility.client.controller.data.DataIdentifiedByString;
 import org.cyk.utility.client.controller.data.DataIdentifiedByStringAndCoded;
-import org.cyk.utility.client.controller.data.DataIdentifiedByStringAndLinkedByString;
+import org.cyk.utility.client.controller.data.DataIdentifiedByStringAndLinkedByStringAndNamed;
 import org.cyk.utility.client.controller.data.RowData;
 
 public class WindowContainerManagedWindowBuilderListDataDefaultImpl extends AbstractWindowContainerManagedWindowBuilderListDataImpl implements WindowContainerManagedWindowBuilderListDataDefault,Serializable {
@@ -28,10 +28,8 @@ public class WindowContainerManagedWindowBuilderListDataDefaultImpl extends Abst
 			fieldNames.removeMany(org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString.PROPERTY_PARENTS
 					,org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString.PROPERTY_NUMBER_OF_PARENTS
 					,org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString.PROPERTY_NUMBER_OF_CHILDREN);
-		}else if(ClassHelper.isInstanceOf(getSystemAction().getEntityClass(), DataIdentifiedByStringAndLinkedByString.class)) {
-			fieldNames.removeMany(org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString.PROPERTY_PARENTS
-					,DataIdentifiedByStringAndLinkedByString.PROPERTY_LINK
-					);
+		}else if(ClassHelper.isInstanceOf(getSystemAction().getEntityClass(), DataIdentifiedByStringAndLinkedByStringAndNamed.class)) {
+			
 		}
 		for(String index : fieldNames.get()) {
 			gridBuilder.addColumnsByFieldNames(FieldHelper.join(RowData.PROPERTY_DATA,index));				

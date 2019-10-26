@@ -5,6 +5,6 @@ public interface DataIdentifiedByStringAndLinkedByString extends DataIdentifiedB
 	String getLink();
 	DataIdentifiedByStringAndLinkedByString setLink(String link);
 	
-	public static final String PROPERTY_LINK = "link";
+	//public static final String PROPERTY_LINK = "link";
 	
 }
