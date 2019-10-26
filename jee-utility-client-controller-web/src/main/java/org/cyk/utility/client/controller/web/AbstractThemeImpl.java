@@ -5,8 +5,8 @@ import java.io.Serializable;
 import javax.servlet.http.HttpServletRequest;
 
 import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
-import org.cyk.utility.__kernel__.configuration.VariableName;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.variable.VariableName;
 import org.cyk.utility.file.MimeTypeGetter;
 
 public abstract class AbstractThemeImpl extends org.cyk.utility.client.controller.component.theme.AbstractThemeImpl implements Theme,Serializable {

@@ -17,6 +17,7 @@ import java.util.Map;
 
 import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.__kernel__.variable.VariableHelper;
 import org.junit.jupiter.api.Test;
 
 import lombok.AllArgsConstructor;
@@ -54,7 +55,7 @@ public class CollectionHelperUnitTest extends AbstractWeldUnitTest {
 	
 	@Test
 	public void getFromJsonLocatedAtUniformResourceIdentifier_uriIsNull() throws URISyntaxException{
-		ConfigurationHelper.setClassUniformResourceIdentifier(Person.class, getClass().getResource("person.json"));
+		VariableHelper.writeClassUniformResourceIdentifier(Person.class, getClass().getResource("person.json"));
 		Collection<Person> persons = CollectionHelper.getFromJsonLocatedAtUniformResourceIdentifier(Person.class, (URI)null,"identifier","name","age");
 		assertThat(persons).isNotNull();
 		assertThat(persons).containsExactly(new Person("1","zadi",12),new Person("2","konan",28));

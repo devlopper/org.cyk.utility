@@ -6,11 +6,11 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 
 import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
-import org.cyk.utility.__kernel__.configuration.VariableName;
 import org.cyk.utility.__kernel__.context.ContextHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.variable.VariableName;
 import org.cyk.utility.client.controller.AbstractSystemContextListener;
 import org.cyk.utility.client.controller.component.theme.AbstractThemeClassGetterImpl;
 import org.cyk.utility.system.node.SystemNodeClient;

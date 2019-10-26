@@ -1,10 +1,11 @@
-package org.cyk.utility.__kernel__.configuration;
+package org.cyk.utility.__kernel__.variable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.__kernel__.variable.VariableName;
 import org.junit.jupiter.api.Test;
 
 public class VariableNameUnitTest extends AbstractWeldUnitTest {
@@ -27,7 +28,7 @@ public class VariableNameUnitTest extends AbstractWeldUnitTest {
 	
 	@Test
 	public void build_many(){
-		assertThat(VariableName.build("v1","v2")).isEqualTo("cyk.variable.v1|v2");
+		assertThat(VariableName.build("v1","v2")).isEqualTo("cyk.variable.v1-v2");
 	}
 	
 	@Test
@@ -54,7 +55,7 @@ public class VariableNameUnitTest extends AbstractWeldUnitTest {
 	public void systemPort(){
 		assertThat(VariableName.SYSTEM_PORT).isEqualTo("cyk.variable.system.port");
 	}
-	
+	 
 	@Test
 	public void systemWebContext(){
 		assertThat(VariableName.SYSTEM_WEB_CONTEXT).isEqualTo("cyk.variable.system.web.context");
@@ -62,11 +63,21 @@ public class VariableNameUnitTest extends AbstractWeldUnitTest {
 	
 	@Test
 	public void buildClassUniformResourceIdentifier(){
-		assertThat(VariableName.buildClassUniformResourceIdentifier(Integer.class, null)).isEqualTo("cyk.variable.java.lang.Integer|uri");
+		assertThat(VariableName.buildClassUniformResourceIdentifier(Integer.class, null)).isEqualTo("cyk.variable.java.lang.Integer-uri");
 	}
 	
 	@Test
 	public void buildClassUniformResourceIdentifier_classifierIs1(){
-		assertThat(VariableName.buildClassUniformResourceIdentifier(Integer.class, 1)).isEqualTo("cyk.variable.java.lang.Integer|1|uri");
+		assertThat(VariableName.buildClassUniformResourceIdentifier(Integer.class, 1)).isEqualTo("cyk.variable.java.lang.Integer-1-uri");
+	}
+	
+	@Test
+	public void buildFieldName(){
+		assertThat(VariableName.buildFieldName(Integer.class, "value")).isEqualTo("cyk.variable.java.lang.Integer-value");
+	}
+	
+	@Test
+	public void buildFieldName_classifierIs1(){
+		assertThat(VariableName.buildFieldName(Integer.class,(Object)1, "value")).isEqualTo("cyk.variable.java.lang.Integer-1-value");
 	}
 }

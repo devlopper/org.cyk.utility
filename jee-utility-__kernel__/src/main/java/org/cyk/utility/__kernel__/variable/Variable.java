@@ -1,4 +1,4 @@
-package org.cyk.utility.__kernel__.configuration;
+package org.cyk.utility.__kernel__.variable;
 
 import java.io.Serializable;
 

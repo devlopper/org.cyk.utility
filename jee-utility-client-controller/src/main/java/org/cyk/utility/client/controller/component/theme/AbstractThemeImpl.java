@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
-import org.cyk.utility.__kernel__.configuration.VariableName;
 import org.cyk.utility.__kernel__.file.FileHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.variable.VariableName;
 import org.cyk.utility.client.controller.AbstractObject;
 import org.cyk.utility.client.controller.component.file.File;
 import org.cyk.utility.client.controller.component.file.FileImage;

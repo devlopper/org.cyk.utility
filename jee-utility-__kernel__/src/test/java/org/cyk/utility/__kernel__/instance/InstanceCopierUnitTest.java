@@ -14,6 +14,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.__kernel__.variable.VariableHelper;
 import org.junit.jupiter.api.Test;
 
 import lombok.Getter;
@@ -94,7 +95,7 @@ public class InstanceCopierUnitTest extends AbstractWeldUnitTest {
 	
 	@Test
 	public void copy_fromMap_keyDifferentToFieldName(){
-		ConfigurationHelper.setFieldName(CopyFromMap.class, "the_string", "string");
+		VariableHelper.writeFieldName(CopyFromMap.class, "the_string", "string");
 		CopyFromMap object = new CopyFromMap();
 		assertThat(object.getString()).isNull();
 		assertThat(object.getInteger()).isNull();
@@ -108,7 +109,7 @@ public class InstanceCopierUnitTest extends AbstractWeldUnitTest {
 	
 	@Test
 	public void copyFromJson_keyDifferentToFieldName(){
-		ConfigurationHelper.setFieldName(CopyFromMap.class, "the_string", "string");
+		VariableHelper.writeFieldName(CopyFromMap.class, "the_string", "string");
 		CopyFromMap object = new CopyFromMap();
 		assertThat(object.getString()).isNull();
 		assertThat(object.getInteger()).isNull();

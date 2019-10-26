@@ -14,7 +14,7 @@ import javax.ws.rs.core.Response;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
-import org.cyk.utility.__kernel__.configuration.VariableName;
+import org.cyk.utility.__kernel__.variable.VariableName;
 
 import io.swagger.annotations.Api;
 

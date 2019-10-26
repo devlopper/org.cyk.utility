@@ -5,8 +5,8 @@ import java.io.Serializable;
 import javax.servlet.ServletContext;
 
 import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
-import org.cyk.utility.__kernel__.configuration.VariableName;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.variable.VariableName;
 import org.cyk.utility.client.controller.web.jsf.primefaces.theme.ThemeDesktopDefault;
 
 public abstract class AbstractServletContextListener extends org.cyk.utility.client.controller.web.jsf.AbstractServletContextListener implements Serializable {

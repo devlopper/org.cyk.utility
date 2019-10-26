@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.__kernel__.variable.VariableHelper;
 import org.junit.jupiter.api.Test;
 
 import lombok.AllArgsConstructor;
@@ -45,7 +46,7 @@ public class InstanceGetterUnitTest extends AbstractWeldUnitTest {
 	
 	@Test
 	public void getFromUniformResourceIdentifier(){
-		ConfigurationHelper.setClassUniformResourceIdentifier(Person.class, getClass().getResource("person.json"));
+		VariableHelper.writeClassUniformResourceIdentifier(Person.class, getClass().getResource("person.json"));
 		Collection<Person> persons = InstanceGetter.getInstance().getFromUniformResourceIdentifier(Person.class, "identifier","name","identifier");
 		assertThat(persons).isNotNull();
 		assertThat(persons.stream().map(Person::getIdentifier)).containsExactly("1","2");
@@ -53,7 +54,7 @@ public class InstanceGetterUnitTest extends AbstractWeldUnitTest {
 	
 	@Test
 	public void getFromUniformResourceIdentifier_1(){
-		ConfigurationHelper.setClassUniformResourceIdentifier(Person.class, getClass().getResource("person_1.json"));
+		VariableHelper.writeClassUniformResourceIdentifier(Person.class, getClass().getResource("person_1.json"));
 		Collection<Person> persons = InstanceGetter.getInstance().getFromUniformResourceIdentifier(Person.class, "identifier","name","identifier");
 		assertThat(persons).isNotNull();
 		assertThat(persons.stream().map(Person::getIdentifier)).containsExactly("1","2");
@@ -61,7 +62,7 @@ public class InstanceGetterUnitTest extends AbstractWeldUnitTest {
 	
 	@Test
 	public void getFromUniformResourceIdentifier_2(){
-		ConfigurationHelper.setClassUniformResourceIdentifier(Person.class, getClass().getResource("person_2.json"));
+		VariableHelper.writeClassUniformResourceIdentifier(Person.class, getClass().getResource("person_2.json"));
 		Collection<Person> persons = InstanceGetter.getInstance().getFromUniformResourceIdentifier(Person.class, "identifier","name","identifier");
 		assertThat(persons).isNotNull();
 		assertThat(persons.stream().map(Person::getIdentifier)).containsExactly("A","B");
@@ -69,8 +70,8 @@ public class InstanceGetterUnitTest extends AbstractWeldUnitTest {
 	
 	@Test
 	public void getFromUniformResourceIdentifier_1_2_classifier_1(){
-		ConfigurationHelper.setClassUniformResourceIdentifier(Person.class,"1", getClass().getResource("person_1.json"));
-		ConfigurationHelper.setClassUniformResourceIdentifier(Person.class,"2", getClass().getResource("person_2.json"));
+		VariableHelper.writeClassUniformResourceIdentifier(Person.class,"1", getClass().getResource("person_1.json"));
+		VariableHelper.writeClassUniformResourceIdentifier(Person.class,"2", getClass().getResource("person_2.json"));
 		Collection<Person> persons = InstanceGetter.getInstance().getFromUniformResourceIdentifier(Person.class,"1", List.of("identifier","name","identifier"));
 		assertThat(persons).isNotNull();
 		assertThat(persons.stream().map(Person::getIdentifier)).containsExactly("1","2");
@@ -78,8 +79,8 @@ public class InstanceGetterUnitTest extends AbstractWeldUnitTest {
 	
 	@Test
 	public void getFromUniformResourceIdentifier_1_2_classifier_2(){
-		ConfigurationHelper.setClassUniformResourceIdentifier(Person.class,"1", getClass().getResource("person_1.json"));
-		ConfigurationHelper.setClassUniformResourceIdentifier(Person.class,"2", getClass().getResource("person_2.json"));
+		VariableHelper.writeClassUniformResourceIdentifier(Person.class,"1", getClass().getResource("person_1.json"));
+		VariableHelper.writeClassUniformResourceIdentifier(Person.class,"2", getClass().getResource("person_2.json"));
 		Collection<Person> persons = InstanceGetter.getInstance().getFromUniformResourceIdentifier(Person.class,2, "identifier","name","identifier");
 		assertThat(persons).isNotNull();
 		assertThat(persons.stream().map(Person::getIdentifier)).containsExactly("A","B");
@@ -87,8 +88,8 @@ public class InstanceGetterUnitTest extends AbstractWeldUnitTest {
 	
 	@Test
 	public void getFromUniformResourceIdentifier_1_2(){
-		ConfigurationHelper.setClassUniformResourceIdentifier(Person.class,"1", getClass().getResource("person_1.json"));
-		ConfigurationHelper.setClassUniformResourceIdentifier(Person.class,"2", getClass().getResource("person_2.json"));
+		VariableHelper.writeClassUniformResourceIdentifier(Person.class,"1", getClass().getResource("person_1.json"));
+		VariableHelper.writeClassUniformResourceIdentifier(Person.class,"2", getClass().getResource("person_2.json"));
 		Collection<Person> persons = InstanceGetter.getInstance().getFromUniformResourceIdentifiers(Person.class, List.of("1","2"), "identifier","name","identifier");
 		assertThat(persons).isNotNull();
 		assertThat(persons.stream().map(Person::getIdentifier)).containsExactly("1","2","A","B");

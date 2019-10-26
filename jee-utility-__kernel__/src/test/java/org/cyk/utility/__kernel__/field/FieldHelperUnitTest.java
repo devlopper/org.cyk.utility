@@ -4,21 +4,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.cyk.utility.__kernel__.field.FieldHelper.disjoin;
 import static org.cyk.utility.__kernel__.field.FieldHelper.filter;
 import static org.cyk.utility.__kernel__.field.FieldHelper.get;
+import static org.cyk.utility.__kernel__.field.FieldHelper.getBusinessIdentifier;
 import static org.cyk.utility.__kernel__.field.FieldHelper.getByName;
 import static org.cyk.utility.__kernel__.field.FieldHelper.getIdentifiers;
-import static org.cyk.utility.__kernel__.field.FieldHelper.getSystemIdentifier;
-import static org.cyk.utility.__kernel__.field.FieldHelper.getBusinessIdentifier;
-import static org.cyk.utility.__kernel__.field.FieldHelper.getPersistablesSingleValueAssociation;
 import static org.cyk.utility.__kernel__.field.FieldHelper.getName;
 import static org.cyk.utility.__kernel__.field.FieldHelper.getNames;
+import static org.cyk.utility.__kernel__.field.FieldHelper.getNamesMap;
+import static org.cyk.utility.__kernel__.field.FieldHelper.getPersistablesSingleValueAssociation;
+import static org.cyk.utility.__kernel__.field.FieldHelper.getSimpleNames;
+import static org.cyk.utility.__kernel__.field.FieldHelper.getSystemIdentifier;
 import static org.cyk.utility.__kernel__.field.FieldHelper.getType;
 import static org.cyk.utility.__kernel__.field.FieldHelper.join;
 import static org.cyk.utility.__kernel__.field.FieldHelper.nullify;
 import static org.cyk.utility.__kernel__.field.FieldHelper.read;
 import static org.cyk.utility.__kernel__.field.FieldHelper.setName;
 import static org.cyk.utility.__kernel__.field.FieldHelper.write;
-import static org.cyk.utility.__kernel__.field.FieldHelper.getSimpleNames;
-import static org.cyk.utility.__kernel__.field.FieldHelper.getNamesMap;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -38,6 +38,7 @@ import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
 import org.cyk.utility.__kernel__.string.RegularExpressionHelper;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
+import org.cyk.utility.__kernel__.variable.VariableHelper;
 import org.junit.jupiter.api.Test;
 
 import lombok.Getter;
@@ -629,7 +630,7 @@ public class FieldHelperUnitTest extends AbstractWeldUnitTest {
 	
 	@Test
 	public void copy_fromMap_string_keyDifferentToFieldName(){
-		ConfigurationHelper.setFieldName(CopyFromMap.class, "the_string", "string");
+		VariableHelper.writeFieldName(CopyFromMap.class, "the_string", "string");
 		CopyFromMap object = new CopyFromMap();
 		assertThat(object.getString()).isNull();
 		assertThat(object.getInteger()).isNull();
@@ -650,7 +651,7 @@ public class FieldHelperUnitTest extends AbstractWeldUnitTest {
 	
 	@Test
 	public void getFieldsNamesMapping_setConfigurationVariable(){
-		ConfigurationHelper.setFieldName(CopyFromMap.class, "the_string", "string");
+		VariableHelper.writeFieldName(CopyFromMap.class, "the_string", "string");
 		Map<String,String> map = FieldHelper.getFieldsNamesMapping(CopyFromMap.class, "the_string");
 		assertThat(map).isNotNull();
 		assertThat(map).containsExactly(Map.entry("the_string", "string"));

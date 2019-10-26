@@ -6,11 +6,11 @@ import javax.servlet.ServletContextEvent;
 
 import org.apache.commons.lang3.RegExUtils;
 import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
-import org.cyk.utility.__kernel__.configuration.VariableName;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.context.ContextHelper;
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 import org.cyk.utility.__kernel__.value.ValueHelper;
+import org.cyk.utility.__kernel__.variable.VariableName;
 import org.cyk.utility.network.protocol.ProtocolDefaults;
 import org.cyk.utility.security.Credentials;
 import org.cyk.utility.server.representation.impl.ApplicationProgrammingInterface;

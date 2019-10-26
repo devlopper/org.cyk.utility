@@ -3,9 +3,9 @@ package org.cyk.utility.__kernel__.identifier.resource;
 import java.net.URI;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.__kernel__.configuration.VariableName;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.Value;
+import org.cyk.utility.__kernel__.variable.VariableName;
 
 public interface ProxyUniformResourceIdentifierGetter {
 

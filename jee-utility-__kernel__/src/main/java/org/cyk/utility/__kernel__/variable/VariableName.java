@@ -1,4 +1,4 @@
-package org.cyk.utility.__kernel__.configuration;
+package org.cyk.utility.__kernel__.variable;
 
 import java.util.Collection;
 
@@ -78,7 +78,7 @@ public interface VariableName {
 	static String build(Collection<Object> objects) {
 		if(CollectionHelper.isEmpty(objects))
 			return null;
-		String value = StringHelper.concatenateFromObjects(objects, ConstantCharacter.VERTICAL_BAR);
+		String value = StringHelper.concatenateFromObjects(objects, SEPARATOR);
 		if(StringHelper.isBlank(value))
 			return null;
 		return String.format(NAME_FORMAT,value);
@@ -127,7 +127,7 @@ public interface VariableName {
 	}
 	
 	static String buildFieldName(Class<?> klass,Object classifier,String...paths) {
-		return buildFieldName(klass, CollectionHelper.listOf(paths));
+		return buildFieldName(klass, classifier,CollectionHelper.listOf(paths));
 	}
 	
 	static String buildFieldName(Class<?> klass,String...paths) {
@@ -154,5 +154,7 @@ public interface VariableName {
 		return buildUserInterface("theme."+string);
 	}
 	
+	/**/
 	
+	static String SEPARATOR = ConstantCharacter.HYPHEN.toString();
 }
