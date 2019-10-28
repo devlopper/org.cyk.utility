@@ -80,4 +80,13 @@ public class VariableNameUnitTest extends AbstractWeldUnitTest {
 	public void buildFieldName_classifierIs1(){
 		assertThat(VariableName.buildFieldName(Integer.class,(Object)1, "value")).isEqualTo("cyk.variable.java.lang.Integer-1-value");
 	}
+	
+	@Test
+	public void buildFieldName_nested(){
+		assertThat(VariableName.buildFieldName(Nested.class, "f1")).isEqualTo("cyk.variable.org.cyk.utility.__kernel__.variable.VariableNameUnitTest$Nested-f1");
+	}
+	
+	/**/
+	
+	public static class Nested {}
 }

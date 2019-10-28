@@ -1,5 +1,6 @@
 package org.cyk.utility.__kernel__.variable;
 
+import java.lang.reflect.Field;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -60,7 +61,20 @@ public interface VariableHelper {
 	static Variable get(String name) {
 		return get(name, null, null);
 	}
+	
+	/* load */
 
+	static void load(Class<?> klass) {
+		if(CLASSES_FIELDS_NAMES_LOADED.contains(klass))
+			return;
+		CLASSES_FIELDS_NAMES_LOADED.add(klass);
+		Collection<Field> jsonbs = FieldHelper.getJsonbs(klass);
+		if(CollectionHelper.isEmpty(jsonbs))
+			return;
+		for(Field field : jsonbs)
+			readFieldName(klass, field.getName());		
+	}
+	
 	/* write */
 	
 	static Variable write(String name,Object value,VariableLocation location) {
@@ -294,9 +308,11 @@ public interface VariableHelper {
 	static void clear() {
 		VARIABLES.clear();
 		VARIABLES_NAMES_NOT_BOUND.clear();
+		CLASSES_FIELDS_NAMES_LOADED.clear();
 	}
 	
 	Map<String,Variable> VARIABLES = new HashMap<>();
 	Collection<String> VARIABLES_NAMES_NOT_BOUND = new HashSet<>();
-	
+	Collection<Class<?>> CLASSES_FIELDS_NAMES_LOADED = new HashSet<>();
+
 }

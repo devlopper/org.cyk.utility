@@ -2,6 +2,8 @@ package org.cyk.utility.__kernel__.object.__static__.identifiable;
 
 import java.io.Serializable;
 
+import javax.json.bind.annotation.JsonbProperty;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.cyk.utility.__kernel__.annotation.Generatable;
@@ -14,7 +16,7 @@ import lombok.experimental.Accessors;
 public abstract class AbstractIdentified<IDENTIFIER> extends Common implements Identified<IDENTIFIER>,Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	@Generatable
+	@Generatable @JsonbProperty
 	protected IDENTIFIER identifier;
 	
 	//protected java.util.Map<String, Boolean> fieldValueComputedByUserMap;

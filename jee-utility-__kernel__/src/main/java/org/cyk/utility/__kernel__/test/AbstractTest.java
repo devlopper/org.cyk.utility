@@ -5,6 +5,7 @@ import java.io.Serializable;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.ApplicationScopeLifeCycleListener;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
 public abstract class AbstractTest extends AbstractObject implements Serializable {
@@ -15,6 +16,11 @@ public abstract class AbstractTest extends AbstractObject implements Serializabl
 	@BeforeEach 
 	public void listenBefore() {
 		__listenBefore__();
+	}
+	
+	@AfterEach
+	public void listenAfter() {
+		__listenAfter__();
 	}
 	
 	protected void __listenBefore__(){
@@ -36,6 +42,10 @@ public abstract class AbstractTest extends AbstractObject implements Serializabl
 	protected void __listenBeforeCallCountIsZero__() throws Exception{}
 	
 	protected void __listenBeforeInitialiseProperties__(){
+		
+	}
+	
+	protected void __listenAfter__(){
 		
 	}
 	

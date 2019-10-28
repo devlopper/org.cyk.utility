@@ -15,15 +15,15 @@
 	<packaging>jar</packaging>
 
 	<name>JEE utility __kernel__</name>
-	
+
 	<properties>
 		<commons-io.commons-io.version>2.6</commons-io.commons-io.version>
 		<commons-beanutils-commons-beanutils>1.9.4</commons-beanutils-commons-beanutils>
 		<org.apache.commons.commons-collections4.version>4.3</org.apache.commons.commons-collections4.version>
 		<org.reflections.reflections.version>0.9.10</org.reflections.reflections.version>
 		<org.keycloak.keycloak-admin-client.version>4.8.3.Final</org.keycloak.keycloak-admin-client.version>
-	</properties> 
-	
+	</properties>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -39,37 +39,37 @@
 						<unittest.config.var.01>env</unittest.config.var.01>
 						<unittest.config.var.02>env</unittest.config.var.02>
 						<unittest.config.var.notdef>$${value}</unittest.config.var.notdef>
-						<cyk.variable.java.lang.Integer-f3>f4</cyk.variable.java.lang.Integer-f3>					
+						<cyk.variable.java.lang.Integer-f3>f4</cyk.variable.java.lang.Integer-f3>
 					</environmentVariables>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
 
-	<dependencies>		
+	<dependencies>
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 		</dependency>
-		
+
 		<dependency>
-		    <groupId>commons-beanutils</groupId>
-		    <artifactId>commons-beanutils</artifactId>
-		    <version>${commons-beanutils-commons-beanutils}</version>
-		</dependency>	
-		
-		<dependency>
-		    <groupId>org.apache.commons</groupId>
-		    <artifactId>commons-collections4</artifactId>
-		    <version>${org.apache.commons.commons-collections4.version}</version>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>${commons-beanutils-commons-beanutils}</version>
 		</dependency>
-		
+
 		<dependency>
-		    <groupId>org.reflections</groupId>
-		    <artifactId>reflections</artifactId>
-		    <version>${org.reflections.reflections.version}</version>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>${org.apache.commons.commons-collections4.version}</version>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>org.reflections</groupId>
+			<artifactId>reflections</artifactId>
+			<version>${org.reflections.reflections.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.keycloak</groupId>
 			<artifactId>keycloak-admin-client</artifactId>
@@ -77,4 +77,5 @@
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
+
 </project>

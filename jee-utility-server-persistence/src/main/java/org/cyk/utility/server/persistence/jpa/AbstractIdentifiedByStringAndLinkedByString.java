@@ -2,6 +2,7 @@ package org.cyk.utility.server.persistence.jpa;
 
 import java.io.Serializable;
 
+import javax.json.bind.annotation.JsonbProperty;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.MappedSuperclass;
@@ -15,7 +16,7 @@ import lombok.experimental.Accessors;
 public abstract class AbstractIdentifiedByStringAndLinkedByString extends AbstractIdentifiedByString implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	@Transient protected String link;
+	@Transient @JsonbProperty protected String link;
 
 	@Override
 	protected String getRuntimeIdentifier() {

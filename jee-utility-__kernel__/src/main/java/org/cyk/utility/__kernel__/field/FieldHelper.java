@@ -18,6 +18,8 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import javax.json.bind.annotation.JsonbProperty;
+
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -107,6 +109,19 @@ public interface FieldHelper {
 		if(fields == null || fields.isEmpty())
 			return null;
 		return fields.stream().map(Field::getName).collect(Collectors.toList());
+	}
+	
+	static Collection<String> getNames(Class<?> klass) {
+		if(klass == null)
+			return null;
+		if(NAMES.containsKey(klass))
+			return NAMES.get(klass);
+		Collection<String> names = null;
+		Collection<Field> fields = get(klass);
+		if(!CollectionHelper.isEmpty(fields))
+			names = getNames(fields);
+		NAMES.put(klass, names);
+		return names;
 	}
 	
 	static Boolean isSimpleName(String name) {
@@ -225,6 +240,27 @@ public interface FieldHelper {
 		if(persistables != null)
 			PERSISTABLES_SINGLE_VALUE_ASSOCIATION_MAP.put(klass, persistables);
 		return persistables;
+	}
+	
+	static Collection<Field> getJsonbs(Class<?> klass) {
+		if(klass == null)
+			return null;
+		Collection<Field> collection = JSONBS.get(klass);
+		if(collection != null)
+			return collection;
+		Collection<Field> fields = get(klass);
+		if(fields == null)
+			return null;		
+		for(Field index : fields) {
+			if(!index.isAnnotationPresent(JsonbProperty.class))
+				continue;
+			if(collection == null)
+				collection = new ArrayList<>();
+			collection.add(index);
+		}
+		if(collection != null)
+			JSONBS.put(klass, collection);
+		return collection;
 	}
 	
 	static Field getByName(Class<?> klass, List<String> fieldNames,Boolean isThrowExceptionIfNull) {
@@ -896,6 +932,8 @@ public interface FieldHelper {
 		SYSTEM_IDENTIFIERS.clear();
 		BUSINESS_IDENTIFIERS.clear();
 		IDENTIFIERS.clear();
+		JSONBS.clear();
+		NAMES.clear();
 	}
 	
 	/**/
@@ -910,6 +948,8 @@ public interface FieldHelper {
 	Map<Class<?>,Field> SYSTEM_IDENTIFIERS = new HashMap<>();
 	Map<Class<?>,Field> BUSINESS_IDENTIFIERS = new HashMap<>();
 	Map<Class<?>,Collection<Field>> IDENTIFIERS = new HashMap<>();
+	Map<Class<?>,Collection<Field>> JSONBS = new HashMap<>();
+	Map<Class<?>,Collection<String>> NAMES = new HashMap<>();
 	
 	@Getter @Setter @Accessors(chain=true) @EqualsAndHashCode(of= {"klass","fieldName","valueUsageType"}) @AllArgsConstructor
 	static class ClassFieldNameValueUsageType implements Serializable {

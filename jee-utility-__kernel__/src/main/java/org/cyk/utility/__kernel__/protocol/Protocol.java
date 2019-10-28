@@ -1,4 +1,4 @@
-package org.cyk.utility.__kernel__.identifier.resource;
+package org.cyk.utility.__kernel__.protocol;
 
 import java.util.List;
 
