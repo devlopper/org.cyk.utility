@@ -64,7 +64,7 @@ public interface VariableHelper {
 	
 	/* load */
 
-	static void load(Class<?> klass) {
+	static void load(Class<?> klass,Object classifier) {
 		if(CLASSES_FIELDS_NAMES_LOADED.contains(klass))
 			return;
 		CLASSES_FIELDS_NAMES_LOADED.add(klass);
@@ -72,7 +72,11 @@ public interface VariableHelper {
 		if(CollectionHelper.isEmpty(jsonbs))
 			return;
 		for(Field field : jsonbs)
-			readFieldName(klass, field.getName());		
+			readFieldName(klass,classifier,null, field.getName());		
+	}
+	
+	static void load(Class<?> klass) {
+		load(klass,null);
 	}
 	
 	/* write */
@@ -301,7 +305,7 @@ public interface VariableHelper {
 			return null;
 		for(Variable variable : variables)
 			if(variable.getValue().equals(value))
-				return StringUtils.substringAfter(variable.getName(),VariableName.SEPARATOR);
+				return StringUtils.substringAfterLast(variable.getName(),VariableName.SEPARATOR);
 		return null;
 	}
 	

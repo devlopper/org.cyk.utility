@@ -65,4 +65,8 @@ public interface HttpHelper {
 		}
 	}
 	
+	static void clear() {
+		HttpClientGetter.INSTANCE.set(null);
+	}
+	
 }

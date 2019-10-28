@@ -51,12 +51,12 @@ public interface RestHelper {
 		if(CollectionHelper.isEmpty(maps))
 			return null;
 		if(fieldsNamesMap == null) {
-			VariableHelper.load(resourceClass);
+			VariableHelper.load(resourceClass,classifier);
 			//deduce fields names from json
 			for(Map.Entry<String, String> entry : CollectionHelper.getFirst(maps).entrySet()) {
 				if(StringHelper.isBlank(entry.getKey()))
 					continue;
-				String fieldName = VariableHelper.readFieldNameByValue(resourceClass, null, entry.getKey());
+				String fieldName = VariableHelper.readFieldNameByValue(resourceClass, classifier, entry.getKey());
 				if(StringHelper.isBlank(fieldName)) {
 					if(FieldHelper.getNames(resourceClass).contains(entry.getKey()))
 						fieldName = entry.getKey();

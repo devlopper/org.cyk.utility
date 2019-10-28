@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:weld="http://jboss.org/schema/weld/beans" 
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee 
+		http://xmlns.jcp.org/xml/ns/javaee/beans_1_1.xsd"
+	bean-discovery-mode="all">
+
+	<weld:scan>
+		<weld:exclude name="org.cyk.utility.__kernel__.AbstractAsFunctionParameter" />
+		<weld:exclude name="org.cyk.utility.__kernel__.collection.CollectionAsFunctionParameter" />
+		<weld:exclude name="org.cyk.utility.__kernel__.collection.CollectionsAsFunctionParameter" />
+		<weld:exclude name="org.cyk.utility.__kernel__.collection.CollectionInstanceAsFunctionParameter" />
+	</weld:scan>
+
+</beans> 
