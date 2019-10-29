@@ -3,6 +3,7 @@ package org.cyk.utility.__kernel__.identifier.resource;
 import static org.cyk.utility.__kernel__.map.MapHelper.getKeys;
 
 import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -21,6 +22,7 @@ import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 import org.cyk.utility.__kernel__.protocol.Protocol;
+import org.cyk.utility.__kernel__.stream.InputStreamHelper;
 import org.cyk.utility.__kernel__.string.Case;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
@@ -477,6 +479,31 @@ public interface UniformResourceIdentifierHelper {
 		for(String uniformResourceIdentifier : uniformResourceIdentifiers)
 			uris.add(URI.create(uniformResourceIdentifier));
 		return uris;
+	}
+	
+	/**/
+	
+	static String getContentAsString(URL url) {
+		if(url == null)
+			return null;
+		try {
+			return InputStreamHelper.getContentAsString(url.openStream()) ;
+		} catch (Exception exception) {
+			throw new RuntimeException(exception);
+		}
+	}
+
+	static String getContentAsString(URI uri) {
+		try {
+			return getContentAsString(uri.toURL());
+		} catch (Exception exception) {
+			throw new RuntimeException(exception);
+		}
+	}
+	
+	static void clear() {
+		PATHS_MAP.clear();
+		PATHS_CACHE_MAP.clear();
 	}
 	
 	/**/

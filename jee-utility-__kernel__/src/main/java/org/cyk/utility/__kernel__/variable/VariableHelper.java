@@ -26,6 +26,13 @@ import org.cyk.utility.__kernel__.system.SystemHelper;
 import org.cyk.utility.__kernel__.value.Checker;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+
 public interface VariableHelper {
 
 	/* get */
@@ -65,9 +72,14 @@ public interface VariableHelper {
 	/* load */
 
 	static void load(Class<?> klass,Object classifier) {
-		if(CLASSES_FIELDS_NAMES_LOADED.contains(klass))
-			return;
-		CLASSES_FIELDS_NAMES_LOADED.add(klass);
+		for(ClassClassifier index : CLASSES_CLASSIFIERS_FIELDS_NAMES_LOADED)
+			if(index.getClass().equals(klass)) {
+				if(index.getClassifier() == null && classifier == null)
+					return;
+				if(index.getClassifier() != null && classifier != null && index.getClassifier().equals(classifier))
+					return;
+			}
+		CLASSES_CLASSIFIERS_FIELDS_NAMES_LOADED.add(new ClassClassifier(klass, classifier));
 		Collection<Field> jsonbs = FieldHelper.getJsonbs(klass);
 		if(CollectionHelper.isEmpty(jsonbs))
 			return;
@@ -312,11 +324,16 @@ public interface VariableHelper {
 	static void clear() {
 		VARIABLES.clear();
 		VARIABLES_NAMES_NOT_BOUND.clear();
-		CLASSES_FIELDS_NAMES_LOADED.clear();
+		CLASSES_CLASSIFIERS_FIELDS_NAMES_LOADED.clear();
 	}
 	
 	Map<String,Variable> VARIABLES = new HashMap<>();
 	Collection<String> VARIABLES_NAMES_NOT_BOUND = new HashSet<>();
-	Collection<Class<?>> CLASSES_FIELDS_NAMES_LOADED = new HashSet<>();
+	Collection<ClassClassifier> CLASSES_CLASSIFIERS_FIELDS_NAMES_LOADED = new HashSet<>();
 
+	@Getter @Setter @Accessors(chain=true) @AllArgsConstructor @EqualsAndHashCode @ToString
+	public static class ClassClassifier {
+		private Class<?> klass;
+		private Object classifier;
+	}
 }

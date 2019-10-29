@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierHelper;
 import org.cyk.utility.__kernel__.string.Case;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.reflections.Reflections;
@@ -320,6 +321,12 @@ public interface ClassHelper {
 	
 	static String getTupleName(Class<?> klass) {
 		return (String) Property.getProperty(klass, Property.TUPLE_NAME);
+	}
+	
+	/**/
+	
+	static String getResourceContentAsString(Class<?> klass,String resourceName) {
+		return UniformResourceIdentifierHelper.getContentAsString(klass.getResource(resourceName));
 	}
 	
 	/**/
