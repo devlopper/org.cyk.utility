@@ -10,8 +10,10 @@ import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.common.CommonUtils;
-import org.cyk.utility.common.helper.RandomHelper;
+import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.random.RandomHelper;
+import org.cyk.utility.system.OperatingSystemCommandExecutor;
+import org.jboss.weld.environment.se.Weld;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -31,7 +33,7 @@ public class GeneratorEclipse implements Serializable {
 			+ " mvn archetype:generate"
 			+ " -DarchetypeGroupId=org.cyk.archetype"
 			+ " -DarchetypeArtifactId=archetype-jee-server"
-			+ " -DarchetypeVersion=0.1.0"
+			+ " -DarchetypeVersion=0.0.1"
 			+ " -DarchetypeCatalog=local"
 			+ " -DsystemIdentifier=%3 "
 			+ " -Dpackage="+PACKAGE+" "
@@ -42,7 +44,7 @@ public class GeneratorEclipse implements Serializable {
 			+ " mvn archetype:generate"
 			+ " -DarchetypeGroupId=org.cyk.archetype"
 			+ " -DarchetypeArtifactId=archetype-jee-client"
-			+ " -DarchetypeVersion=0.1.0"
+			+ " -DarchetypeVersion=0.0.1"
 			+ " -DarchetypeCatalog=local"
 			+ " -DsystemIdentifier=%3 "
 			+ " -Dpackage="+PACKAGE+" "
@@ -70,7 +72,7 @@ public class GeneratorEclipse implements Serializable {
 	
 	private void executeSystem(File systemDirectory,String side,String commands) throws Exception{
 		systemPomFolderName="_pom";
-		commandFile = File.createTempFile(System.currentTimeMillis()+"", RandomHelper.getInstance().getString(4)+".cmd", new File(userDir));
+		commandFile = File.createTempFile(System.currentTimeMillis()+"", RandomHelper.getAlphabetic(4)+".cmd", new File(userDir));
 		commandFile.deleteOnExit();
 		FileUtils.writeStringToFile(commandFile, commands);
 		
@@ -79,7 +81,11 @@ public class GeneratorEclipse implements Serializable {
 		driveId = StringUtils.substringBefore(systemDirectory.toString(), ":")+":";	
 		String command = String.format(ARCHETYPE_GENERATE_COMMAND_FORMAT,commandFile.getPath(),driveId,systemDirectory,identifier,side,packageName);
 		System.out.println("Command : "+command);
-		System.out.println(CommonUtils.getInstance().executeCommand(command));
+		//System.out.println(CommonUtils.getInstance().executeCommand(command));
+		
+		OperatingSystemCommandExecutor operatingSystemCommandExecutor = DependencyInjection.inject(OperatingSystemCommandExecutor.class);
+		operatingSystemCommandExecutor.getCommand(Boolean.TRUE).setCommand(command).setIsTerminalStartable(Boolean.TRUE).setIsStartedTerminalClosable(Boolean.FALSE);
+		operatingSystemCommandExecutor.execute();
 		
 		File targetDirectory = new File(systemDirectory, identifier);
 		if(targetDirectory.exists()){
@@ -108,7 +114,7 @@ public class GeneratorEclipse implements Serializable {
 		System.out.print(type+" package : ");
 		packageName = new BufferedReader(new InputStreamReader(System.in)).readLine();
 		if(StringUtils.isBlank(packageName))
-			packageName = "org.cyk.system."+identifier;
+			packageName = "org.cyk.system";
 		//identifier="hello";
 		System.out.println();
 		
@@ -146,6 +152,8 @@ public class GeneratorEclipse implements Serializable {
 	}
 	
 	public static void main(String[] args) {
+		Weld weld = new Weld();
+	    weld.initialize();
 		GeneratorEclipse generator;
 		try {
 			 generator = new GeneratorEclipse();
@@ -153,6 +161,7 @@ public class GeneratorEclipse implements Serializable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		weld.shutdown();
 	}
 	
 }
