@@ -25,7 +25,7 @@ public abstract class AbstractApplicationScopeLifeCycleListenerEntities extends 
 		ParameterName.ENTITY_CLASS.setType(Data.class);
 		Class<?>[] basesClasses = __getUniformResourceIdentifierParameterValueMatrixClassesBasesClasses__();
 		if(__inject__(ArrayHelper.class).isNotEmpty(basesClasses)) {
-			Collection<Class<?>> classes = ClassHelper.filter(List.of(getClass().getPackage()), List.of(basesClasses), Boolean.TRUE);
+			Collection<Class<?>> classes = ClassHelper.filter(List.of(getClass().getPackage()), List.of(basesClasses), null);
 			if(CollectionHelper.isNotEmpty(classes))
 				ParameterName.addClasses(classes);				
 		}
@@ -33,7 +33,8 @@ public abstract class AbstractApplicationScopeLifeCycleListenerEntities extends 
 	
 	protected Class<?>[] __getUniformResourceIdentifierParameterValueMatrixClassesBasesClasses__() {
 		return new Class<?>[] {
-			DataIdentifiedByString.class
+			Data.class
+			,DataIdentifiedByString.class
 			,DataIdentifiedByStringAndCoded.class
 			,DataIdentifiedByStringAndCodedAndNamed.class
 			,org.cyk.utility.client.controller.data.DataIdentifiedByStringAndLinkedByString.class

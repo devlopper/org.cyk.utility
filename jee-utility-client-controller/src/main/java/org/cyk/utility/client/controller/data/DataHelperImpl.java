@@ -95,14 +95,14 @@ public class DataHelperImpl extends AbstractHelper implements DataHelper,Seriali
 	}
 
 	@Override
-	public Fields getPropertiesFields(Class<?> anInterface) {
-		return (Fields) __inject__(Fields.class).add(FieldHelper.filter(anInterface, "^PROPERTY_", null));
+	public Fields getPropertiesFields(Class<?> klass) {
+		return (Fields) __inject__(Fields.class).add(FieldHelper.filter(klass, "^PROPERTY_", null));
 	}
 	
 	@Override
-	public Strings getPropertiesFieldsNames(Class<?> anInterface) {
+	public Strings getPropertiesFieldsNames(Class<?> klass) {
 		Strings names = null;
-		Fields fields = getPropertiesFields(anInterface);
+		Fields fields = getPropertiesFields(klass);
 		if(CollectionHelper.isNotEmpty(fields)) {
 			names = __inject__(Strings.class);
 			for(Field index : fields.get())

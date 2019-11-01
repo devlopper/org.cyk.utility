@@ -6,20 +6,23 @@ import javax.ws.rs.core.Response;
 
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
+@Getter @Setter @Accessors(chain=true) @NoArgsConstructor
 public abstract class AbstractSystemClientExceptionImpl extends AbstractSystemExceptionImpl implements SystemClientException,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Response response;
 	
-	@Override
-	public Response getResponse() {
-		return response;
+	public AbstractSystemClientExceptionImpl(String message,Throwable throwable) {
+		super(message,throwable);
 	}
 	
-	@Override
-	public SystemClientException setResponse(Response response) {
-		this.response = response;
-		return this;
+	public AbstractSystemClientExceptionImpl(String message) {
+		super(message);
 	}
 	
 	@Override

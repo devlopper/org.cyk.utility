@@ -3,6 +3,8 @@ package org.cyk.utility.__kernel__.throwable;
 import java.util.Collection;
 import java.util.List;
 
+import org.cyk.utility.__kernel__.array.ArrayHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 
 public interface ThrowableHelper {
@@ -10,7 +12,7 @@ public interface ThrowableHelper {
 	String NOT_YET_IMPLEMENTED_MESSAGE = "not yet implemented";
 	
 	static Throwable getInstanceOf(Throwable throwable,Collection<Class<?>> classes){
-		if(throwable == null || classes == null || classes.isEmpty())
+		if(throwable == null || CollectionHelper.isEmpty(classes))
 			return null;
 		Throwable index;
 		for(Class<?> klass : classes) {
@@ -26,9 +28,15 @@ public interface ThrowableHelper {
 	}
 	
 	static Throwable getInstanceOf(Throwable throwable,Class<?>...classes){
-		if(throwable == null || classes == null || classes.length == 0)
+		if(throwable == null || ArrayHelper.isEmpty(classes))
 			return null;
 		return getInstanceOf(throwable,List.of(classes));
+	}
+	
+	static Throwable getInstanceOfSystemClient(Throwable throwable){
+		if(throwable == null)
+			return null;
+		return getInstanceOf(throwable, SystemClientException.class);
 	}
 	
 	static Throwable getFirstCause(Throwable throwable){

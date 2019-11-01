@@ -57,7 +57,7 @@ public class DataTableBuilderImpl extends AbstractComponentBuilderImpl<DataTable
 		Boolean isLazyLoadable = ValueHelper.defaultToIfNull(grid.getIsLazyLoadable(),Boolean.TRUE);
 		dataTable.setLazy(isLazyLoadable);
 		if(Boolean.TRUE.equals(isLazyLoadable)) {
-			dataModel = new LazyDataModel<Object>(grid);
+			dataModel = new LazyDataModel<Object>(dataTable,grid);
 			dataTable.setPaginator(Boolean.TRUE);
 			dataTable.setPaginatorAlwaysVisible(Boolean.FALSE);
 			dataTable.setPaginatorPosition("top");

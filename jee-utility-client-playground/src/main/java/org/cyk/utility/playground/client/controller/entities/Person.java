@@ -1,16 +1,21 @@
 package org.cyk.utility.playground.client.controller.entities;
 
-import org.cyk.utility.client.controller.data.DataIdentifiedByStringAndCoded;
+import java.io.Serializable;
 
-public interface Person extends DataIdentifiedByStringAndCoded {
+import org.cyk.utility.client.controller.component.annotation.Input;
+import org.cyk.utility.client.controller.component.annotation.InputString;
+import org.cyk.utility.client.controller.component.annotation.InputStringLineOne;
+import org.cyk.utility.client.controller.data.AbstractDataIdentifiableSystemStringAndIdentifiableBusinessStringImpl;
 
-	String getFirstName();
-	Person setFirstName(String firstName);
-	
-	String getLastNames();
-	Person setLastNames(String lastNames);
-	
-	String PROPERTY_FIRST_NAME = "firstName";
-	String PROPERTY_LAST_NAMES = "lastNames";
-	
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
+@Getter @Setter @Accessors(chain=true)
+public class Person extends AbstractDataIdentifiableSystemStringAndIdentifiableBusinessStringImpl implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@Input @InputString @InputStringLineOne private String firstName;
+	@Input @InputString @InputStringLineOne private String lastNames;
+
 }

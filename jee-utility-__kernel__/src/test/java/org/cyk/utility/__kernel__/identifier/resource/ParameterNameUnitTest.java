@@ -49,6 +49,11 @@ public class ParameterNameUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	@Test
+	public void stringify_Person() {
+		assertThat(ParameterName.stringify(Person.class)).isEqualTo("person");
+	}
+	
+	@Test
 	public void stringify_class_SystemAction() {
 		assertThat(ParameterName.stringify(SystemAction.class)).isEqualTo("systemaction");
 	}
@@ -83,5 +88,13 @@ public class ParameterNameUnitTest extends AbstractWeldUnitTest {
 	public static enum MyEnum {
 		V01
 		;
+	}
+	
+	public static class Person {
+		
+	}
+	
+	public static class PersonImpl {
+		
 	}
 }

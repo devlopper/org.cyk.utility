@@ -9,6 +9,7 @@ import org.cyk.utility.__kernel__.annotation.Controller;
 import org.cyk.utility.__kernel__.identifier.resource.ParameterName;
 import org.cyk.utility.__kernel__.instance.InstanceGetter;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.system.action.SystemActionFieldsGetter;
 import org.cyk.utility.client.controller.component.window.WindowRenderTypeDialog;
 import org.cyk.utility.client.controller.component.window.WindowRenderTypeNormal;
 import org.cyk.utility.system.node.SystemNodeClient;
@@ -19,7 +20,7 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 
 	@Override
 	public void __initialize__(Object object) {
-		__setQualifierClassTo__(Controller.class, InstanceGetter.class);
+		__setQualifierClassTo__(Controller.class, InstanceGetter.class,SystemActionFieldsGetter.class);
 		__initializeApplication__(object);		
 		__inject__(org.cyk.utility.ApplicationScopeLifeCycleListener.class).initialize(null);
 		ParameterName.addClasses(WindowRenderTypeNormal.class,WindowRenderTypeDialog.class);

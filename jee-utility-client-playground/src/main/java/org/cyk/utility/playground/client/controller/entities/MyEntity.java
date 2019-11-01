@@ -1,11 +1,25 @@
 package org.cyk.utility.playground.client.controller.entities;
 
-import org.cyk.utility.client.controller.data.DataIdentifiedByStringAndCodedAndNamed;
-import org.cyk.utility.playground.client.controller.entities.MyEntity;
+import java.io.Serializable;
 
-public interface MyEntity extends DataIdentifiedByStringAndCodedAndNamed {
+import org.cyk.utility.client.controller.data.AbstractDataIdentifiableSystemStringAndIdentifiableBusinessStringAndNamableImpl;
 
-	@Override MyEntity setIdentifier(String identifier);
-	@Override MyEntity setCode(String code);
-	@Override MyEntity setName(String name);
+public class MyEntity extends AbstractDataIdentifiableSystemStringAndIdentifiableBusinessStringAndNamableImpl implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@Override
+	public MyEntity setIdentifier(String identifier) {
+		return (MyEntity) super.setIdentifier(identifier);
+	}
+	
+	@Override
+	public MyEntity setCode(String code) {
+		return (MyEntity) super.setCode(code);
+	}
+	
+	@Override
+	public MyEntity setName(String name) {
+		return (MyEntity) super.setName(name);
+	}
+	
 }

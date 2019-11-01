@@ -35,7 +35,7 @@ public class ControllerIntegrationTest extends AbstractControllerArquillianInteg
 	@Test
 	public void create_myEntity() {
 		String code = __getRandomCode__();
-		MyEntity myEntity = __inject__(MyEntity.class).setCode(code).setName(__getRandomName__());
+		MyEntity myEntity = new MyEntity().setCode(code).setName(__getRandomName__());
 		Properties properties = new Properties();
 		__inject__(MyEntityController.class).create(myEntity,properties);
 		Response response = (Response) properties.getResponse();
@@ -49,7 +49,7 @@ public class ControllerIntegrationTest extends AbstractControllerArquillianInteg
 	public void create_myEntity_many() {
 		String identifier = __getRandomIdentifier__();
 		String code = __getRandomCode__();
-		MyEntity myEntity = __inject__(MyEntity.class).setIdentifier(identifier).setCode(code).setName(__getRandomName__());
+		MyEntity myEntity = new MyEntity().setIdentifier(identifier).setCode(code).setName(__getRandomName__());
 		Properties properties = new Properties();
 		__inject__(MyEntityController.class).createMany(Arrays.asList(myEntity),properties);
 		Response response = (Response) properties.getResponse();
@@ -62,7 +62,7 @@ public class ControllerIntegrationTest extends AbstractControllerArquillianInteg
 		Integer numberOfEntities = 50;
 		Collection<MyEntity> collection = new ArrayList<>();
 		for(Integer index = 0 ; index < numberOfEntities ; index = index + 1)
-			collection.add(__inject__(MyEntity.class).setIdentifier(index.toString()).setCode(index.toString()).setName(__getRandomName__()));
+			collection.add(new MyEntity().setIdentifier(index.toString()).setCode(index.toString()).setName(__getRandomName__()));
 		__inject__(MyEntityController.class).createMany(collection);
 		
 		ControllerFunctionReaderImpl.COUNT = 5l;
@@ -91,16 +91,16 @@ public class ControllerIntegrationTest extends AbstractControllerArquillianInteg
 		assertThat(__inject__(MyEntityController.class).count()).isEqualTo(0l);
 		Properties properties = new Properties();
 		__inject__(MyEntityController.class).createMany(Arrays.asList(
-				__inject__(MyEntity.class).setIdentifier("0").setCode("0").setName(__getRandomName__())
+				new MyEntity().setIdentifier("0").setCode("0").setName(__getRandomName__())
 				),properties);
 		assertThat(__inject__(MyEntityController.class).count()).isEqualTo(1l);
 		__inject__(MyEntityController.class).createMany(Arrays.asList(
-				__inject__(MyEntity.class).setIdentifier("1").setCode("1").setName(__getRandomName__())
+				new MyEntity().setIdentifier("1").setCode("1").setName(__getRandomName__())
 				),properties);
 		assertThat(__inject__(MyEntityController.class).count()).isEqualTo(2l);
 		__inject__(MyEntityController.class).createMany(Arrays.asList(
-				__inject__(MyEntity.class).setIdentifier("2").setCode("2").setName(__getRandomName__())
-				,__inject__(MyEntity.class).setIdentifier("3").setCode("3").setName(__getRandomName__())
+				new MyEntity().setIdentifier("2").setCode("2").setName(__getRandomName__())
+				,new MyEntity().setIdentifier("3").setCode("3").setName(__getRandomName__())
 				),properties);
 		assertThat(__inject__(MyEntityController.class).count()).isEqualTo(4l);
 	}
@@ -110,7 +110,7 @@ public class ControllerIntegrationTest extends AbstractControllerArquillianInteg
 		Integer numberOfEntities = 50;
 		Collection<MyEntity> collection = new ArrayList<>();
 		for(Integer index = 0 ; index < numberOfEntities ; index = index + 1)
-			collection.add(__inject__(MyEntity.class).setIdentifier(index.toString()).setCode(index.toString()).setName(__getRandomName__()));
+			collection.add(new MyEntity().setIdentifier(index.toString()).setCode(index.toString()).setName(__getRandomName__()));
 		__inject__(MyEntityController.class).createMany(collection);
 		
 		Properties properties = new Properties().setFilters(new FilterDto().addField("identifier", Arrays.asList("0"), ValueUsageType.SYSTEM));
@@ -139,7 +139,7 @@ public class ControllerIntegrationTest extends AbstractControllerArquillianInteg
 		Integer numberOfEntities = 50;
 		Collection<MyEntity> collection = new ArrayList<>();
 		for(Integer index = 0 ; index < numberOfEntities ; index = index + 1)
-			collection.add(__inject__(MyEntity.class).setIdentifier(index.toString()).setCode(index.toString()).setName(__getRandomName__()));
+			collection.add(new MyEntity().setIdentifier(index.toString()).setCode(index.toString()).setName(__getRandomName__()));
 		__inject__(MyEntityController.class).createMany(collection);
 		
 		Properties properties = new Properties().setFilters(new FilterDto().addField("identifier", Arrays.asList("0"), ValueUsageType.SYSTEM));

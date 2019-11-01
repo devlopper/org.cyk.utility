@@ -236,6 +236,9 @@ public interface ClassHelper {
 			return null;
 		if(basesClasses == null || basesClasses.isEmpty())
 			return null;
+		// we need to add bases classes packages in order for getSubTypesOf to collect all match
+		packages = new ArrayList<Package>(packages);
+		packages.addAll(basesClasses.stream().map(Class::getPackage).collect(Collectors.toList()));
 		if(classNameRegularExpression!= null && classNameRegularExpression.isBlank())
 			classNameRegularExpression = null;
 		Collection<Class<?>> classes = null;	

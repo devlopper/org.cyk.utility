@@ -1,6 +1,7 @@
 package org.cyk.utility.__kernel__.field;
 
 import java.io.Serializable;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
@@ -263,6 +264,39 @@ public interface FieldHelper {
 		return collection;
 	}
 	
+	static Collection<Field> getByAnnotationClass(Class<?> klass,Class<? extends Annotation> annotationClass) {
+		if(klass == null || annotationClass == null)
+			return null;
+		Map<Class<? extends Annotation>,Collection<Field>> map = HAVING_ANNOTATION_MAP.get(klass);
+		if(map == null)
+			HAVING_ANNOTATION_MAP.put(klass, map = new HashMap<>());
+		if(map.containsKey(annotationClass))
+			return map.get(annotationClass);
+		Collection<Field> fields = get(klass);
+		Collection<Field> annotated = null;
+		if(CollectionHelper.isNotEmpty(fields)) {
+			for(Field field : fields) {
+				if(!field.isAnnotationPresent(annotationClass))
+					continue;
+				if(annotated == null)
+					annotated = new ArrayList<>();
+				annotated.add(field);
+			}
+		}
+		map.put(annotationClass, annotated);
+		return annotated;
+	}
+	
+	/*static Collection<Field> getByAnnotationsClasses(Class<?> klass,Collection<Class<? extends Annotation>> annotationsClasses) {
+		if(klass == null || CollectionHelper.isEmpty(annotationsClasses))
+			return null;
+		Collection<Field> fields = null;
+		for(Class<? extends Annotation> index : annotationsClasses) {
+			
+		}
+		return fields;
+	}*/
+	
 	static Field getByName(Class<?> klass, List<String> fieldNames,Boolean isThrowExceptionIfNull) {
 		if(klass == null || fieldNames == null || fieldNames.isEmpty())
 			return null;
@@ -325,6 +359,15 @@ public interface FieldHelper {
 		if(field != null)
 			CLASS_FIELD_NAME_VALUE_USAGE_TYPE_FIELDS.put(new ClassFieldNameValueUsageType(klass, fieldName, valueUsageType), field);
 		return field;
+	}
+	
+	static Field getByName(Collection<Field> fields,String name) {
+		if(CollectionHelper.isEmpty(fields))
+			return null;
+		for(Field field : fields)
+			if(field.getName().equals(name))
+				return field;
+		return null;
 	}
 	
 	static Field getSystemIdentifier(Class<?> klass) {
@@ -921,6 +964,40 @@ public interface FieldHelper {
 	}
 	
 	/**/
+	/*
+	static Boolean contains(Collection<Field> fields,String name) {
+		if(CollectionHelper.isEmpty(fields))
+			return Boolean.FALSE;
+		for(Field field : fields)
+			if(field.getName().equals(name))
+				return Boolean.TRUE;
+		return Boolean.FALSE;
+	}
+	*/
+	static void removeByNames(Collection<Field> fields,Collection<String> names) {
+		if(CollectionHelper.isEmpty(fields) || CollectionHelper.isEmpty(names))
+			return;
+		Collection<Field> collection = null;
+		for(String name : names) {
+			Field field = getByName(fields, name);
+			if(field == null)
+				continue;
+			if(collection == null)
+				collection = new ArrayList<>();
+			collection.add(field);	
+		}
+		if(collection == null)
+			return;
+		fields.removeAll(collection);
+	}
+	
+	static void removeByNames(Collection<Field> fields,String...names) {
+		if(CollectionHelper.isEmpty(fields) || ArrayHelper.isEmpty(names))
+			return;
+		removeByNames(fields, CollectionHelper.listOf(names));
+	}
+	
+	/**/
 	
 	static void clear() {
 		CLASS_FIELDS_MAP.clear();
@@ -934,12 +1011,14 @@ public interface FieldHelper {
 		IDENTIFIERS.clear();
 		JSONBS.clear();
 		NAMES.clear();
+		HAVING_ANNOTATION_MAP.clear();
 	}
 	
 	/**/
 	
 	Map<Class<?>,List<Field>> CLASS_FIELDS_MAP = new HashMap<>();
 	Map<Class<?>,Collection<Field>> PERSISTABLES_SINGLE_VALUE_ASSOCIATION_MAP = new HashMap<>();
+	Map<Class<?>,Map<Class<? extends Annotation>,Collection<Field>>> HAVING_ANNOTATION_MAP = new HashMap<>();
 	Map<String,Field> FIELDS_MAP = new HashMap<>();
 	Map<String,Type> TYPES_MAP = new HashMap<>();
 	String DOT = ".";
@@ -960,4 +1039,9 @@ public interface FieldHelper {
 		private ValueUsageType valueUsageType;
 		
 	}
+	
+	String NAME_IDENTIFIER = "identifier";
+	String NAME_CODE = "code";
+	String NAME_NAME = "name";
+	String NAME_DESCRIPTION = "description";
 }

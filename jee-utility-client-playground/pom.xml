@@ -34,15 +34,15 @@
 		<profile>
 			<id>deployment.common</id>
 			<properties>
-				<cyk.parameter.system.name>Playground</cyk.parameter.system.name>
-				<cyk.context.parameter.theme.primefaces>atlantis-blue</cyk.context.parameter.theme.primefaces>
+				<cyk.variable.system.name>Playground</cyk.variable.system.name>
+				<cyk.variable.user.interface.theme.primefaces>atlantis-blue</cyk.variable.user.interface.theme.primefaces>
 			</properties>
 		</profile>
 		
 		<profile>
 			<id>deployment.wildfly.local</id>
 			<properties>
-				<cyk.parameter.proxy.uniform.resource.identifier>http://localhost:8080/playground/server</cyk.parameter.proxy.uniform.resource.identifier>
+				<cyk.variable.system.proxy.uniform.resource.identifier>http://localhost:8080/playground/server</cyk.variable.system.proxy.uniform.resource.identifier>
 			</properties>
 		</profile>
 	</profiles>

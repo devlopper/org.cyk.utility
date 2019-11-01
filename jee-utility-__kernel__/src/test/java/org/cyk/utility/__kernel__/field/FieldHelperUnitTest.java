@@ -32,6 +32,8 @@ import java.util.stream.Collectors;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
@@ -657,6 +659,28 @@ public class FieldHelperUnitTest extends AbstractWeldUnitTest {
 		assertThat(map).containsExactly(Map.entry("the_string", "string"));
 	}
 	
+	@Test
+	public void getByAnnotationClass_annotationIsNotNull(){
+		Collection<String> names = FieldHelper.getNames(FieldHelper.getByAnnotationClass(HavingAnnotation01.class,NotNull.class));
+		assertThat(names).isNotNull();
+		assertThat(names).containsExactlyInAnyOrder("f01","f03");
+	}
+	
+	@Test
+	public void getByAnnotationClass_annotationIsEmail(){
+		Collection<String> names = FieldHelper.getNames(FieldHelper.getByAnnotationClass(HavingAnnotation01.class,Email.class));
+		assertThat(names).isNotNull();
+		assertThat(names).containsExactlyInAnyOrder("f02");
+	}
+	
+	@Test
+	public void getByAnnotationClass_annotationIsNotNull_(){
+		FieldHelper.getNames(FieldHelper.getByAnnotationClass(HavingAnnotation02.class,NotNull.class));
+		Collection<String> names = FieldHelper.getNames(FieldHelper.getByAnnotationClass(HavingAnnotation01.class,NotNull.class));
+		assertThat(names).isNotNull();
+		assertThat(names).containsExactlyInAnyOrder("f01","f03");
+	}
+	
 	/**/
 	
 	@Getter @Setter @Accessors(chain=true)
@@ -812,5 +836,19 @@ public class FieldHelperUnitTest extends AbstractWeldUnitTest {
 		private String string;
 		private Integer integer;
 		private Long long_;
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class HavingAnnotation01 {
+		@NotNull private String f01;
+		@Email private Integer f02;
+		@NotNull private Long f03;
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class HavingAnnotation02 {
+		@NotNull private String z01;
+		@Email private Integer z02;
+		@NotNull private Long z03;
 	}
 }

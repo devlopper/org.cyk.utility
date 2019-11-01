@@ -228,6 +228,16 @@ public class ClassHelperUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	@Test
+	public void isInstanceOf_deep_class_true() {
+		assertThat(isInstanceOf(IsInstanceOfClassSubSub.class, IsInstanceOfClass.class)).isTrue();
+	}
+	
+	@Test
+	public void isInstanceOf_deep_interface_true() {
+		assertThat(isInstanceOf(IsInstanceOfClassSubSub.class, IsInstanceOfInterface.class)).isTrue();
+	}
+	
+	@Test
 	public void isInstanceOfOne_true() {
 		assertThat(isInstanceOfOne(ImplementationImpl.class, InterfaceNotImplemented.class,Interface.class)).isTrue();
 	}
@@ -329,7 +339,7 @@ public class ClassHelperUnitTest extends AbstractWeldUnitTest {
 	@Test
 	public void filter_packageIsCurrent_basesClassesIsFilterBase() {
 		Collection<java.lang.Class<?>> classes = filter(List.of(ClassHelperUnitTest.class.getPackage()), List.of(FilterBase.class));
-		assertThat(classes).containsExactlyInAnyOrder(FilterInterface.class,FilterClass.class);
+		assertThat(classes).containsExactlyInAnyOrder(FilterInterface.class,FilterClass.class,FilterClassSub.class,FilterClassSubSub.class);
 	}
 	
 	@Test
@@ -414,6 +424,30 @@ public class ClassHelperUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	public static class FilterClass implements FilterBase {
+		
+	}
+	
+	public static class FilterClassSub extends FilterClass {
+		
+	}
+	
+	public static class FilterClassSubSub extends FilterClassSub {
+		
+	}
+	
+	public static interface IsInstanceOfInterface {
+		
+	}
+	
+	public static class IsInstanceOfClass implements IsInstanceOfInterface {
+		
+	}
+	
+	public static class IsInstanceOfClassSub extends IsInstanceOfClass {
+		
+	}
+	
+	public static class IsInstanceOfClassSubSub extends IsInstanceOfClassSub {
 		
 	}
 }

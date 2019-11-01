@@ -3,8 +3,10 @@ package org.cyk.utility.client.controller.data;
 import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemActionFieldsGetter;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.field.FieldDescription;
 import org.cyk.utility.field.FieldDescriptions;
@@ -19,7 +21,8 @@ public abstract class AbstractDataFieldDescriptionsGetterImpl extends AbstractFu
 	protected FieldDescriptions __execute__() throws Exception {
 		SystemAction systemAction = ValueHelper.returnOrThrowIfBlank("data field desceiptions getter system action", getSystemAction());
 		FieldDescriptions fieldDescriptions = null;
-		Strings names = __getNames__(systemAction);
+		//Strings names = __getNames__(systemAction);
+		Strings names = __inject__(Strings.class).add(FieldHelper.getNames(SystemActionFieldsGetter.getInstance().get(systemAction)));
 		if(CollectionHelper.isNotEmpty(names)) {
 			fieldDescriptions = __inject__(FieldDescriptions.class);
 			for(String index : names.get()) {

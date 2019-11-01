@@ -71,6 +71,10 @@ public interface VariableName {
 	String USER_INTERFACE_THEME_LOGO_FILE_NAME_PREFIX = buildUserInterfaceTheme("logo.file.name.prefix");
 	String USER_INTERFACE_THEME_LOGO_FILE_NAME_EXTENSION = buildUserInterfaceTheme("logo.file.name.extension");
 	
+	/* 		Menu*/
+	
+	String USER_INTERFACE_THEME_MENU_PATH = buildUserInterfaceTheme("menu.path");
+	
 	/**/
 	
 	String NAME_FORMAT = "cyk.variable.%s";

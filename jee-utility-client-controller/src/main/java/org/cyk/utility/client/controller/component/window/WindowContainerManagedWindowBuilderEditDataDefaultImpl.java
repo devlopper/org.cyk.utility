@@ -1,25 +1,20 @@
 package org.cyk.utility.client.controller.component.window;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.util.Collection;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
-import org.cyk.utility.__kernel__.string.Case;
-import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.__kernel__.system.action.SystemActionAdd;
 import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
+import org.cyk.utility.__kernel__.system.action.SystemActionFieldsGetter;
 import org.cyk.utility.__kernel__.system.action.SystemActionUpdate;
-import org.cyk.utility.array.ArrayHelper;
-import org.cyk.utility.client.controller.component.ComponentBuilder;
-import org.cyk.utility.client.controller.component.input.InputBuilder;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.data.Data;
-import org.cyk.utility.client.controller.data.DataFieldDescriptionsGetter;
 import org.cyk.utility.client.controller.data.DataIdentifiedByString;
 import org.cyk.utility.client.controller.data.Form;
-import org.cyk.utility.field.FieldDescription;
-import org.cyk.utility.field.FieldDescriptions;
 
 public class WindowContainerManagedWindowBuilderEditDataDefaultImpl extends AbstractWindowContainerManagedWindowBuilderEditDataImpl implements WindowContainerManagedWindowBuilderEditDataDefault,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -27,6 +22,7 @@ public class WindowContainerManagedWindowBuilderEditDataDefaultImpl extends Abst
 	@Override
 	protected void __execute__(Form form, SystemAction systemAction, Data data, ViewBuilder viewBuilder) {
 		Boolean isEditable = systemAction instanceof SystemActionCreate || systemAction instanceof SystemActionUpdate || systemAction instanceof SystemActionAdd|| (data instanceof DataIdentifiedByString &&  ((DataIdentifiedByString)data).getIdentifier() == null);
+		/*
 		FieldDescriptions fieldDescriptions = __inject__(DataFieldDescriptionsGetter.class).setSystemAction(systemAction).execute().getOutput();
 		if(CollectionHelper.isNotEmpty(fieldDescriptions)) {
 			for(FieldDescription index : fieldDescriptions.get()) {
@@ -44,6 +40,15 @@ public class WindowContainerManagedWindowBuilderEditDataDefaultImpl extends Abst
 					}
 				}		
 			}
+		}
+		*/
+		//
+		
+		Collection<Field> fields = SystemActionFieldsGetter.getInstance().get(getSystemAction());
+		if(CollectionHelper.isEmpty(fields))
+			return;
+		for(Field index : fields) {
+			viewBuilder.addInputBuilderByObjectByFieldNames(data, isEditable, FieldHelper.disjoin(index.getName()).toArray(new String[] {}));				
 		}
 	}
 
