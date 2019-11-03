@@ -15,6 +15,7 @@ public class Session implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private User user;
+	private UserInterface userInterface;
 	
 	public Session(Principal principal) {
 		user = new User(principal);
@@ -40,5 +41,17 @@ public class Session implements Serializable {
 		if(user == null)
 			return null;
 		return user.getUuid();
+	}
+	
+	public UserInterface getUserInterface(Boolean injectIfNull) {
+		if(userInterface == null && Boolean.TRUE.equals(injectIfNull))
+			userInterface = new UserInterface();
+		return userInterface;
+	}
+	
+	public Object getUserInterfaceThemeColor() {
+		if(userInterface == null)
+			return null;
+		return userInterface.getThemeColor();
 	}
 }

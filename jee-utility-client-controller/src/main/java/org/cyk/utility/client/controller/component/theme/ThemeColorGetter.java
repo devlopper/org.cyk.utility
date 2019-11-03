@@ -1,13 +1,22 @@
 package org.cyk.utility.client.controller.component.theme;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
+import org.cyk.utility.__kernel__.session.Session;
+import org.cyk.utility.__kernel__.session.SessionHelper;
 import org.cyk.utility.__kernel__.value.Value;
+import org.cyk.utility.__kernel__.variable.VariableName;
 import org.cyk.utility.client.controller.component.window.WindowContainerManaged;
 
 public interface ThemeColorGetter {
 
-	Object getByWindowContainerManaged(Class<? extends WindowContainerManaged> klass);
+	default Object getByWindowContainerManaged(Class<? extends WindowContainerManaged> klass) {
+		Session session = SessionHelper.getAttributeSession();
+		if(session == null)
+			return ConfigurationHelper.getValue(VariableName.USER_INTERFACE_THEME_COLOR);
+		return session.getUserInterfaceThemeColor();
+	}
 	
 	default Object getByWindowContainerManaged(WindowContainerManaged windowContainerManaged) {
 		if(windowContainerManaged == null)
