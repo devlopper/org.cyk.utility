@@ -43,13 +43,13 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 	private TagMap tagMap;
 	private Scripts scripts;
 	private Object request;
+	protected Object color;
 
 	@Override
 	public Theme build() {
 		setIdentifier(__getIdentifier__());
 		setTemplate(__inject__(ThemeTemplate.class));
 		getTemplate().setIdentifier(__getTemplateIdentifier__());
-		
 		String logoFileName = ConfigurationHelper.getValueAsString(VariableName.USER_INTERFACE_THEME_LOGO_FILE_NAME);
 		if(StringHelper.isBlank(logoFileName))
 			logoFileName = FileHelper.concatenateNameAndExtension(ConfigurationHelper

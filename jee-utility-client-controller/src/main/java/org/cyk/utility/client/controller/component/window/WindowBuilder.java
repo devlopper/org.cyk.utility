@@ -11,12 +11,12 @@ public interface WindowBuilder extends VisibleComponentBuilder<Window> {
 
 	/*
 	 *  Window structure can be very complex and so impact its rendering time.
-	 *  Hence the idea here will be to initialise some component at demand and not at the window build.
-	 *  The following component will be initialise at demand : view
+	 *  Hence the idea here will be to initialize some component at demand and not at the window build.
+	 *  The following component will be initialize at demand : view
 	 *  
-	 *  FIXME : For now the thechnique will use to implement component initialisation at demand will be to keep its
+	 *  FIXME : For now the technique will use to implement component initialization at demand will be to keep its
 	 *  corresponding builder into the window and run the build at demand.
-	 *  LATER try to build the component itself and run the initialise method at demand
+	 *  LATER try to build the component itself and run the initialize method at demand
 	 */
 	
 	OutputStringTextBuilderMap getOutputStringTextMap();

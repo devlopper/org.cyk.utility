@@ -17,6 +17,7 @@ import org.cyk.utility.client.controller.component.menu.MenuBuilderMap;
 import org.cyk.utility.client.controller.component.menu.MenuBuilderMapGetter;
 import org.cyk.utility.client.controller.component.theme.Theme;
 import org.cyk.utility.client.controller.component.theme.ThemeClassGetter;
+import org.cyk.utility.client.controller.component.theme.ThemeColorGetter;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.message.MessageRender;
 import org.cyk.utility.client.controller.message.MessageRenderType;
@@ -81,13 +82,19 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 		if(__windowBuilder__.getRequest() == null)
 			__windowBuilder__.setRequest(request);
 		
-		//TODO you won't be able to customize a page with a specific theme one it has been set to session. how to make it possible then ???
 		Theme theme = (Theme) SessionHelper.getAttributeValueFromRequest(SessionAttributeEnumeration.THEME,request);
+		Object themeColor = ThemeColorGetter.getInstance().getByWindowContainerManaged(this);
+		//Is theme has to be rebuild ? this enable window customization
+		if(theme != null) {
+			//Some elements might trigger theme rebuild : color
+			if(themeColor != null && !themeColor.equals(theme.getColor()))
+				theme = null;
+		}
 		if(theme == null) {
 			Class<? extends Theme> themeClass = __getThemeClass__();
 			if(themeClass!=null) {
 				theme = __inject__(themeClass);
-				theme.setRequest(request).build();
+				theme.setRequest(request).setColor(themeColor).build();
 				SessionHelper.setAttributeValueFromRequest(SessionAttributeEnumeration.THEME, theme,request);
 				__windowBuilder__.setTheme(theme);
 			}

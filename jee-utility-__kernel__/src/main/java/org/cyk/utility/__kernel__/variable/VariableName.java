@@ -54,6 +54,7 @@ public interface VariableName {
 	
 	String USER_INTERFACE_THEME_CLASS_NAME = buildUserInterfaceTheme("class.name");
 	String USER_INTERFACE_THEME_IDENTIFIER = buildUserInterfaceTheme("identifier");
+	String USER_INTERFACE_THEME_COLOR = buildUserInterfaceTheme("color");
 	String USER_INTERFACE_THEME_PRIMEFACES = buildUserInterfaceTheme("primefaces");
 	
 	/*		Favicon*/

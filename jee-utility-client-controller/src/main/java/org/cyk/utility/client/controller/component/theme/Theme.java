@@ -24,6 +24,9 @@ public interface Theme extends Objectable {
 	Object getRequest();
 	Theme setRequest(Object request);
 	
+	Object getColor();
+	Theme setColor(Object color);
+	
 	ViewMap getViewMap();
 	ViewMap getViewMap(Boolean injectIfNull);
 	Theme setViewMap(ViewMap viewMap);
