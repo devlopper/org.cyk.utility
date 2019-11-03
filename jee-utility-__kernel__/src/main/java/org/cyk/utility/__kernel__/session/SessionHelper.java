@@ -1,11 +1,16 @@
 package org.cyk.utility.__kernel__.session;
 
+import java.security.Principal;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.identifier.resource.RequestHelper;
+import org.cyk.utility.__kernel__.security.SecurityHelper;
+import org.keycloak.KeycloakPrincipal;
+import org.keycloak.representations.AccessToken;
 
 public interface SessionHelper {
 
@@ -101,6 +106,21 @@ public interface SessionHelper {
 		if(session == null)
 			return;
 		setAttributeValue(Session.class, value, session);
+	}
+
+	static String getUserName(Principal principal) {
+		if(principal == null)
+			return null;
+		if(principal instanceof KeycloakPrincipal) {
+			KeycloakPrincipal<?> keycloakPrincipal = (KeycloakPrincipal<?>) principal;
+			AccessToken accessToken = keycloakPrincipal.getKeycloakSecurityContext().getToken();
+			return accessToken.getPreferredUsername();
+		}
+		return principal.getName();
+	}
+	
+	static String getUserName() {
+		return getUserName(SecurityHelper.getPrincipal());
 	}
 	
 	static void destroy() {

@@ -1,11 +1,11 @@
-package org.cyk.utility.client.controller.component.theme;
+package org.cyk.utility.__kernel__.object;
 
 import java.io.Serializable;
 
 import javax.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-public class ThemeColorGetterImpl extends AbstractThemeColorGetterImpl implements Serializable {
+public class LifeCycleListenerImpl extends AbstractLifeCycleListenerImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 }

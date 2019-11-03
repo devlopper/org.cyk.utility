@@ -3,6 +3,7 @@ package org.cyk.utility.__kernel__.session;
 import java.io.Serializable;
 import java.security.Principal;
 
+import org.cyk.utility.__kernel__.object.LifeCycleListener;
 import org.cyk.utility.__kernel__.security.SecurityHelper;
 import org.cyk.utility.__kernel__.security.User;
 
@@ -19,6 +20,8 @@ public class Session implements Serializable {
 	
 	public Session(Principal principal) {
 		user = new User(principal);
+		userInterface = new UserInterface(user);
+		LifeCycleListener.getInstance().listenConstructing(this);
 	}
 	
 	public Session() {
