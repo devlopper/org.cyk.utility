@@ -2,9 +2,9 @@ package org.cyk.utility.playground.client.controller.entities;
 
 import java.io.Serializable;
 
-import org.cyk.utility.client.controller.data.AbstractDataIdentifiableSystemStringAndIdentifiableBusinessStringAndNamableImpl;
+import org.cyk.utility.client.controller.data.AbstractDataIdentifiableSystemStringIdentifiableBusinessStringNamableImpl;
 
-public class MyEntity extends AbstractDataIdentifiableSystemStringAndIdentifiableBusinessStringAndNamableImpl implements Serializable {
+public class MyEntity extends AbstractDataIdentifiableSystemStringIdentifiableBusinessStringNamableImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override

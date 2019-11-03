@@ -1,7 +1,6 @@
 package org.cyk.utility.client.controller.component.window;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
@@ -9,7 +8,7 @@ import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.__kernel__.system.action.SystemActionAdd;
 import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
-import org.cyk.utility.__kernel__.system.action.SystemActionFieldsGetter;
+import org.cyk.utility.__kernel__.system.action.SystemActionFieldsNamesGetter;
 import org.cyk.utility.__kernel__.system.action.SystemActionUpdate;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.data.Data;
@@ -44,11 +43,11 @@ public class WindowContainerManagedWindowBuilderEditDataDefaultImpl extends Abst
 		*/
 		//
 		
-		Collection<Field> fields = SystemActionFieldsGetter.getInstance().get(getSystemAction());
-		if(CollectionHelper.isEmpty(fields))
+		Collection<String> fieldsNames = SystemActionFieldsNamesGetter.getInstance().get(getSystemAction());
+		if(CollectionHelper.isEmpty(fieldsNames))
 			return;
-		for(Field index : fields) {
-			viewBuilder.addInputBuilderByObjectByFieldNames(data, isEditable, FieldHelper.disjoin(index.getName()).toArray(new String[] {}));				
+		for(String index : fieldsNames) {
+			viewBuilder.addInputBuilderByObjectByFieldNames(data, isEditable, FieldHelper.disjoin(index).toArray(new String[] {}));				
 		}
 	}
 

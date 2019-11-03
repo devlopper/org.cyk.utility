@@ -41,4 +41,8 @@ public abstract class AbstractDataIdentifiableSystemStringImpl extends AbstractD
 			string = super.toString();
 		return string;
 	}
+	
+	/**/
+	
+	public static final String FIELD_IDENTIFIER = "identifier";
 }

@@ -1,4 +1,4 @@
-package org.cyk.utility.client.controller.data;
+package org.cyk.utility.client.controller;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -13,6 +13,7 @@ import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.system.action.AbstractSystemActionFieldsGetterImpl;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.client.controller.component.annotation.Input;
+import org.cyk.utility.client.controller.data.DataIdentifiedByStringAndLinkedByStringAndNamed;
 
 @Controller
 public class SystemActionFieldsGetterImpl extends AbstractSystemActionFieldsGetterImpl implements Serializable {
