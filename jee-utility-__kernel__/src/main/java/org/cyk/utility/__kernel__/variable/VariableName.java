@@ -39,6 +39,15 @@ public interface VariableName {
 
 	String SECURITY_DELEGATE_SYSTEM_IS_ENABLE = buildSystem("security.delegate.system.is.enable");
 	
+	/* Keycloak */
+	String KEYCLOAK_ENABLED = buildKeycloak("enabled");
+	String KEYCLOAK_SERVER_URL = buildKeycloak("server.url");
+	String KEYCLOAK_REALM_NAME = buildKeycloak("realm.name");
+	String KEYCLOAK_CLIENT_IDENTIFIER = buildKeycloak("client.identifier");
+	String KEYCLOAK_CLIENT_SECRET = buildKeycloak("client.secret");
+	String KEYCLOAK_CREDENTIAL_USERNAME = buildKeycloak("credential.username");
+	String KEYCLOAK_CREDENTIAL_PASSWORD = buildKeycloak("credential.password");
+	
 	/* Stream Distributed*/
 	
 	String STREAM_DISTRIBUTED_DELEGATE_SYSTEM_IS_ENABLE = buildSystem("stream.distributed.delegate.system.is.enable");
@@ -157,6 +166,12 @@ public interface VariableName {
 	
 	static String buildUserInterfaceTheme(String string) {
 		return buildUserInterface("theme."+string);
+	}
+	
+	/* Keycloak */
+	
+	static String buildKeycloak(String string) {
+		return build("keycloak."+string);
 	}
 	
 	/**/
