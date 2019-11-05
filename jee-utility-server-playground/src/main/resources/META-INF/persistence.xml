@@ -7,6 +7,7 @@
 		<jta-data-source>${data.source.jndi.name}</jta-data-source>
 		<class>org.cyk.utility.playground.server.persistence.entities.MyEntity</class>
 		<class>org.cyk.utility.playground.server.persistence.entities.Person</class>
+		<class>org.cyk.utility.playground.server.persistence.entities.PersonType</class>
 		<class>org.cyk.utility.playground.server.persistence.entities.Node</class>
 		<class>org.cyk.utility.playground.server.persistence.entities.NodeHierarchy</class>
 		<class>org.cyk.utility.playground.server.persistence.entities.SelectedNode</class>

@@ -75,7 +75,8 @@
 	
 	<security-constraint>
 		<web-resource-collection>
-			<url-pattern>/*</url-pattern>
+			<web-resource-name>all</web-resource-name>
+			<url-pattern>${web-app.security-constraint.web-resource-collection.all.url-pattern}</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>*</role-name>
@@ -83,7 +84,7 @@
 	</security-constraint>
 	
 	<login-config>
-		<auth-method>KEYCLOAK</auth-method>
+		<auth-method>${web-app.login-config.auth-method}</auth-method>
 	</login-config>
 	
 </web-app>

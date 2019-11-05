@@ -6,7 +6,7 @@ import java.util.Collection;
 import javax.ws.rs.core.Response;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
-import org.cyk.utility.__kernel__.identifier.resource.ProxyHelper;
+import org.cyk.utility.__kernel__.identifier.resource.ProxyGetter;
 import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
 import org.cyk.utility.__kernel__.internationalization.InternationalizationKeyStringType;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
@@ -57,7 +57,7 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 			__representationClass__ = ValueHelper.returnOrThrowIfBlank(String.format("Data Representation Class of %s", __entityClass__.getName()),
 					__inject__(DataRepresentationClassGetter.class).setDataClass(__entityClass__).execute().getOutput());
 			
-			__representation__ = ValueHelper.returnOrThrowIfBlank(String.format("Data Representation of %s", __entityClass__.getName()),ProxyHelper.get(__representationClass__));	
+			__representation__ = ValueHelper.returnOrThrowIfBlank(String.format("Data Representation of %s", __entityClass__.getName()),ProxyGetter.getInstance().get(__representationClass__));	
 		}
 	}
 	
@@ -76,7 +76,7 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 	
 	protected void __execute__(SystemAction action,Class<?> dataTransferClass,Class<?> dataRepresentationClass,Collection<?> dataTransferObjects) {
 		if(ClassHelper.isInstanceOf(dataRepresentationClass, RepresentationEntity.class)) {
-			__execute__(action, ProxyHelper.get(dataRepresentationClass), dataTransferObjects);
+			__execute__(action, ProxyGetter.getInstance().get(dataRepresentationClass), dataTransferObjects);
 		}
 	}
 	

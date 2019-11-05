@@ -1,10 +1,10 @@
 package org.cyk.utility.client.controller.component.input.choice;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
 
+import org.cyk.utility.__kernel__.instance.InstancePropertyValueBuilder;
 import org.cyk.utility.__kernel__.object.Objects;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.client.controller.component.input.AbstractInputImpl;
@@ -13,7 +13,7 @@ public abstract class AbstractInputChoiceImpl<CHOICE> extends AbstractInputImpl<
 	private static final long serialVersionUID = 1L;
 
 	private Objects choices;
-	private Class<? extends ChoicePropertyValueBuilder> choicePropertyValueBuilderClass,__choicePropertyValueBuilderClass__;
+	//private Class<? extends ChoicePropertyValueBuilder> choicePropertyValueBuilderClass,__choicePropertyValueBuilderClass__;
 	private Integer maximumNumberOfChoice,__maximumNumberOfChoice__;
 	private ChoicesLayout choicesLayout;
 	
@@ -46,7 +46,7 @@ public abstract class AbstractInputChoiceImpl<CHOICE> extends AbstractInputImpl<
 		getChoices(Boolean.TRUE).add(choices);
 		return this;
 	}
-	
+	/*
 	@Override
 	public Class<? extends ChoicePropertyValueBuilder> getChoicePropertyValueBuilderClass() {
 		return choicePropertyValueBuilderClass;
@@ -82,30 +82,30 @@ public abstract class AbstractInputChoiceImpl<CHOICE> extends AbstractInputImpl<
 		
 		return __choicePropertyValueBuilderClass__ == null ? null : __inject__(__choicePropertyValueBuilderClass__).setObject(choice).setProperty(property).execute().getOutput();
 	}
-	
+	*/
 	@Override
 	public String getChoiceLabel(Object choice) {
-		return (String) getChoiceProperty(choice, ChoiceProperty.LABEL);
+		return (String) InstancePropertyValueBuilder.getInstance().build(choice,InstancePropertyValueBuilder.Property.LABEL);
 	}
 	
 	@Override
 	public Object getChoiceValue(Object choice) {
-		return getChoiceProperty(choice, ChoiceProperty.VALUE);
+		return InstancePropertyValueBuilder.getInstance().build(choice,InstancePropertyValueBuilder.Property.VALUE);
 	}
 	
 	@Override
 	public String getChoiceDescription(Object choice) {
-		return (String) getChoiceProperty(choice, ChoiceProperty.DESCRIPTION);
+		return (String) InstancePropertyValueBuilder.getInstance().build(choice,InstancePropertyValueBuilder.Property.DESCRIPTION);
 	}
 	
 	@Override
 	public Boolean getChoiceIsDisable(Object choice) {
-		return (Boolean) getChoiceProperty(choice, ChoiceProperty.IS_DISABLE);
+		return (Boolean) InstancePropertyValueBuilder.getInstance().build(choice,InstancePropertyValueBuilder.Property.IS_DISABLE);
 	}
 	
 	@Override
 	public Boolean getChoiceIsLabelEscaped(Object choice) {
-		return (Boolean) getChoiceProperty(choice, ChoiceProperty.IS_LABEL_ESCAPABLE);
+		return (Boolean) InstancePropertyValueBuilder.getInstance().build(choice,InstancePropertyValueBuilder.Property.IS_LABEL_ESCAPABLE);
 	}
 	
 	@Override

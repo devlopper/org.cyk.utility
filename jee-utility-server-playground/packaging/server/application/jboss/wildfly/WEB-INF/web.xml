@@ -28,7 +28,7 @@
 	
 	<context-param>
 		<param-name>cyk.variable.swagger.bean.config.resource.package</param-name>
-		<param-value>org.cyk.utility.playground.server.representation.api</param-value>
+		<param-value>org.cyk.utility.server.representation.impl,org.cyk.utility.playground.server.representation.api</param-value>
 	</context-param>
 		
 </web-app>

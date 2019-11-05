@@ -10,11 +10,11 @@ import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.field.Fields;
 import org.cyk.utility.field.FieldsGetter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
+@Deprecated
 public abstract class AbstractChoicePropertyValueBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<String> implements ChoicePropertyValueBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 

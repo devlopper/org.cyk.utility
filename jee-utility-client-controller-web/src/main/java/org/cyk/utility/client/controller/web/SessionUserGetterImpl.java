@@ -11,7 +11,7 @@ import org.cyk.utility.client.controller.session.SessionUserGetter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.random.RandomHelper;
 
-@Web
+@Web @Deprecated
 public class SessionUserGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<SessionUser> implements SessionUserGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 

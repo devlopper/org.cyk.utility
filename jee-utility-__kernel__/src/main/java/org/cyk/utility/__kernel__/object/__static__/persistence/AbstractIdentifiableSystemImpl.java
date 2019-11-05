@@ -8,23 +8,24 @@ import javax.persistence.MappedSuperclass;
 
 import org.cyk.utility.__kernel__.object.marker.IdentifiableSystem;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@Getter @Setter @Accessors(chain=true) @EqualsAndHashCode(callSuper = false,of = "identifier")
+@Getter @Setter @Accessors(chain=true)
 @MappedSuperclass @Access(AccessType.FIELD)
 public abstract class AbstractIdentifiableSystemImpl<IDENTIFIER> extends AbstractObjectImpl implements IdentifiableSystem<IDENTIFIER>,Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	private IDENTIFIER identifier;
+	protected abstract IDENTIFIER getIdentifier();
+	
+	protected abstract AbstractIdentifiableSystemImpl<IDENTIFIER> setIdentifier(IDENTIFIER identifier);
 	
 	@Override
 	public IDENTIFIER getSystemIdentifier() {
 		return getIdentifier();
 	}
-	
+
 	@Override
 	public IdentifiableSystem<IDENTIFIER> setSystemIdentifier(IDENTIFIER identifier) {
 		setIdentifier(identifier);

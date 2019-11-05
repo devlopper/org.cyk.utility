@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import javax.enterprise.context.ApplicationScoped;
 
-import org.cyk.utility.__kernel__.identifier.resource.ProxyHelper;
+import org.cyk.utility.__kernel__.identifier.resource.ProxyGetter;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
@@ -170,7 +170,7 @@ public class ControllerImpl extends AbstractControllerServiceProviderImpl<Object
 
 	@Override
 	public Controller deleteAll(Properties properties) {
-		Representation representation =  (Representation) ProxyHelper.get(Representation.class);
+		Representation representation =  (Representation) ProxyGetter.getInstance().get(Representation.class);
 		representation.deleteAll();
 		return this;
 	}

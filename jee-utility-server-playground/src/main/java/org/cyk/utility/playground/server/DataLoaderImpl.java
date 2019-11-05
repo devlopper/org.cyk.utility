@@ -3,13 +3,16 @@ package org.cyk.utility.playground.server;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.ws.rs.core.Response;
 
 import org.cyk.utility.playground.server.business.api.NodeBusiness;
 import org.cyk.utility.playground.server.business.api.PersonBusiness;
+import org.cyk.utility.playground.server.business.api.PersonTypeBusiness;
 import org.cyk.utility.playground.server.persistence.entities.Node;
 import org.cyk.utility.playground.server.persistence.entities.Person;
+import org.cyk.utility.playground.server.persistence.entities.PersonType;
 import org.cyk.utility.random.RandomHelper;
 import org.cyk.utility.server.representation.impl.AbstractDataLoaderImpl;
 
@@ -19,6 +22,10 @@ public class DataLoaderImpl extends AbstractDataLoaderImpl implements Serializab
 
 	@Override
 	protected Response __execute__() throws Exception {
+		PersonType personTypeManager = new PersonType().setCode("MAN").setName("Manager");
+		PersonType personTypeEmployee = new PersonType().setCode("EMP").setName("Employee");
+		__inject__(PersonTypeBusiness.class).createMany(List.of(personTypeManager,personTypeEmployee));
+		
 		Collection<Person> persons = new ArrayList<>();
 		String codePrefix = RandomHelper.getAlphanumeric(4);
 		for(Integer index = 0 ; index < 1000 ; index = index + 1) {
@@ -26,6 +33,7 @@ public class DataLoaderImpl extends AbstractDataLoaderImpl implements Serializab
 			person.setCode("P_"+codePrefix+"_"+index);
 			person.setFirstName(RandomHelper.getAlphabetic(5));
 			person.setLastNames(RandomHelper.getAlphabetic(8));
+			person.setType(RandomHelper.getNumeric(1).intValue() % 2 == 0 ? personTypeManager : personTypeEmployee);
 			persons.add(person);
 		}
 		__logInfo__("Persisting "+persons.size()+" persons");

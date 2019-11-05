@@ -2,11 +2,9 @@ package org.cyk.utility.__kernel__.identifier.resource;
 
 import java.net.URI;
 
-import javax.ws.rs.core.UriBuilder;
-
-import org.jboss.resteasy.client.jaxrs.ResteasyClient;
-import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
-import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
+import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.log.LogHelper;
+import org.cyk.utility.__kernel__.value.Value;
 
 public interface ProxyGetter {
 
@@ -16,29 +14,27 @@ public interface ProxyGetter {
 		if(klass == null)
 			return null;
 		if(uniformResourceIdentifierGetter == null)
-			uniformResourceIdentifierGetter = ProxyUniformResourceIdentifierGetter.INSTANCE;
+			uniformResourceIdentifierGetter = ProxyUniformResourceIdentifierGetter.getInstance();
 		return get(klass,uniformResourceIdentifierGetter.get(klass));
 	}
 	
 	default <T> T get(Class<T> klass) {
 		if(klass == null)
 			return null;
-		return get(klass,ProxyUniformResourceIdentifierGetter.INSTANCE);
+		return get(klass,ProxyUniformResourceIdentifierGetter.getInstance());
 	}
 	
-	ProxyGetter INSTANCE = new ProxyGetter() {
-		@Override
-		public <T> T get(Class<T> klass,URI uri) {
-			if(klass == null || uri == null)
-				return null;
-			ResteasyClient client = new ResteasyClientBuilder().build();
-			ResteasyWebTarget target = client.target(UriBuilder.fromUri(uri));
-			try {
-				return target.proxy(klass);
-			} catch (Exception exception) {
-				throw new RuntimeException("Cannot get proxy for class <<"+klass+">> at uri <<"+uri+">>",exception);
-			}
-		}
-	};
+	/**/
+	
+	static ProxyGetter getInstance() {
+		ProxyGetter instance = (ProxyGetter) INSTANCE.get();
+		if(instance != null)
+			return instance;
+		INSTANCE.set(instance = DependencyInjection.inject(ProxyGetter.class));
+		LogHelper.logInfo("instance has been set. <<"+instance.getClass()+">>", ProxyGetter.class);
+		return instance;
+	}
+	
+	Value INSTANCE = DependencyInjection.inject(Value.class);
 	
 }

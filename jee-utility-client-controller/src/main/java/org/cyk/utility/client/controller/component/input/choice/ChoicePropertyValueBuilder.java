@@ -2,6 +2,7 @@ package org.cyk.utility.client.controller.component.input.choice;
 
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
 
+@Deprecated
 public interface ChoicePropertyValueBuilder extends FunctionWithPropertiesAsInput<String> {
 
 	ChoiceProperty getProperty();

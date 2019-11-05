@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
+import org.cyk.utility.__kernel__.object.Objects;
 import org.cyk.utility.__kernel__.runnable.RunnableHelper;
 import org.cyk.utility.__kernel__.string.Case;
 import org.cyk.utility.client.controller.component.input.InputBuilder;
@@ -17,14 +18,13 @@ import org.cyk.utility.css.Style;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.function.Function;
 import org.cyk.utility.function.FunctionHelperImpl;
-import org.cyk.utility.instance.Instances;
 
 public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Components> implements ComponentsBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private LayoutBuilder layout;
 	private Style layoutStyle;
-	private Instances components;
+	private Objects components;
 	private Boolean isHandleLayout;
 	private Boolean isCreateLayoutItemOnAddComponent;
 	private Object request;
@@ -38,7 +38,7 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 		LayoutBuilder layout = getLayout();
 		if(layout!=null && CollectionHelper.isNotEmpty(layout.getChildren()))
 			components.setLayout(layout.execute().getOutput());
-		Instances instances = getComponents();
+		Objects instances = getComponents();
 		Collection<Object> finals = null;
 		if(CollectionHelper.isNotEmpty(instances)) {
 			finals = new ArrayList<>();
@@ -193,19 +193,19 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 	}
 
 	@Override
-	public Instances getComponents() {
+	public Objects getComponents() {
 		return components;
 	}
 	
 	@Override
-	public Instances getComponents(Boolean injectIfNull) {
+	public Objects getComponents(Boolean injectIfNull) {
 		if(components == null && Boolean.TRUE.equals(injectIfNull))
-			components = __inject__(Instances.class);
+			components = __inject__(Objects.class);
 		return components;
 	}
 
 	@Override
-	public ComponentsBuilder setComponents(Instances components) {
+	public ComponentsBuilder setComponents(Objects components) {
 		this.components = components;
 		return this;
 	}

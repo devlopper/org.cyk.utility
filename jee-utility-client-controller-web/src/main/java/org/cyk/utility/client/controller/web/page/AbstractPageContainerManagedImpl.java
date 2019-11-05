@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.client.controller.component.window.AbstractWindowContainerManagedImpl;
-import org.cyk.utility.type.BooleanHelper;
 
 public abstract class AbstractPageContainerManagedImpl extends AbstractWindowContainerManagedImpl implements PageContainerManaged,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -13,7 +13,7 @@ public abstract class AbstractPageContainerManagedImpl extends AbstractWindowCon
 	@Override
 	protected void __listenBeforePostConstruct__() {
 		super.__listenBeforePostConstruct__();
-		__isInternalLoggable__ = BooleanHelper.get(__inject__(HttpServletRequest.class).getParameter("__isInternalLoggable__"));
+		__isInternalLoggable__ = ValueHelper.convertToBoolean(__inject__(HttpServletRequest.class).getParameter("__isInternalLoggable__"));
 	}
 	
 	

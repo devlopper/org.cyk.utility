@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
-import org.cyk.utility.__kernel__.identifier.resource.ProxyHelper;
+import org.cyk.utility.__kernel__.identifier.resource.ProxyGetter;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
@@ -239,7 +239,7 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 		if(__representationClass__ == null) {
 			throw new RuntimeException("No representation class found for "+__entityClass__);
 		}else {
-			representation = (RepresentationEntity<?, ?, ?>) ProxyHelper.get(__representationClass__);
+			representation = (RepresentationEntity<?, ?, ?>) ProxyGetter.getInstance().get(__representationClass__);
 		}
 		return representation;
 	}

@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.util.List;
 
 import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
+import org.cyk.utility.__kernel__.security.SecurityHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.variable.VariableName;
 import org.keycloak.KeycloakPrincipal;
@@ -67,5 +68,7 @@ public interface KeycloakHelper {
 		executeActionEmailUpdatePassword(principal.getName());
 	}
 	
-	
+	static void executeActionEmailUpdatePassword() {
+		executeActionEmailUpdatePassword(SecurityHelper.getPrincipal());
+	}
 }

@@ -13,12 +13,10 @@ public interface InputChoice<CHOICE> extends Input<CHOICE> {
 	InputChoice<CHOICE> setChoices(Objects choices);
 	InputChoice<CHOICE> addChoices(Collection<Object> choices);
 	InputChoice<CHOICE> addChoices(Object...choices);
-	
+	/*
 	Class<? extends ChoicePropertyValueBuilder> getChoicePropertyValueBuilderClass();
 	InputChoice<CHOICE> setChoicePropertyValueBuilderClass(Class<? extends ChoicePropertyValueBuilder> choicePropertyValueBuilderClass);
-	
-	Object getChoiceProperty(Object choice,ChoiceProperty property);
-	
+	*/
 	String getChoiceLabel(Object choice);
 	Object getChoiceValue(Object choice);
 	String getChoiceDescription(Object choice);

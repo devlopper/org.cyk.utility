@@ -5,7 +5,7 @@ import org.cyk.utility.__kernel__.variable.VariableHelper;
 import org.cyk.utility.__kernel__.variable.VariableName;
 import org.junit.jupiter.api.Test;
 
-public class KeycloakHelperUnitTest extends AbstractWeldUnitTest {
+public class KeycloakHelperUnitTestIntegration extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test

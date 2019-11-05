@@ -35,6 +35,29 @@ public class FieldHelperUnitTestBenchmark extends AbstractWeldUnitTestBenchmark 
 		);
 	}	
 	
+	@Test
+	public void writeSystemIdentifier(){
+		Class klass = new Class();
+		execute(new Jobs().setName("Write system identifier").setNumberOfRound(100000000)
+				.add("reflection generic : FieldHelper.write",new Runnable() {
+				@Override
+				public void run() {
+					FieldHelper.write(klass,FieldName.IDENTIFIER,ValueUsageType.SYSTEM,"1");
+				}
+			}).add("reflection specific  : FieldHelper.writeSystemIdentifier",new Runnable() {
+				@Override
+				public void run() {
+					FieldHelper.writeSystemIdentifier(klass,"1");
+				}
+			}).add("interface marker     : IdentifiableSystem.setSystemIdentifier", new Runnable() {
+				@Override
+				public void run() {
+					((IdentifiableSystem<String>)klass).setSystemIdentifier("1");
+				}
+			})
+		);
+	}	
+	
 	/**/
 	
 	@Getter @Setter @Accessors(chain=true)

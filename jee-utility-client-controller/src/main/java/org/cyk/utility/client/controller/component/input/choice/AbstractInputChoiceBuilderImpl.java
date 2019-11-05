@@ -12,7 +12,7 @@ public abstract class AbstractInputChoiceBuilderImpl<INPUT extends InputChoice<C
 	private static final long serialVersionUID = 1L;
 
 	private Objects choices;
-	private Class<? extends ChoicePropertyValueBuilder> choicePropertyValueBuilderClass;
+	//private Class<? extends ChoicePropertyValueBuilder> choicePropertyValueBuilderClass;
 	private Class<? extends ChoicesGetter> choicesGetterClass;
 	private Integer maximumNumberOfChoice;
 	private Boolean isGetChoices;
@@ -24,8 +24,8 @@ public abstract class AbstractInputChoiceBuilderImpl<INPUT extends InputChoice<C
 		Class<? extends ChoicesGetter> choicesGetterClass = getChoicesGetterClass();
 		if(choicesGetterClass == null)
 			choicesGetterClass = ChoicesGetter.class;
-		Class<? extends ChoicePropertyValueBuilder> choicePropertyValueBuilderClass = getChoicePropertyValueBuilderClass();
-		inputChoice.setChoicePropertyValueBuilderClass(choicePropertyValueBuilderClass);
+		//Class<? extends ChoicePropertyValueBuilder> choicePropertyValueBuilderClass = getChoicePropertyValueBuilderClass();
+		//inputChoice.setChoicePropertyValueBuilderClass(choicePropertyValueBuilderClass);
 		Integer maximumNumberOfChoice = getMaximumNumberOfChoice();
 		inputChoice.setMaximumNumberOfChoice(maximumNumberOfChoice);
 		
@@ -75,7 +75,7 @@ public abstract class AbstractInputChoiceBuilderImpl<INPUT extends InputChoice<C
 		getChoices(Boolean.TRUE).add(choices);
 		return this;
 	}
-	
+	/*
 	@Override
 	public Class<? extends ChoicePropertyValueBuilder> getChoicePropertyValueBuilderClass() {
 		return choicePropertyValueBuilderClass;
@@ -86,7 +86,7 @@ public abstract class AbstractInputChoiceBuilderImpl<INPUT extends InputChoice<C
 		this.choicePropertyValueBuilderClass = choiceLabelBuilderClass;
 		return this;
 	}
-	
+	*/
 	@Override
 	public Class<? extends ChoicesGetter> getChoicesGetterClass() {
 		return choicesGetterClass;

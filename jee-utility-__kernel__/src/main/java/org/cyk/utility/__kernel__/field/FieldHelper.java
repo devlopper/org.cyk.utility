@@ -32,6 +32,7 @@ import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.object.marker.IdentifiableBusiness;
 import org.cyk.utility.__kernel__.object.marker.IdentifiableSystem;
+import org.cyk.utility.__kernel__.object.marker.Namable;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.Identifier;
 import org.cyk.utility.__kernel__.value.ValueHelper;
@@ -679,6 +680,14 @@ public interface FieldHelper {
 		return read(object, FieldName.IDENTIFIER, ValueUsageType.BUSINESS);
 	}
 	
+	static Object readName(Object object) {
+		if(object == null)
+			return null;
+		if(object instanceof Namable)
+			return ((Namable)object).getName();
+		return read(object, FieldName.NAME, ValueUsageType.BUSINESS);
+	}
+	
 	static Identifier readIdentifier(Object object,Boolean isGettable) {
 		if(object == null)
 			return null;
@@ -780,11 +789,13 @@ public interface FieldHelper {
 	}
 	
 	static void write(Object object,Field field, Object value) {
+		if(object == null || field == null)
+			return;
 		write(object,field, value, null);
 	}
 	
 	static void write(Object object, String fieldName, Object value, Boolean isGettable) {
-		if(object == null || fieldName == null || fieldName.isBlank())
+		if(object == null || StringHelper.isBlank(fieldName))
 			return;
 		if(StringUtils.contains(fieldName, DOT)) {
 			try {
@@ -811,53 +822,99 @@ public interface FieldHelper {
 	}
 	
 	static void write(Object object, String fieldName, Object value) {
+		if(object == null || StringHelper.isBlank(fieldName))
+			return;
 		write(object, fieldName, value, null);
 	}
 	
 	static void write(Object object, Collection<String> fieldNames, Object value, Boolean isGettable) {
+		if(object == null || CollectionHelper.isEmpty(fieldNames))
+			return;
 		write(object, join(fieldNames), value, isGettable);
 	}
 	
 	static void write(Object object, Collection<String> fieldNames, Object value) {
+		if(object == null || CollectionHelper.isEmpty(fieldNames))
+			return;
 		write(object, join(fieldNames), value);
 	}
 	
 	static void write(Object object, String[] fieldNames, Object value, Boolean isGettable) {
+		if(object == null || ArrayHelper.isEmpty(fieldNames))
+			return;
 		write(object, join(fieldNames), value, isGettable);
 	}
 	
 	static void write(Object object, String[] fieldNames, Object value) {
+		if(object == null || ArrayHelper.isEmpty(fieldNames))
+			return;
 		write(object, join(fieldNames), value);
 	}
 	
 	static void write(Object object, FieldName fieldName,ValueUsageType valueUsageType, Object value, Boolean isGettable) {
-		if(object != null)
-			write(object, getName(object.getClass(), fieldName, valueUsageType), value, isGettable);
+		if(object == null || fieldName == null || valueUsageType == null)
+			return;
+		write(object, getName(object.getClass(), fieldName, valueUsageType), value, isGettable);
 	}
 	
 	static void write(Object object, FieldName fieldName,ValueUsageType valueUsageType, Object value) {
-		if(object != null)
-			write(object, getName(object.getClass(), fieldName, valueUsageType), value, null);
+		if(object == null || fieldName == null || valueUsageType == null)
+			return;
+		write(object, getName(object.getClass(), fieldName, valueUsageType), value, null);
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	static void writeSystemIdentifier(Object object, Object value, Boolean isGettable) {
-		if(object != null)
-			write(object, getName(object.getClass(), FieldName.IDENTIFIER, ValueUsageType.SYSTEM), value, isGettable);
+		if(object == null)
+			return;
+		if(object instanceof IdentifiableSystem) {
+			((IdentifiableSystem)object).setSystemIdentifier(value);
+			return;
+		}
+		write(object, getName(object.getClass(), FieldName.IDENTIFIER, ValueUsageType.SYSTEM), value, isGettable);
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	static void writeSystemIdentifier(Object object, Object value) {
-		if(object != null)
-			write(object, getName(object.getClass(), FieldName.IDENTIFIER, ValueUsageType.SYSTEM), value);
+		if(object == null)
+			return;
+		if(object instanceof IdentifiableSystem) {
+			((IdentifiableSystem)object).setSystemIdentifier(value);
+			return;
+		}
+		write(object, getName(object.getClass(), FieldName.IDENTIFIER, ValueUsageType.SYSTEM), value);
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	static void writeBusinessIdentifier(Object object, Object value, Boolean isGettable) {
-		if(object != null)
-			write(object, getName(object.getClass(), FieldName.IDENTIFIER, ValueUsageType.BUSINESS), value, isGettable);
+		if(object == null)
+			return;
+		if(object instanceof IdentifiableBusiness) {
+			((IdentifiableBusiness)object).setBusinessIdentifier(value);
+			return;
+		}
+		write(object, getName(object.getClass(), FieldName.IDENTIFIER, ValueUsageType.BUSINESS), value, isGettable);
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	static void writeBusinessIdentifier(Object object, Object value) {
-		if(object != null)
-			write(object, getName(object.getClass(), FieldName.IDENTIFIER, ValueUsageType.BUSINESS), value);
+		if(object == null)
+			return;
+		if(object instanceof IdentifiableBusiness) {
+			((IdentifiableBusiness)object).setBusinessIdentifier(value);
+			return;
+		}
+		write(object, getName(object.getClass(), FieldName.IDENTIFIER, ValueUsageType.BUSINESS), value);
+	}
+	
+	static void writeName(Object object, Object value) {
+		if(object == null)
+			return;
+		if(object instanceof Namable) {
+			((Namable)object).setName((String) value);
+			return;
+		}
+		write(object, getName(object.getClass(), FieldName.NAME, ValueUsageType.BUSINESS), value);
 	}
 	
 	static void writeMany(Object object, Collection<Field> fields,Object value) {

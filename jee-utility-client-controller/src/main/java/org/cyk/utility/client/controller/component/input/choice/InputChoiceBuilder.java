@@ -18,10 +18,10 @@ public interface InputChoiceBuilder<INPUT extends InputChoice<CHOICE>,CHOICE> ex
 	
 	Integer getMaximumNumberOfChoice();
 	InputChoiceBuilder<INPUT,CHOICE> setMaximumNumberOfChoice(Integer maximumNumberOfChoice);
-	
+	/*
 	Class<? extends ChoicePropertyValueBuilder> getChoicePropertyValueBuilderClass();
 	InputChoiceBuilder<INPUT,CHOICE> setChoicePropertyValueBuilderClass(Class<? extends ChoicePropertyValueBuilder> choicePropertyValueBuilderClass);
-	
+	*/
 	Boolean getIsGetChoices();
 	InputChoiceBuilder<INPUT,CHOICE> setIsGetChoices(Boolean isGetChoices);
 	

@@ -18,19 +18,9 @@ public interface KeycloakClientGetter {
 			return (Keycloak) CLIENT.get();
 		if(!ConfigurationHelper.is(VariableName.KEYCLOAK_ENABLED)) {
 			CLIENT.set(null);
+			LogHelper.logInfo("keycloak is not enabled", KeycloakClientGetter.class);
 			return null;
 		}
-		/*
-		String url = ValueHelper.returnOrThrowIfBlank("keycloak server url",ConfigurationHelper.getValueAsString("keycloak.server.url")); 
-		String realmName = ValueHelper.returnOrThrowIfBlank("keycloak realm name",ConfigurationHelper.getValueAsString("keycloak.realm.name")); 
-		String clientIdentifier = ValueHelper.returnOrThrowIfBlank("keycloak client identifier",ConfigurationHelper.getValueAsString("keycloak.client.identifier")); 
-		String clientSecret = ValueHelper.returnOrThrowIfBlank("keycloak client secret",ConfigurationHelper.getValueAsString("keycloak.client.secret")); 
-		String username = ValueHelper.returnOrThrowIfBlank("keycloak credentials username",ConfigurationHelper.getValueAsString("keycloak.credential.username")); 
-		String password = ValueHelper.returnOrThrowIfBlank("keycloak credentials password",ConfigurationHelper.getValueAsString("keycloak.credential.password"));
-		
-		LogHelper.logInfo("KEYCLOAK CLIENT TO BE CREATED\nurl:"+url+"\nrealm:"+realmName+"\nclient identifier:"+clientIdentifier+"\nclient secret:"+clientSecret
-				+"\nusername:"+username+"\npassword:"+password,KeycloakClientGetter.class);
-		*/
 		CLIENT.set(KeycloakBuilder.builder().grantType(OAuth2Constants.PASSWORD).resteasyClient(new ResteasyClientBuilder().connectionPoolSize(10).register(new CustomJacksonProvider()).build())
 				.serverUrl(ValueHelper.returnOrThrowIfBlank("keycloak server url",ConfigurationHelper.getValueAsString(VariableName.KEYCLOAK_SERVER_URL)))
 				.realm(ValueHelper.returnOrThrowIfBlank("keycloak realm name",ConfigurationHelper.getValueAsString(VariableName.KEYCLOAK_REALM_NAME)))
@@ -40,7 +30,7 @@ public interface KeycloakClientGetter {
 				.password(ValueHelper.returnOrThrowIfBlank("keycloak credentials password",ConfigurationHelper.getValueAsString(VariableName.KEYCLOAK_CREDENTIAL_PASSWORD)))				
 				.build()
 				);
-		LogHelper.logInfo("client has been created", KeycloakClientGetter.class);
+		LogHelper.logInfo("keycloak client has been created", KeycloakClientGetter.class);
 		return (Keycloak) CLIENT.get();
 	}
 	

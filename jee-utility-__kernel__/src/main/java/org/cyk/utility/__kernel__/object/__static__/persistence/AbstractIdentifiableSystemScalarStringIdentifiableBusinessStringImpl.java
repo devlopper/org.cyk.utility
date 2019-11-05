@@ -30,7 +30,7 @@ public abstract class AbstractIdentifiableSystemScalarStringIdentifiableBusiness
 	
 	@Override
 	public IdentifiableBusiness<String> setBusinessIdentifier(String identifier) {
-		setBusinessIdentifier(identifier);
+		setCode(identifier);
 		return this;
 	}
 	

@@ -3,6 +3,9 @@ package org.cyk.utility.playground.client.controller.entities;
 import java.io.Serializable;
 
 import org.cyk.utility.client.controller.component.annotation.Input;
+import org.cyk.utility.client.controller.component.annotation.InputChoice;
+import org.cyk.utility.client.controller.component.annotation.InputChoiceOne;
+import org.cyk.utility.client.controller.component.annotation.InputChoiceOneCombo;
 import org.cyk.utility.client.controller.component.annotation.InputString;
 import org.cyk.utility.client.controller.component.annotation.InputStringLineOne;
 import org.cyk.utility.client.controller.data.AbstractDataIdentifiableSystemStringIdentifiableBusinessStringImpl;
@@ -17,5 +20,6 @@ public class Person extends AbstractDataIdentifiableSystemStringIdentifiableBusi
 
 	@Input @InputString @InputStringLineOne private String firstName;
 	@Input @InputString @InputStringLineOne private String lastNames;
+	@Input @InputChoice @InputChoiceOne @InputChoiceOneCombo private PersonType type;
 
 }
