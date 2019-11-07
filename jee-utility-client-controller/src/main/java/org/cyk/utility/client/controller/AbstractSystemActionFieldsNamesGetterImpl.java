@@ -11,6 +11,7 @@ import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.client.controller.component.annotation.Input;
+import org.cyk.utility.client.controller.component.annotation.Output;
 import org.cyk.utility.client.controller.data.DataIdentifiedByStringAndLinkedByStringAndNamed;
 
 public abstract class AbstractSystemActionFieldsNamesGetterImpl extends org.cyk.utility.__kernel__.system.action.AbstractSystemActionFieldsNamesGetterImpl implements Serializable {
@@ -22,7 +23,7 @@ public abstract class AbstractSystemActionFieldsNamesGetterImpl extends org.cyk.
 			LogHelper.logWarning("it would be better to use class instead of interface("+entityClass+"). for data class.implementation will be used.", SystemActionFieldsGetterImpl.class);
 			entityClass = DependencyInjection.inject(entityClass).getClass();
 		}	
-		Collection<Field> fields = FieldHelper.getByAnnotationClass(entityClass, Input.class);	
+		Collection<Field> fields = FieldHelper.getByAnnotationsClasses(entityClass, Input.class,Output.class);	
 		if(CollectionHelper.isEmpty(fields))
 			return null;
 		if(fields.size() > 1) {

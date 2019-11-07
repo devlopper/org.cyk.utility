@@ -288,15 +288,27 @@ public interface FieldHelper {
 		return annotated;
 	}
 	
-	/*static Collection<Field> getByAnnotationsClasses(Class<?> klass,Collection<Class<? extends Annotation>> annotationsClasses) {
+	static Collection<Field> getByAnnotationsClasses(Class<?> klass,Collection<Class<? extends Annotation>> annotationsClasses) {
 		if(klass == null || CollectionHelper.isEmpty(annotationsClasses))
 			return null;
 		Collection<Field> fields = null;
 		for(Class<? extends Annotation> index : annotationsClasses) {
-			
+			Collection<Field> __fields__ = getByAnnotationClass(klass, index);
+			if(CollectionHelper.isEmpty(__fields__))
+				continue;
+			if(fields == null)
+				fields = new LinkedHashSet<>();
+			fields.addAll(__fields__);
 		}
 		return fields;
-	}*/
+	}
+	
+	@SafeVarargs
+	static Collection<Field> getByAnnotationsClasses(Class<?> klass,Class<? extends Annotation>...annotationsClasses) {
+		if(klass == null || ArrayHelper.isEmpty(annotationsClasses))
+			return null;
+		return getByAnnotationsClasses(klass,CollectionHelper.listOf(annotationsClasses));
+	}
 	
 	static Field getByName(Class<?> klass, List<String> fieldNames,Boolean isThrowExceptionIfNull) {
 		if(klass == null || fieldNames == null || fieldNames.isEmpty())

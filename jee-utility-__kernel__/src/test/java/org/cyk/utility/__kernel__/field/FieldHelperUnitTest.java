@@ -667,6 +667,13 @@ public class FieldHelperUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	@Test
+	public void getByAnnotationsClasses_annotationIsNotNullAndEmail(){
+		Collection<String> names = FieldHelper.getNames(FieldHelper.getByAnnotationsClasses(HavingAnnotation01.class,NotNull.class,Email.class));
+		assertThat(names).isNotNull();
+		assertThat(names).containsExactlyInAnyOrder("f01","f02","f03");
+	}
+	
+	@Test
 	public void getByAnnotationClass_annotationIsEmail(){
 		Collection<String> names = FieldHelper.getNames(FieldHelper.getByAnnotationClass(HavingAnnotation01.class,Email.class));
 		assertThat(names).isNotNull();
