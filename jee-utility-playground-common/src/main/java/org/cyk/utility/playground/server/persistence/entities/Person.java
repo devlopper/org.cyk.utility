@@ -22,8 +22,6 @@ public class Person extends AbstractIdentifiableSystemScalarStringIdentifiableBu
 	private String firstName;
 	private String lastNames;
 	
-	@NotNull
-	@ManyToOne
-	private PersonType type;
+	@NotNull @ManyToOne private PersonType type;
 	
 }

@@ -18,9 +18,9 @@ public class ControllerFunctionModifierImpl extends AbstractControllerFunctionIm
 	@Override
 	protected void __executeRepresentation__() {
 		String fields = (String) getProperty(Properties.FIELDS);//TODO get logic from centralized function
-		if(__representation__ instanceof RepresentationEntity<?, ?, ?>) {
+		if(__representation__ instanceof RepresentationEntity<?>) {
 			//FIXME it is making body parsing error
-			__response__ = ((RepresentationEntity<?,Object,?>)__representation__).updateMany(__representationEntities__,fields);
+			__response__ = ((RepresentationEntity<Object>)__representation__).updateMany(__representationEntities__,fields);
 			//for(Object index : __representationEntities__)
 			//	__response__ = ((RepresentationEntity<?,Object,?>)__representation__).updateOne(index,fields);
 		}

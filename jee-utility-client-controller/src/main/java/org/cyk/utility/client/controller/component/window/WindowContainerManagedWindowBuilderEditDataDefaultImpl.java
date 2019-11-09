@@ -43,7 +43,7 @@ public class WindowContainerManagedWindowBuilderEditDataDefaultImpl extends Abst
 		*/
 		//
 		
-		Collection<String> fieldsNames = SystemActionFieldsNamesGetter.getInstance().get(getSystemAction());
+		Collection<String> fieldsNames = SystemActionFieldsNamesGetter.getInstance().get(systemAction);
 		if(CollectionHelper.isEmpty(fieldsNames))
 			return;
 		for(String index : fieldsNames) {

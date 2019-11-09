@@ -233,13 +233,13 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 	
 	/**/
 	
-	protected RepresentationEntity<?, ?, ?> getRepresentation(){
+	protected RepresentationEntity<?> getRepresentation(){
 		System.out.println("AbstractControllerEntityImpl.getRepresentation()");
-		RepresentationEntity<?, ?, ?> representation = null;
+		RepresentationEntity<?> representation = null;
 		if(__representationClass__ == null) {
 			throw new RuntimeException("No representation class found for "+__entityClass__);
 		}else {
-			representation = (RepresentationEntity<?, ?, ?>) ProxyGetter.getInstance().get(__representationClass__);
+			representation = (RepresentationEntity<?>) ProxyGetter.getInstance().get(__representationClass__);
 		}
 		return representation;
 	}

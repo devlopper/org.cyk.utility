@@ -28,7 +28,6 @@ import org.cyk.utility.server.representation.api.ParentChildRepresentation;
 import org.cyk.utility.server.representation.api.ParentRepresentation;
 import org.cyk.utility.server.representation.entities.ChildDto;
 import org.cyk.utility.server.representation.entities.MyEntityDto;
-import org.cyk.utility.server.representation.entities.MyEntityDtoCollection;
 import org.cyk.utility.server.representation.entities.NodeDto;
 import org.cyk.utility.server.representation.entities.ParentDto;
 import org.cyk.utility.server.representation.test.TestRepresentationRead;
@@ -152,29 +151,6 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 		List<MyEntityDto> myEntityDtos = List.of(new MyEntityDto().setCode("a"),new MyEntityDto().setCode("b"));
 		Response response = myEntityRepresentation.createMany(myEntityDtos,null);
 		__assertResponseTransaction__(response, Status.CREATED, 2l, myEntityDtos.stream().map(MyEntityDto::getIdentifier).collect(Collectors.toList()), List.of("a","b"));
-	}
-	
-	@Test
-	public void create_myEntity_many_collection_custom_null() throws Exception{
-		MyEntityRepresentation myEntityRepresentation = __inject__(MyEntityRepresentation.class);
-		Response response = myEntityRepresentation.createMany((MyEntityDtoCollection)null,null);
-		__assertResponseTransaction__(response, Status.BAD_REQUEST, null, null, null);
-	}
-	
-	@Test
-	public void create_myEntity_many_collection_custom_empty() throws Exception{
-		MyEntityRepresentation myEntityRepresentation = __inject__(MyEntityRepresentation.class);
-		Response response = myEntityRepresentation.createMany(new MyEntityDtoCollection(),null);
-		__assertResponseTransaction__(response, Status.BAD_REQUEST, null, null, null);
-	}
-	
-	@Test
-	public void create_myEntity_many_collection_custom() throws Exception{
-		MyEntityRepresentation myEntityRepresentation = __inject__(MyEntityRepresentation.class);
-		MyEntityDtoCollection myEntityDtoCollection = new MyEntityDtoCollection(); 
-		myEntityDtoCollection.add(new MyEntityDto().setCode("a"),new MyEntityDto().setCode("b"));
-		Response response = myEntityRepresentation.createMany(myEntityDtoCollection,null);
-		__assertResponseTransaction__(response, Status.CREATED, 2l, myEntityDtoCollection.getElements().stream().map(MyEntityDto::getIdentifier).collect(Collectors.toList()), List.of("a","b"));
 	}
 	
 	/* Find */

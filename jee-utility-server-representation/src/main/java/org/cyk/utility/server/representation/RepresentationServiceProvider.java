@@ -86,5 +86,17 @@ public interface RepresentationServiceProvider {
 			
 	/**/
 	
+	String TAG_CREATE = "create";
+	String TAG_READ = "read";
+	String TAG_UPDATE = "update";
+	String TAG_DELETE = "delete";
+	String TAG_SAVE = "save";
+	String TAG_COUNT = "count";
+	String TAG_IMPORT = "import";
 	
+	String TAG_ONE = "one";
+	String TAG_MANY = "many";
+	String TAG_ALL = "all";
+	String TAG_BY_IDENTIFIERS = "by identifiers";
+	String TAG_EXCEL = "excel";
 }

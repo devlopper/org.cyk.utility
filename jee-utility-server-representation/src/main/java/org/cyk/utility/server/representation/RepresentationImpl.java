@@ -19,7 +19,7 @@ public class RepresentationImpl extends AbstractObject implements Representation
 	@Override
 	public Representation create(Object object) {
 		@SuppressWarnings("unchecked")
-		Class<RepresentationEntity<Object,Object,Object>> interfaceClass = (Class<RepresentationEntity<Object,Object,Object>>) __inject__(SystemLayerRepresentation.class).getInterfaceClassFromEntityClassName(object.getClass());
+		Class<RepresentationEntity<Object>> interfaceClass = (Class<RepresentationEntity<Object>>) __inject__(SystemLayerRepresentation.class).getInterfaceClassFromEntityClassName(object.getClass());
 		if(interfaceClass == null){
 			System.err.println("No specific representation interface found for entity "+object.getClass());
 			//super.create(object, properties);
@@ -38,7 +38,7 @@ public class RepresentationImpl extends AbstractObject implements Representation
 	@Override
 	public Object getOne(Class<?> aClass, Object identifier, ValueUsageType valueUsageType,Strings fieldNames) {
 		@SuppressWarnings("unchecked")
-		Class<RepresentationEntity<Object,Object,Object>> interfaceClass = (Class<RepresentationEntity<Object,Object,Object>>) __inject__(SystemLayerRepresentation.class).getInterfaceClassFromEntityClassName(aClass);
+		Class<RepresentationEntity<Object>> interfaceClass = (Class<RepresentationEntity<Object>>) __inject__(SystemLayerRepresentation.class).getInterfaceClassFromEntityClassName(aClass);
 		if(interfaceClass == null){
 			System.err.println("No specific representation interface found for class "+aClass);
 			return null;
@@ -50,7 +50,7 @@ public class RepresentationImpl extends AbstractObject implements Representation
 	@Override
 	public Representation delete(Object object) {
 		@SuppressWarnings("unchecked")
-		Class<RepresentationEntity<Object,Object,Object>> interfaceClass = (Class<RepresentationEntity<Object,Object,Object>>) __inject__(SystemLayerRepresentation.class).getInterfaceClassFromEntityClassName(object.getClass());
+		Class<RepresentationEntity<Object>> interfaceClass = (Class<RepresentationEntity<Object>>) __inject__(SystemLayerRepresentation.class).getInterfaceClassFromEntityClassName(object.getClass());
 		if(interfaceClass == null){
 			System.err.println("No specific representation interface found for entity "+object.getClass());
 			//super.create(object, properties);

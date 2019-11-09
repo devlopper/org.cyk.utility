@@ -49,23 +49,8 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 	}
 	
 	@Override
-	protected <ENTITY> void ____createEntity____(Collection<ENTITY> entities,RepresentationEntity representation) {
-		AbstractCollectionOfIdentifiedImpl<ENTITY,?> collection = (AbstractCollectionOfIdentifiedImpl<ENTITY,?>) instanciateOne(__getEntityCollectionClass__(entities.iterator().next().getClass()));
-		collection.add(entities);		
-		Response response = representation.createMany(collection,null);
-		assertThat(response.getStatus()).isEqualTo(Response.Status.CREATED.getStatusCode());
-		response.close();
-		for(ENTITY index : entities) {
-			Object businessIdentifier = org.cyk.utility.__kernel__.field.FieldHelper.readBusinessIdentifier(index);
-			if(businessIdentifier != null) {
-				Object entity = index;
-				response = representation.getOne(businessIdentifier.toString(), ValueUsageType.BUSINESS.name(),null);
-				entity = (ENTITY) response.getEntity();
-				String systemIdentifier = (String) org.cyk.utility.__kernel__.field.FieldHelper.readSystemIdentifier(entity);
-				assertThat(systemIdentifier).isNotBlank();	
-				response.close();
-			}
-		}
+	protected <ENTITY> void ____createEntity____(Collection<ENTITY> entities,RepresentationEntity layerEntityInterface) {
+		throw new RuntimeException("not yet implemented");
 	}
 	
 	@Override

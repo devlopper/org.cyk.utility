@@ -22,15 +22,15 @@ public class ControllerFunctionRemoverImpl extends AbstractControllerFunctionImp
 	protected void __executeRepresentation__() {
 		Boolean isAll = getProperties().getAll() == null ? Boolean.FALSE : ValueHelper.convertToBoolean(getProperties().getAll());
 		if(Boolean.TRUE.equals(isAll)) {
-			if(__representation__ instanceof RepresentationEntity<?, ?, ?>)
-				__response__ = ((RepresentationEntity<?,?,?>)__representation__).deleteAll();
+			if(__representation__ instanceof RepresentationEntity<?>)
+				__response__ = ((RepresentationEntity<?>)__representation__).deleteAll();
 		}else {
-			if(__representation__ instanceof RepresentationEntity<?, ?, ?>) {
+			if(__representation__ instanceof RepresentationEntity<?>) {
 				if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(__entitiesSystemIdentifiers__)))
-					__response__ = ((RepresentationEntity<?,Object,?>)__representation__).deleteByIdentifiers(
+					__response__ = ((RepresentationEntity<Object>)__representation__).deleteByIdentifiers(
 							__entitiesSystemIdentifiers__.stream().map(x -> x.toString()).collect(Collectors.toList()), ValueUsageType.SYSTEM.name());
 				else if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(__entitiesBusinessIdentifiers__)))
-					__response__ = ((RepresentationEntity<?,Object,?>)__representation__).deleteByIdentifiers(
+					__response__ = ((RepresentationEntity<Object>)__representation__).deleteByIdentifiers(
 							__entitiesBusinessIdentifiers__.stream().map(x -> x.toString()).collect(Collectors.toList()), ValueUsageType.BUSINESS.name());
 				//__response__ = ((RepresentationEntity<?,Object,?>)__representation__).deleteOne(__representationEntities__.iterator().next());
 			}

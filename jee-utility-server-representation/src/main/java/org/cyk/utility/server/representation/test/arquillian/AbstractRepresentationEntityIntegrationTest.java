@@ -164,7 +164,7 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected RepresentationEntity<ENTITY,?,?> __getRepresentationEntity__(Object action){
+	protected RepresentationEntity<ENTITY> __getRepresentationEntity__(Object action){
 		return __getLayerEntityInterfaceFromClass__(null);//(RepresentationEntity<ENTITY,?>) __inject__(RepresentationLayer.class).injectInterfaceClassFromEntityClass(__getEntityClass__(action));
 	}
 	

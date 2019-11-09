@@ -43,19 +43,19 @@ public class ControllerFunctionReaderImpl extends AbstractControllerFunctionImpl
 			Long count = ValueHelper.defaultToIfNull(NumberHelper.getLong(Properties.getFromPath(properties,Properties.COUNT))
 					,Boolean.TRUE.equals(isPageable) ? COUNT : null);
 			FilterDto filters = (FilterDto) Properties.getFromPath(properties,Properties.FILTERS);
-			if(__representation__ instanceof RepresentationEntity<?, ?, ?>)
-				__response__ = ((RepresentationEntity<?,Object,?>)__representation__).getMany(isPageable,from,count,fields,filters);	
+			if(__representation__ instanceof RepresentationEntity<?>)
+				__response__ = ((RepresentationEntity<Object>)__representation__).getMany(isPageable,from,count,fields,filters);	
 		}else {
 			//Object identifier = identifiers.getFirst();
 			//ValueUsageType valueUsageType = getEntityIdentifierValueUsageType();
 			//if(valueUsageType == null)
 			//	valueUsageType = ValueUsageType.SYSTEM;
 			if(CollectionHelper.getSize(__entitiesSystemIdentifiers__) == 1) {
-				if(__representation__ instanceof RepresentationEntity<?, ?, ?>)
-					__response__ = ((RepresentationEntity<?,Object,?>)__representation__).getOne(__entitiesSystemIdentifiers__.iterator().next().toString(),ValueUsageType.SYSTEM.name(),fields);
+				if(__representation__ instanceof RepresentationEntity<?>)
+					__response__ = ((RepresentationEntity<Object>)__representation__).getOne(__entitiesSystemIdentifiers__.iterator().next().toString(),ValueUsageType.SYSTEM.name(),fields);
 			}else if(CollectionHelper.getSize(__entitiesBusinessIdentifiers__) == 1) {
-				if(__representation__ instanceof RepresentationEntity<?, ?, ?>)
-					__response__ = ((RepresentationEntity<?,Object,?>)__representation__).getOne(__entitiesBusinessIdentifiers__.iterator().next().toString(),ValueUsageType.BUSINESS.name(),fields);
+				if(__representation__ instanceof RepresentationEntity<?>)
+					__response__ = ((RepresentationEntity<Object>)__representation__).getOne(__entitiesBusinessIdentifiers__.iterator().next().toString(),ValueUsageType.BUSINESS.name(),fields);
 			}else {
 				
 			}

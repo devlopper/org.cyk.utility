@@ -4,16 +4,19 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.klass.NamingModel;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.system.action.SystemActionFieldsNamesGetter;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.input.InputFile;
 import org.cyk.utility.client.controller.component.input.InputFileBuilder;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.data.Data;
-import org.cyk.utility.client.controller.data.DataFieldsNamesGetter;
 import org.cyk.utility.client.controller.data.DataGetter;
 import org.cyk.utility.client.controller.data.DataMethodsNamesGetter;
 import org.cyk.utility.client.controller.data.Form;
@@ -50,7 +53,6 @@ public abstract class AbstractWindowContainerManagedWindowBuilderEditDataImpl ex
 				for(String index : methodsNames.get()) {
 					//TODO we can write a DataCommandableBuilderGetter
 					CommandableBuilder commandable = (CommandableBuilder) viewBuilder.addComponentBuilderByObjectByMethodName(form, index ,systemAction);
-					/* TODO if it is update action then we need to know which field to process : we can write a getter for it */
 					commandable.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setProperty(Properties.FIELDS, StringHelper.concatenate(__getPersistenceEntityFieldNames__(window, systemAction, formClass),","));
 					
 					Boolean isHasInputFile = CollectionHelper.isNotEmpty(viewBuilder.getComponentsBuilder(Boolean.TRUE).getComponents(Boolean.TRUE)
@@ -66,8 +68,16 @@ public abstract class AbstractWindowContainerManagedWindowBuilderEditDataImpl ex
 	}
 	
 	protected Collection<String> __getPersistenceEntityFieldNames__(WindowBuilder window,SystemAction systemAction,Class<? extends Form> formClass){
-		Strings fieldNames = __inject__(DataFieldsNamesGetter.class).setSystemAction(systemAction).execute().getOutput();
-		return CollectionHelper.isEmpty(fieldNames) ? null : fieldNames.get();
+		Collection<String> fieldsNames = SystemActionFieldsNamesGetter.getInstance().get(systemAction);
+		if(CollectionHelper.isEmpty(fieldsNames))
+			return null;
+		String persistenceEntityClassName = ClassHelper.buildName(systemAction.getEntityClass().getPackageName(), systemAction.getEntityClass().getSimpleName()
+				, new NamingModel().client().controller().entities(), new NamingModel().server().persistence().entities());
+		Collection<String> persistenceEntityClassFieldsNames = FieldHelper.getNames(ClassHelper.getByName(persistenceEntityClassName));
+		if(CollectionHelper.isEmpty(persistenceEntityClassFieldsNames))
+			return null;
+		fieldsNames.retainAll(persistenceEntityClassFieldsNames);
+		return fieldsNames;
 	}
 	
 	protected abstract void __execute__(Form form,SystemAction systemAction,Data data,ViewBuilder viewBuilder);

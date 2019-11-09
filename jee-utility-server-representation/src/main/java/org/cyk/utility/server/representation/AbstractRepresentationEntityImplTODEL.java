@@ -18,13 +18,14 @@ import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.clazz.ClassNameBuilder;
 import org.cyk.utility.map.MapInstanceIntegerToString;
+import org.cyk.utility.server.business.BusinessEntity;
 import org.cyk.utility.server.persistence.query.filter.FilterDto;
 
-public abstract class AbstractRepresentationEntityImpl<ENTITY> extends AbstractRepresentationServiceProviderImpl implements RepresentationEntity<ENTITY>,Serializable {
+public abstract class AbstractRepresentationEntityImplTODEL<PERSISTENCE_ENTITY,BUSINESS extends BusinessEntity<PERSISTENCE_ENTITY>,ENTITY,ENTITY_COLLECTION> extends AbstractRepresentationServiceProviderImpl implements RepresentationEntityTODEL<PERSISTENCE_ENTITY,ENTITY,ENTITY_COLLECTION>,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Class<ENTITY> __entityClass__;
-	private Class<?> __persistenceEntityClass__;
+	private Class<PERSISTENCE_ENTITY> __persistenceEntityClass__;
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -41,7 +42,7 @@ public abstract class AbstractRepresentationEntityImpl<ENTITY> extends AbstractR
 			ClassNameBuilder classNameBuilder = __inject__(ClassNameBuilder.class).setKlass(getClass());
 			classNameBuilder.getSourceNamingModel(Boolean.TRUE).server().representation().impl().suffix();
 			classNameBuilder.getDestinationNamingModel(Boolean.TRUE).server().persistence().entities();
-			__persistenceEntityClass__ = ValueHelper.returnOrThrowIfBlank("persistence entity class", ClassHelper.getByName(classNameBuilder.execute().getOutput()));
+			__persistenceEntityClass__ = ValueHelper.returnOrThrowIfBlank("persistence entity class",(Class<PERSISTENCE_ENTITY>) ClassHelper.getByName(classNameBuilder.execute().getOutput()));
 		}
 		
 	}
@@ -63,6 +64,11 @@ public abstract class AbstractRepresentationEntityImpl<ENTITY> extends AbstractR
 			function.getProperties().setBatchSize(map.get(Properties.BATCH_SIZE));	
 		}
 		return function.execute().getResponse();
+	}
+	
+	@Override
+	public Response createMany(ENTITY_COLLECTION entityCollection,String properties) {
+		return createMany(__getEntities__(entityCollection),properties);
 	}
 	
 	@Override
@@ -153,6 +159,17 @@ public abstract class AbstractRepresentationEntityImpl<ENTITY> extends AbstractR
 	@Override
 	public Response import_(List<String> uniformResourceIdentifiers, Boolean ignoreKnownUniformResourceIdentifiers) {
 		return Response.serverError().entity("Not yet implemented").build();
+	}
+	
+	/**/
+	
+	@SuppressWarnings("unchecked")
+	protected Collection<ENTITY> __getEntities__(ENTITY_COLLECTION collection) {
+		if(collection == null)
+			return null;
+		if(collection instanceof org.cyk.utility.__kernel__.object.__static__.representation.Collection)
+			return ((org.cyk.utility.__kernel__.object.__static__.representation.Collection<ENTITY>)collection).getElements();
+		throw new RuntimeException("we cannot get entities from collection of type "+collection.getClass());
 	}
 	
 	/**/
