@@ -8,10 +8,11 @@ import javax.persistence.Embedded;
 import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@Getter @Setter @Accessors(chain=true)
+@Getter @Setter @Accessors(chain=true) @NoArgsConstructor
 @Embeddable
 public class Person extends AbstractObjectImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -20,6 +21,13 @@ public class Person extends AbstractObjectImpl implements Serializable {
 	@Column(name = COLUMN_LAST_NAMES) private String lastNames;	
 	@Column(name = COLUMN_IDENTITY_CARD) private String identityCard;
 	@Embedded private Contact contact;
+	
+	public Person(String firstName,String lastNames,String identityCard,Contact contact) {
+		this.firstName = firstName;
+		this.lastNames = lastNames;
+		this.identityCard = identityCard;
+		this.contact = contact;
+	}
 	
 	public Contact getContact(Boolean injectIfNull) {
 		if(contact == null && Boolean.TRUE.equals(injectIfNull))

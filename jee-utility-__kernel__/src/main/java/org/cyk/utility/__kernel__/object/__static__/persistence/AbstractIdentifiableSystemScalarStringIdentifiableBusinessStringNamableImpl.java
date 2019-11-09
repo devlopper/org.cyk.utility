@@ -12,16 +12,22 @@ import org.cyk.utility.__kernel__.object.marker.Namable;
 import org.cyk.utility.__kernel__.string.StringHelper;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@Getter @Setter @Accessors(chain=true)
+@Getter @Setter @Accessors(chain=true) @NoArgsConstructor
 @MappedSuperclass @Access(AccessType.FIELD)
 public abstract class AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl extends AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringImpl implements Namable,Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@NotNull @Column(name=COLUMN_NAME,nullable=false)
 	protected String name;
+	
+	public AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl(String code,String name) {
+		super(code);
+		this.name = name;
+	}
 	
 	@Override
 	public String toString() {
