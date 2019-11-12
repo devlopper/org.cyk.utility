@@ -30,7 +30,24 @@
 					<artifactId>weld-junit5</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>	
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.jboss.arquillian.extension/arquillian-persistence-dbunit -->
+		<!--
+<dependency>
+    <groupId>org.jboss.arquillian.extension</groupId>
+    <artifactId>arquillian-persistence-dbunit</artifactId>
+    <version>1.0.0.Alpha7</version>
+</dependency>
+		-->	
+		<!-- https://mvnrepository.com/artifact/org.jboss.arquillian.extension/arquillian-persistence-impl -->
+<!--
+<dependency>
+    <groupId>org.jboss.arquillian.extension</groupId>
+    <artifactId>arquillian-persistence-impl</artifactId>
+    <version>1.0.0.Alpha6</version>
+</dependency>
+-->		
+		
 	</dependencies>
 	
 	<profiles>

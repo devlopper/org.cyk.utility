@@ -15,7 +15,7 @@ import org.cyk.utility.test.arquillian.AbstractSystemServerArquillianIntegration
 import org.cyk.utility.test.arquillian.SystemServerIntegrationTest;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 
-@SuppressWarnings({"rawtypes","unchecked"})
+@SuppressWarnings({"rawtypes"})
 public abstract class AbstractPersistenceArquillianIntegrationTest extends AbstractSystemServerArquillianIntegrationTestImpl<PersistenceEntity> implements SystemServerIntegrationTest<PersistenceEntity>, Serializable {
 	private static final long serialVersionUID = 1L;
 

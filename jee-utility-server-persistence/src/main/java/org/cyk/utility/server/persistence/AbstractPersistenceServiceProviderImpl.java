@@ -11,12 +11,14 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.persistence.EntityCreator;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.stacktrace.StackTraceHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.method.MethodGetter;
 import org.cyk.utility.server.persistence.annotation.Query;
+import org.cyk.utility.server.persistence.jpa.JavaPersistenceApiHelper;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.server.persistence.query.PersistenceQueryContext;
 import org.cyk.utility.server.persistence.query.PersistenceQueryContextImpl;
@@ -162,6 +164,13 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 		__listenExecuteCreateAfter__(objects, properties, function);
 		return this;
 	}
+	
+	/*
+	@Override
+	public PersistenceServiceProvider<OBJECT> createMany(Collection<OBJECT> objects,Properties properties) {
+		EntityCreator.getInstance().createMany((Collection<Object>)objects,__inject__(JavaPersistenceApiHelper.class).getEntityManager(properties));
+		return this;
+	}*/
 	
 	@Override
 	public PersistenceServiceProvider<OBJECT> createMany(Collection<OBJECT> objects) {
