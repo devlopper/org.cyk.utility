@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.klass.ClassesGetter;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.clazz.Classes;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -248,11 +248,11 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	
 	@Override
 	public PersistenceServiceProvider<Object> deleteAll(Properties properties) {
-		Classes classes = __inject__(PersistableClassesGetter.class).execute().getOutput();
-		if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(classes))) {
-			for(Class<?> index : classes.get())
-				deleteByEntityClass(index, properties);
-		}
+		Collection<Class<?>> classes = ClassesGetter.getPersistable();
+		if(Boolean.TRUE.equals(CollectionHelper.isEmpty(classes)))
+			return this;
+		for(Class<?> index : classes)
+			deleteByEntityClass(index, properties);
 		return this;
 	}
 	

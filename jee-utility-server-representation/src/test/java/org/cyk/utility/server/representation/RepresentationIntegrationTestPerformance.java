@@ -3,11 +3,9 @@ package org.cyk.utility.server.representation;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.assertion.AssertionsProviderClassMap;
 import org.cyk.utility.server.business.api.MyEntityAssertionsProvider;
 import org.cyk.utility.server.business.api.MyEntityBusiness;
-import org.cyk.utility.server.persistence.PersistableClassesGetter;
 import org.cyk.utility.server.persistence.api.MyEntityPersistence;
 import org.cyk.utility.server.persistence.entities.MyEntity;
 import org.cyk.utility.server.representation.api.MyEntityRepresentation;
@@ -21,7 +19,6 @@ public class RepresentationIntegrationTestPerformance extends AbstractRepresenta
 	protected void __listenBefore__() {
 		super.__listenBefore__();
 		__inject__(AssertionsProviderClassMap.class).set(MyEntity.class, MyEntityAssertionsProvider.class);
-		DependencyInjection.setQualifierClassTo(org.cyk.utility.__kernel__.annotation.Test.Class.class, PersistableClassesGetter.class);
 		__inject__(ApplicationScopeLifeCycleListenerEntities.class).initialize(null);
 	}
 	

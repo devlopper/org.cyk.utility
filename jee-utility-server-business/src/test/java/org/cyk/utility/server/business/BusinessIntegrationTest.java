@@ -10,8 +10,10 @@ import java.util.stream.Collectors;
 
 import javax.validation.ConstraintViolationException;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.klass.PersistableClassesGetter;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.assertion.AssertionsProviderClassMap;
 import org.cyk.utility.server.business.api.MyEntityAssertionsProvider;
@@ -20,11 +22,10 @@ import org.cyk.utility.server.business.api.NodeBusiness;
 import org.cyk.utility.server.business.test.TestBusinessCreate;
 import org.cyk.utility.server.business.test.TestBusinessRead;
 import org.cyk.utility.server.business.test.arquillian.AbstractBusinessArquillianIntegrationTestWithDefaultDeployment;
-import org.cyk.utility.server.persistence.PersistableClassesGetter;
 import org.cyk.utility.server.persistence.entities.MyEntity;
 import org.cyk.utility.server.persistence.entities.Node;
+import org.cyk.utility.server.persistence.entities.NodeHierarchy;
 import org.cyk.utility.server.persistence.query.filter.Filter;
-import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -33,11 +34,12 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 	
 	/* Create */
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void __listenBefore__() {
+		PersistableClassesGetter.COLLECTION.set(CollectionHelper.listOf(NodeHierarchy.class,Node.class,MyEntity.class));
 		super.__listenBefore__();
 		__inject__(AssertionsProviderClassMap.class).set(MyEntity.class, MyEntityAssertionsProvider.class);
-		DependencyInjection.setQualifierClassTo(org.cyk.utility.__kernel__.annotation.Test.Class.class, PersistableClassesGetter.class);
 		__inject__(ApplicationScopeLifeCycleListenerEntities.class).initialize(null);
 	}
 	

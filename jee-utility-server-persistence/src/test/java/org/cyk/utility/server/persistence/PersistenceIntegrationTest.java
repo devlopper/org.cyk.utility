@@ -14,12 +14,12 @@ import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.validation.ConstraintViolationException;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
 import org.cyk.utility.__kernel__.computation.SortOrder;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.field.FieldInstancesRuntime;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.mapping.MappingHelper;
 import org.cyk.utility.server.persistence.api.MyEntityPersistence;
@@ -39,7 +39,6 @@ import org.cyk.utility.server.persistence.test.TestPersistenceCreate;
 import org.cyk.utility.server.persistence.test.arquillian.AbstractPersistenceArquillianIntegrationTestWithDefaultDeployment;
 import org.cyk.utility.sql.builder.Attribute;
 import org.cyk.utility.sql.builder.Tuple;
-import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.value.ValueDto;
 import org.junit.Assert;
 import org.junit.Test;
@@ -55,7 +54,6 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 	@Override
 	protected void __listenBefore__() {
 		super.__listenBefore__();
-		DependencyInjection.setQualifierClassTo(org.cyk.utility.__kernel__.annotation.Test.Class.class, PersistableClassesGetter.class);
 		__inject__(ApplicationScopeLifeCycleListenerEntities.class).initialize(null);
 	}
 	
