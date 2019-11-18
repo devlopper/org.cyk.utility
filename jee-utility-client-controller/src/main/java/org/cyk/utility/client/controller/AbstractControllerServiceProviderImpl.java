@@ -140,6 +140,7 @@ public abstract class AbstractControllerServiceProviderImpl<OBJECT> extends Abst
 		function.copyProperty(Properties.CONTEXT,properties);
 		
 		function.copyProperty(Properties.VALUE_USAGE_TYPE,properties);
+		function.copyProperty(Properties.QUERY_IDENTIFIER,properties);
 		function.copyProperty(Properties.IS_PAGEABLE,properties);
 		function.copyProperty(Properties.FROM,properties);
 		function.copyProperty(Properties.COUNT,properties);
@@ -152,6 +153,7 @@ public abstract class AbstractControllerServiceProviderImpl<OBJECT> extends Abst
 		function.copyProperty(Properties.CONTEXT,properties);
 		
 		function.copyProperty(Properties.VALUE_USAGE_TYPE,properties);
+		function.copyProperty(Properties.QUERY_IDENTIFIER,properties);
 		function.copyProperty(Properties.FILTERS,properties);
 		function.copyProperty(Properties.FIELDS,properties);
 	}
