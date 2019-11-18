@@ -55,7 +55,7 @@ public interface RepresentationEntity<ENTITY> extends RepresentationServiceProvi
 	@Produces({ MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML })
 	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
 	@ApiOperation(value = TAG_READ+" "+TAG_MANY,tags = {TAG_READ,TAG_MANY})
-	Response getMany(@QueryParam(PARAMETER_IS_PAGEABLE) Boolean isPageable,@QueryParam(PARAMETER_FROM) Long from,@QueryParam(PARAMETER_COUNT) Long count,@QueryParam(PARAMETER_FIELDS) String fields
+	Response getMany(@QueryParam(PARAMETER_QUERY_IDENTIFIER) String queryIdentifier,@QueryParam(PARAMETER_IS_PAGEABLE) Boolean isPageable,@QueryParam(PARAMETER_FROM) Long from,@QueryParam(PARAMETER_COUNT) Long count,@QueryParam(PARAMETER_FIELDS) String fields
 			,@QueryParam(PARAMETER_FILTER) FilterDto filter);
 	
 	/* Update */

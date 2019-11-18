@@ -37,6 +37,7 @@ public class ControllerFunctionReaderImpl extends AbstractControllerFunctionImpl
 		Properties properties = getProperties();
 		String fields = (String) Properties.getFromPath(properties, Properties.FIELDS);
 		if(__isMany__ == null || __isMany__) {
+			String queryIdentifier = (String) Properties.getFromPath(properties,Properties.QUERY_IDENTIFIER);
 			Boolean isPageable = ValueHelper.defaultToIfNull(ValueHelper.convertToBoolean(Properties.getFromPath(properties,Properties.IS_PAGEABLE)),IS_PAGEABLE);
 			Long from = ValueHelper.defaultToIfNull(NumberHelper.getLong(Properties.getFromPath(properties,Properties.FROM))
 					,Boolean.TRUE.equals(isPageable) ? FROM : null);
@@ -44,7 +45,7 @@ public class ControllerFunctionReaderImpl extends AbstractControllerFunctionImpl
 					,Boolean.TRUE.equals(isPageable) ? COUNT : null);
 			FilterDto filters = (FilterDto) Properties.getFromPath(properties,Properties.FILTERS);
 			if(__representation__ instanceof RepresentationEntity<?>)
-				__response__ = ((RepresentationEntity<Object>)__representation__).getMany(isPageable,from,count,fields,filters);	
+				__response__ = ((RepresentationEntity<Object>)__representation__).getMany(queryIdentifier,isPageable,from,count,fields,filters);	
 		}else {
 			//Object identifier = identifiers.getFirst();
 			//ValueUsageType valueUsageType = getEntityIdentifierValueUsageType();

@@ -42,6 +42,7 @@ public interface RepresentationServiceProvider {
 	String PARAMETER_DIRECTORIES = ConstantString.DIRECTORIES;
 	String PARAMETER_IS_INLINE = ConstantString.IS_INLINE;
 	String PARAMETER_IS_PAGEABLE = ConstantString.IS_PAGEABLE;
+	String PARAMETER_QUERY_IDENTIFIER = "queryIdentifier";
 	String PARAMETER_WORKBOOK_NAME = ConstantString.WORKBOOK_NAME;
 	String PARAMETER_SHEET_NAME = ConstantString.SHEET_NAME;
 	String PARAMETER_COLUMN_INDEX_FIELD_NAME = ConstantString.COLUMN_INDEX_FIELD_NAME;

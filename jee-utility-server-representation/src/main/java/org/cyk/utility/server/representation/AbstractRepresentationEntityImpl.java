@@ -66,11 +66,12 @@ public abstract class AbstractRepresentationEntityImpl<ENTITY> extends AbstractR
 	}
 	
 	@Override
-	public Response getMany(Boolean isPageable,Long from,Long count,String fields,FilterDto filter) {
+	public Response getMany(String queryIdentifier,Boolean isPageable,Long from,Long count,String fields,FilterDto filter) {
 		RepresentationFunctionReader function = __inject__(RepresentationFunctionReader.class);
 		function.setIsCollectionable(Boolean.TRUE);
 		function.setEntityClass(__entityClass__).setPersistenceEntityClass(__persistenceEntityClass__)
 				.setEntityFieldNames(__getFieldNames__(fields))
+				.setProperty(Properties.QUERY_IDENTIFIER, queryIdentifier)
 				.setProperty(Properties.IS_QUERY_RESULT_PAGINATED, isPageable == null ? Boolean.TRUE : isPageable)
 				.setProperty(Properties.QUERY_FIRST_TUPLE_INDEX, from)
 				.setProperty(Properties.QUERY_NUMBER_OF_TUPLE, count)

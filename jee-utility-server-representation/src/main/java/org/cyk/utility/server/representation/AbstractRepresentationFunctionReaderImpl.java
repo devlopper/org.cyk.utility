@@ -63,7 +63,7 @@ public abstract class AbstractRepresentationFunctionReaderImpl extends AbstractR
 				}
 				// no specific identifiers
 				//In order to take less execution time and data size , we will set default values if not set by caller.
-				properties.copyFrom(getProperties(), Properties.IS_QUERY_RESULT_PAGINATED, Properties.QUERY_FIRST_TUPLE_INDEX,Properties.QUERY_NUMBER_OF_TUPLE);
+				properties.copyFrom(getProperties(), Properties.QUERY_IDENTIFIER,Properties.IS_QUERY_RESULT_PAGINATED, Properties.QUERY_FIRST_TUPLE_INDEX,Properties.QUERY_NUMBER_OF_TUPLE);
 				if(properties.getIsQueryResultPaginated() == null)
 					properties.setIsQueryResultPaginated(IS_QUERY_RESULT_PAGINATED == null ? Boolean.TRUE : IS_QUERY_RESULT_PAGINATED); //yes we paginate
 				addLogMessageBuilderParameter("query paginated", properties.getIsQueryResultPaginated());

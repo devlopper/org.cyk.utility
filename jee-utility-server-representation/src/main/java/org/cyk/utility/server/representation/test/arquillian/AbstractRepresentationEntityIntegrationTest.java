@@ -124,7 +124,7 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 		__inject__(RepresentationLayer.class).injectInterfaceClassFromEntity(object2).createOne(object2);
 		
 		@SuppressWarnings("unchecked")
-		Collection<ENTITY> entities = (Collection<ENTITY>) __inject__(RepresentationLayer.class).injectInterfaceClassFromEntity(object1).getMany(Boolean.FALSE,null,null,ConstantNull.STRING,null).getEntity();
+		Collection<ENTITY> entities = (Collection<ENTITY>) __inject__(RepresentationLayer.class).injectInterfaceClassFromEntity(object1).getMany(null,Boolean.FALSE,null,null,ConstantNull.STRING,null).getEntity();
 		
 		assertThat(entities).asList().hasSize(2);
 	}

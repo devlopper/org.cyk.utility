@@ -46,17 +46,17 @@ public class RepresentationIntegrationTestPerformance extends AbstractRepresenta
 		System.out.println("Business "+numberOfEntities+" : "+t);
 		
 		t = System.currentTimeMillis();
-		__inject__(MyEntityRepresentation.class).getMany(Boolean.FALSE, null, null, null, null);
+		__inject__(MyEntityRepresentation.class).getMany(null,Boolean.FALSE, null, null, null, null);
 		t = System.currentTimeMillis() - t;
 		System.out.println("Representation 01 "+numberOfEntities+" : "+t);
 		
 		t = System.currentTimeMillis();
-		__inject__(MyEntityRepresentation.class).getMany(Boolean.FALSE, null, null, null, null);
+		__inject__(MyEntityRepresentation.class).getMany(null,Boolean.FALSE, null, null, null, null);
 		t = System.currentTimeMillis() - t;
 		System.out.println("Representation 02 "+numberOfEntities+" : "+t);
 		
 		t = System.currentTimeMillis();
-		__inject__(MyEntityRepresentation.class).getMany(Boolean.FALSE, null, null, null, null);
+		__inject__(MyEntityRepresentation.class).getMany(null,Boolean.FALSE, null, null, null, null);
 		t = System.currentTimeMillis() - t;
 		System.out.println("Representation 03 "+numberOfEntities+" : "+t);
 	}
@@ -95,7 +95,7 @@ public class RepresentationIntegrationTestPerformance extends AbstractRepresenta
 	private void __read__(Integer numberOfEntities,Integer executorCorePoolSize) {
 		AbstractMapperSourceDestinationImpl.EXECUTOR_CORE_POOL_SIZE = executorCorePoolSize;
 		Long t = System.currentTimeMillis();
-		__inject__(MyEntityRepresentation.class).getMany(Boolean.FALSE, null, null, null, null);
+		__inject__(MyEntityRepresentation.class).getMany(null,Boolean.FALSE, null, null, null, null);
 		t = System.currentTimeMillis() - t;
 		System.out.println("Representation Executor "+executorCorePoolSize+" - "+numberOfEntities+" : "+t);
 	}
