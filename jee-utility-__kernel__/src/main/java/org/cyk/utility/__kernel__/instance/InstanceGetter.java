@@ -7,6 +7,7 @@ import java.util.Collection;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 
@@ -20,6 +21,16 @@ public interface InstanceGetter {
 	
 	default <INSTANCE> INSTANCE getByBusinessIdentifier(Class<INSTANCE> klass,Object identifier) {
 		return getByIdentifier(klass, identifier, ValueUsageType.BUSINESS);
+	}
+	
+	<INSTANCE> Collection<INSTANCE> get(Class<INSTANCE> klass,Properties properties);
+	
+	<INSTANCE> Collection<INSTANCE> getAll(Class<INSTANCE> klass,Properties properties);
+	
+	default <INSTANCE> Collection<INSTANCE> getAll(Class<INSTANCE> klass) {
+		if(klass == null)
+			return null;
+		return getAll(klass);
 	}
 	
 	default <INSTANCE> Collection<INSTANCE> getFromUniformResourceIdentifier(Class<INSTANCE> klass,Object classifier,Collection<String> fieldsNames) {

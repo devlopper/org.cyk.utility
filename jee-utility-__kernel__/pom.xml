@@ -22,6 +22,7 @@
 		<org.apache.commons.commons-collections4.version>4.3</org.apache.commons.commons-collections4.version>
 		<org.reflections.reflections.version>0.9.10</org.reflections.reflections.version>
 		<org.keycloak.keycloak-admin-client.version>4.8.3.Final</org.keycloak.keycloak-admin-client.version>
+		<org.apache.commons.commons-text.version>1.4</org.apache.commons.commons-text.version>
 	</properties>
 
 	<build>
@@ -62,6 +63,12 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-collections4</artifactId>
 			<version>${org.apache.commons.commons-collections4.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-text</artifactId>
+			<version>${org.apache.commons.commons-text.version}</version>
 		</dependency>
 
 		<dependency>
