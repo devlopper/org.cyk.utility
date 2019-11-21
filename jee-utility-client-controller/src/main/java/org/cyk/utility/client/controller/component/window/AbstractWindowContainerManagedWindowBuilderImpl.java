@@ -61,6 +61,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 			if(windowRenderTypeClass!=null)
 				windowRenderType = (WindowRenderType) __inject__(windowRenderTypeClass);
 		}
+		window.setRenderType(windowRenderType);
 		
 		if(windowRenderType == null || windowRenderType instanceof WindowRenderTypeNormal) {
 			MenuBuilderMap menuMap = getMenuMap();

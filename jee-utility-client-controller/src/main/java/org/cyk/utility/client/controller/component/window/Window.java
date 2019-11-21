@@ -29,6 +29,9 @@ public interface Window extends VisibleComponent {
 
 	WindowRenderType getRenderType();
 	Window setRenderType(WindowRenderType renderType);
+	default Boolean getIsRenderTypeDialog() {
+		return getRenderType() instanceof WindowRenderTypeDialog;
+	}
 	
 	/* Component buildable at demand */
 	View getView();

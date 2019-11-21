@@ -134,6 +134,10 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 		return this;
 	}
 	
+	public Boolean getIsRenderTypeDialog() {
+		return getWindow().getIsRenderTypeDialog();
+	}
+	
 	/**/
 	
 	protected WindowBuilder __getWindowBuilder__(List<String> subDurations) {

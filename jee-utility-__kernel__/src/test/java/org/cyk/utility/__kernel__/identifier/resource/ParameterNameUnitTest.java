@@ -83,6 +83,11 @@ public class ParameterNameUnitTest extends AbstractWeldUnitTest {
 		assertThat(ParameterName.MAP.get(SystemActionCreate.class)).isEqualTo("create");
 	}
 	
+	@Test
+	public void stringify_enum_parameterName_WINDOW_RENDER_TYPE_CLASS() {
+		assertThat(ParameterName.stringify(ParameterName.WINDOW_RENDER_TYPE_CLASS)).isEqualTo("windowrendertypeclass");
+	}
+	
 	/**/
 	
 	public static enum MyEnum {

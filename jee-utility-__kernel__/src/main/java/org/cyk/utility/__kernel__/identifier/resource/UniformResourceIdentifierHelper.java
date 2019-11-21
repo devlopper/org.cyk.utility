@@ -110,7 +110,7 @@ public interface UniformResourceIdentifierHelper {
 		}else if(ParameterName.ENTITY_CLASS.getValue().equals(parameterName)) {
 			value = CollectionHelper.getFirst(getKeys(ParameterName.MAP,null,List.of(ParameterName.ENTITY_CLASS.getType()),List.of(parameterValue)));
 		}else if(ParameterName.WINDOW_RENDER_TYPE_CLASS.getValue().equals(parameterName)) {
-			value = getKeys(ParameterName.MAP,null,List.of(ParameterName.WINDOW_RENDER_TYPE_CLASS.getType()), List.of(parameterValue));
+			value = CollectionHelper.getFirst(getKeys(ParameterName.MAP,null,List.of(ParameterName.WINDOW_RENDER_TYPE_CLASS.getType()), List.of(parameterValue)));
 		}
 		
 		if(value == null)

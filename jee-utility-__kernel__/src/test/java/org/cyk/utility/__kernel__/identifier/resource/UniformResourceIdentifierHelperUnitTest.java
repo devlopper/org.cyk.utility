@@ -151,6 +151,22 @@ public class UniformResourceIdentifierHelperUnitTest extends AbstractWeldUnitTes
 		assertThat(((SystemAction)mappedValue).getEntitiesIdentifiers().get()).contains("12");
 	}
 	
+	/*@Test
+	public void mapParameterValue_windowRenderTypeClass(){
+		ParameterName.ENTITY_CLASS.setType(MyEntity.class);
+		ParameterName.MAP.put(SystemActionCreate.class, "create");
+		ParameterName.MAP.put(MyEntity.class, "myentity");
+		Object mappedValue = mapParameterValue(ParameterName.WINDOW_RENDER_TYPE_CLASS.getValue(),new QueryParameterValueGetter() {			
+			@Override
+			public String get(String name) {
+				if(name.equals("windowrendertypeclass"))
+					return "windowrendertypenormal";
+				return null;
+			}
+		});
+		assertThat(mappedValue).isNotNull();
+	}*/
+	
 	/* query */
 	
 	@Test
