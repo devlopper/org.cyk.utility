@@ -7,14 +7,19 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@Getter @Setter @Accessors(chain=true) @EqualsAndHashCode(callSuper = false,of = "identifier")
+@Getter @Setter @Accessors(chain=true) @EqualsAndHashCode(callSuper = false,of = "identifier") @NoArgsConstructor
 public abstract class AbstractIdentifiableSystemScalarStringImpl extends AbstractIdentifiableSystemScalarImpl<String> implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	protected String identifier;
+	
+	public AbstractIdentifiableSystemScalarStringImpl(String identifier) {
+		setIdentifier(identifier);
+	}
 	
 	@Override
 	@XmlTransient

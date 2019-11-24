@@ -1,6 +1,7 @@
 package org.cyk.utility.__kernel__.instance;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
@@ -21,6 +22,8 @@ public abstract class AbstractSelection<T,VALUE> extends AbstractObject implemen
 	protected String message;
 	protected VALUE value;
 	
+	protected T cursor;
+	
 	public AbstractSelection(Class<T> choiceClass,Properties properties) {
 		setChoiceClass(choiceClass);
 		if(choiceClass != null) {
@@ -32,4 +35,28 @@ public abstract class AbstractSelection<T,VALUE> extends AbstractObject implemen
 	public AbstractSelection(Class<T> choiceClass) {
 		this(choiceClass,null);
 	}
+	
+	public Collection<T> getChoices(Boolean injectIfNull) {
+		if(choices == null && Boolean.TRUE.equals(injectIfNull))
+			choices = new ArrayList<>();
+		return choices;
+	}
+	
+	public AbstractSelection<T,VALUE> select(VALUE value) {
+		if(value == null)
+			return this;
+		__select__(value);
+		return this;
+	}
+	
+	protected abstract void __select__(VALUE value);
+
+	public AbstractSelection<T,VALUE> unselect(VALUE value) {
+		if(value == null)
+			return this;
+		__unselect__(value);
+		return this;
+	}
+	
+	protected abstract void __unselect__(VALUE value);
 }

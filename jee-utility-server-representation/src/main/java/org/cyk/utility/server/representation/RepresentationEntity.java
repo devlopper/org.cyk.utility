@@ -72,6 +72,7 @@ public interface RepresentationEntity<ENTITY> extends RepresentationServiceProvi
 	@PUT
 	@Path(PATH_UPDATE_MANY)
 	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+	@ApiOperation(value = TAG_UPDATE+" "+TAG_MANY,tags = {TAG_UPDATE,TAG_MANY})
 	Response updateMany(Collection<ENTITY> entities,@QueryParam(PARAMETER_FIELDS) String fields);
 	
 	/* Delete */

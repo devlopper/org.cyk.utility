@@ -2,12 +2,18 @@ package org.cyk.utility.server.representation;
 
 import java.util.Collection;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 /**
  * 
@@ -15,6 +21,7 @@ import org.cyk.utility.__kernel__.value.ValueUsageType;
  *
  */
 @Path(Representation.PATH)
+@Api
 public interface Representation extends RepresentationServiceProvider {
 
 	/* Create */
@@ -45,6 +52,14 @@ public interface Representation extends RepresentationServiceProvider {
 	@DELETE
 	@Path(PATH_DELETE_ALL)
 	Response deleteAll();
+	
+	/**/
+	
+	@POST
+	@Path("data/load")
+	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+	@ApiOperation(value = TAG_LOAD,tags = {TAG_LOAD})
+	Response loadData();
 	
 	/**/
 	

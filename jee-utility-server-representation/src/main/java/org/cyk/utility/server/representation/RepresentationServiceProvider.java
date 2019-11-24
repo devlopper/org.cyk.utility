@@ -94,6 +94,7 @@ public interface RepresentationServiceProvider {
 	String TAG_SAVE = "save";
 	String TAG_COUNT = "count";
 	String TAG_IMPORT = "import";
+	String TAG_LOAD = "load";
 	
 	String TAG_ONE = "one";
 	String TAG_MANY = "many";

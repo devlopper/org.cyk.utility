@@ -17,6 +17,7 @@ import org.cyk.utility.random.RandomHelper;
 import org.cyk.utility.server.representation.impl.AbstractDataLoaderImpl;
 
 @org.cyk.utility.playground.server.System
+@Deprecated
 public class DataLoaderImpl extends AbstractDataLoaderImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 

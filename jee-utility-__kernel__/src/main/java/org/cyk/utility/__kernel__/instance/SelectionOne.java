@@ -19,4 +19,16 @@ public class SelectionOne<T> extends AbstractSelection<T,T> implements Serializa
 	public SelectionOne(Class<T> choiceClass) {
 		super(choiceClass);
 	}
+
+	@Override
+	protected void __select__(T value) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void __unselect__(T value) {
+		// TODO Auto-generated method stub
+		
+	}
 }

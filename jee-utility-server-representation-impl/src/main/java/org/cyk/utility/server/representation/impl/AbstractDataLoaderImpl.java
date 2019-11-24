@@ -6,6 +6,7 @@ import javax.ws.rs.core.Response;
 
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
+@Deprecated
 public abstract class AbstractDataLoaderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Response> implements DataLoader,Serializable {
 	private static final long serialVersionUID = 1L;
 

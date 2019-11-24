@@ -47,6 +47,8 @@ public class RepresentationImpl extends AbstractObject implements Representation
 		}
 	}
 	
+	/* Delete */
+	
 	@Override
 	public Representation delete(Object object) {
 		@SuppressWarnings("unchecked")
@@ -66,14 +68,16 @@ public class RepresentationImpl extends AbstractObject implements Representation
 		return null;
 	}
 	
-	/* Delete */
-	
 	@Override
 	public Response deleteAll() {
 		__inject__(Business.class).deleteAll();
 		return Response.ok().build();
 	}
 
+	/* Load */
 	
-	
+	@Override
+	public Response loadData() {
+		return DataLoader.getInstance().load();
+	}
 }

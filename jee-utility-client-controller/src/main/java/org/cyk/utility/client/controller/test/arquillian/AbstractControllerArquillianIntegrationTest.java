@@ -23,7 +23,7 @@ public abstract class AbstractControllerArquillianIntegrationTest extends Abstra
 	protected void __listenBefore__() {
 		String systemIdentifier = __getSystemIdentifier__();
 		if(StringUtils.isNotBlank(systemIdentifier))
-			ProxyUniformResourceIdentifierGetter.UNIFORM_RESOURCE_IDENTIFIER.set(URI.create(String.format("http://localhost:8080/%s/server/",systemIdentifier)));
+			ProxyUniformResourceIdentifierGetter.UNIFORM_RESOURCE_IDENTIFIER.set(URI.create(String.format("http://localhost:8080/%s/server/api",systemIdentifier)));
 		super.__listenBefore__();
 		__inject__(Controller.class).deleteAll();
 	}

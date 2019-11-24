@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<ui:insert name="header">
+		<h3><h:outputText value="#{header}" /></h3>
+	</ui:insert> 		
+   	<div class="ui-g">   			
+ 		<div class="ui-g-2">
+ 			<ui:insert name="selectableLabel">
+ 				<p:outputLabel for="#{selectableInputId}" value="#{selectableLabel}" />
+ 			</ui:insert>
+ 		</div>
+  		<div class="ui-g-8">
+  			<ui:insert name="selectableInput">
+  				<p:selectOneMenu id="#{selectableInputId}" value="#{selection.cursor}" converter="#{objectConverter}">
+    				<f:selectItem itemLabel="Veuillez sélectionner" />
+	    			<f:selectItems value="#{selection.choices}" var="item" itemLabel="#{item}" itemValue="#{item}"/>
+	    		</p:selectOneMenu>
+  			</ui:insert>  			
+  		</div>   			
+   		<div class="ui-g-2">
+   			<ui:insert name="selectableAddCommandable">
+   				<cyk:commandable value="#{addCommandable}" />
+   			</ui:insert>
+   		</div>
+   	</div>
+   	<ui:insert name="selected">
+   		<p:dataTable id="#{dataTableId}" value="#{selection.value}" var="selected" >
+	 		<ui:insert name="dataTableColumns">
+	 			<ui:insert name="dataTableColumnsSelected">
+	 				<p:column headerText="#{selectableLabel}" width="10%">
+	 					<h:outputText value="#{selected}" />
+	 				</p:column>			
+	 			</ui:insert>
+	 			<ui:insert name="dataTableColumnsOthers"/>
+	 			<ui:insert name="dataTableColumnsRemoveCommandable">
+	 				<p:column width="10%">
+		   				<p:commandButton value="Supprimer" action="#{selection.unselectOne(selected)}" immediate="true" update="form:#{selectableInputId},#{dataTableId}"/>
+		   			</p:column>
+	 			</ui:insert>	 			
+	 		</ui:insert>
+	 	</p:dataTable>
+   	</ui:insert>
+</ui:composition>
