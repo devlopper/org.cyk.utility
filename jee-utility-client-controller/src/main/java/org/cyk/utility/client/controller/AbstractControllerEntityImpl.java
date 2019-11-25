@@ -133,7 +133,17 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 	public ENTITY readBySystemIdentifier(Object identifier) {
 		return readBySystemIdentifier(identifier, null);
 	}
+	/*
+	@Override
+	public ENTITY readBySystemIdentifierFromRequestParameter(Properties properties) {
+		return readByIdentifier(identifier, ValueUsageType.SYSTEM, properties);
+	}
 	
+	@Override
+	public ENTITY readBySystemIdentifierFromRequestParameter() {
+		return readBySystemIdentifier(identifier, null);
+	}
+	*/
 	@Override
 	public ENTITY readByBusinessIdentifier(Object identifier, Properties properties) {
 		return readByIdentifier(identifier, ValueUsageType.BUSINESS, properties);

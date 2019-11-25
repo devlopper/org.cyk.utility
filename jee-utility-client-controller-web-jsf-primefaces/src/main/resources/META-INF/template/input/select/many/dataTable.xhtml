@@ -42,7 +42,7 @@
 	 			<ui:insert name="dataTableColumnsOthers"/>
 	 			<ui:insert name="dataTableColumnsRemoveCommandable">
 	 				<p:column width="10%">
-		   				<p:commandButton value="Supprimer" action="#{selection.unselectOne(selected)}" immediate="true" update="form:#{selectableInputId},#{dataTableId}"/>
+		   				<p:commandButton value="Supprimer" action="#{selection.unselectOne(selected)}" immediate="true" process="form:#{selectableInputId},#{dataTableId}" update="form:#{selectableInputId},#{dataTableId}"/>
 		   			</p:column>
 	 			</ui:insert>	 			
 	 		</ui:insert>

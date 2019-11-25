@@ -26,7 +26,10 @@ public interface ControllerEntity<ENTITY> extends ControllerServiceProvider<ENTI
 	
 	ENTITY readBySystemIdentifier(Object identifier,Properties properties);
 	ENTITY readBySystemIdentifier(Object identifier);
-	
+	/*
+	ENTITY readBySystemIdentifierFromRequestParameter(Properties properties);
+	ENTITY readBySystemIdentifierFromRequestParameter();
+	*/
 	ENTITY readByBusinessIdentifier(Object identifier,Properties properties);
 	ENTITY readByBusinessIdentifier(Object identifier);
 	
