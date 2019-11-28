@@ -19,7 +19,17 @@ public class SelectionOne<T> extends AbstractSelection<T,T> implements Serializa
 	public SelectionOne(Class<T> choiceClass) {
 		super(choiceClass);
 	}
-
+	
+	@Override
+	public SelectionOne<T> setAreChoicesGettable(Boolean areChoicesGettable) {
+		return (SelectionOne<T>) super.setAreChoicesGettable(areChoicesGettable);
+	}
+	
+	@Override
+	public SelectionOne<T> setListener(Listener<T> listener) {
+		return (SelectionOne<T>) super.setListener(listener);
+	}
+	
 	@Override
 	protected void __select__(T value) {
 		// TODO Auto-generated method stub
