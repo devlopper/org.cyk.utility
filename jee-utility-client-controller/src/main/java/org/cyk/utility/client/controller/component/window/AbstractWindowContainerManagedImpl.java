@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.session.Session;
 import org.cyk.utility.__kernel__.session.SessionHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
@@ -73,9 +74,11 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 		try {
 			__windowBuilder__ = __getWindowBuilder__(subDurations);
 		} catch (Exception exception) {
-			__windowBuilder__ = __inject__(WindowContainerManagedWindowBuilderThrowable.class).setThrowable(exception).setRequest(request)
-					.setContext(__getContext__()).execute().getOutput();
-			exception.printStackTrace();
+			WindowContainerManagedWindowBuilderThrowable windowContainerManagedWindowBuilderThrowable = __inject__(WindowContainerManagedWindowBuilderThrowable.class);
+			windowContainerManagedWindowBuilderThrowable.setThrowable(exception).setRequest(request).setContext(__getContext__()).setSystemAction(systemAction);
+			windowContainerManagedWindowBuilderThrowable.getWindow(Boolean.TRUE).setTitleValue(__getWindowTitleValue__());
+			__windowBuilder__ = windowContainerManagedWindowBuilderThrowable.execute().getOutput();
+			LogHelper.log(exception, getClass());
 		}
 		
 		DurationBuilder subDurationBuilder = __inject__(DurationBuilder.class).setBeginToNow();
@@ -99,6 +102,9 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 				__windowBuilder__.setTheme(theme);
 			}
 		}
+		
+		if(theme != null)
+			theme.buildMenu(__getMenuBuilderMapKey__());
 		
 		subDurations.add("get theme : "+__inject__(DurationStringBuilder.class).setDurationBuilder(subDurationBuilder.setEndToNow()).execute().getOutput());
 		subDurationBuilder.setBeginToNow();
@@ -154,7 +160,7 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 				windowContainerManagedWindowBuilder.setContext(__getContext__());
 			if(windowContainerManagedWindowBuilder.getUniformResourceLocatorMap() == null)
 				windowContainerManagedWindowBuilder.setUniformResourceLocatorMap(__getUniformResourceLocatorMap__());
-			
+			windowContainerManagedWindowBuilder.setMenuMapKey(__getMenuBuilderMapKey__());
 			windowBuilder = windowContainerManagedWindowBuilder.setWindowContainerManaged(this).execute().getOutput();
 		}
 		
@@ -198,7 +204,7 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 	}
 	
 	protected MenuBuilderMap __getMenuBuilderMap__() {
-		return __inject__(MenuBuilderMapGetter.class).setRequest(__getRequest__()).execute().getOutput();
+		return MenuBuilderMapGetter.getInstance().get(null, __getRequest__(),this);
 	}
 	
 	protected WindowBuilder __injectWindowBuilder__() {
@@ -254,6 +260,10 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 	protected Object __getUniformResourceLocatorMap__() {
 		//TODO write NavigationIdentifierStringMapGetter
 		return null;
+	}
+	
+	protected Object __getMenuBuilderMapKey__() {
+		return SessionAttributeEnumeration.MENU_BUILDER_MAP;
 	}
 	
 	/**/

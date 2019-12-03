@@ -5,18 +5,15 @@ import java.util.Map;
 
 import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.variable.VariableName;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
 import org.cyk.utility.client.controller.component.dialog.DialogBuilder;
-import org.cyk.utility.client.controller.component.menu.MenuBuilder;
 import org.cyk.utility.client.controller.component.menu.MenuBuilderMap;
-import org.cyk.utility.client.controller.component.menu.MenuGetter;
-import org.cyk.utility.client.controller.component.menu.MenuMap;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilderMap;
 import org.cyk.utility.client.controller.component.output.OutputStringTextMap;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
-import org.cyk.utility.__kernel__.string.StringHelper;
-import org.cyk.utility.__kernel__.variable.VariableName;
 
 public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Window> implements WindowBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -48,7 +45,7 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 			window.setOutputStringTextMap(__inject__(OutputStringTextMap.class));
 			for(Map.Entry<String,OutputStringTextBuilder> entry : outputStringTextMap.getEntries()) {
 				if(entry.getValue().getRequest() == null)
-					entry.getValue().setRequest(getRequest());
+					entry.getValue().setRequest(request);
 				window.getOutputStringTextMap().set(entry.getKey(),entry.getValue().execute().getOutput());
 			}
 		}	
@@ -75,12 +72,13 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 			}	
 		}
 		if(renderType == null || renderType instanceof WindowRenderTypeNormal) {
-			MenuBuilderMap menuMap = getMenuMap();
+			//TODO following has been commented out to make something work. think about it
+			/*MenuBuilderMap menuMap = getMenuMap();
 			if(menuMap!=null) {
 				window.setMenuMap(__inject__(MenuMap.class));
 				for(@SuppressWarnings("rawtypes") Map.Entry<Class,MenuBuilder> entry : menuMap.getEntries())
 					window.getMenuMap().set(entry.getKey(),__inject__(MenuGetter.class).setRequest(request).setScopeClass(entry.getKey()).execute().getOutput());
-			}	
+			}*/	
 		}
 		/*
 		Theme theme = getTheme();

@@ -12,7 +12,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderViewDataImpl ex
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected void __execute__(WindowBuilder window,SystemAction systemAction,Class<? extends Form> formClass,Class<? extends Row> rowClass) {
+	protected void __executeSystemActionIsNotNull__(WindowBuilder window,SystemAction systemAction,Class<? extends Form> formClass,Class<? extends Row> rowClass) {
 		Data data = (Data) systemAction.getEntities().getAt(0);			
 		ViewBuilder viewBuilder = __inject__(ViewBuilder.class);
 		__execute__(data,viewBuilder);		

@@ -12,4 +12,8 @@ public interface Menu extends VisibleComponent {
 	Menu setRenderType(MenuRenderType renderType);
 	
 	Commandable getCommandableByIdentifier(String identifier);
+	
+	/**/
+	
+	String CONTROL_PANEL = "MENU_CONTROL_PANEL";
 }

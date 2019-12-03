@@ -33,8 +33,9 @@ public class NotificationBuilderImpl extends AbstractFunctionWithPropertiesAsInp
 		if(severity == null) {
 			if(throwable == null)
 				severity = __inject__(NotificationSeverityInformation.class);
-			else
+			else {
 				severity = __inject__(NotificationSeverityError.class);
+			}
 		}
 		notification.setSeverity(severity);
 		
@@ -43,7 +44,7 @@ public class NotificationBuilderImpl extends AbstractFunctionWithPropertiesAsInp
 			InternationalizationString summaryInternationalizationString = getSummaryInternationalizationString();
 			if(summaryInternationalizationString==null) {
 				if(throwable!=null) {
-					__log__(throwable);
+					//__log__(throwable);
 					summary = InternationalizationHelper.buildString(InternationalizationHelper.buildKey(throwable));
 				}
 			}else {
@@ -58,7 +59,7 @@ public class NotificationBuilderImpl extends AbstractFunctionWithPropertiesAsInp
 			InternationalizationString detailsInternationalizationString = getDetailsInternationalizationString();
 			if(detailsInternationalizationString==null) {
 				if(throwable!=null) {
-					__log__(throwable);
+					//__log__(throwable);
 					details = InternationalizationHelper.buildString(InternationalizationHelper.buildKey(throwable));
 				}
 			}else {

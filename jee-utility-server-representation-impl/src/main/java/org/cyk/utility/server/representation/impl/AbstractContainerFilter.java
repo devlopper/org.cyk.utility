@@ -1,6 +1,7 @@
 package org.cyk.utility.server.representation.impl;
 
 import java.io.Serializable;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.container.ContainerRequestContext;
 
@@ -16,7 +17,8 @@ public abstract class AbstractContainerFilter extends AbstractObject implements 
 		log.getMessageBuilder(Boolean.TRUE).addParameter("Method", containerRequestContext.getMethod())
 		.addParameter("Path", containerRequestContext.getUriInfo().getPath());
 		if(containerRequestContext.getUriInfo().getQueryParameters()!=null && !containerRequestContext.getUriInfo().getQueryParameters().isEmpty())
-			log.getMessageBuilder(Boolean.TRUE).addParameter("Parameters", containerRequestContext.getUriInfo().getQueryParameters());
+			log.getMessageBuilder(Boolean.TRUE).addParameter("Parameters"
+					, containerRequestContext.getUriInfo().getQueryParameters().entrySet().stream().map(x -> x.getKey()+":"+x.getValue()).collect(Collectors.toList()));
 		return log;
 	}
 	

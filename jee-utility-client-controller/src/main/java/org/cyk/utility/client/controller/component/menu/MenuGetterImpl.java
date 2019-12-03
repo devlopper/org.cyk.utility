@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.session.SessionHelper;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.client.controller.session.SessionAttributeEnumeration;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.scope.Scope;
@@ -18,8 +19,10 @@ public class MenuGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Me
 	
 	@Override
 	protected Menu __execute__() throws Exception {
+		/*
 		Object request = getRequest();
 		Menu menu = null;
+		
 		Class<? extends Scope> scopeClass = getScopeClass();
 		if(ClassHelper.isInstanceOf(scopeClass, ScopeSession.class)) {
 			menu = (Menu) SessionHelper.getAttributeValue(SessionAttributeEnumeration.MENU);
@@ -44,8 +47,9 @@ public class MenuGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Me
 				SessionHelper.setAttributeValueFromRequest(SessionAttributeEnumeration.MENU,menu,request);
 			}
 		}
-		
 		return menu;
+		*/
+		throw new RuntimeException("How is it used ????");
 	}
 	
 	@Override

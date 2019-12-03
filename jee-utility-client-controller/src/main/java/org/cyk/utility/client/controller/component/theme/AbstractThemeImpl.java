@@ -16,6 +16,7 @@ import org.cyk.utility.client.controller.component.file.Files;
 import org.cyk.utility.client.controller.component.script.Script;
 import org.cyk.utility.client.controller.component.script.Scripts;
 import org.cyk.utility.client.controller.component.view.ViewMap;
+import org.cyk.utility.client.controller.session.SessionAttributeEnumeration;
 import org.cyk.utility.client.controller.tag.TagLink;
 import org.cyk.utility.client.controller.tag.TagLinks;
 import org.cyk.utility.client.controller.tag.TagMap;
@@ -45,6 +46,16 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 	private Object request;
 	protected Object color;
 
+	@Override
+	public Theme buildMenu(Object menuMapKey) {
+		if(menuMapKey == null)
+			menuMapKey = SessionAttributeEnumeration.MENU_BUILDER_MAP;
+		__buildMenu__(menuMapKey);
+		return this;
+	}
+	
+	protected abstract void __buildMenu__(Object menuMapKey);
+	
 	@Override
 	public Theme build() {
 		setIdentifier(__getIdentifier__());

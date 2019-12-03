@@ -36,6 +36,7 @@ public abstract class AbstractSelection<T,VALUE> extends AbstractObject implemen
 	
 	public AbstractSelection(Class<T> choiceClass,Properties properties) {
 		setChoiceClass(choiceClass);
+		setProperties(properties);
 		if(choiceClass != null) {
 			setMessage("Veuillez sélectionner "+InternationalizationHelper.buildString(InternationalizationHelper.buildKey(choiceClass)));	
 		}

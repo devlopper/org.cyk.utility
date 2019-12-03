@@ -20,6 +20,12 @@
 		</navigation-case>
 		
 		<navigation-case>
+			<from-outcome>controlPanelIndexView</from-outcome>
+			<to-view-id>/private/__controlpanel__/index.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
 			<from-outcome>logoutView</from-outcome>
 			<to-view-id>/private/security/logout.jsf</to-view-id>
 			<redirect />

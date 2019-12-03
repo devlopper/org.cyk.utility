@@ -100,7 +100,8 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 						else if(responseEntityDto instanceof ResponseEntityDto)
 							throw new RuntimeException( ((ResponseEntityDto)responseEntityDto).getMessageCollection().toString());
 					}else if(Response.Status.Family.CLIENT_ERROR.equals(responseStatusFamily)){
-						System.out.println("AbstractControllerFunctionImpl("+getClass().getSimpleName()+").__execute__() CLIENT ERROR : "+response.getStatusInfo()+" : "+response.readEntity(String.class));
+						//String responseEntity = response.readEntity(String.class);
+						//System.out.println("AbstractControllerFunctionImpl("+getClass().getSimpleName()+").__execute__() CLIENT ERROR : "+response.getStatusInfo()+" : "+responseEntity);
 						/*String summary = null;
 						String summaryInternalizationStringKey = __getMessageSummaryInternalizationStringBuilderKey__(action,response);
 						if(StringHelper.isBlank(summaryInternalizationStringKey)) {
@@ -118,7 +119,7 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 								.copyProperty(Properties.CONTEXT, getProperties())
 								.execute();
 						*/
-						//throw new RuntimeException(message);
+						//throw new RuntimeException(responseEntity);
 					}else if(Response.Status.Family.INFORMATIONAL.equals(responseStatusFamily) || Response.Status.Family.OTHER.equals(responseStatusFamily)){
 						String summary = response.readEntity(String.class);
 						__inject__(MessageRender.class).addNotificationBuilders(__inject__(NotificationBuilder.class)
@@ -164,8 +165,6 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 	protected abstract void __executeRepresentation__();
 	
 	protected void __listenExecuteThrowServiceNotFoundException__() {
-		System.out.println("AbstractControllerFunctionImpl.__listenExecuteThrowServiceNotFoundException__() : "+__response__.readEntity(String.class)
-		+" : "+__response__.getStatusInfo());
 		throw ((RuntimeException) (__inject__(ServiceNotFoundException.class).setSystemAction(__action__).setResponse(__response__)));
 	}
 	

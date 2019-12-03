@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf15665000862070" configfile="/jee-utility-client-playground/src/main/webapp/WEB-INF/faces-config.xml">
   <nodes xsi:type="pageflow:PFPage" name="*" id="pf15698607343260" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf15698607343271 pf15698610075119" path="*"/>
-  <nodes xsi:type="pageflow:PFPage" name="http://www.google.com" id="pf15698607343273" referenceLink="//@navigationRule.0/@navigationCase.0/@toViewId|" inlinks="pf15698607343271" path="http://www.google.com"/>
-  <nodes xsi:type="pageflow:PFPage" name="outcome.jsf" id="pf156986100751110" referenceLink="//@navigationRule.0/@navigationCase.1/@toViewId|" inlinks="pf15698610075119" path="/outcome.jsf"/>
+  <nodes xsi:type="pageflow:PFPage" name="http://www.google.com" id="pf15698607343273" referenceLink="//@navigationRule.0/@navigationCase.1/@toViewId|" inlinks="pf15698607343271" path="http://www.google.com"/>
+  <nodes xsi:type="pageflow:PFPage" name="outcome.jsf" id="pf156986100751110" referenceLink="//@navigationRule.0/@navigationCase.2/@toViewId|" inlinks="pf15698610075119" path="/outcome.jsf"/>
   <links id="pf15698607343271" target="pf15698607343273" source="pf15698607343260" outcome="google" redirect="true"/>
   <links id="pf15698610075119" target="pf156986100751110" source="pf15698607343260" outcome="outcome" redirect="true"/>
 </pageflow:Pageflow>

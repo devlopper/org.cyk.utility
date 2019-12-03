@@ -1,13 +1,12 @@
 package org.cyk.utility.playground.server.persistence.entities;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.playground.server.System;
+import org.cyk.utility.__kernel__.klass.PersistableClassesGetter;
 import org.cyk.utility.server.persistence.AbstractApplicationScopeLifeCycleListenerEntities;
-import org.cyk.utility.server.persistence.PersistableClassesGetter;
 
 @ApplicationScoped
 public class ApplicationScopeLifeCycleListenerEntities extends AbstractApplicationScopeLifeCycleListenerEntities implements Serializable {
@@ -16,7 +15,7 @@ public class ApplicationScopeLifeCycleListenerEntities extends AbstractApplicati
 	@Override
 	public void __initialize__(Object object) {
 		super.__initialize__(object);
-		DependencyInjection.setQualifierClassTo(System.Class.class, PersistableClassesGetter.class);
+		PersistableClassesGetter.COLLECTION.set(List.of(MyEntity.class,NodeHierarchy.class,SelectedNode.class,Node.class,Person.class,PersonType.class));
 	}
 	
 	@Override

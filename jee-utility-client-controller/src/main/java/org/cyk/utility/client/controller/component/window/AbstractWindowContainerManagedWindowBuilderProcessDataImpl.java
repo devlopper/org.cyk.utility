@@ -22,7 +22,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderProcessDataImpl
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected void __execute__(WindowBuilder window,SystemAction systemAction,Class<? extends Form> formClass,Class<? extends Row> rowClass) {
+	protected void __executeSystemActionIsNotNull__(WindowBuilder window,SystemAction systemAction,Class<? extends Form> formClass,Class<? extends Row> rowClass) {
 		if(formClass!=null) {
 			Form form = __inject__(formClass);
 			if(window.getTitle()!=null)

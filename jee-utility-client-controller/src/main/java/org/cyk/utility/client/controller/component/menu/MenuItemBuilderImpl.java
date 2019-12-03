@@ -154,21 +154,12 @@ public class MenuItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<Men
 	}
 	
 	@Override
-	public MenuItemBuilder addEntitiesList(Class<?>... classes) {
-		for(Class<?> index : classes)
-			addEntityList(index);
-		return this;
-	}
-	
-	@Override
-	public MenuItemBuilder addEntityList(Class<?> aClass) {
-		return addChild(__inject__(MenuItemBuilder.class).setCommandableNameInternalizationKeyValue(aClass)
-				.setCommandableNavigationIdentifierBuilderSystemAction(__inject__(SystemActionList.class).setEntityClass(aClass)));
-	}
-	
-	@Override
-	public MenuItemBuilder list(Class<?>... classes) {
-		addEntitiesList(classes);
+	public MenuItemBuilder addEntitiesList(Collection<Class<?>> classes) {
+		if(CollectionHelper.isEmpty(classes))
+			return this;
+		for(Class<?> klass : classes)
+			addChild(__inject__(MenuItemBuilder.class).setCommandableNameInternalizationKeyValue(klass)
+					.setCommandableNavigationIdentifierBuilderSystemAction(__inject__(SystemActionList.class).setEntityClass(klass)));
 		return this;
 	}
 	

@@ -14,15 +14,14 @@ import org.cyk.utility.playground.server.persistence.entities.Node;
 import org.cyk.utility.playground.server.persistence.entities.Person;
 import org.cyk.utility.playground.server.persistence.entities.PersonType;
 import org.cyk.utility.random.RandomHelper;
-import org.cyk.utility.server.representation.impl.AbstractDataLoaderImpl;
+import org.cyk.utility.server.representation.AbstractDataLoaderImpl;
 
 @org.cyk.utility.playground.server.System
-@Deprecated
 public class DataLoaderImpl extends AbstractDataLoaderImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected Response __execute__() throws Exception {
+	public Response load() {
 		PersonType personTypeManager = new PersonType().setCode("MAN").setName("Manager");
 		PersonType personTypeEmployee = new PersonType().setCode("EMP").setName("Employee");
 		__inject__(PersonTypeBusiness.class).createMany(List.of(personTypeManager,personTypeEmployee));

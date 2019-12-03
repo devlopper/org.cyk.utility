@@ -51,4 +51,9 @@ public class ThemeDesktopDefaultImpl extends AbstractThemeImpl implements ThemeD
 	private void __south__(Window window) {
 		
 	}
+
+	@Override
+	protected void __buildMenu__(Object menuMapKey) {
+		// TODO Auto-generated method stub		
+	}
 }

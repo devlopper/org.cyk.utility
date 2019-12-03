@@ -1,5 +1,9 @@
 package org.cyk.utility.client.controller.component.menu;
 
+import java.util.Collection;
+
+import org.cyk.utility.__kernel__.array.ArrayHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.icon.Icon;
 import org.cyk.utility.__kernel__.internationalization.InternationalizationKeyStringType;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
@@ -27,9 +31,32 @@ public interface MenuItemBuilder extends VisibleComponentBuilder<MenuItem> {
 	
 	MenuItemBuilder addCommandableRoles(ComponentRole...roles);
 	
-	MenuItemBuilder addEntitiesList(Class<?>...classes);
-	MenuItemBuilder addEntityList(Class<?> aClass);
-	MenuItemBuilder list(Class<?>...classes);
+	MenuItemBuilder addEntitiesList(Collection<Class<?>> classes);
+	
+	default MenuItemBuilder addEntitiesList(Class<?>...classes) {
+		if(ArrayHelper.isEmpty(classes))
+			return this;
+		addEntitiesList(CollectionHelper.listOf(classes));
+		return this;
+	}
+	
+	default MenuItemBuilder addEntityList(Class<?> klass) {
+		if(klass == null)
+			return this;
+		return addEntitiesList(klass);
+	}
+	
+	default MenuItemBuilder list(Collection<Class<?>> classes) {
+		if(CollectionHelper.isEmpty(classes))
+			return this;
+		return addEntitiesList(classes);
+	}
+	
+	default MenuItemBuilder list(Class<?>...classes) {
+		if(ArrayHelper.isEmpty(classes))
+			return this;
+		return addEntitiesList(classes);
+	}
 	
 	MenuItemBuilder addEntitiesTree(Class<?>...classes);
 	MenuItemBuilder tree(Class<?>...classes);

@@ -5,7 +5,7 @@ import java.io.Serializable;
 import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.client.controller.AbstractApplicationScopeLifeCycleListenerEntities;
-import org.cyk.utility.client.controller.component.menu.MenuBuilderMapGetter;
+import org.cyk.utility.client.controller.component.menu.MenuBuilderMapInstantiator;
 
 @ApplicationScoped
 public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeLifeCycleListenerEntities implements Serializable {
@@ -15,7 +15,7 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 	public void __initialize__(Object object) {
 		super.__initialize__(object);
 		__inject__(org.cyk.utility.playground.client.controller.entities.ApplicationScopeLifeCycleListener.class).initialize(null);
-		__setQualifierClassTo__(org.cyk.utility.playground.server.System.class, MenuBuilderMapGetter.class);
+		__setQualifierClassTo__(org.cyk.utility.playground.server.System.class, MenuBuilderMapInstantiator.class);
 	}
 	
 	@Override

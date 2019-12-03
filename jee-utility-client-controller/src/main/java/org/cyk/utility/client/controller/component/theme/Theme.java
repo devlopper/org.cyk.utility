@@ -2,6 +2,7 @@ package org.cyk.utility.client.controller.component.theme;
 
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.client.controller.Objectable;
 import org.cyk.utility.client.controller.component.file.File;
 import org.cyk.utility.client.controller.component.file.FileImage;
@@ -100,6 +101,10 @@ public interface Theme extends Objectable {
 	/**/
 	
 	Theme build();
+	
+	default Theme buildMenu(Object menuMapKey) {
+		throw ThrowableHelper.NOT_YET_IMPLEMENTED;
+	}
 	
 	Theme process(Window window);
 }

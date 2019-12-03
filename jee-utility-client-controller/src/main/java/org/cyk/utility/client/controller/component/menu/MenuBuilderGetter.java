@@ -2,17 +2,14 @@ package org.cyk.utility.client.controller.component.menu;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.log.LogHelper;
-import org.cyk.utility.__kernel__.session.SessionHelper;
 import org.cyk.utility.__kernel__.value.Value;
-import org.cyk.utility.client.controller.session.SessionAttributeEnumeration;
 
 public interface MenuBuilderGetter {
 
-	default MenuBuilder get(Object key,Object request) {
-		MenuBuilderMap menuBuilderMap = (MenuBuilderMap) SessionHelper.getAttributeValueFromRequest(SessionAttributeEnumeration.MENU_BUILDER_MAP,request);
+	default MenuBuilder get(Object mapKey,Object key,Object request) {
+		MenuBuilderMap menuBuilderMap = MenuBuilderMapGetter.getInstance().get(mapKey, request);
 		if(menuBuilderMap == null)
-			SessionHelper.setAttributeValueFromRequest(SessionAttributeEnumeration.MENU_BUILDER_MAP
-					,menuBuilderMap = DependencyInjection.inject(MenuBuilderMapGetter.class).setRequest(request).execute().getOutput(),request);
+			return null;
 		return menuBuilderMap.get((Class<?>)key);
 	}
 	

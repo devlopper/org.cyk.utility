@@ -17,6 +17,9 @@ public interface WindowContainerManagedWindowBuilder extends FunctionWithPropert
 	MenuBuilderMap getMenuMap(Boolean injectIfNull);
 	WindowContainerManagedWindowBuilder setMenuMap(MenuBuilderMap menuMap);
 	
+	Object getMenuMapKey();
+	WindowContainerManagedWindowBuilder setMenuMapKey(Object menuMapKey);
+	
 	ViewBuilder getView();
 	ViewBuilder getView(Boolean injectIfNull);
 	WindowContainerManagedWindowBuilder setView(ViewBuilder view);

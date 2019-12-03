@@ -10,7 +10,6 @@ import org.cyk.utility.__kernel__.internationalization.InternationalizationHelpe
 import org.cyk.utility.__kernel__.internationalization.InternationalizationKeyStringType;
 import org.cyk.utility.__kernel__.internationalization.InternationalizationPhrase;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.__kernel__.session.SessionHelper;
 import org.cyk.utility.__kernel__.string.Case;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
@@ -43,7 +42,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 	private Class<? extends Row> rowClass;
 	private WindowContainerManaged windowContainerManaged;
 	private WindowRenderType windowRenderType;
-	private Object request,context,uniformResourceLocatorMap;
+	private Object request,context,uniformResourceLocatorMap,menuMapKey;
 	
 	//TODO improve build logic to reduce build time
 	@Override
@@ -65,12 +64,18 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		
 		if(windowRenderType == null || windowRenderType instanceof WindowRenderTypeNormal) {
 			MenuBuilderMap menuMap = getMenuMap();
-			if(menuMap == null)
-				menuMap = (MenuBuilderMap) SessionHelper.getAttributeValue(SessionAttributeEnumeration.MENU_BUILDER_MAP);
 			if(menuMap == null) {
-				menuMap = __inject__(MenuBuilderMapGetter.class).setRequest(request).execute().getOutput();
-				SessionHelper.setAttributeValueFromRequest(SessionAttributeEnumeration.MENU_BUILDER_MAP,menuMap,request);
+				Object menuMapKey = getMenuMapKey();
+				if(menuMapKey == null)
+					menuMapKey = SessionAttributeEnumeration.MENU_BUILDER_MAP;
+				menuMap = MenuBuilderMapGetter.getInstance().get(menuMapKey, request, this);
 			}
+			//System.out.println("AbstractWindowContainerManagedWindowBuilderImpl.__execute__() 0000 : "+menuMap);
+			//if(menuMap == null) {
+				//menuMap = __inject__(MenuBuilderMapGetter.class).setRequest(request).execute().getOutput();
+				//SessionHelper.setAttributeValueFromRequest(SessionAttributeEnumeration.MENU_BUILDER_MAP,menuMap,request);
+				//System.out.println("AbstractWindowContainerManagedWindowBuilderImpl.__execute__() 1111 : "+menuMap);
+			//}
 			window.setMenuMap(menuMap);	
 		}
 		
@@ -84,28 +89,8 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		
 		if(instance!=null && systemAction!=null)
 			systemAction.getEntities().add(instance);
-		
-		if(systemAction == null) {
-			
-		}else {
-			if(window.getTitle()==null || StringHelper.isBlank(window.getTitle().getValue())) {
-				/*InternalizationPhraseBuilder windowTitleInternalizationPhraseBuilder = __getWindowTitleInternalizationPhraseBuilder__(systemAction);
-				if(windowTitleInternalizationPhraseBuilder == null) {
-					windowTitleInternalizationPhraseBuilder = __inject__(InternalizationPhraseBuilder.class)
-							.addStrings(__inject__(InternalizationStringBuilder.class).setKeyValue(systemAction).setCase(Case.FIRST_CHARACTER_UPPER).setKeyType(InternationalizationKeyStringType.NOUN))
-							.addStringsByKeys(systemAction.getEntities().getElementClass());
-				}
-				if(windowTitleInternalizationPhraseBuilder != null)
-					window.setTitleValue(windowTitleInternalizationPhraseBuilder.execute().getOutput());
-				*/
-				InternationalizationPhrase phrase = __getWindowTitleInternationalizationPhrase__(systemAction);
-				if(phrase != null) {
-					InternationalizationHelper.processPhrases(phrase);
-					window.setTitleValue(phrase.getValue());
-				}
-			}
-			__execute__(window,systemAction,__getFormClass__(getFormClass()),__getRowClass__(getRowClass()));
-		}
+				
+		__execute__(window,systemAction,__getFormClass__(getFormClass()),__getRowClass__(getRowClass()));
 		
 		ViewBuilder view = getView();
 		//if(view == null)
@@ -166,7 +151,33 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		return __inject__(Controller.class).readBySystemIdentifier(klass, identifier,properties);	
 	}
 	
-	protected abstract void __execute__(WindowBuilder window,SystemAction systemAction,Class<? extends Form> formClass,Class<? extends Row> rowClass);
+	protected void __executeSystemActionIsNull__(WindowBuilder window) {}
+	
+	protected void __executeSystemActionIsNotNull__(WindowBuilder window,SystemAction systemAction,Class<? extends Form> formClass,Class<? extends Row> rowClass) {}
+	
+	protected final void __execute__(WindowBuilder window,SystemAction systemAction,Class<? extends Form> formClass,Class<? extends Row> rowClass) {
+		if(systemAction == null) {
+			__executeSystemActionIsNull__(window);
+		}else {
+			if(window.getTitle()==null || StringHelper.isBlank(window.getTitle().getValue())) {
+				/*InternalizationPhraseBuilder windowTitleInternalizationPhraseBuilder = __getWindowTitleInternalizationPhraseBuilder__(systemAction);
+				if(windowTitleInternalizationPhraseBuilder == null) {
+					windowTitleInternalizationPhraseBuilder = __inject__(InternalizationPhraseBuilder.class)
+							.addStrings(__inject__(InternalizationStringBuilder.class).setKeyValue(systemAction).setCase(Case.FIRST_CHARACTER_UPPER).setKeyType(InternationalizationKeyStringType.NOUN))
+							.addStringsByKeys(systemAction.getEntities().getElementClass());
+				}
+				if(windowTitleInternalizationPhraseBuilder != null)
+					window.setTitleValue(windowTitleInternalizationPhraseBuilder.execute().getOutput());
+				*/
+				InternationalizationPhrase phrase = __getWindowTitleInternationalizationPhrase__(systemAction);
+				if(phrase != null) {
+					InternationalizationHelper.processPhrases(phrase);
+					window.setTitleValue(phrase.getValue());
+				}
+			}
+			__executeSystemActionIsNotNull__(window,systemAction,__getFormClass__(getFormClass()),__getRowClass__(getRowClass()));
+		}
+	}
 	
 	protected Class<? extends Form> __getFormClass__(Class<? extends Form> aClass){
 		return aClass;
@@ -191,6 +202,17 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 	@Override
 	public WindowContainerManagedWindowBuilder setMenuMap(MenuBuilderMap menuMap) {
 		this.menuMap = menuMap;
+		return this;
+	}
+	
+	@Override
+	public Object getMenuMapKey() {
+		return menuMapKey;
+	}
+	
+	@Override
+	public WindowContainerManagedWindowBuilder setMenuMapKey(Object menuMapKey) {
+		this.menuMapKey = menuMapKey;
 		return this;
 	}
 	
