@@ -79,6 +79,9 @@
 										<c:when test="#{componentHelper.isInputDateTime(indexComponent)}">
 											<cyk:inputDateTime value="#{indexComponent}" />
 										</c:when>
+										<c:when test="#{componentHelper.isInputNumber(indexComponent)}">
+											<cyk:inputNumber value="#{indexComponent}" />
+										</c:when>
 										
 										<!-- Commandable -->
 										

@@ -79,6 +79,7 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 			windowContainerManagedWindowBuilderThrowable.getWindow(Boolean.TRUE).setTitleValue(__getWindowTitleValue__());
 			__windowBuilder__ = windowContainerManagedWindowBuilderThrowable.execute().getOutput();
 			LogHelper.log(exception, getClass());
+			exception.printStackTrace();
 		}
 		
 		DurationBuilder subDurationBuilder = __inject__(DurationBuilder.class).setBeginToNow();

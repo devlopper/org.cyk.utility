@@ -27,6 +27,7 @@ import org.cyk.utility.client.controller.component.input.InputBuilder;
 import org.cyk.utility.client.controller.component.input.InputDateBuilder;
 import org.cyk.utility.client.controller.component.input.InputDateTimeBuilder;
 import org.cyk.utility.client.controller.component.input.InputFileBuilder;
+import org.cyk.utility.client.controller.component.input.InputNumberBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringEditorBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineManyBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
@@ -193,6 +194,11 @@ public class ComponentBuilderHelperImpl extends AbstractHelper implements Compon
 					__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputFile.class,annotations);
 			if(annotationInputFile!=null)
 				return InputFileBuilder.class;	
+			
+			org.cyk.utility.client.controller.component.annotation.InputNumber annotationInputNumber =
+					__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputNumber.class,annotations);
+			if(annotationInputNumber!=null)
+				return InputNumberBuilder.class;	
 			
 			org.cyk.utility.client.controller.component.annotation.InputDate annotationInputDate =
 					__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputDate.class,annotations);

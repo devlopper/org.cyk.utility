@@ -3,10 +3,12 @@ package org.cyk.utility.__kernel__.log;
 import java.util.Collection;
 import java.util.logging.Level;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.value.Value;
 
 public interface LogHelper {
 
@@ -63,7 +65,7 @@ public interface LogHelper {
 	}
 	
 	static void log(String message,Level level,Class<?> klass) {
-		if(message == null || message.isBlank())
+		if(StringHelper.isBlank(message))
 			return;
 		if(level == null)
 			level = Level.INFO;
@@ -73,51 +75,81 @@ public interface LogHelper {
 	}
 	
 	static void log(String message,Level level) {
+		if(StringHelper.isBlank(message))
+			return;
 		log(message, level, LogHelper.class);
 	}
 	
 	static void log(String message) {
+		if(StringHelper.isBlank(message))
+			return;
 		log(message, Level.INFO, LogHelper.class);
 	}
 	
 	static void logFinest(String message,Class<?> klass) {
+		if(StringHelper.isBlank(message))
+			return;
 		log(message, Level.FINEST,klass);
 	}
 	
 	static void logFiner(String message,Class<?> klass) {
+		if(StringHelper.isBlank(message))
+			return;
 		log(message, Level.FINER,klass);
 	}
 	
 	static void logFine(String message,Class<?> klass) {
+		if(StringHelper.isBlank(message))
+			return;
 		log(message, Level.FINE,klass);
 	}
 
 	static void logInfo(String message,Class<?> klass) {
+		if(StringHelper.isBlank(message))
+			return;
 		log(message, Level.INFO,klass);
 	}
 	
 	static void logWarning(String message,Class<?> klass) {
+		if(StringHelper.isBlank(message))
+			return;
 		log(message, Level.WARNING,klass);
 	}
 	
 	static void logSevere(String message,Class<?> klass) {
+		if(StringHelper.isBlank(message))
+			return;
 		log(message, Level.SEVERE,klass);
 	}
 	
 	static void logAll(String message,Class<?> klass) {
+		if(StringHelper.isBlank(message))
+			return;
 		log(message, Level.ALL,klass);
 	}
 	
 	static void logConfig(String message,Class<?> klass) {
+		if(StringHelper.isBlank(message))
+			return;
 		log(message, Level.CONFIG,klass);
 	}
 	
 	static void logOff(String message,Class<?> klass) {
+		if(StringHelper.isBlank(message))
+			return;
 		log(message, Level.OFF,klass);
 	}
 	
-	static void log(Throwable throwable,Class<?> klass) {
+	static void log(Throwable throwable,Class<?> klass,Boolean isPrintStackTrace) {
+		if(throwable == null)
+			return;
 		logSevere(throwable.toString(),klass);
+		if(Boolean.TRUE.equals(isPrintStackTrace) || Boolean.TRUE.equals(IS_PRINT_STACK_TRACE.get()))
+			throwable.printStackTrace();
+	}
+	
+	static void log(Throwable throwable,Class<?> klass) {
+		log(throwable, klass,Boolean.FALSE);
 	}
 
 	static void log(LogMessage message,Level level,Class<?> klass) {
@@ -129,4 +161,7 @@ public interface LogHelper {
 		log(string,level,klass);
 	}
 	
+	/**/
+	
+	Value IS_PRINT_STACK_TRACE = DependencyInjection.inject(Value.class).set(Boolean.FALSE);
 }

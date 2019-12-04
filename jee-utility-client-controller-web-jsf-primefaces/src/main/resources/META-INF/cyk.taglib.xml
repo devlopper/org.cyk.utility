@@ -88,6 +88,11 @@
     </tag>
     
     <tag>
+        <tag-name>inputNumber</tag-name>
+        <source>tag/input/number/inputNumber.xhtml</source>
+    </tag>
+    
+    <tag>
         <tag-name>selectBooleanCheckbox</tag-name>
         <source>tag/input/boolean/selectBooleanCheckbox.xhtml</source>
     </tag>
