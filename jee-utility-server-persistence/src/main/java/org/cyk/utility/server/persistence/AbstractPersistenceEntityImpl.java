@@ -523,6 +523,10 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	
 	protected void __listenExecuteReadAfter__(ENTITY entity,Properties properties) {
 		Strings fieldsNames = __getFieldsFromProperties__(properties);
+		__listenExecuteReadAfterSetFieldsValues__(entity, fieldsNames, properties);
+	}
+	
+	protected void __listenExecuteReadAfterSetFieldsValues__(ENTITY entity,Strings fieldsNames,Properties properties) {
 		Collection<Field> fieldsToBeSet = new ArrayList<>();
 		Collection<Field> fieldsToBeSetToNull = new ArrayList<>();
 		Collection<String> fieldsToBeSetNames = new ArrayList<>();
