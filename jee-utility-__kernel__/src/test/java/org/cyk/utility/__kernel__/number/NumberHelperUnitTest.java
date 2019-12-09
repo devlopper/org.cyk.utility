@@ -90,6 +90,11 @@ public class NumberHelperUnitTest extends AbstractWeldUnitTest {
 		assertThat(get(BigDecimal.class,"12")).isEqualTo(new BigDecimal("12"));
 	}
 	
+	@Test
+	public void get_integer_bigdecimal(){
+		assertThat(NumberHelper.getInteger(new BigDecimal("12"))).isEqualTo(12);
+	}
+	
 	/* compare */
 	
 	@Test
@@ -187,5 +192,10 @@ public class NumberHelperUnitTest extends AbstractWeldUnitTest {
 	@Test
 	public void operate_subtract(){
 		assertThat(operate(Operation.SUBTRACT,2,4).intValue()).isEqualTo(-2);
+	}
+	
+	@Test
+	public void operate_multiply(){
+		assertThat(NumberHelper.multiply(2,3).intValue()).isEqualTo(6);
 	}
 }

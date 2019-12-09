@@ -17,4 +17,6 @@ public enum Icon {
 	,FLASH
 	,SUITCASE
 	,PENCIL
+	,CAR
+	,TRUCK
 }

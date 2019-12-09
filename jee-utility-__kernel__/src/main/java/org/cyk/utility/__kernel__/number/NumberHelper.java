@@ -1,10 +1,13 @@
 package org.cyk.utility.__kernel__.number;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
+import org.cyk.utility.__kernel__.array.ArrayHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
+import org.cyk.utility.__kernel__.log.LogHelper;
 
 public interface NumberHelper {
 
@@ -22,7 +25,10 @@ public interface NumberHelper {
 			if(Short.class.equals(klass))
 				return (NUMBER) Short.valueOf(object.toString());
 			if(Integer.class.equals(klass))
-				return (NUMBER) Integer.valueOf(object.toString());
+				if(object instanceof BigDecimal)
+					return (NUMBER) Integer.valueOf(((BigDecimal)object).intValue());
+				else
+					return (NUMBER) Integer.valueOf(object.toString());
 			if(Long.class.equals(klass))
 				return (NUMBER) Long.valueOf(object.toString());
 			if(Float.class.equals(klass))
@@ -32,6 +38,7 @@ public interface NumberHelper {
 			if(BigDecimal.class.equals(klass))
 				return (NUMBER) new BigDecimal(object.toString());
 		} catch (NumberFormatException exception) {
+			LogHelper.log(exception, NumberHelper.class);
 			if(Boolean.TRUE.equals(isThrowException))
 				throw exception;
 			return nullValue;
@@ -81,6 +88,23 @@ public interface NumberHelper {
 		if((object instanceof String) && ((String)object).isBlank())
 			return null;
 		return getLong(object, null);
+	}
+	
+	static Collection<Long> getLongs(Collection<?> collection,Long nullValue) {
+		if(CollectionHelper.isEmpty(collection))
+			return null;
+		Collection<Long> longs = new ArrayList<>();
+		for(Object index : collection) {
+			Long value = getLong(index, nullValue);
+			if(value == null)
+				value = nullValue;
+			longs.add(value);
+		}			
+		return longs;
+	}
+	
+	static Collection<Long> getLongs(Collection<?> collection) {
+		return getLongs(collection, null);
 	}
 	
 	static BigDecimal getBigDecimal(Object object, BigDecimal nullValue) {
@@ -150,7 +174,7 @@ public interface NumberHelper {
 	/* operate */
 	
 	static Number operate(Operation operation,Collection<Number> numbers){
-		if(operation == null || numbers == null || numbers.isEmpty())
+		if(operation == null || CollectionHelper.isEmpty(numbers))
 			return null;
 		Number result = null;
 		switch(operation){
@@ -187,21 +211,56 @@ public interface NumberHelper {
 	}
 	
 	static Number operate(Operation operation, Number... numbers) {
-		if(operation == null || numbers == null || numbers.length == 0)
+		if(operation == null || ArrayHelper.isEmpty(numbers))
 			return null;
-		return operate(operation, List.of(numbers));
+		return operate(operation, CollectionHelper.listOf(Boolean.TRUE, numbers));
 	}
 	
-	static Number add(Number... numbers) {
-		if(numbers == null || numbers.length == 0)
+	static Number add(Collection<Number> numbers) {
+		if(CollectionHelper.isEmpty(numbers))
 			return null;
 		return operate(Operation.ADD, numbers);
 	}
-
-	static Number subtract(Number... numbers) {
-		if(numbers == null || numbers.length == 0)
+	
+	static Number add(Number... numbers) {
+		if(ArrayHelper.isEmpty(numbers))
+			return null;
+		return operate(Operation.ADD, numbers);
+	}
+	
+	static Number subtract(Collection<Number> numbers) {
+		if(CollectionHelper.isEmpty(numbers))
 			return null;
 		return operate(Operation.SUBTRACT, numbers);
 	}
-		
+
+	static Number subtract(Number... numbers) {
+		if(ArrayHelper.isEmpty(numbers))
+			return null;
+		return operate(Operation.SUBTRACT, numbers);
+	}
+	
+	static Number multiply(Collection<Number> numbers) {
+		if(CollectionHelper.isEmpty(numbers))
+			return null;
+		return operate(Operation.MULTIPLY, numbers);
+	}
+
+	static Number multiply(Number... numbers) {
+		if(ArrayHelper.isEmpty(numbers))
+			return null;
+		return operate(Operation.MULTIPLY, numbers);
+	}
+	
+	static Number divide(Collection<Number> numbers) {
+		if(CollectionHelper.isEmpty(numbers))
+			return null;
+		return operate(Operation.DIVIDE, numbers);
+	}
+
+	static Number divide(Number... numbers) {
+		if(ArrayHelper.isEmpty(numbers))
+			return null;
+		return operate(Operation.DIVIDE, numbers);
+	}
 }
