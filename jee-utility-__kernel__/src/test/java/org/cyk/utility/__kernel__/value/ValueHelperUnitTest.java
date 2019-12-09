@@ -140,6 +140,13 @@ public class ValueHelperUnitTest extends AbstractWeldUnitTest {
 		assertThat(persistenceEntityType.getInteger()).isEqualTo(159);
 	}
 	
+	@Test
+	public void convert_representation_to_persistence() {
+		RepresentationEntity representationEntity = new RepresentationEntity().setIdentifier("i01");
+		PersistenceEntity persistenceEntity = convert(representationEntity, PersistenceEntity.class);
+		System.out.println("ValueHelperUnitTest.convert_representation_to_persistence() : "+persistenceEntity);
+	}
+	
 	/**/
 	
 	@Getter @Setter @Accessors(chain=true)

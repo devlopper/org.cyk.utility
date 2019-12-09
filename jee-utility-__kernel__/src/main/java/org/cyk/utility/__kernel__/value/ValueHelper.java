@@ -5,6 +5,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.collection.CollectionInstance;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.instance.InstanceHelper;
@@ -118,6 +119,13 @@ public interface ValueHelper {
 				return (T) value;
 			return (T) value.toString();
 		}
+		
+		if(value instanceof org.cyk.utility.__kernel__.object.__static__.representation.AbstractIdentifiedImpl) {
+			if(ClassHelper.isInstanceOf(klass, org.cyk.utility.__kernel__.object.__static__.persistence.embeddedable.AbstractObjectImpl.class)) {
+				//return DependencyInjection.inject(MapperSourceDestinationGetter.class).
+			}
+		}
+		
 		throw new RuntimeException("convert type <<"+value.getClass()+">> to type "+klass+" not yet implemented");
 	}
 	

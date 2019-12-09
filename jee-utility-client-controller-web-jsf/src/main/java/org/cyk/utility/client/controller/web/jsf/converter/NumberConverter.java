@@ -25,7 +25,6 @@ public class NumberConverter extends AbstractObject implements Converter<Number>
 
 	@Override
 	public String getAsString(FacesContext context, UIComponent c, Number number) {
-		//return __inject__(NumberHelper.class). getInstance().stringify((Number)number);
 		return number == null ? ConstantEmpty.STRING : number.toString();
 	}
 }

@@ -11,6 +11,7 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.icon.Icon;
 import org.cyk.utility.__kernel__.icon.IconHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
@@ -36,6 +37,7 @@ import org.cyk.utility.client.controller.component.input.InputDate;
 import org.cyk.utility.client.controller.component.input.InputDateTime;
 import org.cyk.utility.client.controller.component.input.InputFile;
 import org.cyk.utility.client.controller.component.input.InputFileBuilder;
+import org.cyk.utility.client.controller.component.input.InputNumber;
 import org.cyk.utility.client.controller.component.input.choice.ChoicesLayout;
 import org.cyk.utility.client.controller.component.input.choice.ChoicesLayoutResponsive;
 import org.cyk.utility.client.controller.component.input.choice.InputChoice;
@@ -65,6 +67,7 @@ import org.cyk.utility.client.controller.event.EventName;
 import org.cyk.utility.client.controller.event.Events;
 import org.cyk.utility.client.controller.web.ComponentHelper;
 import org.cyk.utility.client.controller.web.jsf.converter.DateConverter;
+import org.cyk.utility.client.controller.web.jsf.converter.NumberConverter;
 import org.cyk.utility.client.controller.web.jsf.converter.ObjectConverter;
 import org.cyk.utility.client.controller.web.jsf.primefaces.annotation.Primefaces;
 import org.cyk.utility.css.Style;
@@ -179,6 +182,7 @@ public class ObjectLifeCycleListenerImpl extends AbstractObjectLifeCycleListener
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	protected void listenExecuteComponentBuilderAfter(ComponentBuilder<?> componentBuilder) {
 		super.listenExecuteComponentBuilderAfter(componentBuilder);
 		Component component = componentBuilder.getComponent();
@@ -306,6 +310,10 @@ public class ObjectLifeCycleListenerImpl extends AbstractObjectLifeCycleListener
 						inputDateTime.getProperties().setConverter(DependencyInjection.inject(DateConverter.class));
 						inputDateTime.getProperties().setLocale(Locale.FRENCH);
 						inputDateTime.getProperties().setTimeZone(TimeZone.getDefault());
+					}else if(component instanceof InputNumber) {
+						InputNumber inputNumber = (InputNumber) inputOutput;
+						Class<? extends Number> numberClass = (Class<? extends Number>)FieldHelper.getType(inputNumber.getField(),null);
+						inputNumber.getProperties().setConverter(new NumberConverter(numberClass));
 					}
 				}
 			}else if(component instanceof Menu) {
