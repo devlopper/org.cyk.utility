@@ -1,5 +1,6 @@
 package org.cyk.utility.__kernel__.time;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -16,4 +17,9 @@ public interface TimeHelper {
 		return localDateTime.format(DateTimeFormatter.ofPattern(pattern));
 	}
 	
+	public static String formatDurationTillNow(String string) {
+		if(StringHelper.isBlank(string))
+			return null;
+		return Duration.between(LocalDateTime.parse(string), LocalDateTime.now()).toString();
+	}
 }

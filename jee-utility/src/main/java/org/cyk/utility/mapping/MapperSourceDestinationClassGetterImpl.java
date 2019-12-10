@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
-@SuppressWarnings("rawtypes")
+@SuppressWarnings("rawtypes") @Deprecated
 public class MapperSourceDestinationClassGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Class> implements MapperSourceDestinationClassGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 	

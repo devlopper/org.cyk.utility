@@ -5,7 +5,7 @@ import java.io.Serializable;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-
+@Deprecated
 public class MapperSourceDestinationClassNameGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<String> implements MapperSourceDestinationClassNameGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 	

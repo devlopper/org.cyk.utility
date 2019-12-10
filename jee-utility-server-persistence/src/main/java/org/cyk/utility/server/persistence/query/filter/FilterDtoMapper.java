@@ -2,10 +2,10 @@ package org.cyk.utility.server.persistence.query.filter;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.mapping.AbstractMapperSourceDestinationImpl;
 import org.cyk.utility.__kernel__.mapping.Instantiator;
+import org.cyk.utility.__kernel__.mapping.MappingHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
-import org.cyk.utility.mapping.AbstractMapperSourceDestinationImpl;
-import org.cyk.utility.mapping.MappingHelper;
 import org.mapstruct.Mapper;
 
 @Mapper(uses= {Instantiator.class})
@@ -25,7 +25,7 @@ public abstract class FilterDtoMapper extends AbstractMapperSourceDestinationImp
 		if(fieldDtoCollection != null && fieldDtoCollection.getCollection()!=null && !fieldDtoCollection.getCollection().isEmpty()) {
 			fields = DependencyInjection.inject(Fields.class);
 			for(FieldDto index : fieldDtoCollection.getCollection())
-				fields.add(DependencyInjection.inject(MappingHelper.class).getDestination(index, Field.class));
+				fields.add(MappingHelper.getDestination(index, Field.class));
 		}
 		return fields;
 	}
@@ -35,7 +35,7 @@ public abstract class FilterDtoMapper extends AbstractMapperSourceDestinationImp
 		if(fields != null && fields.get()!=null && !fields.get().isEmpty()) {
 			fieldDtoCollection = new FieldDtoCollection();
 			for(Field index : fields.get())
-				fieldDtoCollection.add(DependencyInjection.inject(MappingHelper.class).getDestination(index, FieldDto.class));
+				fieldDtoCollection.add(MappingHelper.getDestination(index, FieldDto.class));
 		}
 		return fieldDtoCollection;
 	}

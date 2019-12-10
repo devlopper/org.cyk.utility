@@ -9,7 +9,7 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.helper.AbstractHelper;
 
-@ApplicationScoped
+@ApplicationScoped @Deprecated
 public class MappingHelperImpl extends AbstractHelper implements MappingHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 

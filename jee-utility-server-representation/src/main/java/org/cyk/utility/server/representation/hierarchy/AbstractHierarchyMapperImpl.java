@@ -2,7 +2,7 @@ package org.cyk.utility.server.representation.hierarchy;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
-import org.cyk.utility.mapping.MapperSourceDestination;
+import org.cyk.utility.__kernel__.mapping.MapperSourceDestination;
 import org.cyk.utility.server.representation.AbstractMapperSourceDestinationImpl;
 
 public abstract class AbstractHierarchyMapperImpl<SOURCE,DESTINATION,NODE_SOURCE,NODE_DESTINATION,NODE_MAPPER extends MapperSourceDestination<NODE_SOURCE, NODE_DESTINATION>> extends AbstractMapperSourceDestinationImpl<SOURCE, DESTINATION> {

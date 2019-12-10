@@ -5,11 +5,11 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.collection.CollectionInstance;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.instance.InstanceHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.mapping.MapperGetter;
 import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 
@@ -120,9 +120,9 @@ public interface ValueHelper {
 			return (T) value.toString();
 		}
 		
-		if(value instanceof org.cyk.utility.__kernel__.object.__static__.representation.AbstractIdentifiedImpl) {
+		if(value instanceof org.cyk.utility.__kernel__.object.__static__.representation.AbstractObjectImpl) {
 			if(ClassHelper.isInstanceOf(klass, org.cyk.utility.__kernel__.object.__static__.persistence.embeddedable.AbstractObjectImpl.class)) {
-				//return DependencyInjection.inject(MapperSourceDestinationGetter.class).
+				return MapperGetter.getInstance().getBySourceByDestinationClass(value, klass).getDestination(value);
 			}
 		}
 		
@@ -182,7 +182,9 @@ public interface ValueHelper {
 						if(identifier!=null)
 							return InstanceHelper.getByIdentifier(destinationFieldType, identifier);
 					//}
-				}				
+				}else if(ClassHelper.isInstanceOf(destinationFieldType, org.cyk.utility.__kernel__.object.__static__.persistence.embeddedable.AbstractObjectImpl.class)) {
+					return convert(sourceFieldValue, destinationFieldType);
+				}
 			}
 		}
 		return sourceFieldValue;

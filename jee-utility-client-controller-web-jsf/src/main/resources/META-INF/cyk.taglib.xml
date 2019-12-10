@@ -13,4 +13,10 @@
         <function-signature>java.lang.String formatLocalDateTimeFromString(java.lang.String, java.lang.String)</function-signature>
 	</function>
 	
+	<function>
+		<function-name>formatDurationTillNow</function-name>
+        <function-class>org.cyk.utility.client.controller.web.jsf.Functions</function-class>
+        <function-signature>java.lang.String formatDurationTillNow(java.lang.String)</function-signature>
+	</function>
+	
 </facelet-taglib>

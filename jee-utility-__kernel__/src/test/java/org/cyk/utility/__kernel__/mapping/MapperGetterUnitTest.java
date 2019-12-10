@@ -1,6 +1,6 @@
-package org.cyk.utility.mapping;
+package org.cyk.utility.__kernel__.mapping;
 
-import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.Mapper;
 
@@ -14,7 +14,8 @@ public class MapperGetterUnitTest extends AbstractWeldUnitTest {
 	@Test
 	public void get_source_destination() {
 		//MapperSourceDestination<Source, Destination> mapper = 
-		__inject__(MapperSourceDestinationGetter.class).setSourceClass(Source.class).setDestinationClass(Destination.class).execute().getOutput();
+		Object mapper =  MapperGetter.getInstance().getBySourceClassByDestinationClass(Source.class,Destination.class);
+		System.out.println("MapperGetterUnitTest.get_source_destination() MAPPER : "+mapper);
 		//System.out.println("MapperGetterUnitTest.get_source_destination() ::: "+mapper);
 		//Destination destination = SourceDestinationMapper.MAPPER.mapFromType1(new Source().setString01("s01").setInteger01(12));
 		//assertThat(destination.getString01()).isEqualTo("s01");

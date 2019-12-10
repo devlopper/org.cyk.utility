@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.mapping.MappingHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.mapping.MappingHelper;
 import org.cyk.utility.server.persistence.query.filter.Filter;
 import org.cyk.utility.server.persistence.query.filter.FilterDto;
 
@@ -20,7 +20,7 @@ public class RepresentationFunctionCounterImpl extends AbstractRepresentationFun
 		Properties properties = new Properties();
 		FilterDto filterDto = (FilterDto) getProperty(Properties.QUERY_FILTERS);
 		if(filterDto != null) {
-			Filter filter = __inject__(MappingHelper.class).getDestination(filterDto, Filter.class).normalize(__persistenceEntityClass__);
+			Filter filter = MappingHelper.getDestination(filterDto, Filter.class).normalize(__persistenceEntityClass__);
 			properties.setQueryFilters(filter);
 		}
 		count = __injectBusiness__().count(__persistenceEntityClass__, properties);

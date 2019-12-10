@@ -1,8 +1,8 @@
-package org.cyk.utility.mapping;
+package org.cyk.utility.__kernel__.mapping;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 
 import lombok.Getter;
@@ -14,12 +14,12 @@ public class MapperSourceDestinationClassNameGetterUnitTest extends AbstractWeld
 
 	@Test
 	public void get_name_byClass() {
-		assertThat(__inject__(MapperSourceDestinationClassNameGetter.class).setKlass(Class.class).execute().getOutput()).isEqualTo(ClassMapper.class.getName());
+		assertThat(MapperClassNameGetter.getInstance().get(Class.class)).isEqualTo(ClassMapper.class.getName());
 	}
 	
 	@Test
 	public void get_name_byClassName() {
-		assertThat(__inject__(MapperSourceDestinationClassNameGetter.class).setClassName(Class.class.getName()).execute().getOutput()).isEqualTo(ClassMapper.class.getName());
+		assertThat(MapperClassNameGetter.getInstance().get(Class.class.getName())).isEqualTo(ClassMapper.class.getName());
 	}
 	
 	/**/

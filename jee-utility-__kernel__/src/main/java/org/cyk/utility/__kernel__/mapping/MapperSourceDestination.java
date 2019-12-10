@@ -1,9 +1,9 @@
-package org.cyk.utility.mapping;
+package org.cyk.utility.__kernel__.mapping;
 
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-@Deprecated
+
 public interface MapperSourceDestination<SOURCE,DESTINATION> extends Mapper {
 
 	DESTINATION getDestination(SOURCE source);

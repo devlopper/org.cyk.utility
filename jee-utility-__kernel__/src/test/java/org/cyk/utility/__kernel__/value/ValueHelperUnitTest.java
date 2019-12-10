@@ -14,8 +14,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.instance.InstanceGetterImpl;
+import org.cyk.utility.__kernel__.mapping.AbstractMapperSourceDestinationImpl;
+import org.cyk.utility.__kernel__.object.__static__.persistence.embeddedable.AbstractObjectImpl;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.Mapper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -141,10 +144,10 @@ public class ValueHelperUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	@Test
-	public void convert_representation_to_persistence() {
-		RepresentationEntity representationEntity = new RepresentationEntity().setIdentifier("i01");
-		PersistenceEntity persistenceEntity = convert(representationEntity, PersistenceEntity.class);
-		System.out.println("ValueHelperUnitTest.convert_representation_to_persistence() : "+persistenceEntity);
+	public void convert_representationEmbeddable_to_persistenceEmbeddable() {
+		RepresentationEmbbedable representation = new RepresentationEmbbedable().setString("i01");
+		PersistenceEmbbedable persistence = convert(representation, PersistenceEmbbedable.class);
+		assertThat(persistence.getString()).isEqualTo("i01");
 	}
 	
 	/**/
@@ -193,6 +196,13 @@ public class ValueHelperUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	@Getter @Setter @Accessors(chain=true) @Entity
+	public static class PersistenceEmbbedable extends AbstractObjectImpl {
+		private static final long serialVersionUID = 1L;
+		private String string;
+		private Integer integer;
+	}
+	
+	@Getter @Setter @Accessors(chain=true) @Entity
 	public static class PersistenceEntityType {
 		private String identifier;
 		private String code;
@@ -211,10 +221,23 @@ public class ValueHelperUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	@Getter @Setter @Accessors(chain=true) @XmlRootElement
+	public static class RepresentationEmbbedable extends org.cyk.utility.__kernel__.object.__static__.representation.AbstractObjectImpl {
+		private static final long serialVersionUID = 1L;
+		private String string;
+		private Integer integer;
+	}
+	
+	@Getter @Setter @Accessors(chain=true) @XmlRootElement
 	public static class RepresentationEntityType {
 		private String identifier;
 		private String code;
 		private String string;
 		private Integer integer;
+	}
+	
+	@Mapper
+	public static abstract class RepresentationEmbbedableMapper extends AbstractMapperSourceDestinationImpl<RepresentationEmbbedable,PersistenceEmbbedable> {
+		private static final long serialVersionUID = 1L;
+		
 	}
 }

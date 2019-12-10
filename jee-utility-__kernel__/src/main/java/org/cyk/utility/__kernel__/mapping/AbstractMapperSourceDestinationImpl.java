@@ -1,4 +1,4 @@
-package org.cyk.utility.mapping;
+package org.cyk.utility.__kernel__.mapping;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -15,7 +15,6 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.MappingTarget;
 
-@Deprecated
 public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> extends AbstractMapperImpl implements MapperSourceDestination<SOURCE,DESTINATION>,Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -26,6 +25,7 @@ public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> ex
 	protected Class<DESTINATION> __destinationClass__;
 	protected Collection<Field> __persistableFields__;
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();

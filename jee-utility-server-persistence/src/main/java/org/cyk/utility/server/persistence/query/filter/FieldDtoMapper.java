@@ -14,7 +14,7 @@ import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.mapping.Instantiator;
 import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
-import org.cyk.utility.mapping.AbstractMapperSourceDestinationImpl;
+import org.cyk.utility.__kernel__.mapping.AbstractMapperSourceDestinationImpl;
 import org.cyk.utility.value.ValueDto;
 import org.cyk.utility.value.ValueDto.Container;
 import org.mapstruct.Mapper;

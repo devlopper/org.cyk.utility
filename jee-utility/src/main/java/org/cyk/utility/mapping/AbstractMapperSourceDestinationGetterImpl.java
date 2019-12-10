@@ -5,7 +5,7 @@ import java.io.Serializable;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
-@SuppressWarnings("rawtypes")
+@SuppressWarnings("rawtypes") @Deprecated
 public abstract class AbstractMapperSourceDestinationGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<MapperSourceDestination> implements MapperSourceDestinationGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 	

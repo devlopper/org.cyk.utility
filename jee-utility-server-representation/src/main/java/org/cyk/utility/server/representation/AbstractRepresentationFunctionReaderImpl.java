@@ -12,15 +12,15 @@ import javax.ws.rs.core.Response.Status;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.log.LogLevel;
+import org.cyk.utility.__kernel__.mapping.MappingHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.Strings;
-import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.__kernel__.log.LogLevel;
-import org.cyk.utility.mapping.MappingHelper;
-import org.cyk.utility.server.persistence.query.filter.Filter;
-import org.cyk.utility.server.persistence.query.filter.FilterDto;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.__kernel__.system.action.SystemActionRead;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
+import org.cyk.utility.server.persistence.query.filter.Filter;
+import org.cyk.utility.server.persistence.query.filter.FilterDto;
 
 public abstract class AbstractRepresentationFunctionReaderImpl extends AbstractRepresentationFunctionImpl implements RepresentationFunctionReader, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -58,7 +58,7 @@ public abstract class AbstractRepresentationFunctionReaderImpl extends AbstractR
 			if(Boolean.TRUE.equals(CollectionHelper.isEmpty(__entitiesSystemIdentifiers__)) && Boolean.TRUE.equals(CollectionHelper.isEmpty(__entitiesBusinessIdentifiers__))) {
 				FilterDto filterDto = (FilterDto) getProperty(Properties.QUERY_FILTERS);
 				if(filterDto != null) {
-					Filter filter = __inject__(MappingHelper.class).getDestination(filterDto, Filter.class).normalize(__persistenceEntityClass__);
+					Filter filter = MappingHelper.getDestination(filterDto, Filter.class).normalize(__persistenceEntityClass__);
 					properties.setQueryFilters(filter);
 				}
 				// no specific identifiers
@@ -82,7 +82,7 @@ public abstract class AbstractRepresentationFunctionReaderImpl extends AbstractR
 				if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(collection))) {
 					if(__entities__ == null)
 						__entities__ = new ArrayList<>();
-					__entities__.addAll(__inject__(MappingHelper.class).getSources(collection, __entityClass__,properties));
+					__entities__.addAll(MappingHelper.getSources(collection, __entityClass__,properties));
 				}
 				
 				properties.setQueryIdentifier(null);
@@ -104,7 +104,7 @@ public abstract class AbstractRepresentationFunctionReaderImpl extends AbstractR
 				if(entity != null) {
 					if(__entities__ == null)
 						__entities__ = new ArrayList<>();
-					__entities__.add(__inject__(MappingHelper.class).getSource(entity, __entityClass__,properties));	
+					__entities__.add(MappingHelper.getSource(entity, __entityClass__,properties));	
 				}
 				
 			}

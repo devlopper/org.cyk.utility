@@ -6,8 +6,8 @@ import java.util.Collection;
 import javax.ws.rs.core.Response.Status;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.mapping.MappingHelper;
 import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
-import org.cyk.utility.mapping.MappingHelper;
 import org.cyk.utility.server.business.Business;
 
 public abstract class AbstractRepresentationFunctionCreatorImpl extends AbstractRepresentationFunctionTransactionImpl implements RepresentationFunctionCreator, Serializable {
@@ -24,7 +24,7 @@ public abstract class AbstractRepresentationFunctionCreatorImpl extends Abstract
 	protected void __executeBusiness__() {
 		if(CollectionHelper.isEmpty(__entities__))
 			return;		
-		__persistenceEntities__ = (Collection<Object>) __inject__(MappingHelper.class).getDestinations(__entities__, __persistenceEntityClass__);
+		__persistenceEntities__ = (Collection<Object>) MappingHelper.getDestinations(__entities__, __persistenceEntityClass__);
 		if(__isBatchable__) {
 			__inject__(Business.class).createByBatch(__persistenceEntities__, __batchSize__);
 		}else {

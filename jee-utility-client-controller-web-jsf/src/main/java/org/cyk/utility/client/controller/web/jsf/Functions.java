@@ -13,4 +13,10 @@ public class Functions {
 		return TimeHelper.formatLocalDateTimeFromString(string, pattern);
 	}
 	
+	public static String formatDurationTillNow(String string) {
+		if(StringHelper.isBlank(string))
+			return null;
+		return TimeHelper.formatDurationTillNow(string);
+	}
+	
 }

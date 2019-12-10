@@ -1,4 +1,4 @@
-package org.cyk.utility.mapping;
+package org.cyk.utility.__kernel__.mapping;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
 import org.cyk.utility.__kernel__.instance.InstanceGetterImpl;
-import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -124,7 +124,7 @@ public class MapperUnitTest extends AbstractWeldUnitTest {
 	public void map_getter_representationEntity_to_persistenceEntity() {
 		InstanceGetterImpl.add(new PersistenceEntityDetail().setIdentifier("159").setCode("a01").setInteger01(123456));		
 		RepresentationEntity representationEntity = new RepresentationEntity().setString01("s01").setInteger01("12");
-		MapperSourceDestination<RepresentationEntity,PersistenceEntity> mapper = __inject__(MapperSourceDestinationGetter.class).setSource(representationEntity).setDestinationClass(PersistenceEntity.class).execute().getOutput();
+		MapperSourceDestination<RepresentationEntity,PersistenceEntity> mapper = MapperGetter.getInstance().getBySourceByDestinationClass(representationEntity,PersistenceEntity.class);
 		PersistenceEntity persistenceEntity = mapper.getDestination(representationEntity);
 		assertThat(persistenceEntity.getString01()).isEqualTo("s01");
 		assertThat(persistenceEntity.getInteger01()).isEqualTo(12);
