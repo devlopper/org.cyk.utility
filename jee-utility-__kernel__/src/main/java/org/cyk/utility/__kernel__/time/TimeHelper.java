@@ -9,17 +9,26 @@ import org.cyk.utility.__kernel__.value.ValueHelper;
 
 public interface TimeHelper {
 
+	static LocalDateTime parseLocalDateTimeFromString(String string) {
+		if(StringHelper.isBlank(string))
+			return null;
+		return  LocalDateTime.parse(string);
+	}
+	
 	static String formatLocalDateTimeFromString(String string,String pattern) {
 		if(StringHelper.isBlank(string))
 			return null;
 		pattern = ValueHelper.defaultToIfBlank(pattern, "dd/MM/yyyy");
-		LocalDateTime localDateTime =  LocalDateTime.parse(string);
+		LocalDateTime localDateTime =  parseLocalDateTimeFromString(string);
+		if(localDateTime == null)
+			return null;
 		return localDateTime.format(DateTimeFormatter.ofPattern(pattern));
 	}
 	
-	public static String formatDurationTillNow(String string) {
+	public static Duration getDurationTillNow(String string) {
 		if(StringHelper.isBlank(string))
 			return null;
-		return Duration.between(LocalDateTime.parse(string), LocalDateTime.now()).toString();
+		return Duration.between(parseLocalDateTimeFromString(string), LocalDateTime.now());
 	}
+	
 }
