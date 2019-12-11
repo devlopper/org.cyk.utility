@@ -1,8 +1,8 @@
 package org.cyk.utility.__kernel__.protocol.smtp;
 
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
@@ -10,8 +10,13 @@ import org.cyk.utility.__kernel__.variable.VariableHelper;
 import org.cyk.utility.__kernel__.variable.VariableName;
 import org.junit.jupiter.api.Test;
 
+import com.icegreen.greenmail.util.GreenMail;
+import com.icegreen.greenmail.util.GreenMailUtil;
+
 public class MailSenderUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
+	
+	private GreenMail greenMail;
 	
 	@Override
 	protected void __listenBefore__() {
@@ -23,31 +28,36 @@ public class MailSenderUnitTest extends AbstractWeldUnitTest {
 		VariableHelper.write(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_SECURED_CONNECTION_REQUIRED, Boolean.TRUE);
 		VariableHelper.write(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_CREDENTIALS_USER_IDENTIFIER, "kycdev@gmail.com");
 		VariableHelper.write(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_CREDENTIALS_USER_SECRET, "P@sSw0rd@2O18");
+		MailSender.INSTANCE.set(__inject__(MailSenderImplTest.class));
+		greenMail = new GreenMail(); //uses test ports by default
+		greenMail.start();
+	}
+	
+	@Override
+	protected void __listenAfter__() {
+		super.__listenAfter__();
+		greenMail.stop();
 	}
 	
 	@Test
-	public void ping(){
+	public void ping() throws MessagingException{
 		MailSender.getInstance().ping("kycdev@gmail.com");
+		MimeMessage[] emails = greenMail.getReceivedMessages();
+		assertThat(emails).isNotNull();
+		assertThat(emails.length).isEqualTo(1);
+		assertThat(emails[0].getSubject()).isEqualTo("Ping");
+		assertThat(GreenMailUtil.getBody(emails[0])).isEqualTo("This is a ping.");
 	}
 	
 	@Test
-	public void java() throws Exception{
-		Properties protocolProperties = Properties.DEFAULT;
-		java.util.Properties properties = System.getProperties();
-		if(protocolProperties.getHost()!=null)
-			properties.put(Properties.HOST, protocolProperties.getHost());
-		if(protocolProperties.getPort()!=null)
-			properties.put(Properties.PORT, protocolProperties.getPort());
-		if(protocolProperties.getIsAuthenticationRequired()!=null)
-			properties.put(Properties.AUTHENTICATION, protocolProperties.getIsAuthenticationRequired());
-		if(protocolProperties.getIsSecuredConnectionRequired()!=null)
-			properties.put(Properties.STARTTLS_ENABLE, protocolProperties.getIsSecuredConnectionRequired());
-		Session session = Session.getDefaultInstance(properties, new Authenticator(protocolProperties));
-		MimeMessage mimeMessage = new MimeMessage(session);
-		mimeMessage.setSubject("Java Mail");
-		mimeMessage.setContent("It is working!", "text/html");
-		mimeMessage.addRecipients(javax.mail.Message.RecipientType.TO, new InternetAddress[] {new InternetAddress("kycdev@gmail.com")});
-		Transport.send(mimeMessage);
+	public void greenMailSetup() throws MessagingException {
+		GreenMailUtil.sendTextEmailTest("to@localhost.com", "from@localhost.com", "subject", "body");
+		MimeMessage[] emails = greenMail.getReceivedMessages();
+		assertThat(emails).isNotNull();
+		assertThat(emails.length).isEqualTo(1);
+		assertThat(emails[0].getSubject()).isEqualTo("subject");
+		assertThat(GreenMailUtil.getBody(emails[0])).isEqualTo("body");
 	}
 
+	
 }

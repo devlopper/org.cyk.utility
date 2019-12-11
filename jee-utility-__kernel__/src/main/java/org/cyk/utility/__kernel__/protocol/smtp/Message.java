@@ -17,7 +17,7 @@ import lombok.experimental.Accessors;
 public class Message extends AbstractObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private String title;
+	private String subject;
 	private String body;
 	private Collection<Object> receivers;
 	

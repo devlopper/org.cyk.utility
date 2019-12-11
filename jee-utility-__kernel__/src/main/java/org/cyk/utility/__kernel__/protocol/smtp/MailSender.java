@@ -15,12 +15,12 @@ public interface MailSender {
 		send(message, Properties.DEFAULT, null);
 	}
 	
-	default void send(String title,String body,Collection<String> receivers) {
-		send(new Message().setTitle(title).setBody(body).addReceiversFromStrings(receivers), Properties.DEFAULT, null);
+	default void send(String subject,String body,Collection<String> receivers) {
+		send(new Message().setSubject(subject).setBody(body).addReceiversFromStrings(receivers), Properties.DEFAULT, null);
 	}
 	
-	default void send(String title,String body,String...receivers) {
-		send(new Message().setTitle(title).setBody(body).addReceiversFromStrings(receivers), Properties.DEFAULT, null);
+	default void send(String subject,String body,String...receivers) {
+		send(new Message().setSubject(subject).setBody(body).addReceiversFromStrings(receivers), Properties.DEFAULT, null);
 	}
 	
 	default void ping(Collection<String> receivers) {

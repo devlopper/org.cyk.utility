@@ -24,6 +24,7 @@
 		<org.keycloak.keycloak-admin-client.version>4.8.3.Final</org.keycloak.keycloak-admin-client.version>
 		<org.apache.commons.commons-text.version>1.4</org.apache.commons.commons-text.version>
 		<javax.mail.mail.version>1.5.0-b01</javax.mail.mail.version>
+		<com.icegreen.greenmail.version>1.5.11</com.icegreen.greenmail.version>
 	</properties>
 
 	<build>
@@ -97,6 +98,14 @@
 			<artifactId>resteasy-jackson2-provider</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		
+		<dependency>
+		    <groupId>com.icegreen</groupId>
+		    <artifactId>greenmail</artifactId>
+		    <version>${com.icegreen.greenmail.version}</version>
+		    <scope>test</scope>
+		</dependency>
+		
 	</dependencies>
 
 </project>
