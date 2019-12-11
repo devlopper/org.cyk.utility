@@ -32,16 +32,16 @@ public abstract class AbstractServletContextListener extends org.cyk.utility.con
 	public void __initialize__(ServletContext context) {
 		ContextHelper.set(context);
 		super.__initialize__(context);
-		if(ConfigurationHelper.is(VariableName.PROTOCOL_DEFAULTS_SIMPLE_MAIL_TRANSFER_IS_ENABLE)) {
+		if(ConfigurationHelper.is(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_ENABLE)) {
 			__inject__(ProtocolDefaults.class)
 			.getSimpleMailTransfer()
-				.setHost(ConfigurationHelper.getValueAsString(VariableName.PROTOCOL_DEFAULTS_SIMPLE_MAIL_TRANSFER_HOST))
-				.setPort(ConfigurationHelper.getValueAsInteger(VariableName.PROTOCOL_DEFAULTS_SIMPLE_MAIL_TRANSFER_PORT))
-				.setIsAuthenticationRequired(ConfigurationHelper.is(VariableName.PROTOCOL_DEFAULTS_SIMPLE_MAIL_TRANSFER_IS_AUTHENTICATION_REQUIRED))
-				.setIsSecuredConnectionRequired(ConfigurationHelper.is(VariableName.PROTOCOL_DEFAULTS_SIMPLE_MAIL_TRANSFER_IS_SECURED_CONNECTION_REQUIRED))
+				.setHost(ConfigurationHelper.getValueAsString(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_HOST))
+				.setPort(ConfigurationHelper.getValueAsInteger(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_PORT))
+				.setIsAuthenticationRequired(ConfigurationHelper.is(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_REQUIRED))
+				.setIsSecuredConnectionRequired(ConfigurationHelper.is(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_SECURED_CONNECTION_REQUIRED))
 				.setAuthenticationCredentials(__inject__(Credentials.class)
-						.setIdentifier(ConfigurationHelper.getValueAsString(VariableName.PROTOCOL_DEFAULTS_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_CREDENTIALS_USER_IDENTIFIER))
-						.setSecret(ConfigurationHelper.getValueAsString(VariableName.PROTOCOL_DEFAULTS_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_CREDENTIALS_USER_SECRET)));	
+						.setIdentifier(ConfigurationHelper.getValueAsString(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_CREDENTIALS_USER_IDENTIFIER))
+						.setSecret(ConfigurationHelper.getValueAsString(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_CREDENTIALS_USER_SECRET)));	
 		}
 		
 		if(ConfigurationHelper.is(VariableName.DATA_IS_LOADABLE))

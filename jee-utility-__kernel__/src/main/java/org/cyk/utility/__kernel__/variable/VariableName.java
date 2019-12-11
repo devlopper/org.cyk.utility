@@ -21,13 +21,13 @@ public interface VariableName {
 
 	/* Protocols */
 	
-	String PROTOCOL_DEFAULTS_SIMPLE_MAIL_TRANSFER_IS_ENABLE = buildProtocolSimpleMailTransfer("is.enabled");
-	String PROTOCOL_DEFAULTS_SIMPLE_MAIL_TRANSFER_HOST = buildProtocolSimpleMailTransfer("host");
-	String PROTOCOL_DEFAULTS_SIMPLE_MAIL_TRANSFER_PORT = buildProtocolSimpleMailTransfer("port");
-	String PROTOCOL_DEFAULTS_SIMPLE_MAIL_TRANSFER_IS_AUTHENTICATION_REQUIRED = buildProtocolSimpleMailTransfer("is.authentication.required");
-	String PROTOCOL_DEFAULTS_SIMPLE_MAIL_TRANSFER_IS_SECURED_CONNECTION_REQUIRED = buildProtocolSimpleMailTransfer("is.secured.connection.required");
-	String PROTOCOL_DEFAULTS_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_CREDENTIALS_USER_IDENTIFIER = buildProtocolSimpleMailTransfer("authentication.credentials.user.identifier");
-	String PROTOCOL_DEFAULTS_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_CREDENTIALS_USER_SECRET = buildProtocolSimpleMailTransfer("authentication.credentials.user.secret");
+	String PROTOCOL_SIMPLE_MAIL_TRANSFER_ENABLE = buildProtocolSimpleMailTransfer("enabled");
+	String PROTOCOL_SIMPLE_MAIL_TRANSFER_HOST = buildProtocolSimpleMailTransfer("host");
+	String PROTOCOL_SIMPLE_MAIL_TRANSFER_PORT = buildProtocolSimpleMailTransfer("port");
+	String PROTOCOL_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_REQUIRED = buildProtocolSimpleMailTransfer("authentication.required");
+	String PROTOCOL_SIMPLE_MAIL_TRANSFER_SECURED_CONNECTION_REQUIRED = buildProtocolSimpleMailTransfer("secured.connection.required");
+	String PROTOCOL_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_CREDENTIALS_USER_IDENTIFIER = buildProtocolSimpleMailTransfer("authentication.credentials.user.identifier");
+	String PROTOCOL_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_CREDENTIALS_USER_SECRET = buildProtocolSimpleMailTransfer("authentication.credentials.user.secret");
 	
 	String PROXY_UNIFORM_RESOURCE_IDENTIFIER = buildSystem("proxy.uniform.resource.identifier");
 	

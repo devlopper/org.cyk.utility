@@ -86,6 +86,10 @@ public interface ConfigurationHelper {
 		return Boolean.TRUE.equals(getValueAsBoolean(name, null, null));
 	}
 	
+	static Boolean isNot(String name) {
+		return !is(name);
+	}
+	
 	static Integer getValueAsInteger(String name,Object context,Object request) {
 		return ValueHelper.convertToInteger(getValue(name, context, request, Boolean.FALSE.toString()));
 	}

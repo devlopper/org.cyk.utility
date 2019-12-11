@@ -23,6 +23,7 @@
 		<org.reflections.reflections.version>0.9.10</org.reflections.reflections.version>
 		<org.keycloak.keycloak-admin-client.version>4.8.3.Final</org.keycloak.keycloak-admin-client.version>
 		<org.apache.commons.commons-text.version>1.4</org.apache.commons.commons-text.version>
+		<javax.mail.mail.version>1.5.0-b01</javax.mail.mail.version>
 	</properties>
 
 	<build>
@@ -48,6 +49,13 @@
 	</build>
 
 	<dependencies>
+
+		<dependency>
+		    <groupId>javax.mail</groupId>
+		    <artifactId>mail</artifactId>
+		    <version>${javax.mail.mail.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>

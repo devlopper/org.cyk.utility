@@ -4,6 +4,10 @@ import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.List;
 
+import org.cyk.utility.__kernel__.log.LogHelper;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
+import org.cyk.utility.__kernel__.value.Value;
+
 public interface Helper {
 
 	static Boolean isHaveModifiers(Integer encodedModifiers,Collection<Integer> modifiers,Integer numberOfMatch) {
@@ -79,5 +83,19 @@ public interface Helper {
 	
 	static <T extends Enum<?>> T getEnumByName(Class<T> klass,String name) {
 		return getEnumByName(klass, name,Boolean.FALSE);
+	}
+	
+	/**/
+	
+	static <T> T getInstance(Class<T> klass,Value INSTANCE) {
+		ThrowableHelper.throwIllegalArgumentExceptionIfNull("class", klass);
+		ThrowableHelper.throwIllegalArgumentExceptionIfNull("instance", INSTANCE);
+		@SuppressWarnings("unchecked")
+		T instance = (T) INSTANCE.get();
+		if(instance != null)
+			return instance;
+		INSTANCE.set(instance = DependencyInjection.inject(klass));
+		LogHelper.logInfo("instance has been set. <<"+instance.getClass()+">>", klass);
+		return instance;
 	}
 }
