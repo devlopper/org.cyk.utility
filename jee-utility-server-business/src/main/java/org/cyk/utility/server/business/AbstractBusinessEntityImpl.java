@@ -421,11 +421,32 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 		__delete__(finalInstances == null ? null : finalInstances.get() , persistedInstances, fieldName);
 	}
 	
+	protected <M,D> Boolean __isSavableInstance__(M finalInstance,Collection<M> persistedInstances) {
+		//check if not yet created
+		return CollectionHelper.contains(persistedInstances, finalInstance);
+	}
+	
+	protected <M,D> D __getSavableInstance__(Class<D> klass,M finalInstance,Collection<M> persistedInstances,String fieldName,Object master,String masterFieldName) {
+		if(!__isSavableInstance__(finalInstance, persistedInstances))
+			return null;
+		D instance = ClassHelper.instanciate(klass);
+		FieldHelper.write(instance, masterFieldName, master);
+		FieldHelper.write(instance, fieldName, finalInstance);	
+		return instance;
+	}
+	
 	protected <M,D> Collection<D> __getSavableInstances__(Class<D> klass,Collection<M> finalInstances,Collection<M> persistedInstances,String fieldName,Object master,String masterFieldName) {
 		Collection<D> collection = null;
 		if(CollectionHelper.isNotEmpty(finalInstances)) {
-			for(Object index : finalInstances) {
-				//check if not yet created
+			for(M index : finalInstances) {
+				D instance = __getSavableInstance__(klass, index, persistedInstances, fieldName, master, masterFieldName);
+				if(instance == null)
+					continue;
+				if(collection == null)
+					collection = new ArrayList<>();
+				collection.add(instance);	
+				
+				/*//check if not yet created
 				if(!Boolean.TRUE.equals(CollectionHelper.contains(persistedInstances, index))) {
 					if(collection == null)
 						collection = new ArrayList<>();
@@ -433,7 +454,7 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 					FieldHelper.write(instance, masterFieldName, master);
 					FieldHelper.write(instance, fieldName, index);
 					collection.add(instance);	
-				}
+				}*/
 			}
 		}
 		return collection;

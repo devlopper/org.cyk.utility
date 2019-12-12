@@ -112,6 +112,21 @@ public class ValueHelperUnitTest extends AbstractWeldUnitTest {
 		assertThat(persistenceEntityType.getCode()).isEqualTo("c01");
 		assertThat(persistenceEntityType.getString()).isEqualTo("s01");
 		assertThat(persistenceEntityType.getInteger()).isEqualTo(159);
+		assertThat(persistenceEntityType.getTransientString()).isNull();
+	}
+	
+	@Test
+	public void convert_field_representation_identifier_system_to_field_persistence_withTransientsFieldsCopied() {
+		InstanceGetterImpl.add(PersistenceEntityType.class, new PersistenceEntityType().setIdentifier("i01").setCode("c01").setString("s01").setInteger(159));
+		RepresentationEntityType representationEntityType = new RepresentationEntityType().setIdentifier("i01").setTransientString("tf");
+		Object value = convert(FieldHelper.getByName(RepresentationEntity.class, "type"),representationEntityType, FieldHelper.getByName(PersistenceEntity.class, "type"));
+		assertThat(value).isInstanceOf(PersistenceEntityType.class);
+		PersistenceEntityType persistenceEntityType = (PersistenceEntityType) value;
+		assertThat(persistenceEntityType.getIdentifier()).isEqualTo("i01");
+		assertThat(persistenceEntityType.getCode()).isEqualTo("c01");
+		assertThat(persistenceEntityType.getString()).isEqualTo("s01");
+		assertThat(persistenceEntityType.getInteger()).isEqualTo(159);
+		assertThat(persistenceEntityType.getTransientString()).isEqualTo("tf");
 	}
 	
 	@Test
@@ -208,6 +223,7 @@ public class ValueHelperUnitTest extends AbstractWeldUnitTest {
 		private String code;
 		private String string;
 		private Integer integer;
+		@Transient private String transientString;
 	}
 	
 	@Getter @Setter @Accessors(chain=true) @XmlRootElement
@@ -233,6 +249,7 @@ public class ValueHelperUnitTest extends AbstractWeldUnitTest {
 		private String code;
 		private String string;
 		private Integer integer;
+		private String transientString;
 	}
 	
 	@Mapper

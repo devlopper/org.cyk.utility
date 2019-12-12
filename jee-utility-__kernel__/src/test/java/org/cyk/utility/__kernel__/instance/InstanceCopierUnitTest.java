@@ -50,6 +50,21 @@ public class InstanceCopierUnitTest extends AbstractWeldUnitTest {
 		assertThat(function.getType()).isNotNull();
 		assertThat(function.getType().getIdentifier()).isEqualTo("0123");
 		assertThat(function.getType().getCode()).isEqualTo("t01");
+		assertThat(function.getType().getTransientString()).isNull();
+	}
+	
+	@Test
+	public void copy_function_representation_to_persistence_withTransientsFieldsValuesCopied(){
+		InstanceGetterImpl.add(new FunctionType().setIdentifier("0123").setCode("t01"));
+		FunctionDto functionDto = new FunctionDto().setCode("c01").setType(new FunctionTypeDto().setCode("t01"));
+		functionDto.getType().setTransientString("myTransientString01");
+		Function function = new Function();
+		InstanceHelper.copy(functionDto, function, List.of("code","type"));
+		assertThat(function.getCode()).isEqualTo("c01");
+		assertThat(function.getType()).isNotNull();
+		assertThat(function.getType().getIdentifier()).isEqualTo("0123");
+		assertThat(function.getType().getCode()).isEqualTo("t01");
+		assertThat(function.getType().getTransientString()).isEqualTo("myTransientString01");
 	}
 	
 	@Test
@@ -146,6 +161,7 @@ public class InstanceCopierUnitTest extends AbstractWeldUnitTest {
 	@Getter @Setter @Accessors(chain=true) @Entity
 	public static class FunctionType {
 		private String identifier,code;
+		@Transient private String transientString;
 	}
 	
 	/* Representation */
@@ -172,6 +188,7 @@ public class InstanceCopierUnitTest extends AbstractWeldUnitTest {
 	@Getter @Setter @Accessors(chain=true) @XmlRootElement
 	public static class FunctionTypeDto {
 		private String identifier,code;
+		private String transientString;
 	}
 	
 	@Getter @Setter @Accessors(chain=true)

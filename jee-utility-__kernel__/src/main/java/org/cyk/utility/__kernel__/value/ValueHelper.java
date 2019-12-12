@@ -5,6 +5,9 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
 
+import javax.persistence.Transient;
+
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.collection.CollectionInstance;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.instance.InstanceHelper;
@@ -179,8 +182,23 @@ public interface ValueHelper {
 					//if(destinationField.isAnnotationPresent(javax.persistence.ManyToOne.class)) {
 						//Find the object to be linked by its identifier (system and/or business)
 						Identifier identifier = FieldHelper.readIdentifier(sourceFieldValue);
-						if(identifier!=null)
-							return InstanceHelper.getByIdentifier(destinationFieldType, identifier);
+						if(identifier!=null) {
+							Object object = InstanceHelper.getByIdentifier(destinationFieldType, identifier);
+							//copy transients fields
+							Collection<Field> fields = FieldHelper.getByAnnotationClass(destinationFieldType, Transient.class);
+							if(CollectionHelper.isNotEmpty(fields)) {
+								for(Field field : fields) {
+									Field transientSourceField = FieldHelper.getByName(sourceFieldType, field.getName());
+									if(transientSourceField == null)
+										continue;
+									Object transientSourceFieldValue = FieldHelper.read(sourceFieldValue, transientSourceField);
+									if(transientSourceFieldValue == null)
+										continue;
+									FieldHelper.copy(sourceFieldValue, transientSourceField, transientSourceFieldValue, object, field);
+								}
+							}
+							return object;
+						}
 					//}
 				}else if(ClassHelper.isInstanceOf(destinationFieldType, org.cyk.utility.__kernel__.object.__static__.persistence.embeddedable.AbstractObjectImpl.class)) {
 					return convert(sourceFieldValue, destinationFieldType);

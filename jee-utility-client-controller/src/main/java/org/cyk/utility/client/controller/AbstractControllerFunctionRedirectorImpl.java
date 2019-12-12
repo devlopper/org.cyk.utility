@@ -14,7 +14,7 @@ import org.cyk.utility.__kernel__.system.action.SystemActionRead;
 import org.cyk.utility.__kernel__.system.action.SystemActionRedirect;
 import org.cyk.utility.__kernel__.throwable.EntityNotFoundException;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.mapping.MappingHelper;
+import org.cyk.utility.__kernel__.mapping.MappingHelper;
 import org.cyk.utility.server.representation.ResponseHelper;
 import org.cyk.utility.type.TypeHelper;
 
@@ -80,11 +80,11 @@ public abstract class AbstractControllerFunctionRedirectorImpl extends AbstractC
 			Collection<?> dtos = (Collection<?>) response.readEntity(__inject__(TypeHelper.class)
 					.instanciateGenericCollectionParameterizedTypeForJaxrs(Collection.class,dtoClass));
 			object = new ArrayList<Object>();
-			((Collection<Object>)object).addAll(__inject__(MappingHelper.class).getSources(dtos,__inject__(__entityClass__).getClass()));
+			((Collection<Object>)object).addAll(MappingHelper.getSources(dtos,__inject__(__entityClass__).getClass()));
 			setEntities((Collection<?>) object);
 		}else {
 			object = response.readEntity(dtoClass);
-			object = __inject__(MappingHelper.class).getSource(object,__inject__(__entityClass__).getClass());
+			object = MappingHelper.getSource(object,__inject__(__entityClass__).getClass());
 			setEntity(object);	
 		}
 		return object;
