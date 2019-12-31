@@ -273,10 +273,10 @@ public class ObjectLifeCycleListenerImpl extends AbstractObjectLifeCycleListener
 								if(choicesLayout == null)
 									choicesLayout = DependencyInjection.inject(ChoicesLayoutResponsive.class).setNumberOfColumns(3);
 								if(choicesLayout instanceof ChoicesLayoutResponsive) {
-									component.getProperties().setLayout("responsive");
+									component.getProperties().setLayout("grid");
 									component.getProperties().setColumns( ValueHelper.defaultToIfNull(((ChoicesLayoutResponsive)choicesLayout).getNumberOfColumns(),3));
 								}else {
-									component.getProperties().setLayout("responsive");
+									component.getProperties().setLayout("grid");
 									component.getProperties().setColumns(3);
 								}
 							}else if(component instanceof InputChoiceManyAutoComplete) {

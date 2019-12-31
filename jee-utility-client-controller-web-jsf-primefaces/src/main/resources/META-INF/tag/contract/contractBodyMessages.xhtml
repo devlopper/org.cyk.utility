@@ -9,7 +9,8 @@
 	
    	<ui:insert name="contractBodyMessages">
    		<h:inputHidden id="#{componentHelper.globalMessagesOwnerInlineComponentIdentifier}"/>
-		<p:messages id="#{componentHelper.globalMessagesTargetInlineComponentIdentifier}" for="#{componentHelper.globalMessagesOwnerInlineComponentIdentifier}" />
+		<p:messages id="#{componentHelper.globalMessagesTargetInlineComponentIdentifier}" for="#{componentHelper.globalMessagesOwnerInlineComponentIdentifier}" 
+			escape="false"/>
    	</ui:insert>
     
 </ui:composition>

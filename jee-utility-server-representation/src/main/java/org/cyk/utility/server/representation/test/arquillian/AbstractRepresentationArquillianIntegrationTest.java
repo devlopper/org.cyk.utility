@@ -79,7 +79,7 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 	
 	@Override
 	protected <ENTITY> Long ____countEntitiesAll____(Class<ENTITY> entityClass,RepresentationEntity representation) {
-		return (Long) representation.count(null).getEntity();
+		return (Long) representation.count(null,null).getEntity();
 	}
 	
 	@Override

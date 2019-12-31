@@ -18,6 +18,7 @@ public class RepresentationFunctionCounterImpl extends AbstractRepresentationFun
 	@Override
 	protected void __executeBusiness__() {
 		Properties properties = new Properties();
+		properties.setQueryIdentifier(getProperty(Properties.QUERY_IDENTIFIER));
 		FilterDto filterDto = (FilterDto) getProperty(Properties.QUERY_FILTERS);
 		if(filterDto != null) {
 			Filter filter = MappingHelper.getDestination(filterDto, Filter.class).normalize(__persistenceEntityClass__);

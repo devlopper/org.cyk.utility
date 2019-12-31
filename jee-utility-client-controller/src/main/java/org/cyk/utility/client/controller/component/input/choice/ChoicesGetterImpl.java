@@ -45,14 +45,12 @@ public class ChoicesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl
 		String query = StringUtils.trimToEmpty(getQuery());
 		Integer maximumNumberOfChoice = getMaximumNumberOfChoice();
 		Objects objects = __inject__(Objects.class);
-		/*
-		FieldType fieldType = __inject__(FieldTypeGetter.class).setFieldGetter(__inject__(FieldsGetter.class).setClazz(fieldDeclaringClass).setToken(field.getName())).execute()
-				.getOutput();
-		*/
 		Type fieldType = FieldHelper.getType(field, fieldDeclaringClass);
-		Class<?> choiceClass = (Class<?>) fieldType;
-		if(ClassHelper.isInstanceOf(choiceClass, Collection.class)) {
-			choiceClass = (Class<?>) ((ParameterizedType)fieldType).getActualTypeArguments()[0]; //FieldHelper.getParameterAt(field, 0, Object.class);
+		Class<?> choiceClass = null;//(Class<?>) fieldType;
+		if(ClassHelper.isInstanceOf(Collection.class, field.getType())) {
+			choiceClass = (Class<?>) ((ParameterizedType)fieldType).getActualTypeArguments()[0];
+		}else {
+			choiceClass = (Class<?>) fieldType;
 		}
 		
 		if(choiceClass.isEnum()) {

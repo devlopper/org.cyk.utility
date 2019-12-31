@@ -19,9 +19,11 @@ public class ControllerFunctionCounterImpl extends AbstractControllerFunctionImp
 
 	@Override
 	protected void __executeRepresentation__() {
-		FilterDto filters = (FilterDto) Properties.getFromPath(getProperties(),Properties.FILTERS);
+		Properties properties = getProperties();
+		String queryIdentifier = (String) Properties.getFromPath(properties,Properties.QUERY_IDENTIFIER);
+		FilterDto filters = (FilterDto) Properties.getFromPath(properties,Properties.FILTERS);
 		if(__representation__ instanceof RepresentationEntity<?>)
-			__response__ = ((RepresentationEntity<?>)__representation__).count(filters);	
+			__response__ = ((RepresentationEntity<?>)__representation__).count(queryIdentifier,filters);	
 		if(__response__!=null)
 			setEntitiesCount(__response__.readEntity(Long.class));
 	}

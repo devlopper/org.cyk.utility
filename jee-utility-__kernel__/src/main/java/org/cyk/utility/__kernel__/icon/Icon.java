@@ -19,4 +19,9 @@ public enum Icon {
 	,PENCIL
 	,CAR
 	,TRUCK
+	,BUILDING
+	,LINK
+	,LIST
+	,UPLOAD
+	,THUMB_TACK
 }

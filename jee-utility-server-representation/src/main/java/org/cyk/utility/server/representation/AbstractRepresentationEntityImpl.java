@@ -144,9 +144,10 @@ public abstract class AbstractRepresentationEntityImpl<ENTITY> extends AbstractR
 	}
 
 	@Override
-	public Response count(FilterDto filter) {
+	public Response count(String queryIdentifier,FilterDto filter) {
 		RepresentationFunctionCounter function = __inject__(RepresentationFunctionCounter.class);
 		function.setPersistenceEntityClass(__persistenceEntityClass__);
+		function.setProperty(Properties.QUERY_IDENTIFIER,queryIdentifier);
 		function.setProperty(Properties.QUERY_FILTERS,filter);
 		return function.execute().getResponse();
 	}

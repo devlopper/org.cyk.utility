@@ -6,7 +6,6 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
-import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.properties.Properties;
 
@@ -28,6 +27,7 @@ public abstract class AbstractSelection<T,VALUE> extends AbstractObject implemen
 	protected Collection<T> choices;
 	@Accessors(chain = true) protected Listener<VALUE> listener;
 	
+	//protected Boolean choiceSelectable = Boolean.TRUE;
 	protected String message;
 	
 	/*  */
@@ -38,7 +38,8 @@ public abstract class AbstractSelection<T,VALUE> extends AbstractObject implemen
 		setChoiceClass(choiceClass);
 		setProperties(properties);
 		if(choiceClass != null) {
-			setMessage("Veuillez sélectionner "+InternationalizationHelper.buildString(InternationalizationHelper.buildKey(choiceClass)));	
+			//setMessage("Veuillez sélectionner "+InternationalizationHelper.buildString(InternationalizationHelper.buildKey(choiceClass)));	
+			setMessage("--- Aucune sélection ---");
 		}
 	}
 	
@@ -52,7 +53,16 @@ public abstract class AbstractSelection<T,VALUE> extends AbstractObject implemen
 		if(Boolean.TRUE.equals(areChoicesHaveBeenGot))
 			return;
 		if(choiceClass != null) {
-			setChoices(InstanceGetter.getInstance().get(choiceClass,properties));
+			if(properties == null)
+				properties = new Properties();
+			if(properties.getIsPageable() == null)
+				properties.setIsPageable(Boolean.FALSE);
+			try {
+				setChoices(InstanceGetter.getInstance().get(choiceClass,properties));
+			} catch (Exception exception) {
+				setMessage("ERROR : "+exception);
+				exception.printStackTrace();
+			}
 		}
 	}
 	
@@ -72,6 +82,7 @@ public abstract class AbstractSelection<T,VALUE> extends AbstractObject implemen
 		if(value == null)
 			return this;
 		__select__(value);
+		listenSelect();
 		return this;
 	}
 	

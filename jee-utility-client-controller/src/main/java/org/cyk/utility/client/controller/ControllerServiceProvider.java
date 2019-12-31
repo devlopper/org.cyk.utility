@@ -20,10 +20,10 @@ public interface ControllerServiceProvider<OBJECT> extends SystemServiceProvider
 	
 	ControllerServiceProvider<OBJECT> update(OBJECT object,Properties properties);
 	ControllerServiceProvider<OBJECT> update(OBJECT object);
-	/*
+	
 	ControllerServiceProvider<OBJECT> updateMany(Collection<OBJECT> objects,Properties properties);
 	ControllerServiceProvider<OBJECT> updateMany(Collection<OBJECT> objects);
-	*/
+	
 	/* Delete */
 	
 	ControllerServiceProvider<OBJECT> delete(OBJECT object,Properties properties);

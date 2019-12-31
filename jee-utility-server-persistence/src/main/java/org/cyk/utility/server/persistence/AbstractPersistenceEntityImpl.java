@@ -15,6 +15,7 @@ import javax.persistence.Transient;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
+import org.cyk.utility.__kernel__.computation.SortOrder;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.field.FieldInstance;
 import org.cyk.utility.__kernel__.field.FieldInstancesRuntime;
@@ -39,7 +40,9 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	private static final long serialVersionUID = 1L;
 
 	protected String read
-		,readSystemIdentifiers,readBusinessIdentifiers,readBySystemIdentifiers,readByBusinessIdentifiers,readWhereSystemIdentifierContains,readWhereBusinessIdentifierContains
+		,readSystemIdentifiers,readBusinessIdentifiers,readBySystemIdentifiers,readByBusinessIdentifiers
+		,readWhereSystemIdentifierContains,readWhereBusinessIdentifierContains
+		,readWhereSystemIdentifierNotIn,readWhereBusinessIdentifierNotIn
 		,deleteBySystemIdentifiers,deleteByBusinessIdentifiers,deleteAll;
 	
 	/* Working variables */
@@ -51,7 +54,12 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	
 	@Override
 	public QueryStringBuilderSelect instanciateReadQueryStringBuilder() {
-		return __instanciateQuerySelect__();
+		QueryStringBuilderSelect queryStringBuilderSelect = __instanciateQuerySelect__();
+		if(__businessIdentifierField__ != null)
+			queryStringBuilderSelect.orderBy(__businessIdentifierField__.getName(), SortOrder.ASCENDING);
+		else if(__systemIdentifierField__ != null)
+			queryStringBuilderSelect.orderBy(__systemIdentifierField__.getName(), SortOrder.ASCENDING);
+		return queryStringBuilderSelect;
 	}
 	
 	@Override
@@ -65,8 +73,8 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		if(Boolean.TRUE.equals(getIsPhysicallyMapped())) {
 			//TODO even not physically mapped we should be able to read
 			__addReadQueryCollectInstances__();
-			addQueriesByIdentifierField(ValueUsageType.SYSTEM, __tupleName__, readSystemIdentifiers, readBySystemIdentifiers,readWhereSystemIdentifierContains, deleteBySystemIdentifiers);
-			addQueriesByIdentifierField(ValueUsageType.BUSINESS, __tupleName__, readBusinessIdentifiers, readByBusinessIdentifiers,readWhereBusinessIdentifierContains, deleteByBusinessIdentifiers);
+			addQueriesByIdentifierField(ValueUsageType.SYSTEM, __tupleName__, readSystemIdentifiers, readBySystemIdentifiers,readWhereSystemIdentifierNotIn,readWhereSystemIdentifierContains, deleteBySystemIdentifiers);
+			addQueriesByIdentifierField(ValueUsageType.BUSINESS, __tupleName__, readBusinessIdentifiers, readByBusinessIdentifiers,readWhereBusinessIdentifierNotIn,readWhereBusinessIdentifierContains, deleteByBusinessIdentifiers);
 			addQuery(deleteAll, "DELETE FROM "+__tupleName__+" tuple",null);	
 		}
 	}
@@ -75,12 +83,13 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		addQueryCollectInstances(read, instanciateReadQueryStringBuilder());
 	}
 	
-	protected void addQueriesByIdentifierField(ValueUsageType valueUsageType,String tupleName,String readIdentifiers,String readByIdentifiers,String readWhereIdentifierContains,String deleteByIdentifiers) {
+	protected void addQueriesByIdentifierField(ValueUsageType valueUsageType,String tupleName,String readIdentifiers,String readByIdentifiers,String readWhereIdentifierNotIn,String readWhereIdentifierContains,String deleteByIdentifiers) {
 		Field field = ValueUsageType.BUSINESS.equals(valueUsageType) ? __businessIdentifierField__ : __systemIdentifierField__; 
 		if(field != null) {
 			String columnName = field.getName();
 			addQuery(readIdentifiers, String.format("SELECT tuple.%s FROM %s tuple", columnName,tupleName),null);
 			addQueryCollectInstances(readByIdentifiers, String.format("SELECT tuple FROM %s tuple WHERE tuple.%s IN :identifiers", tupleName,columnName));
+			addQueryCollectInstances(readWhereIdentifierNotIn, String.format("SELECT tuple FROM %s tuple WHERE tuple.%s NOT IN :identifiers", tupleName,columnName));
 			FieldInstance fieldInstance = __inject__(FieldInstancesRuntime.class).get(__entityClass__, field.getName());
 			if(fieldInstance != null && String.class.equals(fieldInstance.getType())) {
 				addQueryCollectInstances(readWhereIdentifierContains, String.format("SELECT tuple FROM %s tuple WHERE lower(tuple.%s) LIKE lower(:identifier)", tupleName,columnName));

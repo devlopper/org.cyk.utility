@@ -76,11 +76,11 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 		ParentDto parent = new ParentDto().setCode("cyk").setFirstName("komenan").setLastNames("Yao christian");
 		//parent.addChildrenByIdentifiers("i01");
 		parent.addChildrenByCodes("kybe");
-		assertThat(parentRepresentation.count(null).getEntity()).isEqualTo(0l);
-		assertThat(parentChildRepresentation.count(null).getEntity()).isEqualTo(0l);
+		assertThat(parentRepresentation.count(null,null).getEntity()).isEqualTo(0l);
+		assertThat(parentChildRepresentation.count(null,null).getEntity()).isEqualTo(0l);
 		parentRepresentation.createOne(parent);	
-		assertThat(parentRepresentation.count(null).getEntity()).isEqualTo(1l);
-		assertThat(parentChildRepresentation.count(null).getEntity()).isEqualTo(1l);
+		assertThat(parentRepresentation.count(null,null).getEntity()).isEqualTo(1l);
+		assertThat(parentChildRepresentation.count(null,null).getEntity()).isEqualTo(1l);
 		parent = (ParentDto) parentRepresentation.getOne("cyk", "business", null).getEntity();
 		assertThat(parent.getChildren()).isNull();
 		parent = (ParentDto) parentRepresentation.getOne("cyk", "business", "identifier,children").getEntity();
@@ -90,15 +90,15 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 		parent.setChildren(null);
 		assertThat(parent.getChildren()).isNull();
 		parentRepresentation.updateOne(parent, "children");
-		assertThat(parentRepresentation.count(null).getEntity()).isEqualTo(1l);
-		assertThat(parentChildRepresentation.count(null).getEntity()).isEqualTo(0l);
+		assertThat(parentRepresentation.count(null,null).getEntity()).isEqualTo(1l);
+		assertThat(parentChildRepresentation.count(null,null).getEntity()).isEqualTo(0l);
 		parent = (ParentDto) parentRepresentation.getOne("cyk", "business", "identifier,children").getEntity();
 		assertThat(parent.getChildren()).isNull();
 		parent.addChildrenByCodes("kybe","kkpme");
 		assertThat(parent.getChildren().size()).isEqualTo(2);
 		parentRepresentation.updateOne(parent, "children");
-		assertThat(parentRepresentation.count(null).getEntity()).isEqualTo(1l);
-		assertThat(parentChildRepresentation.count(null).getEntity()).isEqualTo(2l);
+		assertThat(parentRepresentation.count(null,null).getEntity()).isEqualTo(1l);
+		assertThat(parentChildRepresentation.count(null,null).getEntity()).isEqualTo(2l);
 		parent = (ParentDto) parentRepresentation.getOne("cyk", "business", "identifier,children").getEntity();
 		assertThat(parent.getChildren()).isNotNull();
 		assertThat(parent.getChildren().stream().map(x -> x.getCode())).containsExactlyInAnyOrder("kybe","kkpme");
@@ -327,9 +327,9 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 			collection.add(new MyEntity().setIdentifier(index.toString()).setCode(index.toString()).setName(__getRandomName__()));
 		__inject__(MyEntityBusiness.class).createMany(collection);
 		
-		assertThat( __inject__(MyEntityRepresentation.class).count(new FilterDto().addField("identifier", Arrays.asList("0"), ValueUsageType.SYSTEM))
+		assertThat( __inject__(MyEntityRepresentation.class).count(null,new FilterDto().addField("identifier", Arrays.asList("0"), ValueUsageType.SYSTEM))
 				.getEntity()).isEqualTo(1l);
-		assertThat( __inject__(MyEntityRepresentation.class).count(new FilterDto().addField("identifier", Arrays.asList("0","10","21"), ValueUsageType.SYSTEM))
+		assertThat( __inject__(MyEntityRepresentation.class).count(null,new FilterDto().addField("identifier", Arrays.asList("0","10","21"), ValueUsageType.SYSTEM))
 				.getEntity()).isEqualTo(3l);
 	}
 	
@@ -355,7 +355,7 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 		MyEntityDto myEntity01 = new MyEntityDto().setCode(code1).setIntegerValue(123);
 		MyEntityDto myEntity02 = new MyEntityDto().setCode(code2).setIntegerValue(456);
 		__inject__(MyEntityRepresentation.class).createMany(Arrays.asList(myEntity01,myEntity02),null);
-		assertionHelper.assertEquals(2l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
+		assertionHelper.assertEquals(2l, __inject__(MyEntityRepresentation.class).count(null,null).getEntity());
 		myEntity01 = (MyEntityDto)__inject__(MyEntityRepresentation.class).getOne(code1,"business",null).getEntity();
 		myEntity02 = (MyEntityDto)__inject__(MyEntityRepresentation.class).getOne(code2,"business",null).getEntity();
 		assertionHelper.assertEquals(123, myEntity01.getIntegerValue());
@@ -374,100 +374,100 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 	
 	@Test
 	public void delete_myEntity_one() throws Exception{
-		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
+		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null,null).getEntity());
 		String code = __getRandomCode__();
 		MyEntityDto myEntity = new MyEntityDto().setCode(code);
 		__inject__(MyEntityRepresentation.class).createOne(myEntity);
-		assertionHelper.assertEquals(1l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
+		assertionHelper.assertEquals(1l, __inject__(MyEntityRepresentation.class).count(null,null).getEntity());
 		__inject__(MyEntityRepresentation.class).deleteOne(new MyEntityDto().setCode(code));
-		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
+		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null,null).getEntity());
 	}
 	
 	@Test
 	public void delete_myEntity_many() throws Exception{
 		String code1 = __getRandomCode__();
 		String code2 = __getRandomCode__();
-		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
+		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null,null).getEntity());
 		MyEntityDto myEntity01 = new MyEntityDto().setCode(code1);
 		MyEntityDto myEntity02 = new MyEntityDto().setCode(code2);
 		__inject__(MyEntityRepresentation.class).createMany(Arrays.asList(myEntity01,myEntity02),null);
-		assertionHelper.assertEquals(2l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
+		assertionHelper.assertEquals(2l, __inject__(MyEntityRepresentation.class).count(null,null).getEntity());
 		__inject__(MyEntityRepresentation.class).deleteByIdentifiers(Arrays.asList(code1,code2),"business");
-		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
+		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null,null).getEntity());
 	}
 	
 	@Test
 	public void delete_myEntity_one_by_identifier_system() throws Exception{
-		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
+		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null,null).getEntity());
 		String code = __getRandomCode__();
 		MyEntityDto myEntity = new MyEntityDto().setIdentifier(code).setCode(code);
 		__inject__(MyEntityRepresentation.class).createOne(myEntity);
-		assertionHelper.assertEquals(1l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
+		assertionHelper.assertEquals(1l, __inject__(MyEntityRepresentation.class).count(null,null).getEntity());
 		__inject__(MyEntityRepresentation.class).deleteByIdentifiers(Arrays.asList(code),"system");
-		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
+		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null,null).getEntity());
 	}
 	
 	@Test
 	public void delete_myEntity_many_by_identifier_system() throws Exception{
 		String code1 = __getRandomCode__();
 		String code2 = __getRandomCode__();
-		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
+		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null,null).getEntity());
 		MyEntityDto myEntity01 = new MyEntityDto().setIdentifier(code1).setCode(code1);
 		MyEntityDto myEntity02 = new MyEntityDto().setIdentifier(code2).setCode(code2);
 		__inject__(MyEntityRepresentation.class).createMany(Arrays.asList(myEntity01,myEntity02),null);
-		assertionHelper.assertEquals(2l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
+		assertionHelper.assertEquals(2l, __inject__(MyEntityRepresentation.class).count(null,null).getEntity());
 		__inject__(MyEntityRepresentation.class).deleteByIdentifiers(Arrays.asList(code1,code2),"system");
-		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
+		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null,null).getEntity());
 	}
 	
 	@Test
 	public void delete_myEntity_one_by_identifier_business() throws Exception{
 		String code1 = __getRandomCode__();
-		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
+		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null,null).getEntity());
 		MyEntityDto myEntity01 = new MyEntityDto().setCode(code1);
 		__inject__(MyEntityRepresentation.class).createMany(Arrays.asList(myEntity01),null);
-		assertionHelper.assertEquals(1l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
+		assertionHelper.assertEquals(1l, __inject__(MyEntityRepresentation.class).count(null,null).getEntity());
 		__inject__(MyEntityRepresentation.class).deleteByIdentifiers(Arrays.asList(code1),"business");
-		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
+		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null,null).getEntity());
 	}
 	
 	@Test
 	public void delete_myEntity_many_by_identifier_business() throws Exception{
 		String code1 = __getRandomCode__();
 		String code2 = __getRandomCode__();
-		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
+		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null,null).getEntity());
 		MyEntityDto myEntity01 = new MyEntityDto().setCode(code1);
 		MyEntityDto myEntity02 = new MyEntityDto().setCode(code2);
 		__inject__(MyEntityRepresentation.class).createMany(Arrays.asList(myEntity01,myEntity02),null);
-		assertionHelper.assertEquals(2l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
+		assertionHelper.assertEquals(2l, __inject__(MyEntityRepresentation.class).count(null,null).getEntity());
 		__inject__(MyEntityRepresentation.class).deleteByIdentifiers(Arrays.asList(code1,code2),"business");
-		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
+		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null,null).getEntity());
 	}
 	
 	@Test
 	public void delete_myEntity_all() {
 		String code1 = __getRandomCode__();
 		String code2 = __getRandomCode__();
-		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
+		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null,null).getEntity());
 		MyEntityDto myEntity01 = new MyEntityDto().setCode(code1);
 		MyEntityDto myEntity02 = new MyEntityDto().setCode(code2);
 		__inject__(MyEntityRepresentation.class).createMany(Arrays.asList(myEntity01,myEntity02),null);
-		assertionHelper.assertEquals(2l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
+		assertionHelper.assertEquals(2l, __inject__(MyEntityRepresentation.class).count(null,null).getEntity());
 		__inject__(MyEntityRepresentation.class).deleteAll();
-		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
+		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null,null).getEntity());
 	}
 	
 	@Test
 	public void delete_myEntity_all_generic() {
 		String code1 = __getRandomCode__();
 		String code2 = __getRandomCode__();
-		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
+		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null,null).getEntity());
 		MyEntityDto myEntity01 = new MyEntityDto().setCode(code1);
 		MyEntityDto myEntity02 = new MyEntityDto().setCode(code2);
 		__inject__(MyEntityRepresentation.class).createMany(Arrays.asList(myEntity01,myEntity02),null);
-		assertionHelper.assertEquals(2l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
+		assertionHelper.assertEquals(2l, __inject__(MyEntityRepresentation.class).count(null,null).getEntity());
 		__inject__(Representation.class).deleteAll();
-		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
+		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null,null).getEntity());
 	}
 	
 	/*
@@ -626,17 +626,17 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 		Collection<NodeDto> nodes = (Collection<NodeDto>) __inject__(NodeRepresentation.class).getMany(null,Boolean.FALSE, null, null, null, new FilterDto().addField(Node.FIELD_PARENTS, null)).getEntity();
 		assertThat(nodes).isNotNull();
 		assertThat(nodes.stream().map(NodeDto::getCode).collect(Collectors.toList())).containsOnly("0","1","2","3");
-		assertThat(__inject__(NodeRepresentation.class).count(new FilterDto().addField(Node.FIELD_PARENTS, null)).getEntity()).isEqualTo(4l);
+		assertThat(__inject__(NodeRepresentation.class).count(null,new FilterDto().addField(Node.FIELD_PARENTS, null)).getEntity()).isEqualTo(4l);
 		
 		nodes = (Collection<NodeDto>) __inject__(NodeRepresentation.class).getMany(null,Boolean.FALSE, null, null, null,new FilterDto().addField(Node.FIELD_PARENTS, Arrays.asList("0"),ValueUsageType.BUSINESS)).getEntity();
 		assertThat(nodes).isNotNull();
 		assertThat(nodes.stream().map(NodeDto::getCode).collect(Collectors.toList())).containsOnly("0.0","0.1","0.2");
-		assertThat(__inject__(NodeRepresentation.class).count(new FilterDto().addField(Node.FIELD_PARENTS, Arrays.asList("0"))).getEntity()).isEqualTo(3l);
+		assertThat(__inject__(NodeRepresentation.class).count(null,new FilterDto().addField(Node.FIELD_PARENTS, Arrays.asList("0"))).getEntity()).isEqualTo(3l);
 		
 		nodes = (Collection<NodeDto>) __inject__(NodeRepresentation.class).getMany(null,Boolean.FALSE, null, null, null,new FilterDto().addField(Node.FIELD_PARENTS, Arrays.asList("0.0"),ValueUsageType.BUSINESS)).getEntity();
 		assertThat(nodes).isNotNull();
 		assertThat(nodes.stream().map(NodeDto::getCode).collect(Collectors.toList())).containsOnly("0.0.0","0.0.1");
-		assertThat(__inject__(NodeRepresentation.class).count(new FilterDto().addField(Node.FIELD_PARENTS, Arrays.asList("0.0"))).getEntity()).isEqualTo(2l);
+		assertThat(__inject__(NodeRepresentation.class).count(null,new FilterDto().addField(Node.FIELD_PARENTS, Arrays.asList("0.0"))).getEntity()).isEqualTo(2l);
 		
 		nodes = (Collection<NodeDto>) __inject__(NodeRepresentation.class).getMany(null,Boolean.FALSE, null, null, null,new FilterDto().addField(Node.FIELD_PARENTS, Arrays.asList("1"),ValueUsageType.BUSINESS)).getEntity();
 		assertThat(nodes).isNotNull();
@@ -652,20 +652,20 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 	@Test
 	public void save_many() {
 		List<MyEntityDto> list = (List<MyEntityDto>) CollectionHelper.listOf(List.class,new MyEntityDto().setCode("a").setIntegerValue(3));
-		assertThat(__inject__(MyEntityRepresentation.class).count(null).getEntity()).isEqualTo(0);
+		assertThat(__inject__(MyEntityRepresentation.class).count(null,null).getEntity()).isEqualTo(0);
 		__inject__(MyEntityRepresentation.class).saveMany(list);
-		assertThat(__inject__(MyEntityRepresentation.class).count(null).getEntity()).isEqualTo(1);
+		assertThat(__inject__(MyEntityRepresentation.class).count(null,null).getEntity()).isEqualTo(1);
 		__inject__(MyEntityRepresentation.class).deleteAll();
 	}
 	/*
 	@Test
 	public void save_many_twice() {
 		List<MyEntity> list = (List<MyEntity>) CollectionHelper.listOf(List.class,new MyEntityDto().setCode("a").setTimestamp(1l));
-		assertThat(__inject__(MyEntityRepresentation.class).count(null).getEntity()).isEqualTo(0);
+		assertThat(__inject__(MyEntityRepresentation.class).count(null,null).getEntity()).isEqualTo(0);
 		__inject__(MyEntityRepresentation.class).saveMany(list);
-		assertThat(__inject__(MyEntityRepresentation.class).count(null).getEntity()).isEqualTo(1);
+		assertThat(__inject__(MyEntityRepresentation.class).count(null,null).getEntity()).isEqualTo(1);
 		__inject__(MyEntityRepresentation.class).saveMany(list);
-		assertThat(__inject__(MyEntityRepresentation.class).count(null).getEntity()).isEqualTo(1);
+		assertThat(__inject__(MyEntityRepresentation.class).count(null,null).getEntity()).isEqualTo(1);
 		__inject__(MyEntityRepresentation.class).deleteAll();
 	}
 	
@@ -675,9 +675,9 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 		for(Integer index = 0 ; index < 100 ; index = index + 1) {
 			list.add(new MyEntityDto().setCode(index.toString()).setTimestamp(index.longValue()));
 		}
-		assertThat(__inject__(MyEntityRepresentation.class).count(null).getEntity()).isEqualTo(0);
+		assertThat(__inject__(MyEntityRepresentation.class).count(null,null).getEntity()).isEqualTo(0);
 		__inject__(MyEntityRepresentation.class).saveByBatch(list, 3);
-		assertThat(__inject__(MyEntityRepresentation.class).count(null).getEntity()).isEqualTo(100);
+		assertThat(__inject__(MyEntityRepresentation.class).count(null,null).getEntity()).isEqualTo(100);
 		__inject__(MyEntityRepresentation.class).deleteAll();
 	}
 	
@@ -687,11 +687,11 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 		for(Integer index = 0 ; index < 10 ; index = index + 1) {
 			list.add(new MyEntityDto().setCode(index.toString()).setTimestamp(index.longValue()));
 		}
-		assertThat(__inject__(MyEntityRepresentation.class).count(null).getEntity()).isEqualTo(0);
+		assertThat(__inject__(MyEntityRepresentation.class).count(null,null).getEntity()).isEqualTo(0);
 		__inject__(MyEntityRepresentation.class).saveByBatch(list, 3);
-		assertThat(__inject__(MyEntityRepresentation.class).count(null).getEntity()).isEqualTo(10);
+		assertThat(__inject__(MyEntityRepresentation.class).count(null,null).getEntity()).isEqualTo(10);
 		__inject__(MyEntityRepresentation.class).saveByBatch(list, 3);
-		assertThat(__inject__(MyEntityRepresentation.class).count(null).getEntity()).isEqualTo(10);
+		assertThat(__inject__(MyEntityRepresentation.class).count(null,null).getEntity()).isEqualTo(10);
 		__inject__(MyEntityRepresentation.class).deleteAll();
 	}
 	*/

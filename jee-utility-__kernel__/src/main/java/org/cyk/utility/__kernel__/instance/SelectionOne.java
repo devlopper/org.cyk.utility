@@ -32,8 +32,7 @@ public class SelectionOne<T> extends AbstractSelection<T,T> implements Serializa
 	
 	@Override
 	protected void __select__(T value) {
-		// TODO Auto-generated method stub
-		
+		setValue(value);
 	}
 
 	@Override

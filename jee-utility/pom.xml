@@ -18,8 +18,6 @@
 	<properties>
 		<org.cyk.jee.utility.__kernel__.jee-utility-__kernel__.version>0.1.0</org.cyk.jee.utility.__kernel__.jee-utility-__kernel__.version>
 		<org.apache.commons.commons-text.version>1.4</org.apache.commons.commons-text.version>
-		<org.apache.poi.poi.version>3.14</org.apache.poi.poi.version>
-		<org.apache.poi.poi-ooxml.version>3.14</org.apache.poi.poi-ooxml.version>
 		<org.apache.kafka.kafka-clients.version>2.2.0</org.apache.kafka.kafka-clients.version>
 		<commons-codec.commons-codec.version>1.12</commons-codec.commons-codec.version>
 		<net.sf.barcode4j.barcode4j.version>2.1</net.sf.barcode4j.barcode4j.version>
@@ -55,18 +53,6 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-text</artifactId>
 			<version>${org.apache.commons.commons-text.version}</version>
-		</dependency>
-		
-		<dependency>
-		    <groupId>org.apache.poi</groupId>
-		    <artifactId>poi</artifactId>
-		    <version>${org.apache.poi.poi.version}</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.apache.poi</groupId>
-			<artifactId>poi-ooxml</artifactId>
-			<version>${org.apache.poi.poi-ooxml.version}</version>
 		</dependency>
 		
 		<dependency>

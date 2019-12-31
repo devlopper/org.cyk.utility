@@ -1,6 +1,7 @@
 package org.cyk.utility.server.persistence.query;
 
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
+import org.cyk.utility.server.persistence.query.filter.Field;
 import org.cyk.utility.server.persistence.query.filter.Filter;
 
 public interface PersistenceQueryContext extends Objectable {
@@ -17,5 +18,6 @@ public interface PersistenceQueryContext extends Objectable {
 	
 	Boolean isFilterByKeys(String...keys);
 	Object getFilterByKeysValue(String...keys);
+	Field getFilterFieldByKeys(String... keys);
 	
 }

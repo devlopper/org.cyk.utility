@@ -3,6 +3,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.system.AbstractSystemServiceProviderImpl;
@@ -25,6 +26,8 @@ public abstract class AbstractControllerServiceProviderImpl<OBJECT> extends Abst
 		//function.getAction().getEntities(Boolean.TRUE).add(object);
 		function.copyProperty(Properties.REQUEST,properties);
 		function.copyProperty(Properties.CONTEXT,properties);
+		function.copyProperty(Properties.IS_BATCHABLE,properties);
+		function.copyProperty(Properties.BATCH_SIZE,properties);
 		function.execute();
 		if(properties!=null) {
 			properties.setResponse(function.getProperties().getResponse());
@@ -63,8 +66,33 @@ public abstract class AbstractControllerServiceProviderImpl<OBJECT> extends Abst
 	}
 	
 	@Override
-	public ControllerServiceProvider<OBJECT> update(OBJECT object, Properties properties) {
+	public ControllerServiceProvider<OBJECT> updateMany(Collection<OBJECT> objects, Properties properties) {
 		if(properties == null)
+			properties = new Properties();
+		ControllerFunctionModifier function = ____inject____(ControllerFunctionModifier.class);
+		function.setEntities(objects);
+		function.copyProperty(Properties.REQUEST,properties);
+		function.copyProperty(Properties.CONTEXT,properties);
+		function.copyProperty(Properties.FIELDS,properties);
+		function.execute();
+		if(properties!=null) {
+			properties.setResponse(function.getProperties().getResponse());
+			properties.setAction(function.getProperties().getAction());
+		}
+		return this;
+	}
+	
+	@Override
+	public ControllerServiceProvider<OBJECT> updateMany(Collection<OBJECT> objects) {
+		if(CollectionHelper.isEmpty(objects))
+			return this;
+		updateMany(objects, null);
+		return this;
+	}
+	
+	@Override
+	public ControllerServiceProvider<OBJECT> update(OBJECT object, Properties properties) {
+		/*if(properties == null)
 			properties = new Properties();
 		ControllerFunctionModifier function = ____inject____(ControllerFunctionModifier.class);
 		function.setEntity(object);
@@ -76,6 +104,8 @@ public abstract class AbstractControllerServiceProviderImpl<OBJECT> extends Abst
 			properties.setResponse(function.getProperties().getResponse());
 			properties.setAction(function.getProperties().getAction());
 		}
+		*/
+		updateMany(Arrays.asList(object), properties);
 		return this;
 	}
 

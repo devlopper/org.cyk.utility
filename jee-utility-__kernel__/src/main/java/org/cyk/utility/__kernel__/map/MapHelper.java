@@ -108,4 +108,10 @@ public interface MapHelper {
 	static Map<String,?> instantiateFromJson(String json) {
 		return instantiateFromJson(json, null);
 	}
+
+	static <KEY,VALUE> VALUE readByKey(Map<KEY,VALUE> map,KEY key) {
+		if(map == null)
+			return null;
+		return map.get(key);
+	}
 }

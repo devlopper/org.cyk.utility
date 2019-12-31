@@ -111,7 +111,7 @@ public interface RepresentationEntity<ENTITY> extends RepresentationServiceProvi
 	@GET
 	@Path(PATH_GET_COUNT)
 	@ApiOperation(value = TAG_COUNT,tags = {TAG_COUNT})
-	Response count(@QueryParam(PARAMETER_FILTER) FilterDto filter);
+	Response count(@QueryParam(PARAMETER_QUERY_IDENTIFIER) String queryIdentifier,@QueryParam(PARAMETER_FILTER) FilterDto filter);
 	
 	/* Import */
 

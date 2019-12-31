@@ -3,6 +3,7 @@ package org.cyk.utility.server.persistence.query;
 import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
+import org.cyk.utility.server.persistence.query.filter.Field;
 import org.cyk.utility.server.persistence.query.filter.Filter;
 
 public class PersistenceQueryContextImpl extends AbstractObject implements PersistenceQueryContext,Serializable {
@@ -55,7 +56,13 @@ public class PersistenceQueryContextImpl extends AbstractObject implements Persi
 	@Override
 	public Object getFilterByKeysValue(String... keys) {
 		Filter filter = getFilter();
-		return filter == null ? Boolean.FALSE : filter.getFieldValueByPath(keys);
+		return filter == null ? null : filter.getFieldValueByPath(keys);
+	}
+	
+	@Override
+	public Field getFilterFieldByKeys(String... keys) {
+		Filter filter = getFilter();
+		return filter == null ? null : filter.getFieldByPath(keys);
 	}
 	
 	/**/

@@ -10,13 +10,15 @@
 	
 	<!-- Messages -->
 	<h:inputHidden id="#{componentHelper.globalMessagesOwnerGrowlComponentIdentifier}"/>
-    <p:growl id="#{componentHelper.globalMessagesTargetGrowlComponentIdentifier}" for="#{componentHelper.globalMessagesOwnerGrowlComponentIdentifier}"/>
+    <p:growl id="#{componentHelper.globalMessagesTargetGrowlComponentIdentifier}" for="#{componentHelper.globalMessagesOwnerGrowlComponentIdentifier}"
+    	escape="false"/>
     
     <ui:fragment rendered="#{__page__.window.dialog != null}">
     	<cyk:dialog value="#{__page__.window.dialog}">
 	   		<ui:define name="dialogContent">
 	   			<h:inputHidden id="#{componentHelper.globalMessagesOwnerDialogComponentIdentifier}" />
-		    	<p:messages id="#{componentHelper.globalMessagesTargetDialogComponentIdentifier}ID" for="#{componentHelper.globalMessagesOwnerDialogComponentIdentifier}" />
+		    	<p:messages id="#{componentHelper.globalMessagesTargetDialogComponentIdentifier}ID" for="#{componentHelper.globalMessagesOwnerDialogComponentIdentifier}" 
+		    		escape="false"/>
 		    	
 		    	<p:separator/>
 		    	<p:outputPanel style="text-align:center">
