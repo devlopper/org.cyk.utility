@@ -121,6 +121,13 @@
 			<version>${org.apache.poi.poi-ooxml.version}</version>
 		</dependency>
 		
+<dependency>
+    <groupId>org.freemarker</groupId>
+    <artifactId>freemarker</artifactId>
+    <version>2.3.29</version>
+</dependency>
+		
+		
 	</dependencies>
 
 </project>
