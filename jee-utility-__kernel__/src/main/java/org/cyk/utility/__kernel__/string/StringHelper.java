@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantSeparator;
 
@@ -29,6 +30,21 @@ public interface StringHelper {
 	
 	static Boolean isNotBlank(String string) {
 		return string != null && !string.isBlank();
+	}
+	
+	static Boolean isOneBlank(Collection<String> strings) {
+		if(CollectionHelper.isEmpty(strings))
+			return Boolean.FALSE;
+		for(String string : strings)
+			if(isBlank(string))
+				return Boolean.TRUE;
+		return Boolean.FALSE;
+	}
+	
+	static Boolean isOneBlank(String...strings) {
+		if(ArrayHelper.isEmpty(strings))
+			return Boolean.FALSE;
+		return isOneBlank(CollectionHelper.listOf(Boolean.TRUE, strings));
 	}
 	
 	static Boolean isAtLocation(String string,String subString,StringLocation location,Boolean caseSensitive){

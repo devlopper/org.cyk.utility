@@ -1,19 +1,17 @@
 package org.cyk.utility.__kernel__.string;
 
-import java.util.Map;
-
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.value.Value;
 
-public interface StringGenerator {
+public interface StringTemplateGetter {
 
-	String generate(Object template,Map<String,Object> arguments);
+	Object get(String identifier);
 	
 	/**/
 	
-	static StringGenerator getInstance() {
-		return Helper.getInstance(StringGenerator.class, INSTANCE);
+	static StringTemplateGetter getInstance() {
+		return Helper.getInstance(StringTemplateGetter.class, INSTANCE);
 	}
 	
 	Value INSTANCE = DependencyInjection.inject(Value.class);
