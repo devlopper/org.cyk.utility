@@ -4,7 +4,7 @@ import java.io.Serializable;
 import javax.enterprise.context.ApplicationScoped;
 
 import ${system_package}.${system_identifier}.server.persistence.api.${entity_class_name}Persistence;
-import ${system_package}.${system_identifier}.server.persistence.entities.Title;
+import ${system_package}.${system_identifier}.server.persistence.entities.${entity_class_name};
 import org.cyk.utility.server.persistence.AbstractPersistenceEntityImpl;
 
 @ApplicationScoped

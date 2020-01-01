@@ -49,8 +49,12 @@ public interface StringTemplateIdentifierGetter {
 		return get(new NamingModel().server().representation().entities().namable().suffix());
 	}
 	
+	default String getServerRepresentationEntity() {
+		return get(new NamingModel().server().representation().entities().suffix());
+	}
+	
 	default String getServerRepresentationEntityMapper() {
-		return get(new NamingModel().server().representation().entities().setSuffix("Mapper"));
+		return get(new NamingModel().server().representation().entities().suffix().addSuffixMapper());
 	}
 	
 	default String getServerRepresentationApi() {

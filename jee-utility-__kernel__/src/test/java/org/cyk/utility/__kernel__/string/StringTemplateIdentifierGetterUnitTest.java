@@ -43,6 +43,8 @@ public class StringTemplateIdentifierGetterUnitTest extends AbstractWeldUnitTest
 		assertThat(StringTemplateIdentifierGetter.getInstance().getServerBusinessImpl()).isEqualTo("project/system/server/business/impl/impl.ftl");
 	}
 	
+	/* Representation */
+	
 	@Test
 	public void getServerRepresentationEntitySystemIdentifiable(){	
 		assertThat(StringTemplateIdentifierGetter.getInstance().getServerRepresentationEntitySystemIdentifiable()).isEqualTo("project/system/server/representation/entities/systemidentifiable.ftl");
@@ -59,8 +61,13 @@ public class StringTemplateIdentifierGetterUnitTest extends AbstractWeldUnitTest
 	}
 	
 	@Test
+	public void getServerRepresentationEntity(){	
+		assertThat(StringTemplateIdentifierGetter.getInstance().getServerRepresentationEntity()).isEqualTo("project/system/server/representation/entities/systemidentifiable.ftl");
+	}
+	
+	@Test
 	public void getServerRepresentationEntityMapper(){	
-		assertThat(StringTemplateIdentifierGetter.getInstance().getServerRepresentationEntityMapper()).isEqualTo("project/system/server/representation/entities/mapper.ftl");
+		assertThat(StringTemplateIdentifierGetter.getInstance().getServerRepresentationEntityMapper()).isEqualTo("project/system/server/representation/entities/dtomapper.ftl");
 	}
 	
 	@Test

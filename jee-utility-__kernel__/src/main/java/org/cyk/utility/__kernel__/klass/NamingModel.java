@@ -2,8 +2,10 @@ package org.cyk.utility.__kernel__.klass;
 
 import java.io.Serializable;
 
+import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.string.Case;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -31,7 +33,7 @@ public class NamingModel implements Serializable {
 	}
 	
 	public Boolean isNodeClient() {
-		return NODE_SERVER.equals(node);
+		return NODE_CLIENT.equals(node);
 	}
 	
 	public NamingModel persistence() {
@@ -97,6 +99,17 @@ public class NamingModel implements Serializable {
 		}			
 		setSuffix(suffix);
 		return this;
+	}
+	
+	public NamingModel addSuffix(String suffix) {
+		if(StringHelper.isBlank(suffix))
+			return this;
+		this.suffix = ValueHelper.defaultToIfBlank(this.suffix, ConstantEmpty.STRING)+suffix;
+		return this;
+	}
+	
+	public NamingModel addSuffixMapper() {
+		return addSuffix("Mapper");
 	}
 	
 	public NamingModel systemIdentifiable() {

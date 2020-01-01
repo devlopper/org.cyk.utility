@@ -2,6 +2,7 @@ package org.cyk.utility.__kernel__.string;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.klass.NamingModel;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 
@@ -24,8 +25,13 @@ public abstract class AbstractStringTemplateIdentifierGetterImpl extends Abstrac
 				name = "businessidentifiable";
 			else if(Boolean.TRUE.equals(namingModel.getSystemIdentifiable()))
 				name = "systemidentifiable";
-			else
+			else if(StringHelper.isBlank(namingModel.getSuffix()))
+				name = "systemidentifiable";
+			else if(StringUtils.endsWith(namingModel.getSuffix(), "Mapper"))
 				name = StringHelper.applyCase(namingModel.getSuffix(),Case.LOWER);
+			
+			if(StringHelper.isBlank(name))
+				name = "systemidentifiable";
 		}else
 			name = namingModel.getSubLayer();
 		return String.format(PROJECT_SYSTEM_FORMAT, namingModel.getNode(),namingModel.getLayer(),namingModel.getSubLayer(),name);
