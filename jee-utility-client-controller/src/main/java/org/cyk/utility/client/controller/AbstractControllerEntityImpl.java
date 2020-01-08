@@ -7,9 +7,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.identifier.resource.ProxyGetter;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringImpl;
+import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl;
+import org.cyk.utility.__kernel__.persistence.QueryIdentifierBuilder;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
+import org.cyk.utility.server.persistence.PersistenceEntity;
+import org.cyk.utility.server.persistence.query.filter.FilterDto;
 import org.cyk.utility.server.representation.RepresentationEntity;
 
 public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractControllerServiceProviderImpl<ENTITY> implements ControllerEntity<ENTITY>,Serializable {
@@ -152,6 +157,15 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 	@Override
 	public ENTITY readByBusinessIdentifier(Object identifier) {
 		return readByBusinessIdentifier(identifier, null);
+	}
+	
+	@Override
+	public Collection<ENTITY> readByString(String string) {
+		Collection<ENTITY> entities = read(new Properties().setQueryIdentifier(QueryIdentifierBuilder.getInstance()
+				.build(__entityClass__,PersistenceEntity.FIELD_NAME_READ_WHERE_CODE_OR_NAME_CONTAINS)).setIsPageable(Boolean.TRUE)
+						.setFilters(new FilterDto().addField(AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringImpl.FIELD_CODE, string)
+								.addField(AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl.FIELD_NAME, string)));
+		return entities;
 	}
 	
 	@Override

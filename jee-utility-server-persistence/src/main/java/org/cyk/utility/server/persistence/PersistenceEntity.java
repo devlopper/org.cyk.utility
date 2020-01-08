@@ -83,5 +83,10 @@ public interface PersistenceEntity<ENTITY> extends PersistenceServiceProvider<EN
 	PersistenceEntity<ENTITY> addQuery(Object identifier,String value);
 	PersistenceEntity<ENTITY> addQueryCollectInstances(Object identifier,String value);
 	PersistenceEntity<ENTITY> addQueryCollectInstances(Object identifier,QueryStringBuilder stringBuilder);
+	
+	/**/
+	
+	String FIELD_NAME_READ_WHERE_CODE_OR_NAME_CONTAINS = "readWhereBusinessIdentifierOrNameContains";
+	String FIELD_NAME_COUNT_WHERE_CODE_OR_NAME_CONTAINS = "countWhereBusinessIdentifierOrNameContains";
 
 }

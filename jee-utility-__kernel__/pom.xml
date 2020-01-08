@@ -26,8 +26,8 @@
 		<javax.mail.mail.version>1.5.0-b01</javax.mail.mail.version>
 		<com.icegreen.greenmail.version>1.5.11</com.icegreen.greenmail.version>
 		
-		<org.apache.poi.poi.version>3.14</org.apache.poi.poi.version>
-		<org.apache.poi.poi-ooxml.version>3.14</org.apache.poi.poi-ooxml.version>
+		<org.apache.poi.poi.version>3.17</org.apache.poi.poi.version>
+		<org.apache.poi.poi-ooxml.version>3.17</org.apache.poi.poi-ooxml.version>
 	</properties>
 
 	<build>

@@ -17,6 +17,12 @@ import lombok.experimental.Accessors;
 public class PersistenceHelperUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
+	@Override
+	protected void __listenBefore__() {
+		super.__listenBefore__();
+		PersistenceHelper.clear();
+	}
+	
 	@Test
 	public void areRelated_Product_Shop_ManyToOne_isFalse(){
 		assertThat(PersistenceHelper.areRelated(Shop.class, Product.class, ManyToOne.class)).isFalse();
@@ -58,6 +64,19 @@ public class PersistenceHelperUnitTest extends AbstractWeldUnitTest {
 		List<Class<?>> classes = CollectionHelper.listOf(Sale.class,Shop.class,Product.class);
 		PersistenceHelper.sort(classes,Boolean.FALSE);
 		assertThat(classes).containsExactly(Sale.class,Shop.class,Product.class);
+	}
+	
+	@Test
+	public void getQueryIdentifier(){
+		assertThat(PersistenceHelper.QUERY_IDENTIFIERS.size()).isEqualTo(0);
+		assertThat(PersistenceHelper.getQueryIdentifier(Sale.class,"read")).isEqualTo("Sale.read");
+		assertThat(PersistenceHelper.QUERY_IDENTIFIERS.size()).isEqualTo(1);
+		assertThat(PersistenceHelper.getQueryIdentifier(Sale.class,"read")).isEqualTo("Sale.read");
+		assertThat(PersistenceHelper.QUERY_IDENTIFIERS.size()).isEqualTo(1);
+		assertThat(PersistenceHelper.getQueryIdentifier(Product.class,"read")).isEqualTo("Product.read");
+		assertThat(PersistenceHelper.QUERY_IDENTIFIERS.size()).isEqualTo(2);
+		assertThat(PersistenceHelper.getQueryIdentifier(Product.class,"read")).isEqualTo("Product.read");
+		assertThat(PersistenceHelper.QUERY_IDENTIFIERS.size()).isEqualTo(2);
 	}
 	
 	/**/

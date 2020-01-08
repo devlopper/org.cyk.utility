@@ -57,7 +57,13 @@ public class SheetReaderImpl extends AbstractSheetReaderImpl implements Serializ
                     if(cell==null)
                     	arrayInstance.set(i,j, ConstantEmpty.STRING);
                     else{
-                    	CellValue cellValue = formulaEvaluator.evaluate(cell);
+                    	CellValue cellValue;
+                    	try {
+							cellValue = formulaEvaluator.evaluate(cell);
+						} catch (Exception exception) {
+							cellValue = null;
+							//throw new RuntimeException(exception); // TODO what to do ???
+						}
                     	String stringValue;
                     	if(cellValue==null)
                     		stringValue = ConstantEmpty.STRING;

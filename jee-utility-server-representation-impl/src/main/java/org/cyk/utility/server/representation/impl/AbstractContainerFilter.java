@@ -19,6 +19,8 @@ public abstract class AbstractContainerFilter extends AbstractObject implements 
 		if(containerRequestContext.getUriInfo().getQueryParameters()!=null && !containerRequestContext.getUriInfo().getQueryParameters().isEmpty())
 			log.getMessageBuilder(Boolean.TRUE).addParameter("Parameters"
 					, containerRequestContext.getUriInfo().getQueryParameters().entrySet().stream().map(x -> x.getKey()+":"+x.getValue()).collect(Collectors.toList()));
+		if(containerRequestContext.getLength() > -1)
+			log.getMessageBuilder(Boolean.TRUE).addParameter("Size", containerRequestContext.getLength());
 		return log;
 	}
 	

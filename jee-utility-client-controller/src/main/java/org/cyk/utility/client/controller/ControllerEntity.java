@@ -33,6 +33,8 @@ public interface ControllerEntity<ENTITY> extends ControllerServiceProvider<ENTI
 	ENTITY readByBusinessIdentifier(Object identifier,Properties properties);
 	ENTITY readByBusinessIdentifier(Object identifier);
 	
+	Collection<ENTITY> readByString(String string);
+	
 	Long count(Properties properties);
 	Long count();
 	

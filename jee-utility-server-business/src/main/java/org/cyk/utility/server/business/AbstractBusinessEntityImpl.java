@@ -423,7 +423,8 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 	
 	protected <M,D> Boolean __isSavableInstance__(M finalInstance,Collection<M> persistedInstances) {
 		//check if not yet created
-		return CollectionHelper.contains(persistedInstances, finalInstance);
+		//return CollectionHelper.contains(persistedInstances, finalInstance);
+		return Boolean.TRUE;
 	}
 	
 	protected <M,D> D __getSavableInstance__(Class<D> klass,M finalInstance,Collection<M> persistedInstances,String fieldName,Object master,String masterFieldName) {

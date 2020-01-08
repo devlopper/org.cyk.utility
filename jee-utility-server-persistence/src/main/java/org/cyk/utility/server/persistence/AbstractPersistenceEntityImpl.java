@@ -12,10 +12,12 @@ import java.util.Map;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.computation.SortOrder;
+import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.field.FieldInstance;
 import org.cyk.utility.__kernel__.field.FieldInstancesRuntime;
@@ -40,13 +42,15 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	private static final long serialVersionUID = 1L;
 
 	protected String read
-		,readSystemIdentifiers,readBusinessIdentifiers,readBySystemIdentifiers,readByBusinessIdentifiers
-		,readWhereSystemIdentifierContains,readWhereBusinessIdentifierContains
+		,readSystemIdentifiers,readBusinessIdentifiers
+		,readBySystemIdentifiers,readByBusinessIdentifiers
+		,readWhereSystemIdentifierContains,readWhereBusinessIdentifierContains,readWhereBusinessIdentifierOrNameContains
 		,readWhereSystemIdentifierNotIn,readWhereBusinessIdentifierNotIn
-		,deleteBySystemIdentifiers,deleteByBusinessIdentifiers,deleteAll;
+		,deleteBySystemIdentifiers,deleteByBusinessIdentifiers,deleteAll
+		;
 	
 	/* Working variables */
-	protected Field __systemIdentifierField__,__businessIdentifierField__;
+	protected Field __systemIdentifierField__,__businessIdentifierField__,__businessNameField__;
 	protected Collection<Field> __entityFields__;
 	protected Class<ENTITY> __entityClass__;
 	protected String __tupleName__;
@@ -67,6 +71,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		super.__listenPostConstructPersistenceQueries__();
 		__systemIdentifierField__ = FieldHelper.getSystemIdentifier(__entityClass__);
 		__businessIdentifierField__ = FieldHelper.getBusinessIdentifier(__entityClass__);
+		__businessNameField__ = FieldHelper.getBusinessName(__entityClass__);
 		__tupleName__ = ClassHelper.getTupleName(__entityClass__);
 		__entityFields__ = FieldHelper.get(__entityClass__);
 		
@@ -93,6 +98,10 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 			FieldInstance fieldInstance = __inject__(FieldInstancesRuntime.class).get(__entityClass__, field.getName());
 			if(fieldInstance != null && String.class.equals(fieldInstance.getType())) {
 				addQueryCollectInstances(readWhereIdentifierContains, String.format("SELECT tuple FROM %s tuple WHERE lower(tuple.%s) LIKE lower(:identifier)", tupleName,columnName));
+				if(ValueUsageType.BUSINESS.equals(valueUsageType) && __businessNameField__ != null) {
+					addQueryCollectInstances(readWhereBusinessIdentifierOrNameContains, String.format("SELECT tuple FROM %s tuple WHERE LOWER(tuple.%s) LIKE LOWER(:identifier) OR LOWER(tuple.%s) LIKE LOWER(:name)"
+							, tupleName,columnName,__businessNameField__.getName()));
+				}
 			}
 			addQuery(deleteByIdentifiers, String.format("DELETE FROM %s tuple WHERE tuple.%s IN :identifiers", tupleName,columnName),null);	
 			Map<ArithmeticOperator,String> map = new HashMap<>();
@@ -151,7 +160,6 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		return read(null);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<ENTITY> readByIdentifiers(Collection<Object> identifiers, ValueUsageType valueUsageType,Properties properties) {
 		PersistenceFunctionReader function = __inject__(PersistenceFunctionReader.class);
@@ -240,11 +248,8 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 						,ValueUsageType.BUSINESS.equals(valueUsageType) ? readBusinessIdentifiers : readSystemIdentifiers));
 			if(properties.getValueUsageType() == null)
 				properties.setValueUsageType(valueUsageType);
-		}
-		
-		@SuppressWarnings("unchecked")
-		Collection<Object> identifiers = (Collection<Object>) __getReader__(properties).execute().getEntities();
-		
+		}		
+		Collection<Object> identifiers = (Collection<Object>) __getReader__(properties).execute().getEntities();		
 		return identifiers;
 	}
 	
@@ -474,6 +479,24 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 			if(Boolean.TRUE.equals(__inject__(ArrayHelper.class).isEmpty(objects)))
 				objects = new Object[] {queryContext.getFilterByKeysValue(__businessIdentifierField__.getName())};
 			return new Object[]{"identifier", "%"+objects[0]+"%"};
+		}else if(queryContext.getQuery().isIdentifierEqualsToOrQueryDerivedFromQueryIdentifierEqualsTo(readWhereBusinessIdentifierOrNameContains)) {
+			if(Boolean.TRUE.equals(__inject__(ArrayHelper.class).isEmpty(objects))) {
+				Object businessIdentifierFieldValue = null;
+				org.cyk.utility.server.persistence.query.filter.Field field = queryContext.getFilterFieldByKeys(__businessIdentifierField__.getName());				
+				if(field == null || field.getValue() == null || field.getValue() instanceof String) {
+					businessIdentifierFieldValue = "%"+(field == null ? ConstantEmpty.STRING : StringUtils.trimToEmpty((String) field.getValue()))+"%";
+				}
+				
+				Object businessNameFieldValue = null;
+				field = queryContext.getFilterFieldByKeys(__businessNameField__.getName());				
+				if(field == null || field.getValue() == null || field.getValue() instanceof String) {
+					businessNameFieldValue = "%"+(field == null ? ConstantEmpty.STRING : StringUtils.trimToEmpty((String) field.getValue()))+"%";
+				}		
+				
+				objects = new Object[] {businessIdentifierFieldValue,businessNameFieldValue};
+			}
+			//System.out.println("AbstractPersistenceEntityImpl.__getQueryParameters__() : "+Arrays.deepToString(objects)+" ::: "+queryContext.getQuery().getValue());
+			return new Object[]{"identifier", "%"+objects[0]+"%","name", "%"+objects[1]+"%"};
 		}
 		return super.__getQueryParameters__(queryContext, properties, objects);
 	}

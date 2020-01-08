@@ -407,6 +407,18 @@ public interface FieldHelper {
 		return field;
 	}
 	
+	static Field getBusinessName(Class<?> klass) {
+		if(klass == null)
+			return null;
+		Field field = BUSINESS_NAMES.get(klass);
+		if(field != null)
+			return field;
+		field = getByName(klass, FieldName.NAME, ValueUsageType.BUSINESS);
+		if(field != null)
+			BUSINESS_NAMES.put(klass, field);
+		return field;
+	}
+	
 	static Collection<Field> getIdentifiers(Class<?> klass) {
 		if(klass == null)
 			return null;
@@ -1095,6 +1107,7 @@ public interface FieldHelper {
 	Map<ClassFieldNameValueUsageType,Field> CLASS_FIELD_NAME_VALUE_USAGE_TYPE_FIELDS = new HashMap<>();
 	Map<Class<?>,Field> SYSTEM_IDENTIFIERS = new HashMap<>();
 	Map<Class<?>,Field> BUSINESS_IDENTIFIERS = new HashMap<>();
+	Map<Class<?>,Field> BUSINESS_NAMES = new HashMap<>();
 	Map<Class<?>,Collection<Field>> IDENTIFIERS = new HashMap<>();
 	Map<Class<?>,Collection<Field>> JSONBS = new HashMap<>();
 	Map<Class<?>,Collection<String>> NAMES = new HashMap<>();
