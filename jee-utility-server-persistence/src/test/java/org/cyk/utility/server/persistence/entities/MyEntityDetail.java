@@ -10,7 +10,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 
-import org.cyk.utility.server.persistence.jpa.AbstractIdentifiedByString;
+import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringImpl;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +18,7 @@ import lombok.experimental.Accessors;
 
 @Entity @Getter @Setter @Accessors(chain=true)
 @Access(AccessType.FIELD)
-public class MyEntityDetail extends AbstractIdentifiedByString implements Serializable {
+public class MyEntityDetail extends AbstractIdentifiableSystemScalarStringImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Basic(fetch=FetchType.LAZY)

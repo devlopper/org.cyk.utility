@@ -1315,7 +1315,6 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		//ObjectMapper objectMapper = new ObjectMapper();
 		//objectMapper.setSerializationInclusion(Include.NON_EMPTY);
 		String string = JsonbBuilder.create().toJson(filterDto);
-		System.out.println("PersistenceIntegrationTest.stringfy_filterDto_veryLight() ::: "+string);
 		filterDto = JsonbBuilder.create().fromJson(string, FilterDto.class);
 		Filter filter = MappingHelper.getDestination(filterDto, Filter.class);
 		assertThat(filter).isNotNull();
