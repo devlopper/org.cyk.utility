@@ -32,11 +32,11 @@ public interface PersistenceQueryContext extends Objectable {
 	Object getFilterByKeysValue(String...keys);
 	Field getFilterFieldByKeys(String... keys);
 	
-	default Collection<String> getCodes(Class<? extends IdentifiableBusiness<String>> entityClass,String fieldName) {
+	default Collection<String> getCodes(Class<? extends IdentifiableBusiness<String>> entityClass,String fieldName,Boolean readIfEmpty) {
 		ThrowableHelper.throwIllegalArgumentExceptionIfBlank("entity class", entityClass);
 		ThrowableHelper.throwIllegalArgumentExceptionIfBlank("field name", fieldName);
 		Collection<String> codes = (Collection<String>) getFilterByKeysValue(fieldName);
-		if(CollectionHelper.isEmpty(codes)) {
+		if(CollectionHelper.isEmpty(codes) && Boolean.TRUE.equals(readIfEmpty)) {
 			if(codes == null)
 				codes = new ArrayList<>();
 			codes.addAll(DependencyInjection.inject(Persistence.class).read(entityClass).stream().map(entity -> ((IdentifiableBusiness<String>)entity)
@@ -47,7 +47,7 @@ public interface PersistenceQueryContext extends Objectable {
 	
 	default Collection<String> getCodes(Class<? extends IdentifiableBusiness<String>> entityClass) {
 		ThrowableHelper.throwIllegalArgumentExceptionIfBlank("entity class", entityClass);
-		return getCodes(entityClass,StringHelper.getVariableNameFrom(entityClass.getSimpleName()));
+		return getCodes(entityClass,StringHelper.getVariableNameFrom(entityClass.getSimpleName()),Boolean.TRUE);
 	}
 	
 	default String getStringLike(String fieldName) {

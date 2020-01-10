@@ -13,6 +13,13 @@
     <p:growl id="#{componentHelper.globalMessagesTargetGrowlComponentIdentifier}" for="#{componentHelper.globalMessagesOwnerGrowlComponentIdentifier}"
     	escape="false"/>
     
+    <!-- Monitor Sate Notification -->
+    <p:growl id="messages" showDetail="true" sticky="true" escape="true" />
+    <p:idleMonitor timeout="#{userInterfaceController.numberOfMillisecondToBecomeIdle}">
+        <p:ajax event="idle" listener="#{userInterfaceController.listenEventIdle}" update="messages" global="false"/>
+        <p:ajax event="active" listener="#{userInterfaceController.listenEventActivate}" update="messages" global="false"/>
+    </p:idleMonitor>
+    
     <ui:fragment rendered="#{__page__.window.dialog != null}">
     	<cyk:dialog value="#{__page__.window.dialog}">
 	   		<ui:define name="dialogContent">
