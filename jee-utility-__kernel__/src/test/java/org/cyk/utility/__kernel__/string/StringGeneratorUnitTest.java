@@ -18,7 +18,7 @@ public class StringGeneratorUnitTest extends AbstractWeldUnitTest {
 	
 	@Test
 	public void generate_project_server_persistence_entity_namable(){
-		String string = StringGenerator.getInstance().generate(StringTemplateGetter.getInstance().get("project/system/server/persistence/entity/namable.ftl")
+		String string = StringGenerator.getInstance().generate(StringTemplateGetter.getInstance().get("project/system/server/persistence/entities/namable.ftl")
 				, Map.of("system_package","org.cyk.system","system_identifier","contact","entity_class_name","Person","entity_table_name","person"));
 		assertThat(string).contains("class Person","TABLE_NAME = \"person\";");
 	}

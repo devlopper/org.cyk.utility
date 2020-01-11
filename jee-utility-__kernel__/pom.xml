@@ -28,6 +28,8 @@
 		
 		<org.apache.poi.poi.version>3.17</org.apache.poi.poi.version>
 		<org.apache.poi.poi-ooxml.version>3.17</org.apache.poi.poi-ooxml.version>
+		<org.freemarker.freemarker.version>2.3.29</org.freemarker.freemarker.version>
+		<commons-io.commons-io.version>2.6</commons-io.commons-io.version>
 	</properties>
 
 	<build>
@@ -63,6 +65,7 @@
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
+			<version>${commons-io.commons-io.version}</version>
 		</dependency>
 
 		<dependency>
@@ -99,6 +102,21 @@
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-jackson2-provider</artifactId>
+			<version>${org.jboss.resteasy.resteasy-bom.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-client</artifactId>
+			<version>${org.jboss.resteasy.resteasy-bom.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jaxb-provider</artifactId>
+			<version>${org.jboss.resteasy.resteasy-bom.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		
@@ -127,12 +145,11 @@
 			</exclusions>
 		</dependency>
 		
-<dependency>
-    <groupId>org.freemarker</groupId>
-    <artifactId>freemarker</artifactId>
-    <version>2.3.29</version>
-</dependency>
-		
+		<dependency>
+		    <groupId>org.freemarker</groupId>
+		    <artifactId>freemarker</artifactId>
+		    <version>${org.freemarker.freemarker.version}</version>
+		</dependency>
 		
 	</dependencies>
 

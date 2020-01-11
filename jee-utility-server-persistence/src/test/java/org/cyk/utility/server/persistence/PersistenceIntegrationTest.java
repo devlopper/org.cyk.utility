@@ -14,6 +14,7 @@ import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.validation.ConstraintViolationException;
 
+import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
 import org.cyk.utility.__kernel__.computation.SortOrder;
 import org.cyk.utility.__kernel__.field.FieldHelper;
@@ -22,10 +23,13 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.__kernel__.mapping.MappingHelper;
+import org.cyk.utility.__kernel__.persistence.PersistenceHelper;
 import org.cyk.utility.server.persistence.api.MyEntityPersistence;
+import org.cyk.utility.server.persistence.api.NamablePersistence;
 import org.cyk.utility.server.persistence.api.NodeHierarchyPersistence;
 import org.cyk.utility.server.persistence.api.NodePersistence;
 import org.cyk.utility.server.persistence.entities.MyEntity;
+import org.cyk.utility.server.persistence.entities.Namable;
 import org.cyk.utility.server.persistence.entities.Node;
 import org.cyk.utility.server.persistence.entities.NodeHierarchies;
 import org.cyk.utility.server.persistence.entities.NodeHierarchy;
@@ -1321,6 +1325,96 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		assertThat(filter.getKlass()).isNull();
 		assertThat(filter.getFields()).isNull();
 		assertThat(filter.getValue()).isEqualTo("hello");
+	}
+	
+	/* filter by name contains*/
+	
+	@Test
+	public void namable_readWhereBusinessIdentifierOrNameContains_oneWord() throws Exception{
+		userTransaction.begin();
+		__inject__(NamablePersistence.class).createMany(List.of(
+			new Namable().setCode("codeabcd01").setName("nameabcd01")
+			,new Namable().setCode("codeabcd02").setName("nameabcd02")
+			,new Namable().setCode("codeabcd03").setName("nameabcd03")
+			,new Namable().setCode("codeabcd04").setName("nameabcd04")
+			,new Namable().setCode("codeabcd05").setName("nameabcd05")
+		));
+		userTransaction.commit();
+		__assertNamableReadWhereBusinessIdentifierOrNameContains__(null, new String[] {"codeabcd01","codeabcd02","codeabcd03","codeabcd04","codeabcd05"});
+		__assertNamableReadWhereBusinessIdentifierOrNameContains__("", new String[] {"codeabcd01","codeabcd02","codeabcd03","codeabcd04","codeabcd05"});
+		__assertNamableReadWhereBusinessIdentifierOrNameContains__("c", new String[] {"codeabcd01","codeabcd02","codeabcd03","codeabcd04","codeabcd05"});
+		__assertNamableReadWhereBusinessIdentifierOrNameContains__("code", new String[] {"codeabcd01","codeabcd02","codeabcd03","codeabcd04","codeabcd05"});
+		__assertNamableReadWhereBusinessIdentifierOrNameContains__("n", new String[] {"codeabcd01","codeabcd02","codeabcd03","codeabcd04","codeabcd05"});
+		__assertNamableReadWhereBusinessIdentifierOrNameContains__("name", new String[] {"codeabcd01","codeabcd02","codeabcd03","codeabcd04","codeabcd05"});
+		__assertNamableReadWhereBusinessIdentifierOrNameContains__("01", new String[] {"codeabcd01"});
+		__assertNamableReadWhereBusinessIdentifierOrNameContains__("02", new String[] {"codeabcd02"});
+	}
+	
+	@Test
+	public void namable_readWhereBusinessIdentifierOrNameContains_twoWords() throws Exception{
+		userTransaction.begin();
+		__inject__(NamablePersistence.class).createMany(List.of(
+			new Namable().setCode("1").setName("word1")
+			,new Namable().setCode("2").setName("word1 word2")
+			,new Namable().setCode("3").setName("word1 word2 word3")
+			,new Namable().setCode("4").setName("word1 word2 word3 word4")
+			,new Namable().setCode("5").setName("word1 word2 word3 word4 word5")
+		));
+		userTransaction.commit();
+		__assertNamableReadWhereBusinessIdentifierOrNameContains__(null, new String[] {"1","2","3","4","5"});
+		__assertNamableReadWhereBusinessIdentifierOrNameContains__("", new String[] {"1","2","3","4","5"});
+		__assertNamableReadWhereBusinessIdentifierOrNameContains__("word1", new String[] {"1","2","3","4","5"});
+		__assertNamableReadWhereBusinessIdentifierOrNameContains__("word1 word2", new String[] {"2","3","4","5"});
+		__assertNamableReadWhereBusinessIdentifierOrNameContains__("word1 word3", new String[] {"3","4","5"});
+		__assertNamableReadWhereBusinessIdentifierOrNameContains__("word1 word4", new String[] {"4","5"});
+		__assertNamableReadWhereBusinessIdentifierOrNameContains__("word1 word5", new String[] {"5"});
+		
+		__assertNamableReadWhereBusinessIdentifierOrNameContains__("word2", new String[] {"2","3","4","5"});
+		__assertNamableReadWhereBusinessIdentifierOrNameContains__("word2 word3", new String[] {"3","4","5"});
+	}
+	
+	@Test
+	public void namable_readWhereBusinessIdentifierOrNameContains_threeWords() throws Exception{
+		userTransaction.begin();
+		__inject__(NamablePersistence.class).createMany(List.of(
+			new Namable().setCode("1").setName("word1")
+			,new Namable().setCode("2").setName("word1 word2")
+			,new Namable().setCode("3").setName("word1 word2 word3")
+			,new Namable().setCode("4").setName("word1 word2 word3 word4")
+			,new Namable().setCode("5").setName("word1 word2 word3 word4 word5")
+		));
+		userTransaction.commit();
+		__assertNamableReadWhereBusinessIdentifierOrNameContains__(null, new String[] {"1","2","3","4","5"});
+		__assertNamableReadWhereBusinessIdentifierOrNameContains__("", new String[] {"1","2","3","4","5"});
+		__assertNamableReadWhereBusinessIdentifierOrNameContains__("word1", new String[] {"1","2","3","4","5"});		
+		
+		__assertNamableReadWhereBusinessIdentifierOrNameContains__("word1 word2 word3", new String[] {"3","4","5"});
+		__assertNamableReadWhereBusinessIdentifierOrNameContains__("word1 word3 word4", new String[] {"4","5"});
+		__assertNamableReadWhereBusinessIdentifierOrNameContains__("word1 word4 word5", new String[] {"5"});
+		
+		__assertNamableReadWhereBusinessIdentifierOrNameContains__("word2 word3 word4", new String[] {"4","5"});
+		__assertNamableReadWhereBusinessIdentifierOrNameContains__("word2 word4 word5", new String[] {"5"});
+		
+		__assertNamableReadWhereBusinessIdentifierOrNameContains__("word3 word4 word5", new String[] {"5"});
+	}
+	
+	/**/
+	
+	private void __assertNamableReadWhereBusinessIdentifierOrNameContains__(String string,String[] expectedCodes) {
+		assertThat(__inject__(NamablePersistence.class).count(new Properties().
+				setQueryIdentifier(PersistenceHelper.getQueryIdentifierCountWhereWhereBusinessIdentifierOrNameContains(Namable.class))
+				.setQueryFilters(__inject__(Filter.class).addField(Namable.FIELD_CODE, string)
+						.addField(Namable.FIELD_NAME, string)
+						))).isEqualTo(Long.valueOf(ArrayHelper.getSize(expectedCodes)));
+		
+		Collection<Namable> namables = __inject__(NamablePersistence.class).read(new Properties().
+				setQueryIdentifier(PersistenceHelper.getQueryIdentifierReadWhereWhereBusinessIdentifierOrNameContains(Namable.class))
+				.setQueryFilters(__inject__(Filter.class).addField(Namable.FIELD_CODE, string)
+						.addField(Namable.FIELD_NAME, string)
+						));
+		
+		assertThat(namables).hasSize(ArrayHelper.getSize(expectedCodes));
+		assertThat(namables.stream().map(Namable::getCode).collect(Collectors.toList())).containsExactlyInAnyOrder(expectedCodes);
 	}
 	
 	/**/

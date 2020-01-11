@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.persistence.Entity;
@@ -41,6 +42,14 @@ import org.cyk.utility.sql.builder.QueryStringBuilderSelect;
 public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPersistenceServiceProviderImpl<ENTITY> implements PersistenceEntity<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private static final String NAME_TOKENS_LIKE;
+	static {
+		Collection<String> names = new ArrayList<>();
+		for(Integer index = 1; index <=3; index = index + 1)
+			names.add("LOWER(tuple.%3$s) LIKE LOWER(:name"+index+")");
+		NAME_TOKENS_LIKE = StringHelper.concatenate(names, " AND ");
+	}
+	
 	protected String read
 		,readSystemIdentifiers,readBusinessIdentifiers
 		,readBySystemIdentifiers,readByBusinessIdentifiers
@@ -98,8 +107,9 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 			FieldInstance fieldInstance = __inject__(FieldInstancesRuntime.class).get(__entityClass__, field.getName());
 			if(fieldInstance != null && String.class.equals(fieldInstance.getType())) {
 				addQueryCollectInstances(readWhereIdentifierContains, String.format("SELECT tuple FROM %s tuple WHERE lower(tuple.%s) LIKE lower(:identifier)", tupleName,columnName));
-				if(ValueUsageType.BUSINESS.equals(valueUsageType) && __businessNameField__ != null) {
-					addQueryCollectInstances(readWhereBusinessIdentifierOrNameContains, String.format("SELECT tuple FROM %s tuple WHERE LOWER(tuple.%s) LIKE LOWER(:identifier) OR LOWER(tuple.%s) LIKE LOWER(:name)"
+				if(ValueUsageType.BUSINESS.equals(valueUsageType) && __businessNameField__ != null) {					
+					addQueryCollectInstances(readWhereBusinessIdentifierOrNameContains, 
+							String.format("SELECT tuple FROM %1$s tuple WHERE LOWER(tuple.%2$s) LIKE LOWER(:identifier) OR LOWER(tuple.%3$s) LIKE LOWER(:name) OR ("+NAME_TOKENS_LIKE+")"
 							, tupleName,columnName,__businessNameField__.getName()));
 				}
 			}
@@ -117,7 +127,6 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		return super.__getQueryParameters__(query,properties, objects);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void __listenBeforePostConstruct__() {
 		super.__listenBeforePostConstruct__();
@@ -487,16 +496,17 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 					businessIdentifierFieldValue = "%"+(field == null ? ConstantEmpty.STRING : StringUtils.trimToEmpty((String) field.getValue()))+"%";
 				}
 				
-				Object businessNameFieldValue = null;
-				field = queryContext.getFilterFieldByKeys(__businessNameField__.getName());				
+				List<String> businessNameFieldValue = queryContext.getStringsLike(__businessNameField__.getName(),3);
+				/*field = queryContext.getFilterFieldByKeys(__businessNameField__.getName());				
 				if(field == null || field.getValue() == null || field.getValue() instanceof String) {
 					businessNameFieldValue = "%"+(field == null ? ConstantEmpty.STRING : StringUtils.trimToEmpty((String) field.getValue()))+"%";
 				}		
-				
-				objects = new Object[] {businessIdentifierFieldValue,businessNameFieldValue};
+				*/
+				objects = new Object[] {businessIdentifierFieldValue,businessNameFieldValue.get(0),businessNameFieldValue.get(1),businessNameFieldValue.get(2)
+						,businessNameFieldValue.get(3)};
 			}
 			//System.out.println("AbstractPersistenceEntityImpl.__getQueryParameters__() : "+Arrays.deepToString(objects)+" ::: "+queryContext.getQuery().getValue());
-			return new Object[]{"identifier", "%"+objects[0]+"%","name", "%"+objects[1]+"%"};
+			return new Object[]{"identifier", "%"+objects[0]+"%","name", objects[1],"name1", objects[2],"name2", objects[3],"name3", objects[4]};
 		}
 		return super.__getQueryParameters__(queryContext, properties, objects);
 	}
@@ -508,7 +518,6 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	
 	/**/
 	
-	@SuppressWarnings("unchecked")
 	protected <FUNCTION extends PersistenceFunction> FUNCTION __getFunction__(Class<FUNCTION> aClass,Properties properties,Object...parameters) {
 		String queryIdentifier = (String) Properties.getFromPath(properties, Properties.QUERY_IDENTIFIER);
 		if(StringHelper.isBlank(queryIdentifier))
@@ -538,7 +547,6 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	
 	/**/
 	
-	@SuppressWarnings("unchecked")
 	protected Collection<ENTITY> __readMany__(Properties properties,Object...parameters) {
 		Collection<ENTITY> entities = (Collection<ENTITY>) __getReader__(properties,parameters).execute().getEntities();
 		if(CollectionHelper.isNotEmpty(entities))
@@ -613,7 +621,6 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	}
 	
 	protected ENTITY __readOne__(Properties properties,Object...parameters) {
-		@SuppressWarnings("unchecked")
 		Collection<ENTITY> entities = (Collection<ENTITY>) __getReader__(properties,parameters).execute().getEntities();
 		Integer size = CollectionHelper.getSize(entities);
 		if(size!=null && size > 1)

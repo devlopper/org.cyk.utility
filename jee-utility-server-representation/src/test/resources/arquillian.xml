@@ -24,7 +24,7 @@
     <!-- Configuration to be used when the WildFly managed profile is active -->
     <container qualifier="widlfly-managed" default="true">
         <configuration>
-           <property name="jbossHome">target/wildfly-${wildfly.version:18.0.0.Beta1}</property>
+           <property name="jbossHome">target/wildfly-${wildfly.version:18.0.0.Final}</property>
            <!--
            <property name="serverConfig">${project.basedir}/src/test/resources/server/wildfly/standalone.xml</property>
            -->

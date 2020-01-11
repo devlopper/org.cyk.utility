@@ -67,21 +67,25 @@ public class SheetReaderImpl extends AbstractSheetReaderImpl implements Serializ
                     	String stringValue;
                     	if(cellValue==null)
                     		stringValue = ConstantEmpty.STRING;
-                    	else switch(cellValue.getCellType()){
-	    	                case Cell.CELL_TYPE_FORMULA : 
-	    	                	throw new RuntimeException("Must never happen! Cannot process a formula. Please change field to result of formula.("+i+","+j+")");
-	    	                case Cell.CELL_TYPE_BLANK: stringValue = ConstantEmpty.STRING; break;
-	    	                case Cell.CELL_TYPE_NUMERIC: 
-	    	                	if(DateUtil.isCellDateFormatted(cell))
-	                        		stringValue = cell.getDateCellValue().toString(); //Constant.DATE_TIME_FORMATTER.format(cell.getDateCellValue());
-	                        	else
-	                        		stringValue = /*cellValue.getStringValue();*/ new BigDecimal(cellValue.getNumberValue()).toString(); //cellValue.getNumberValue()); 
-	    	                	break;
-	    	                case Cell.CELL_TYPE_STRING: stringValue = cellValue.getStringValue(); break;
-	    	                default:
-	    	                	stringValue = StringUtils.trim(cellValue.getStringValue());
-	    	                	break;
-	    	                }
+                    	else switch(cellValue.getCellTypeEnum()){ 
+                    	case BLANK : 
+                    		stringValue = ConstantEmpty.STRING;
+                    		break;
+                    	case NUMERIC : 
+                    		if(DateUtil.isCellDateFormatted(cell))
+                        		stringValue = cell.getDateCellValue().toString(); //Constant.DATE_TIME_FORMATTER.format(cell.getDateCellValue());
+                        	else
+                        		stringValue = /*cellValue.getStringValue();*/ new BigDecimal(cellValue.getNumberValue()).toString(); //cellValue.getNumberValue()); 
+    	                	break;
+                    	case STRING:
+                    		stringValue = cellValue.getStringValue(); 
+                    		break;
+                    	case FORMULA:
+                    		throw new RuntimeException("Must never happen! Cannot process a formula. Please change field to result of formula.("+i+","+j+")");
+                    	default:
+	    	                stringValue = StringUtils.trim(cellValue.getStringValue());
+	    	                break;
+	    	            }
                     	arrayInstance.set(i,j,StringUtils.defaultIfBlank(stringValue,ConstantEmpty.STRING));
                     }
                 }

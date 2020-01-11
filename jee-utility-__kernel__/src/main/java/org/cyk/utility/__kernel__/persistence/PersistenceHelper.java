@@ -117,6 +117,18 @@ public interface PersistenceHelper {
 		return getQueryIdentifier(klass, "countWhereCodeNotInByFilters");
 	}
 	
+	static String getQueryIdentifierReadWhereWhereBusinessIdentifierOrNameContains(Class<?> klass) {
+		if(klass == null)
+			return null;
+		return getQueryIdentifier(klass, "readWhereBusinessIdentifierOrNameContains");
+	}
+	
+	static String getQueryIdentifierCountWhereWhereBusinessIdentifierOrNameContains(Class<?> klass) {
+		if(klass == null)
+			return null;
+		return getQueryIdentifier(klass, "countWhereBusinessIdentifierOrNameContains");
+	}
+	
 	/**/
 	
 	static void clear() {
