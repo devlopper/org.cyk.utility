@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"      
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+    <cyk:page value="#{inputChoiceOneAutoCompletePage}">
+    	<ui:define name="centerCenter">.
+    		<ui:decorate template="/input/select/one/autoComplete.xhtml">
+    			<ui:param name="autoComplete" value="#{inputChoiceOneAutoCompletePage.autoComplete}"/>
+    		</ui:decorate>	   
+    		
+    		<style>
+    			.ui-autocomplete-input {
+    				width: 100% !important;
+    				border: 1px solid red;
+    			}
+    		</style>	 		
+    	</ui:define>
+    </cyk:page>
+    
+</html>

@@ -7,9 +7,13 @@ import java.util.List;
 
 import javax.ws.rs.core.Response;
 
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.playground.server.business.api.NamableBusiness;
 import org.cyk.utility.playground.server.business.api.NodeBusiness;
 import org.cyk.utility.playground.server.business.api.PersonBusiness;
 import org.cyk.utility.playground.server.business.api.PersonTypeBusiness;
+import org.cyk.utility.playground.server.persistence.entities.Namable;
 import org.cyk.utility.playground.server.persistence.entities.Node;
 import org.cyk.utility.playground.server.persistence.entities.Person;
 import org.cyk.utility.playground.server.persistence.entities.PersonType;
@@ -49,6 +53,19 @@ public class DataLoaderImpl extends AbstractDataLoaderImpl implements Serializab
 		}		
 		java.lang.System.out.println("Creating "+nodes.size()+" nodes");
 		__inject__(NodeBusiness.class).createMany(nodes);
+		
+		Collection<Namable> namables = new ArrayList<>();
+		for(Integer index = 1 ; index <= 1000 ; index = index + 1) {
+			Namable namable = new Namable();
+			namable.setCode(index+"");
+			Collection<String> words = new ArrayList<>();
+			for(Integer indexWord = 0;indexWord <= index && indexWord < 10; indexWord = indexWord + 1)
+				words.add("word"+(index+indexWord));
+			namable.setName(StringHelper.concatenate(words, ConstantCharacter.SPACE.toString()));
+			namables.add(namable);
+		}
+		__logInfo__("Persisting "+namables.size()+" namables");
+		__inject__(NamableBusiness.class).createByBatch(namables, 100);
 		
 		return Response.ok().build();
 	}
