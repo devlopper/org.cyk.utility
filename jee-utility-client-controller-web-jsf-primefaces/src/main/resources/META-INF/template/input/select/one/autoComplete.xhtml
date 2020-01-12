@@ -8,7 +8,8 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
-	<p:autoComplete 
+	<p:autoComplete
+		value="#{autoComplete.value}" 
 		placeholder="Rechercher..."
 		var="item" 
 		itemValue="#{autoComplete.readItemValue(item)}" 
@@ -19,8 +20,21 @@
 		queryDelay="500" 
 		emptyMessage="-- Aucun résultat --"
 		widgetVar="#{autoComplete.widgetVar}"
-	>
-		<p:ajax event="moreText" listener="#{autoComplete.loadMore}" />
+		
+		onchange="#{autoComplete.onChange}"
+	>			
+		<ui:decorate template="/ajax.xhtml">
+			<ui:param name="ajax" value="#{autoComplete.ajaxQuery}"/>
+		</ui:decorate>
+		<ui:decorate template="/ajax.xhtml">
+			<ui:param name="ajax" value="#{autoComplete.ajaxItemSelect}"/>
+		</ui:decorate>
+		<ui:decorate template="/ajax.xhtml">
+			<ui:param name="ajax" value="#{autoComplete.ajaxItemUnselect}"/>
+		</ui:decorate>
+		<ui:decorate template="/ajax.xhtml">
+			<ui:param name="ajax" value="#{autoComplete.ajaxMoreText}"/>
+		</ui:decorate>
 	</p:autoComplete>   
 			
 </ui:composition>

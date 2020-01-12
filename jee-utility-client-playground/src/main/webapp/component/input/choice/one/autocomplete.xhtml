@@ -13,13 +13,7 @@
     		<ui:decorate template="/input/select/one/autoComplete.xhtml">
     			<ui:param name="autoComplete" value="#{inputChoiceOneAutoCompletePage.autoComplete}"/>
     		</ui:decorate>	   
-    		
-    		<style>
-    			.ui-autocomplete-input {
-    				width: 100% !important;
-    				border: 1px solid red;
-    			}
-    		</style>	 		
+    		<cyk:commandable value="#{inputChoiceOneAutoCompletePage.commandable}" />
     	</ui:define>
     </cyk:page>
     
