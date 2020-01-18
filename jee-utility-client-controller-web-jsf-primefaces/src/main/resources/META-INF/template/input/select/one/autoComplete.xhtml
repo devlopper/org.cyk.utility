@@ -9,6 +9,7 @@
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
 	<p:autoComplete
+		id="#{empty autoCompleteId ? autoComplete.identifier : autoCompleteId}"
 		value="#{autoComplete.value}" 
 		placeholder="Rechercher..."
 		var="item" 
@@ -17,9 +18,10 @@
 		converter="#{autoComplete.converter}"
 		completeMethod="#{autoComplete.complete}"
 		maxResults="#{autoComplete.numberOfResults}" 
-		queryDelay="500" 
+		queryDelay="#{autoComplete.queryDelay}" 
 		emptyMessage="-- Aucun résultat --"
 		widgetVar="#{autoComplete.widgetVar}"
+		rendered="#{autoComplete.rendered}"
 		
 		onchange="#{autoComplete.onChange}"
 	>			

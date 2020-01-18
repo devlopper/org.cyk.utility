@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.model;
 import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.map.MapInstance;
+import org.cyk.utility.__kernel__.random.RandomHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 
 import lombok.Getter;
@@ -10,7 +11,9 @@ import lombok.Setter;
 
 public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractObject implements Serializable {
 
+	@Getter @Setter protected String identifier = RandomHelper.getAlphabetic(5);
 	@Getter @Setter protected MapInstance<Event, String> eventScripts;
+	@Getter @Setter protected Boolean rendered = Boolean.TRUE;
 
 	/* Events */
 	

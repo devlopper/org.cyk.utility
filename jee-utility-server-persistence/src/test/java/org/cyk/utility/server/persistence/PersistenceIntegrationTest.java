@@ -1402,13 +1402,13 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 	
 	private void __assertNamableReadWhereBusinessIdentifierOrNameContains__(String string,String[] expectedCodes) {
 		assertThat(__inject__(NamablePersistence.class).count(new Properties().
-				setQueryIdentifier(PersistenceHelper.getQueryIdentifierCountWhereWhereBusinessIdentifierOrNameContains(Namable.class))
+				setQueryIdentifier(PersistenceHelper.getQueryIdentifierCountWhereBusinessIdentifierOrNameContains(Namable.class))
 				.setQueryFilters(__inject__(Filter.class).addField(Namable.FIELD_CODE, string)
 						.addField(Namable.FIELD_NAME, string)
 						))).isEqualTo(Long.valueOf(ArrayHelper.getSize(expectedCodes)));
 		
 		Collection<Namable> namables = __inject__(NamablePersistence.class).read(new Properties().
-				setQueryIdentifier(PersistenceHelper.getQueryIdentifierReadWhereWhereBusinessIdentifierOrNameContains(Namable.class))
+				setQueryIdentifier(PersistenceHelper.getQueryIdentifierReadWhereBusinessIdentifierOrNameContains(Namable.class))
 				.setQueryFilters(__inject__(Filter.class).addField(Namable.FIELD_CODE, string)
 						.addField(Namable.FIELD_NAME, string)
 						));

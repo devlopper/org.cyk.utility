@@ -1,8 +1,10 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces.model;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.object.ReadListener;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.client.controller.web.jsf.converter.ObjectConverter;
 
 public interface AutoCompleteEntityBuilder {
 
@@ -10,7 +12,10 @@ public interface AutoCompleteEntityBuilder {
 		if(entityClass == null)
 			return null;
 		AutoCompleteEntity<ENTITY> autoCompleteEntity = new AutoCompleteEntity<ENTITY>(entityClass);
-		if(StringHelper.isNotBlank(targetWidgetVar)) {
+		autoCompleteEntity.setIdentifier(StringHelper.getVariableNameFrom(entityClass.getSimpleName()));
+		if(StringHelper.isBlank(targetWidgetVar)) {
+			autoCompleteEntity.setConverter(DependencyInjection.inject(ObjectConverter.class));
+		}else {
 			String script = String.format(SCRIPT_FILTER, targetWidgetVar);
 			autoCompleteEntity.getEventScripts(Boolean.TRUE).write(Event.CHANGE, script);
 			autoCompleteEntity.getAjaxItemSelect().setDisabled(Boolean.FALSE);

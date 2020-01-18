@@ -19,14 +19,18 @@ import lombok.Setter;
 
 public class AutoCompleteEntity<ENTITY> extends AbstractObject implements Serializable {
 
+	public static Integer INITIAL_NUMBER_OF_RESULTS = 10;
+	public static Integer QUERY_DELAY = 2000;
+	
 	@Getter private Class<ENTITY> entityClass;
 	private ControllerEntity<ENTITY> controllerEntity;
-	private Integer initialNumberOfResults = 5;
+	private Integer initialNumberOfResults = INITIAL_NUMBER_OF_RESULTS;
 	@Getter private Integer numberOfResults = initialNumberOfResults;
 	private String queryString;
 	@Getter @Setter private Object converter;
 	@Getter private String widgetVar = RandomHelper.getAlphabetic(5);
 	@Getter @Setter private Object value;
+	@Getter @Setter private Integer queryDelay = QUERY_DELAY;
 	
 	@Getter @Setter private ReadListener readItemLabelListener;
 	@Getter @Setter private ReadListener readItemValueListener;
@@ -35,6 +39,8 @@ public class AutoCompleteEntity<ENTITY> extends AbstractObject implements Serial
 	@Getter @Setter private AjaxUnselectEvent ajaxItemUnselect = new AjaxUnselectEvent("itemUnselect");
 	@Getter @Setter private Ajax ajaxQuery = new Ajax("query");
 	@Getter @Setter private Ajax ajaxMoreText = new Ajax("moreText");
+	
+	@Getter @Setter private Listener<ENTITY> listener;
 	
 	public AutoCompleteEntity(Class<ENTITY> entityClass,ControllerEntity<ENTITY> controllerEntity) {
 		this.entityClass = entityClass;
@@ -65,9 +71,12 @@ public class AutoCompleteEntity<ENTITY> extends AbstractObject implements Serial
 	
 	public Collection<ENTITY> complete(String queryString) {
 		this.queryString = queryString;
-		if(controllerEntity == null)
-			return null;
-		return controllerEntity.readByString(queryString);
+		if(listener == null) {
+			if(controllerEntity == null)
+				return null;
+			return controllerEntity.readByString(queryString);	
+		}else
+			return listener.listenComplete(this,queryString);
 	}
 	
 	public Object readItemValue(ENTITY entity) {
@@ -85,4 +94,12 @@ public class AutoCompleteEntity<ENTITY> extends AbstractObject implements Serial
 	/**/
 	
 	private static final String SCRIPT_SEARCH = "PF('%s').search('%s')";
+	
+	/**/
+	
+	public static interface Listener<ENTITY> {
+		
+		Collection<ENTITY> listenComplete(AutoCompleteEntity<ENTITY> autoCompleteEntity,String queryString);
+		
+	}
 }

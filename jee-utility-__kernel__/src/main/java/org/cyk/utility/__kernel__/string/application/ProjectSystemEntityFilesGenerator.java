@@ -30,7 +30,9 @@ public class ProjectSystemEntityFilesGenerator {
 		
 		String defaultIde = "Eclipse";
 		String defaultProjectsWorkspaceFolder = "E:/Workspaces/"+defaultIde+"/201903";
+		//String defaultProjectsWorkspaceFolder = "E:/Repositories/source code/git";
 		String defaultProjectsSystemFolder = "org/cyk/system";
+		//String defaultProjectsSystemFolder = "org/cyk/system";
 		
 		System.out.println("File generator V01.");
 		Scanner scanner = new Scanner(System.in);
@@ -123,7 +125,7 @@ public class ProjectSystemEntityFilesGenerator {
 		if(namingModel.isNodeClient() && namingModel.isLayerController() && namingModel.isSubLayerImpl()) {
 			subLayer = NamingModel.SUB_LAYER_API;
 		}
-		return systemsFolder+"/"+systemIdentifier+"/"+systemIdentifier+"-"+namingModel.getNode()+"-"+namingModel.getLayer()+"-"+subLayer+"/src/main/java/"
+		return systemsFolder+"/"+systemIdentifier+"/"+namingModel.getNode()+"/"+systemIdentifier+"-"+namingModel.getNode()+"-"+namingModel.getLayer()+"-"+subLayer+"/src/main/java/"
 				+RegExUtils.replaceAll(packageName+"."+systemIdentifier+"."+namingModel.getNode()+"."+namingModel.getLayer()+"."+subLayer, "\\.", "/")+"/"
 				+entity+ValueHelper.defaultToIfBlank(namingModel.getSuffix(),ConstantEmpty.STRING)+".java";
 	}

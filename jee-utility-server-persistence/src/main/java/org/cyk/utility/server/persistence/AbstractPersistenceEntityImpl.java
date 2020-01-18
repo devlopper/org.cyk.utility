@@ -17,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
+import org.cyk.utility.__kernel__.computation.LogicalOperator;
 import org.cyk.utility.__kernel__.computation.SortOrder;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.field.FieldHelper;
@@ -24,6 +25,7 @@ import org.cyk.utility.__kernel__.field.FieldInstance;
 import org.cyk.utility.__kernel__.field.FieldInstancesRuntime;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
+import org.cyk.utility.__kernel__.persistence.QueryHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.stacktrace.StackTraceHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
@@ -41,7 +43,7 @@ import org.cyk.utility.sql.builder.QueryStringBuilderSelect;
 
 public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPersistenceServiceProviderImpl<ENTITY> implements PersistenceEntity<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
-
+	/*
 	private static final String NAME_TOKENS_LIKE;
 	static {
 		Collection<String> names = new ArrayList<>();
@@ -49,12 +51,13 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 			names.add("LOWER(tuple.%3$s) LIKE LOWER(:name"+index+")");
 		NAME_TOKENS_LIKE = StringHelper.concatenate(names, " AND ");
 	}
-	
+	*/
 	protected String read
 		,readSystemIdentifiers,readBusinessIdentifiers
 		,readBySystemIdentifiers,readByBusinessIdentifiers
 		,readWhereSystemIdentifierContains,readWhereBusinessIdentifierContains,readWhereBusinessIdentifierOrNameContains
 		,readWhereSystemIdentifierNotIn,readWhereBusinessIdentifierNotIn
+		,readByFiltersLike
 		,deleteBySystemIdentifiers,deleteByBusinessIdentifiers,deleteAll
 		;
 	
@@ -109,8 +112,11 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 				addQueryCollectInstances(readWhereIdentifierContains, String.format("SELECT tuple FROM %s tuple WHERE lower(tuple.%s) LIKE lower(:identifier)", tupleName,columnName));
 				if(ValueUsageType.BUSINESS.equals(valueUsageType) && __businessNameField__ != null) {					
 					addQueryCollectInstances(readWhereBusinessIdentifierOrNameContains, 
-							String.format("SELECT tuple FROM %1$s tuple WHERE LOWER(tuple.%2$s) LIKE LOWER(:identifier) OR LOWER(tuple.%3$s) LIKE LOWER(:name) OR ("+NAME_TOKENS_LIKE+")"
-							, tupleName,columnName,__businessNameField__.getName()));
+							String.format("SELECT tuple FROM %1$s tuple WHERE "
+									+ QueryHelper.formatTupleFieldLike("tuple", columnName,"identifier")
+									+ " OR "
+									+ QueryHelper.formatTupleFieldLikeOrTokens("tuple", __businessNameField__.getName(), 3, LogicalOperator.AND)
+							, tupleName,columnName));
 				}
 			}
 			addQuery(deleteByIdentifiers, String.format("DELETE FROM %s tuple WHERE tuple.%s IN :identifiers", tupleName,columnName),null);	

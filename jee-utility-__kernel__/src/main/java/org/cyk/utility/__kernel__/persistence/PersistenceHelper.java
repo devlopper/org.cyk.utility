@@ -117,13 +117,13 @@ public interface PersistenceHelper {
 		return getQueryIdentifier(klass, "countWhereCodeNotInByFilters");
 	}
 	
-	static String getQueryIdentifierReadWhereWhereBusinessIdentifierOrNameContains(Class<?> klass) {
+	static String getQueryIdentifierReadWhereBusinessIdentifierOrNameContains(Class<?> klass) {
 		if(klass == null)
 			return null;
 		return getQueryIdentifier(klass, "readWhereBusinessIdentifierOrNameContains");
 	}
 	
-	static String getQueryIdentifierCountWhereWhereBusinessIdentifierOrNameContains(Class<?> klass) {
+	static String getQueryIdentifierCountWhereBusinessIdentifierOrNameContains(Class<?> klass) {
 		if(klass == null)
 			return null;
 		return getQueryIdentifier(klass, "countWhereBusinessIdentifierOrNameContains");

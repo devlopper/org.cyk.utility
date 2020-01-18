@@ -36,7 +36,6 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	/* Read */
 	
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public <ENTITY> Collection<ENTITY> readByIdentifiers(Class<ENTITY> aClass, Collection<Object> identifiers,ValueUsageType valueUsageType, Properties properties) {
 		if(aClass == null)
@@ -66,7 +65,6 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	}
 	
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public <ENTITY> ENTITY readByIdentifier(Class<ENTITY> aClass, Object identifier,Properties properties) {
 		if(aClass == null)
@@ -96,7 +94,6 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 		return readByIdentifier(aClass, identifier, new Properties().setValueUsageType(valueUsageType));
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public <ENTITY> Collection<ENTITY> read(Class<ENTITY> aClass, Properties properties) {
 		PersistenceEntity<ENTITY> persistence = __injectPersistenceLayer__().injectInterfaceClassFromEntityClass(aClass);
