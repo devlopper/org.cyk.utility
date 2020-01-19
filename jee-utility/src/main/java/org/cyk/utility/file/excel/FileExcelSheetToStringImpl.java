@@ -6,7 +6,7 @@ import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
-@Dependent
+@Dependent @Deprecated
 public class FileExcelSheetToStringImpl extends AbstractFunctionWithPropertiesAsInputImpl<String> implements FileExcelSheetToString,Serializable {
 	private static final long serialVersionUID = 1L;
 	

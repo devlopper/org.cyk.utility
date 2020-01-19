@@ -1,4 +1,4 @@
-package org.cyk.utility.server.persistence.query.filter;
+package org.cyk.utility.__kernel__.persistence.query.filter;
 
 import java.io.Serializable;
 
@@ -15,12 +15,10 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor
-//@JsonIgnoreProperties(ignoreUnknown=true)
 public class FilterDto extends AbstractRepresentationObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String klass;
-	//@JsonIgnoreProperties(value="size")
 	private FieldDtoCollection fields;
 
 	private String value;

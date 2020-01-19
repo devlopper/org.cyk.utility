@@ -1,8 +1,8 @@
-package org.cyk.utility.value;
+package org.cyk.utility.__kernel__.value;
 
 import lombok.Getter;
 
-@Getter @Deprecated
+@Getter
 public enum ValueLength {
 	SHORT
 	,LONG

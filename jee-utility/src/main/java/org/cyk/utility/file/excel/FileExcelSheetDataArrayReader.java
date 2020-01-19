@@ -6,6 +6,7 @@ import org.cyk.utility.array.ArrayInstanceTwoDimensionString;
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
 import org.cyk.utility.number.Interval;
 
+@Deprecated
 public interface FileExcelSheetDataArrayReader extends FunctionWithPropertiesAsInput<ArrayInstanceTwoDimensionString> {
 
 	String getWorkbookFileName();

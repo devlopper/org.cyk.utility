@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Locale;
 
 import org.cyk.utility.__kernel__.object.AbstractObject;
-import org.cyk.utility.value.ValueLength;
+import org.cyk.utility.__kernel__.value.ValueLength;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

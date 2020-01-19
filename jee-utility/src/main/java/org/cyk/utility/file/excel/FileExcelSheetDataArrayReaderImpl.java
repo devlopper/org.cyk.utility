@@ -24,7 +24,7 @@ import org.cyk.utility.array.ArrayInstanceTwoDimensionString;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.number.Interval;
 
-@Dependent
+@Dependent @Deprecated
 public class FileExcelSheetDataArrayReaderImpl extends AbstractFunctionWithPropertiesAsInputImpl<ArrayInstanceTwoDimensionString> implements FileExcelSheetDataArrayReader,Serializable {
 	private static final long serialVersionUID = 1L;
 

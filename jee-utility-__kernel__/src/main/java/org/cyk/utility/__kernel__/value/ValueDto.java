@@ -1,4 +1,4 @@
-package org.cyk.utility.value;
+package org.cyk.utility.__kernel__.value;
 
 import java.io.Serializable;
 
@@ -13,7 +13,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-@XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor @ToString @Deprecated
+@XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor @ToString
 public class ValueDto extends AbstractRepresentationObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

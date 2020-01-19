@@ -1,14 +1,13 @@
-package org.cyk.utility.server.persistence.query.filter;
+package org.cyk.utility.__kernel__.persistence.query.filter;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.mapping.AbstractMapperSourceDestinationImpl;
-import org.cyk.utility.__kernel__.mapping.Instantiator;
 import org.cyk.utility.__kernel__.mapping.MappingHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.mapstruct.Mapper;
 
-@Mapper(uses= {Instantiator.class}) @Deprecated
+@Mapper
 public abstract class FilterDtoMapper extends AbstractMapperSourceDestinationImpl<FilterDto, Filter> {
 	private static final long serialVersionUID = 1L;
 	

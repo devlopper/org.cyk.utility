@@ -1,4 +1,4 @@
-package org.cyk.utility.__kernel__.persistence;
+package org.cyk.utility.__kernel__.persistence.query;
 
 import java.io.Serializable;
 

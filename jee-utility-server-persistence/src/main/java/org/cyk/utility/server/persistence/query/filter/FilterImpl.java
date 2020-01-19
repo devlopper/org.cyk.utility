@@ -17,7 +17,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@Dependent @Getter @Setter @Accessors(chain=true)
+@Dependent @Getter @Setter @Accessors(chain=true) @Deprecated
 public class FilterImpl extends AbstractObject implements Filter,Serializable {
 	private static final long serialVersionUID = 1L;
 

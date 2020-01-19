@@ -1,9 +1,10 @@
-package org.cyk.utility.__kernel__.persistence;
+package org.cyk.utility.__kernel__.persistence.query;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.persistence.ManyToOne;
 
+import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 

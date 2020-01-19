@@ -6,6 +6,7 @@ import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 
+@Deprecated
 public interface Filter extends Objectable {
 
 	Filter normalize(Class<?> klass);

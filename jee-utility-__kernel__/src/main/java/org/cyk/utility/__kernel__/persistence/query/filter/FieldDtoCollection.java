@@ -1,4 +1,4 @@
-package org.cyk.utility.server.persistence.query.filter;
+package org.cyk.utility.__kernel__.persistence.query.filter;
 
 import java.io.Serializable;
 import java.util.Collection;

@@ -5,6 +5,7 @@ import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 import org.cyk.utility.__kernel__.field.FieldInstance;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 
+@Deprecated
 public interface Field extends Objectable {
 
 	String getName();

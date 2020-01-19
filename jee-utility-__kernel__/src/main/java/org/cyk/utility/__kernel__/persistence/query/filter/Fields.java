@@ -1,8 +1,7 @@
-package org.cyk.utility.server.persistence.query.filter;
+package org.cyk.utility.__kernel__.persistence.query.filter;
 
 import org.cyk.utility.__kernel__.collection.CollectionInstance;
 
-@Deprecated
 public interface Fields extends CollectionInstance<Field> {
 
 	Field getByPath(String...paths);	

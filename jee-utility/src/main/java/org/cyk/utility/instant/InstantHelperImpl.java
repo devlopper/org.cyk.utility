@@ -11,7 +11,7 @@ import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.locale.LocaleHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.helper.AbstractHelper;
-import org.cyk.utility.value.ValueLength;
+import org.cyk.utility.__kernel__.value.ValueLength;
 
 @ApplicationScoped
 public class InstantHelperImpl extends AbstractHelper implements InstantHelper,Serializable {

@@ -1,4 +1,4 @@
-package org.cyk.utility.server.persistence.query.filter;
+package org.cyk.utility.__kernel__.persistence.query.filter;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -11,15 +11,14 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldInstance;
 import org.cyk.utility.__kernel__.field.FieldInstancesRuntime;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
-import org.cyk.utility.__kernel__.mapping.Instantiator;
+import org.cyk.utility.__kernel__.mapping.AbstractMapperSourceDestinationImpl;
 import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
-import org.cyk.utility.__kernel__.mapping.AbstractMapperSourceDestinationImpl;
 import org.cyk.utility.__kernel__.value.ValueDto;
 import org.cyk.utility.__kernel__.value.ValueDto.Container;
 import org.mapstruct.Mapper;
 
-@Mapper(uses= {Instantiator.class}) @Deprecated
+@Mapper
 public abstract class FieldDtoMapper extends AbstractMapperSourceDestinationImpl<FieldDto, Field> {
 	private static final long serialVersionUID = 1L;
 	
