@@ -12,6 +12,7 @@ import javax.transaction.Transactional;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.collection.CollectionInstance;
 import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.file.microsoft.excel.SheetReader;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
@@ -19,7 +20,6 @@ import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.array.ArrayInstanceTwoDimensionString;
 import org.cyk.utility.clazz.ClassNameBuilder;
-import org.cyk.utility.file.excel.FileExcelSheetDataArrayReader;
 import org.cyk.utility.map.MapInstanceIntegerToString;
 import org.cyk.utility.server.persistence.PersistenceEntity;
 import org.cyk.utility.server.persistence.PersistenceLayer;
@@ -65,15 +65,16 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 		return this;
 	}
 	
-	@Override
-	public BusinessEntity<ENTITY> saveFromFileExcelSheet(FileExcelSheetDataArrayReader fileExcelSheetDataArrayReader,MapInstanceIntegerToString columnIndexFieldNameMap, Properties properties) {
-		saveFromArray(fileExcelSheetDataArrayReader.execute().getOutput(), columnIndexFieldNameMap, properties);
+	@Override //TODO
+	public BusinessEntity<ENTITY> saveFromFileExcelSheet(SheetReader sheetReader,MapInstanceIntegerToString columnIndexFieldNameMap, Properties properties) {
+		//saveFromArray(fileExcelSheetDataArrayReader.execute().getOutput(), columnIndexFieldNameMap, properties);
 		return this;
 	}
 	
 	//TODO : an idea is to transform excel content to json format and transform it java object
 	@Override
 	public BusinessEntity<ENTITY> saveFromFileExcelSheet(InputStream workbookInputStream,String sheetName,MapInstanceIntegerToString columnIndexFieldNameMap,Properties properties) {
+		/*
 		ValueHelper.throwIfBlank("save many from file excel sheet : workbook input stream",workbookInputStream);
 		ValueHelper.throwIfBlank("save many from file excel sheet : sheet name",sheetName);
 		ValueHelper.throwIfBlank("create many from file excel sheet : column index and field name mapping",columnIndexFieldNameMap);
@@ -82,7 +83,8 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 		reader.setWorkbookInputStream(workbookInputStream).setSheetName(sheetName);
 		reader.getRowInterval(Boolean.TRUE).getLow(Boolean.TRUE).setValue(1);
 		
-		saveFromFileExcelSheet(reader, columnIndexFieldNameMap, properties);		
+		saveFromFileExcelSheet(reader, columnIndexFieldNameMap, properties);
+		*/
 		return this;
 	}
 	

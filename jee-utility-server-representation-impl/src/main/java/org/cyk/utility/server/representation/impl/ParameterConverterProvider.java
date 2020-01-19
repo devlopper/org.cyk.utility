@@ -8,7 +8,7 @@ import javax.ws.rs.ext.ParamConverter;
 import javax.ws.rs.ext.ParamConverterProvider;
 import javax.ws.rs.ext.Provider;
 
-import org.cyk.utility.server.persistence.query.filter.FilterDto;
+import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
 import org.cyk.utility.server.representation.RepresentationEntity;
 
 @Provider

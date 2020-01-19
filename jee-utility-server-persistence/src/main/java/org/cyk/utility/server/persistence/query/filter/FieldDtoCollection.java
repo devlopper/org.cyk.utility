@@ -20,7 +20,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor
-@XmlSeeAlso(FieldDto.class)
+@XmlSeeAlso(FieldDto.class) @Deprecated
 public class FieldDtoCollection extends AbstractRepresentationObjectCollection<FieldDto> implements Serializable {
 	private static final long serialVersionUID = 1L;
 

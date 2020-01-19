@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.server.persistence.query.filter.FilterDto;
+import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
 import org.cyk.utility.server.representation.RepresentationEntity;
 import org.cyk.utility.__kernel__.system.action.SystemActionRead;
 

@@ -21,7 +21,7 @@ import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.server.persistence.query.PersistenceQueryContext;
 import org.cyk.utility.server.persistence.query.PersistenceQueryContextImpl;
 import org.cyk.utility.server.persistence.query.PersistenceQueryRepository;
-import org.cyk.utility.server.persistence.query.filter.Filter;
+import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 import org.cyk.utility.sql.builder.QueryStringBuilder;
 import org.cyk.utility.sql.builder.QueryStringBuilderSelect;
 import org.cyk.utility.sql.builder.Tuple;

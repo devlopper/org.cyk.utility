@@ -1,12 +1,17 @@
 package org.cyk.utility.__kernel__.persistence.query;
 
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.string.StringHelper;
 
 public interface QueryHelper {
 
+	static Queries getQueries() {
+		return QUERIES;
+	}
+	
 	/* get */
 	
 	static String getIdentifier(Class<?> klass,String name) {
@@ -71,9 +76,12 @@ public interface QueryHelper {
 	
 	/**/
 	
-	Map<Class<?>,Map<String,String>> IDENTIFIERS = new HashMap<>();
-	
 	static void clear() {
 		IDENTIFIERS.clear();
+		QUERIES.removeAll();
 	}
+	
+	Map<Class<?>,Map<String,String>> IDENTIFIERS = new HashMap<>();
+	Queries QUERIES = new Queries().setCollectionClass(LinkedHashSet.class);
+	
 }

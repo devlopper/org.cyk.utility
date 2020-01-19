@@ -19,8 +19,8 @@ import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.__kernel__.system.action.SystemActionRead;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.server.persistence.query.filter.Filter;
-import org.cyk.utility.server.persistence.query.filter.FilterDto;
+import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
+import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
 
 public abstract class AbstractRepresentationFunctionReaderImpl extends AbstractRepresentationFunctionImpl implements RepresentationFunctionReader, Serializable {
 	private static final long serialVersionUID = 1L;

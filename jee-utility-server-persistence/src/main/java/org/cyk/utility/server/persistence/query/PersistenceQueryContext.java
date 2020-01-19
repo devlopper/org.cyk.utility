@@ -17,8 +17,8 @@ import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.server.persistence.Persistence;
-import org.cyk.utility.server.persistence.query.filter.Field;
-import org.cyk.utility.server.persistence.query.filter.Filter;
+import org.cyk.utility.__kernel__.persistence.query.filter.Field;
+import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 
 public interface PersistenceQueryContext extends Objectable {
 
@@ -55,14 +55,14 @@ public interface PersistenceQueryContext extends Objectable {
 	}
 	
 	default String getStringLike(String fieldName) {
-		org.cyk.utility.server.persistence.query.filter.Field field = getFilterFieldByKeys(fieldName);				
+		Field field = getFilterFieldByKeys(fieldName);				
 		return "%"+(field == null ? ConstantEmpty.STRING : StringUtils.trimToEmpty((String) field.getValue()))+"%";
 	}
 	
 	default List<String> getStringsLike(String fieldName,Integer numberOfToken) {
 		numberOfToken = numberOfToken + 1;
 		List<String> list = new ArrayList<>();
-		org.cyk.utility.server.persistence.query.filter.Field field = getFilterFieldByKeys(fieldName);
+		Field field = getFilterFieldByKeys(fieldName);
 		String string = field == null ? ConstantEmpty.STRING : StringUtils.trimToEmpty((String) field.getValue());
 		list.add("%"+ValueHelper.defaultToIfBlank(string, ConstantEmpty.STRING)+"%");
 		String[] tokens = StringUtils.split(string, ConstantCharacter.SPACE);
@@ -79,7 +79,7 @@ public interface PersistenceQueryContext extends Objectable {
 	default Collection<String> getStrings(String fieldName) {
 		if(StringHelper.isBlank(fieldName))
 			return ConstantEmpty.STRINGS_WITH_ONE_ELEMENT;
-		org.cyk.utility.server.persistence.query.filter.Field field = getFilterFieldByKeys(fieldName);
+		Field field = getFilterFieldByKeys(fieldName);
 		if(field == null || field.getValue() == null)
 			return ConstantEmpty.STRINGS_WITH_ONE_ELEMENT;
 		if(field.getValue() instanceof Collection)

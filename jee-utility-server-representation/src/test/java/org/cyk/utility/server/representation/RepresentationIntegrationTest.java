@@ -25,7 +25,7 @@ import org.cyk.utility.server.persistence.entities.NodeHierarchy;
 import org.cyk.utility.server.persistence.entities.Parent;
 import org.cyk.utility.server.persistence.entities.ParentChild;
 import org.cyk.utility.server.persistence.entities.ParentType;
-import org.cyk.utility.server.persistence.query.filter.FilterDto;
+import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
 import org.cyk.utility.server.representation.api.ChildRepresentation;
 import org.cyk.utility.server.representation.api.MyEntityRepresentation;
 import org.cyk.utility.server.representation.api.NodeRepresentation;

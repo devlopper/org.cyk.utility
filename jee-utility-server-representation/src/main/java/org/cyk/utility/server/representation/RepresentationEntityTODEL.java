@@ -15,7 +15,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.cyk.utility.server.persistence.query.filter.FilterDto;
+import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

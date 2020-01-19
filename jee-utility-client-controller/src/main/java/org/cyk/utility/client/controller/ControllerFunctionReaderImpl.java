@@ -14,7 +14,7 @@ import org.cyk.utility.__kernel__.system.action.SystemActionRead;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.__kernel__.mapping.MappingHelper;
-import org.cyk.utility.server.persistence.query.filter.FilterDto;
+import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
 import org.cyk.utility.server.representation.RepresentationEntity;
 import org.cyk.utility.type.TypeHelper;
 

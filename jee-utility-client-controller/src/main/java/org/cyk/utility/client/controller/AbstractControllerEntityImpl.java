@@ -9,12 +9,12 @@ import org.cyk.utility.__kernel__.identifier.resource.ProxyGetter;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringImpl;
 import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl;
-import org.cyk.utility.__kernel__.persistence.QueryIdentifierBuilder;
+import org.cyk.utility.__kernel__.persistence.query.QueryIdentifierBuilder;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.server.persistence.PersistenceEntity;
-import org.cyk.utility.server.persistence.query.filter.FilterDto;
+import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
 import org.cyk.utility.server.representation.RepresentationEntity;
 
 public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractControllerServiceProviderImpl<ENTITY> implements ControllerEntity<ENTITY>,Serializable {

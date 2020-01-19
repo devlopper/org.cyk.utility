@@ -5,10 +5,10 @@ import java.util.Collection;
 
 import javax.transaction.Transactional;
 
+import org.cyk.utility.__kernel__.file.microsoft.excel.SheetReader;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.array.ArrayInstanceTwoDimensionString;
-import org.cyk.utility.file.excel.FileExcelSheetDataArrayReader;
 import org.cyk.utility.map.MapInstanceIntegerToString;
 
 /**
@@ -84,7 +84,7 @@ public interface BusinessEntity<PERSISTENCE_ENTITY> extends BusinessServiceProvi
 	/**/
 	
 	BusinessEntity<PERSISTENCE_ENTITY> saveFromArray(ArrayInstanceTwoDimensionString arrayInstanceTwoDimensionString,MapInstanceIntegerToString columnIndexFieldNameMap,Properties properties);
-	BusinessEntity<PERSISTENCE_ENTITY> saveFromFileExcelSheet(FileExcelSheetDataArrayReader fileExcelSheetDataArrayReader,MapInstanceIntegerToString columnIndexFieldNameMap,Properties properties);
+	BusinessEntity<PERSISTENCE_ENTITY> saveFromFileExcelSheet(SheetReader sheetReader,MapInstanceIntegerToString columnIndexFieldNameMap,Properties properties);
 	BusinessEntity<PERSISTENCE_ENTITY> saveFromFileExcelSheet(InputStream workbookInputStream,String sheetName,MapInstanceIntegerToString columnIndexFieldNameMap,Properties properties);
 	
 	/* Count */

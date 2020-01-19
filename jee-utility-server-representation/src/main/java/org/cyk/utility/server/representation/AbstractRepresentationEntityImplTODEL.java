@@ -19,7 +19,7 @@ import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.clazz.ClassNameBuilder;
 import org.cyk.utility.map.MapInstanceIntegerToString;
 import org.cyk.utility.server.business.BusinessEntity;
-import org.cyk.utility.server.persistence.query.filter.FilterDto;
+import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
 
 public abstract class AbstractRepresentationEntityImplTODEL<PERSISTENCE_ENTITY,BUSINESS extends BusinessEntity<PERSISTENCE_ENTITY>,ENTITY,ENTITY_COLLECTION> extends AbstractRepresentationServiceProviderImpl implements RepresentationEntityTODEL<PERSISTENCE_ENTITY,ENTITY,ENTITY_COLLECTION>,Serializable {
 	private static final long serialVersionUID = 1L;

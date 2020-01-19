@@ -9,7 +9,9 @@ import java.util.Set;
 import java.util.function.Function;
 
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 
 import lombok.Getter;
@@ -240,6 +242,23 @@ public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject i
 	@Override
 	public T getLast() {
 		return CollectionHelper.getLast(collection);
+	}
+	
+	@Override
+	public T getBySystemIdentifier(Object identifier,Boolean logIfNotFound) {
+		if(identifier == null || CollectionHelper.isEmpty(collection))
+			return null;
+		for(T index : collection)
+			if(identifier.equals(FieldHelper.readSystemIdentifier(index)))
+				return index;
+		if(Boolean.TRUE.equals(logIfNotFound))
+			LogHelper.logWarning(elementClass+" with system identifier "+identifier+" not found", getClass());
+		return null;
+	}
+	
+	@Override
+	public T getBySystemIdentifier(Object identifier) {
+		return getBySystemIdentifier(identifier, Boolean.FALSE);
 	}
 	
 	@Override

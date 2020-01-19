@@ -25,7 +25,7 @@ import org.cyk.utility.server.business.test.arquillian.AbstractBusinessArquillia
 import org.cyk.utility.server.persistence.entities.MyEntity;
 import org.cyk.utility.server.persistence.entities.Node;
 import org.cyk.utility.server.persistence.entities.NodeHierarchy;
-import org.cyk.utility.server.persistence.query.filter.Filter;
+import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 import org.junit.Ignore;
 import org.junit.Test;
 

@@ -18,7 +18,7 @@ import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.clazz.ClassNameBuilder;
 import org.cyk.utility.map.MapInstanceIntegerToString;
-import org.cyk.utility.server.persistence.query.filter.FilterDto;
+import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
 
 public abstract class AbstractRepresentationEntityImpl<ENTITY> extends AbstractRepresentationServiceProviderImpl implements RepresentationEntity<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;

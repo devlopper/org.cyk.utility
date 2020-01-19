@@ -19,7 +19,7 @@ import org.cyk.utility.playground.client.controller.api.NodeHierarchyController;
 import org.cyk.utility.playground.client.controller.entities.MyEntity;
 import org.cyk.utility.playground.client.controller.entities.Node;
 import org.cyk.utility.playground.client.controller.impl.ApplicationScopeLifeCycleListener;
-import org.cyk.utility.server.persistence.query.filter.FilterDto;
+import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
 import org.cyk.utility.server.representation.ResponseHelper;
 import org.junit.Test;
 

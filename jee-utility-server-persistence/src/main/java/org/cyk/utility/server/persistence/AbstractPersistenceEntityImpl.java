@@ -37,7 +37,7 @@ import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.map.MapHelper;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.server.persistence.query.PersistenceQueryContext;
-import org.cyk.utility.server.persistence.query.filter.Filter;
+import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 import org.cyk.utility.sql.builder.QueryStringBuilder;
 import org.cyk.utility.sql.builder.QueryStringBuilderSelect;
 
@@ -451,7 +451,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	protected String __getQueryIdentifierByIdentifierField__(ValueUsageType valueUsageType,String defaultQueryIdentifier,Filter filters){
 		String identifier = null;
 		Field identifierField = ValueUsageType.BUSINESS.equals(valueUsageType) ? __businessIdentifierField__ : __systemIdentifierField__;
-		org.cyk.utility.server.persistence.query.filter.Field field = null;
+		org.cyk.utility.__kernel__.persistence.query.filter.Field field = null;
 		if(filters != null)
 			field = filters.getFieldByPath(identifierField.getName());
 		if(field != null) {
@@ -497,7 +497,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		}else if(queryContext.getQuery().isIdentifierEqualsToOrQueryDerivedFromQueryIdentifierEqualsTo(readWhereBusinessIdentifierOrNameContains)) {
 			if(Boolean.TRUE.equals(__inject__(ArrayHelper.class).isEmpty(objects))) {
 				Object businessIdentifierFieldValue = null;
-				org.cyk.utility.server.persistence.query.filter.Field field = queryContext.getFilterFieldByKeys(__businessIdentifierField__.getName());				
+				org.cyk.utility.__kernel__.persistence.query.filter.Field field = queryContext.getFilterFieldByKeys(__businessIdentifierField__.getName());				
 				if(field == null || field.getValue() == null || field.getValue() instanceof String) {
 					businessIdentifierFieldValue = "%"+(field == null ? ConstantEmpty.STRING : StringUtils.trimToEmpty((String) field.getValue()))+"%";
 				}

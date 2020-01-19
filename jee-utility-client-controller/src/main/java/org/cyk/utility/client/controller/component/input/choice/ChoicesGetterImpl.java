@@ -21,7 +21,7 @@ import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.client.controller.Controller;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.server.persistence.query.filter.FilterDto;
+import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
 import org.cyk.utility.server.representation.ResponseHelper;
 import org.cyk.utility.system.layer.SystemLayerController;
 

@@ -17,7 +17,7 @@ import org.cyk.utility.server.persistence.AbstractPersistenceEntityImpl;
 import org.cyk.utility.server.persistence.PersistenceFunctionReader;
 import org.cyk.utility.server.persistence.PersistenceQueryIdentifierStringBuilder;
 import org.cyk.utility.server.persistence.query.PersistenceQueryContext;
-import org.cyk.utility.server.persistence.query.filter.Filter;
+import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 
 public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends AbstractHierarchy<ENTITY>,ENTITY extends AbstractIdentifiedByString<?>,HIERARCHIES extends Hierarchies<HIERARCHY,ENTITY>> extends AbstractPersistenceEntityImpl<HIERARCHY> implements HierarchyPersistence<HIERARCHY,ENTITY, HIERARCHIES>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -245,7 +245,7 @@ public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends Abstrac
 	protected String __getQueryIdentifier__(Class<?> functionClass, Properties properties, Object... parameters) {
 		Filter filter = (Filter) Properties.getFromPath(properties,Properties.QUERY_FILTERS);
 		if(PersistenceFunctionReader.class.equals(functionClass)) {
-			org.cyk.utility.server.persistence.query.filter.Field field = filter == null? null : filter.getFieldByPath(AbstractIdentifiedByString.FIELD_PARENTS);
+			org.cyk.utility.__kernel__.persistence.query.filter.Field field = filter == null? null : filter.getFieldByPath(AbstractIdentifiedByString.FIELD_PARENTS);
 			if(field != null) {
 				if(ValueUsageType.BUSINESS.equals(field.getValueUsageType()))
 					return readByParentsBusinessIdentifiers;

@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import org.cyk.utility.instance.AbstractInstanceRepositoryImpl;
 
+@Deprecated
 public abstract class AbstractPersistenceQueryRepositoryImpl extends AbstractInstanceRepositoryImpl<PersistenceQuery> implements PersistenceQueryRepository, Serializable {
 	private static final long serialVersionUID = 1L;
 

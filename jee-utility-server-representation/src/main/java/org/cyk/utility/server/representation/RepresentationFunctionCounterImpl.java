@@ -6,8 +6,8 @@ import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.mapping.MappingHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.server.persistence.query.filter.Filter;
-import org.cyk.utility.server.persistence.query.filter.FilterDto;
+import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
+import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
 
 @Dependent
 public class RepresentationFunctionCounterImpl extends AbstractRepresentationFunctionCounterImpl implements Serializable {
