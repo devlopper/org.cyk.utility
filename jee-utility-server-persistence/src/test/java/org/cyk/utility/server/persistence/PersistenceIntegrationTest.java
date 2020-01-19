@@ -19,11 +19,11 @@ import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
 import org.cyk.utility.__kernel__.computation.SortOrder;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.field.FieldInstancesRuntime;
+import org.cyk.utility.__kernel__.mapping.MappingHelper;
+import org.cyk.utility.__kernel__.persistence.QueryHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.__kernel__.mapping.MappingHelper;
-import org.cyk.utility.__kernel__.persistence.PersistenceHelper;
 import org.cyk.utility.server.persistence.api.MyEntityPersistence;
 import org.cyk.utility.server.persistence.api.NamablePersistence;
 import org.cyk.utility.server.persistence.api.NodeHierarchyPersistence;
@@ -1402,13 +1402,13 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 	
 	private void __assertNamableReadWhereBusinessIdentifierOrNameContains__(String string,String[] expectedCodes) {
 		assertThat(__inject__(NamablePersistence.class).count(new Properties().
-				setQueryIdentifier(PersistenceHelper.getQueryIdentifierCountWhereBusinessIdentifierOrNameContains(Namable.class))
+				setQueryIdentifier(QueryHelper.getIdentifierCountWhereBusinessIdentifierOrNameContains(Namable.class))
 				.setQueryFilters(__inject__(Filter.class).addField(Namable.FIELD_CODE, string)
 						.addField(Namable.FIELD_NAME, string)
 						))).isEqualTo(Long.valueOf(ArrayHelper.getSize(expectedCodes)));
 		
 		Collection<Namable> namables = __inject__(NamablePersistence.class).read(new Properties().
-				setQueryIdentifier(PersistenceHelper.getQueryIdentifierReadWhereBusinessIdentifierOrNameContains(Namable.class))
+				setQueryIdentifier(QueryHelper.getIdentifierReadWhereBusinessIdentifierOrNameContains(Namable.class))
 				.setQueryFilters(__inject__(Filter.class).addField(Namable.FIELD_CODE, string)
 						.addField(Namable.FIELD_NAME, string)
 						));

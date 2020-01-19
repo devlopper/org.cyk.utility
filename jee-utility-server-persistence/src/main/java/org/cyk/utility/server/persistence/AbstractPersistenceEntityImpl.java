@@ -25,7 +25,7 @@ import org.cyk.utility.__kernel__.field.FieldInstance;
 import org.cyk.utility.__kernel__.field.FieldInstancesRuntime;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
-import org.cyk.utility.__kernel__.persistence.QueryHelper;
+import org.cyk.utility.__kernel__.persistence.QueryStringHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.stacktrace.StackTraceHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
@@ -113,9 +113,9 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 				if(ValueUsageType.BUSINESS.equals(valueUsageType) && __businessNameField__ != null) {					
 					addQueryCollectInstances(readWhereBusinessIdentifierOrNameContains, 
 							String.format("SELECT tuple FROM %1$s tuple WHERE "
-									+ QueryHelper.formatTupleFieldLike("tuple", columnName,"identifier")
+									+ QueryStringHelper.formatTupleFieldLike("tuple", columnName,"identifier")
 									+ " OR "
-									+ QueryHelper.formatTupleFieldLikeOrTokens("tuple", __businessNameField__.getName(), 3, LogicalOperator.AND)
+									+ QueryStringHelper.formatTupleFieldLikeOrTokens("tuple", __businessNameField__.getName(), 3, LogicalOperator.AND)
 							, tupleName,columnName));
 				}
 			}
@@ -503,11 +503,6 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 				}
 				
 				List<String> businessNameFieldValue = queryContext.getStringsLike(__businessNameField__.getName(),3);
-				/*field = queryContext.getFilterFieldByKeys(__businessNameField__.getName());				
-				if(field == null || field.getValue() == null || field.getValue() instanceof String) {
-					businessNameFieldValue = "%"+(field == null ? ConstantEmpty.STRING : StringUtils.trimToEmpty((String) field.getValue()))+"%";
-				}		
-				*/
 				objects = new Object[] {businessIdentifierFieldValue,businessNameFieldValue.get(0),businessNameFieldValue.get(1),businessNameFieldValue.get(2)
 						,businessNameFieldValue.get(3)};
 			}

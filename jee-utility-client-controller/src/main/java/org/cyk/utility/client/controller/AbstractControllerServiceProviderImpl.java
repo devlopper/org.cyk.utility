@@ -43,19 +43,6 @@ public abstract class AbstractControllerServiceProviderImpl<OBJECT> extends Abst
 	
 	@Override
 	public ControllerServiceProvider<OBJECT> create(OBJECT object,Properties properties) {
-		/*if(properties == null)
-			properties = new Properties();
-		ControllerFunctionCreator function = ____inject____(ControllerFunctionCreator.class);
-		function.setEntity(object);
-		//function.getAction().getEntities(Boolean.TRUE).add(object);
-		function.copyProperty(Properties.REQUEST,properties);
-		function.copyProperty(Properties.CONTEXT,properties);
-		function.execute();
-		if(properties!=null) {
-			properties.setResponse(function.getProperties().getResponse());
-			properties.setAction(function.getProperties().getAction());
-		}
-		*/
 		createMany(Arrays.asList(object), properties);
 		return this;
 	}
@@ -92,19 +79,6 @@ public abstract class AbstractControllerServiceProviderImpl<OBJECT> extends Abst
 	
 	@Override
 	public ControllerServiceProvider<OBJECT> update(OBJECT object, Properties properties) {
-		/*if(properties == null)
-			properties = new Properties();
-		ControllerFunctionModifier function = ____inject____(ControllerFunctionModifier.class);
-		function.setEntity(object);
-		function.copyProperty(Properties.REQUEST,properties);
-		function.copyProperty(Properties.CONTEXT,properties);
-		function.copyProperty(Properties.FIELDS,properties);
-		function.execute();
-		if(properties!=null) {
-			properties.setResponse(function.getProperties().getResponse());
-			properties.setAction(function.getProperties().getAction());
-		}
-		*/
 		updateMany(Arrays.asList(object), properties);
 		return this;
 	}
@@ -115,13 +89,11 @@ public abstract class AbstractControllerServiceProviderImpl<OBJECT> extends Abst
 	}
 
 	@Override
-	public ControllerServiceProvider<OBJECT> delete(OBJECT object, Properties properties) {
+	public ControllerServiceProvider<OBJECT> deleteMany(Collection<OBJECT> objects, Properties properties) {
 		if(properties == null)
 			properties = new Properties();
 		ControllerFunctionRemover function = ____inject____(ControllerFunctionRemover.class);
-		//Object identifier = FieldHelper.getFieldValueBusinessIdentifier(object);
-		function.setEntity(object);
-		//function.copyProperty(Properties.VALUE_USAGE_TYPE,properties);
+		function.setEntities(objects);
 		function.copyProperty(Properties.REQUEST,properties);
 		function.copyProperty(Properties.CONTEXT,properties);
 		function.execute();
@@ -129,6 +101,17 @@ public abstract class AbstractControllerServiceProviderImpl<OBJECT> extends Abst
 			properties.setResponse(function.getProperties().getResponse());
 			properties.setAction(function.getProperties().getAction());
 		}
+		return this;
+	}
+	
+	@Override
+	public ControllerServiceProvider<OBJECT> deleteMany(Collection<OBJECT> objects) {
+		return deleteMany(objects, null);
+	}
+	
+	@Override
+	public ControllerServiceProvider<OBJECT> delete(OBJECT object, Properties properties) {
+		deleteMany(Arrays.asList(object), properties);
 		return this;
 	}
 
