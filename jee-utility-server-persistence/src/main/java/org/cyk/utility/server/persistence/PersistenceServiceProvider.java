@@ -2,8 +2,8 @@ package org.cyk.utility.server.persistence;
 
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.persistence.query.Query;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.sql.builder.QueryStringBuilder;
 import org.cyk.utility.system.SystemServiceProvider;
 
@@ -46,10 +46,10 @@ public interface PersistenceServiceProvider<OBJECT> extends SystemServiceProvide
 	
 	/**/
 	
-	Collection<PersistenceQuery> getQueries();
-	PersistenceServiceProvider<OBJECT> setQueries(Collection<PersistenceQuery> queries);
-	PersistenceServiceProvider<OBJECT> addQueries(Collection<PersistenceQuery> queries);
-	PersistenceServiceProvider<OBJECT> addQueries(PersistenceQuery...queries);
+	Collection<Query> getQueries();
+	PersistenceServiceProvider<OBJECT> setQueries(Collection<Query> queries);
+	PersistenceServiceProvider<OBJECT> addQueries(Collection<Query> queries);
+	PersistenceServiceProvider<OBJECT> addQueries(Query...queries);
 	
 	PersistenceServiceProvider<OBJECT> addQuery(Object identifier,String value,Class<?> resultClass);
 	

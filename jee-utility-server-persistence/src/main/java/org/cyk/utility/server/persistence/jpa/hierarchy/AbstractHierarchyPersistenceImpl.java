@@ -16,7 +16,7 @@ import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.server.persistence.AbstractPersistenceEntityImpl;
 import org.cyk.utility.server.persistence.PersistenceFunctionReader;
 import org.cyk.utility.server.persistence.PersistenceQueryIdentifierStringBuilder;
-import org.cyk.utility.server.persistence.query.PersistenceQueryContext;
+import org.cyk.utility.__kernel__.persistence.query.QueryContext;
 import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 
 public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends AbstractHierarchy<ENTITY>,ENTITY extends AbstractIdentifiedByString<?>,HIERARCHIES extends Hierarchies<HIERARCHY,ENTITY>> extends AbstractPersistenceEntityImpl<HIERARCHY> implements HierarchyPersistence<HIERARCHY,ENTITY, HIERARCHIES>,Serializable {
@@ -237,7 +237,7 @@ public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends Abstrac
 	}
 	
 	@Override
-	public HIERARCHIES readWhereIsParentOrChild(@SuppressWarnings("unchecked") ENTITY... entities) {
+	public HIERARCHIES readWhereIsParentOrChild(ENTITY... entities) {
 		return readWhereIsParentOrChild(List.of(entities));
 	}
 	
@@ -264,7 +264,7 @@ public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends Abstrac
 	}
 	
 	@Override
-	protected Object[] __getQueryParameters__(PersistenceQueryContext queryContext, Properties properties,Object... objects) {
+	protected Object[] __getQueryParameters__(QueryContext queryContext, Properties properties,Object... objects) {
 		if(queryContext.getQuery().isIdentifierEqualsToOrQueryDerivedFromQueryIdentifierEqualsTo(readByParentsIdentifiers)) {
 			if(__inject__(ArrayHelper.class).isEmpty(objects)) {
 				objects = new Object[] {queryContext.getFilterByKeysValue(AbstractIdentifiedByString.FIELD_CHILDREN)};
@@ -289,7 +289,6 @@ public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends Abstrac
 		return super.__getQueryParameters__(queryContext, properties, objects);
 	}
 	
-	@SuppressWarnings("unchecked")
 	protected Class<HIERARCHIES> __getCollectionInstanceClass__() {
 		return (Class<HIERARCHIES>) ClassHelper.getParameterAt(getClass(), 2);
 	}

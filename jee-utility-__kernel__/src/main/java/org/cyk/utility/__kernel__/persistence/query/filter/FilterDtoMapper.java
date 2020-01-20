@@ -1,6 +1,5 @@
 package org.cyk.utility.__kernel__.persistence.query.filter;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.mapping.AbstractMapperSourceDestinationImpl;
 import org.cyk.utility.__kernel__.mapping.MappingHelper;
@@ -22,7 +21,7 @@ public abstract class FilterDtoMapper extends AbstractMapperSourceDestinationImp
 	public Fields getFields(FieldDtoCollection fieldDtoCollection) {
 		Fields fields = null;
 		if(fieldDtoCollection != null && fieldDtoCollection.getCollection()!=null && !fieldDtoCollection.getCollection().isEmpty()) {
-			fields = DependencyInjection.inject(Fields.class);
+			fields = new Fields();
 			for(FieldDto index : fieldDtoCollection.getCollection())
 				fields.add(MappingHelper.getDestination(index, Field.class));
 		}

@@ -35,8 +35,8 @@ import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.map.MapHelper;
-import org.cyk.utility.server.persistence.query.PersistenceQuery;
-import org.cyk.utility.server.persistence.query.PersistenceQueryContext;
+import org.cyk.utility.__kernel__.persistence.query.Query;
+import org.cyk.utility.__kernel__.persistence.query.QueryContext;
 import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 import org.cyk.utility.sql.builder.QueryStringBuilder;
 import org.cyk.utility.sql.builder.QueryStringBuilderSelect;
@@ -127,7 +127,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		}
 	}
 	
-	protected Object[] __getQueryParameters__(PersistenceQuery query,Properties properties,Object...objects){
+	protected Object[] __getQueryParameters__(Query query,Properties properties,Object...objects){
 		if(query.isIdentifierEqualsToOrQueryDerivedFromQueryIdentifierEqualsTo(read))
 			return null;
 		return super.__getQueryParameters__(query,properties, objects);
@@ -477,7 +477,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	}
 	
 	@Override
-	protected Object[] __getQueryParameters__(PersistenceQueryContext queryContext, Properties properties,Object... objects) {
+	protected Object[] __getQueryParameters__(QueryContext queryContext, Properties properties,Object... objects) {
 		if(queryContext.getQuery().isIdentifierEqualsToOrQueryDerivedFromQueryIdentifierEqualsTo(readBySystemIdentifiers)) {
 			if(Boolean.TRUE.equals(__inject__(ArrayHelper.class).isEmpty(objects)))
 				objects = new Object[] {queryContext.getFilterByKeysValue(__systemIdentifierField__.getName())};
@@ -502,7 +502,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 					businessIdentifierFieldValue = "%"+(field == null ? ConstantEmpty.STRING : StringUtils.trimToEmpty((String) field.getValue()))+"%";
 				}
 				
-				List<String> businessNameFieldValue = queryContext.getStringsLike(__businessNameField__.getName(),3);
+				List<String> businessNameFieldValue = queryContext.getFieldValueLikes(__businessNameField__.getName(),4);
 				objects = new Object[] {businessIdentifierFieldValue,businessNameFieldValue.get(0),businessNameFieldValue.get(1),businessNameFieldValue.get(2)
 						,businessNameFieldValue.get(3)};
 			}

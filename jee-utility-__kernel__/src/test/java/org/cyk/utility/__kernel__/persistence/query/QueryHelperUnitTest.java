@@ -34,6 +34,13 @@ public class QueryHelperUnitTest extends AbstractWeldUnitTest {
 		assertThat(QueryHelper.IDENTIFIERS.size()).isEqualTo(2);
 	}
 	
+	@Test
+	public void addQuery(){
+		assertThat(QueryHelper.QUERIES.getSize()).isEqualTo(0);
+		QueryHelper.getQueries().add(new Query());
+		assertThat(QueryHelper.QUERIES.getSize()).isEqualTo(1);
+	}
+	
 	/**/
 	
 	@Getter @Setter @Accessors(chain=true)

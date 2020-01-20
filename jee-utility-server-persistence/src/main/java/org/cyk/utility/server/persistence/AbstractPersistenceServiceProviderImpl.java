@@ -11,17 +11,13 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.persistence.query.Query;
+import org.cyk.utility.__kernel__.persistence.query.QueryContext;
+import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
+import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.stacktrace.StackTraceHelper;
-import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
-import org.cyk.utility.method.MethodGetter;
-import org.cyk.utility.server.persistence.annotation.Query;
-import org.cyk.utility.server.persistence.query.PersistenceQuery;
-import org.cyk.utility.server.persistence.query.PersistenceQueryContext;
-import org.cyk.utility.server.persistence.query.PersistenceQueryContextImpl;
-import org.cyk.utility.server.persistence.query.PersistenceQueryRepository;
-import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 import org.cyk.utility.sql.builder.QueryStringBuilder;
 import org.cyk.utility.sql.builder.QueryStringBuilderSelect;
 import org.cyk.utility.sql.builder.Tuple;
@@ -76,6 +72,8 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 		//1 - from class
 		//2 - from field
 		//3 - from method
+		//TODO think about it later
+		/*
 		Collection<Method> methods = __inject__(MethodGetter.class).setClazz(getClass()).addAnnotationClasses(Query.class).execute().getOutput();
 		if(CollectionHelper.isNotEmpty(methods)){
 			for(Method index : methods){
@@ -105,24 +103,25 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 				addQueries(query);
 			}
 		}
+		*/
 	}
 	
 	protected final Object[] __getQueryParameters__(String queryIdentifier,Properties properties,Object...objects){
-		PersistenceQuery persistenceQuery = __inject__(PersistenceQueryRepository.class).getBySystemIdentifier(queryIdentifier);
+		Query persistenceQuery = QueryHelper.getQueries().getBySystemIdentifier(queryIdentifier);
 		if(persistenceQuery == null)
 			throw new RuntimeException("persistence query with identifier "+queryIdentifier+" not found.");
 		return __getQueryParameters__(persistenceQuery, properties, objects);
 	}
 	
-	protected Object[] __getQueryParameters__(PersistenceQuery query,Properties properties,Object...objects){
-		PersistenceQueryContext queryContext = __inject__(PersistenceQueryContext.class).setQuery(query).setParameters(objects);
+	protected Object[] __getQueryParameters__(Query query,Properties properties,Object...objects){
+		QueryContext queryContext = new QueryContext().setQuery(query).setArguments(objects);
 		if(properties!=null && properties.getQueryFilters() instanceof Filter)
 			queryContext.setFilter((Filter) properties.getQueryFilters());
 			//queryContext.setFilters((Map<String, Object>) properties.getQueryFilters());
 		return __getQueryParameters__(queryContext, properties, objects);
 	}
 	
-	protected Object[] __getQueryParameters__(PersistenceQueryContext queryContext,Properties properties,Object...objects){
+	protected Object[] __getQueryParameters__(QueryContext queryContext,Properties properties,Object...objects){
 		return null;
 	}
 	
@@ -337,31 +336,31 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<PersistenceQuery> getQueries() {
-		return (Collection<PersistenceQuery>) getProperties().getQueries();
+	public Collection<Query> getQueries() {
+		return (Collection<Query>) getProperties().getQueries();
 	}
 	
 	@Override
-	public PersistenceServiceProvider<OBJECT> setQueries(Collection<PersistenceQuery> queries) {
+	public PersistenceServiceProvider<OBJECT> setQueries(Collection<Query> queries) {
 		getProperties().setQueries(queries);
 		return this;
 	}
 	
 	@Override
-	public PersistenceServiceProvider<OBJECT> addQueries(Collection<PersistenceQuery> queries) {
+	public PersistenceServiceProvider<OBJECT> addQueries(Collection<Query> queries) {
 		setQueries(CollectionHelper.add(HashSet.class, getQueries(), Boolean.TRUE, queries));
-		__inject__(PersistenceQueryRepository.class).add(getQueries());//TODO is it the right place ? what if call multiple times ??? are the old ones overwritten ???
+		QueryHelper.getQueries().add(getQueries());//TODO is it the right place ? what if call multiple times ??? are the old ones overwritten ???
 		return this;
 	}
 	
 	@Override
-	public PersistenceServiceProvider<OBJECT> addQueries(PersistenceQuery... queries) {
+	public PersistenceServiceProvider<OBJECT> addQueries(Query... queries) {
 		return addQueries(List.of(queries));
 	}
 	
 	@Override
 	public PersistenceServiceProvider<OBJECT> addQuery(Object identifier, String value, Class<?> resultClass) {
-		addQueries(new PersistenceQuery().setIdentifier(identifier).setValue(value).setResultClass(resultClass));
+		addQueries(new Query().setIdentifier(identifier).setValue(value).setResultClass(resultClass));
 		return this;
 	}
 	
@@ -379,16 +378,16 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	
 	@Override
 	public PersistenceServiceProvider<OBJECT> addQueryCountInstancesFromCollection(Object collectionIdentifier) {
-		PersistenceQuery persistenceQuery = __inject__(PersistenceQueryRepository.class).getBySystemIdentifier(collectionIdentifier, Boolean.TRUE);
-		if(persistenceQuery!=null){
+		Query query = QueryHelper.getQueries().getBySystemIdentifier(collectionIdentifier, Boolean.TRUE);
+		if(query!=null){
 			String value = "SELECT COUNT("
-					+StringUtils.substringBetween(persistenceQuery.getValue(),"SELECT ", " FROM ")
-					+") FROM "+StringUtils.substringAfter(persistenceQuery.getValue(), " FROM ");
+					+StringUtils.substringBetween(query.getValue(),"SELECT ", " FROM ")
+					+") FROM "+StringUtils.substringAfter(query.getValue(), " FROM ");
 			String identifier = __inject__(PersistenceQueryIdentifierStringBuilder.class).setIsDerivedFromQueryIdentifier(Boolean.TRUE)
 					.setDerivedFromQueryIdentifier(collectionIdentifier).setIsCountInstances(Boolean.TRUE).execute().getOutput();
 			value = StringUtils.substringBefore(value, "ORDER BY");
 			addQuery(identifier, value, Long.class);
-			__inject__(PersistenceQueryRepository.class).getBySystemIdentifier(identifier, Boolean.TRUE).setQueryDerivedFromQuery(persistenceQuery);
+			QueryHelper.getQueries().getBySystemIdentifier(identifier, Boolean.TRUE).setQueryDerivedFromQuery(query);
 			//addDerivedQueryIdentifier(collectionIdentifier, identifier);
 		}
 		return this;
@@ -414,7 +413,7 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	}
 	
 	protected static Boolean __isFilterByKeys__(Filter filter,String... keys) {
-		return PersistenceQueryContextImpl.isFilterByKeys(filter, keys);
+		return filter == null ? Boolean.FALSE : filter.hasFieldWithPath(keys);
 	}
 	
 	protected static Boolean __isFilterByKeys__(Properties properties,String... keys) {

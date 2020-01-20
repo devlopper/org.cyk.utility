@@ -6,14 +6,30 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.List;
 
+import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.properties.Properties;
 
 public interface PersistenceHelper {
 
+	static EntityManager getEntityManager(Properties properties, Boolean injectIfNull) {
+		EntityManager entityManager = (EntityManager) (properties == null ? null : properties.getEntityManager());
+		if(entityManager == null && Boolean.TRUE.equals(injectIfNull))
+			entityManager = DependencyInjection.inject(EntityManager.class);
+		return entityManager;
+	}
+
+	static EntityManager getEntityManager(Properties properties) {
+		return getEntityManager(properties, Boolean.TRUE);
+	}
+
+	/**/
+	
 	static Boolean areRelated(Class<?> class1,Class<?> class2,Collection<Class<? extends Annotation>> relationsAnnotationsClasses) {
 		if(class1 == null || class2 == null || CollectionHelper.isEmpty(relationsAnnotationsClasses))
 			return Boolean.FALSE;

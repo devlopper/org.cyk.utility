@@ -3,6 +3,7 @@ package org.cyk.utility.server.persistence.jpa;
 import javax.enterprise.context.Dependent;
 import javax.persistence.EntityManager;
 
+import org.cyk.utility.__kernel__.persistence.PersistenceHelper;
 import org.cyk.utility.server.persistence.AbstractPersistenceFunctionCreatorImpl;
 import org.cyk.utility.server.persistence.PersistenceFunctionCreator;
 /**
@@ -19,7 +20,7 @@ public class PersistenceFunctionCreatorImpl extends AbstractPersistenceFunctionC
 	@Override
 	protected void __initialiseWorkingVariables__() {
 		super.__initialiseWorkingVariables__();
-		entityManager = __inject__(JavaPersistenceApiHelper.class).getEntityManager(getProperties());
+		entityManager = PersistenceHelper.getEntityManager(getProperties());
 	}
 	
 	@Override

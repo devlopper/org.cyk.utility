@@ -12,10 +12,20 @@ public class QueryArgumentHelperUnitTest extends AbstractWeldUnitTest {
 	public void getLikes_null_null(){
 		assertThat(QueryArgumentHelper.getLikes(null, null)).containsExactly("%%");
 	}
+
+	@Test
+	public void getLikes_null_2(){
+		assertThat(QueryArgumentHelper.getLikes(null, 2)).containsExactly("%%","%%");
+	}
 	
 	@Test
 	public void getLikes_abc_null(){
 		assertThat(QueryArgumentHelper.getLikes("abc", null)).containsExactly("%abc%");
+	}
+	
+	@Test
+	public void getLikes_abc_3(){
+		assertThat(QueryArgumentHelper.getLikes("abc", 3)).containsExactly("%abc%","%abc%","%%");
 	}
 
 	@Test

@@ -23,7 +23,7 @@ public class Field extends AbstractObject implements Serializable {
 	private ValueUsageType valueUsageType;
 	private ArithmeticOperator arithmeticOperator;
 
-	public List<String> getArgumentsLikes(Integer numberOfTokens) {
+	public List<String> getValueLikes(Integer numberOfTokens) {
 		if(value instanceof String)
 			return QueryArgumentHelper.getLikes((String) value, numberOfTokens);
 		return null;

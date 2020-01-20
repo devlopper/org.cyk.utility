@@ -20,6 +20,7 @@ import org.cyk.utility.server.persistence.Persistence;
 import org.cyk.utility.__kernel__.persistence.query.filter.Field;
 import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 
+@Deprecated
 public interface PersistenceQueryContext extends Objectable {
 
 	PersistenceQuery getQuery();

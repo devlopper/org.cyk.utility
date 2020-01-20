@@ -12,7 +12,7 @@ import org.cyk.utility.server.persistence.query.AbstractPersistenceQueryReposito
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.server.persistence.query.PersistenceQueryRepository;
 
-@ApplicationScoped
+@ApplicationScoped @Deprecated
 public class PersistenceQueryRepositoryImpl extends AbstractPersistenceQueryRepositoryImpl implements PersistenceQueryRepository, Serializable {
 	private static final long serialVersionUID = 1L;
 

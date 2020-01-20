@@ -6,6 +6,7 @@ import java.util.Collection;
 import javax.enterprise.context.Dependent;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
 import org.cyk.utility.__kernel__.field.FieldInstancesRuntime;
@@ -44,7 +45,19 @@ public class Filter extends AbstractObject implements Serializable {
 	}
 	
 	public Field getFieldByPath(String... paths) {
-		return fields == null ? null : fields.getByPath(paths);
+		return fields == null ? null : fields.get(paths);
+	}
+	
+	public Field getField(Collection<String> paths) {
+		if(CollectionHelper.isEmpty(fields) || CollectionHelper.isEmpty(paths))
+			return null;
+		return fields.get(paths);
+	}
+	
+	public Field getField(String... paths) {
+		if(ArrayHelper.isEmpty(paths))
+			return null;
+		return getField(CollectionHelper.listOf(paths));
 	}
 	
 	public Object getFieldValueByPath(String... paths) {
@@ -54,7 +67,7 @@ public class Filter extends AbstractObject implements Serializable {
 	
 	public Fields getFields(Boolean injectIfNull) {
 		if(fields == null && Boolean.TRUE.equals(injectIfNull))
-			fields = __inject__(Fields.class);
+			fields = new Fields();
 		return fields;
 	}
 
@@ -86,6 +99,8 @@ public class Filter extends AbstractObject implements Serializable {
 	public Filter addField(String fieldName, Object fieldValue) {
 		return addField(fieldName, fieldValue, null);
 	}
+
+	/**/
 	
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);

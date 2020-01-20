@@ -10,7 +10,7 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.server.persistence.AbstractPersistenceEntityIdentifiedByStringImpl;
 import org.cyk.utility.server.persistence.api.MyEntityPersistence;
 import org.cyk.utility.server.persistence.entities.MyEntity;
-import org.cyk.utility.server.persistence.query.PersistenceQuery;
+import org.cyk.utility.__kernel__.persistence.query.Query;
 import org.cyk.utility.sql.builder.QueryParameterNameBuilder;
 import org.cyk.utility.sql.builder.QueryStringBuilderSelect;
 
@@ -57,7 +57,7 @@ public class MyEntityPersistenceImpl extends AbstractPersistenceEntityIdentified
 	}
 	
 	@Override
-	protected Object[] __getQueryParameters__(PersistenceQuery query, Properties properties, Object... objects) {
+	protected Object[] __getQueryParameters__(Query query, Properties properties, Object... objects) {
 		if(query.isIdentifierEqualsToOrQueryDerivedFromQueryIdentifierEqualsTo(readByIntegerValue))
 			return new Object[]{MyEntity.FIELD_INTEGER_VALUE,objects[0]};
 		if(executeIncrementIntegerValue.equals(query.getIdentifier()))

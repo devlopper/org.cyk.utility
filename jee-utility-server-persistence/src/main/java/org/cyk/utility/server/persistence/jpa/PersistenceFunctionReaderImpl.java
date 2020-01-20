@@ -12,6 +12,8 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.field.FieldName;
+import org.cyk.utility.__kernel__.persistence.PersistenceHelper;
+import org.cyk.utility.__kernel__.persistence.query.Query;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
@@ -19,7 +21,6 @@ import org.cyk.utility.__kernel__.system.action.SystemActionRead;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.server.persistence.AbstractPersistenceFunctionReaderImpl;
 import org.cyk.utility.server.persistence.PersistenceFunctionReader;
-import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.sql.builder.QueryWherePredicateStringBuilder;
 import org.cyk.utility.sql.builder.Tuple;
 import org.cyk.utility.sql.jpql.JpqlQualifier;
@@ -38,7 +39,7 @@ public class PersistenceFunctionReaderImpl extends AbstractPersistenceFunctionRe
 	
 	@Override
 	protected void __executeQuery__(SystemAction action) {
-		EntityManager entityManager = __inject__(JavaPersistenceApiHelper.class).getEntityManager(getProperties());
+		EntityManager entityManager = PersistenceHelper.getEntityManager(getProperties());
 		Class<?> aClass = getEntityClass();
 		Object entityIdentifier = getEntityIdentifier();
 		ValueUsageType valueUsageType = getEntityIdentifierValueUsageType();
@@ -69,11 +70,11 @@ public class PersistenceFunctionReaderImpl extends AbstractPersistenceFunctionRe
 	}
 	
 	@Override
-	protected void __executeQuery__(SystemAction action, PersistenceQuery persistenceQuery) {
-		EntityManager entityManager = __inject__(JavaPersistenceApiHelper.class).getEntityManager(getProperties());
-		String identifier = persistenceQuery.getIdentifier() == null ? null : persistenceQuery.getIdentifier().toString();
-		Class<?> resultClass = persistenceQuery.getResultClass();
-		TypedQuery<?> typedQuery = StringHelper.isBlank(identifier) ? entityManager.createQuery(persistenceQuery.getValue(), resultClass) 
+	protected void __executeQuery__(SystemAction action, Query query) {
+		EntityManager entityManager = PersistenceHelper.getEntityManager(getProperties());
+		String identifier = query.getIdentifier() == null ? null : query.getIdentifier().toString();
+		Class<?> resultClass = query.getResultClass();
+		TypedQuery<?> typedQuery = StringHelper.isBlank(identifier) ? entityManager.createQuery(query.getValue(), resultClass) 
 				: entityManager.createNamedQuery(identifier, resultClass);
 		
 		//Parameters

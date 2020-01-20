@@ -3,10 +3,12 @@ package org.cyk.utility.server.persistence.jpa;
 import javax.enterprise.context.Dependent;
 import javax.persistence.EntityManager;
 
+import org.cyk.utility.__kernel__.persistence.PersistenceHelper;
+import org.cyk.utility.__kernel__.persistence.query.Query;
+import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
+import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.server.persistence.AbstractPersistenceFunctionModifierImpl;
 import org.cyk.utility.server.persistence.PersistenceFunctionModifier;
-import org.cyk.utility.server.persistence.query.PersistenceQuery;
-import org.cyk.utility.__kernel__.system.action.SystemAction;
 
 @Dependent
 public class PersistenceFunctionModifierImpl extends AbstractPersistenceFunctionModifierImpl implements PersistenceFunctionModifier {
@@ -17,7 +19,7 @@ public class PersistenceFunctionModifierImpl extends AbstractPersistenceFunction
 	@Override
 	protected void __initialiseWorkingVariables__() {
 		super.__initialiseWorkingVariables__();
-		__entityManager__ = __inject__(JavaPersistenceApiHelper.class).getEntityManager(getProperties());
+		__entityManager__ = PersistenceHelper.getEntityManager(getProperties());
 	}
 	
 	@Override
@@ -36,8 +38,8 @@ public class PersistenceFunctionModifierImpl extends AbstractPersistenceFunction
 	}
 	
 	@Override
-	protected void __executeQuery__(SystemAction action, PersistenceQuery persistenceQuery) {
-		__inject__(JavaPersistenceApiHelper.class).executeQuery(persistenceQuery, getProperties());
+	protected void __executeQuery__(SystemAction action, Query query) {
+		QueryHelper.execute(query, getProperties());
 	}
 	
 }

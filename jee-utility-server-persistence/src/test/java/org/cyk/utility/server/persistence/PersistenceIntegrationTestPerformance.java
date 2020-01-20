@@ -6,11 +6,11 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import org.cyk.utility.__kernel__.persistence.query.Query;
+import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
 import org.cyk.utility.__kernel__.test.TestRunner;
 import org.cyk.utility.server.persistence.api.MyEntityPersistence;
 import org.cyk.utility.server.persistence.entities.MyEntity;
-import org.cyk.utility.server.persistence.query.PersistenceQuery;
-import org.cyk.utility.server.persistence.query.PersistenceQueryRepository;
 import org.cyk.utility.server.persistence.test.arquillian.AbstractPersistenceArquillianIntegrationTestWithDefaultDeployment;
 import org.junit.Test;
 
@@ -20,7 +20,7 @@ public class PersistenceIntegrationTestPerformance extends AbstractPersistenceAr
 	@Override
 	protected void __listenBeforeCallCountIsZero__() throws Exception {
 		super.__listenBeforeCallCountIsZero__();
-		__inject__(PersistenceQueryRepository.class).add(new PersistenceQuery().setIdentifier("MyEntity.deleteByIdentifier").setValue("DELETE FROM MyEntity r WHERE r.identifier IN :identifiers"));
+		QueryHelper.getQueries().add(new Query().setIdentifier("MyEntity.deleteByIdentifier").setValue("DELETE FROM MyEntity r WHERE r.identifier IN :identifiers"));
 	}
 	
 	@Test

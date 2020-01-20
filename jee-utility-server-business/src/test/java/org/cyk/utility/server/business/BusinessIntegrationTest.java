@@ -8,12 +8,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.validation.ConstraintViolationException;
-
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.klass.PersistableClassesGetter;
+import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.assertion.AssertionsProviderClassMap;
 import org.cyk.utility.server.business.api.MyEntityAssertionsProvider;
@@ -25,7 +23,6 @@ import org.cyk.utility.server.business.test.arquillian.AbstractBusinessArquillia
 import org.cyk.utility.server.persistence.entities.MyEntity;
 import org.cyk.utility.server.persistence.entities.Node;
 import org.cyk.utility.server.persistence.entities.NodeHierarchy;
-import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -488,25 +485,6 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 		assertThat(__inject__(MyEntityBusiness.class).count()).isEqualTo(10);
 		__inject__(MyEntityBusiness.class).saveByBatch(list, 3);
 		assertThat(__inject__(MyEntityBusiness.class).count()).isEqualTo(10);
-	}
-	
-	/* Rules */
-	
-	@Test
-	public void isMyEntityCodeMustBeUnique() throws Exception{
-		String code = "a";
-		__inject__(TestBusinessCreate.class).addObjects(new MyEntity().setCode(code),new MyEntity().setCode(code)).setName("MyEntity.code unicity")
-		.setExpectedThrowableCauseClassIsSqlException().execute();
-	}
-	
-	@Test
-	public void isMyEntityCodeMustBeNotNull() throws Exception{
-		TestBusinessCreate test = __inject__(TestBusinessCreate.class);
-		test.addObjects(new MyEntity()).setName("MyEntity.code notnull")
-		.setExpectedThrowableCauseClassIsConstraintViolationException().execute();
-		
-		assertThat(ThrowableHelper.getInstanceOf(test.getThrowable(), ConstraintViolationException.class).getMessage())
-			.contains("propertyPath=code");
 	}
 	
 	/* Hierarchy */

@@ -8,7 +8,7 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.server.persistence.PersistenceFunctionReader;
-import org.cyk.utility.server.persistence.query.PersistenceQueryContext;
+import org.cyk.utility.__kernel__.persistence.query.QueryContext;
 import org.cyk.utility.__kernel__.persistence.query.filter.Field;
 import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 import static org.cyk.utility.__kernel__.klass.ClassHelper.getTupleName;
@@ -119,7 +119,7 @@ public abstract class AbstractPersistenceIdentifiedByStringAndCodedImpl<ENTITY e
 	}
 	
 	@Override
-	protected Object[] __getQueryParameters__(PersistenceQueryContext queryContext, Properties properties,Object... objects) {
+	protected Object[] __getQueryParameters__(QueryContext queryContext, Properties properties,Object... objects) {
 		if(queryContext.getQuery().isIdentifierEqualsToOrQueryDerivedFromQueryIdentifierEqualsTo(readByParentsCodes)) {
 			if(__inject__(ArrayHelper.class).isEmpty(objects)) {
 				objects = new Object[] {queryContext.getFilterByKeysValue(AbstractIdentifiedByString.FIELD_PARENTS)};

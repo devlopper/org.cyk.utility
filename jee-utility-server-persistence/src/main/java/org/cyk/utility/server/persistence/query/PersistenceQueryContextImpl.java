@@ -6,6 +6,7 @@ import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.__kernel__.persistence.query.filter.Field;
 import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 
+@Deprecated
 public class PersistenceQueryContextImpl extends AbstractObject implements PersistenceQueryContext,Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 import javax.json.bind.JsonbBuilder;
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
-import javax.validation.ConstraintViolationException;
 
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
@@ -20,9 +19,13 @@ import org.cyk.utility.__kernel__.computation.SortOrder;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.field.FieldInstancesRuntime;
 import org.cyk.utility.__kernel__.mapping.MappingHelper;
+import org.cyk.utility.__kernel__.persistence.query.Query;
 import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
+import org.cyk.utility.__kernel__.persistence.query.filter.Field;
+import org.cyk.utility.__kernel__.persistence.query.filter.FieldDto;
+import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
+import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.ValueDto;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.server.persistence.api.MyEntityPersistence;
@@ -34,13 +37,6 @@ import org.cyk.utility.server.persistence.entities.Namable;
 import org.cyk.utility.server.persistence.entities.Node;
 import org.cyk.utility.server.persistence.entities.NodeHierarchies;
 import org.cyk.utility.server.persistence.entities.NodeHierarchy;
-import org.cyk.utility.server.persistence.query.PersistenceQuery;
-import org.cyk.utility.server.persistence.query.PersistenceQueryRepository;
-import org.cyk.utility.__kernel__.persistence.query.filter.Field;
-import org.cyk.utility.__kernel__.persistence.query.filter.FieldDto;
-import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
-import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
-import org.cyk.utility.server.persistence.test.TestPersistenceCreate;
 import org.cyk.utility.server.persistence.test.arquillian.AbstractPersistenceArquillianIntegrationTestWithDefaultDeployment;
 import org.cyk.utility.sql.builder.Attribute;
 import org.cyk.utility.sql.builder.Tuple;
@@ -64,7 +60,7 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 	@Override
 	protected void __listenBeforeCallCountIsZero__() throws Exception {
 		super.__listenBeforeCallCountIsZero__();
-		__inject__(PersistenceQueryRepository.class).add(new PersistenceQuery().setIdentifier("MyEntity.readAll").setValue("SELECT r FROM MyEntity r")
+		QueryHelper.getQueries().add(new Query().setIdentifier("MyEntity.readAll").setValue("SELECT r FROM MyEntity r")
 				.setResultClass(MyEntity.class));
 		__inject__(MyEntityPersistence.class).read();//to trigger initialisation
 	}
@@ -787,23 +783,6 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		//assertionHelper.assertEquals(null, myEntity.getPhones());
 		
 		//assertionHelper.assertNull("field integer value has been loaded", myEntity.getIntegerValue());
-	}
-	
-	/* Rules */
-	
-	@Test
-	public void is_myEntityCodeMustBeUnique() throws Exception{
-		TestPersistenceCreate test = __inject__(TestPersistenceCreate.class);
-		String code = "a";
-		test.addObjects(new MyEntity().setCode(code),new MyEntity().setCode(code)).setName("MyEntity.code unicity").setExpectedThrowableCauseClassIsSqlException();
-		test.execute();			
-	}
-	
-	@Test
-	public void is_myEntityCodeMustBeNotNull() throws Exception{
-		TestPersistenceCreate test = __inject__(TestPersistenceCreate.class);
-		test.addObjects(new MyEntity()).setName("MyEntity.code notnull").setExpectedThrowableCauseClassIsConstraintViolationException().execute();
-		assertThat(ThrowableHelper.getInstanceOf(test.getThrowable(), ConstraintViolationException.class).getMessage()).contains("propertyPath=code");
 	}
 	
 	/* Hierarchy */

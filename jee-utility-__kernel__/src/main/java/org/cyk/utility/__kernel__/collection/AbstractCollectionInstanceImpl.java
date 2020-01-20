@@ -163,8 +163,11 @@ public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject i
 				this.collection.addAll(addable);
 			else
 				((List<T>)this.collection).addAll(index,addable);
+			__listenAdded__(addable);
 		}			
 	}
+	
+	protected void  __listenAdded__(Collection<T> elements) {}
 	
 	protected Boolean __isAddable__(T element) {
 		if(Boolean.TRUE.equals(isDoNotAddNull) && element == null)

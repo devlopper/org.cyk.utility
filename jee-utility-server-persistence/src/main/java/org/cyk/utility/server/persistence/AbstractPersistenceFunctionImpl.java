@@ -5,13 +5,13 @@ import java.util.Map;
 
 import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
 import org.cyk.utility.__kernel__.log.LogLevel;
+import org.cyk.utility.__kernel__.persistence.query.Query;
+import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.variable.VariableName;
-import org.cyk.utility.server.persistence.query.PersistenceQuery;
-import org.cyk.utility.server.persistence.query.PersistenceQueryRepository;
 import org.cyk.utility.system.AbstractSystemFunctionServerImpl;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerPersistence;
@@ -37,13 +37,13 @@ public abstract class AbstractPersistenceFunctionImpl extends AbstractSystemFunc
 		if(StringHelper.isBlank(queryIdentifier) &&StringHelper.isBlank(queryValue)){
 			__executeQuery__(action);		
 		}else {
-			PersistenceQuery persistenceQuery = __inject__(PersistenceQueryRepository.class).getBySystemIdentifier(queryIdentifier);
-			if(persistenceQuery == null){
+			Query query = QueryHelper.getQueries().getBySystemIdentifier(queryIdentifier);
+			if(query == null){
 				if(StringHelper.isBlank(queryValue))
 					throw new RuntimeException("persistence query with identifier "+queryIdentifier+" not found.");	
-				persistenceQuery = new PersistenceQuery().setValue(queryValue).setResultClass(getQueryResultClass());	
+				query = new Query().setValue(queryValue).setResultClass(getQueryResultClass());	
 			}
-			__executeQuery__(action, persistenceQuery);
+			__executeQuery__(action, query);
 		}
 		
 		Class<?> entityClass = action.getEntityClass();
@@ -67,7 +67,7 @@ public abstract class AbstractPersistenceFunctionImpl extends AbstractSystemFunc
 		ThrowableHelper.throwNotYetImplemented();
 	}
 	
-	protected void __executeQuery__(SystemAction action,PersistenceQuery persistenceQuery){
+	protected void __executeQuery__(SystemAction action,Query query){
 		ThrowableHelper.throwNotYetImplemented();
 	}
 	
@@ -90,10 +90,10 @@ public abstract class AbstractPersistenceFunctionImpl extends AbstractSystemFunc
 	public PersistenceFunction setQueryIdentifier(Object identifier) {
 		getProperties().setFromPath(new Object[]{Properties.QUERY,Properties.IDENTIFIER}, identifier);
 		if(getEntityClass() == null){
-			PersistenceQuery persistenceQuery = __inject__(PersistenceQueryRepository.class).getBySystemIdentifier(identifier,Boolean.TRUE);
-			if(persistenceQuery!=null){
-				setEntityClass(persistenceQuery.getResultClass());
-				setQueryResultClass(persistenceQuery.getResultClass());
+			Query query = QueryHelper.getQueries().getBySystemIdentifier(identifier,Boolean.TRUE);
+			if(query!=null){
+				setEntityClass(query.getResultClass());
+				setQueryResultClass(query.getResultClass());
 			}
 		}
 		return this;
@@ -108,9 +108,9 @@ public abstract class AbstractPersistenceFunctionImpl extends AbstractSystemFunc
 	public PersistenceFunction setQueryValue(String value) {
 		getProperties().setFromPath(new Object[]{Properties.QUERY,Properties.VALUE}, value);
 		/*if(getEntityClass() == null){
-			PersistenceQuery persistenceQuery = __inject__(PersistenceQueryRepository.class).getBySystemIdentifier(identifier,Boolean.TRUE);
-			if(persistenceQuery!=null)
-				setEntityClass(persistenceQuery.getResultClass());
+			PersistenceQuery query = __inject__(PersistenceQueryRepository.class).getBySystemIdentifier(identifier,Boolean.TRUE);
+			if(query!=null)
+				setEntityClass(query.getResultClass());
 		}*/
 		return this;
 	}
