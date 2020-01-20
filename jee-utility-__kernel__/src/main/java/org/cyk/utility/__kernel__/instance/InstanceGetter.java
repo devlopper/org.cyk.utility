@@ -30,7 +30,7 @@ public interface InstanceGetter {
 	default <INSTANCE> Collection<INSTANCE> getAll(Class<INSTANCE> klass) {
 		if(klass == null)
 			return null;
-		return getAll(klass);
+		return getAll(klass,null);
 	}
 	
 	default <INSTANCE> Collection<INSTANCE> getFromUniformResourceIdentifier(Class<INSTANCE> klass,Object classifier,Collection<String> fieldsNames) {

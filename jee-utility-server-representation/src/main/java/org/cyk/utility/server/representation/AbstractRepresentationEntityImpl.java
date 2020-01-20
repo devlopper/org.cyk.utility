@@ -34,7 +34,8 @@ public abstract class AbstractRepresentationEntityImpl<ENTITY> extends AbstractR
 			ClassNameBuilder classNameBuilder = __inject__(ClassNameBuilder.class).setKlass(getClass());
 			classNameBuilder.getSourceNamingModel(Boolean.TRUE).server().representation().impl().suffix();
 			classNameBuilder.getDestinationNamingModel(Boolean.TRUE).server().representation().entities().suffix();
-			__entityClass__ = ValueHelper.returnOrThrowIfBlank("entity class",(Class<ENTITY>) ClassHelper.getByName(classNameBuilder.execute().getOutput()));
+			String name = classNameBuilder.execute().getOutput();
+			__entityClass__ = ValueHelper.returnOrThrowIfBlank("entity class",(Class<ENTITY>) ClassHelper.getByName(name));
 		}
 		
 		if(__persistenceEntityClass__ == null) {

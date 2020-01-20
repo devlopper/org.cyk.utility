@@ -1,10 +1,12 @@
 package org.cyk.utility.server.persistence.impl;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.instance.AbstractInstanceGetterImpl;
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.server.persistence.Persistence;
 
@@ -17,4 +19,9 @@ public class InstanceGetterImpl extends AbstractInstanceGetterImpl implements Se
 		return __inject__(Persistence.class).readByIdentifier(klass, identifier, valueUsageType);
 	}
 
+	@Override
+	protected <INSTANCE> Collection<INSTANCE> __getAll__(Class<INSTANCE> klass, Properties properties) {
+		return __inject__(Persistence.class).read(klass, properties);
+	}
+	
 }
