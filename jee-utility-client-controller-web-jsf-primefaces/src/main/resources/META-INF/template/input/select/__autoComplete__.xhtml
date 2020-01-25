@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<p:autoComplete
+		id="#{empty autoCompleteId ? autoComplete.identifier : autoCompleteId}"
+		value="#{autoComplete.value}" 
+		multiple="#{autoComplete.multiple}"
+		placeholder="Rechercher..."
+		var="item" 
+		itemValue="#{autoComplete.readItemValue(item)}" 
+		itemLabel="#{autoComplete.readItemLabel(item)}"
+		converter="#{autoComplete.converter}"
+		completeMethod="#{autoComplete.complete}"
+		maxResults="#{autoComplete.numberOfResults}" 
+		queryDelay="#{autoComplete.queryDelay}" 
+		emptyMessage="-- Aucun résultat --"
+		widgetVar="#{autoComplete.widgetVar}"
+		rendered="#{autoComplete.rendered}"
+		
+		onchange="#{autoComplete.onChange}"
+	>			
+		<ui:decorate template="/ajax.xhtml">
+			<ui:param name="ajax" value="#{autoComplete.ajaxQuery}"/>
+		</ui:decorate>
+		<ui:decorate template="/ajax.xhtml">
+			<ui:param name="ajax" value="#{autoComplete.ajaxItemSelect}"/>
+		</ui:decorate>
+		<ui:decorate template="/ajax.xhtml">
+			<ui:param name="ajax" value="#{autoComplete.ajaxItemUnselect}"/>
+		</ui:decorate>
+		<ui:decorate template="/ajax.xhtml">
+			<ui:param name="ajax" value="#{autoComplete.ajaxMoreText}"/>
+		</ui:decorate>
+	</p:autoComplete>   
+			
+</ui:composition>

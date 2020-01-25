@@ -1,7 +1,6 @@
 package org.cyk.utility.__kernel__.report.jasper;
 
 import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
 import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.report.AbstractReportBuilderImpl;
@@ -26,7 +25,7 @@ import net.sf.jasperreports.export.TextReportConfiguration;
 public class ReportBuilderImpl extends AbstractReportBuilderImpl implements Serializable {
 
 	@Override
-	public OutputStream build(Template template,Object dataSource,Object exporter) {
+	public ByteArrayOutputStream build(Template template,Object dataSource,Object exporter) {
 		if(template == null)
 			return null;
 		if(dataSource == null)

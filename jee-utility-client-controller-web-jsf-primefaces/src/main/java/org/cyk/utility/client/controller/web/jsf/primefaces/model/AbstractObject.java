@@ -12,6 +12,7 @@ import lombok.Setter;
 public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractObject implements Serializable {
 
 	@Getter @Setter protected String identifier = RandomHelper.getAlphabetic(5);
+	@Getter @Setter protected String widgetVar = RandomHelper.getAlphabetic(5);
 	@Getter @Setter protected MapInstance<Event, String> eventScripts;
 	@Getter @Setter protected Boolean rendered = Boolean.TRUE;
 

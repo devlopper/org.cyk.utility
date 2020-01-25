@@ -7,7 +7,6 @@ import javax.faces.event.AjaxBehaviorEvent;
 
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.object.ReadListener;
-import org.cyk.utility.__kernel__.random.RandomHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.ControllerEntity;
 import org.cyk.utility.client.controller.ControllerLayer;
@@ -28,9 +27,9 @@ public class AutoCompleteEntity<ENTITY> extends AbstractObject implements Serial
 	@Getter private Integer numberOfResults = initialNumberOfResults;
 	private String queryString;
 	@Getter @Setter private Object converter;
-	@Getter private String widgetVar = RandomHelper.getAlphabetic(5);
 	@Getter @Setter private Object value;
 	@Getter @Setter private Integer queryDelay = QUERY_DELAY;
+	@Getter @Setter private Boolean multiple;
 	
 	@Getter @Setter private ReadListener readItemLabelListener;
 	@Getter @Setter private ReadListener readItemValueListener;

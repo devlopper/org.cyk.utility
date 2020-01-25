@@ -1,6 +1,6 @@
 package org.cyk.utility.__kernel__.report;
 
-import java.io.OutputStream;
+import java.io.ByteArrayOutputStream;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
@@ -8,7 +8,7 @@ import org.cyk.utility.__kernel__.value.Value;
 
 public interface ReportBuilder {
 
-	OutputStream build(Template template,Object dataSource,Object exporter);
+	ByteArrayOutputStream build(Template template,Object dataSource,Object exporter);
 	
 	/**/
 	

@@ -29,7 +29,7 @@
 		<org.apache.poi.poi-ooxml.version>3.17</org.apache.poi.poi-ooxml.version>
 		<org.freemarker.freemarker.version>2.3.29</org.freemarker.freemarker.version>
 		
-		<net.sf.jasperreports.jasperreports.version>6.2.2</net.sf.jasperreports.jasperreports.version>
+		<net.sf.jasperreports.jasperreports.version>6.11.0</net.sf.jasperreports.jasperreports.version>
 	</properties>
 
 	<build>
@@ -148,60 +148,6 @@
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
 			<version>${net.sf.jasperreports.jasperreports.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-core</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-databind</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-annotations</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.lucene</groupId>
-					<artifactId>lucene-core</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>lucene-analyzers-common</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.lucene</groupId>
-					<artifactId>lucene-queryparser</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.jfree</groupId>
-					<artifactId>jcommon</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.jfree</groupId>
-					<artifactId>jfreechart</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.eclipse.jdt.core.compiler</groupId>
-					<artifactId>ecj</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.codehaus.castor</groupId>
-					<artifactId>castor-xml</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.olap4j</groupId>
-					<artifactId>olap4j</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.google.zxing</groupId>
-					<artifactId>core</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.ibm.icu</groupId>
-					<artifactId>icu4j</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		
 	</dependencies>
