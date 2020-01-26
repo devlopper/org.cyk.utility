@@ -8,6 +8,7 @@ import org.cyk.utility.__kernel__.AbstractApplicationScopeLifeCycleListener;
 import org.cyk.utility.__kernel__.annotation.JavaServerFaces;
 import org.cyk.utility.__kernel__.function.FunctionRunnableMap;
 import org.cyk.utility.__kernel__.user.interface_.UserInterfaceEventListener;
+import org.cyk.utility.__kernel__.value.ValueConverter;
 import org.cyk.utility.client.controller.component.file.FileImageBuilder;
 import org.cyk.utility.client.controller.component.input.choice.ChoiceBuilderImpl;
 import org.cyk.utility.client.controller.component.theme.ThemeColorGetter;
@@ -28,7 +29,7 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 		
 		__inject__(org.cyk.utility.client.controller.web.ApplicationScopeLifeCycleListener.class).initialize(null);
 		
-		__setQualifierClassTo__(JavaServerFaces.class, FileImageBuilder.class,ThemeColorGetter.class,UserInterfaceEventListener.class);
+		__setQualifierClassTo__(JavaServerFaces.class, FileImageBuilder.class,ThemeColorGetter.class,UserInterfaceEventListener.class,ValueConverter.class);
 	}
 	
 	@Override
