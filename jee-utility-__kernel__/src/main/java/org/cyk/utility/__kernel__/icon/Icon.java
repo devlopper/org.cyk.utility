@@ -24,4 +24,7 @@ public enum Icon {
 	,LIST
 	,UPLOAD
 	,THUMB_TACK
+	,FOLDER_OPEN
+	,FOLDER
+	,MAIL_FORWARD
 }
