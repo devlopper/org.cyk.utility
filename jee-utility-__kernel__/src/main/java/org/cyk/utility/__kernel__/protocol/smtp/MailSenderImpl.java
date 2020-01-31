@@ -9,15 +9,18 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 
 public class MailSenderImpl extends AbstractMailSenderImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	public static Session SESSION;
+	
 	@Override
 	protected void __send__(Message message,Properties protocolProperties, Listener listener) throws Exception{
-		java.util.Properties properties = System.getProperties();
+		/*java.util.Properties properties = System.getProperties();
 		if(protocolProperties.getHost()!=null)
 			properties.put(Properties.HOST, protocolProperties.getHost());
 		if(protocolProperties.getPort()!=null)
@@ -26,7 +29,11 @@ public class MailSenderImpl extends AbstractMailSenderImpl implements Serializab
 			properties.put(Properties.AUTHENTICATION, protocolProperties.getIsAuthenticationRequired());
 		if(protocolProperties.getIsSecuredConnectionRequired()!=null)
 			properties.put(Properties.STARTTLS_ENABLE, protocolProperties.getIsSecuredConnectionRequired());
-		Session session = Session.getDefaultInstance(properties, new Authenticator(protocolProperties));
+		//Session session = Session.getDefaultInstance(properties, new Authenticator(protocolProperties));
+		*/
+		Session session = __getSession__(protocolProperties); //Session.getInstance(properties, new Authenticator(protocolProperties));
+		if(session == null)
+			LogHelper.logWarning("Session is NULL", getClass());
 		MimeMessage mimeMessage = new MimeMessage(session);		
 		mimeMessage.setSubject(ValueHelper.returnOrThrowIfBlank("mail subject", message.getSubject()));
 		mimeMessage.setContent(ValueHelper.returnOrThrowIfBlank("mail body", message.getBody()), "text/html");
@@ -46,7 +53,23 @@ public class MailSenderImpl extends AbstractMailSenderImpl implements Serializab
 		}
 		ValueHelper.throwIfBlank("mail receivers", internetAddresses);
 		mimeMessage.addRecipients(javax.mail.Message.RecipientType.TO, internetAddresses.toArray(new InternetAddress[] {}));
-		Transport.send(mimeMessage);	
+		Transport.send(mimeMessage);
+	}
+	
+	protected Session __getSession__(Properties protocolProperties) {
+		if(SESSION != null)
+			return SESSION;
+		java.util.Properties properties = System.getProperties();	
+		if(protocolProperties.getHost()!=null)
+			properties.put(Properties.HOST, protocolProperties.getHost());
+		if(protocolProperties.getPort()!=null)
+			properties.put(Properties.PORT, protocolProperties.getPort());
+		if(protocolProperties.getIsAuthenticationRequired()!=null)
+			properties.put(Properties.AUTHENTICATION, protocolProperties.getIsAuthenticationRequired());
+		if(protocolProperties.getIsSecuredConnectionRequired()!=null)
+			properties.put(Properties.STARTTLS_ENABLE, protocolProperties.getIsSecuredConnectionRequired());
+		SESSION = Session.getInstance(properties, new Authenticator(protocolProperties));
+		return SESSION;
 	}
 
 }

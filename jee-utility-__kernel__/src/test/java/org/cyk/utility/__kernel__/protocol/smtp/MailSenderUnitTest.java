@@ -50,6 +50,30 @@ public class MailSenderUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	@Test
+	public void pingTwice() throws MessagingException{
+		MailSender.getInstance().ping("kycdev@gmail.com");
+		MailSender.getInstance().ping("kycdev@gmail.com");
+		MimeMessage[] emails = greenMail.getReceivedMessages();
+		assertThat(emails).isNotNull();
+		assertThat(emails.length).isEqualTo(2);
+		assertThat(emails[0].getSubject()).isEqualTo("Ping");
+		assertThat(GreenMailUtil.getBody(emails[0])).isEqualTo("This is a ping.");
+	}
+	
+	@Test
+	public void pingFourTimes() throws MessagingException{
+		MailSender.getInstance().ping("kycdev@gmail.com");
+		MailSender.getInstance().ping("kycdev@gmail.com");
+		MailSender.getInstance().ping("kycdev@gmail.com");
+		MailSender.getInstance().ping("kycdev@gmail.com");
+		MimeMessage[] emails = greenMail.getReceivedMessages();
+		assertThat(emails).isNotNull();
+		assertThat(emails.length).isEqualTo(4);
+		assertThat(emails[0].getSubject()).isEqualTo("Ping");
+		assertThat(GreenMailUtil.getBody(emails[0])).isEqualTo("This is a ping.");
+	}
+	
+	@Test
 	public void greenMailSetup() throws MessagingException {
 		GreenMailUtil.sendTextEmailTest("to@localhost.com", "from@localhost.com", "subject", "body");
 		MimeMessage[] emails = greenMail.getReceivedMessages();

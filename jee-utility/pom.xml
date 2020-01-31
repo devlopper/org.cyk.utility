@@ -20,7 +20,6 @@
 		<org.apache.commons.commons-text.version>1.4</org.apache.commons.commons-text.version>
 		<org.apache.kafka.kafka-clients.version>2.2.0</org.apache.kafka.kafka-clients.version>
 		<commons-codec.commons-codec.version>1.12</commons-codec.commons-codec.version>
-		<net.sf.barcode4j.barcode4j.version>2.1</net.sf.barcode4j.barcode4j.version>
 		<com.google.zxing.core.version>3.3.3</com.google.zxing.core.version>
 		<com.google.zxing.javase.version>3.3.3</com.google.zxing.javase.version>
 		<org.jboss.resteasy.resteasy-jaxrs.version>3.7.0.Final</org.jboss.resteasy.resteasy-jaxrs.version>		
@@ -65,12 +64,6 @@
 		    <groupId>commons-codec</groupId>
 		    <artifactId>commons-codec</artifactId>
 		    <version>${commons-codec.commons-codec.version}</version>
-		</dependency>
-		
-		<dependency>
-		    <groupId>net.sf.barcode4j</groupId>
-		    <artifactId>barcode4j</artifactId>
-		    <version>${net.sf.barcode4j.barcode4j.version}</version>
 		</dependency>
 		
 		<dependency>

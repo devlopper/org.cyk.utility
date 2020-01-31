@@ -29,7 +29,10 @@
 		<org.apache.poi.poi-ooxml.version>3.17</org.apache.poi.poi-ooxml.version>
 		<org.freemarker.freemarker.version>2.3.29</org.freemarker.freemarker.version>
 		
-		<net.sf.jasperreports.jasperreports.version>6.11.0</net.sf.jasperreports.jasperreports.version>
+		<net.sf.jasper.report.version>6.11.0</net.sf.jasper.report.version>
+		<net.sf.jasperreports.jasperreports.version>${net.sf.jasper.report.version}</net.sf.jasperreports.jasperreports.version>
+		<net.sf.jasperreports.jasperreports-fonts.version>${net.sf.jasper.report.version}</net.sf.jasperreports.jasperreports-fonts.version>
+		<net.sf.barcode4j.barcode4j.version>2.1</net.sf.barcode4j.barcode4j.version>
 	</properties>
 
 	<build>
@@ -149,6 +152,19 @@
 			<artifactId>jasperreports</artifactId>
 			<version>${net.sf.jasperreports.jasperreports.version}</version>
 		</dependency>
+		
+		<dependency>
+		    <groupId>net.sf.barcode4j</groupId>
+		    <artifactId>barcode4j</artifactId>
+		    <version>${net.sf.barcode4j.barcode4j.version}</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>net.sf.jasperreports</groupId>
+		    <artifactId>jasperreports-fonts</artifactId>
+		    <version>${net.sf.jasperreports.jasperreports-fonts.version}</version>
+		</dependency>
+		
 		
 	</dependencies>
 
