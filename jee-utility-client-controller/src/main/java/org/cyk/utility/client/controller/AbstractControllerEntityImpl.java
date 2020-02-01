@@ -11,6 +11,7 @@ import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifi
 import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl;
 import org.cyk.utility.__kernel__.persistence.query.QueryIdentifierBuilder;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.server.persistence.PersistenceEntity;
@@ -161,8 +162,9 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 	
 	@Override
 	public Collection<ENTITY> readByString(String string) {
+		String queryIdentifier = StringHelper.isBlank(string) ? "read" : PersistenceEntity.FIELD_NAME_READ_WHERE_CODE_OR_NAME_CONTAINS;
 		Collection<ENTITY> entities = read(new Properties().setQueryIdentifier(QueryIdentifierBuilder.getInstance()
-				.build(__entityClass__,PersistenceEntity.FIELD_NAME_READ_WHERE_CODE_OR_NAME_CONTAINS)).setIsPageable(Boolean.TRUE)
+				.build(__entityClass__,queryIdentifier)).setIsPageable(Boolean.TRUE)
 						.setFilters(new FilterDto().addField(AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringImpl.FIELD_CODE, string)
 								.addField(AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl.FIELD_NAME, string)));
 		return entities;

@@ -26,10 +26,11 @@ public class AutoCompleteEntity<ENTITY> extends AbstractObject implements Serial
 	private Integer initialNumberOfResults = INITIAL_NUMBER_OF_RESULTS;
 	@Getter private Integer numberOfResults = initialNumberOfResults;
 	private String queryString;
+	@Getter @Setter private String dropdownMode = "current",placeholder,emptyMessage="-- Aucun résultat --";
 	@Getter @Setter private Object converter;
 	@Getter @Setter private Object value;
 	@Getter @Setter private Integer queryDelay = QUERY_DELAY;
-	@Getter @Setter private Boolean multiple;
+	@Getter @Setter private Boolean multiple,dropdown;
 	
 	@Getter @Setter private ReadListener readItemLabelListener;
 	@Getter @Setter private ReadListener readItemValueListener;
