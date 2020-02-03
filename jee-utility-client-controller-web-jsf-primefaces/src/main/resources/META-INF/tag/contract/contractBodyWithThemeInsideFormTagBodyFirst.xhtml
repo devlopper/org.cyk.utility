@@ -39,10 +39,8 @@
     </ui:fragment>		
    	
     <!-- Title -->
-    <ui:insert name="formContentTitle">
-    	<h2>
-    		<h:outputText value="#{__page__.window.title.properties.value}" escape="false" />
-   		</h2>
+    <ui:insert name="formContentTitle">    	
+    	<h:outputText value="#{__page__.window.title.properties.value}" escape="false" styleClass="cyk-page-form-content-title"/>   	
 	</ui:insert>
     
 </ui:composition>
