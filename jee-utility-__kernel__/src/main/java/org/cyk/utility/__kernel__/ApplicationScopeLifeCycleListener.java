@@ -6,8 +6,11 @@ import javax.enterprise.context.ApplicationScoped;
 
 import org.apache.commons.beanutils.FluentPropertyBeanIntrospector;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.cyk.utility.__kernel__.annotation.Google;
 import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
 import org.cyk.utility.__kernel__.locale.LocaleHelper;
+import org.cyk.utility.__kernel__.string.barcode.BarCodeBuilder;
+import org.cyk.utility.__kernel__.string.barcode.BarCodeReader;
 
 @ApplicationScoped
 public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeLifeCycleListener implements Serializable {
@@ -18,6 +21,7 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 		PropertyUtils.addBeanIntrospector(new FluentPropertyBeanIntrospector());
 		LocaleHelper.LOCALES.add(Locale.FRENCH);
 		InternationalizationHelper.addResourceBundlesFromNames(null,null, "word","phrase","throwable","assertion");
+		DependencyInjection.setQualifierClassTo(Google.class, BarCodeBuilder.class, BarCodeReader.class);
 	}
 
 	@Override

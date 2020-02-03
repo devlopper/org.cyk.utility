@@ -17,7 +17,7 @@ import com.google.zxing.Result;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
 
-@Dependent
+@Dependent @Deprecated
 public class BytesOfBarCodeToStringImpl extends AbstractFunctionWithPropertiesAsInputImpl<String> implements BytesOfBarCodeToString,Serializable {
 	private static final long serialVersionUID = 1L;
 	

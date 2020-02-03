@@ -12,7 +12,7 @@ import org.krysalis.barcode4j.impl.code128.Code128Bean;
 import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 import org.krysalis.barcode4j.tools.UnitConv;
 
-@Dependent
+@Dependent @Deprecated
 public class StringToBarCodeBytesBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<byte[]> implements StringToBarCodeBytesBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 

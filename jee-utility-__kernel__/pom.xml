@@ -25,6 +25,10 @@
 		<org.apache.commons.commons-text.version>1.4</org.apache.commons.commons-text.version>
 		<javax.mail.mail.version>1.5.0-b01</javax.mail.mail.version>
 		
+		<com.google.zxing.version>3.3.3</com.google.zxing.version>
+		<com.google.zxing.core.version>${com.google.zxing.version}</com.google.zxing.core.version>
+		<com.google.zxing.javase.version>${com.google.zxing.version}</com.google.zxing.javase.version>
+		
 		<org.apache.poi.poi.version>3.17</org.apache.poi.poi.version>
 		<org.apache.poi.poi-ooxml.version>3.17</org.apache.poi.poi-ooxml.version>
 		<org.freemarker.freemarker.version>2.3.29</org.freemarker.freemarker.version>
@@ -165,6 +169,17 @@
 		    <version>${net.sf.jasperreports.jasperreports-fonts.version}</version>
 		</dependency>
 		
+		<dependency>
+		    <groupId>com.google.zxing</groupId>
+		    <artifactId>core</artifactId>
+		    <version>${com.google.zxing.core.version}</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>com.google.zxing</groupId>
+		    <artifactId>javase</artifactId>
+		    <version>${com.google.zxing.javase.version}</version>
+		</dependency>
 		
 	</dependencies>
 
