@@ -29,13 +29,13 @@ public abstract class AbstractMessageRendererImpl extends org.cyk.utility.__kern
 			if(facesMessage == null)
 				continue;
 			ComponentHelper componentHelper = DependencyInjection.inject(ComponentHelper.class);
-			if(CollectionHelper.contains(renderTypes, RenderType.INLINE)) {
+			if(CollectionHelper.contains(renderTypes, RenderType.INLINE))
 				facesContext.addMessage(componentHelper.getGlobalMessagesOwnerInlineComponentClientIdentifier(), facesMessage);
-			}
 			if(CollectionHelper.contains(renderTypes, RenderType.DIALOG))
 				facesContext.addMessage(componentHelper.getGlobalMessagesOwnerDialogComponentClientIdentifier(), facesMessage);
 			if(CollectionHelper.contains(renderTypes, RenderType.GROWL))
-				facesContext.addMessage(componentHelper.getGlobalMessagesOwnerGrowlComponentClientIdentifier(), facesMessage);	
+				facesContext.addMessage(componentHelper.getGlobalMessagesOwnerGrowlComponentClientIdentifier(), facesMessage);
+			
 		}		
 	}
 	

@@ -8,16 +8,14 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
-	<p:commandButton
-		id="#{commandButton.identifier}"
-		value="#{commandButton.value}"
-		action="#{commandButton.action}"
-		update="#{commandButton.update}"
-		process="#{commandButton.process}"
+	<p:confirm
+		disabled="#{confirm.disabled}"
+		escape="#{confirm.escape}"
+		header="#{confirm.header}"
+		icon="#{confirm.icon}"
+		message="#{confirm.message}"
 	>
-		<ui:decorate template="/confirm/default.xhtml">
-    		<ui:param name="confirm" value="#{commandButton.confirm}"/>
-    	</ui:decorate>
-	</p:commandButton>
-		
+	
+	</p:confirm>
+	
 </ui:composition>

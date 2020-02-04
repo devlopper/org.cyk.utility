@@ -314,6 +314,11 @@
     </tag>
     
     <tag>
+        <tag-name>contractBodyConfirmDialog</tag-name>
+        <source>tag/contract/contractBodyConfirmDialog.xhtml</source>
+    </tag>
+    
+    <tag>
         <tag-name>menu</tag-name>
         <source>tag/menu/menu.xhtml</source>
     </tag>

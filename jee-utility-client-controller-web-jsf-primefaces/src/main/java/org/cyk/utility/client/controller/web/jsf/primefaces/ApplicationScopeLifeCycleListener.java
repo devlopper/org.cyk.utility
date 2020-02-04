@@ -11,7 +11,6 @@ import org.cyk.utility.bean.PropertyValueGetter;
 import org.cyk.utility.client.controller.command.CommandFunction;
 import org.cyk.utility.client.controller.component.ComponentRoleStyleClassGetterImpl;
 import org.cyk.utility.client.controller.component.ComponentTargetModelBuilder;
-import org.cyk.utility.client.controller.component.ComponentTargetModelBuilderImpl;
 import org.cyk.utility.client.controller.component.grid.GridBuilderCommandableBuilderProcessorImpl;
 import org.cyk.utility.client.controller.component.layout.LayoutWidthGetterImpl;
 import org.cyk.utility.client.controller.component.layout.StyleClassBuilderWidthCssPrimefacesGridFunctionRunnableImpl;

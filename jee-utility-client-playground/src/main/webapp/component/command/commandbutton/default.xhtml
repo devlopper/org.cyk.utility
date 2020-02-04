@@ -14,6 +14,25 @@
     			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonServer}"/>
     		</ui:decorate>	   
     		
+    		<ui:decorate template="/command/commandbutton/default.xhtml">
+    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonServerDoNotNotifySuccess}"/>
+    		</ui:decorate>
+    		
+    		<ui:decorate template="/command/commandbutton/default.xhtml">
+    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonServerDoError}"/>
+    		</ui:decorate>
+    		
+    		<ui:decorate template="/command/commandbutton/default.xhtml">
+    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonServerRenderMessageSuccessGrowl}"/>
+    		</ui:decorate>
+    		
+    		<ui:decorate template="/command/commandbutton/default.xhtml">
+    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonServerRenderMessageErrorGrowl}"/>
+    		</ui:decorate>
+    		
+    		<ui:decorate template="/command/commandbutton/default.xhtml">
+    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonServerConfirmDialog}"/>
+    		</ui:decorate>
     	</ui:define>
     </cyk:page>
     
