@@ -15,7 +15,7 @@ public class ThrowableHelperUnitTest extends AbstractWeldUnitTest {
 	
 	@Test
 	public void getFirstCause_runtimeException(){
-		assertThat(ThrowableHelper.getFirstCause(new RuntimeException(new Throwable(new RuntimeException())))).isInstanceOf(RuntimeException.class);
+		assertThat(ThrowableHelper.getFirstCause(new RuntimeException(new java.lang.Throwable(new RuntimeException())))).isInstanceOf(RuntimeException.class);
 	}
 	
 	@Test

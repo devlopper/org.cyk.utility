@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 
+import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
+
 @Named @ApplicationScoped
 public class UserInterfaceController implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -22,4 +24,7 @@ public class UserInterfaceController implements Serializable {
     	UserInterfaceEventListener.getInstance().listen(UserInterfaceEvent.ACTIVATE);
     }
 	
+    public Object getConfigurationValue(String name) {
+    	return ConfigurationHelper.getValue(name);
+    }
 }

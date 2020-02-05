@@ -17,7 +17,7 @@ public abstract class AbstractSystemClientExceptionImpl extends AbstractSystemEx
 
 	private Response response;
 	
-	public AbstractSystemClientExceptionImpl(String message,Throwable throwable) {
+	public AbstractSystemClientExceptionImpl(String message,java.lang.Throwable throwable) {
 		super(message,throwable);
 	}
 	

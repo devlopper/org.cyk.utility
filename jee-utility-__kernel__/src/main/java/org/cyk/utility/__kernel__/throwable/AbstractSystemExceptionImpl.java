@@ -7,12 +7,12 @@ import org.cyk.utility.__kernel__.system.action.SystemAction;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public abstract class AbstractSystemExceptionImpl extends RuntimeException implements SystemException,Serializable {
+public abstract class AbstractSystemExceptionImpl extends java.lang.RuntimeException implements SystemException,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private SystemAction systemAction;
 	
-	public AbstractSystemExceptionImpl(String message,Throwable throwable) {
+	public AbstractSystemExceptionImpl(String message,java.lang.Throwable throwable) {
 		super(message,throwable);
 	}
 	

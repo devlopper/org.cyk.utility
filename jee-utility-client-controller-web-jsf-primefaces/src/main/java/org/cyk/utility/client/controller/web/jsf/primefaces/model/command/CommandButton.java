@@ -8,8 +8,11 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.icon.Icon;
+import org.cyk.utility.__kernel__.icon.IconIdentifierGetter;
 import org.cyk.utility.__kernel__.object.Configurator;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.throwable.RemoteRuntimeException;
 import org.cyk.utility.__kernel__.user.interface_.message.Message;
 import org.cyk.utility.__kernel__.user.interface_.message.MessageRenderer;
 import org.cyk.utility.client.controller.web.ComponentHelper;
@@ -26,6 +29,8 @@ public class CommandButton extends Command implements Serializable {
 	private MessageRenderer.Arguments successMessageArguments = new MessageRenderer.Arguments(MessageRenderer.Arguments.INFORMATION_INLINE_DIALOG);
 	private MessageRenderer.Arguments throwableMessageArguments = new MessageRenderer.Arguments(MessageRenderer.Arguments.ERROR_INLINE_DIALOG);
 	private Confirm confirm = new Confirm().setDisabled(Boolean.TRUE);
+	private String type = "submit";
+	private String icon;
 	
 	public void action() {
 		try {
@@ -36,13 +41,30 @@ public class CommandButton extends Command implements Serializable {
 				MessageRenderer.getInstance().render(new Message().setSummary("Opération bien éffectuée")
 					.setSeverity(successMessageArguments.getSeverity()), successMessageArguments.getRenderTypes());
 		} catch (Exception exception) {
-			if(throwableMessageArguments != null)
-				MessageRenderer.getInstance().render(new Message().setSummary("Erreur lors de l'exécution de l'opération : "+exception.toString())
-					.setSeverity(throwableMessageArguments.getSeverity()), throwableMessageArguments.getRenderTypes());
+			if(throwableMessageArguments != null) {
+				Message message = new Message().setSeverity(throwableMessageArguments.getSeverity());
+				if(exception instanceof RemoteRuntimeException) {
+					RemoteRuntimeException remoteRuntimeException = (RemoteRuntimeException) exception;
+					org.cyk.utility.__kernel__.throwable.Message remoteMessage = CollectionHelper.getFirst(remoteRuntimeException.getMessages());
+					message.setSummary(remoteMessage.getSummary());
+					message.setDetails(remoteMessage.getDetails());
+				}else {
+					message.setSummary("Erreur lors de l'exécution de l'opération : "+exception.toString());
+				}
+				MessageRenderer.getInstance().render(message, throwableMessageArguments.getRenderTypes());
+			}
 		}
 	}
 	
 	protected void __action__() {}
+	
+	public CommandButton setIcon(Icon icon) {
+		if(icon == null)
+			this.icon = null;
+		else
+			this.icon = IconIdentifierGetter.FONT_AWSOME.get(icon);
+		return this;
+	}
 	
 	/**/
 	

@@ -12,6 +12,8 @@ import org.cyk.utility.__kernel__.internationalization.InternationalizationKeySt
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
+import org.cyk.utility.__kernel__.throwable.Message;
+import org.cyk.utility.__kernel__.throwable.RemoteRuntimeException;
 import org.cyk.utility.__kernel__.throwable.ServiceNotFoundException;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
@@ -24,6 +26,7 @@ import org.cyk.utility.notification.NotificationBuilder;
 import org.cyk.utility.notification.NotificationSeverityInformation;
 import org.cyk.utility.notification.NotificationSeverityWarning;
 import org.cyk.utility.notification.Notifications;
+import org.cyk.utility.server.representation.MessageDto;
 import org.cyk.utility.server.representation.RepresentationEntity;
 import org.cyk.utility.server.representation.ResponseEntityDto;
 import org.cyk.utility.server.representation.ResponseHelper;
@@ -94,11 +97,16 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 				if(Boolean.TRUE.equals(__isProcessReponse__())) {
 					Response.Status.Family responseStatusFamily = Response.Status.Family.familyOf(response.getStatus());
 					if(Response.Status.Family.SUCCESSFUL.equals(responseStatusFamily) || Response.Status.Family.SERVER_ERROR.equals(responseStatusFamily)){
-						Object responseEntityDto = Boolean.TRUE.equals(response.hasEntity()) ? getResponseEntityDto(action, representation, response) : null;		
+						Object responseEntity = Boolean.TRUE.equals(response.hasEntity()) ? getResponseEntityDto(action, representation, response) : null;		
 						if(Response.Status.Family.SUCCESSFUL.equals(responseStatusFamily))
 							;
-						else if(responseEntityDto instanceof ResponseEntityDto)
-							throw new RuntimeException( ((ResponseEntityDto)responseEntityDto).getMessageCollection().toString());
+						else if(responseEntity instanceof ResponseEntityDto) {
+							ResponseEntityDto responseEntityDto = (ResponseEntityDto) responseEntity;
+							RemoteRuntimeException remoteRuntimeException = new RemoteRuntimeException(response,responseEntityDto.getMessageCollection().toString());
+							for(MessageDto index : responseEntityDto.getMessageCollection().getElements())
+								remoteRuntimeException.addMessages(new Message(index.getCode(),index.getHead(),index.getBody()));							
+							throw remoteRuntimeException;
+						}
 					}else if(Response.Status.Family.CLIENT_ERROR.equals(responseStatusFamily)){
 						//String responseEntity = response.readEntity(String.class);
 						//System.out.println("AbstractControllerFunctionImpl("+getClass().getSimpleName()+").__execute__() CLIENT ERROR : "+response.getStatusInfo()+" : "+responseEntity);

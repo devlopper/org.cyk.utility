@@ -11,10 +11,10 @@ public interface ThrowableHelper {
 
 	String NOT_YET_IMPLEMENTED_MESSAGE = "not yet implemented";
 	
-	static Throwable getInstanceOf(Throwable throwable,Collection<Class<?>> classes){
+	static java.lang.Throwable getInstanceOf(java.lang.Throwable throwable,Collection<Class<?>> classes){
 		if(throwable == null || CollectionHelper.isEmpty(classes))
 			return null;
-		Throwable index;
+		java.lang.Throwable index;
 		for(Class<?> klass : classes) {
 			index = throwable;
 			while(index!=null){
@@ -27,22 +27,22 @@ public interface ThrowableHelper {
 		return null;
 	}
 	
-	static Throwable getInstanceOf(Throwable throwable,Class<?>...classes){
+	static java.lang.Throwable getInstanceOf(java.lang.Throwable throwable,Class<?>...classes){
 		if(throwable == null || ArrayHelper.isEmpty(classes))
 			return null;
 		return getInstanceOf(throwable,List.of(classes));
 	}
 	
-	static Throwable getInstanceOfSystemClient(Throwable throwable){
+	static java.lang.Throwable getInstanceOfSystemClient(java.lang.Throwable throwable){
 		if(throwable == null)
 			return null;
 		return getInstanceOf(throwable, SystemClientException.class);
 	}
 	
-	static Throwable getFirstCause(Throwable throwable){
+	static java.lang.Throwable getFirstCause(java.lang.Throwable throwable){
 		if(throwable == null)
 			return null;
-		Throwable cause=throwable,index = throwable;
+		java.lang.Throwable cause=throwable,index = throwable;
 		while(index!=null){
 			cause = index;
 			index = index.getCause();
@@ -52,7 +52,7 @@ public interface ThrowableHelper {
 
 	static void throwRuntimeExceptionIfTrue(Boolean condition, String message) {
 		if(Boolean.TRUE.equals(condition))
-			throw new RuntimeException(message);
+			throw new java.lang.RuntimeException(message);
 	}
 	
 	static void throwIllegalArgumentException(String name, Object value) {
@@ -70,7 +70,7 @@ public interface ThrowableHelper {
 	}
 	
 	static void throwNotYetImplemented(String name) {
-		throw new RuntimeException(name+" "+NOT_YET_IMPLEMENTED_MESSAGE);
+		throw new java.lang.RuntimeException(name+" "+NOT_YET_IMPLEMENTED_MESSAGE);
 	}
 	
 	static void throwNotYetImplemented() {
@@ -79,7 +79,7 @@ public interface ThrowableHelper {
 	
 	/**/
 	
-	RuntimeException NOT_YET_IMPLEMENTED = new RuntimeException(NOT_YET_IMPLEMENTED_MESSAGE);
+	java.lang.RuntimeException NOT_YET_IMPLEMENTED = new java.lang.RuntimeException(NOT_YET_IMPLEMENTED_MESSAGE);
 	
 	
 }

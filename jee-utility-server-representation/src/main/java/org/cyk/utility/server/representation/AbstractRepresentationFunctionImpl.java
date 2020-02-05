@@ -11,8 +11,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.log.LogLevel;
-import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.server.business.Business;
@@ -90,9 +90,7 @@ public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemF
 			}
 		} catch (Exception exception) {
 			__throwable__ = exception;
-			System.out.println("AbstractRepresentationFunctionImpl.__execute__() THROWABLE");
-			exception.printStackTrace();
-			//__log__(exception);
+			LogHelper.log(exception, getClass());
 		} finally {
 			__processResponseBuilder__();
 		}
@@ -138,9 +136,8 @@ public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemF
 	protected void __computeResponseEntity__(ResponseEntityDto responseEntityDto,Throwable throwable){
 		responseEntityDto.setStatusUsingEnumeration(ResponseEntityDto.Status.FAILURE);
 		Throwable cause = ThrowableHelper.getFirstCause(throwable);	
-		//TODO cause can be null , find the cause which is not null otherwise use throwable itself
-		//throwable.printStackTrace();
-		responseEntityDto.addMessage(new MessageDto().setHead("Une erreur est survenue lors de "+getAction().getIdentifier()+" de "+getPersistenceEntityClass()+". "+cause.getMessage()));
+		//responseEntityDto.addMessage(new MessageDto().setHead("Une erreur est survenue lors de "+getAction().getIdentifier()+" de "+getPersistenceEntityClass()+". "+cause.getMessage()));
+		responseEntityDto.addMessage(new MessageDto().setHead(cause.getMessage()));
 	}
 	
 	protected void __processResponseBuilder__(ResponseBuilder builder,Throwable throwable) {
@@ -154,12 +151,12 @@ public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemF
 	
 	@Override
 	public Class<?> getPersistenceEntityClass() {
-		return (Class<?>) getProperties().getFromPath(Properties.PERSISTENCE,Properties.ENTITY_CLASS);
+		return __persistenceEntityClass__;
 	}
 	
 	@Override
-	public RepresentationFunction setPersistenceEntityClass(Class<?> aClass) {
-		getProperties().setFromPath(new Object[] {Properties.PERSISTENCE,Properties.ENTITY_CLASS},aClass);
+	public RepresentationFunction setPersistenceEntityClass(Class<?> klass) {
+		this.__persistenceEntityClass__ = klass;
 		return this;
 	}
 	

@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
+import org.cyk.utility.__kernel__.icon.Icon;
 import org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierAsFunctionParameter;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
@@ -28,7 +29,8 @@ public class CommandButtonPage extends AbstractPageContainerManagedImpl implemen
 	private static final long serialVersionUID = 1L;
 
 	private CommandButton commandButtonServer,commandButtonServerDoNotNotifySuccess,commandButtonServerDoError
-		,commandButtonServerRenderMessageSuccessGrowl,commandButtonServerRenderMessageErrorGrowl,commandButtonServerConfirmDialog;
+		,commandButtonServerRenderMessageSuccessGrowl,commandButtonServerRenderMessageErrorGrowl,commandButtonServerConfirmDialog
+		,commandButtonIcon;
 	
 	@Override
 	protected String __getWindowTitleValue__() {
@@ -63,6 +65,8 @@ public class CommandButtonPage extends AbstractPageContainerManagedImpl implemen
 		
 		commandButtonServerConfirmDialog = Builder.build(CommandButton.class,Map.of("value","Server Confirm Dialog"));
 		commandButtonServerConfirmDialog.getConfirm().setDisabled(Boolean.FALSE);
+		
+		commandButtonIcon = Builder.build(CommandButton.class,Map.of("value","Yes")).setIcon(Icon.EDIT);
 	}
 	
 	@Override
