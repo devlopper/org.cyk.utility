@@ -28,6 +28,11 @@ public class Properties extends AbstractProperties implements Serializable {
 	public static final String USER = "mail.smtp.user";
 	public static final String PASSWORD = "mail.smtp.password";
 	
+	public static final String PROXY_HOST = "mail.smtp.proxy.host";
+	public static final String PROXY_PORT = "mail.smtp.proxy.port";
+	public static final String PROXY_USER = "mail.smtp.proxy.user";
+	public static final String PROXY_PASSWORD = "mail.smtp.proxy.password";
+	
 	/**/
 	
 	public static final Properties DEFAULT = new Properties();
@@ -39,6 +44,13 @@ public class Properties extends AbstractProperties implements Serializable {
 		.setIsSecuredConnectionRequired(ConfigurationHelper.is(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_SECURED_CONNECTION_REQUIRED))
 		.setAuthenticationCredentials(new Credentials()
 				.setIdentifier(ConfigurationHelper.getValueAsString(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_CREDENTIALS_USER_IDENTIFIER))
-				.setSecret(ConfigurationHelper.getValueAsString(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_CREDENTIALS_USER_SECRET)));
+				.setSecret(ConfigurationHelper.getValueAsString(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_CREDENTIALS_USER_SECRET)))
+		//Proxy
+		.setProxyHost(ConfigurationHelper.getValueAsString(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_PROXY_HOST))
+		.setProxyPort(ConfigurationHelper.getValueAsInteger(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_PROXY_PORT))
+		//.setProxyAuthenticationCredentials(new Credentials()
+		//		.setIdentifier(ConfigurationHelper.getValueAsString(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_PROXY_AUTHENTICATION_CREDENTIALS_USER_IDENTIFIER))
+		//		.setSecret(ConfigurationHelper.getValueAsString(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_PROXY_AUTHENTICATION_CREDENTIALS_USER_SECRET)))
+		;
 	}
 }

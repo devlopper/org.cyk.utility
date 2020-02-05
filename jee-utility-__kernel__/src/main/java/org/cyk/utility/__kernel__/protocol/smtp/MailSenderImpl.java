@@ -60,7 +60,7 @@ public class MailSenderImpl extends AbstractMailSenderImpl implements Serializab
 		if(SESSION != null)
 			return SESSION;
 		java.util.Properties properties = System.getProperties();	
-		if(protocolProperties.getHost()!=null)
+		if(StringHelper.isNotBlank(protocolProperties.getHost()))
 			properties.put(Properties.HOST, protocolProperties.getHost());
 		if(protocolProperties.getPort()!=null)
 			properties.put(Properties.PORT, protocolProperties.getPort());
@@ -68,6 +68,12 @@ public class MailSenderImpl extends AbstractMailSenderImpl implements Serializab
 			properties.put(Properties.AUTHENTICATION, protocolProperties.getIsAuthenticationRequired());
 		if(protocolProperties.getIsSecuredConnectionRequired()!=null)
 			properties.put(Properties.STARTTLS_ENABLE, protocolProperties.getIsSecuredConnectionRequired());
+		//Proxy
+		if(StringHelper.isNotBlank(protocolProperties.getProxyHost()))
+			properties.put(Properties.PROXY_HOST, protocolProperties.getProxyHost());
+		if(protocolProperties.getProxyPort()!=null)
+			properties.put(Properties.PROXY_PORT, protocolProperties.getProxyPort());
+		
 		SESSION = Session.getInstance(properties, new Authenticator(protocolProperties));
 		return SESSION;
 	}

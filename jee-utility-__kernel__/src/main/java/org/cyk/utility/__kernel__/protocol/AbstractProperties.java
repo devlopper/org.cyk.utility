@@ -13,9 +13,9 @@ import lombok.experimental.Accessors;
 public abstract class AbstractProperties extends AbstractObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private String host;
-	private Integer port;
+	private String host,proxyHost;
+	private Integer port,proxyPort;
 	private Boolean isAuthenticationRequired,isSecuredConnectionRequired;
-	private Credentials authenticationCredentials;
+	private Credentials authenticationCredentials,proxyAuthenticationCredentials;
 	
 }

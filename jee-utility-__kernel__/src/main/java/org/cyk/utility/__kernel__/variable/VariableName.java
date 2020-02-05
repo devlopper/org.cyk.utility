@@ -28,6 +28,10 @@ public interface VariableName {
 	String PROTOCOL_SIMPLE_MAIL_TRANSFER_SECURED_CONNECTION_REQUIRED = buildProtocolSimpleMailTransfer("secured.connection.required");
 	String PROTOCOL_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_CREDENTIALS_USER_IDENTIFIER = buildProtocolSimpleMailTransfer("authentication.credentials.user.identifier");
 	String PROTOCOL_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_CREDENTIALS_USER_SECRET = buildProtocolSimpleMailTransfer("authentication.credentials.user.secret");
+	String PROTOCOL_SIMPLE_MAIL_TRANSFER_PROXY_HOST = buildProtocolSimpleMailTransfer("proxy.host");
+	String PROTOCOL_SIMPLE_MAIL_TRANSFER_PROXY_PORT = buildProtocolSimpleMailTransfer("proxy.port");
+	String PROTOCOL_SIMPLE_MAIL_TRANSFER_PROXY_AUTHENTICATION_CREDENTIALS_USER_IDENTIFIER = buildProtocolSimpleMailTransfer("proxy.authentication.credentials.user.identifier");
+	String PROTOCOL_SIMPLE_MAIL_TRANSFER_PROXY_AUTHENTICATION_CREDENTIALS_USER_SECRET = buildProtocolSimpleMailTransfer("proxy.authentication.credentials.user.secret");
 	
 	String PROXY_UNIFORM_RESOURCE_IDENTIFIER = buildSystem("proxy.uniform.resource.identifier");
 	

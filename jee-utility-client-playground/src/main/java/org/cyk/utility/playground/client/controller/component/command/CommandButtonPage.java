@@ -1,6 +1,7 @@
 package org.cyk.utility.playground.client.controller.component.command;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +21,7 @@ import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
 import org.cyk.utility.playground.client.controller.entities.Person;
+import org.primefaces.PrimeFaces;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -29,7 +31,8 @@ public class CommandButtonPage extends AbstractPageContainerManagedImpl implemen
 	private static final long serialVersionUID = 1L;
 
 	private CommandButton commandButtonServer,commandButtonServerDoNotNotifySuccess,commandButtonServerDoError
-		,commandButtonServerRenderMessageSuccessGrowl,commandButtonServerRenderMessageErrorGrowl,commandButtonServerConfirmDialog
+		,commandButtonServerRenderMessageSuccessGrowl,commandButtonServerRenderMessageErrorGrowl
+		,commandButtonServerConfirmDialog,commandButtonServerConfirmDialogUpdated
 		,commandButtonIcon;
 	
 	@Override
@@ -65,6 +68,16 @@ public class CommandButtonPage extends AbstractPageContainerManagedImpl implemen
 		
 		commandButtonServerConfirmDialog = Builder.build(CommandButton.class,Map.of("value","Server Confirm Dialog"));
 		commandButtonServerConfirmDialog.getConfirm().setDisabled(Boolean.FALSE);
+		
+		commandButtonServerConfirmDialogUpdated = Builder.build(CommandButton.class,Map.of("value","Server Confirm Dialog Updated"));
+		commandButtonServerConfirmDialogUpdated.getConfirm().setDisabled(Boolean.FALSE);
+		commandButtonServerConfirmDialogUpdated.setListener(new CommandButton.Listener() {
+			@Override
+			public void listenAction() {
+				commandButtonServerConfirmDialogUpdated.getConfirm().setMessage("Time is "+LocalDateTime.now()+". Do you want to continue ?");
+				PrimeFaces.current().ajax().update(":form:contractBodyConfirmDialogOutputPanel");
+			}
+		});
 		
 		commandButtonIcon = Builder.build(CommandButton.class,Map.of("value","Yes")).setIcon(Icon.EDIT);
 	}

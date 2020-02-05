@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 public class Confirm extends AbstractObject implements Serializable {
 
 	private String header = "Confirmation";
-	private String message = "Êtes vous sûr de vouloir continuer ?";
+	private String message = "Êtes-vous sûr de vouloir exécuter cette action ?";
 	private String icon = "fa fa-warning";
 	private Boolean disabled = Boolean.FALSE;
 	private Boolean escape = Boolean.FALSE;
