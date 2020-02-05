@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.AbstractApplicationScopeLifeCycleListener;
+import org.cyk.utility.__kernel__.persistence.query.Queries;
+import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
 
 @ApplicationScoped
 public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeLifeCycleListener implements Serializable {
@@ -12,6 +14,8 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 
 	@Override
 	public void __initialize__(Object object) {
+		Queries.IS_REGISTERABLE_TO_ENTITY_MANAGER = Boolean.TRUE;
+		QueryHelper.getQueries().setIsRegisterableToEntityManager(Boolean.TRUE);
 		__inject__(org.cyk.utility.ApplicationScopeLifeCycleListener.class).initialize(null);
 	}
 	

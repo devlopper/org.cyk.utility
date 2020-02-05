@@ -12,13 +12,15 @@
 		<weld:exclude name="org.cyk.utility.__kernel__.collection.CollectionsAsFunctionParameter" />
 		<weld:exclude name="org.cyk.utility.__kernel__.collection.CollectionInstanceAsFunctionParameter" />
 		
+		<!-- Be careful. injection wont work if excluded -->
+		<!--
 		<weld:exclude name="org.cyk.utility.__kernel__.protocol.http.HttpClientGetterImpl" />
 		<weld:exclude name="org.cyk.utility.__kernel__.protocol.http.HttpClientGetterTestImpl" />
 		<weld:exclude name="org.cyk.utility.__kernel__.protocol.http.HttpHelperGetParameter" />
 		<weld:exclude name="org.cyk.utility.__kernel__.security.keycloak.KeycloakClientGetterImpl" />
 		<weld:exclude name="org.cyk.utility.__kernel__.test.arquillian.archive.builder.WebArchiveBuilder" />
 		<weld:exclude name="org.cyk.utility.__kernel__.test.arquillian.archive.builder.JavaArchiveBuilder" />
-		
+		-->
 	</weld:scan>
 
 </beans> 

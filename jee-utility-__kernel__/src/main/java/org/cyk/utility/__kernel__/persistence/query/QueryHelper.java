@@ -119,12 +119,14 @@ public interface QueryHelper {
 		@Override
 		protected void __listenAdded__(Collection<Query> queries) {
 			super.__listenAdded__(queries);
-			EntityManager entityManager = PersistenceHelper.getEntityManager(null);
-			for(Query query : queries) {
-				Class<?> resultClass = query.getResultClass();
-				javax.persistence.Query __query__ = resultClass == null ? entityManager.createQuery(query.getValue()) : entityManager.createQuery(query.getValue(), resultClass);
-				entityManager.getEntityManagerFactory().addNamedQuery((String) query.getIdentifier(), __query__);
-			}
+			if(Boolean.TRUE.equals(getIsRegisterableToEntityManager())) {
+				EntityManager entityManager = PersistenceHelper.getEntityManager(null);
+				for(Query query : queries) {
+					Class<?> resultClass = query.getResultClass();
+					javax.persistence.Query __query__ = resultClass == null ? entityManager.createQuery(query.getValue()) : entityManager.createQuery(query.getValue(), resultClass);
+					entityManager.getEntityManagerFactory().addNamedQuery((String) query.getIdentifier(), __query__);
+				}	
+			}			
 		}		
 	}
 }

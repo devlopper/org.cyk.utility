@@ -3,9 +3,6 @@ package org.cyk.utility.__kernel__.report.jasper;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -15,7 +12,6 @@ import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.export.JRTextExporter;
 
 public class ReportBuilderJasperUnitTest extends AbstractWeldUnitTest {
@@ -47,6 +43,7 @@ public class ReportBuilderJasperUnitTest extends AbstractWeldUnitTest {
 		assertThat(string).contains("helloooo","1","worlddddd","2");
 	}
 	
+	/*
 	@Test
 	public void text_with_datasource_with_image(){
 		JRBeanCollectionDataSource jrBeanCollectionDataSource = new JRBeanCollectionDataSource(Bean.buildCollection());
@@ -60,4 +57,5 @@ public class ReportBuilderJasperUnitTest extends AbstractWeldUnitTest {
 			e.printStackTrace();
 		}
 	}
+	*/
 }
