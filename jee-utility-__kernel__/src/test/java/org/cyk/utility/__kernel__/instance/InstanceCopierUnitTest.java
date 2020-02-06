@@ -2,7 +2,10 @@ package org.cyk.utility.__kernel__.instance;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -29,6 +32,14 @@ public class InstanceCopierUnitTest extends AbstractWeldUnitTest {
 		super.__listenBefore__();
 		InstanceGetterImpl.clear();
 		ConfigurationHelper.clear();
+	}
+	
+	@Test
+	public void copy_javaUtilDate_to_javaLocalDateTime(){
+		JavaUtilDate javaUtilDate = new JavaUtilDate().setValue(Date.from(LocalDateTime.of(2020,05,10,11,30).toInstant(ZoneOffset.UTC)));
+		JavaLocalDateTime javaLocalDateTime = new JavaLocalDateTime();
+		InstanceHelper.copy(javaUtilDate, javaLocalDateTime, List.of("value"));
+		assertThat(javaLocalDateTime.getValue().getYear()).isEqualTo(2020);
 	}
 	
 	@Test
@@ -196,5 +207,17 @@ public class InstanceCopierUnitTest extends AbstractWeldUnitTest {
 		private String string;
 		private Integer integer;
 		private Long long_;
+	}
+	
+	/**/
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class JavaUtilDate {
+		private Date value;
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class JavaLocalDateTime {
+		private LocalDateTime value;
 	}
 }

@@ -3,7 +3,13 @@ package org.cyk.utility.__kernel__.value;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Collection;
+import java.util.Date;
 
 import javax.persistence.Transient;
 
@@ -35,9 +41,36 @@ public interface ValueConverter {
 			if(value instanceof String)
 				return (T) Boolean.valueOf((String)value);
 			if(value instanceof Number)
-				return (T) NumberHelper.isGreaterThanZero((Number)value);
-			
+				return (T) NumberHelper.isGreaterThanZero((Number)value);			
 		}
+		
+		if(Date.class.equals(klass)) {
+			/*if(value instanceof LocalDate)
+				return (T) Date.from( ((LocalDate)value).toInstant(ZoneOffset.UTC));
+			else if(value instanceof LocalTime)
+				return (T) Date.from( ((LocalTime)value).toInstant(ZoneOffset.UTC));
+			else */if(value instanceof LocalDateTime)
+				return (T) Date.from( ((LocalDateTime)value).toInstant(ZoneOffset.UTC));
+		}
+		
+		if(LocalDate.class.equals(klass)) {
+			if(value instanceof Date) {
+				return (T) LocalDate.ofInstant(((Date)value).toInstant(),ZoneId.systemDefault());
+			}
+		}
+		
+		if(LocalTime.class.equals(klass)) {
+			if(value instanceof Date) {
+				return (T) LocalTime.ofInstant(((Date)value).toInstant(),ZoneId.systemDefault());
+			}
+		}
+		
+		if(LocalDateTime.class.equals(klass)) {
+			if(value instanceof Date) {
+				return (T) LocalDateTime.ofInstant(((Date)value).toInstant(),ZoneId.systemDefault());
+			}
+		}
+		
 		if(Object.class.equals(klass)) {
 			if(value instanceof String)
 				return (T) value;
@@ -88,7 +121,8 @@ public interface ValueConverter {
 			return null;	
 		//JDK classes : Primitive or char sequence or enumeration
 		if(ClassHelper.isBelongsToJavaPackages(sourceFieldType)) {
-			if(ClassHelper.isNumberOrCharSequenceOrEnum(sourceFieldType) && ClassHelper.isNumberOrCharSequenceOrEnum(destinationFieldType))
+			//if(ClassHelper.isNumberOrCharSequenceOrEnum(sourceFieldType) && ClassHelper.isNumberOrCharSequenceOrEnum(destinationFieldType))
+			if(ClassHelper.isBelongsToJavaPackages(destinationFieldType))	
 				return convert(sourceFieldValue, destinationFieldType);			
 			if(!ClassHelper.isBelongsToJavaPackages(destinationFieldType))
 				//value might be a destination type instance business identifier
