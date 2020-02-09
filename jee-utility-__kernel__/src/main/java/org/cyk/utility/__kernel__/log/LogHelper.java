@@ -3,12 +3,11 @@ package org.cyk.utility.__kernel__.log;
 import java.util.Collection;
 import java.util.logging.Level;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.string.StringHelper;
-import org.cyk.utility.__kernel__.value.Value;
 
 public interface LogHelper {
 
@@ -144,7 +143,7 @@ public interface LogHelper {
 		if(throwable == null)
 			return;
 		logSevere(throwable.toString(),klass);
-		if(Boolean.TRUE.equals(isPrintStackTrace) || Boolean.TRUE.equals(IS_PRINT_STACK_TRACE.get()))
+		if(Boolean.TRUE.equals(isPrintStackTrace) || ConfigurationHelper.is("print.stack.trace"))
 			throwable.printStackTrace();
 	}
 	
@@ -161,7 +160,4 @@ public interface LogHelper {
 		log(string,level,klass);
 	}
 	
-	/**/
-	
-	Value IS_PRINT_STACK_TRACE = DependencyInjection.inject(Value.class).set(Boolean.FALSE);
 }

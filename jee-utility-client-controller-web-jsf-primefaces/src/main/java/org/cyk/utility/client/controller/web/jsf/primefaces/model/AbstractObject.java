@@ -1,8 +1,14 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces.model;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
 
+import org.cyk.utility.__kernel__.array.ArrayHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.map.MapInstance;
+import org.cyk.utility.__kernel__.object.Configurator;
 import org.cyk.utility.__kernel__.random.RandomHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 
@@ -13,6 +19,7 @@ public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractOb
 
 	@Getter @Setter protected String identifier = RandomHelper.getAlphabetic(5);
 	@Getter @Setter protected String widgetVar = RandomHelper.getAlphabetic(5);
+	@Getter @Setter protected String style,styleClass;
 	@Getter @Setter protected MapInstance<Event, String> eventScripts;
 	@Getter @Setter protected Boolean rendered = Boolean.TRUE;
 
@@ -44,4 +51,50 @@ public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractOb
 		Event event = Event.valueOf(string);
 		return getEventScript(event);
 	}
+	
+	public AbstractObject addStyleClasses(Collection<String> classes) {
+		if(CollectionHelper.isEmpty(classes))
+			return this;
+		styleClass = (StringHelper.isBlank(styleClass) ? ConstantEmpty.STRING : styleClass+" ") + StringHelper.concatenate(classes, " ");		
+		return this;
+	}
+	
+	public AbstractObject addStyleClasses(String...classes) {
+		if(ArrayHelper.isEmpty(classes))
+			return this;
+		return addStyleClasses(CollectionHelper.listOf(classes));
+	}
+	
+	public AbstractObject addStyles(Collection<String> styles) {
+		if(CollectionHelper.isEmpty(styles))
+			return this;
+		style = (StringHelper.isBlank(style) ? ConstantEmpty.STRING : style+" ") + StringHelper.concatenate(styles, " ");		
+		return this;
+	}
+	
+	public AbstractObject addStyle(String...styles) {
+		if(ArrayHelper.isEmpty(styles))
+			return this;
+		return addStyles(CollectionHelper.listOf(styles));
+	}
+	
+	/**/
+	
+	public static abstract class AbstractConfiguratorImpl<OBJECT extends AbstractObject> extends Configurator.AbstractImpl<OBJECT> implements Serializable {
+
+		@Override
+		protected Collection<String> __getFieldsNames__() {
+			return List.of(FIELD_IDENTIFIER,FIELD_WIDGET_VAR,FIELD_RENDERED,FIELD_EVENT_SCRIPTS);
+		}
+
+	}
+	
+	/**/
+	
+	public static final String FIELD_IDENTIFIER = "identifier";
+	public static final String FIELD_WIDGET_VAR = "widgetVar";
+	public static final String FIELD_RENDERED = "rendered";
+	public static final String FIELD_EVENT_SCRIPTS = "eventScripts";
+	public static final String FIELD_EVENT_STYLE = "style";
+	public static final String FIELD_EVENT_STYLE_CLASS = "styleClass";
 }

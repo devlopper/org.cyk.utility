@@ -436,7 +436,8 @@ public interface CollectionHelper {
 		return collection;
 	}
 	
-	static <ELEMENT> Collection<ELEMENT> concatenate(@SuppressWarnings("unchecked") Collection<ELEMENT>...collections) {
+	@SafeVarargs
+	static <ELEMENT> Collection<ELEMENT> concatenate(Collection<ELEMENT>...collections) {
 		if(collections == null || collections.length == 0)
 			return null;
 		return concatenate(List.of(collections));

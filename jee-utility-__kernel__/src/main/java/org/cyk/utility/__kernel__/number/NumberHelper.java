@@ -171,6 +171,12 @@ public interface NumberHelper {
 		return compare(number, 0, ComparisonOperator.LT);
 	}
 	
+	static Boolean isLessThanOrEqualZero(Number number) {
+		if(number == null)
+			return Boolean.FALSE;
+		return compare(number, 0, ComparisonOperator.LTE);
+	}
+	
 	/* operate */
 	
 	static Number operate(Operation operation,Collection<Number> numbers){
