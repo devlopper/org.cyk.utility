@@ -92,6 +92,11 @@ public class CommandButton extends Command implements Serializable {
 		}
 		
 		@Override
+		protected Class<CommandButton> __getClass__() {
+			return CommandButton.class;
+		}
+		
+		@Override
 		protected Collection<String> __getFieldsNames__() {
 			return List.of("value","listener","update");
 		}

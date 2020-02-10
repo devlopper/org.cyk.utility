@@ -285,7 +285,8 @@ public interface CollectionHelper {
 		return (List<T>) instantiate(List.class,ignoreNullElement,elements);
 	}
 	
-	static <T> List<T> listOf(@SuppressWarnings("unchecked") T...elements) {
+	@SafeVarargs
+	static <T> List<T> listOf(T...elements) {
 		return listOf(Boolean.FALSE,elements);
 	}
 	

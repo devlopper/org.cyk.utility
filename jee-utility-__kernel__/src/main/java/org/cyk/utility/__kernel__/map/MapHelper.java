@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 
 import javax.json.bind.JsonbBuilder;
 
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 
@@ -113,5 +114,29 @@ public interface MapHelper {
 		if(map == null)
 			return null;
 		return map.get(key);
+	}
+	
+	@SuppressWarnings("unchecked")
+	static void set(@SuppressWarnings("rawtypes") Map map,Object...objects) {
+		if(map == null || org.cyk.utility.__kernel__.array.ArrayHelper.isEmpty(objects))
+			return;
+		for(Integer index = 0 ; index < objects.length - 1 ; index = index + 2)
+			map.put(objects[index], objects[index+1]);
+	}
+	
+	static Map<Object,Object> instantiate(Object...objects) {
+		if(org.cyk.utility.__kernel__.array.ArrayHelper.isEmpty(objects))
+			return null;
+		Map<Object, Object> map = new LinkedHashMap<Object, Object>();
+		set(map,objects);
+		return map;
+	}
+	
+	@SuppressWarnings("unchecked")
+	static void copyFromField(@SuppressWarnings("rawtypes") Map map,Object object,String fieldName,Boolean override) {
+		if(map == null || object == null || StringHelper.isBlank(fieldName))
+			return;
+		if(!map.containsKey(fieldName) || Boolean.TRUE.equals(override))
+			map.put(fieldName, FieldHelper.read(object, fieldName));
 	}
 }

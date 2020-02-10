@@ -1,12 +1,10 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces.model.layout;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
-import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
+import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
@@ -20,6 +18,7 @@ import lombok.experimental.Accessors;
 public class Cell extends OutputPanel implements Serializable {
 
 	private Layout layout;
+	private Integer columnIndex,rowIndex;
 	private Integer width;
 	private WidthUnit widthUnit;
 	private Boolean isWidthFixed;
@@ -27,6 +26,8 @@ public class Cell extends OutputPanel implements Serializable {
 	/**/
 	
 	public static final String FIELD_LAYOUT = "layout";
+	public static final String FIELD_COLUMN_INDEX = "columnIndex";
+	public static final String FIELD_ROW_INDEX = "rowIndex";
 	public static final String FIELD_WIDTH = "width";
 	public static final String FIELD_WIDTH_UNIT = "widthUnit";
 	public static final String FIELD_IS_WIDTH_FIXED = "isWidthFixed";
@@ -43,6 +44,8 @@ public class Cell extends OutputPanel implements Serializable {
 		public void configure(Cell cell, Map<Object, Object> arguments) {
 			super.configure(cell, arguments);
 			WidthUnit widthUnit = cell.widthUnit;
+			if(widthUnit == null && cell.getLayout() != null)
+				widthUnit = cell.getLayout().getCellWidthUnit();
 			if(widthUnit == null)
 				widthUnit = WidthUnit.UI_G;
 			if(WidthUnit.UI_G.equals(widthUnit)) {
@@ -58,14 +61,26 @@ public class Cell extends OutputPanel implements Serializable {
 		}
 		
 		@Override
-		protected Collection<String> __getFieldsNames__() {
-			return CollectionHelper.concatenate(super.__getFieldsNames__(),List.of(FIELD_LAYOUT,FIELD_WIDTH,FIELD_WIDTH_UNIT,FIELD_IS_WIDTH_FIXED));
+		protected Class<Cell> __getClass__() {
+			return Cell.class;
 		}
 
 	}
 
 	public static Cell build(Map<Object,Object> map) {
 		return Builder.build(Cell.class,map);
+	}
+	
+	public static interface Listener {
+		
+		void addCell(Cell cell);
+		
+		default void addCell(Map<Object,Object> map) {
+			if(MapHelper.isEmpty(map))
+				return;
+			
+		}
+		
 	}
 	
 	static {

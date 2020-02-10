@@ -20,5 +20,10 @@ public class OutputPanel extends AbstractObject implements Serializable {
 	
 	public static class ConfiguratorImpl extends AbstractConfiguratorImpl<OutputPanel> implements Serializable {
 
+		@Override
+		protected Class<OutputPanel> __getClass__() {
+			return OutputPanel.class;
+		}
+
 	}
 }

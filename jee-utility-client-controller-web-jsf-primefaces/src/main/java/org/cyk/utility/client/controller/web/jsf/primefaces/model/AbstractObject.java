@@ -2,7 +2,6 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.model;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.List;
 
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
@@ -82,12 +81,9 @@ public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractOb
 	
 	public static abstract class AbstractConfiguratorImpl<OBJECT extends AbstractObject> extends Configurator.AbstractImpl<OBJECT> implements Serializable {
 
-		@Override
-		protected Collection<String> __getFieldsNames__() {
-			return List.of(FIELD_IDENTIFIER,FIELD_WIDGET_VAR,FIELD_RENDERED,FIELD_EVENT_SCRIPTS);
-		}
-
 	}
+	
+	/**/
 	
 	/**/
 	

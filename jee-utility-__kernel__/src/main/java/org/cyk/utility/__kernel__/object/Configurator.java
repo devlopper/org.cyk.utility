@@ -1,5 +1,7 @@
 package org.cyk.utility.__kernel__.object;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -56,7 +58,9 @@ public interface Configurator<OBJECT> {
 	/**/
 	
 	public static abstract class AbstractImpl<OBJECT> implements Configurator<OBJECT> {
-
+		
+		protected Collection<String> __fieldsNames__;
+		
 		@Override
 		public void configure(OBJECT object, Map<Object, Object> arguments) {
 			Collection<String> fieldsNames = __getFieldsNames__();
@@ -65,8 +69,21 @@ public interface Configurator<OBJECT> {
 					__set__(object, fieldName, arguments);
 		}
 		
+		protected abstract Class<OBJECT> __getClass__();
+		
 		protected Collection<String> __getFieldsNames__() {
-			return null;
+			if(__fieldsNames__ == null) {
+				__fieldsNames__ = new ArrayList<>();
+				Class<OBJECT> klass = __getClass__();
+				if(klass == null)
+					return null;
+				Collection<Field> fields = FieldHelper.filter(klass, "^FIELD", null);
+				if(CollectionHelper.isEmpty(fields))
+					return null;				
+				for(Field field : fields)
+					__fieldsNames__.add((String) FieldHelper.readStatic(field));
+			}
+			return __fieldsNames__;
 		}
 		
 		protected void __set__(OBJECT object,String fieldName, Map<Object, Object> arguments,String key) {

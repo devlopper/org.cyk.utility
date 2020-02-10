@@ -3,13 +3,15 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.model.layout;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
+import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
+import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.layout.Cell.WidthUnit;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.panel.OutputPanel;
@@ -22,7 +24,10 @@ import lombok.experimental.Accessors;
 public class Layout extends OutputPanel implements Serializable {
 
 	private Collection<Cell> cells;
+	private Collection<Map<Object,Object>> cellsMaps;
+	private Map<Integer,Cell> rowCellModel;
 	private WidthUnit cellWidthUnit;
+	private Builder.Listener<Cell> cellBuilderListener;
 	private Integer numberOfRows,numberOfColumns;
 	
 	public Collection<Cell> getCells(Boolean injectIfNull) {
@@ -47,6 +52,37 @@ public class Layout extends OutputPanel implements Serializable {
 		return this;
 	}
 	
+	public Layout addCellsByMaps(Collection<Map<Object,Object>> cellsMaps) {
+		if(CollectionHelper.isEmpty(cellsMaps))
+			return this;
+		for(Map<Object,Object> cellMap : cellsMaps) {
+			cellMap.put(Cell.FIELD_LAYOUT, this);
+			cellMap.put(Builder.Listener.class, cellBuilderListener);
+			addCells(Cell.build(cellMap));
+		}
+		return this;
+	}
+	
+	public Layout addCellsByMaps(@SuppressWarnings("unchecked") Map<Object,Object>...cellsMaps) {
+		if(ArrayHelper.isEmpty(cellsMaps))
+			return this;
+		addCellsByMaps(CollectionHelper.listOf(cellsMaps));
+		return this;
+	}
+	
+	public Map<Integer,Cell> getRowCellModel(Boolean injectIfNull) {
+		if(rowCellModel == null && Boolean.TRUE.equals(injectIfNull))
+			rowCellModel = new HashMap<>();
+		return rowCellModel;
+	}
+	
+	public Layout setRowCellModels(Object...objects) {
+		if(ArrayHelper.isEmpty(objects))
+			return this;
+		MapHelper.set(rowCellModel, objects);
+		return this;
+	}
+	
 	public Layout addRow(Collection<Cell> cells) {
 		if(CollectionHelper.isEmpty(cells))
 			return this;
@@ -63,6 +99,9 @@ public class Layout extends OutputPanel implements Serializable {
 	/**/
 	
 	public static final String FIELD_CELLS = "cells";
+	public static final String FIELD_CELL_BUILDER_LISTENER = "cellBuilderListener";
+	public static final String FIELD_CELLS_MAPS = "cellsMaps";
+	public static final String FIELD_ROW_CELL_MODEL = "rowCellModel";
 	public static final String FIELD_CELL_WIDTH_UNIT = "cellWidthUnit";
 	public static final String FIELD_NUMBER_OF_ROWS = "numberOfRows";
 	public static final String FIELD_NUMBER_OF_COLUMNS = "numberOfColumns";
@@ -74,6 +113,19 @@ public class Layout extends OutputPanel implements Serializable {
 		@Override
 		public void configure(Layout layout, Map<Object, Object> arguments) {
 			super.configure(layout, arguments);
+			if(CollectionHelper.isNotEmpty(layout.cellsMaps)) {
+				Integer columnIndex = 0;
+				Integer rowIndex = 0;
+				for(Map<Object, Object> map : layout.cellsMaps) {
+					Cell model = MapHelper.readByKey(layout.rowCellModel, columnIndex);
+					map.put(Cell.FIELD_LAYOUT, layout);
+					map.put(Cell.FIELD_COLUMN_INDEX, columnIndex++);
+					map.put(Cell.FIELD_ROW_INDEX, rowIndex);
+					MapHelper.copyFromField(map, model, Cell.FIELD_WIDTH, Boolean.FALSE);
+				}
+				layout.addCellsByMaps(layout.cellsMaps);
+			}
+				
 			if(layout.getNumberOfRows() == null) {
 				if(CollectionHelper.isNotEmpty(layout.cells))
 					layout.setNumberOfRows(1);
@@ -88,8 +140,8 @@ public class Layout extends OutputPanel implements Serializable {
 		}
 		
 		@Override
-		protected Collection<String> __getFieldsNames__() {
-			return CollectionHelper.concatenate(super.__getFieldsNames__(),List.of(FIELD_CELLS,FIELD_CELL_WIDTH_UNIT,FIELD_NUMBER_OF_ROWS,FIELD_NUMBER_OF_COLUMNS));
+		protected Class<Layout> __getClass__() {
+			return Layout.class;
 		}
 
 	}
