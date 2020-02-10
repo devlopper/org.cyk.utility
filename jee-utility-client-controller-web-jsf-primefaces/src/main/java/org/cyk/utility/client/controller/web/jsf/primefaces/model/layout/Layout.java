@@ -24,11 +24,16 @@ import lombok.experimental.Accessors;
 public class Layout extends OutputPanel implements Serializable {
 
 	private Collection<Cell> cells;
-	private Collection<Map<Object,Object>> cellsMaps;
 	private Map<Integer,Cell> rowCellModel;
 	private WidthUnit cellWidthUnit;
 	private Builder.Listener<Cell> cellBuilderListener;
 	private Integer numberOfRows,numberOfColumns;
+	
+	public Cell getCellAt(Integer index) {
+		if(index == null)
+			return null;
+		return CollectionHelper.getElementAt(cells, index);
+	}
 	
 	public Collection<Cell> getCells(Boolean injectIfNull) {
 		if(cells == null && Boolean.TRUE.equals(injectIfNull))
@@ -100,7 +105,6 @@ public class Layout extends OutputPanel implements Serializable {
 	
 	public static final String FIELD_CELLS = "cells";
 	public static final String FIELD_CELL_BUILDER_LISTENER = "cellBuilderListener";
-	public static final String FIELD_CELLS_MAPS = "cellsMaps";
 	public static final String FIELD_ROW_CELL_MODEL = "rowCellModel";
 	public static final String FIELD_CELL_WIDTH_UNIT = "cellWidthUnit";
 	public static final String FIELD_NUMBER_OF_ROWS = "numberOfRows";
@@ -113,26 +117,48 @@ public class Layout extends OutputPanel implements Serializable {
 		@Override
 		public void configure(Layout layout, Map<Object, Object> arguments) {
 			super.configure(layout, arguments);
-			if(CollectionHelper.isNotEmpty(layout.cellsMaps)) {
+			
+			WidthUnit widthUnit = layout.cellWidthUnit;
+			if(widthUnit == null)
+				widthUnit = WidthUnit.UI_G;
+			if(WidthUnit.UI_G.equals(widthUnit)) {
+				layout.addStyleClasses("ui-g ui-g-nopad");
+			} else if(WidthUnit.FLEX.equals(widthUnit)) {
+				layout.addStyleClasses("p-grid");
+			}else {
+				
+			}
+			
+			@SuppressWarnings("unchecked")
+			Collection<Map<Object,Object>> cellsMaps = (Collection<Map<Object, Object>>) MapHelper.readByKey(arguments, FIELD_CELLS_MAPS);
+			if(CollectionHelper.isEmpty(cellsMaps)) {
+				layout.setNumberOfColumns(CollectionHelper.getSize(layout.cells));
+				layout.setNumberOfRows(1);
+			}else {
+				if(layout.getNumberOfColumns() == null || layout.getNumberOfColumns() <= 0)
+					layout.setNumberOfColumns(CollectionHelper.getSize(cellsMaps));
+				
+				if(layout.getNumberOfRows() == null || layout.getNumberOfRows() <= 0) {
+					if(layout.getNumberOfColumns() != null)
+						layout.setNumberOfRows(cellsMaps.size() / layout.getNumberOfColumns());
+					else
+						layout.setNumberOfRows(1);
+				}
+				
 				Integer columnIndex = 0;
 				Integer rowIndex = 0;
-				for(Map<Object, Object> map : layout.cellsMaps) {
+				for(Map<Object, Object> map : cellsMaps) {
+					if(NumberHelper.isGreaterThanZero(layout.getNumberOfColumns()))
+						columnIndex = columnIndex % layout.getNumberOfColumns();
 					Cell model = MapHelper.readByKey(layout.rowCellModel, columnIndex);
 					map.put(Cell.FIELD_LAYOUT, layout);
 					map.put(Cell.FIELD_COLUMN_INDEX, columnIndex++);
 					map.put(Cell.FIELD_ROW_INDEX, rowIndex);
 					MapHelper.copyFromField(map, model, Cell.FIELD_WIDTH, Boolean.FALSE);
 				}
-				layout.addCellsByMaps(layout.cellsMaps);
+				layout.addCellsByMaps(cellsMaps);
 			}
-				
-			if(layout.getNumberOfRows() == null) {
-				if(CollectionHelper.isNotEmpty(layout.cells))
-					layout.setNumberOfRows(1);
-			}
-			if(layout.getNumberOfColumns() == null) {
-				layout.setNumberOfColumns(CollectionHelper.getSize(layout.cells));
-			}
+
 			if(layout.getNumberOfRows() == null || NumberHelper.isLessThanOrEqualZero(layout.getNumberOfRows()))
 				LogHelper.logWarning(String.format("layout identified by %s has no valid number of rows : %s", layout.identifier,layout.getNumberOfRows()) , ConfiguratorImpl.class);
 			if(layout.getNumberOfColumns() == null || NumberHelper.isLessThanOrEqualZero(layout.getNumberOfColumns()))
@@ -144,6 +170,9 @@ public class Layout extends OutputPanel implements Serializable {
 			return Layout.class;
 		}
 
+		/**/
+		
+		public static final String FIELD_CELLS_MAPS = "cellsMaps";
 	}
 
 	static {

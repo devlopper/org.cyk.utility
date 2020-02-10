@@ -52,7 +52,7 @@ public class Cell extends OutputPanel implements Serializable {
 				if(cell.getWidth() == null || NumberHelper.isLessThanOrEqualZero(cell.getWidth()))
 					LogHelper.logWarning(String.format("layout cell identified by %s has no valid width : %s", cell.identifier,cell.getWidth()) , ConfiguratorImpl.class);
 				else
-					cell.addStyleClasses("ui-g-"+cell.width);
+					cell.addStyleClasses("ui-g-"+cell.width+" ui-g-nopad ui-sm-12");
 			} else if(WidthUnit.FLEX.equals(widthUnit)) {
 				cell.addStyleClasses("p-col-"+cell.width);
 			}else {

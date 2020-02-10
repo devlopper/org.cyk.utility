@@ -44,10 +44,10 @@ public class LayoutUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	@Test
-	public void buildTwoColumns_flex_numberOfRowsAndNumberOfColumnsDeduced() {
+	public void buildTwoColumns_flex_2x1_numberOfRowsAndNumberOfColumnsDeduced() {
 		Layout layoutTwoColumns = Builder.build(Layout.class,Map.of(Layout.FIELD_CELL_WIDTH_UNIT,Cell.WidthUnit.FLEX
 				,Layout.FIELD_ROW_CELL_MODEL,Map.of(0,new Cell().setWidth(2),1,new Cell().setWidth(10))
-				,Layout.FIELD_CELLS_MAPS,CollectionHelper.listOf(
+				,Layout.ConfiguratorImpl.FIELD_CELLS_MAPS,CollectionHelper.listOf(
 					MapHelper.instantiate(Cell.FIELD_IDENTIFIER,"first name")
 					,MapHelper.instantiate(Cell.FIELD_IDENTIFIER,"last names")
 					)
@@ -59,5 +59,25 @@ public class LayoutUnitTest extends AbstractWeldUnitTest {
 		assertThat(CollectionHelper.getElementAt(layoutTwoColumns.getCells(),0).getStyleClass()).isNotEmpty();
 		assertThat(CollectionHelper.getElementAt(layoutTwoColumns.getCells(),0).getStyleClass()).contains("p-col-2");
 		assertThat(CollectionHelper.getElementAt(layoutTwoColumns.getCells(),1).getStyleClass()).contains("p-col-10");
+	}
+	
+	@Test
+	public void buildTwoColumns_flex_2x2_numberOfRowsAndNumberOfColumnsDeduced() {
+		Layout layoutTwoColumns = Builder.build(Layout.class,Map.of(Layout.FIELD_CELL_WIDTH_UNIT,Cell.WidthUnit.FLEX,Layout.FIELD_NUMBER_OF_COLUMNS,2
+				,Layout.FIELD_ROW_CELL_MODEL,Map.of(0,new Cell().setWidth(2),1,new Cell().setWidth(10))
+				,Layout.ConfiguratorImpl.FIELD_CELLS_MAPS,CollectionHelper.listOf(
+					MapHelper.instantiate(Cell.FIELD_IDENTIFIER,"first name"),MapHelper.instantiate(Cell.FIELD_IDENTIFIER,"last names")
+					,MapHelper.instantiate(Cell.FIELD_IDENTIFIER,"tel0"),MapHelper.instantiate(Cell.FIELD_IDENTIFIER,"tel1")
+				)
+				));
+		assertThat(layoutTwoColumns.getNumberOfRows()).isEqualTo(2);
+		assertThat(layoutTwoColumns.getNumberOfColumns()).isEqualTo(2);
+		
+		assertThat(CollectionHelper.getElementAt(layoutTwoColumns.getCells(),0)).isNotNull();
+		assertThat(CollectionHelper.getElementAt(layoutTwoColumns.getCells(),0).getStyleClass()).isNotEmpty();
+		assertThat(CollectionHelper.getElementAt(layoutTwoColumns.getCells(),0).getStyleClass()).contains("p-col-2");
+		assertThat(CollectionHelper.getElementAt(layoutTwoColumns.getCells(),1).getStyleClass()).contains("p-col-10");
+		assertThat(CollectionHelper.getElementAt(layoutTwoColumns.getCells(),2).getStyleClass()).contains("p-col-2");
+		assertThat(CollectionHelper.getElementAt(layoutTwoColumns.getCells(),3).getStyleClass()).contains("p-col-10");
 	}
 }

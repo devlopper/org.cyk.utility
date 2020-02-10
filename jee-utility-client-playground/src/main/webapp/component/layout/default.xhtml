@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"      
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+    <cyk:page value="#{layoutIndexPage}">
+    	<ui:define name="centerCenter">
+    		<style>
+    			[class*="ui-g"] {
+	                border: 1px solid red !important;
+	            } 
+    		</style>
+    		
+    		<h3><h:outputText value="One column" /></h3>
+    		<ui:decorate template="/layout/default.xhtml">
+    			<ui:param name="layout" value="#{layoutIndexPage.layoutOneColumn}"/>
+    			<ui:define name="cell0">
+    				<h:outputText value="Custom content 01" />
+    			</ui:define>
+    			<ui:define name="cell2">
+    				<h:outputText value="Custom content 02" />
+    			</ui:define>
+    		</ui:decorate>
+    		
+    		<p:separator/>
+    		<h3><h:outputText value="Two columns" /></h3>
+    		<ui:decorate template="/layout/default.xhtml">
+    			<ui:param name="layout" value="#{layoutIndexPage.layoutTwoColumns}"/>
+    			<ui:define name="cell0">
+    				<p:outputLabel for="ipt01" value="InputText" />
+    			</ui:define>
+    			<ui:define name="cell1">
+    				<p:inputText id="ipt01" value="" />
+    			</ui:define>
+    		</ui:decorate>	   
+    		
+    		<p:separator/>		
+    		<h3><h:outputText value="Three columns" /></h3>
+    		<ui:decorate template="/layout/default.xhtml">
+    			<ui:param name="layout" value="#{layoutIndexPage.layoutThreeColumns}"/>
+    		</ui:decorate>
+    		
+    		<p:separator/>
+    		<h3><h:outputText value="Complex" /></h3>
+    		<ui:decorate template="/layout/default.xhtml">
+    			<ui:param name="layout" value="#{layoutIndexPage.layoutComplex}"/>
+    		</ui:decorate>	   
+    	</ui:define>
+    </cyk:page>
+    
+</html>

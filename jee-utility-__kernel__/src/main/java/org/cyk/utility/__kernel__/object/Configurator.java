@@ -91,6 +91,9 @@ public interface Configurator<OBJECT> {
 				return;
 			if(StringHelper.isBlank(key))
 				key = fieldName;
+			//do not override
+			if(MapHelper.readByKey(arguments, key)==null/* ||  FieldHelper.read(object, fieldName) != null*/)
+				return;
 			FieldHelper.write(object, fieldName, MapHelper.readByKey(arguments, key));
 		}
 		

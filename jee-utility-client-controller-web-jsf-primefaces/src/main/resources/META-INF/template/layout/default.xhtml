@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<ui:decorate template="/panel/output/default.xhtml">
+    	<ui:param name="outputPanel" value="#{layout}"/>
+    	<ui:define name="outputPanelBody">
+    		<!--
+    		<c:forEach items="#{layout.cells}" var="cell" varStatus="varStatus">
+				<ui:fragment rendered="#{cell != null}">
+					<ui:decorate template="/panel/output/default.xhtml">
+						<ui:param name="outputPanel" value="#{cell}"/>
+						<ui:define name="outputPanelBody">
+							<ui:insert name="cell#{varStatus.index}">
+								<h:outputText value="#{cell.identifier}" />
+							</ui:insert>
+						</ui:define>
+					</ui:decorate>
+				</ui:fragment>
+			</c:forEach>
+			-->
+			
+			<ui:param name="cell" value="#{layout.getCellAt(0)}"/>
+			<ui:fragment rendered="#{cell != null}">
+				<ui:decorate template="/panel/output/default.xhtml">
+					<ui:param name="outputPanel" value="#{cell}"/>
+					<ui:define name="outputPanelBody">
+						<ui:insert name="cell0">
+							<h:outputText value="#{cell.identifier}" />
+						</ui:insert>
+					</ui:define>
+				</ui:decorate>
+			</ui:fragment>
+			
+			<ui:param name="cell" value="#{layout.getCellAt(1)}"/>
+			<ui:fragment rendered="#{cell != null}">
+				<ui:decorate template="/panel/output/default.xhtml">
+					<ui:param name="outputPanel" value="#{cell}"/>
+					<ui:define name="outputPanelBody">
+						<ui:insert name="cell1">
+							<h:outputText value="#{cell.identifier}" />
+						</ui:insert>
+					</ui:define>
+				</ui:decorate>
+			</ui:fragment>
+			
+			<ui:param name="cell" value="#{layout.getCellAt(2)}"/>
+			<ui:fragment rendered="#{cell != null}">
+				<ui:decorate template="/panel/output/default.xhtml">
+					<ui:param name="outputPanel" value="#{cell}"/>
+					<ui:define name="outputPanelBody">
+						<ui:insert name="cell2">
+							<h:outputText value="#{cell.identifier}" />
+						</ui:insert>
+					</ui:define>
+				</ui:decorate>
+			</ui:fragment>
+			
+			<ui:param name="cell" value="#{layout.getCellAt(3)}"/>
+			<ui:fragment rendered="#{cell != null}">
+				<ui:decorate template="/panel/output/default.xhtml">
+					<ui:param name="outputPanel" value="#{cell}"/>
+					<ui:define name="outputPanelBody">
+						<ui:insert name="cell3">
+							<h:outputText value="#{cell.identifier}" />
+						</ui:insert>
+					</ui:define>
+				</ui:decorate>
+			</ui:fragment>
+			
+			<ui:param name="cell" value="#{layout.getCellAt(4)}"/>
+			<ui:fragment rendered="#{cell != null}">
+				<ui:decorate template="/panel/output/default.xhtml">
+					<ui:param name="outputPanel" value="#{cell}"/>
+					<ui:define name="outputPanelBody">
+						<ui:insert name="cell4">
+							<h:outputText value="#{cell.identifier}" />
+						</ui:insert>
+					</ui:define>
+				</ui:decorate>
+			</ui:fragment>
+			
+			
+			<ui:param name="cell" value="#{layout.getCellAt(5)}"/>
+			<ui:fragment rendered="#{cell != null}">
+				<ui:decorate template="/panel/output/default.xhtml">
+					<ui:param name="outputPanel" value="#{cell}"/>
+					<ui:define name="outputPanelBody">
+						<ui:insert name="cell5">
+							<h:outputText value="#{cell.identifier}" />
+						</ui:insert>
+					</ui:define>
+				</ui:decorate>
+			</ui:fragment>
+			
+			<ui:param name="cell" value="#{layout.getCellAt(6)}"/>
+			<ui:fragment rendered="#{cell != null}">
+				<ui:decorate template="/panel/output/default.xhtml">
+					<ui:param name="outputPanel" value="#{cell}"/>
+					<ui:define name="outputPanelBody">
+						<ui:insert name="cell6">
+							<h:outputText value="#{cell.identifier}" />
+						</ui:insert>
+					</ui:define>
+				</ui:decorate>
+			</ui:fragment>
+			
+			<ui:param name="cell" value="#{layout.getCellAt(7)}"/>
+			<ui:fragment rendered="#{cell != null}">
+				<ui:decorate template="/panel/output/default.xhtml">
+					<ui:param name="outputPanel" value="#{cell}"/>
+					<ui:define name="outputPanelBody">
+						<ui:insert name="cell7">
+							<h:outputText value="#{cell.identifier}" />
+						</ui:insert>
+					</ui:define>
+				</ui:decorate>
+			</ui:fragment>
+			
+			<ui:param name="cell" value="#{layout.getCellAt(8)}"/>
+			<ui:fragment rendered="#{cell != null}">
+				<ui:decorate template="/panel/output/default.xhtml">
+					<ui:param name="outputPanel" value="#{cell}"/>
+					<ui:define name="outputPanelBody">
+						<ui:insert name="cell8">
+							<h:outputText value="#{cell.identifier}" />
+						</ui:insert>
+					</ui:define>
+				</ui:decorate>
+			</ui:fragment>
+			
+			<ui:param name="cell" value="#{layout.getCellAt(9)}"/>
+			<ui:fragment rendered="#{cell != null}">
+				<ui:decorate template="/panel/output/default.xhtml">
+					<ui:param name="outputPanel" value="#{cell}"/>
+					<ui:define name="outputPanelBody">
+						<ui:insert name="cell9">
+							<h:outputText value="#{cell.identifier}" />
+						</ui:insert>
+					</ui:define>
+				</ui:decorate>
+			</ui:fragment>
+			
+			<ui:param name="cell" value="#{layout.getCellAt(10)}"/>
+			<ui:fragment rendered="#{cell != null}">
+				<ui:decorate template="/panel/output/default.xhtml">
+					<ui:param name="outputPanel" value="#{cell}"/>
+					<ui:define name="outputPanelBody">
+						<ui:insert name="cell10">
+							<h:outputText value="#{cell.identifier}" />
+						</ui:insert>
+					</ui:define>
+				</ui:decorate>
+			</ui:fragment>
+			
+			<ui:param name="cell" value="#{layout.getCellAt(11)}"/>
+			<ui:fragment rendered="#{cell != null}">
+				<ui:decorate template="/panel/output/default.xhtml">
+					<ui:param name="outputPanel" value="#{cell}"/>
+					<ui:define name="outputPanelBody">
+						<ui:insert name="cell11">
+							<h:outputText value="#{cell.identifier}" />
+						</ui:insert>
+					</ui:define>
+				</ui:decorate>
+			</ui:fragment>
+			
+			<ui:param name="cell" value="#{layout.getCellAt(12)}"/>
+			<ui:fragment rendered="#{cell != null}">
+				<ui:decorate template="/panel/output/default.xhtml">
+					<ui:param name="outputPanel" value="#{cell}"/>
+					<ui:define name="outputPanelBody">
+						<ui:insert name="cell12">
+							<h:outputText value="#{cell.identifier}" />
+						</ui:insert>
+					</ui:define>
+				</ui:decorate>
+			</ui:fragment>
+			
+			<ui:param name="cell" value="#{layout.getCellAt(13)}"/>
+			<ui:fragment rendered="#{cell != null}">
+				<ui:decorate template="/panel/output/default.xhtml">
+					<ui:param name="outputPanel" value="#{cell}"/>
+					<ui:define name="outputPanelBody">
+						<ui:insert name="cell13">
+							<h:outputText value="#{cell.identifier}" />
+						</ui:insert>
+					</ui:define>
+				</ui:decorate>
+			</ui:fragment>
+			
+			<ui:param name="cell" value="#{layout.getCellAt(14)}"/>
+			<ui:fragment rendered="#{cell != null}">
+				<ui:decorate template="/panel/output/default.xhtml">
+					<ui:param name="outputPanel" value="#{cell}"/>
+					<ui:define name="outputPanelBody">
+						<ui:insert name="cell14">
+							<h:outputText value="#{cell.identifier}" />
+						</ui:insert>
+					</ui:define>
+				</ui:decorate>
+			</ui:fragment>
+			
+			<ui:param name="cell" value="#{layout.getCellAt(15)}"/>
+			<ui:fragment rendered="#{cell != null}">
+				<ui:decorate template="/panel/output/default.xhtml">
+					<ui:param name="outputPanel" value="#{cell}"/>
+					<ui:define name="outputPanelBody">
+						<ui:insert name="cell15">
+							<h:outputText value="#{cell.identifier}" />
+						</ui:insert>
+					</ui:define>
+				</ui:decorate>
+			</ui:fragment>
+			
+			<ui:param name="cell" value="#{layout.getCellAt(16)}"/>
+			<ui:fragment rendered="#{cell != null}">
+				<ui:decorate template="/panel/output/default.xhtml">
+					<ui:param name="outputPanel" value="#{cell}"/>
+					<ui:define name="outputPanelBody">
+						<ui:insert name="cell16">
+							<h:outputText value="#{cell.identifier}" />
+						</ui:insert>
+					</ui:define>
+				</ui:decorate>
+			</ui:fragment>
+			
+			<ui:param name="cell" value="#{layout.getCellAt(17)}"/>
+			<ui:fragment rendered="#{cell != null}">
+				<ui:decorate template="/panel/output/default.xhtml">
+					<ui:param name="outputPanel" value="#{cell}"/>
+					<ui:define name="outputPanelBody">
+						<ui:insert name="cell17">
+							<h:outputText value="#{cell.identifier}" />
+						</ui:insert>
+					</ui:define>
+				</ui:decorate>
+			</ui:fragment>
+			
+			<ui:param name="cell" value="#{layout.getCellAt(18)}"/>
+			<ui:fragment rendered="#{cell != null}">
+				<ui:decorate template="/panel/output/default.xhtml">
+					<ui:param name="outputPanel" value="#{cell}"/>
+					<ui:define name="outputPanelBody">
+						<ui:insert name="cell18">
+							<h:outputText value="#{cell.identifier}" />
+						</ui:insert>
+					</ui:define>
+				</ui:decorate>
+			</ui:fragment>
+			
+			<ui:param name="cell" value="#{layout.getCellAt(19)}"/>
+			<ui:fragment rendered="#{cell != null}">
+				<ui:decorate template="/panel/output/default.xhtml">
+					<ui:param name="outputPanel" value="#{cell}"/>
+					<ui:define name="outputPanelBody">
+						<ui:insert name="cell19">
+							<h:outputText value="#{cell.identifier}" />
+						</ui:insert>
+					</ui:define>
+				</ui:decorate>
+			</ui:fragment>
+			
+    	</ui:define>
+    </ui:decorate>
+	
+	
+	
+</ui:composition>

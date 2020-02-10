@@ -6,6 +6,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 
 import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
+import org.cyk.utility.__kernel__.random.RandomHelper;
 
 @Named @ApplicationScoped
 public class UserInterfaceController implements Serializable {
@@ -26,5 +27,9 @@ public class UserInterfaceController implements Serializable {
 	
     public Object getConfigurationValue(String name) {
     	return ConfigurationHelper.getValue(name);
+    }
+    
+    public Object getRandomIdentifier() {
+    	return RandomHelper.getAlphabetic(10);
     }
 }
