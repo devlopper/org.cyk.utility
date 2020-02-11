@@ -80,7 +80,7 @@ public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractOb
 	/**/
 	
 	public static abstract class AbstractConfiguratorImpl<OBJECT extends AbstractObject> extends Configurator.AbstractImpl<OBJECT> implements Serializable {
-
+		
 	}
 	
 	/**/

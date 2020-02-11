@@ -114,6 +114,10 @@ public class Layout extends OutputPanel implements Serializable {
 	
 	public static class ConfiguratorImpl extends OutputPanel.AbstractConfiguratorImpl<Layout> implements Serializable {
 
+		{
+			setIsCachable(Boolean.TRUE);
+		}
+		
 		@Override
 		public void configure(Layout layout, Map<Object, Object> arguments) {
 			super.configure(layout, arguments);

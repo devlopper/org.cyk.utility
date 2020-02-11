@@ -12,6 +12,10 @@ import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
 public interface Configurator<OBJECT> {
 
 	default Map<Object,Object> getDefaultArguments() {
@@ -26,6 +30,9 @@ public interface Configurator<OBJECT> {
 		Map<Object,Object> arguments = getDefaultArguments();
 		configure(object, arguments);
 	}
+	
+	Boolean getIsCachable();
+	Configurator<OBJECT> setIsCachable(Boolean isCachable);
 	
 	/**/
 	
@@ -60,6 +67,7 @@ public interface Configurator<OBJECT> {
 	public static abstract class AbstractImpl<OBJECT> implements Configurator<OBJECT> {
 		
 		protected Collection<String> __fieldsNames__;
+		@Getter @Setter @Accessors(chain=true) protected Boolean isCachable;
 		
 		@Override
 		public void configure(OBJECT object, Map<Object, Object> arguments) {
