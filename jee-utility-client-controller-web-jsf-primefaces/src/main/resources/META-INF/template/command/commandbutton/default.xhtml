@@ -11,11 +11,12 @@
 	<p:commandButton
 		id="#{commandButton.identifier}"
 		value="#{commandButton.value}"
-		action="#{commandButton.action}"
+		action="#{commandButton.action(actionArgument)}"
 		update="#{commandButton.update}"
 		process="#{commandButton.process}"
 		icon="#{commandButton.icon}"
 		type="#{commandButton.type}"
+		
 	>
 		<ui:decorate template="/confirm/default.xhtml">
     		<ui:param name="confirm" value="#{commandButton.confirm}"/>

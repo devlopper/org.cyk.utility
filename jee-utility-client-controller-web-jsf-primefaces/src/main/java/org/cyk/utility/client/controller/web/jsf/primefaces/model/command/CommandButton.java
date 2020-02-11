@@ -30,13 +30,13 @@ public class CommandButton extends Command implements Serializable {
 	private MessageRenderer.Arguments throwableMessageArguments = new MessageRenderer.Arguments(MessageRenderer.Arguments.ERROR_INLINE_DIALOG);
 	private Confirm confirm = new Confirm().setDisabled(Boolean.TRUE);
 	private String type = "submit";
-	private String icon;
+	private String icon,title;
 	
-	public void action() {
+	public void action(Object argument) {
 		try {
-			__action__();
+			__action__(argument);
 			if(listener != null)
-				listener.listenAction();
+				listener.listenAction(argument);
 			if(successMessageArguments != null)
 				MessageRenderer.getInstance().render(new Message().setSummary("Opération bien éffectuée")
 					.setSeverity(successMessageArguments.getSeverity()), successMessageArguments.getRenderTypes());
@@ -56,7 +56,7 @@ public class CommandButton extends Command implements Serializable {
 		}
 	}
 	
-	protected void __action__() {}
+	protected void __action__(Object argument) {}
 	
 	public CommandButton setIcon(Icon icon) {
 		if(icon == null)
@@ -68,9 +68,14 @@ public class CommandButton extends Command implements Serializable {
 	
 	/**/
 	
+	//public static final String FIELD_TYPE = "type";
+	//public static final String FIELD_ICON = "icon";
+	
+	/**/
+	
 	public static interface Listener {
 		
-		void listenAction();
+		void listenAction(Object argument);
 		
 	}
 	

@@ -30,7 +30,7 @@ import lombok.Setter;
 public class CommandButtonPage extends AbstractPageContainerManagedImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private CommandButton commandButtonServer,commandButtonServerDoNotNotifySuccess,commandButtonServerDoError
+	private CommandButton commandButtonServer,commandButtonServerArgument1,commandButtonServerArgument2,commandButtonServerDoNotNotifySuccess,commandButtonServerDoError
 		,commandButtonServerRenderMessageSuccessGrowl,commandButtonServerRenderMessageErrorGrowl
 		,commandButtonServerConfirmDialog,commandButtonServerConfirmDialogUpdated
 		,commandButtonIcon;
@@ -44,12 +44,29 @@ public class CommandButtonPage extends AbstractPageContainerManagedImpl implemen
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
 		commandButtonServer = Builder.build(CommandButton.class,Map.of("value","Server"));
+		
+		commandButtonServerArgument1 = Builder.build(CommandButton.class,Map.of("value","Server Argument1"));
+		commandButtonServerArgument1.setListener(new CommandButton.Listener() {
+			@Override
+			public void listenAction(Object argument) {
+				System.out.println("Argument1 : "+argument);
+			}
+		});
+		
+		commandButtonServerArgument2 = Builder.build(CommandButton.class,Map.of("value","Server Argument2"));
+		commandButtonServerArgument2.setListener(new CommandButton.Listener() {
+			@Override
+			public void listenAction(Object argument) {
+				System.out.println("Argument2 : "+argument);
+			}
+		});
+		
 		commandButtonServerDoNotNotifySuccess = Builder.build(CommandButton.class,Map.of("value","Server Do Not Notify Success"));
 		commandButtonServerDoNotNotifySuccess.setSuccessMessageArguments(null);
 		commandButtonServerDoError = Builder.build(CommandButton.class,Map.of("value","Server Do Error"));
 		commandButtonServerDoError.setListener(new CommandButton.Listener() {
 			@Override
-			public void listenAction() {
+			public void listenAction(Object argument) {
 				throw new RuntimeException("Something goes wrong from controller");
 			}
 		});
@@ -60,7 +77,7 @@ public class CommandButtonPage extends AbstractPageContainerManagedImpl implemen
 		commandButtonServerRenderMessageErrorGrowl = Builder.build(CommandButton.class,Map.of("value","Server Do Error Render Message Error Growl"));
 		commandButtonServerRenderMessageErrorGrowl.setListener(new CommandButton.Listener() {
 			@Override
-			public void listenAction() {
+			public void listenAction(Object argument) {
 				throw new RuntimeException("Something goes wrong from controller");
 			}
 		});
@@ -73,7 +90,7 @@ public class CommandButtonPage extends AbstractPageContainerManagedImpl implemen
 		commandButtonServerConfirmDialogUpdated.getConfirm().setDisabled(Boolean.FALSE);
 		commandButtonServerConfirmDialogUpdated.setListener(new CommandButton.Listener() {
 			@Override
-			public void listenAction() {
+			public void listenAction(Object argument) {
 				commandButtonServerConfirmDialogUpdated.getConfirm().setMessage("Time is "+LocalDateTime.now()+". Do you want to continue ?");
 				PrimeFaces.current().ajax().update(":form:contractBodyConfirmDialogOutputPanel");
 			}

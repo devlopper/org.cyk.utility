@@ -12,7 +12,17 @@
     	<ui:define name="centerCenter">.
     		<ui:decorate template="/command/commandbutton/default.xhtml">
     			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonServer}"/>
-    		</ui:decorate>	   
+    		</ui:decorate>
+    		
+    		<ui:decorate template="/command/commandbutton/default.xhtml">
+    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonServerArgument1}"/>
+    			<ui:param name="actionArgument" value="'It is my string argument'"/>
+    		</ui:decorate>
+    		
+    		<ui:decorate template="/command/commandbutton/default.xhtml">
+    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonServerArgument2}"/>
+    			<ui:param name="actionArgument" value="123"/>
+    		</ui:decorate>
     		
     		<ui:decorate template="/command/commandbutton/default.xhtml">
     			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonServerDoNotNotifySuccess}"/>
