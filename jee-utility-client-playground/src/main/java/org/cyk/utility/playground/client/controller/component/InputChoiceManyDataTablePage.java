@@ -63,7 +63,7 @@ public class InputChoiceManyDataTablePage extends AbstractPageContainerManagedIm
 				}
 			}
 		);
-		dataTable.getDialog().setCommandable(commandableBuilder.execute().getOutput());
+		//dataTable.getDialog().setCommandable(commandableBuilder.execute().getOutput());
 	}
 	
 }

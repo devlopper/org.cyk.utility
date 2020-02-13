@@ -14,13 +14,14 @@ import org.primefaces.PrimeFaces;
 import lombok.Getter;
 import lombok.Setter;
 
+@Deprecated
 public class DataTableEntity<ENTITY> extends DataTable implements Serializable {
 
 	@Getter @Setter private Class<ENTITY> entityClass;
 	@Getter @Setter private Collection<ENTITY> value;
 	@Getter @Setter private Listener<ENTITY> listener;
 	@Getter @Setter private String dialogOutputPanelIdentifier = "dialogOutputPanel"+getIdentifier();	
-	@Getter @Setter private Dialog dialog = new Dialog();
+	//@Getter @Setter private Dialog dialog = new Dialog();
 	@Getter @Setter private ActionMode addMode = ActionMode.INLINE;
 	@Getter @Setter private Commandable addCommandable;
 	/**/

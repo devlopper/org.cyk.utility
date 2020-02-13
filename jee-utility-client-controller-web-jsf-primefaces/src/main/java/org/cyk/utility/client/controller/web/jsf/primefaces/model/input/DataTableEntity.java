@@ -17,7 +17,7 @@ public class DataTableEntity<ENTITY> extends org.cyk.utility.client.controller.w
 	@Getter @Setter private Collection<ENTITY> value;
 	@Getter @Setter private Listener<ENTITY> listener;
 	@Getter @Setter private String dialogOutputPanelIdentifier = "dialogOutputPanel"+getIdentifier();	
-	@Getter @Setter private Dialog dialog = new Dialog();
+	//@Getter @Setter private Dialog dialog = new Dialog();
 	
 	/**/
 	

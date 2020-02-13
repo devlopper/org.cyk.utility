@@ -31,7 +31,7 @@ public interface DataTableEntityBuilder {
 		);
 		commandableBuilder.addUpdatables(DependencyInjection.inject(ComponentHelper.class).getGlobalMessagesTargetsIdentifiers());
 		
-		dataTableEntity.getDialog().setCommandable(commandableBuilder.execute().getOutput());
+		//dataTableEntity.getDialog().setCommandable(commandableBuilder.execute().getOutput());
 		return dataTableEntity;
 	}
 	

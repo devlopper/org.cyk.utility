@@ -3,22 +3,17 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.model;
 import java.io.Serializable;
 import java.util.Collection;
 
-import javax.faces.event.AjaxBehaviorEvent;
-
-import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.object.ReadListener;
-import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.ControllerEntity;
 import org.cyk.utility.client.controller.ControllerLayer;
-import org.cyk.utility.client.controller.web.jsf.model.AjaxBehaviorEventListener;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax.Ajax;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax.AjaxSelectEvent;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax.AjaxUnselectEvent;
-import org.primefaces.PrimeFaces;
 
 import lombok.Getter;
 import lombok.Setter;
 
+@Deprecated
 public class AutoCompleteEntity<ENTITY> extends AbstractObject implements Serializable {
 
 	public static Integer INITIAL_NUMBER_OF_RESULTS = 10;
@@ -28,6 +23,7 @@ public class AutoCompleteEntity<ENTITY> extends AbstractObject implements Serial
 	private ControllerEntity<ENTITY> controllerEntity;
 	private Integer initialNumberOfResults = INITIAL_NUMBER_OF_RESULTS;
 	@Getter private Integer numberOfResults = initialNumberOfResults;
+	@SuppressWarnings("unused")
 	private String queryString;
 	@Getter @Setter private String dropdownMode = "current",placeholder,emptyMessage="-- Aucun résultat --";
 	@Getter @Setter private Object converter;
@@ -98,6 +94,7 @@ public class AutoCompleteEntity<ENTITY> extends AbstractObject implements Serial
 	
 	/**/
 	
+	@SuppressWarnings("unused")
 	private static final String SCRIPT_SEARCH = "PF('%s').search('%s')";
 	
 	/**/

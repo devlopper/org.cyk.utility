@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"      
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+    <cyk:page value="#{dataTableLazyPage}">
+    	<ui:define name="centerCenter">
+    		<ui:decorate template="/collection/datatable/default.xhtml">
+    			<ui:param name="dataTable" value="#{dataTableLazyPage.dataTable}"/>
+    			
+    			<ui:define name="header">
+    				<ui:decorate template="/command/commandbutton/default.xhtml">
+    					<ui:param name="commandButton" value="#{dataTableLazyPage.commandButtonOperation1Mass}"/>
+    				</ui:decorate>
+    			</ui:define>
+    			
+    			<ui:define name="columnsAfterRowIndex">
+    				<p:column width="100" selectionMode="multiple">
+    					<f:facet name="header">
+    						<h:outputText value="Code" />
+    					</f:facet>
+    					<h:outputText value="#{record.code}" />
+    				</p:column>
+    				<p:column>
+    					<f:facet name="header">
+    						<h:outputText value="Name" />
+    					</f:facet>
+    					<h:outputText value="#{record.name}" />
+    				</p:column>
+    			</ui:define>
+    			
+    			<ui:define name="dialogBodyForm">
+    				S : #{dataTableLazyPage.dataTable.selection}
+    			</ui:define>
+    			
+    		</ui:decorate>	   
+    	</ui:define>
+    </cyk:page>
+    
+</html>

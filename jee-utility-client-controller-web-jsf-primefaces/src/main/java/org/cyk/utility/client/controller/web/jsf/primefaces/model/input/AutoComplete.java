@@ -6,7 +6,9 @@ import java.util.Map;
 
 import javax.faces.event.AjaxBehaviorEvent;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
 import org.cyk.utility.__kernel__.object.ReadListener;
@@ -18,8 +20,10 @@ import org.cyk.utility.__kernel__.user.interface_.message.RenderType;
 import org.cyk.utility.__kernel__.user.interface_.message.Severity;
 import org.cyk.utility.client.controller.ControllerEntity;
 import org.cyk.utility.client.controller.ControllerLayer;
+import org.cyk.utility.client.controller.web.jsf.converter.ObjectConverter;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObject;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.Event;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax.Ajax;
 import org.primefaces.PrimeFaces;
 
@@ -37,7 +41,7 @@ public class AutoComplete extends AbstractObject implements Serializable {
 	
 	private Integer initialNumberOfResults = INITIAL_NUMBER_OF_RESULTS;
 	@Getter private Integer numberOfResults = initialNumberOfResults;
-	private String queryString;
+	private String queryString,targetWidgetVar;
 	private String dropdownMode = "current",placeholder,emptyMessage="-- Aucun résultat --";
 	private Object converter;
 	private Object value;
@@ -95,6 +99,7 @@ public class AutoComplete extends AbstractObject implements Serializable {
 	
 	public static final String FIELD_ENTITY_CLASS = "entityClass";
 	public static final String FIELD_ENTITY_CONTROLLER = "entityController";
+	public static final String FIELD_TARGET_WIDGET_VAR = "targetWidgetVar";
 	
 	private static final String SCRIPT_SEARCH = "PF('%s').search('%s')";
 	
@@ -147,12 +152,39 @@ public class AutoComplete extends AbstractObject implements Serializable {
 			autoComplete.ajaxItemSelect = Builder.build(Ajax.class,Map.of(Ajax.FIELD_EVENT,"itemSelect"));
 			
 			autoComplete.ajaxItemUnselect = Builder.build(Ajax.class,Map.of(Ajax.FIELD_EVENT,"itemUnselect"));
+			
+			if(autoComplete.entityClass == null) {
+				
+			}else {
+				//autoComplete.setIdentifier(StringHelper.getVariableNameFrom(autoComplete.entityClass.getSimpleName()));
+				if(StringHelper.isBlank(autoComplete.targetWidgetVar)) {
+					autoComplete.setConverter(DependencyInjection.inject(ObjectConverter.class));
+				}else {
+					String script = String.format(SCRIPT_FILTER, autoComplete.targetWidgetVar);
+					autoComplete.getEventScripts(Boolean.TRUE).write(Event.CHANGE, script);
+					autoComplete.getAjaxItemSelect().setDisabled(Boolean.FALSE);
+					autoComplete.getAjaxItemSelect().getEventScripts(Boolean.TRUE).write(Event.COMPLETE, script);
+					autoComplete.getAjaxItemSelect().setThrowNotYetImplemented(Boolean.FALSE);
+					autoComplete.getAjaxItemSelect().getRunnerArguments().setSuccessMessageArguments(null);
+					
+					autoComplete.setReadItemValueListener(new ReadListener() {				
+						@Override
+						public Object read(Object object) {
+							return FieldHelper.readBusinessIdentifier(object);
+						}
+					});
+				}
+			}			
 		}
 		
 		@Override
 		protected Class<AutoComplete> __getClass__() {
 			return AutoComplete.class;
-		}		
+		}
+		
+		/**/
+		
+		private static final String SCRIPT_FILTER = "PF('%s').filter()";
 	}
 
 	static {

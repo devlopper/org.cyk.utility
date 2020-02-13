@@ -8,42 +8,46 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
-	<p:dataTable id="#{dataTable.identifier}" value="#{dataTable.value}" var="record" rowIndexVar="rowIndex">
+	<p:dataTable
+		id="#{dataTable.identifier}" value="#{dataTable.value}" var="record" emptyMessage="#{dataTable.emptyMessage}"
+   		lazy="#{dataTable.lazy}" rows="#{dataTable.rows}" paginator="#{dataTable.paginator}" rowsPerPageTemplate="#{dataTable.rowsPerPageTemplate}" 
+   		paginatorAlwaysVisible="#{dataTable.paginatorAlwaysVisible}"
+		paginatorTemplate="#{dataTable.paginatorTemplate}" currentPageReportTemplate="#{dataTable.currentPageReportTemplate}"
+		widgetVar="#{dataTable.widgetVar}" rowIndexVar="rowIndex" filterDelay="#{dataTable.filterDelay}" selection="#{dataTable.selection}"
+		rowStyleClass="#{dataTable.rowStyleClass}"
+	>
  		<f:facet name="header">
  			<ui:insert name="header">
- 				<h:outputText value="#{dataTable.title}" />
- 			</ui:insert> 			
+ 				
+			</ui:insert> 			
  		</f:facet>
- 		<ui:insert name="rowIndexColumn">
- 			<p:column width="60">
-	 			<h:outputText value="#{rowIndex+1}" />
-	 			<f:facet name="footer">
-	 				<cyk:commandable value="#{dataTable.addCommandable}" />
-	 				<!--
-	 				<p:commandButton title="Ajouter" icon="fa fa-plus" action="#{dataTable.openDialogForAdd}" update=":form:#{dataTable.dialogOutputPanelIdentifier}"/>
-	 				-->
-	 			</f:facet>
-	 		</p:column>
- 		</ui:insert>
-	 		
- 		<ui:insert name="middleColumns"/>
  		
- 		<ui:insert name="removeCommandColumn">
- 			<p:column width="60">
- 				<p:commandButton title="Retirer" icon="fa fa-minus" action="#{dataTable.remove(record)}" update=":form:#{dataTable.identifier}"/>
- 			</p:column>
- 		</ui:insert> 		
+ 		<ui:insert name="columns">
+ 			<ui:insert name="columnRowIndex">
+	 			<p:column headerText="#" width="50">
+		 			<h:outputText value="#{rowIndex+1}" />
+		 		</p:column>
+	 		</ui:insert>
+	 		
+	 		<ui:insert name="columnsAfterRowIndex"/>
+	 		
+	 		<ui:insert name="columnMenu"/> 			 		
+ 		</ui:insert>
+
  	</p:dataTable>
  	
- 	<p:outputPanel id="#{dataTable.dialogOutputPanelIdentifier}">
-   		<p:dialog id="#{dataTable.dialog.identifier}" header="#{dataTable.dialog.title}" modal="true" widgetVar="#{dataTable.dialog.widgetVar}" fitViewport="true" 
-			styleClass="cyk-dialog" closeOnEscape="true" draggable="false" dynamic="true" resizable="false">		
-			<ui:insert name="dialogContent">
-				<h1><h:outputText value="Dialog Content" /></h1>
-			</ui:insert>				
-	 		<p:separator/>		
-	 		<cyk:commandable value="#{dataTable.dialog.commandable}" />
-	  	</p:dialog>
-	</p:outputPanel>
-	
+ 	<ui:decorate template="/panel/output/default.xhtml">
+ 		<ui:param name="outputPanel" value="#{dataTable.dialogOutputPanel}"/>
+ 		<ui:define name="outputPanelBody">
+ 			<ui:decorate template="/dialog/default.xhtml">
+ 				<ui:param name="dialog" value="#{dataTable.dialog}"/>
+		 		<ui:define name="dialogBody">
+		 			<ui:insert name="dialogBodyForm"><h:outputText value="Form"></h:outputText></ui:insert>
+		 			<p:separator/>
+		 			<ui:insert name="dialogBodyCommands"><h:outputText value="Commands"></h:outputText></ui:insert>	
+		 		</ui:define>
+		 	</ui:decorate>
+ 		</ui:define>
+ 	</ui:decorate>
+ 	
 </ui:composition>

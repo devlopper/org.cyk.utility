@@ -2,6 +2,7 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.model;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Map;
 
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
@@ -16,8 +17,8 @@ import lombok.Setter;
 
 public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractObject implements Serializable {
 
-	@Getter @Setter protected String identifier = RandomHelper.getAlphabetic(5);
-	@Getter @Setter protected String widgetVar = RandomHelper.getAlphabetic(5);
+	@Getter @Setter protected String identifier;
+	@Getter @Setter protected String widgetVar;
 	@Getter @Setter protected String style,styleClass;
 	@Getter @Setter protected MapInstance<Event, String> eventScripts;
 	@Getter @Setter protected Boolean rendered = Boolean.TRUE;
@@ -83,6 +84,14 @@ public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractOb
 	
 	public static abstract class AbstractConfiguratorImpl<OBJECT extends AbstractObject> extends Configurator.AbstractImpl<OBJECT> implements Serializable {
 		
+		@Override
+		public void configure(OBJECT object, Map<Object, Object> arguments) {
+			super.configure(object, arguments);
+			String identifier_prefix = object.getClass().getSimpleName().toLowerCase()+"_";
+			object.identifier = identifier_prefix+RandomHelper.getAlphabetic(5);
+			object.widgetVar = identifier_prefix+RandomHelper.getAlphabetic(5);
+		}
+		
 	}
 	
 	/**/
@@ -91,6 +100,8 @@ public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractOb
 	
 	public static final String FIELD_IDENTIFIER = "identifier";
 	public static final String FIELD_WIDGET_VAR = "widgetVar";
+	public static final String FIELD_STYLE = "style";
+	public static final String FIELD_STYLE_CLASS = "styleClass";
 	public static final String FIELD_RENDERED = "rendered";
 	public static final String FIELD_EVENT_SCRIPTS = "eventScripts";
 	public static final String FIELD_EVENT_STYLE = "style";

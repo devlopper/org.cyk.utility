@@ -2,6 +2,7 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.model.panel;
 
 import java.io.Serializable;
 
+import org.cyk.utility.__kernel__.object.Configurator;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObject;
 
 import lombok.Getter;
@@ -24,6 +25,9 @@ public class OutputPanel extends AbstractObject implements Serializable {
 		protected Class<OutputPanel> __getClass__() {
 			return OutputPanel.class;
 		}
-
+	}
+	
+	static {
+		Configurator.set(OutputPanel.class, new ConfiguratorImpl());
 	}
 }

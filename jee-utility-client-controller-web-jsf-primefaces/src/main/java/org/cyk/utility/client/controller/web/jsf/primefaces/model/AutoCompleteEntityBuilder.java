@@ -6,6 +6,7 @@ import org.cyk.utility.__kernel__.object.ReadListener;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.web.jsf.converter.ObjectConverter;
 
+@Deprecated
 public interface AutoCompleteEntityBuilder {
 
 	static <ENTITY> AutoCompleteEntity<ENTITY> build(Class<ENTITY> entityClass,String targetWidgetVar) {

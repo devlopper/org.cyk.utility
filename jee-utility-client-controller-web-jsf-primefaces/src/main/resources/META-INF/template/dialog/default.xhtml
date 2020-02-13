@@ -8,12 +8,11 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
-	<!--
-	<p:dialog
-		
-	>
-		<ui:insert name="#{}" />
+	<p:dialog 
+		id="#{dialog.identifier}" header="#{dialog.header}" modal="#{dialog.modal}" widgetVar="#{dialog.widgetVar}" fitViewport="#{dialog.fitViewport}" 
+			styleClass="#{dialog.styleClass}" closeOnEscape="#{dialog.closeOnEscape}" draggable="#{dialog.draggable}" dynamic="#{dialog.dynamic}" resizable="#{dialog.resizable}"
+		>
+		<ui:insert name="dialogBody"><h:outputText value="Dialog Body" /></ui:insert>	
 	</p:dialog>
-	-->
 	
 </ui:composition>

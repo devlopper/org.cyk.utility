@@ -64,7 +64,7 @@ public class CollectionDataTablePage extends AbstractPageContainerManagedImpl im
 				}
 			}
 		);
-		dataTable.getDialog().setCommandable(commandableBuilder.execute().getOutput());
+		//dataTable.getDialog().setCommandable(commandableBuilder.execute().getOutput());
 	}
 	
 }
