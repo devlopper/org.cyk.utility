@@ -51,6 +51,8 @@ public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractOb
 		return getEventScript(event);
 	}
 	
+	/* Style */
+	
 	public AbstractObject addStyleClasses(Collection<String> classes) {
 		if(CollectionHelper.isEmpty(classes))
 			return this;

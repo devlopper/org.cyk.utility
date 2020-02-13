@@ -11,6 +11,9 @@ import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.ControllerEntity;
 import org.cyk.utility.client.controller.ControllerLayer;
 import org.cyk.utility.client.controller.web.jsf.model.AjaxBehaviorEventListener;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax.Ajax;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax.AjaxSelectEvent;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax.AjaxUnselectEvent;
 import org.primefaces.PrimeFaces;
 
 import lombok.Getter;
@@ -35,10 +38,10 @@ public class AutoCompleteEntity<ENTITY> extends AbstractObject implements Serial
 	@Getter @Setter private ReadListener readItemLabelListener;
 	@Getter @Setter private ReadListener readItemValueListener;
 	
-	@Getter @Setter private AjaxSelectEvent ajaxItemSelect = new AjaxSelectEvent("itemSelect");
-	@Getter @Setter private AjaxUnselectEvent ajaxItemUnselect = new AjaxUnselectEvent("itemUnselect");
-	@Getter @Setter private Ajax ajaxQuery = new Ajax("query");
-	@Getter @Setter private Ajax ajaxMoreText = new Ajax("moreText");
+	@Getter @Setter private AjaxSelectEvent ajaxItemSelect = new AjaxSelectEvent();
+	@Getter @Setter private AjaxUnselectEvent ajaxItemUnselect = new AjaxUnselectEvent();
+	@Getter @Setter private Ajax ajaxQuery = new Ajax();
+	@Getter @Setter private Ajax ajaxMoreText = new Ajax();
 	
 	@Getter @Setter private Listener<ENTITY> listener;
 	
@@ -51,6 +54,7 @@ public class AutoCompleteEntity<ENTITY> extends AbstractObject implements Serial
 		}
 		ajaxQuery.setDisabled(Boolean.FALSE);
 		ajaxMoreText.setDisabled(Boolean.FALSE);
+		/*
 		ajaxMoreText.setListener(new AjaxBehaviorEventListener() {
 			@Override
 			public void listen(AjaxBehaviorEvent event) {
@@ -63,6 +67,7 @@ public class AutoCompleteEntity<ENTITY> extends AbstractObject implements Serial
 				PrimeFaces.current().executeScript(String.format(SCRIPT_SEARCH, autoComplete.getWidgetVar(),queryString));				
 			}
 		});
+		*/
 	}
 	
 	public AutoCompleteEntity(Class<ENTITY> entityClass) {

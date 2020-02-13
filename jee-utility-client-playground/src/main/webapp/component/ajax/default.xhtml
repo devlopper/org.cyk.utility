@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"      
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+    <cyk:page value="#{ajaxPage}">
+    	<ui:define name="centerCenter">
+    		<p:panelGrid columns="2">
+    			<p:outputLabel value="InputText Click" for="inputtext01" />
+    			<p:inputText id="inputtext01">
+    				<ui:decorate template="/ajax/default.xhtml">
+    					<ui:param name="ajax" value="#{ajaxPage.ajaxServerOnClick}"/>
+    				</ui:decorate>
+		        </p:inputText>
+		        
+		        <p:outputLabel value="InputText DblClick" for="inputtext02" />
+    			<p:inputText id="inputtext02">
+    				<ui:decorate template="/ajax/default.xhtml">
+    					<ui:param name="ajax" value="#{ajaxPage.ajaxServerOnDoubleClick}"/>
+    				</ui:decorate>
+		        </p:inputText>
+		        
+		        <p:outputLabel value="InputText Change" for="inputtext03" />
+    			<p:inputText id="inputtext03">
+    				<ui:decorate template="/ajax/default.xhtml">
+    					<ui:param name="ajax" value="#{ajaxPage.ajaxServerOnChange}"/>
+    				</ui:decorate>
+		        </p:inputText>
+		        
+		        <p:outputLabel value="InputText Blur" for="inputtext04" />
+    			<p:inputText id="inputtext04">
+    				<ui:decorate template="/ajax/default.xhtml">
+    					<ui:param name="ajax" value="#{ajaxPage.ajaxServerOnBlur}"/>
+    				</ui:decorate>
+		        </p:inputText>
+    		</p:panelGrid>	    		
+    	</ui:define>
+    </cyk:page>
+    
+</html>

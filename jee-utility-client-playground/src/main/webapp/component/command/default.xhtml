@@ -8,14 +8,14 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
-    <cyk:page value="#{inputChoiceOneAutoCompletePage}">
+    <cyk:page value="#{commandPage}">
     	<ui:define name="centerCenter">
-    		<ui:decorate template="/input/select/one/autoComplete.xhtml">
-    			<ui:param name="autoComplete" value="#{inputChoiceOneAutoCompletePage.autoComplete}"/>
-    		</ui:decorate>
-    		<ui:decorate template="/command/commandbutton/default.xhtml">
-    			<ui:param name="commandButton" value="#{inputChoiceOneAutoCompletePage.commandButton}"/>
-    		</ui:decorate>
+    		<p:panelGrid columns="2">
+    			<p:outputLabel value="InputText" for="inputtext" />
+    			<p:inputText id="inputtext">
+		            <p:ajax event="click" listener="#{commandPage.commandServerOnClick}" />
+		        </p:inputText>
+    		</p:panelGrid>	    		
     	</ui:define>
     </cyk:page>
     

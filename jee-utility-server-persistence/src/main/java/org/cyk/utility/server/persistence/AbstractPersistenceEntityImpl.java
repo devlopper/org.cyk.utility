@@ -110,7 +110,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 			FieldInstance fieldInstance = __inject__(FieldInstancesRuntime.class).get(__entityClass__, field.getName());
 			if(fieldInstance != null && String.class.equals(fieldInstance.getType())) {
 				addQueryCollectInstances(readWhereIdentifierContains, String.format("SELECT tuple FROM %s tuple WHERE lower(tuple.%s) LIKE lower(:identifier)", tupleName,columnName));
-				if(ValueUsageType.BUSINESS.equals(valueUsageType) && __businessNameField__ != null) {					
+				if(ValueUsageType.BUSINESS.equals(valueUsageType) && __businessNameField__ != null && __businessNameField__.getAnnotation(Transient.class) == null) {					
 					addQueryCollectInstances(readWhereBusinessIdentifierOrNameContains, 
 							String.format("SELECT tuple FROM %1$s tuple WHERE "
 									+ QueryStringHelper.formatTupleFieldLike("tuple", columnName,"identifier")

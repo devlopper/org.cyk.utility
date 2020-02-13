@@ -15,6 +15,7 @@ import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
 import org.cyk.utility.__kernel__.system.action.SystemActionDelete;
 import org.cyk.utility.__kernel__.system.action.SystemActionList;
 import org.cyk.utility.__kernel__.system.action.SystemActionUpdate;
+import org.cyk.utility.__kernel__.throwable.Message;
 import org.cyk.utility.__kernel__.user.interface_.message.RenderType;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
@@ -30,10 +31,10 @@ import lombok.Setter;
 public class CommandButtonPage extends AbstractPageContainerManagedImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private CommandButton commandButtonServer,commandButtonServerArgument1,commandButtonServerArgument2,commandButtonServerDoNotNotifySuccess,commandButtonServerDoError
-		,commandButtonServerRenderMessageSuccessGrowl,commandButtonServerRenderMessageErrorGrowl
+	private CommandButton commandButtonServer,commandButtonServerArgument1,commandButtonServerArgument2,commandButtonServerDoNotNotifySuccess,commandButtonServerDoErrorJava
+		,commandButtonServerDoErrorCyk,commandButtonServerDoErrorCykMessageOne,commandButtonServerRenderMessageSuccessGrowl,commandButtonServerRenderMessageErrorGrowl
 		,commandButtonServerConfirmDialog,commandButtonServerConfirmDialogUpdated
-		,commandButtonIcon;
+		,commandButtonIcon,commandButtonIconOnly;
 	
 	@Override
 	protected String __getWindowTitleValue__() {
@@ -62,17 +63,34 @@ public class CommandButtonPage extends AbstractPageContainerManagedImpl implemen
 		});
 		
 		commandButtonServerDoNotNotifySuccess = Builder.build(CommandButton.class,Map.of("value","Server Do Not Notify Success"));
-		commandButtonServerDoNotNotifySuccess.setSuccessMessageArguments(null);
-		commandButtonServerDoError = Builder.build(CommandButton.class,Map.of("value","Server Do Error"));
-		commandButtonServerDoError.setListener(new CommandButton.Listener() {
+		commandButtonServerDoNotNotifySuccess.getRunnerArguments().setSuccessMessageArguments(null);
+		
+		commandButtonServerDoErrorJava = Builder.build(CommandButton.class,Map.of("value","Server Do Error Java"));
+		commandButtonServerDoErrorJava.setListener(new CommandButton.Listener() {
 			@Override
 			public void listenAction(Object argument) {
 				throw new RuntimeException("Something goes wrong from controller");
 			}
 		});
 		
+		commandButtonServerDoErrorCyk = Builder.build(CommandButton.class,Map.of("value","Server Do Error Cyk"));
+		commandButtonServerDoErrorCyk.setListener(new CommandButton.Listener() {
+			@Override
+			public void listenAction(Object argument) {
+				throw new org.cyk.utility.__kernel__.throwable.RuntimeException("Something goes wrong from controller");
+			}
+		});
+		
+		commandButtonServerDoErrorCykMessageOne = Builder.build(CommandButton.class,Map.of("value","Server Do Error Cyk One Message"));
+		commandButtonServerDoErrorCykMessageOne.setListener(new CommandButton.Listener() {
+			@Override
+			public void listenAction(Object argument) {
+				throw new org.cyk.utility.__kernel__.throwable.RuntimeException().addMessages(new Message().setSummary("Something goes wrong from controller"));
+			}
+		});
+		
 		commandButtonServerRenderMessageSuccessGrowl = Builder.build(CommandButton.class,Map.of("value","Server Render Message Success Growl"));
-		commandButtonServerRenderMessageSuccessGrowl.getSuccessMessageArguments().setRenderTypes(List.of(RenderType.GROWL));
+		commandButtonServerRenderMessageSuccessGrowl.getRunnerArguments().getSuccessMessageArguments().setRenderTypes(List.of(RenderType.GROWL));
 		
 		commandButtonServerRenderMessageErrorGrowl = Builder.build(CommandButton.class,Map.of("value","Server Do Error Render Message Error Growl"));
 		commandButtonServerRenderMessageErrorGrowl.setListener(new CommandButton.Listener() {
@@ -81,7 +99,7 @@ public class CommandButtonPage extends AbstractPageContainerManagedImpl implemen
 				throw new RuntimeException("Something goes wrong from controller");
 			}
 		});
-		commandButtonServerRenderMessageErrorGrowl.getThrowableMessageArguments().setRenderTypes(List.of(RenderType.GROWL));
+		commandButtonServerRenderMessageErrorGrowl.getRunnerArguments().getThrowableMessageArguments().setRenderTypes(List.of(RenderType.GROWL));
 		
 		commandButtonServerConfirmDialog = Builder.build(CommandButton.class,Map.of("value","Server Confirm Dialog"));
 		commandButtonServerConfirmDialog.getConfirm().setDisabled(Boolean.FALSE);
@@ -97,6 +115,8 @@ public class CommandButtonPage extends AbstractPageContainerManagedImpl implemen
 		});
 		
 		commandButtonIcon = Builder.build(CommandButton.class,Map.of("value","Yes")).setIcon(Icon.EDIT);
+		
+		commandButtonIconOnly = Builder.build(CommandButton.class).setIcon(Icon.EDIT);
 	}
 	
 	@Override

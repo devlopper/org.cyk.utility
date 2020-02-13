@@ -8,19 +8,42 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
-	<p:commandButton
-		id="#{commandButton.identifier}"
-		value="#{commandButton.value}"
-		action="#{commandButton.action(actionArgument)}"
-		update="#{commandButton.update}"
-		process="#{commandButton.process}"
-		icon="#{commandButton.icon}"
-		type="#{commandButton.type}"
-		
-	>
-		<ui:decorate template="/confirm/default.xhtml">
-    		<ui:param name="confirm" value="#{commandButton.confirm}"/>
-    	</ui:decorate>
-	</p:commandButton>
+	<ui:param name="isHasValue" value="#{not empty commandButton.value}"/>
+	
+	<ui:fragment rendered="#{isHasValue}">
+		<p:commandButton
+			value="#{commandButton.value}"
+			
+			id="value_yes_#{commandButton.identifier}"
+			action="#{commandButton.action(actionArgument)}"
+			update="#{commandButton.update}"
+			process="#{commandButton.process}"
+			icon="#{commandButton.icon}"
+			type="#{commandButton.type}"
+			title="#{commandButton.title}"
+			
+		>
+			<ui:decorate template="/confirm/default.xhtml">
+	    		<ui:param name="confirm" value="#{commandButton.confirm}"/>
+	    	</ui:decorate>
+		</p:commandButton>
+	</ui:fragment>
+	
+	<ui:fragment rendered="#{not isHasValue}">
+		<p:commandButton
+			id="value_no_#{commandButton.identifier}"
+			action="#{commandButton.action(actionArgument)}"
+			update="#{commandButton.update}"
+			process="#{commandButton.process}"
+			icon="#{commandButton.icon}"
+			type="#{commandButton.type}"
+			title="#{commandButton.title}"
+						
+		>
+			<ui:decorate template="/confirm/default.xhtml">
+	    		<ui:param name="confirm" value="#{commandButton.confirm}"/>
+	    	</ui:decorate>
+		</p:commandButton>
+	</ui:fragment>	
 		
 </ui:composition>

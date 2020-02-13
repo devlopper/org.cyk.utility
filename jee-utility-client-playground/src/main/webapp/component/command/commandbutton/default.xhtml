@@ -10,47 +10,62 @@
 	
     <cyk:page value="#{commandButtonPage}">
     	<ui:define name="centerCenter">.
-    		<ui:decorate template="/command/commandbutton/default.xhtml">
-    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonServer}"/>
-    		</ui:decorate>
-    		
-    		<ui:decorate template="/command/commandbutton/default.xhtml">
-    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonServerArgument1}"/>
-    			<ui:param name="actionArgument" value="'It is my string argument'"/>
-    		</ui:decorate>
-    		
-    		<ui:decorate template="/command/commandbutton/default.xhtml">
-    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonServerArgument2}"/>
-    			<ui:param name="actionArgument" value="123"/>
-    		</ui:decorate>
-    		
-    		<ui:decorate template="/command/commandbutton/default.xhtml">
-    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonServerDoNotNotifySuccess}"/>
-    		</ui:decorate>
-    		
-    		<ui:decorate template="/command/commandbutton/default.xhtml">
-    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonServerDoError}"/>
-    		</ui:decorate>
-    		
-    		<ui:decorate template="/command/commandbutton/default.xhtml">
-    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonServerRenderMessageSuccessGrowl}"/>
-    		</ui:decorate>
-    		
-    		<ui:decorate template="/command/commandbutton/default.xhtml">
-    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonServerRenderMessageErrorGrowl}"/>
-    		</ui:decorate>
-    		
-    		<ui:decorate template="/command/commandbutton/default.xhtml">
-    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonServerConfirmDialog}"/>
-    		</ui:decorate>
-    		
-    		<ui:decorate template="/command/commandbutton/default.xhtml">
-    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonServerConfirmDialogUpdated}"/>
-    		</ui:decorate>
-    		
-    		<ui:decorate template="/command/commandbutton/default.xhtml">
-    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonIcon}"/>
-    		</ui:decorate>
+    		<p:panelGrid columns="4">
+    			<ui:decorate template="/command/commandbutton/default.xhtml">
+	    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonServer}"/>
+	    		</ui:decorate>
+	    		
+	    		<ui:decorate template="/command/commandbutton/default.xhtml">
+	    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonServerArgument1}"/>
+	    			<ui:param name="actionArgument" value="'It is my string argument'"/>
+	    		</ui:decorate>
+	    		
+	    		<ui:decorate template="/command/commandbutton/default.xhtml">
+	    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonServerArgument2}"/>
+	    			<ui:param name="actionArgument" value="123"/>
+	    		</ui:decorate>
+	    		
+	    		<ui:decorate template="/command/commandbutton/default.xhtml">
+	    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonServerDoNotNotifySuccess}"/>
+	    		</ui:decorate>
+	    		
+	    		<ui:decorate template="/command/commandbutton/default.xhtml">
+	    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonServerDoErrorJava}"/>
+	    		</ui:decorate>
+	    		
+	    		<ui:decorate template="/command/commandbutton/default.xhtml">
+	    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonServerDoErrorCyk}"/>
+	    		</ui:decorate>
+	    		
+	    		<ui:decorate template="/command/commandbutton/default.xhtml">
+	    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonServerDoErrorCykMessageOne}"/>
+	    		</ui:decorate>
+	    		
+	    		<ui:decorate template="/command/commandbutton/default.xhtml">
+	    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonServerRenderMessageSuccessGrowl}"/>
+	    		</ui:decorate>
+	    		
+	    		<ui:decorate template="/command/commandbutton/default.xhtml">
+	    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonServerRenderMessageErrorGrowl}"/>
+	    		</ui:decorate>
+	    		
+	    		<ui:decorate template="/command/commandbutton/default.xhtml">
+	    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonServerConfirmDialog}"/>
+	    		</ui:decorate>
+	    		
+	    		<ui:decorate template="/command/commandbutton/default.xhtml">
+	    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonServerConfirmDialogUpdated}"/>
+	    		</ui:decorate>
+	    		
+	    		<ui:decorate template="/command/commandbutton/default.xhtml">
+	    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonIcon}"/>
+	    		</ui:decorate>
+	    		
+	    		<ui:decorate template="/command/commandbutton/default.xhtml">
+	    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonIconOnly}"/>
+	    		</ui:decorate>
+	    		
+    		</p:panelGrid>	    		
     	</ui:define>
     </cyk:page>
     

@@ -43,6 +43,10 @@ public interface MessageRenderer {
 		render(new Message().setSummary(summary).setSeverity(severity), renderTypes);
 	}
 	
+	default void render(String summary,Severity severity,RenderType...renderTypes) {
+		render(new Message().setSummary(summary).setSeverity(severity), renderTypes);
+	}
+	
 	default void render(String summary,Collection<RenderType> renderTypes) {
 		render(new Message().setSummary(summary).setSeverity(Severity.INFORMATION), renderTypes);
 	}
