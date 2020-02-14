@@ -1,6 +1,7 @@
 package org.cyk.utility.playground.client.controller.component;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 import javax.faces.view.ViewScoped;
@@ -12,7 +13,6 @@ import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.collection.DataTable;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
 import org.cyk.utility.playground.client.controller.entities.Namable;
-import org.omnifaces.util.Ajax;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -33,16 +33,18 @@ public class DataTableLazyPage extends AbstractPageContainerManagedImpl implemen
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
 		dataTable = Builder.build(DataTable.class,Map.of(DataTable.FIELD_LAZY,Boolean.TRUE,DataTable.ConfiguratorImpl.FIELD_ENTIY_CLASS,Namable.class
-				,DataTable.ConfiguratorImpl.FIELD_SELECTABLE,Boolean.TRUE));
+				,DataTable.FIELD_SELECTION_MODE,"multiple"));
 		
-		commandButtonOperation1Mass = Builder.build(CommandButton.class,Map.of(CommandButton.FIELD_VALUE,"Opération 1",CommandButton.FIELD_UPDATE,":form:"+dataTable.getDialogOutputPanel().getIdentifier()));
-		commandButtonOperation1Mass.getRunnerArguments().setSuccessMessageArguments(null);
-		commandButtonOperation1Mass.setListener(new AbstractAction.Listener() {			
+		dataTable.getDialog().getCloseAjax().setListener(new AbstractAction.Listener() {			
 			@Override
 			public void listenAction(Object argument) {
-				Ajax.oncomplete("PF('"+dataTable.getDialog().getWidgetVar()+"').show();");
+				System.out.println("DataTableLazyPage.__listenPostConstruct__().new Listener() {...}.listenAction() : "+LocalDateTime.now());
 			}
 		});
+		dataTable.getDialog().getCloseAjax().setDisabled(Boolean.FALSE);
+		
+		commandButtonOperation1Mass = Builder.build(CommandButton.class,Map.of(CommandButton.FIELD_VALUE,"Opération 1",CommandButton.ConfiguratorImpl.FIELD_DATA_TABLE,dataTable));
+		
 	}
 	
 }

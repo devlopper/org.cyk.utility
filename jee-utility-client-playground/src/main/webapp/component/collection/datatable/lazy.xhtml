@@ -20,7 +20,7 @@
     			</ui:define>
     			
     			<ui:define name="columnsAfterRowIndex">
-    				<p:column width="100" selectionMode="multiple">
+    				<p:column width="100">
     					<f:facet name="header">
     						<h:outputText value="Code" />
     					</f:facet>
@@ -34,8 +34,12 @@
     				</p:column>
     			</ui:define>
     			
-    			<ui:define name="dialogBodyForm">
+    			<ui:define name="dialogBody">
     				S : #{dataTableLazyPage.dataTable.selection}
+    			</ui:define>
+    			
+    			<ui:define name="dialogCommandsBeforeClose">
+    				MY ACTION COMMAND
     			</ui:define>
     			
     		</ui:decorate>	   

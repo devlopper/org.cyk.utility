@@ -45,6 +45,10 @@ public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractOb
 		return getEventScript(Event.CHANGE);
 	}
 	
+	public String getOnClick() {
+		return getEventScript(Event.CLICK);
+	}
+	
 	public String getEventScriptByString(String string) {
 		if(StringHelper.isBlank(string))
 			return null;

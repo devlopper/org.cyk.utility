@@ -4,6 +4,6 @@ public enum Event {
 
 	COMPLETE
 	,CHANGE
-	
+	,CLICK
 	;
 }

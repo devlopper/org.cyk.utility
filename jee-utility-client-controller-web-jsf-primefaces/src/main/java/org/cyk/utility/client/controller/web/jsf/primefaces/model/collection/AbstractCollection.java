@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.Builder;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObject;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.panel.Dialog;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.panel.OutputPanel;
@@ -19,9 +20,9 @@ import lombok.Setter;
 public abstract class AbstractCollection extends AbstractObject implements Serializable {
 
 	protected Object value;
-	protected String emptyMessage,rowsPerPageTemplate,rowStyleClass,paginatorTemplate,currentPageReportTemplate;
+	protected String emptyMessage,rowsPerPageTemplate,rowStyleClass,paginatorTemplate,currentPageReportTemplate,selectionMode;
 	protected Boolean lazy,paginator,paginatorAlwaysVisible;
-	protected Integer rows=0,filterDelay=300;
+	protected Integer rows,filterDelay;
 	protected List<?> selection;
 	protected Map<String,Object> map = new HashMap<>();
 	protected OutputPanel dialogOutputPanel;
@@ -29,12 +30,15 @@ public abstract class AbstractCollection extends AbstractObject implements Seria
 	
 	/**/
 	
-	
-	
 	/**/
 	
 	public static final String FIELD_VALUE = "value";
+	public static final String FIELD_EMPTY_MESSAGE = "emptyMessage";
+	public static final String FIELD_ROWS_PER_PAGE_TEMPLATE = "rowsPerPageTemplate";
+	public static final String FIELD_ROWS = "rows";
+	public static final String FIELD_FILTER_DELAY = "filterDelay";
 	public static final String FIELD_LAZY = "lazy";
+	public static final String FIELD_SELECTION_MODE = "selectionMode";
 	
 	/**/
 	
@@ -45,15 +49,18 @@ public abstract class AbstractCollection extends AbstractObject implements Seria
 			super.configure(collection, arguments);
 			@SuppressWarnings("unchecked")
 			Class<Object> entityClass = (Class<Object>) MapHelper.readByKey(arguments, FIELD_ENTIY_CLASS);
-			collection.rows = 0;
-			collection.filterDelay = 2000;
-			collection.emptyMessage = "-- Aucun élément trouvé --";
+			if(collection.rows == null)
+				collection.rows = 0;
+			if(collection.filterDelay == null)
+				collection.filterDelay = 2000;
+			if(StringHelper.isEmpty(collection.emptyMessage))
+				collection.emptyMessage = "-- Aucun élément trouvé --";
 			
 			if(Boolean.TRUE.equals(collection.lazy)) {
 				collection.rows = 20;
 				collection.rowsPerPageTemplate = "20,50,100,500,1000";
 				collection.paginatorTemplate = "{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}";
-				collection.currentPageReportTemplate = "{totalRecords} | Page {currentPage}/{totalPages}";
+				collection.currentPageReportTemplate = "Total {totalRecords} | Page {currentPage}/{totalPages}";
 				collection.paginator = Boolean.TRUE;
 				if(entityClass == null) {
 					
@@ -61,10 +68,13 @@ public abstract class AbstractCollection extends AbstractObject implements Seria
 					LazyDataModel<Object> value = new LazyDataModel<Object>(entityClass);
 					collection.value = value;	
 				}				
+			}else {
+				
 			}
 			
-			Boolean selectable = (Boolean) MapHelper.readByKey(arguments, FIELD_SELECTABLE);
-			if(Boolean.TRUE.equals(selectable)) {
+			if(StringHelper.isBlank(collection.selectionMode)) {
+				
+			}else {
 				collection.selection = new ArrayList<>();
 				collection.dialogOutputPanel = Builder.build(OutputPanel.class);
 				collection.dialog = Builder.build(Dialog.class,Map.of(Dialog.FIELD_STYLE_CLASS,"cyk-min-width-90-percent cyk-min-height-90-percent"));
@@ -72,7 +82,5 @@ public abstract class AbstractCollection extends AbstractObject implements Seria
 		}
 		
 		public static final String FIELD_ENTIY_CLASS = "entityClass";
-		public static final String FIELD_SELECTABLE = "selectable";
-		
 	}	
 }

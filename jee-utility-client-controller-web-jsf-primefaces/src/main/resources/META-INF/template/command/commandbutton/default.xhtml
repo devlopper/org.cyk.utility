@@ -22,6 +22,7 @@
 			type="#{commandButton.type}"
 			title="#{commandButton.title}"
 			
+			onclick="#{commandButton.onClick}"
 		>
 			<ui:decorate template="/confirm/default.xhtml">
 	    		<ui:param name="confirm" value="#{commandButton.confirm}"/>
@@ -38,7 +39,8 @@
 			icon="#{commandButton.icon}"
 			type="#{commandButton.type}"
 			title="#{commandButton.title}"
-						
+			
+			onclick="#{commandButton.onClick}"			
 		>
 			<ui:decorate template="/confirm/default.xhtml">
 	    		<ui:param name="confirm" value="#{commandButton.confirm}"/>

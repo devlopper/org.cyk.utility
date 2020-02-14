@@ -24,8 +24,17 @@
  		
  		<ui:insert name="columns">
  			<ui:insert name="columnRowIndex">
-	 			<p:column headerText="#" width="50">
-		 			<h:outputText value="#{rowIndex+1}" />
+	 			<p:column selectionMode="#{dataTable.selectionMode}" width="55">
+	 				<f:facet name="header">
+	 					<!-- Align # to right of check box -->
+		 				<div style="float: left !important;">
+			 				<h:outputText value="#" />
+			 			</div>
+	 				</f:facet>
+	 				<!-- Align order number to right of check box -->
+	 				<div style="float: left !important;">
+		 				<h:outputText value="#{rowIndex+1}" />
+		 			</div>
 		 		</p:column>
 	 		</ui:insert>
 	 		
@@ -41,11 +50,6 @@
  		<ui:define name="outputPanelBody">
  			<ui:decorate template="/dialog/default.xhtml">
  				<ui:param name="dialog" value="#{dataTable.dialog}"/>
-		 		<ui:define name="dialogBody">
-		 			<ui:insert name="dialogBodyForm"><h:outputText value="Form"></h:outputText></ui:insert>
-		 			<p:separator/>
-		 			<ui:insert name="dialogBodyCommands"><h:outputText value="Commands"></h:outputText></ui:insert>	
-		 		</ui:define>
 		 	</ui:decorate>
  		</ui:define>
  	</ui:decorate>
