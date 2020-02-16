@@ -6,7 +6,6 @@ import java.util.Map;
 import javax.faces.event.AjaxBehaviorEvent;
 
 import org.cyk.utility.__kernel__.object.Configurator;
-import org.cyk.utility.__kernel__.string.StringHelper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -25,8 +24,7 @@ public class Ajax extends AbstractAjax<AjaxBehaviorEvent> implements Serializabl
 		@Override
 		public void configure(Ajax ajax, Map<Object, Object> arguments) {
 			super.configure(ajax, arguments);
-			if(StringHelper.isBlank(ajax.getEvent()))
-				ajax.setEvent("click");
+			
 		}
 
 		@Override

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
+import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.Configurator;
 import org.cyk.utility.__kernel__.string.Case;
 import org.cyk.utility.__kernel__.string.StringHelper;
@@ -16,6 +17,7 @@ import lombok.Setter;
 public class Column extends AbstractObject implements Serializable {
 
 	private String header,footer,selectionMode,width,filterBy,fieldName;
+	private Boolean visible = Boolean.TRUE;
 	private Object filterValue; 
 	
 	/**/
@@ -25,6 +27,7 @@ public class Column extends AbstractObject implements Serializable {
 	public static final String FIELD_WIDTH = "width";
 	public static final String FIELD_FIELD_NAME = "fieldName";
 	public static final String FIELD_FILTER_BY = "filterBy";
+	public static final String FIELD_VISIBLE = "visible";
 	
 	/**/
 	
@@ -36,7 +39,10 @@ public class Column extends AbstractObject implements Serializable {
 			if(column.header == null && StringHelper.isNotBlank(column.fieldName)) {
 				column.header = InternationalizationHelper.buildString(InternationalizationHelper.buildKey(column.fieldName),null,null,Case.FIRST_CHARACTER_UPPER);
 			}
-			if(StringHelper.isBlank(column.getFilterBy()) && StringHelper.isNotBlank(column.getFieldName()))
+			Boolean isFilterable = (Boolean) MapHelper.readByKey(arguments, FIELD_FILTERABLE);
+			if(isFilterable == null)
+				isFilterable = Boolean.TRUE;
+			if(StringHelper.isBlank(column.getFilterBy()) && Boolean.TRUE.equals(isFilterable) && StringHelper.isNotBlank(column.getFieldName()))
 				column.setFilterBy(column.getFieldName());
 		}
 		
@@ -44,6 +50,8 @@ public class Column extends AbstractObject implements Serializable {
 		protected Class<Column> __getClass__() {
 			return Column.class;
 		}
+		
+		public static final String FIELD_FILTERABLE = "filterable";
 	}
 	
 	static {

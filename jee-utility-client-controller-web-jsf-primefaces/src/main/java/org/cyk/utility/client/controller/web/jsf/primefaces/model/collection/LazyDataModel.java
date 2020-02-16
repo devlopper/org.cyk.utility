@@ -1,6 +1,7 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces.model.collection;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.ControllerEntity;
 import org.cyk.utility.client.controller.ControllerLayer;
 import org.primefaces.model.SortOrder;
@@ -25,7 +27,8 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 	private Map<String,ENTITY> map;
 	private Class<ENTITY> entityClass;
 	private ControllerEntity<ENTITY> controller;
-	private String readQueryIdentifier,countQueryIdentifier;
+	private String readQueryIdentifier,countQueryIdentifier,entityFieldsNamesAsString;
+	private Collection<String> entityFieldsNames;
 	
 	public LazyDataModel(Class<ENTITY> entityClass) {
 		this.entityClass = entityClass;
@@ -43,7 +46,10 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 			for(Map.Entry<String, Object> entry : filters.entrySet())
 				filter.addField(entry.getKey(), entry.getValue());
 		}
-		Properties properties = new Properties().setQueryIdentifier(readQueryIdentifier).setFilters(filter).setIsPageable(Boolean.TRUE).setFrom(first).setCount(pageSize);		
+		if(entityFieldsNamesAsString == null && CollectionHelper.isNotEmpty(entityFieldsNames))
+			entityFieldsNamesAsString = StringHelper.concatenate(entityFieldsNames, ",");
+		Properties properties = new Properties().setQueryIdentifier(readQueryIdentifier).setFields(entityFieldsNamesAsString).setFilters(filter).setIsPageable(Boolean.TRUE).setFrom(first)
+				.setCount(pageSize);		
 		List<ENTITY> list = (List<ENTITY>) controller.read(properties);
 		if(CollectionHelper.isEmpty(list))
 			setRowCount(0);

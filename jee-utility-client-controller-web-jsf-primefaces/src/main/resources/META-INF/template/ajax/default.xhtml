@@ -11,11 +11,14 @@
 	<p:ajax 
 		event="#{ajax.event}" 
 		listener="#{ajax.listen}" 
-		partialSubmit="#{ajax.partialSubmit}" 
-		oncomplete="#{ajax.onComplete}"
+		partialSubmit="#{ajax.partialSubmit}" 		
 		disabled="#{ajax.disabled}"
+		global="#{ajax.disabled}"
 		
 		update="#{ajax.update}"
+		
+		onstart="#{ajax.onStart}"
+		oncomplete="#{ajax.onComplete}"
 	/>
   			
 </ui:composition>

@@ -27,7 +27,8 @@ public abstract class AbstractAction extends AbstractObject implements Serializa
 	public void action(Object argument) {
 		if(runnerArguments == null) {
 			MessageRenderer.getInstance().render("No runner arguments found.",Severity.WARNING);
-		}else {
+		}else {			
+			runnerArguments.setRunnables(null);//free previous one
 			runnerArguments.addRunnables(new Runnable() {			
 				@Override
 				public void run() {
@@ -37,7 +38,7 @@ public abstract class AbstractAction extends AbstractObject implements Serializa
 				}
 			});
 			Runner.getInstance().run(runnerArguments);	
-		}		
+		}
 	}
 	
 	protected void __action__(Object argument) {}
@@ -64,7 +65,10 @@ public abstract class AbstractAction extends AbstractObject implements Serializa
 		@Override
 		public void configure(ACTION action, Map<Object, Object> arguments) {
 			super.configure(action, arguments);
-			action.runnerArguments = new Runner.Arguments().assignDefaultMessageArguments();
+			if(action.runnerArguments == null) {
+				action.runnerArguments = new Runner.Arguments().assignDefaultMessageArguments();
+			}
+			
 			//we need to show messages after processing
 			Collection<String> updatables = CollectionHelper.listOf(StringUtils.split(action.getUpdate(),","));			
 			if(updatables == null)

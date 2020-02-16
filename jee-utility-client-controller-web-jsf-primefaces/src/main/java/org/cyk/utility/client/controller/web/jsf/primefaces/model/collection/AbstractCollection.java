@@ -20,10 +20,11 @@ import org.cyk.utility.__kernel__.user.interface_.message.RenderType;
 import org.cyk.utility.__kernel__.user.interface_.message.Severity;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObject;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.BlockUI;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax.Ajax;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.panel.Dialog;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.panel.OutputPanel;
-import org.omnifaces.util.Ajax;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -42,6 +43,8 @@ public abstract class AbstractCollection extends AbstractObject implements Seria
 	protected OutputPanel dialogOutputPanel;
 	protected Dialog dialog;
 	protected Collection<CommandButton> headerToolbarLeftCommandButtons;
+	protected BlockUI blockUI;
+	protected Ajax pageAjax,sortAjax,filterAjax,rowSelectAjax,rowUnselectAjax,rowSelectCheckBoxAjax,rowUnselectCheckBoxAjax;
 	
 	/**/
 	
@@ -79,10 +82,10 @@ public abstract class AbstractCollection extends AbstractObject implements Seria
 	
 	public static abstract class AbstractConfiguratorImpl<COLLECTION extends AbstractCollection> extends AbstractObject.AbstractConfiguratorImpl<COLLECTION> implements Serializable {
 
+		@SuppressWarnings("unchecked")
 		@Override
 		public void configure(COLLECTION collection, Map<Object, Object> arguments) {
 			super.configure(collection, arguments);
-			@SuppressWarnings("unchecked")
 			Class<Object> entityClass = (Class<Object>) MapHelper.readByKey(arguments, FIELD_ENTIY_CLASS);
 			Boolean filterable = (Boolean) MapHelper.readByKey(arguments, FIELD_FILTERABLE);
 			if(collection.rows == null)
@@ -109,7 +112,9 @@ public abstract class AbstractCollection extends AbstractObject implements Seria
 						if(StringHelper.isBlank(value.getReadQueryIdentifier()))
 							value.setReadQueryIdentifier(QueryHelper.getIdentifierReadByFiltersLike(persistenceEntityClass));
 						if(StringHelper.isBlank(value.getCountQueryIdentifier()))
-							value.setCountQueryIdentifier(QueryHelper.getIdentifierCountByFiltersLike(persistenceEntityClass));
+							value.setCountQueryIdentifier(QueryHelper.getIdentifierCountByFiltersLike(persistenceEntityClass));						
+						if(value.getEntityFieldsNames() == null)
+							value.setEntityFieldsNames((Collection<String>) MapHelper.readByKey(arguments, FIELD_ENTITY_FIELDS_NAMES));													
 					}					
 					collection.value = value;	
 				}				
@@ -125,10 +130,46 @@ public abstract class AbstractCollection extends AbstractObject implements Seria
 				collection.dialog = Builder.build(Dialog.class,Map.of(Dialog.FIELD_STYLE_CLASS,"cyk-min-width-90-percent cyk-min-height-90-percent"
 						,Dialog.FIELD_MODAL,Boolean.TRUE));
 			}
+			
+			if(collection.blockUI == null)
+				collection.blockUI = Builder.build(BlockUI.class, Map.of(BlockUI.FIELD_BLOCK,collection.identifier,BlockUI.FIELD_TRIGGER,collection.identifier));				
+			
+			/* Listeners */
+			
+			if(collection.pageAjax == null)
+				collection.pageAjax = Builder.build(Ajax.class, Map.of(Ajax.FIELD_EVENT,"page",Ajax.FIELD_DISABLED,Boolean.FALSE,Ajax.ConfiguratorImpl.FIELD_BLOCK_UI
+						,collection.blockUI,Ajax.ConfiguratorImpl.FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_NULLABLE,Boolean.TRUE
+						,Ajax.ConfiguratorImpl.FIELD_LISTENER_NULLABLE,Boolean.TRUE));
+			if(collection.filterAjax == null)
+				collection.filterAjax = Builder.build(Ajax.class, Map.of(Ajax.FIELD_EVENT,"filter",Ajax.FIELD_DISABLED,Boolean.FALSE,Ajax.ConfiguratorImpl.FIELD_BLOCK_UI
+						,collection.blockUI,Ajax.ConfiguratorImpl.FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_NULLABLE,Boolean.TRUE
+						,Ajax.ConfiguratorImpl.FIELD_LISTENER_NULLABLE,Boolean.TRUE));
+			if(collection.sortAjax == null)
+				collection.sortAjax = Builder.build(Ajax.class, Map.of(Ajax.FIELD_EVENT,"sort",Ajax.FIELD_DISABLED,Boolean.FALSE,Ajax.ConfiguratorImpl.FIELD_BLOCK_UI
+						,collection.blockUI,Ajax.ConfiguratorImpl.FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_NULLABLE,Boolean.TRUE
+						,Ajax.ConfiguratorImpl.FIELD_LISTENER_NULLABLE,Boolean.TRUE));
+			if(collection.rowSelectAjax == null)
+				collection.rowSelectAjax = Builder.build(Ajax.class, Map.of(Ajax.FIELD_EVENT,"rowSelect",Ajax.FIELD_DISABLED,Boolean.FALSE,Ajax.ConfiguratorImpl.FIELD_BLOCK_UI
+						,collection.blockUI,Ajax.ConfiguratorImpl.FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_NULLABLE,Boolean.TRUE
+						,Ajax.ConfiguratorImpl.FIELD_LISTENER_NULLABLE,Boolean.TRUE));
+			if(collection.rowUnselectAjax == null)
+				collection.rowUnselectAjax = Builder.build(Ajax.class, Map.of(Ajax.FIELD_EVENT,"rowUnselect",Ajax.FIELD_DISABLED,Boolean.FALSE,Ajax.ConfiguratorImpl.FIELD_BLOCK_UI
+						,collection.blockUI,Ajax.ConfiguratorImpl.FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_NULLABLE,Boolean.TRUE
+						,Ajax.ConfiguratorImpl.FIELD_LISTENER_NULLABLE,Boolean.TRUE));
+			if(collection.rowSelectCheckBoxAjax == null)
+				collection.rowSelectCheckBoxAjax = Builder.build(Ajax.class, Map.of(Ajax.FIELD_EVENT,"rowSelectCheckbox",Ajax.FIELD_DISABLED,Boolean.FALSE,Ajax.ConfiguratorImpl.FIELD_BLOCK_UI
+						,collection.blockUI,Ajax.ConfiguratorImpl.FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_NULLABLE,Boolean.TRUE
+						,Ajax.ConfiguratorImpl.FIELD_LISTENER_NULLABLE,Boolean.TRUE));
+			if(collection.rowUnselectCheckBoxAjax == null)
+				collection.rowUnselectCheckBoxAjax = Builder.build(Ajax.class, Map.of(Ajax.FIELD_EVENT,"rowUnselectCheckbox",Ajax.FIELD_DISABLED,Boolean.FALSE,Ajax.ConfiguratorImpl.FIELD_BLOCK_UI
+						,collection.blockUI,Ajax.ConfiguratorImpl.FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_NULLABLE,Boolean.TRUE
+						,Ajax.ConfiguratorImpl.FIELD_LISTENER_NULLABLE,Boolean.TRUE));
 		}
 		
 		public static final String FIELD_ENTIY_CLASS = "entityClass";
+		public static final String FIELD_ENTITY_FIELDS_NAMES = "entityFieldsNames";
 		public static final String FIELD_FILTERABLE = "filterable";
+		
 	}
 	
 	/**/
@@ -150,13 +191,13 @@ public abstract class AbstractCollection extends AbstractObject implements Seria
 				//if(collection != null && collection.dialog != null && StringHelper.isNotBlank(collection.dialog.getWidgetVar()))
 				__showDialog__();
 			}else {
-				MessageRenderer.getInstance().clear().render(getDialogNotShowableMessageSummary(), Severity.WARNING, RenderType.GROWL);
+				MessageRenderer.getInstance().render(getDialogNotShowableMessageSummary(), Severity.WARNING, RenderType.GROWL);
 			}
 		}
 		
 		protected void __showDialog__() {
 			collection.setIsSelectionShowableInDialog(isSelectionShowable);
-			Ajax.oncomplete("PF('"+collection.dialog.getWidgetVar()+"').show();");
+			org.omnifaces.util.Ajax.oncomplete("PF('"+collection.dialog.getWidgetVar()+"').show();");
 		}
 		
 		protected Boolean isDialogShowable() {

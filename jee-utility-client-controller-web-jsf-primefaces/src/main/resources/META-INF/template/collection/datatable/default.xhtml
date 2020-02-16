@@ -73,7 +73,8 @@
 	 		</ui:insert>
 	 		
 	 		<ui:insert name="columnsAfterRowIndex">
-	 			<p:columns value="#{dataTable.columnsAfterRowIndex}" var="column" columnIndexVar="columnIndex" width="#{column.width}" filterBy="#{column.filterBy}">
+	 			<p:columns value="#{dataTable.columnsAfterRowIndex}" var="column" columnIndexVar="columnIndex" width="#{column.width}" filterBy="#{column.filterBy}"
+	 				visible="#{column.visible}">
 	 				<f:facet name="header">
 						<ui:insert name="columnsAfterRowIndexHeaders">
 							<h:outputText value="#{column.header}" />
@@ -83,7 +84,7 @@
 					<ui:insert name="columnsAfterRowIndexFiltersFacet">
 						<f:facet name="filter">
 							<ui:insert name="columnsAfterRowIndexFiltersFacetControl">
-								<p:inputText id="columnsAfterRowIndexFiltersFacetControl" placeholder="Rechercher...">									
+								<p:inputText id="columnsAfterRowIndexFiltersFacetControl" placeholder="Rechercher..." rendered="#{not empty column.filterBy}">									
 									<p:ajax delay="#{dataTable.filterDelay}" event="keyup" oncomplete="if(event.keyCode != 13) PF('#{dataTable.widgetVar}').filter();" partialSubmit="true" global="false"/>									
 									<p:ajax event="keypress" oncomplete="if(event.keyCode == 13) PF('#{dataTable.widgetVar}').filter();" partialSubmit="true" global="false"/>
 								</p:inputText>															
@@ -101,9 +102,35 @@
 	 		
 	 		<ui:insert name="columnMenu"/> 			 		
  		</ui:insert>
-
+ 		
+ 		<!-- Listeners -->
+ 		<ui:decorate template="/ajax/default.xhtml">
+	 		<ui:param name="ajax" value="#{dataTable.pageAjax}"/>
+	 	</ui:decorate>
+	 	<ui:decorate template="/ajax/default.xhtml">
+	 		<ui:param name="ajax" value="#{dataTable.sortAjax}"/>
+	 	</ui:decorate>
+	 	<ui:decorate template="/ajax/default.xhtml">
+	 		<ui:param name="ajax" value="#{dataTable.filterAjax}"/>
+	 	</ui:decorate>
+	 	<ui:decorate template="/ajax/default.xhtml">
+	 		<ui:param name="ajax" value="#{dataTable.rowSelectAjax}"/>
+	 	</ui:decorate>
+	 	<ui:decorate template="/ajax/default.xhtml">
+	 		<ui:param name="ajax" value="#{dataTable.rowUnselectAjax}"/>
+	 	</ui:decorate>
+	 	<ui:decorate template="/ajax/default.xhtml">
+	 		<ui:param name="ajax" value="#{dataTable.rowSelectCheckBoxAjax}"/>
+	 	</ui:decorate>
+	 	<ui:decorate template="/ajax/default.xhtml">
+	 		<ui:param name="ajax" value="#{dataTable.rowUnselectCheckBoxAjax}"/>
+	 	</ui:decorate>
  	</p:dataTable>
- 
+ 	
+ 	<ui:decorate template="/blockui/default.xhtml">
+ 		<ui:param name="blockUI" value="#{dataTable.blockUI}"/>
+ 	</ui:decorate>
+ 	
  	<ui:decorate template="/panel/output/default.xhtml">
  		<ui:param name="outputPanel" value="#{dataTable.dialogOutputPanel}"/>
  		<ui:define name="outputPanelBody">

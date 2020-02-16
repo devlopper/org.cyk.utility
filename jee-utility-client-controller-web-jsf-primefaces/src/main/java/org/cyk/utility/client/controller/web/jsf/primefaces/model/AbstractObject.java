@@ -37,6 +37,10 @@ public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractOb
 		return eventScripts.read(event);
 	}
 	
+	public String getOnStart() {
+		return getEventScript(Event.START);
+	}
+	
 	public String getOnComplete() {
 		return getEventScript(Event.COMPLETE);
 	}
