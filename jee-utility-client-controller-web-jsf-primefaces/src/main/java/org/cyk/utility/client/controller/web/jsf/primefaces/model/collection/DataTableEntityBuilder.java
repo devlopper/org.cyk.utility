@@ -10,6 +10,7 @@ import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.web.ComponentHelper;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.collection.DataTableEntity.ActionMode;
 
+@Deprecated
 public interface DataTableEntityBuilder {
 
 	static <ENTITY> DataTableEntity<ENTITY> build(Class<ENTITY> entityClass,DataTableEntity.ActionMode addMode) {

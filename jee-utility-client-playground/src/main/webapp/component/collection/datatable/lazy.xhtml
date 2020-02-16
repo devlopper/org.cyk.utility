@@ -2,6 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
       xmlns:f="http://java.sun.com/jsf/core"      
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
@@ -13,6 +14,16 @@
     		<ui:decorate template="/collection/datatable/default.xhtml">
     			<ui:param name="dataTable" value="#{dataTableLazyPage.dataTable}"/>
     			<ui:param name="rowStyleClass" value="#{record.code.contains('10') ? 'cyk-background-highlight' : 'ui-state-default'}"/>
+    			
+    			<ui:define name="columnsAfterRowIndexBodies">
+    				<ui:fragment rendered="#{columnIndex == 0}">
+    					<h:outputText value="#{record[column.fieldName]}" style="font-weight: bold;"/>
+    				</ui:fragment>
+    				<ui:fragment rendered="#{columnIndex != 0}">
+    					<h:outputText value="#{record[column.fieldName]}" />
+    				</ui:fragment>		
+				</ui:define>
+					
     		</ui:decorate>	   
     	</ui:define>
     </cyk:page>

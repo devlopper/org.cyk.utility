@@ -15,7 +15,7 @@
    		paginatorAlwaysVisible="#{dataTable.paginatorAlwaysVisible}"
 		paginatorTemplate="#{dataTable.paginatorTemplate}" currentPageReportTemplate="#{dataTable.currentPageReportTemplate}"
 		widgetVar="#{dataTable.widgetVar}" rowIndexVar="rowIndex" filterDelay="#{dataTable.filterDelay}" selection="#{dataTable.selection}"
-		rowStyleClass="#{rowStyleClass}"
+		rowStyleClass="#{rowStyleClass}" 
 	>
  		<f:facet name="header">
  			<ui:insert name="header">
@@ -80,6 +80,17 @@
 						</ui:insert>
 					</f:facet>
 					
+					<ui:insert name="columnsAfterRowIndexFiltersFacet">
+						<f:facet name="filter">
+							<ui:insert name="columnsAfterRowIndexFiltersFacetControl">
+								<p:inputText id="columnsAfterRowIndexFiltersFacetControl" placeholder="Rechercher...">									
+									<p:ajax delay="#{dataTable.filterDelay}" event="keyup" oncomplete="if(event.keyCode != 13) PF('#{dataTable.widgetVar}').filter();" partialSubmit="true" global="false"/>									
+									<p:ajax event="keypress" oncomplete="if(event.keyCode == 13) PF('#{dataTable.widgetVar}').filter();" partialSubmit="true" global="false"/>
+								</p:inputText>															
+							</ui:insert>
+						</f:facet>
+					</ui:insert>
+
 					<ui:insert name="columnsAfterRowIndexBodies">
 						<h:outputText value="#{record[column.fieldName]}" />
 					</ui:insert>
@@ -92,7 +103,7 @@
  		</ui:insert>
 
  	</p:dataTable>
- 	
+ 
  	<ui:decorate template="/panel/output/default.xhtml">
  		<ui:param name="outputPanel" value="#{dataTable.dialogOutputPanel}"/>
  		<ui:define name="outputPanelBody">

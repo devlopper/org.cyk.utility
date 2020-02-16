@@ -9,6 +9,7 @@ import org.cyk.utility.client.controller.Controller;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.web.ComponentHelper;
 
+@Deprecated
 public interface DataTableEntityBuilder {
 
 	static <ENTITY> DataTableEntity<ENTITY> build(Class<ENTITY> entityClass) {

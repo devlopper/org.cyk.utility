@@ -13,6 +13,7 @@
 			<h:form
 				id="#{value.identifier}"
 				enctype="#{value.properties.enctype}"
+				onkeypress="if (event.keyCode == 13) { return false; }"
 			>
 				<ui:insert name="formContent">
 					<h1>FORM CONTENT</h1>

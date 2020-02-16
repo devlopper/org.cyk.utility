@@ -8,7 +8,6 @@ import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.system.action.SystemActionCustom;
 import org.cyk.utility.client.controller.component.command.Commandable;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
-import org.cyk.utility.client.controller.web.jsf.primefaces.model.Dialog;
 import org.primefaces.PrimeFaces;
 
 import lombok.Getter;

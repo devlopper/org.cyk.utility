@@ -12,7 +12,7 @@
 		
 		<cyk:contractBodyWithThemeBeforeFormTag/>
 		
-		<h:form id="#{componentHelper.globalFormComponentIdentifier}" enctype="multipart/form-data">		
+		<h:form id="#{componentHelper.globalFormComponentIdentifier}" enctype="multipart/form-data" onkeypress="if (event.keyCode == 13) { return false; }">		
 			<cyk:contractBodyWithThemeInsideFormTag/>
 		</h:form>
 		

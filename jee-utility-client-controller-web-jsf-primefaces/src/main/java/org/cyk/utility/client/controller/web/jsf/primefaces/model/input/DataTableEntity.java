@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.klass.ClassHelper;
-import org.cyk.utility.client.controller.web.jsf.primefaces.model.Dialog;
 import org.primefaces.PrimeFaces;
 
 import lombok.Getter;
 import lombok.Setter;
 
+@Deprecated
 public class DataTableEntity<ENTITY> extends org.cyk.utility.client.controller.web.jsf.primefaces.model.collection.DataTable implements Serializable {
 
 	@Getter @Setter private Class<ENTITY> entityClass;
