@@ -17,6 +17,8 @@ import lombok.experimental.Accessors;
 
 public interface MessageRenderer {
 
+	MessageRenderer clear();
+	
 	void render(Collection<Message> messages,Collection<RenderType> renderTypes);
 	
 	default void render(Message message,Collection<RenderType> renderTypes) {

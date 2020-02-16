@@ -1382,15 +1382,12 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 	private void __assertNamableReadWhereBusinessIdentifierOrNameContains__(String string,String[] expectedCodes) {
 		assertThat(__inject__(NamablePersistence.class).count(new Properties().
 				setQueryIdentifier(QueryHelper.getIdentifierCountWhereBusinessIdentifierOrNameContains(Namable.class))
-				.setQueryFilters(__inject__(Filter.class).addField(Namable.FIELD_CODE, string)
-						.addField(Namable.FIELD_NAME, string)
+				.setQueryFilters(__inject__(Filter.class).addField(Namable.FIELD_CODE, string).addField(Namable.FIELD_NAME, string)
 						))).isEqualTo(Long.valueOf(ArrayHelper.getSize(expectedCodes)));
 		
 		Collection<Namable> namables = __inject__(NamablePersistence.class).read(new Properties().
 				setQueryIdentifier(QueryHelper.getIdentifierReadWhereBusinessIdentifierOrNameContains(Namable.class))
-				.setQueryFilters(__inject__(Filter.class).addField(Namable.FIELD_CODE, string)
-						.addField(Namable.FIELD_NAME, string)
-						));
+				.setQueryFilters(__inject__(Filter.class).addField(Namable.FIELD_CODE, string).addField(Namable.FIELD_NAME, string)));
 		
 		assertThat(namables).hasSize(ArrayHelper.getSize(expectedCodes));
 		assertThat(namables.stream().map(Namable::getCode).collect(Collectors.toList())).containsExactlyInAnyOrder(expectedCodes);

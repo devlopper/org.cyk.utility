@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
-import org.cyk.utility.__kernel__.object.Configurator;
 import org.cyk.utility.__kernel__.runnable.Runner;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.user.interface_.message.MessageRenderer;
@@ -60,7 +59,7 @@ public abstract class AbstractAction extends AbstractObject implements Serializa
 	
 	/**/
 	
-	public static abstract class AbstractConfiguratorImpl<ACTION extends AbstractAction> extends Configurator.AbstractImpl<ACTION> implements Serializable {
+	public static abstract class AbstractConfiguratorImpl<ACTION extends AbstractAction> extends AbstractObject.AbstractConfiguratorImpl<ACTION> implements Serializable {
 
 		@Override
 		public void configure(ACTION action, Map<Object, Object> arguments) {

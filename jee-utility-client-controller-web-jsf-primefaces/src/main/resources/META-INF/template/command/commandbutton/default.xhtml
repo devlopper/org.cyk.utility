@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
@@ -8,13 +9,14 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
-	<ui:param name="isHasValue" value="#{not empty commandButton.value}"/>
+	<c:set var="isHasValue" value="#{not empty commandButton.value}"/>
+	<c:set var="identifier" value="#{commandButton == null ? userInterfaceController.randomIdentifier : commandButton.identifier}" />
 	
-	<ui:fragment rendered="#{isHasValue}">
+	<c:if test="#{isHasValue}">
 		<p:commandButton
 			value="#{commandButton.value}"
 			
-			id="value_yes_#{commandButton.identifier}"
+			id="value_yes_#{identifier}"
 			action="#{commandButton.action(actionArgument)}"
 			update="#{commandButton.update}"
 			process="#{commandButton.process}"
@@ -28,11 +30,11 @@
 	    		<ui:param name="confirm" value="#{commandButton.confirm}"/>
 	    	</ui:decorate>
 		</p:commandButton>
-	</ui:fragment>
+	</c:if>
 	
-	<ui:fragment rendered="#{not isHasValue}">
+	<c:if test="#{not isHasValue}">
 		<p:commandButton
-			id="value_no_#{commandButton.identifier}"
+			id="value_no_#{identifier}"
 			action="#{commandButton.action(actionArgument)}"
 			update="#{commandButton.update}"
 			process="#{commandButton.process}"
@@ -46,6 +48,6 @@
 	    		<ui:param name="confirm" value="#{commandButton.confirm}"/>
 	    	</ui:decorate>
 		</p:commandButton>
-	</ui:fragment>	
+	</c:if>	
 		
 </ui:composition>

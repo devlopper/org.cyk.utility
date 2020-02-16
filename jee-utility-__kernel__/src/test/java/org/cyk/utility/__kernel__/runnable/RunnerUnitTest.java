@@ -90,6 +90,11 @@ public class RunnerUnitTest extends AbstractWeldUnitTest {
 		private Collection<Message> messages;
 		
 		@Override
+		public MessageRenderer clear() {
+			return this;
+		}
+		
+		@Override
 		protected void __render__(Collection<Message> messages, Collection<RenderType> renderTypes) {
 			this.messages = messages;
 			for(Message message : messages)

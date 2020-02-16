@@ -2,6 +2,7 @@ package org.cyk.utility.client.controller.web.jsf;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Iterator;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -10,12 +11,23 @@ import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.user.interface_.message.Message;
+import org.cyk.utility.__kernel__.user.interface_.message.MessageRenderer;
 import org.cyk.utility.__kernel__.user.interface_.message.RenderType;
 import org.cyk.utility.__kernel__.value.ValueConverter;
 import org.cyk.utility.client.controller.web.ComponentHelper;
 
 public abstract class AbstractMessageRendererImpl extends org.cyk.utility.__kernel__.user.interface_.message.AbstractMessageRendererImpl implements Serializable {
 
+	@Override
+	public MessageRenderer clear() {
+		Iterator<FacesMessage> iterator = FacesContext.getCurrentInstance().getMessages();
+		while (iterator.hasNext()) {
+			iterator.next();
+			iterator.remove();
+		}
+		return this;
+	}
+	
 	@Override
 	protected void __render__(Collection<Message> messages, Collection<RenderType> renderTypes) {
 		FacesContext facesContext = FacesContext.getCurrentInstance();

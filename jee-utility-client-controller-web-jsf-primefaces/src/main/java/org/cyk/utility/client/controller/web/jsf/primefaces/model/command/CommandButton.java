@@ -6,10 +6,8 @@ import java.util.Map;
 import org.cyk.utility.__kernel__.icon.Icon;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.Configurator;
-import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.Confirm;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.collection.DataTable;
-import org.omnifaces.util.Ajax;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -43,12 +41,6 @@ public class CommandButton extends AbstractCommand implements Serializable {
 			}else {
 				commandButton.update += " :form:"+dataTable.getDialogOutputPanel().getIdentifier();
 				commandButton.getRunnerArguments().setSuccessMessageArguments(null);
-				commandButton.setListener(new AbstractAction.Listener() {			
-					@Override
-					public void listenAction(Object argument) {
-						Ajax.oncomplete("PF('"+dataTable.getDialog().getWidgetVar()+"').show();");
-					}
-				});	
 			}			
 		}
 		

@@ -12,36 +12,10 @@
     	<ui:define name="centerCenter">
     		<ui:decorate template="/collection/datatable/default.xhtml">
     			<ui:param name="dataTable" value="#{dataTableLazyPage.dataTable}"/>
-    			
-    			<ui:define name="header">
-    				<ui:decorate template="/command/commandbutton/default.xhtml">
-    					<ui:param name="commandButton" value="#{dataTableLazyPage.commandButtonOperation1Mass}"/>
-    				</ui:decorate>
-    			</ui:define>
-    			
-    			<ui:define name="columnsAfterRowIndex">
-    				<p:column width="100">
-    					<f:facet name="header">
-    						<h:outputText value="Code" />
-    					</f:facet>
-    					<h:outputText value="#{record.code}" />
-    				</p:column>
-    				<p:column>
-    					<f:facet name="header">
-    						<h:outputText value="Name" />
-    					</f:facet>
-    					<h:outputText value="#{record.name}" />
-    				</p:column>
-    			</ui:define>
-    			
+    			<ui:param name="rowStyleClass" value="#{record.code.contains('10') ? 'cyk-background-highlight' : 'ui-state-default'}"/>
     			<ui:define name="dialogBody">
     				S : #{dataTableLazyPage.dataTable.selection}
-    			</ui:define>
-    			
-    			<ui:define name="dialogCommandsBeforeClose">
-    				MY ACTION COMMAND
-    			</ui:define>
-    			
+    			</ui:define>			
     		</ui:decorate>	   
     	</ui:define>
     </cyk:page>

@@ -91,11 +91,16 @@ public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractOb
 		@Override
 		public void configure(OBJECT object, Map<Object, Object> arguments) {
 			super.configure(object, arguments);
-			String identifier_prefix = object.getClass().getSimpleName().toLowerCase()+"_";
-			object.identifier = identifier_prefix+RandomHelper.getAlphabetic(5);
-			object.widgetVar = identifier_prefix+RandomHelper.getAlphabetic(5);
+			if(StringHelper.isBlank(object.identifier) || StringHelper.isBlank(object.widgetVar)) {
+				String identifier_prefix = object.getClass().getSimpleName().toLowerCase()+"_";
+				if(StringHelper.isBlank(object.identifier)) {
+					object.identifier = identifier_prefix+RandomHelper.getAlphabetic(5);
+				}
+				if(StringHelper.isBlank(object.widgetVar)) {
+					object.widgetVar = identifier_prefix+RandomHelper.getAlphabetic(5);
+				}
+			}
 		}
-		
 	}
 	
 	/**/

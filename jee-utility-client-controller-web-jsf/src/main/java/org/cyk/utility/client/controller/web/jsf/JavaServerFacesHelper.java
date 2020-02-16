@@ -37,7 +37,7 @@ public class JavaServerFacesHelper extends AbstractObject implements Serializabl
 		return String.format(EXPRESSION_FORMAT, expression);
 	}
 	
-	public ValueExpression buildValueExpression(String expression,Class<?> returnType) {
+	public static ValueExpression buildValueExpression(String expression,Class<?> returnType) {
 		return FacesContext.getCurrentInstance().getApplication().getExpressionFactory().createValueExpression(
 				FacesContext.getCurrentInstance().getELContext(), expression, returnType);
 	}

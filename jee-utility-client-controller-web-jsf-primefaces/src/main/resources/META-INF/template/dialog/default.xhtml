@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
@@ -19,12 +20,11 @@
 		</ui:insert>
 		
 		<ui:insert name="dialogCommands">
-			<ui:insert name="dialogCommandsBeforeClose"/>
-			<ui:insert name="dialogCommandsClose">
+			<c:forEach items="#{dialog.commandButtons}" var="commandButton">
 				<ui:decorate template="/command/commandbutton/default.xhtml">
-		 			<ui:param name="commandButton" value="#{dialog.closeCommandButton}"/>
+		 			<ui:param name="commandButton" value="#{commandButton}"/>
 		 		</ui:decorate>
-			</ui:insert>
+			</c:forEach>
 		</ui:insert>
 		
 		<!-- listener -->

@@ -225,7 +225,12 @@
         <tag-name>commandableLink</tag-name>
         <source>tag/command/commandableLink.xhtml</source>
     </tag>
-    
+    <!--
+    <tag>
+        <tag-name>commandButton</tag-name>
+        <source>tag/command/commandButton.xhtml</source>
+    </tag>
+    -->
     <!-- Misc -->
     
     <tag>

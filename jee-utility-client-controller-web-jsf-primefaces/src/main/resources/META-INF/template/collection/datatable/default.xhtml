@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
@@ -14,31 +15,82 @@
    		paginatorAlwaysVisible="#{dataTable.paginatorAlwaysVisible}"
 		paginatorTemplate="#{dataTable.paginatorTemplate}" currentPageReportTemplate="#{dataTable.currentPageReportTemplate}"
 		widgetVar="#{dataTable.widgetVar}" rowIndexVar="rowIndex" filterDelay="#{dataTable.filterDelay}" selection="#{dataTable.selection}"
-		rowStyleClass="#{dataTable.rowStyleClass}"
+		rowStyleClass="#{rowStyleClass}"
 	>
  		<f:facet name="header">
  			<ui:insert name="header">
- 				
+ 				<p:toolbar>
+ 					<f:facet name="left">
+ 						<ui:insert name="headerToolbarLeft">
+ 							<ui:insert name="headerToolbarLeftCommandButtons">
+ 								<c:forEach items="#{dataTable.headerToolbarLeftCommandButtons}" var="commandButton" >
+ 									<ui:decorate template="/command/commandbutton/default.xhtml">
+ 										<ui:param name="commandButton" value="#{commandButton}"/>
+ 									</ui:decorate>
+ 								</c:forEach>
+ 							</ui:insert>
+ 						</ui:insert>
+ 					</f:facet>
+ 					<f:facet name="right">
+ 						<ui:insert name="headerToolbarRight">
+ 							<ui:fragment rendered="#{dataTable.isExportable}">
+ 								<ui:insert name="headerToolbarRightExports">
+	 								<p:commandButton id="export_excel" icon="fa fa-file-excel-o" ajax="false">
+				    					<p:dataExporter type="xls" target="#{dataTable.identifier}" fileName="#{dataTable.fileName}" />
+				    				</p:commandButton>
+				    				<p:tooltip for="export_excel" value="Exporter en excel" />
+	 							</ui:insert>
+ 							</ui:fragment>
+	 						<ui:fragment rendered="#{dataTable.areColumnsChoosable}">
+	 							<ui:insert name="headerToolbarRightColumns">
+		 							<p:commandButton id="toggler" type="button" value="Colonnes" icon="fa fa-columns" />
+				       				<p:columnToggler datasource="#{dataTable.identifier}" trigger="toggler" />
+		 						</ui:insert>	
+	 						</ui:fragment>			 									    				
+ 						</ui:insert>
+ 					</f:facet>
+ 				</p:toolbar>
 			</ui:insert> 			
  		</f:facet>
  		
  		<ui:insert name="columns">
  			<ui:insert name="columnRowIndex">
-	 			<p:column selectionMode="#{dataTable.selectionMode}" width="55">
-	 				<f:facet name="header">
-	 					<!-- Align # to right of check box -->
+ 				<ui:decorate template="/collection/datatable/column/default.xhtml">
+ 					<ui:param name="column" value="#{dataTable.orderNumberColumn}"/>
+ 					<ui:define name="columnHeader">
+ 						<!-- Align # to right of check box -->
 		 				<div style="float: left !important;">
 			 				<h:outputText value="#" />
 			 			</div>
-	 				</f:facet>
-	 				<!-- Align order number to right of check box -->
-	 				<div style="float: left !important;">
-		 				<h:outputText value="#{rowIndex+1}" />
-		 			</div>
-		 		</p:column>
+ 					</ui:define>
+ 					<ui:define name="columnBody">
+ 						<!-- Align order number to right of check box -->
+		 				<div style="float: left !important;">
+			 				<h:outputText value="#{rowIndex+1}" />
+			 			</div>
+ 					</ui:define>
+ 				</ui:decorate>
 	 		</ui:insert>
 	 		
-	 		<ui:insert name="columnsAfterRowIndex"/>
+	 		<ui:insert name="columnsAfterRowIndex">
+	 			<p:columns value="#{dataTable.columnsAfterRowIndex}" var="column" columnIndexVar="columnIndex" width="#{column.width}" filterBy="#{column.filterBy}">
+	 				<f:facet name="header">
+						<ui:insert name="columnsAfterRowIndexHeaders">
+							<h:outputText value="#{column.header}" />
+						</ui:insert>
+					</f:facet>
+					
+					<ui:insert name="columnsAfterRowIndexBodies">
+						<h:outputText value="#{record[column.fieldName]}" />
+					</ui:insert>
+					
+					<f:facet name="header">
+						<ui:insert name="columnsAfterRowIndexFooters">
+							<h:outputText value="#{column.footer}" />
+						</ui:insert>
+					</f:facet>
+	 			</p:columns>
+	 		</ui:insert>
 	 		
 	 		<ui:insert name="columnMenu"/> 			 		
  		</ui:insert>
@@ -49,7 +101,7 @@
  		<ui:param name="outputPanel" value="#{dataTable.dialogOutputPanel}"/>
  		<ui:define name="outputPanelBody">
  			<ui:decorate template="/dialog/default.xhtml">
- 				<ui:param name="dialog" value="#{dataTable.dialog}"/>
+ 				<ui:param name="dialog" value="#{dataTable.dialog}"/> 				
 		 	</ui:decorate>
  		</ui:define>
  	</ui:decorate>

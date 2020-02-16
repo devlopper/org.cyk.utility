@@ -116,6 +116,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 									+ QueryStringHelper.formatTupleFieldLike("tuple", columnName,"identifier")
 									+ " OR "
 									+ QueryStringHelper.formatTupleFieldLikeOrTokens("tuple", __businessNameField__.getName(), 3, LogicalOperator.AND)
+									+" ORDER BY "+__businessNameField__.getName()
 							, tupleName,columnName));
 				}
 			}
