@@ -36,12 +36,12 @@ public class DataTableLazyPage extends AbstractPageContainerManagedImpl implemen
 		dataTable = Builder.build(DataTable.class,Map.of(DataTable.FIELD_LAZY,Boolean.TRUE,DataTable.ConfiguratorImpl.FIELD_ENTIY_CLASS,Namable.class
 				,DataTable.ConfiguratorImpl.FIELD_FILTERABLE,Boolean.TRUE
 				,DataTable.FIELD_SELECTION_MODE,"multiple"));
-		System.out.println("DataTableLazyPage.__listenPostConstruct__() : "+dataTable.getRowStyleClass());
+		
 		dataTable.addColumnsAfterRowIndex(Builder.build(Column.class, Map.of(Column.FIELD_HEADER,"Code",Column.FIELD_FIELD_NAME,"code",Column.FIELD_WIDTH,"100"))
 				,Builder.build(Column.class, Map.of(Column.FIELD_HEADER,"Nom",Column.FIELD_FIELD_NAME,"name")));
 		
 		dataTable.addHeaderToolbarLeftCommandButtons(
-				Builder.build(CommandButton.class,Map.of(CommandButton.FIELD_VALUE,"Opération 1",CommandButton.ConfiguratorImpl.FIELD_DATA_TABLE,dataTable
+				Builder.build(CommandButton.class,Map.of(CommandButton.FIELD_VALUE,"Opération 1. Min1",CommandButton.ConfiguratorImpl.FIELD_DATA_TABLE,dataTable
 						,CommandButton.FIELD_LISTENER,new AbstractCollection.AbstractActionListenerImpl(dataTable) {
 					@Override
 					protected void __showDialog__() {
@@ -49,7 +49,7 @@ public class DataTableLazyPage extends AbstractPageContainerManagedImpl implemen
 						super.__showDialog__();
 					}
 				}))
-				,Builder.build(CommandButton.class,Map.of(CommandButton.FIELD_VALUE,"Opération 2",CommandButton.ConfiguratorImpl.FIELD_DATA_TABLE,dataTable
+				,Builder.build(CommandButton.class,Map.of(CommandButton.FIELD_VALUE,"Opération 2. Min2",CommandButton.ConfiguratorImpl.FIELD_DATA_TABLE,dataTable
 						,CommandButton.FIELD_LISTENER,new AbstractCollection.AbstractActionListenerImpl(dataTable) {
 					@Override
 					protected void __showDialog__() {
@@ -57,6 +57,14 @@ public class DataTableLazyPage extends AbstractPageContainerManagedImpl implemen
 						super.__showDialog__();
 					}
 				}.setMinimumSelectionSize(2)))
+				,Builder.build(CommandButton.class,Map.of(CommandButton.FIELD_VALUE,"Opération 3. No Constraint",CommandButton.ConfiguratorImpl.FIELD_DATA_TABLE,dataTable
+						,CommandButton.FIELD_LISTENER,new AbstractCollection.AbstractActionListenerImpl(dataTable) {
+					@Override
+					protected void __showDialog__() {
+						dataTable.getDialog().setHeader("Réalisation de l'opération 3");
+						super.__showDialog__();
+					}
+				}.setMinimumSelectionSize(0).setIsSelectionShowable(Boolean.FALSE)))
 			);
 		
 		dataTable.getDialog().getCloseAjax().setListener(new AbstractAction.Listener() {			

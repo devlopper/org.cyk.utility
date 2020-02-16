@@ -19,7 +19,7 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 
 	protected Column orderNumberColumn;
 	protected Column menuColumn;
-	protected Collection<Column> columnsAfterRowIndex;
+	protected Collection<Column> columnsAfterRowIndex,selectedColumnsAfterRowIndex;
 	protected Boolean areColumnsChoosable;
 	
 	/**/
@@ -41,6 +41,25 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 		if(ArrayHelper.isEmpty(columnsAfterRowIndex))
 			return this;
 		return addColumnsAfterRowIndex(CollectionHelper.listOf(columnsAfterRowIndex));
+	}
+	
+	public Collection<Column> getSelectedColumnsAfterRowIndex(Boolean injectIfNull) {
+		if(selectedColumnsAfterRowIndex == null && Boolean.TRUE.equals(injectIfNull))
+			selectedColumnsAfterRowIndex = new ArrayList<>();
+		return selectedColumnsAfterRowIndex;
+	}
+	
+	public AbstractDataTable addSelectedColumnsAfterRowIndex(Collection<Column> selectedColumnsAfterRowIndex) {
+		if(CollectionHelper.isEmpty(selectedColumnsAfterRowIndex))
+			return this;
+		getSelectedColumnsAfterRowIndex(Boolean.TRUE).addAll(selectedColumnsAfterRowIndex);
+		return this;
+	}
+	
+	public AbstractDataTable addSelectedColumnsAfterRowIndex(Column...selectedColumnsAfterRowIndex) {
+		if(ArrayHelper.isEmpty(selectedColumnsAfterRowIndex))
+			return this;
+		return addSelectedColumnsAfterRowIndex(CollectionHelper.listOf(selectedColumnsAfterRowIndex));
 	}
 	
 	/**/

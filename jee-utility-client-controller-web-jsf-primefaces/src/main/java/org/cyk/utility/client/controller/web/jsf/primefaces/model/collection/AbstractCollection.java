@@ -37,7 +37,7 @@ public abstract class AbstractCollection extends AbstractObject implements Seria
 	protected Object value;
 	protected String emptyMessage,rowsPerPageTemplate,paginatorTemplate,currentPageReportTemplate,selectionMode,fileName;
 	protected String rowStyleClass;
-	protected Boolean lazy,paginator,paginatorAlwaysVisible,isExportable;
+	protected Boolean lazy,paginator,paginatorAlwaysVisible,isExportable,isSelectionShowableInDialog;
 	protected Integer rows,filterDelay;
 	protected List<?> selection;
 	protected Map<String,Object> map = new HashMap<>();
@@ -140,6 +140,7 @@ public abstract class AbstractCollection extends AbstractObject implements Seria
 		
 		protected AbstractCollection collection;
 		protected Integer minimumSelectionSize=1,maximumSelectionSize;
+		protected Boolean isSelectionShowable=Boolean.TRUE;
 		
 		public AbstractActionListenerImpl(AbstractCollection collection) {
 			this.collection = collection;
@@ -156,6 +157,7 @@ public abstract class AbstractCollection extends AbstractObject implements Seria
 		}
 		
 		protected void __showDialog__() {
+			collection.setIsSelectionShowableInDialog(isSelectionShowable);
 			Ajax.oncomplete("PF('"+collection.dialog.getWidgetVar()+"').show();");
 		}
 		

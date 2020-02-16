@@ -13,9 +13,6 @@
     		<ui:decorate template="/collection/datatable/default.xhtml">
     			<ui:param name="dataTable" value="#{dataTableLazyPage.dataTable}"/>
     			<ui:param name="rowStyleClass" value="#{record.code.contains('10') ? 'cyk-background-highlight' : 'ui-state-default'}"/>
-    			<ui:define name="dialogBody">
-    				S : #{dataTableLazyPage.dataTable.selection}
-    			</ui:define>			
     		</ui:decorate>	   
     	</ui:define>
     </cyk:page>
