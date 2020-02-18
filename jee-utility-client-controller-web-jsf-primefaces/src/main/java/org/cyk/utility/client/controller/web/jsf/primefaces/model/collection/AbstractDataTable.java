@@ -21,6 +21,7 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 	protected Column menuColumn;
 	protected Collection<Column> columnsAfterRowIndex,selectedColumnsAfterRowIndex;
 	protected Boolean areColumnsChoosable;
+	protected Listener listener;
 	
 	/**/
 	
@@ -62,6 +63,18 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 		return addSelectedColumnsAfterRowIndex(CollectionHelper.listOf(selectedColumnsAfterRowIndex));
 	}
 	
+	public String getStyleClassByRecord(Object record,Integer recordIndex) {
+		if(listener != null)
+			return listener.listenGetStyleClassByRecord(record,recordIndex);
+		return null;
+	}
+	
+	public String getStyleClassByRecordByColumn(Object record,Integer recordIndex,Column column,Integer columnIndex) {
+		if(listener != null)
+			return listener.listenGetStyleClassByRecordByColumn(record, recordIndex,column,columnIndex);
+		return null;
+	}
+	
 	/**/
 	
 	public static abstract class AbstractConfiguratorImpl<DATATABLE extends AbstractDataTable> extends AbstractCollection.AbstractConfiguratorImpl<DATATABLE> implements Serializable {
@@ -78,11 +91,26 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 				}
 				dataTable.setOrderNumberColumn(Builder.build(Column.class,map));
 			}
+			if(dataTable.getMenuColumn() == null) {
+				Map<Object,Object> map = new HashMap<>(Map.of(Column.FIELD_HEADER,"",Column.FIELD_WIDTH,"50",Column.ConfiguratorImpl.FIELD_FILTERABLE,Boolean.FALSE
+						,Column.FIELD_RENDERED,Boolean.FALSE));
+				dataTable.setMenuColumn(Builder.build(Column.class,map));
+			}
 			if(dataTable.areColumnsChoosable == null)
 				dataTable.areColumnsChoosable = Boolean.TRUE;
 			
 			if(dataTable.isExportable == null)
 				dataTable.isExportable = Boolean.TRUE;
 		}
-	}	
+	}
+	
+	/**/
+	
+	public static interface Listener {
+		
+		String listenGetStyleClassByRecord(Object record,Integer recordIndex);
+		
+		String listenGetStyleClassByRecordByColumn(Object record,Integer recordIndex,Column column,Integer columnIndex);
+		
+	}
 }

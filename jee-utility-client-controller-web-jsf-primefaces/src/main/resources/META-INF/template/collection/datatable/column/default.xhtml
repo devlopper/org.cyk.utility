@@ -32,7 +32,7 @@
 	</c:if>
 	
 	<c:if test="#{not isSelectionModeNotEmpty}">
-		<p:column id="#{column.identifier}" width="#{column.width}" filterBy="#{fieldName}">
+		<p:column id="#{column.identifier}" width="#{column.width}" rendered="#{column.rendered}">
 			<f:facet name="header">				
 				<ui:insert name="columnHeader">					
 					<h:outputText value="#{column.header}" />

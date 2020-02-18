@@ -29,6 +29,7 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 	private ControllerEntity<ENTITY> controller;
 	private String readQueryIdentifier,countQueryIdentifier,entityFieldsNamesAsString;
 	private Collection<String> entityFieldsNames;
+	private FilterDto filter;
 	
 	public LazyDataModel(Class<ENTITY> entityClass) {
 		this.entityClass = entityClass;
@@ -41,7 +42,8 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 	public List<ENTITY> load(int first, int pageSize, String sortField, SortOrder sortOrder,Map<String, Object> filters) {
 		if(controller == null)
 			return null;
-		FilterDto filter = new FilterDto();
+		if(filter == null)
+			filter = new FilterDto();
 		if(MapHelper.isNotEmpty(filters)) {
 			for(Map.Entry<String, Object> entry : filters.entrySet())
 				filter.addField(entry.getKey(), entry.getValue());

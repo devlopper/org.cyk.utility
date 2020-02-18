@@ -97,6 +97,7 @@ public class AutoComplete extends AbstractObject implements Serializable {
 	
 	/**/
 	
+	public static final String FIELD_DROPDOWN = "dropdown";
 	public static final String FIELD_ENTITY_CLASS = "entityClass";
 	public static final String FIELD_ENTITY_CONTROLLER = "entityController";
 	public static final String FIELD_TARGET_WIDGET_VAR = "targetWidgetVar";
@@ -174,7 +175,11 @@ public class AutoComplete extends AbstractObject implements Serializable {
 						}
 					});
 				}
-			}			
+			}
+			
+			if(autoComplete.dropdown == null) {
+				autoComplete.dropdown = Boolean.TRUE;
+			}
 		}
 		
 		@Override

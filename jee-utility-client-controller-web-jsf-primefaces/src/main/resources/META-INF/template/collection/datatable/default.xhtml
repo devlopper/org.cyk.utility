@@ -15,18 +15,25 @@
    		paginatorAlwaysVisible="#{dataTable.paginatorAlwaysVisible}"
 		paginatorTemplate="#{dataTable.paginatorTemplate}" currentPageReportTemplate="#{dataTable.currentPageReportTemplate}"
 		widgetVar="#{dataTable.widgetVar}" rowIndexVar="rowIndex" filterDelay="#{dataTable.filterDelay}" selection="#{dataTable.selection}"
-		rowStyleClass="#{rowStyleClass}" 
+		rowStyleClass="#{dataTable.getStyleClassByRecord(record,rowIndex)}" 
 	>
  		<f:facet name="header">
  			<ui:insert name="header">
  				<p:toolbar>
  					<f:facet name="left">
  						<ui:insert name="headerToolbarLeft">
- 							<ui:insert name="headerToolbarLeftCommandButtons">
- 								<c:forEach items="#{dataTable.headerToolbarLeftCommandButtons}" var="commandButton" >
- 									<ui:decorate template="/command/commandbutton/default.xhtml">
- 										<ui:param name="commandButton" value="#{commandButton}"/>
- 									</ui:decorate>
+ 							<ui:insert name="headerToolbarLeftCommands">
+ 								<c:forEach items="#{dataTable.headerToolbarLeftCommands}" var="command" >
+ 									<c:if test="#{command.class.simpleName eq 'CommandButton'}">
+ 										<ui:decorate template="/command/commandbutton/default.xhtml">
+	 										<ui:param name="commandButton" value="#{command}"/>
+	 									</ui:decorate>
+ 									</c:if>
+	 								<c:if test="#{command.class.simpleName eq 'Button'}">
+ 										<ui:decorate template="/command/button/default.xhtml">
+	 										<ui:param name="button" value="#{command}"/>
+	 									</ui:decorate>
+ 									</c:if>	
  								</c:forEach>
  							</ui:insert>
  						</ui:insert>
@@ -74,7 +81,7 @@
 	 		
 	 		<ui:insert name="columnsAfterRowIndex">
 	 			<p:columns value="#{dataTable.columnsAfterRowIndex}" var="column" columnIndexVar="columnIndex" width="#{column.width}" filterBy="#{column.filterBy}"
-	 				visible="#{column.visible}">
+	 				visible="#{column.visible}" styleClass="#{dataTable.getStyleClassByRecordByColumn(record,rowIndex,column,columnIndex)}">
 	 				<f:facet name="header">
 						<ui:insert name="columnsAfterRowIndexHeaders">
 							<h:outputText value="#{column.header}" />
@@ -100,7 +107,22 @@
 	 			</p:columns>
 	 		</ui:insert>
 	 		
-	 		<ui:insert name="columnMenu"/> 			 		
+	 		<ui:insert name="columnMenu">
+	 			<ui:decorate template="/collection/datatable/column/default.xhtml">
+ 					<ui:param name="column" value="#{dataTable.menuColumn}"/>
+ 					<ui:define name="columnHeader">
+ 						<ui:insert name="columnMenuHeader">
+ 							<!-- Nothing -->
+ 						</ui:insert>						
+ 					</ui:define>
+ 					<ui:define name="columnBody">
+ 						<ui:insert name="columnMenuCommands">
+ 							<!-- Commands in menu button in order to occupy less space -->	 						
+			 				COMMANDS
+ 						</ui:insert>	 						
+ 					</ui:define>
+ 				</ui:decorate>
+	 		</ui:insert> 			 		
  		</ui:insert>
  		
  		<!-- Listeners -->
@@ -138,13 +160,15 @@
  				<ui:param name="dialog" value="#{dataTable.dialog}"/>
  				<ui:define name="dialogBody">
  					<ui:insert name="dataTableDialogBody">
+ 						<ui:insert name="dataTableDialogBodyDataTableBefore"/>
  						<ui:insert name="dataTableDialogBodyDataTable">
  							<p:dataTable value="#{dataTable.selection}" var="selected" rowIndexVar="selectedRowIndex" rendered="#{dataTable.isSelectionShowableInDialog}">
  								<ui:insert name="dataTableDialogBodyDataTableColumnRowIndex">
  									<p:column headerText="#" width="40"><h:outputText value="#{selectedRowIndex+1}"/></p:column>
  								</ui:insert>
 		 						<ui:insert name="dataTableDialogBodyDataTableColumnsAfterRowIndex">
- 									<p:columns value="#{dataTable.selectedColumnsAfterRowIndex == null ? dataTable.columnsAfterRowIndex : dataTable.selectedColumnsAfterRowIndex}" var="column" columnIndexVar="columnIndex" width="#{column.width}">
+ 									<p:columns value="#{dataTable.selectedColumnsAfterRowIndex == null ? dataTable.columnsAfterRowIndex : dataTable.selectedColumnsAfterRowIndex}" 
+ 										var="column" columnIndexVar="columnIndex" width="#{column.width}">
 						 				<f:facet name="header">
 											<ui:insert name="dataTableDialogBodyDataTableColumnsAfterRowIndexHeaders">
 												<h:outputText value="#{column.header}" />
@@ -160,6 +184,7 @@
  								</ui:insert>	
 		 					</p:dataTable>
  						</ui:insert>
+ 						<ui:insert name="dataTableDialogBodyDataTableAfter"/>
  					</ui:insert>
     			</ui:define> 				
 		 	</ui:decorate>

@@ -22,7 +22,7 @@ import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObject;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.BlockUI;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax.Ajax;
-import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.AbstractCommand;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.panel.Dialog;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.panel.OutputPanel;
 
@@ -33,7 +33,7 @@ import lombok.experimental.Accessors;
 @Getter @Setter
 public abstract class AbstractCollection extends AbstractObject implements Serializable {
 
-	protected Object value;
+	protected Object value,selectedCommandIdentifier;
 	protected String emptyMessage,rowsPerPageTemplate,paginatorTemplate,currentPageReportTemplate,selectionMode,fileName;
 	protected String rowStyleClass;
 	protected Boolean lazy,paginator,paginatorAlwaysVisible,isExportable,isSelectionShowableInDialog;
@@ -42,29 +42,49 @@ public abstract class AbstractCollection extends AbstractObject implements Seria
 	protected Map<String,Object> map = new HashMap<>();
 	protected OutputPanel dialogOutputPanel;
 	protected Dialog dialog;
-	protected Collection<CommandButton> headerToolbarLeftCommandButtons;
+	protected Collection<AbstractCommand> headerToolbarLeftCommands;
+	protected Collection<AbstractCommand> recordCommands;
 	protected BlockUI blockUI;
 	protected Ajax pageAjax,sortAjax,filterAjax,rowSelectAjax,rowUnselectAjax,rowSelectCheckBoxAjax,rowUnselectCheckBoxAjax;
 	
 	/**/
 	
-	public Collection<CommandButton> getHeaderToolbarLeftCommandButtons(Boolean injectIfNull) {
-		if(headerToolbarLeftCommandButtons == null && Boolean.TRUE.equals(injectIfNull))
-			headerToolbarLeftCommandButtons = new ArrayList<>();
-		return headerToolbarLeftCommandButtons;
+	public Collection<AbstractCommand> getHeaderToolbarLeftCommands(Boolean injectIfNull) {
+		if(headerToolbarLeftCommands == null && Boolean.TRUE.equals(injectIfNull))
+			headerToolbarLeftCommands = new ArrayList<>();
+		return headerToolbarLeftCommands;
 	}
 	
-	public AbstractCollection addHeaderToolbarLeftCommandButtons(Collection<CommandButton> headerToolbarLeftCommandButtons) {
-		if(CollectionHelper.isEmpty(headerToolbarLeftCommandButtons))
+	public AbstractCollection addHeaderToolbarLeftCommands(Collection<AbstractCommand> headerToolbarLeftCommands) {
+		if(CollectionHelper.isEmpty(headerToolbarLeftCommands))
 			return this;
-		getHeaderToolbarLeftCommandButtons(Boolean.TRUE).addAll(headerToolbarLeftCommandButtons);
+		getHeaderToolbarLeftCommands(Boolean.TRUE).addAll(headerToolbarLeftCommands);
 		return this;
 	}
 	
-	public AbstractCollection addHeaderToolbarLeftCommandButtons(CommandButton...headerToolbarLeftCommandButtons) {
-		if(ArrayHelper.isEmpty(headerToolbarLeftCommandButtons))
+	public AbstractCollection addHeaderToolbarLeftCommands(AbstractCommand...headerToolbarLeftCommands) {
+		if(ArrayHelper.isEmpty(headerToolbarLeftCommands))
 			return this;
-		return addHeaderToolbarLeftCommandButtons(CollectionHelper.listOf(headerToolbarLeftCommandButtons));
+		return addHeaderToolbarLeftCommands(CollectionHelper.listOf(headerToolbarLeftCommands));
+	}
+	
+	public Collection<AbstractCommand> getRecordCommands(Boolean injectIfNull) {
+		if(recordCommands == null && Boolean.TRUE.equals(injectIfNull))
+			recordCommands = new ArrayList<>();
+		return recordCommands;
+	}
+	
+	public AbstractCollection addRecordCommands(Collection<AbstractCommand> recordCommands) {
+		if(CollectionHelper.isEmpty(recordCommands))
+			return this;
+		getRecordCommands(Boolean.TRUE).addAll(recordCommands);
+		return this;
+	}
+	
+	public AbstractCollection addRecordCommands(AbstractCommand...recordCommands) {
+		if(ArrayHelper.isEmpty(recordCommands))
+			return this;
+		return addRecordCommands(CollectionHelper.listOf(recordCommands));
 	}
 	
 	/**/
@@ -180,6 +200,7 @@ public abstract class AbstractCollection extends AbstractObject implements Seria
 		protected AbstractCollection collection;
 		protected Integer minimumSelectionSize=1,maximumSelectionSize;
 		protected Boolean isSelectionShowable=Boolean.TRUE;
+		protected Object commandIdentifier;
 		
 		public AbstractActionListenerImpl(AbstractCollection collection) {
 			this.collection = collection;
@@ -188,7 +209,6 @@ public abstract class AbstractCollection extends AbstractObject implements Seria
 		@Override
 		public void listenAction(Object argument) {
 			if(Boolean.TRUE.equals(isDialogShowable())) {
-				//if(collection != null && collection.dialog != null && StringHelper.isNotBlank(collection.dialog.getWidgetVar()))
 				__showDialog__();
 			}else {
 				MessageRenderer.getInstance().render(getDialogNotShowableMessageSummary(), Severity.WARNING, RenderType.GROWL);
@@ -196,7 +216,8 @@ public abstract class AbstractCollection extends AbstractObject implements Seria
 		}
 		
 		protected void __showDialog__() {
-			collection.setIsSelectionShowableInDialog(isSelectionShowable);
+			collection.setSelectedCommandIdentifier(commandIdentifier);
+			collection.setIsSelectionShowableInDialog(isSelectionShowable);			
 			org.omnifaces.util.Ajax.oncomplete("PF('"+collection.dialog.getWidgetVar()+"').show();");
 		}
 		

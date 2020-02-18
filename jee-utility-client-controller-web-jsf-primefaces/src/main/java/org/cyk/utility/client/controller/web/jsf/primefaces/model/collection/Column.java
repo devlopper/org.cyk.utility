@@ -18,10 +18,12 @@ public class Column extends AbstractObject implements Serializable {
 
 	private String header,footer,selectionMode,width,filterBy,fieldName;
 	private Boolean visible = Boolean.TRUE;
-	private Object filterValue; 
+	private Object filterValue;
+	private Integer index;
 	
 	/**/
 	
+	public static final String FIELD_INDEX = "index";
 	public static final String FIELD_HEADER = "header";
 	public static final String FIELD_SELECTION_MODE = "selectionMode";
 	public static final String FIELD_WIDTH = "width";

@@ -15,15 +15,15 @@ public class DataTableEntity<ENTITY> extends org.cyk.utility.client.controller.w
 
 	@Getter @Setter private Class<ENTITY> entityClass;
 	@Getter @Setter private Collection<ENTITY> value;
-	@Getter @Setter private Listener<ENTITY> listener;
+	//@Getter @Setter private Listener<ENTITY> listener;
 	@Getter @Setter private String dialogOutputPanelIdentifier = "dialogOutputPanel"+getIdentifier();	
 	//@Getter @Setter private Dialog dialog = new Dialog();
 	
 	/**/
 	
 	public void openDialogForAdd() {
-		if(listener != null)
-			listener.listenOpenDialogForAdd(this);
+		//if(listener != null)
+		//	listener.listenOpenDialogForAdd(this);
 		PrimeFaces.current().executeScript("PF('"+dialog.getWidgetVar()+"').show();");
 	}
 	
@@ -36,16 +36,16 @@ public class DataTableEntity<ENTITY> extends org.cyk.utility.client.controller.w
 		if(value == null)
 			value = new ArrayList<>();
 		value.add(entity);
-		if(listener != null)
-			listener.listenAdd(this,entity);
+		//if(listener != null)
+		//	listener.listenAdd(this,entity);
 	}
 	
 	public void remove(ENTITY entity) {
 		if(entity == null)
 			return;
 		value.remove(entity);
-		if(listener != null)
-			listener.listenRemove(this,entity);
+		//if(listener != null)
+		//	listener.listenRemove(this,entity);
 	}
 	
 	/**/

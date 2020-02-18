@@ -9,6 +9,12 @@
 		<from-view-id>*</from-view-id>
 		
 		<navigation-case>
+			<from-outcome>namableEditView</from-outcome>
+			<to-view-id>/private/namable/edit.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
 			<from-outcome>google</from-outcome>
 			<to-view-id>http://www.google.com</to-view-id>
 			<redirect />
