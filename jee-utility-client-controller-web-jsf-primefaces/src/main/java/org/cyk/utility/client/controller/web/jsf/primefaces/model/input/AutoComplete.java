@@ -9,9 +9,16 @@ import javax.faces.event.AjaxBehaviorEvent;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.klass.NamingModel;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
 import org.cyk.utility.__kernel__.object.ReadListener;
+import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringImpl;
+import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl;
+import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
+import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.runnable.Runner;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.user.interface_.message.Message;
@@ -36,11 +43,12 @@ public class AutoComplete extends AbstractObject implements Serializable {
 	public static Integer INITIAL_NUMBER_OF_RESULTS = 10;
 	public static Integer QUERY_DELAY = 2000;
 	
-	@Getter private Class<?> entityClass;
+	private Class<?> entityClass;
 	private ControllerEntity<?> controllerEntity;
+	private String readQueryIdentifier,countQueryIdentifier;
 	
 	private Integer initialNumberOfResults = INITIAL_NUMBER_OF_RESULTS;
-	@Getter private Integer numberOfResults = initialNumberOfResults;
+	private Integer numberOfResults = initialNumberOfResults;
 	private String queryString,targetWidgetVar;
 	private String dropdownMode = "current",placeholder,emptyMessage="-- Aucun résultat --";
 	private Object converter;
@@ -53,29 +61,30 @@ public class AutoComplete extends AbstractObject implements Serializable {
 	
 	private Ajax ajaxItemSelect,ajaxItemUnselect,ajaxQuery,ajaxMoreText;
 	
-	@Getter @Setter private Listener listener;
-	
 	@SuppressWarnings("unchecked")
 	public Collection<Object> complete(String queryString) {
 		this.queryString = queryString;
 		if(listener != null || controllerEntity != null) {
-			Runner.Arguments arguments = new Runner.Arguments().assignDefaultMessageArguments()
-					.setSuccessMessageArguments(null);
+			Runner.Arguments arguments = new Runner.Arguments().assignDefaultMessageArguments().setSuccessMessageArguments(null);
 			arguments.getThrowableMessageArguments().setRenderTypes(CollectionHelper.listOf(RenderType.GROWL));
-			if(listener != null) {				
+			if(listener instanceof AutoComplete.Listener) {				
 				arguments.addRunnables(new Runnable() {				
 					@Override
 					public void run() {
-						arguments.setResult(listener.listenComplete(AutoComplete.this,queryString));
+						((AutoComplete.Listener)listener).listenComplete(AutoComplete.this,arguments,new FilterDto(),queryString);
 					}
 				});				
 			}else if(controllerEntity != null) {
-				arguments.addRunnables(new Runnable() {				
-					@Override
-					public void run() {
-						arguments.setResult(controllerEntity.readByString(queryString));
-					}
-				});
+				if(StringHelper.isBlank(readQueryIdentifier)) {
+					MessageRenderer.getInstance().render("read query identifier need to be defined to query data by "+queryString,Severity.WARNING, RenderType.GROWL);
+				}else {
+					arguments.addRunnables(new Runnable() {				
+						@Override
+						public void run() {
+							__complete__(arguments, controllerEntity, readQueryIdentifier, new FilterDto(), queryString);
+						}
+					});
+				}				
 			}
 			return (Collection<Object>) Runner.getInstance().run(arguments);
 		}
@@ -98,9 +107,13 @@ public class AutoComplete extends AbstractObject implements Serializable {
 	/**/
 	
 	public static final String FIELD_DROPDOWN = "dropdown";
+	public static final String FIELD_MULTIPLE = "multiple";
 	public static final String FIELD_ENTITY_CLASS = "entityClass";
 	public static final String FIELD_ENTITY_CONTROLLER = "entityController";
 	public static final String FIELD_TARGET_WIDGET_VAR = "targetWidgetVar";
+	public static final String FIELD_FILTER = "filter";
+	public static final String FIELD_READ_QUERY_IDENTIFIER = "readQueryIdentifier";
+	public static final String FIELD_COUNT_QUERY_IDENTIFIER = "countQueryIdentifier";
 	
 	private static final String SCRIPT_SEARCH = "PF('%s').search('%s')";
 	
@@ -108,13 +121,17 @@ public class AutoComplete extends AbstractObject implements Serializable {
 	
 	public static interface Listener {
 		
-		@SuppressWarnings("unchecked")
-		default Collection<Object> listenComplete(AutoComplete autoComplete,String queryString) {
-			if(autoComplete == null || autoComplete.controllerEntity == null)
-				return null;
-			return (Collection<Object>) autoComplete.controllerEntity.readByString(queryString);
+		default void listenComplete(AutoComplete autoComplete,Runner.Arguments arguments,FilterDto filter,String queryString) {
+			if(autoComplete == null || autoComplete.controllerEntity == null) {
+				MessageRenderer.getInstance().render("controller need to be defined to query data by "+queryString,Severity.WARNING, RenderType.GROWL);
+				return;
+			}
+			__complete__(arguments, autoComplete.controllerEntity, autoComplete.readQueryIdentifier, filter, queryString);
 		}
 		
+		public static abstract class AbstractImpl extends org.cyk.utility.__kernel__.object.AbstractObject implements Listener,Serializable {
+			
+		}
 	}
 
 	/**/
@@ -125,8 +142,17 @@ public class AutoComplete extends AbstractObject implements Serializable {
 		public void configure(AutoComplete autoComplete, Map<Object, Object> arguments) {
 			super.configure(autoComplete, arguments);
 			if(autoComplete.controllerEntity == null) {
-				if(autoComplete.entityClass != null)
+				if(autoComplete.entityClass != null) {
 					autoComplete.controllerEntity = __inject__(ControllerLayer.class).injectInterfaceClassFromEntityClass(autoComplete.entityClass);
+					
+					String persistenceEntityClassName = ClassHelper.buildName(autoComplete.entityClass.getPackageName(), autoComplete.entityClass.getSimpleName()
+							, new NamingModel().client().controller().entities(), new NamingModel().server().persistence().entities());						
+					Class<?> persistenceEntityClass = ClassHelper.getByName(persistenceEntityClassName);
+					if(StringHelper.isBlank(autoComplete.readQueryIdentifier))
+						autoComplete.readQueryIdentifier = QueryHelper.getIdentifierReadWhereBusinessIdentifierOrNameContains(persistenceEntityClass);
+					if(StringHelper.isBlank(autoComplete.countQueryIdentifier))
+						autoComplete.countQueryIdentifier = QueryHelper.getIdentifierCountWhereBusinessIdentifierOrNameContains(persistenceEntityClass);
+				}
 			}
 			
 			autoComplete.ajaxQuery = Builder.build(Ajax.class,Map.of(Ajax.FIELD_EVENT,"query",Ajax.FIELD_DISABLED,Boolean.FALSE));
@@ -191,6 +217,16 @@ public class AutoComplete extends AbstractObject implements Serializable {
 		
 		private static final String SCRIPT_FILTER = "PF('%s').filter()";
 	}
+	
+	/**/
+	
+	private static void __complete__(Runner.Arguments arguments,ControllerEntity<?> controllerEntity,String readQueryIdentifier,FilterDto filter,String queryString) {
+		filter.addField(AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringImpl.FIELD_CODE, queryString)
+		.addField(AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl.FIELD_NAME, queryString);							
+		arguments.setResult(controllerEntity.read(new Properties().setQueryIdentifier(readQueryIdentifier).setIsPageable(Boolean.TRUE).setFilters(filter)));
+	}
+	
+	/**/
 
 	static {
 		Configurator.set(AutoComplete.class, new ConfiguratorImpl());

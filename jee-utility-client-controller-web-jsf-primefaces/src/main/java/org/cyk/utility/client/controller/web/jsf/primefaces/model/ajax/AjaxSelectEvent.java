@@ -2,6 +2,7 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax;
 
 import org.primefaces.event.SelectEvent;
 
+@Deprecated
 public class AjaxSelectEvent extends AbstractAjax<SelectEvent> {
 
 	@Override

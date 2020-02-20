@@ -18,7 +18,9 @@ public interface VariableName {
 	String SYSTEM_HOST = buildSystem("host");
 	String SYSTEM_PORT = buildSystem("port");
 	String SYSTEM_WEB_CONTEXT = buildSystem("web.context");
-
+	String SYSTEM_LOGGING_ENABLED = buildSystem("logging.enabled");
+	String SYSTEM_LOGGING_THROWABLE_PRINT_STACK_TRACE = buildSystem("logging.throwable.print.stack.trace");
+	
 	/* Protocols */
 	
 	String PROTOCOL_SIMPLE_MAIL_TRANSFER_ENABLE = buildProtocolSimpleMailTransfer("enabled");

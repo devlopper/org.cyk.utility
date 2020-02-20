@@ -115,7 +115,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 							String.format("SELECT tuple FROM %1$s tuple WHERE "
 									+ QueryStringHelper.formatTupleFieldLike("tuple", columnName,"identifier")
 									+ " OR "
-									+ QueryStringHelper.formatTupleFieldLikeOrTokens("tuple", __businessNameField__.getName(), 3, LogicalOperator.AND)
+									+ QueryStringHelper.formatTupleFieldLikeOrTokens("tuple", __businessNameField__.getName(), 6, LogicalOperator.AND)
 									+" ORDER BY "+__businessNameField__.getName()
 							, tupleName,columnName));
 				}
@@ -503,12 +503,13 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 					businessIdentifierFieldValue = "%"+(field == null ? ConstantEmpty.STRING : StringUtils.trimToEmpty((String) field.getValue()))+"%";
 				}
 				
-				List<String> businessNameFieldValue = queryContext.getFieldValueLikes(__businessNameField__.getName(),4);
+				List<String> businessNameFieldValue = queryContext.getFieldValueLikes(__businessNameField__.getName(),7);
 				objects = new Object[] {businessIdentifierFieldValue,businessNameFieldValue.get(0),businessNameFieldValue.get(1),businessNameFieldValue.get(2)
-						,businessNameFieldValue.get(3)};
+						,businessNameFieldValue.get(3),businessNameFieldValue.get(4),businessNameFieldValue.get(5),businessNameFieldValue.get(6)};
 			}
 			//System.out.println("AbstractPersistenceEntityImpl.__getQueryParameters__() : "+Arrays.deepToString(objects)+" ::: "+queryContext.getQuery().getValue());
-			return new Object[]{"identifier", "%"+objects[0]+"%","name", objects[1],"name1", objects[2],"name2", objects[3],"name3", objects[4]};
+			return new Object[]{"identifier", "%"+objects[0]+"%","name", objects[1],"name1", objects[2],"name2", objects[3],"name3", objects[4]
+					,"name4", objects[5],"name5", objects[6],"name6", objects[7]};
 		}
 		return super.__getQueryParameters__(queryContext, properties, objects);
 	}

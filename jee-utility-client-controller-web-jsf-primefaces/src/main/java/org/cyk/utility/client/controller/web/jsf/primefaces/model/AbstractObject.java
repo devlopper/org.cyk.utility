@@ -21,8 +21,11 @@ public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractOb
 	@Getter @Setter protected String widgetVar;
 	@Getter @Setter protected String style,styleClass;
 	@Getter @Setter protected MapInstance<Event, String> eventScripts;
-	@Getter @Setter protected Boolean rendered = Boolean.TRUE;
-
+	@Getter @Setter protected Boolean rendered;
+	
+	/* Listener to enabled behavior extension */
+	@Getter @Setter protected Object listener;
+	
 	/* Events */
 	
 	public MapInstance<Event, String> getEventScripts(Boolean injectIfNull) {
@@ -104,6 +107,8 @@ public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractOb
 					object.widgetVar = identifier_prefix+RandomHelper.getAlphabetic(5);
 				}
 			}
+			if(object.rendered == null)
+				object.rendered = Boolean.TRUE;
 		}
 	}
 	
@@ -117,6 +122,6 @@ public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractOb
 	public static final String FIELD_STYLE_CLASS = "styleClass";
 	public static final String FIELD_RENDERED = "rendered";
 	public static final String FIELD_EVENT_SCRIPTS = "eventScripts";
-	public static final String FIELD_EVENT_STYLE = "style";
-	public static final String FIELD_EVENT_STYLE_CLASS = "styleClass";
+	public static final String FIELD_LISTENER = "listener";
+	
 }

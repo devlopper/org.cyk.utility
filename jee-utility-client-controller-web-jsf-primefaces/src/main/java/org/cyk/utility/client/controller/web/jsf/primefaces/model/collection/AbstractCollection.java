@@ -145,11 +145,12 @@ public abstract class AbstractCollection extends AbstractObject implements Seria
 			if(StringHelper.isBlank(collection.selectionMode)) {
 				
 			}else {
-				collection.selection = new ArrayList<>();
-				collection.dialogOutputPanel = Builder.build(OutputPanel.class);
-				collection.dialog = Builder.build(Dialog.class,Map.of(Dialog.FIELD_STYLE_CLASS,"cyk-min-width-90-percent cyk-min-height-90-percent"
-						,Dialog.FIELD_MODAL,Boolean.TRUE));
+				collection.selection = new ArrayList<>();				
 			}
+			
+			collection.dialogOutputPanel = Builder.build(OutputPanel.class);
+			collection.dialog = Builder.build(Dialog.class,Map.of(Dialog.FIELD_STYLE_CLASS,"cyk-min-width-90-percent cyk-min-height-90-percent"
+					,Dialog.FIELD_MODAL,Boolean.TRUE));
 			
 			if(collection.blockUI == null)
 				collection.blockUI = Builder.build(BlockUI.class, Map.of(BlockUI.FIELD_BLOCK,collection.identifier,BlockUI.FIELD_TRIGGER,collection.identifier));				

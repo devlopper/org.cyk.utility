@@ -20,7 +20,6 @@ import lombok.experimental.Accessors;
 @Getter @Setter @Accessors(chain=true)
 public abstract class AbstractAction extends AbstractObject implements Serializable {
 
-	protected Listener listener;
 	protected String process,update;
 	protected Runner.Arguments runnerArguments;
 	
@@ -33,8 +32,8 @@ public abstract class AbstractAction extends AbstractObject implements Serializa
 				@Override
 				public void run() {
 					__action__(argument);
-					if(listener != null)
-						listener.listenAction(argument);
+					if(listener instanceof AbstractAction.Listener)
+						((AbstractAction.Listener)listener).listenAction(argument);
 				}
 			});
 			Runner.getInstance().run(runnerArguments);	
@@ -45,7 +44,6 @@ public abstract class AbstractAction extends AbstractObject implements Serializa
 	
 	/**/
 	
-	public static final String FIELD_LISTENER = "listener";
 	public static final String FIELD_PROCESS = "process";
 	public static final String FIELD_UPDATE = "update";
 	public static final String FIELD_RUNNER_ARGUMENTS = "runnerArguments";

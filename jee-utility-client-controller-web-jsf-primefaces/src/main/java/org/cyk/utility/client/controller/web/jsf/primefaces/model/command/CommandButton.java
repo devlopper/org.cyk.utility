@@ -39,7 +39,11 @@ public class CommandButton extends AbstractCommand implements Serializable {
 			if(dataTable == null) {
 				
 			}else {
-				commandButton.update += " :form:"+dataTable.getDialogOutputPanel().getIdentifier();
+				if(dataTable.getDialogOutputPanel() == null) {
+					
+				}else {
+					commandButton.update += " :form:"+dataTable.getDialogOutputPanel().getIdentifier();	
+				}				
 				commandButton.getRunnerArguments().setSuccessMessageArguments(null);
 			}			
 		}

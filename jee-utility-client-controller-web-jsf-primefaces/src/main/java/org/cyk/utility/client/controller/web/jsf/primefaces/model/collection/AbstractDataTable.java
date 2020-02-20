@@ -21,7 +21,6 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 	protected Column menuColumn;
 	protected Collection<Column> columnsAfterRowIndex,selectedColumnsAfterRowIndex;
 	protected Boolean areColumnsChoosable;
-	protected Listener listener;
 	
 	/**/
 	
@@ -64,14 +63,14 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 	}
 	
 	public String getStyleClassByRecord(Object record,Integer recordIndex) {
-		if(listener != null)
-			return listener.listenGetStyleClassByRecord(record,recordIndex);
+		if(listener instanceof AbstractDataTable.Listener)
+			return ((AbstractDataTable.Listener)listener).listenGetStyleClassByRecord(record,recordIndex);
 		return null;
 	}
 	
 	public String getStyleClassByRecordByColumn(Object record,Integer recordIndex,Column column,Integer columnIndex) {
-		if(listener != null)
-			return listener.listenGetStyleClassByRecordByColumn(record, recordIndex,column,columnIndex);
+		if(listener instanceof AbstractDataTable.Listener)
+			return ((AbstractDataTable.Listener)listener).listenGetStyleClassByRecordByColumn(record, recordIndex,column,columnIndex);
 		return null;
 	}
 	

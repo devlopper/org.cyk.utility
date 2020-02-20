@@ -42,10 +42,12 @@
  						<ui:insert name="headerToolbarRight">
  							<ui:fragment rendered="#{dataTable.isExportable}">
  								<ui:insert name="headerToolbarRightExports">
-	 								<p:commandButton id="export_excel" icon="fa fa-file-excel-o" ajax="false">
-				    					<p:dataExporter type="xls" target="#{dataTable.identifier}" fileName="#{dataTable.fileName}" />
-				    				</p:commandButton>
-				    				<p:tooltip for="export_excel" value="Exporter en excel" />
+ 									<ui:fragment rendered="#{dataTable.isExportable}">
+		 								<p:commandButton id="export_excel" icon="fa fa-file-excel-o" ajax="false">
+					    					<p:dataExporter type="xls" target="#{dataTable.identifier}" fileName="#{dataTable.fileName}" />
+					    				</p:commandButton>
+					    				<p:tooltip for="export_excel" value="Exporter en excel" />
+				    				</ui:fragment>
 	 							</ui:insert>
  							</ui:fragment>
 	 						<ui:fragment rendered="#{dataTable.areColumnsChoosable}">

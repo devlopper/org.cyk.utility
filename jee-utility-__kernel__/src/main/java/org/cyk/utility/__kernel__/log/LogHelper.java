@@ -8,6 +8,7 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.variable.VariableName;
 
 public interface LogHelper {
 
@@ -143,7 +144,7 @@ public interface LogHelper {
 		if(throwable == null)
 			return;
 		logSevere(throwable.toString(),klass);
-		if(Boolean.TRUE.equals(isPrintStackTrace) || ConfigurationHelper.is("print.stack.trace"))
+		if(Boolean.TRUE.equals(isPrintStackTrace) || ConfigurationHelper.is(VariableName.SYSTEM_LOGGING_THROWABLE_PRINT_STACK_TRACE))
 			throwable.printStackTrace();
 	}
 	

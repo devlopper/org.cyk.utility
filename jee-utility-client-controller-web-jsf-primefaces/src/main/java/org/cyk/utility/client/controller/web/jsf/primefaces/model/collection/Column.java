@@ -43,7 +43,7 @@ public class Column extends AbstractObject implements Serializable {
 			}
 			Boolean isFilterable = (Boolean) MapHelper.readByKey(arguments, FIELD_FILTERABLE);
 			if(isFilterable == null)
-				isFilterable = Boolean.TRUE;
+				isFilterable = Boolean.FALSE;
 			if(StringHelper.isBlank(column.getFilterBy()) && Boolean.TRUE.equals(isFilterable) && StringHelper.isNotBlank(column.getFieldName()))
 				column.setFilterBy(column.getFieldName());
 		}

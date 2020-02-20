@@ -359,7 +359,6 @@ public interface InternationalizationHelper {
 		addResourceBundlesFromNames(List.of(names), klass,index);
 	}
 	
-	@SuppressWarnings("unchecked")
 	static String getFromResourceBundles(String identifier,Object[] arguments,Locale locale,Case kase,Collection<ResourceBundle> resourceBundles) {
 		resourceBundles = resourceBundles == null ? RESOURCE_BUNDLES.get() : CollectionHelper.concatenate(resourceBundles,RESOURCE_BUNDLES.get());
 		if(CollectionHelper.isEmpty(resourceBundles)){
