@@ -10,6 +10,7 @@ import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.user.interface_.message.Message;
 import org.cyk.utility.__kernel__.user.interface_.message.MessageRenderer;
@@ -49,6 +50,7 @@ public interface Runner {
 				MessageRenderer.getInstance().render("Opération bien éffectuée",arguments.successMessageArguments.getSeverity(), arguments.successMessageArguments.getRenderTypes());
 			}			
 		} catch (Exception exception) {
+			LogHelper.log(exception, getClass());
 			if(arguments.throwableMessageArguments == null) {
 				throw new RuntimeException(exception);
 			}else {

@@ -13,19 +13,20 @@ import java.util.Map;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
-import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.computation.LogicalOperator;
 import org.cyk.utility.__kernel__.computation.SortOrder;
-import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.field.FieldInstance;
 import org.cyk.utility.__kernel__.field.FieldInstancesRuntime;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
+import org.cyk.utility.__kernel__.persistence.query.Query;
+import org.cyk.utility.__kernel__.persistence.query.QueryContext;
 import org.cyk.utility.__kernel__.persistence.query.QueryStringHelper;
+import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.stacktrace.StackTraceHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
@@ -35,9 +36,6 @@ import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.map.MapHelper;
-import org.cyk.utility.__kernel__.persistence.query.Query;
-import org.cyk.utility.__kernel__.persistence.query.QueryContext;
-import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 import org.cyk.utility.sql.builder.QueryStringBuilder;
 import org.cyk.utility.sql.builder.QueryStringBuilderSelect;
 
@@ -497,19 +495,14 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 			return new Object[]{"identifier", "%"+objects[0]+"%"};
 		}else if(queryContext.getQuery().isIdentifierEqualsToOrQueryDerivedFromQueryIdentifierEqualsTo(readWhereBusinessIdentifierOrNameContains)) {
 			if(Boolean.TRUE.equals(__inject__(ArrayHelper.class).isEmpty(objects))) {
-				Object businessIdentifierFieldValue = null;
-				org.cyk.utility.__kernel__.persistence.query.filter.Field field = queryContext.getFilterFieldByKeys(__businessIdentifierField__.getName());				
-				if(field == null || field.getValue() == null || field.getValue() instanceof String) {
-					businessIdentifierFieldValue = "%"+(field == null ? ConstantEmpty.STRING : StringUtils.trimToEmpty((String) field.getValue()))+"%";
-				}
-				
+				Object businessIdentifierFieldValue = queryContext.getStringLike(__businessIdentifierField__.getName());				
 				List<String> businessNameFieldValue = queryContext.getFieldValueLikes(__businessNameField__.getName(),7);
 				objects = new Object[] {businessIdentifierFieldValue,businessNameFieldValue.get(0),businessNameFieldValue.get(1),businessNameFieldValue.get(2)
-						,businessNameFieldValue.get(3),businessNameFieldValue.get(4),businessNameFieldValue.get(5),businessNameFieldValue.get(6)};
+						,businessNameFieldValue.get(3),businessNameFieldValue.get(4),businessNameFieldValue.get(5),businessNameFieldValue.get(6)};			
 			}
-			//System.out.println("AbstractPersistenceEntityImpl.__getQueryParameters__() : "+Arrays.deepToString(objects)+" ::: "+queryContext.getQuery().getValue());
-			return new Object[]{"identifier", "%"+objects[0]+"%","name", objects[1],"name1", objects[2],"name2", objects[3],"name3", objects[4]
+			objects = new Object[]{"identifier", objects[0],"name", objects[1],"name1", objects[2],"name2", objects[3],"name3", objects[4]
 					,"name4", objects[5],"name5", objects[6],"name6", objects[7]};
+			return objects;
 		}
 		return super.__getQueryParameters__(queryContext, properties, objects);
 	}

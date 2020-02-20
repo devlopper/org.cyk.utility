@@ -20,7 +20,7 @@
 		completeMethod="#{autoComplete.complete}"
 		maxResults="#{autoComplete.numberOfResults}" 
 		queryDelay="#{autoComplete.queryDelay}" 
-		emptyMessage="-- Aucun résultat --"
+		emptyMessage="#{autoComplete.emptyMessage}"
 		widgetVar="#{autoComplete.widgetVar}"
 		rendered="#{autoComplete.rendered}"
 		
@@ -42,5 +42,9 @@
 			<ui:param name="ajax" value="#{autoComplete.ajaxMoreText}"/>
 		</ui:decorate>
 	</p:autoComplete>   
+	
+	<ui:decorate template="/blockui/default.xhtml">
+ 		<ui:param name="blockUI" value="#{autoComplete.blockUI}"/>
+ 	</ui:decorate>
 			
 </ui:composition>

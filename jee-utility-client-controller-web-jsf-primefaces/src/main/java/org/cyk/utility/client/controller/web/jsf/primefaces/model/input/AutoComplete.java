@@ -30,6 +30,7 @@ import org.cyk.utility.client.controller.ControllerLayer;
 import org.cyk.utility.client.controller.web.jsf.converter.ObjectConverter;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObject;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.BlockUI;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.Event;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax.Ajax;
 import org.primefaces.PrimeFaces;
@@ -60,6 +61,7 @@ public class AutoComplete extends AbstractObject implements Serializable {
 	private ReadListener readItemValueListener;
 	
 	private Ajax ajaxItemSelect,ajaxItemUnselect,ajaxQuery,ajaxMoreText;
+	private BlockUI blockUI;
 	
 	@SuppressWarnings("unchecked")
 	public Collection<Object> complete(String queryString) {
@@ -114,6 +116,7 @@ public class AutoComplete extends AbstractObject implements Serializable {
 	public static final String FIELD_FILTER = "filter";
 	public static final String FIELD_READ_QUERY_IDENTIFIER = "readQueryIdentifier";
 	public static final String FIELD_COUNT_QUERY_IDENTIFIER = "countQueryIdentifier";
+	public static final String FIELD_BLOCK_UI = "blockUI";
 	
 	private static final String SCRIPT_SEARCH = "PF('%s').search('%s')";
 	
@@ -155,7 +158,13 @@ public class AutoComplete extends AbstractObject implements Serializable {
 				}
 			}
 			
-			autoComplete.ajaxQuery = Builder.build(Ajax.class,Map.of(Ajax.FIELD_EVENT,"query",Ajax.FIELD_DISABLED,Boolean.FALSE));
+			if(autoComplete.blockUI == null)
+				autoComplete.blockUI = Builder.build(BlockUI.class, Map.of(BlockUI.FIELD_BLOCK,autoComplete.identifier,BlockUI.FIELD_TRIGGER,autoComplete.identifier));		
+			
+			
+			
+			autoComplete.ajaxQuery = Builder.build(Ajax.class,Map.of(Ajax.FIELD_EVENT,"query",Ajax.FIELD_DISABLED,Boolean.FALSE
+					,Ajax.ConfiguratorImpl.FIELD_BLOCK_UI,autoComplete.blockUI));
 			autoComplete.ajaxQuery.getRunnerArguments().setSuccessMessageArguments(null);
 			
 			autoComplete.ajaxMoreText = Builder.build(Ajax.class,Map.of(Ajax.FIELD_EVENT,"moreText",Ajax.FIELD_DISABLED,Boolean.FALSE,Ajax.FIELD_LISTENER
@@ -183,7 +192,6 @@ public class AutoComplete extends AbstractObject implements Serializable {
 			if(autoComplete.entityClass == null) {
 				
 			}else {
-				//autoComplete.setIdentifier(StringHelper.getVariableNameFrom(autoComplete.entityClass.getSimpleName()));
 				if(StringHelper.isBlank(autoComplete.targetWidgetVar)) {
 					autoComplete.setConverter(DependencyInjection.inject(ObjectConverter.class));
 				}else {
@@ -221,9 +229,16 @@ public class AutoComplete extends AbstractObject implements Serializable {
 	/**/
 	
 	private static void __complete__(Runner.Arguments arguments,ControllerEntity<?> controllerEntity,String readQueryIdentifier,FilterDto filter,String queryString) {
-		filter.addField(AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringImpl.FIELD_CODE, queryString)
-		.addField(AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl.FIELD_NAME, queryString);							
-		arguments.setResult(controllerEntity.read(new Properties().setQueryIdentifier(readQueryIdentifier).setIsPageable(Boolean.TRUE).setFilters(filter)));
+		if(StringHelper.isBlank(queryString))
+			queryString = null;
+		if(queryString != null)
+			filter.addField(AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringImpl.FIELD_CODE, queryString)
+			.addField(AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl.FIELD_NAME, queryString);
+		Properties properties = new Properties().setQueryIdentifier(readQueryIdentifier).setIsPageable(Boolean.TRUE);
+		if(filter.getFields() != null && CollectionHelper.isNotEmpty(filter.getFields().getCollection())) {
+			properties.setFilters(filter);
+		}
+		arguments.setResult(controllerEntity.read(properties));
 	}
 	
 	/**/

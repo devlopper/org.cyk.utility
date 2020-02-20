@@ -20,7 +20,7 @@ import lombok.experimental.Accessors;
 public class AbstractAjax<ARGUMENT> extends AbstractAction implements Serializable {
 
 	protected String event;
-	protected Boolean disabled = Boolean.TRUE,partialSubmit=Boolean.TRUE,global = Boolean.TRUE;
+	protected Boolean disabled = Boolean.TRUE,partialSubmit=Boolean.TRUE,global;
 	protected Boolean throwNotYetImplemented = Boolean.TRUE;
 	
 	{
@@ -70,6 +70,9 @@ public class AbstractAjax<ARGUMENT> extends AbstractAction implements Serializab
 			}
 			if(StringHelper.isBlank(ajax.getEvent()))
 				ajax.setEvent("click");
+			
+			if(ajax.global == null)
+				ajax.global = Boolean.TRUE;
 		}
 		
 		public static final String FIELD_LISTENER_NULLABLE = "LISTENER_NULLABLE";
