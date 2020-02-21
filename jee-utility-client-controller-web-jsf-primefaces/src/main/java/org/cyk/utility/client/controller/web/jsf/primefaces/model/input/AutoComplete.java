@@ -11,7 +11,6 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.klass.NamingModel;
-import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
 import org.cyk.utility.__kernel__.object.ReadListener;
 import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringImpl;
@@ -29,8 +28,7 @@ import org.cyk.utility.client.controller.ControllerEntity;
 import org.cyk.utility.client.controller.ControllerLayer;
 import org.cyk.utility.client.controller.web.jsf.converter.ObjectConverter;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
-import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObject;
-import org.cyk.utility.client.controller.web.jsf.primefaces.model.BlockUI;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObjectAjaxable;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.Event;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax.Ajax;
 import org.primefaces.PrimeFaces;
@@ -39,7 +37,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class AutoComplete extends AbstractObject implements Serializable {
+public class AutoComplete extends AbstractObjectAjaxable implements Serializable {
 
 	public static Integer INITIAL_NUMBER_OF_RESULTS = 10;
 	public static Integer QUERY_DELAY = 2000;
@@ -59,9 +57,6 @@ public class AutoComplete extends AbstractObject implements Serializable {
 	
 	private ReadListener readItemLabelListener;
 	private ReadListener readItemValueListener;
-	
-	private Ajax ajaxItemSelect,ajaxItemUnselect,ajaxQuery,ajaxMoreText;
-	private BlockUI blockUI;
 	
 	@SuppressWarnings("unchecked")
 	public Collection<Object> complete(String queryString) {
@@ -116,7 +111,6 @@ public class AutoComplete extends AbstractObject implements Serializable {
 	public static final String FIELD_FILTER = "filter";
 	public static final String FIELD_READ_QUERY_IDENTIFIER = "readQueryIdentifier";
 	public static final String FIELD_COUNT_QUERY_IDENTIFIER = "countQueryIdentifier";
-	public static final String FIELD_BLOCK_UI = "blockUI";
 	
 	private static final String SCRIPT_SEARCH = "PF('%s').search('%s')";
 	
@@ -141,6 +135,7 @@ public class AutoComplete extends AbstractObject implements Serializable {
 	
 	public static class ConfiguratorImpl extends AbstractConfiguratorImpl<AutoComplete> implements Serializable {
 
+		@SuppressWarnings("unchecked")
 		@Override
 		public void configure(AutoComplete autoComplete, Map<Object, Object> arguments) {
 			super.configure(autoComplete, arguments);
@@ -158,17 +153,9 @@ public class AutoComplete extends AbstractObject implements Serializable {
 				}
 			}
 			
-			if(autoComplete.blockUI == null)
-				autoComplete.blockUI = Builder.build(BlockUI.class, Map.of(BlockUI.FIELD_BLOCK,autoComplete.identifier,BlockUI.FIELD_TRIGGER,autoComplete.identifier));		
-			
-			
-			
-			autoComplete.ajaxQuery = Builder.build(Ajax.class,Map.of(Ajax.FIELD_EVENT,"query",Ajax.FIELD_DISABLED,Boolean.FALSE
-					,Ajax.ConfiguratorImpl.FIELD_BLOCK_UI,autoComplete.blockUI));
-			autoComplete.ajaxQuery.getRunnerArguments().setSuccessMessageArguments(null);
-			
-			autoComplete.ajaxMoreText = Builder.build(Ajax.class,Map.of(Ajax.FIELD_EVENT,"moreText",Ajax.FIELD_DISABLED,Boolean.FALSE,Ajax.FIELD_LISTENER
-					,new AbstractAction.Listener() {			
+			autoComplete.addAjaxes(Map.of(Ajax.FIELD_EVENT,"query",Ajax.FIELD_DISABLED,Boolean.FALSE)
+					,Map.of(Ajax.FIELD_EVENT,"moreText",Ajax.FIELD_DISABLED,Boolean.FALSE,Ajax.FIELD_LISTENER
+					,new AbstractAction.Listener() {
 						@Override
 						public void listenAction(Object argument) {
 							if(argument instanceof AjaxBehaviorEvent) {
@@ -182,12 +169,9 @@ public class AutoComplete extends AbstractObject implements Serializable {
 									PrimeFaces.current().executeScript(String.format(SCRIPT_SEARCH, component.getWidgetVar(),autoComplete.queryString));		
 							}					
 						}
-					}));
-			autoComplete.ajaxMoreText.getRunnerArguments().setSuccessMessageArguments(null);
-			
-			autoComplete.ajaxItemSelect = Builder.build(Ajax.class,Map.of(Ajax.FIELD_EVENT,"itemSelect"));
-			
-			autoComplete.ajaxItemUnselect = Builder.build(Ajax.class,Map.of(Ajax.FIELD_EVENT,"itemUnselect"));
+					})
+					,Map.of(Ajax.FIELD_EVENT,"itemSelect")
+					,Map.of(Ajax.FIELD_EVENT,"itemUnselect"));
 			
 			if(autoComplete.entityClass == null) {
 				
@@ -196,11 +180,11 @@ public class AutoComplete extends AbstractObject implements Serializable {
 					autoComplete.setConverter(DependencyInjection.inject(ObjectConverter.class));
 				}else {
 					String script = String.format(SCRIPT_FILTER, autoComplete.targetWidgetVar);
+					Ajax itemSelect = autoComplete.ajaxes.get("itemSelect");
 					autoComplete.getEventScripts(Boolean.TRUE).write(Event.CHANGE, script);
-					autoComplete.getAjaxItemSelect().setDisabled(Boolean.FALSE);
-					autoComplete.getAjaxItemSelect().getEventScripts(Boolean.TRUE).write(Event.COMPLETE, script);
-					autoComplete.getAjaxItemSelect().setThrowNotYetImplemented(Boolean.FALSE);
-					autoComplete.getAjaxItemSelect().getRunnerArguments().setSuccessMessageArguments(null);
+					itemSelect.setDisabled(Boolean.FALSE);
+					itemSelect.getEventScripts(Boolean.TRUE).write(Event.COMPLETE, script);
+					itemSelect.setThrowNotYetImplemented(Boolean.FALSE);
 					
 					autoComplete.setReadItemValueListener(new ReadListener() {				
 						@Override

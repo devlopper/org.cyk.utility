@@ -116,6 +116,18 @@ public interface MapHelper {
 		return map.get(key);
 	}
 	
+	static <KEY,VALUE> void writeByKey(Map<KEY,VALUE> map,KEY key,VALUE value,Boolean override) {
+		if(map == null)
+			return;
+		Object current = readByKey(map, key);
+		if(current == null || override == null || Boolean.TRUE.equals(override))
+			map.put(key, value);
+	}
+	
+	static <KEY,VALUE> void writeByKey(Map<KEY,VALUE> map,KEY key,VALUE value) {
+		writeByKey(map, key, value, null);
+	}
+	
 	@SuppressWarnings("unchecked")
 	static void set(@SuppressWarnings("rawtypes") Map map,Object...objects) {
 		if(map == null || org.cyk.utility.__kernel__.array.ArrayHelper.isEmpty(objects))

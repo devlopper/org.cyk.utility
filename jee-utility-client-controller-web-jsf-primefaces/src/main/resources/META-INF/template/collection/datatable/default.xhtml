@@ -129,25 +129,25 @@
  		
  		<!-- Listeners -->
  		<ui:decorate template="/ajax/default.xhtml">
-	 		<ui:param name="ajax" value="#{dataTable.pageAjax}"/>
+	 		<ui:param name="ajax" value="#{dataTable.ajaxes.get('page')}"/>
 	 	</ui:decorate>
 	 	<ui:decorate template="/ajax/default.xhtml">
-	 		<ui:param name="ajax" value="#{dataTable.sortAjax}"/>
+	 		<ui:param name="ajax" value="#{dataTable.ajaxes.get('sort')}"/>
 	 	</ui:decorate>
 	 	<ui:decorate template="/ajax/default.xhtml">
-	 		<ui:param name="ajax" value="#{dataTable.filterAjax}"/>
+	 		<ui:param name="ajax" value="#{dataTable.ajaxes.get('filter')}"/>
 	 	</ui:decorate>
 	 	<ui:decorate template="/ajax/default.xhtml">
-	 		<ui:param name="ajax" value="#{dataTable.rowSelectAjax}"/>
+	 		<ui:param name="ajax" value="#{dataTable.ajaxes.get('rowSelect')}"/>
 	 	</ui:decorate>
 	 	<ui:decorate template="/ajax/default.xhtml">
-	 		<ui:param name="ajax" value="#{dataTable.rowUnselectAjax}"/>
+	 		<ui:param name="ajax" value="#{dataTable.ajaxes.get('rowUnselect')}"/>
 	 	</ui:decorate>
 	 	<ui:decorate template="/ajax/default.xhtml">
-	 		<ui:param name="ajax" value="#{dataTable.rowSelectCheckBoxAjax}"/>
+	 		<ui:param name="ajax" value="#{dataTable.ajaxes.get('rowSelectCheckbox')}"/>
 	 	</ui:decorate>
 	 	<ui:decorate template="/ajax/default.xhtml">
-	 		<ui:param name="ajax" value="#{dataTable.rowUnselectCheckBoxAjax}"/>
+	 		<ui:param name="ajax" value="#{dataTable.ajaxes.get('rowUnselectCheckbox')}"/>
 	 	</ui:decorate>
  	</p:dataTable>
  	

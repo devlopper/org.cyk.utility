@@ -30,16 +30,16 @@
 		onchange="#{autoComplete.onChange}"
 	>			
 		<ui:decorate template="/ajax/default.xhtml">
-			<ui:param name="ajax" value="#{autoComplete.ajaxQuery}"/>
+			<ui:param name="ajax" value="#{autoComplete.ajaxes.get('query')}"/>
 		</ui:decorate>
 		<ui:decorate template="/ajax/default.xhtml">
-			<ui:param name="ajax" value="#{autoComplete.ajaxItemSelect}"/>
+			<ui:param name="ajax" value="#{autoComplete.ajaxes.get('itemSelect')}"/>
 		</ui:decorate>
 		<ui:decorate template="/ajax/default.xhtml">
-			<ui:param name="ajax" value="#{autoComplete.ajaxItemUnselect}"/>
+			<ui:param name="ajax" value="#{autoComplete.ajaxes.get('itemUnselect')}"/>
 		</ui:decorate>
 		<ui:decorate template="/ajax/default.xhtml">
-			<ui:param name="ajax" value="#{autoComplete.ajaxMoreText}"/>
+			<ui:param name="ajax" value="#{autoComplete.ajaxes.get('moreText')}"/>
 		</ui:decorate>
 	</p:autoComplete>   
 	

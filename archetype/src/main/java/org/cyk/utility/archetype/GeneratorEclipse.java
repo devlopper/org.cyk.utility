@@ -61,7 +61,8 @@ public class GeneratorEclipse implements Serializable {
 	private File commandFile;
 	
 	public GeneratorEclipse() throws FileNotFoundException, IOException {
-		properties.put("cyk.workspace.path", "E:\\Workspaces\\Eclipse\\201903\\org\\cyk");
+		//properties.put("cyk.workspace.path", "E:\\Workspaces\\Eclipse\\201903\\org\\cyk");
+		properties.put("cyk.workspace.path", "E:\\Workspaces\\Eclipse\\201903\\ci\\gouv\\dgbf");
 		//properties.put("cyk.workspace.path", "E:\\Workspaces\\Eclipse\\photon\\ci\\gouv\\dgbf");
 		//properties.load(new FileInputStream(userDir+"/config.properties"));
 		workspaceDirectory = new File(properties.getProperty(CYK_WORKSPACE_PATH));
