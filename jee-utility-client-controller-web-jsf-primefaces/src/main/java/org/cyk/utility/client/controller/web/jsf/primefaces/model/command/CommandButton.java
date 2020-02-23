@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.cyk.utility.__kernel__.icon.Icon;
 import org.cyk.utility.__kernel__.map.MapHelper;
+import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.Confirm;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.collection.DataTable;
@@ -56,6 +57,10 @@ public class CommandButton extends AbstractCommand implements Serializable {
 		public static final String FIELD_DATA_TABLE = "dataTable";
 	}
 
+	public static CommandButton build(Map<Object,Object> arguments) {
+		return Builder.build(CommandButton.class,arguments);
+	}
+	
 	static {
 		Configurator.set(CommandButton.class, new ConfiguratorImpl());
 	}

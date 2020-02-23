@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.model.command;
 import java.io.Serializable;
 import java.util.Map;
 
+import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
 
 import lombok.Getter;
@@ -29,6 +30,10 @@ public class Button extends AbstractCommand implements Serializable {
 		}	
 	}
 
+	public static Button build(Map<Object,Object> arguments) {
+		return Builder.build(Button.class,arguments);
+	}
+	
 	static {
 		Configurator.set(Button.class, new ConfiguratorImpl());
 	}

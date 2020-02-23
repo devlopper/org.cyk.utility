@@ -23,7 +23,8 @@ public class GeneratorEclipse implements Serializable {
 	
 	public static final String CYK_WORKSPACE_PATH = "cyk.workspace.path";
 	
-	public static final String PACKAGE = "org.cyk.system";
+	//public static final String PACKAGE = "org.cyk.system";
+	public static final String PACKAGE = "ci.gouv.dgbf.system";
 	
 	//archetype-jee-server-microservices-jboss-swarm
 	public static final String COMMANDS_SERVER ="%1"+"\r\n"

@@ -179,6 +179,10 @@ public class Layout extends OutputPanel implements Serializable {
 		public static final String FIELD_CELLS_MAPS = "cellsMaps";
 	}
 
+	public static Layout build(Map<Object,Object> arguments) {
+		return Builder.build(Layout.class,arguments);
+	}
+	
 	static {
 		Configurator.set(Layout.class, new ConfiguratorImpl());
 	}

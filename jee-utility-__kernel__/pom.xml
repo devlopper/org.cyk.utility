@@ -37,6 +37,10 @@
 		<net.sf.jasperreports.jasperreports.version>${net.sf.jasper.report.version}</net.sf.jasperreports.jasperreports.version>
 		<net.sf.jasperreports.jasperreports-fonts.version>${net.sf.jasper.report.version}</net.sf.jasperreports.jasperreports-fonts.version>
 		<net.sf.barcode4j.barcode4j.version>2.1</net.sf.barcode4j.barcode4j.version>
+		
+		<org.elasticsearch.version>7.6.0</org.elasticsearch.version>
+		<org.elasticsearch.elasticsearch.version>${org.elasticsearch.version}</org.elasticsearch.elasticsearch.version>
+		<org.elasticsearch.test.framework.version>${org.elasticsearch.version}</org.elasticsearch.test.framework.version>
 	</properties>
 
 	<build>
@@ -181,6 +185,40 @@
 		    <version>${com.google.zxing.javase.version}</version>
 		</dependency>
 		
+		<!-- Search -->
+		<!--
+		<dependency>
+		    <groupId>org.elasticsearch</groupId>
+		    <artifactId>elasticsearch</artifactId>
+		    <version>${org.elasticsearch.elasticsearch.version}</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.elasticsearch.test</groupId>
+		    <artifactId>framework</artifactId>
+		    <version>${org.elasticsearch.test.framework.version}</version>
+		    <scope>test</scope>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.testcontainers</groupId>
+		    <artifactId>testcontainers</artifactId>
+		    <version>1.12.5</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.testcontainers</groupId>
+		    <artifactId>junit-jupiter</artifactId>
+		    <version>1.12.5</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.testcontainers</groupId>
+		    <artifactId>elasticsearch</artifactId>
+		    <version>1.12.5</version>
+		    <scope>test</scope>
+		</dependency>
+		-->
 	</dependencies>
 
 </project>

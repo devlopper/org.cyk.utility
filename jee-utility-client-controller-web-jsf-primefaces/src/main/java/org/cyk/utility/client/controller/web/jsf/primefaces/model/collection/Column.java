@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
+import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
 import org.cyk.utility.__kernel__.string.Case;
 import org.cyk.utility.__kernel__.string.StringHelper;
@@ -54,6 +55,10 @@ public class Column extends AbstractObject implements Serializable {
 		}
 		
 		public static final String FIELD_FILTERABLE = "filterable";
+	}
+	
+	public static Column build(Map<Object,Object> arguments) {
+		return Builder.build(Column.class,arguments);
 	}
 	
 	static {

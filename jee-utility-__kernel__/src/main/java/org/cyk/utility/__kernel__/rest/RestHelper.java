@@ -19,6 +19,7 @@ import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.protocol.http.HttpHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.variable.VariableHelper;
+import org.jboss.weld.exceptions.IllegalArgumentException;
 
 /**
  * Representational State Transfer Helper
@@ -29,11 +30,11 @@ public interface RestHelper {
 
 	static <RESOURCE> Collection<RESOURCE> getMany(Class<RESOURCE> resourceClass,Object classifier,URI uniformResourceIdentifier,Map<String,String> fieldsNamesMap) {
 		if(resourceClass == null)
-			return null;
+			throw new IllegalArgumentException("Resource class is required");
 		if(uniformResourceIdentifier == null) {
 			String uniformResourceIdentifierAsString = ConfigurationHelper.getClassUniformResourceIdentifier(resourceClass,classifier);
 			if(StringHelper.isBlank(uniformResourceIdentifierAsString))
-				return null;
+				throw new IllegalArgumentException("Resource uniform identifier is required");
 			try {
 				uniformResourceIdentifier = new URI(uniformResourceIdentifierAsString);
 			} catch (URISyntaxException exception) {
