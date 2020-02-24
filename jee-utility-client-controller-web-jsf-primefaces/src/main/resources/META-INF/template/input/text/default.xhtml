@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<ui:decorate template="/input/default.xhtml">
+		<ui:define name="message">
+			<ui:decorate template="#{inputText == null or inputText.message == null ? '/__dummy__.xhtml' : '/message/default.xhtml'}">
+				<ui:param name="message" value="#{inputText.message}"/>
+			</ui:decorate>
+		</ui:define>		
+		<ui:define name="input">
+			<p:inputText
+				id="#{inputText == null ? userInterfaceController.randomIdentifier : inputText.identifier}"
+				value="#{inputText.value}"
+				required="#{inputText.required}"
+				requiredMessage="#{inputText.requiredMessage}"
+				rendered="#{inputText.rendered}"
+				widgetVar="#{inputText.widgetVar}"
+				placeholder="#{inputText.placeholder}"
+			>
+			
+			</p:inputText>
+		</ui:define>
+	</ui:decorate>
+			
+</ui:composition>

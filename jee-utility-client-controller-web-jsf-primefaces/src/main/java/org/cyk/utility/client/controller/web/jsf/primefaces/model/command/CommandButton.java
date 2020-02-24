@@ -38,7 +38,7 @@ public class CommandButton extends AbstractCommand implements Serializable {
 			super.configure(commandButton, arguments);
 			DataTable dataTable = (DataTable) MapHelper.readByKey(arguments, FIELD_DATA_TABLE);
 			if(dataTable == null) {
-				
+				//commandButton.addUpdates(":form:formCenterCenterOutputPanel");
 			}else {
 				if(dataTable.getDialogOutputPanel() == null) {
 					
@@ -46,7 +46,12 @@ public class CommandButton extends AbstractCommand implements Serializable {
 					commandButton.update += " :form:"+dataTable.getDialogOutputPanel().getIdentifier();	
 				}				
 				commandButton.getRunnerArguments().setSuccessMessageArguments(null);
-			}			
+			}
+		}
+		
+		@Override
+		protected String __getTemplate__() {
+			return "/command/commandbutton/default.xhtml";
 		}
 		
 		@Override

@@ -44,8 +44,17 @@ public interface CollectionHelper {
 			}
 			return collection;
 		}
-		if(klass.equals(Set.class))
-			return Set.of(elements);
+		if(klass.equals(Set.class)) {
+			Collection<T> collection = new LinkedHashSet<T>();
+			for(T element : elements) {
+				if(element == null && Boolean.TRUE.equals(ignoreNullElement))
+					continue;
+				if(collection == null)
+					collection = new ArrayList<>();
+				collection.add(element);
+			}
+			return collection;
+		}
 		throw new RuntimeException("instantiate collection of type "+klass+" not yet handled");
 	}
 	

@@ -8,18 +8,16 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
-	<p:ajax 
-		event="#{ajax.event}" 
-		listener="#{ajax.listen}" 
-		partialSubmit="#{ajax.partialSubmit}" 		
-		disabled="#{ajax.disabled}"
+	<p:outputLabel
+		id="#{outputText == null ? userInterfaceController.randomIdentifier : outputText.identifier}"
+		value="#{outputLabel.value}"
+		rendered="#{outputLabel.rendered}"
+		widgetVar="#{outputLabel.widgetVar}"
+		for="#{outputLabel.for_}"
+	>
+	
+	</p:outputLabel>
+	
+	
 		
-		global="#{ajax.global}"
-		
-		update="#{ajax.update}"
-		
-		onstart="#{ajax.onStart}"
-		oncomplete="#{ajax.onComplete}"
-	/>
-  			
 </ui:composition>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<ui:param name="template" value="#{empty cell.control.__template__ ? '/__dummy__.xhtml' : cell.control.__template__}"/>
+	<ui:param name="classSimpleName" value="#{cell.control.class.simpleName}"/>
+	
+	<ui:fragment rendered="#{classSimpleName eq 'OutputLabel'}">
+		<ui:param name="processed" value="true"/>
+		<ui:decorate template="#{template}">
+	    	<ui:param name="outputLabel" value="#{cell.control}"/>
+	    </ui:decorate>
+	</ui:fragment>
+	
+	<ui:fragment rendered="#{classSimpleName eq 'InputText'}">
+		<ui:param name="processed" value="true"/>
+		<ui:decorate template="#{template}">
+	    	<ui:param name="inputText" value="#{cell.control}"/>
+	    </ui:decorate>
+	</ui:fragment>
+	
+	<ui:fragment rendered="#{classSimpleName eq 'CommandButton'}">
+		<ui:param name="processed" value="true"/>
+		<ui:decorate template="#{template}">
+	    	<ui:param name="commandButton" value="#{cell.control}"/>
+	    </ui:decorate>
+	</ui:fragment>
+	
+	<ui:fragment rendered="#{not processed}">
+		NOT PROCESSED
+		<h:outputText value="#{cell.identifier} : {cell.control.class.simpleName}" />
+	</ui:fragment>
+			
+</ui:composition>

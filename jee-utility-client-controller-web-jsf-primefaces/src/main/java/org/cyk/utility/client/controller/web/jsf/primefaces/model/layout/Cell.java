@@ -8,6 +8,7 @@ import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.panel.OutputPanel;
 
 import lombok.Getter;
@@ -22,6 +23,7 @@ public class Cell extends OutputPanel implements Serializable {
 	private Integer width;
 	private WidthUnit widthUnit;
 	private Boolean isWidthFixed;
+	private Object control;
 	
 	/**/
 	
@@ -31,6 +33,7 @@ public class Cell extends OutputPanel implements Serializable {
 	public static final String FIELD_WIDTH = "width";
 	public static final String FIELD_WIDTH_UNIT = "widthUnit";
 	public static final String FIELD_IS_WIDTH_FIXED = "isWidthFixed";
+	public static final String FIELD_CONTROL = "control";
 	
 	/**/
 	
@@ -40,6 +43,7 @@ public class Cell extends OutputPanel implements Serializable {
 	
 	public static class ConfiguratorImpl extends OutputPanel.AbstractConfiguratorImpl<Cell> implements Serializable {
 
+		@SuppressWarnings("unchecked")
 		@Override
 		public void configure(Cell cell, Map<Object, Object> arguments) {
 			super.configure(cell, arguments);
@@ -52,19 +56,29 @@ public class Cell extends OutputPanel implements Serializable {
 				if(cell.getWidth() == null || NumberHelper.isLessThanOrEqualZero(cell.getWidth()))
 					LogHelper.logWarning(String.format("layout cell identified by %s has no valid width : %s", cell.identifier,cell.getWidth()) , ConfiguratorImpl.class);
 				else
-					cell.addStyleClasses("ui-g-"+cell.width+" ui-g-nopad ui-sm-12");
+					//cell.addStyleClasses("ui-g-"+cell.width+" ui-sm-12 ui-g-nopad");
+					cell.addStyleClasses("ui-g-"+cell.width+" ui-sm-12");
 			} else if(WidthUnit.FLEX.equals(widthUnit)) {
 				cell.addStyleClasses("p-col-"+cell.width);
 			}else {
 				
 			}
+			if(cell.control == null) {
+				Map<Object,Object> commandButtonArguments = (Map<Object, Object>) MapHelper.readByKey(arguments, FIELD_CONTROL_COMMAND_BUTTON_ARGUMENTS);
+				if(commandButtonArguments != null) {
+					CommandButton commandButton = CommandButton.build(commandButtonArguments);
+					commandButton.addUpdatables(cell.layout);
+					cell.control = commandButton;
+				}	
+			}			
 		}
 		
 		@Override
 		protected Class<Cell> __getClass__() {
 			return Cell.class;
 		}
-
+		
+		public static final String FIELD_CONTROL_COMMAND_BUTTON_ARGUMENTS = "commandButtonArguments";
 	}
 
 	public static Cell build(Map<Object,Object> map) {

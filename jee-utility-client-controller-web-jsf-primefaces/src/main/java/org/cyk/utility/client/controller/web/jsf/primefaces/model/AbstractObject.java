@@ -15,16 +15,43 @@ import org.cyk.utility.__kernel__.string.StringHelper;
 import lombok.Getter;
 import lombok.Setter;
 
+@Getter @Setter
 public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractObject implements Serializable {
 
-	@Getter @Setter protected String identifier;
-	@Getter @Setter protected String widgetVar;
-	@Getter @Setter protected String style,styleClass;
-	@Getter @Setter protected MapInstance<Event, String> eventScripts;
-	@Getter @Setter protected Boolean rendered;
+	protected String identifier;
+	protected String widgetVar;
+	protected String style,styleClass;
+	protected MapInstance<Event, String> eventScripts;
+	protected Boolean rendered;
+	
+	/* Working variables */
+	
+	/* Template to enable custom file*/
+	protected String __template__;
 	
 	/* Listener to enabled behavior extension */
-	@Getter @Setter protected Object listener;
+	protected Object listener;
+	
+	/**/
+	
+	public Boolean getIsInput() {
+		return null;
+	}
+	
+	public Boolean getIsOutput() {
+		return null;
+	}
+	
+	/**/
+	
+	public static final String FIELD_IDENTIFIER = "identifier";
+	public static final String FIELD_WIDGET_VAR = "widgetVar";
+	public static final String FIELD_STYLE = "style";
+	public static final String FIELD_STYLE_CLASS = "styleClass";
+	public static final String FIELD_RENDERED = "rendered";
+	public static final String FIELD_EVENT_SCRIPTS = "eventScripts";
+	public static final String FIELD___TEMPLATE__ = "__template__";
+	public static final String FIELD_LISTENER = "listener";
 	
 	/* Events */
 	
@@ -109,19 +136,18 @@ public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractOb
 			}
 			if(object.rendered == null)
 				object.rendered = Boolean.TRUE;
+			
+			if(StringHelper.isBlank(object.__template__))
+				object.__template__ = __getTemplate__();
+		}
+		
+		protected String __getTemplate__() {
+			return null;
 		}
 	}
 	
 	/**/
 	
-	/**/
 	
-	public static final String FIELD_IDENTIFIER = "identifier";
-	public static final String FIELD_WIDGET_VAR = "widgetVar";
-	public static final String FIELD_STYLE = "style";
-	public static final String FIELD_STYLE_CLASS = "styleClass";
-	public static final String FIELD_RENDERED = "rendered";
-	public static final String FIELD_EVENT_SCRIPTS = "eventScripts";
-	public static final String FIELD_LISTENER = "listener";
 	
 }

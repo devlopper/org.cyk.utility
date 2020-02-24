@@ -183,6 +183,10 @@ public class Layout extends OutputPanel implements Serializable {
 		return Builder.build(Layout.class,arguments);
 	}
 	
+	public static Layout build(Object...objects) {
+		return build(MapHelper.instantiate(objects));
+	}
+	
 	static {
 		Configurator.set(Layout.class, new ConfiguratorImpl());
 	}

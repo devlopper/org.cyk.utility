@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
@@ -8,18 +9,6 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
-	<p:ajax 
-		event="#{ajax.event}" 
-		listener="#{ajax.listen}" 
-		partialSubmit="#{ajax.partialSubmit}" 		
-		disabled="#{ajax.disabled}"
-		
-		global="#{ajax.global}"
-		
-		update="#{ajax.update}"
-		
-		onstart="#{ajax.onStart}"
-		oncomplete="#{ajax.onComplete}"
-	/>
-  			
+	<h:outputText value="#{cell.identifier}" />
+	
 </ui:composition>
