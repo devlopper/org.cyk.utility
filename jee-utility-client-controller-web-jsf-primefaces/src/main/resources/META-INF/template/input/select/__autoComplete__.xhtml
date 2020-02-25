@@ -9,10 +9,10 @@
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
 	<p:autoComplete
-		id="#{empty autoCompleteId ? autoComplete.identifier : autoCompleteId}"
+		id="#{autoComplete == null ? userInterfaceController.randomIdentifier : autoComplete.identifier}"
 		value="#{autoComplete.value}" 
 		multiple="#{autoComplete.multiple}"
-		placeholder="Rechercher..."
+		placeholder="#{autoComplete.placeholder}"
 		var="item" 
 		itemValue="#{autoComplete.readItemValue(item)}" 
 		itemLabel="#{autoComplete.readItemLabel(item)}"

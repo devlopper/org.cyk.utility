@@ -11,6 +11,8 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.klass.NamingModel;
+import org.cyk.utility.__kernel__.map.MapHelper;
+import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
 import org.cyk.utility.__kernel__.object.ReadListener;
 import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringImpl;
@@ -28,7 +30,6 @@ import org.cyk.utility.client.controller.ControllerEntity;
 import org.cyk.utility.client.controller.ControllerLayer;
 import org.cyk.utility.client.controller.web.jsf.converter.ObjectConverter;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
-import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObjectAjaxable;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.Event;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax.Ajax;
 import org.primefaces.PrimeFaces;
@@ -37,7 +38,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class AutoComplete extends AbstractObjectAjaxable implements Serializable {
+public class AutoComplete extends AbstractInput<Object> implements Serializable {
 
 	public static Integer INITIAL_NUMBER_OF_RESULTS = 10;
 	public static Integer QUERY_DELAY = 2000;
@@ -49,9 +50,8 @@ public class AutoComplete extends AbstractObjectAjaxable implements Serializable
 	private Integer initialNumberOfResults = INITIAL_NUMBER_OF_RESULTS;
 	private Integer numberOfResults = initialNumberOfResults;
 	private String queryString,targetWidgetVar;
-	private String dropdownMode = "current",placeholder,emptyMessage="-- Aucun résultat --";
+	private String dropdownMode = "current",emptyMessage="-- Aucun résultat --";
 	private Object converter;
-	private Object value;
 	private Integer queryDelay = QUERY_DELAY;
 	private Boolean multiple,dropdown;
 	
@@ -205,9 +205,22 @@ public class AutoComplete extends AbstractObjectAjaxable implements Serializable
 			return AutoComplete.class;
 		}
 		
+		@Override
+		protected String __getTemplate__() {
+			return "/input/select/one/autoComplete.xhtml";
+		}
+		
 		/**/
 		
 		private static final String SCRIPT_FILTER = "PF('%s').filter()";
+	}
+	
+	public static AutoComplete build(Map<Object, Object> arguments) {
+		return Builder.build(AutoComplete.class,arguments);
+	}
+	
+	public static AutoComplete build(Object...objects) {
+		return build(MapHelper.instantiate(objects));
 	}
 	
 	/**/

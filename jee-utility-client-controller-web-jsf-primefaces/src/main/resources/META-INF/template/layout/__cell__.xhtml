@@ -9,33 +9,39 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
-	<ui:param name="template" value="#{empty cell.control.__template__ ? '/__dummy__.xhtml' : cell.control.__template__}"/>
-	<ui:param name="classSimpleName" value="#{cell.control.class.simpleName}"/>
+	<c:set var="template" value="#{empty cell.control.__template__ ? '/__dummy__.xhtml' : cell.control.__template__}"/>
+	<c:set var="classSimpleName" value="#{cell.control.class.simpleName}"/>
 	
-	<ui:fragment rendered="#{classSimpleName eq 'OutputLabel'}">
-		<ui:param name="processed" value="true"/>
+	<c:if test="#{classSimpleName eq 'OutputLabel'}">
+		<c:set var="processed" value="true"/>
 		<ui:decorate template="#{template}">
 	    	<ui:param name="outputLabel" value="#{cell.control}"/>
 	    </ui:decorate>
-	</ui:fragment>
+	</c:if>
 	
-	<ui:fragment rendered="#{classSimpleName eq 'InputText'}">
-		<ui:param name="processed" value="true"/>
+	<c:if test="#{classSimpleName eq 'InputText'}">
+		<c:set var="processed" value="true"/>
 		<ui:decorate template="#{template}">
 	    	<ui:param name="inputText" value="#{cell.control}"/>
 	    </ui:decorate>
-	</ui:fragment>
+	</c:if>
+
+	<c:if test="#{classSimpleName eq 'AutoComplete'}">
+		<c:set var="processed" value="true"/>
+		<ui:decorate template="#{template}">
+	    	<ui:param name="autoComplete" value="#{cell.control}"/>
+	    </ui:decorate>
+	</c:if>
 	
-	<ui:fragment rendered="#{classSimpleName eq 'CommandButton'}">
-		<ui:param name="processed" value="true"/>
+	<c:if test="#{classSimpleName eq 'CommandButton'}">
+		<c:set var="processed" value="true"/>
 		<ui:decorate template="#{template}">
 	    	<ui:param name="commandButton" value="#{cell.control}"/>
 	    </ui:decorate>
-	</ui:fragment>
+	</c:if>
 	
-	<ui:fragment rendered="#{not processed}">
-		NOT PROCESSED
-		<h:outputText value="#{cell.identifier} : {cell.control.class.simpleName}" />
-	</ui:fragment>
-			
+	<c:if test="#{not processed}">
+		<h:outputText value="#{cell.identifier} : #{classSimpleName} : #{cell.control.identifier}" />
+	</c:if>
+	
 </ui:composition>

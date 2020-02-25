@@ -6,6 +6,9 @@ import java.util.Map;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.icon.Icon;
 import org.cyk.utility.__kernel__.icon.IconIdentifierGetter;
+import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
+import org.cyk.utility.__kernel__.map.MapHelper;
+import org.cyk.utility.__kernel__.string.Case;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
 
@@ -26,6 +29,27 @@ public abstract class AbstractCommand extends AbstractAction implements Serializ
 		return this;
 	}
 	
+	public AbstractCommand applyValue(String value,Boolean isUpdateTitle) {
+		this.value = value;
+		if(StringHelper.isBlank(this.value))
+			//FIXME handle empty value
+			this.value = ConstantEmpty.STRING;
+		if(Boolean.TRUE.equals(isUpdateTitle))
+			setTitle(null).applyTitle(this.value);
+		return this;
+	}
+	
+	public AbstractCommand applyTitle(String title) {
+		this.title = title;
+		if(StringHelper.isBlank(this.title))
+			if(StringHelper.isBlank(this.value))
+				//FIXME handle empty value	
+				this.title = ".";
+			else
+				this.title = this.value;
+		return this;
+	}
+	
 	/**/
 	
 	public static final String FIELD_VALUE = "value";
@@ -39,15 +63,14 @@ public abstract class AbstractCommand extends AbstractAction implements Serializ
 		@Override
 		public void configure(COMMAND command, Map<Object, Object> arguments) {
 			super.configure(command, arguments);
-			if(StringHelper.isBlank(command.getValue()))
-				//FIXME handle empty value
-				command.setValue(ConstantEmpty.STRING);
-			if(StringHelper.isBlank(command.getTitle()))
-				if(StringHelper.isBlank(command.getValue()))
-					//FIXME handle empty value	
-					command.setTitle(".");
-				else
-					command.setTitle(command.getValue());
+			String value = command.getValue();
+			if(StringHelper.isBlank(value)) {
+				String methodName = (String) MapHelper.readByKey(arguments, FIELD_METHOD_NAME);
+				if(StringHelper.isNotBlank(methodName))
+					value = InternationalizationHelper.buildString(InternationalizationHelper.buildKey(methodName), null, null, Case.FIRST_CHARACTER_UPPER);					
+			}
+			command.applyValue(value,Boolean.FALSE);
+			command.applyTitle(command.getTitle());
 		}
 	}
 }

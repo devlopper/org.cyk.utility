@@ -1,14 +1,18 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces.model.layout;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.AbstractInput;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.panel.OutputPanel;
 
 import lombok.Getter;
@@ -64,12 +68,28 @@ public class Cell extends OutputPanel implements Serializable {
 				
 			}
 			if(cell.control == null) {
-				Map<Object,Object> commandButtonArguments = (Map<Object, Object>) MapHelper.readByKey(arguments, FIELD_CONTROL_COMMAND_BUTTON_ARGUMENTS);
-				if(commandButtonArguments != null) {
-					CommandButton commandButton = CommandButton.build(commandButtonArguments);
-					commandButton.addUpdatables(cell.layout);
+				CommandButton commandButton = (CommandButton) MapHelper.readByKey(arguments, FIELD_CONTROL_COMMAND_BUTTON);
+				if(commandButton == null) {
+					Map<Object,Object> commandButtonArguments = (Map<Object, Object>) MapHelper.readByKey(arguments, FIELD_CONTROL_COMMAND_BUTTON_ARGUMENTS);
+					if(MapHelper.readByKey(commandButtonArguments, CommandButton.ConfiguratorImpl.FIELD_INPUTS) == null) {
+						//this command button must process inputs
+						Collection<AbstractInput<?>> inputs = cell.layout.findInputs();
+						if(CollectionHelper.isNotEmpty(inputs)) {
+							if(commandButtonArguments == null)
+								commandButtonArguments = new HashMap<>();
+							MapHelper.writeByKey(commandButtonArguments, CommandButton.ConfiguratorImpl.FIELD_INPUTS, inputs);	
+						}			
+					}							
+					if(commandButtonArguments != null)
+						commandButton = CommandButton.build(commandButtonArguments);						
+				}
+				
+				if(commandButton != null) {
 					cell.control = commandButton;
-				}	
+					commandButton.addUpdatables(cell.layout);
+					if(commandButton.getListener() instanceof Layout.ActionListener)
+						((Layout.ActionListener)commandButton.getListener()).setLayout(cell.layout);
+				}
 			}			
 		}
 		
@@ -78,6 +98,7 @@ public class Cell extends OutputPanel implements Serializable {
 			return Cell.class;
 		}
 		
+		public static final String FIELD_CONTROL_COMMAND_BUTTON = "commandButton";
 		public static final String FIELD_CONTROL_COMMAND_BUTTON_ARGUMENTS = "commandButtonArguments";
 	}
 
@@ -100,4 +121,5 @@ public class Cell extends OutputPanel implements Serializable {
 	static {
 		Configurator.set(Cell.class, new ConfiguratorImpl());
 	}
+	
 }

@@ -11,8 +11,11 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
+import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.AbstractInput;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.layout.Cell.WidthUnit;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.panel.OutputPanel;
 
@@ -101,6 +104,31 @@ public class Layout extends OutputPanel implements Serializable {
 		return this;
 	}
 	
+	public Collection<AbstractInput<?>> findInputs() {
+		if(CollectionHelper.isEmpty(cells))
+			return null;
+		Collection<AbstractInput<?>> collection = null;
+		for(Cell cell : cells) {
+			if(cell.getControl() instanceof AbstractInput) {
+				if(collection == null)
+					collection = new ArrayList<>();
+				collection.add((AbstractInput<?>) cell.getControl());
+			}
+		}
+		return collection;
+	}
+	
+	public Layout writeInputsValuesToObjectsFields() {
+		if(CollectionHelper.isEmpty(cells))
+			return this;
+		Collection<AbstractInput<?>> inputs = findInputs();
+		if(CollectionHelper.isEmpty(inputs))
+			return this;
+		for(AbstractInput<?> input : inputs)
+			input.writeValueToObjectField();
+		return this;
+	}
+	
 	/**/
 	
 	public static final String FIELD_CELLS = "cells";
@@ -126,7 +154,7 @@ public class Layout extends OutputPanel implements Serializable {
 			if(widthUnit == null)
 				widthUnit = WidthUnit.UI_G;
 			if(WidthUnit.UI_G.equals(widthUnit)) {
-				layout.addStyleClasses("ui-g ui-g-nopad");
+				layout.addStyleClasses("ui-g-12 ui-g-nopad");
 			} else if(WidthUnit.FLEX.equals(widthUnit)) {
 				layout.addStyleClasses("p-grid");
 			}else {
@@ -185,6 +213,29 @@ public class Layout extends OutputPanel implements Serializable {
 	
 	public static Layout build(Object...objects) {
 		return build(MapHelper.instantiate(objects));
+	}
+	
+	public static interface ActionListener extends AbstractAction.Listener {
+		
+		@Override
+		default void listenAction(Object argument) {
+			Layout layout = getLayout();
+			if(layout == null)
+				return;
+			layout.writeInputsValuesToObjectsFields();
+		}
+		
+		ActionListener setLayout(Layout layout);
+		Layout getLayout();
+		
+		/**/
+		
+		@Getter @Setter @Accessors(chain=true)
+		public static abstract class AbstractImpl extends AbstractObject implements ActionListener {
+			
+			private Layout layout;
+			
+		}
 	}
 	
 	static {
