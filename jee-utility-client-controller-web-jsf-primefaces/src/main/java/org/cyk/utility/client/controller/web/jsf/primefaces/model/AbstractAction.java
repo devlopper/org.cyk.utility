@@ -17,6 +17,7 @@ import org.cyk.utility.__kernel__.runnable.Runner;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.user.interface_.message.MessageRenderer;
+import org.cyk.utility.__kernel__.user.interface_.message.RenderType;
 import org.cyk.utility.__kernel__.user.interface_.message.Severity;
 import org.cyk.utility.client.controller.web.ComponentHelper;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.AbstractInput;
@@ -29,6 +30,7 @@ import lombok.experimental.Accessors;
 public abstract class AbstractAction extends AbstractObject implements Serializable {
 
 	protected String process,update;
+	protected Boolean global;
 	protected Runner.Arguments runnerArguments;
 	
 	public void action(Object argument) {
@@ -141,11 +143,33 @@ public abstract class AbstractAction extends AbstractObject implements Serializa
 				action.runnerArguments = new Runner.Arguments().assignDefaultMessageArguments();
 			}
 			
+			if(Boolean.TRUE.equals(MapHelper.readByKey(arguments, FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_NULLABLE))) {
+				action.getRunnerArguments().setSuccessMessageArguments(null);
+			}
+			
+			if(action.getRunnerArguments().getSuccessMessageArguments() != null) {
+				Collection<RenderType> renderTypes = (Collection<RenderType>) MapHelper.readByKey(arguments, FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_RENDER_TYPES);
+				if(renderTypes != null) {
+					action.getRunnerArguments().getSuccessMessageArguments().setRenderTypes(renderTypes);
+				}
+			}
+			
 			//we need to update any messages after processing
 			// global
 			action.addUpdates(__inject__(ComponentHelper.class).getGlobalMessagesTargetInlineComponentClientIdentifier()
 					,__inject__(ComponentHelper.class).getGlobalMessagesTargetDialogComponentClientIdentifier()
 					,":form:"+__inject__(ComponentHelper.class).getGlobalMessagesTargetGrowlComponentIdentifier());
+			
+			BlockUI blockUI = (BlockUI) MapHelper.readByKey(arguments, FIELD_BLOCK_UI);
+			if(blockUI != null) {
+				if(action.global == null)
+					action.global = Boolean.FALSE;
+				action.getEventScripts(Boolean.TRUE).write(Event.START, "PF('"+blockUI.getWidgetVar()+"').show();");
+				action.getEventScripts(Boolean.TRUE).write(Event.COMPLETE, "PF('"+blockUI.getWidgetVar()+"').hide();");
+			}
+			
+			if(action.global == null)
+				action.global = Boolean.TRUE;
 		}
 		
 		/**/
@@ -155,5 +179,10 @@ public abstract class AbstractAction extends AbstractObject implements Serializa
 		public static final String FIELD_CLASS = "class";
 		public static final String FIELD_OBJECT = "object";
 		public static final String FIELD_METHOD_NAME = "methodName";
+		
+		public static final String FIELD_LISTENER_NULLABLE = "LISTENER_NULLABLE";
+		public static final String FIELD_BLOCK_UI = "BLOCK_UI";
+		public static final String FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_NULLABLE = "RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_NULLABLE";
+		public static final String FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_RENDER_TYPES = "RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_RENDER_TYPES";
 	}
 }

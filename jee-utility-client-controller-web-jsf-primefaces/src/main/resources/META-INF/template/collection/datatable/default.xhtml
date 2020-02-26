@@ -119,8 +119,11 @@
  					</ui:define>
  					<ui:define name="columnBody">
  						<ui:insert name="columnMenuCommands">
- 							<!-- Commands in menu button in order to occupy less space -->	 						
-			 				COMMANDS
+ 							<!-- Commands in menu button in order to occupy less space -->
+ 							<ui:decorate template="/menu/button/default.xhtml">
+    							<ui:param name="menuButton" value="#{dataTable.recordMenu}"/>
+    							<ui:param name="actionArgument" value="#{record}"/>
+    						</ui:decorate>
  						</ui:insert>	 						
  					</ui:define>
  				</ui:decorate>

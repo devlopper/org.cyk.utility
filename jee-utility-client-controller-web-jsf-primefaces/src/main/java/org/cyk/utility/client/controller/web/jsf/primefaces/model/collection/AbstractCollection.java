@@ -22,6 +22,8 @@ import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObjectAjaxable;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax.Ajax;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.AbstractCommand;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.AbstractMenu;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.MenuButton;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.panel.Dialog;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.panel.OutputPanel;
 
@@ -43,6 +45,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	protected Dialog dialog;
 	protected Collection<AbstractCommand> headerToolbarLeftCommands;
 	protected Collection<AbstractCommand> recordCommands;
+	protected AbstractMenu recordMenu;
 	
 	/**/
 	
@@ -157,7 +160,9 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 					,Map.of(Ajax.FIELD_EVENT,"rowUnselect",Ajax.ConfiguratorImpl.FIELD_LISTENER_NULLABLE,Boolean.TRUE)
 					,Map.of(Ajax.FIELD_EVENT,"rowSelectCheckbox",Ajax.ConfiguratorImpl.FIELD_LISTENER_NULLABLE,Boolean.TRUE)
 					,Map.of(Ajax.FIELD_EVENT,"rowUnselectCheckbox",Ajax.ConfiguratorImpl.FIELD_LISTENER_NULLABLE,Boolean.TRUE)
-					);			
+					);		
+			
+			collection.recordMenu = MenuButton.build();
 		}
 		
 		public static final String FIELD_ENTIY_CLASS = "entityClass";

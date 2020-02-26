@@ -51,7 +51,6 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 	private Integer numberOfResults = initialNumberOfResults;
 	private String queryString,targetWidgetVar;
 	private String dropdownMode = "current",emptyMessage="-- Aucun résultat --";
-	private Object converter;
 	private Integer queryDelay = QUERY_DELAY;
 	private Boolean multiple,dropdown;
 	

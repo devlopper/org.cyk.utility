@@ -13,6 +13,7 @@ import org.cyk.utility.__kernel__.user.interface_.message.MessageRenderer;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.AutoComplete;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.InputNumber;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.InputText;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.layout.Cell;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.layout.Layout;
@@ -43,6 +44,7 @@ public class LayoutFormPage extends AbstractPageContainerManagedImpl implements 
 		
 		InputText code = InputText.build(InputText.ConfiguratorImpl.FIELD_OBJECT,form.getData(),InputText.ConfiguratorImpl.FIELD_FIELD_NAME,"code");
 		InputText name = InputText.build(InputText.ConfiguratorImpl.FIELD_OBJECT,form.getData(),InputText.ConfiguratorImpl.FIELD_FIELD_NAME,"name");
+		InputNumber integer = InputNumber.build(InputNumber.ConfiguratorImpl.FIELD_OBJECT,form.getData(),InputNumber.ConfiguratorImpl.FIELD_FIELD_NAME,"integer");
 		AutoComplete namable = AutoComplete.build(AutoComplete.ConfiguratorImpl.FIELD_OBJECT,form.getData(),AutoComplete.ConfiguratorImpl.FIELD_FIELD_NAME,"namable"
 				,AutoComplete.FIELD_ENTITY_CLASS,Namable.class);
 		
@@ -51,6 +53,7 @@ public class LayoutFormPage extends AbstractPageContainerManagedImpl implements 
 				,Layout.ConfiguratorImpl.FIELD_CELLS_MAPS,CollectionHelper.listOf(
 					MapHelper.instantiate(Cell.FIELD_CONTROL,code.getOutputLabel()),MapHelper.instantiate(Cell.FIELD_CONTROL,code)
 					,MapHelper.instantiate(Cell.FIELD_CONTROL,name.getOutputLabel()),MapHelper.instantiate(Cell.FIELD_CONTROL,name)
+					,MapHelper.instantiate(Cell.FIELD_CONTROL,integer.getOutputLabel()),MapHelper.instantiate(Cell.FIELD_CONTROL,integer)
 					,MapHelper.instantiate(Cell.FIELD_CONTROL,namable.getOutputLabel()),MapHelper.instantiate(Cell.FIELD_CONTROL,namable)
 					
 					,MapHelper.instantiate(Cell.ConfiguratorImpl.FIELD_CONTROL_COMMAND_BUTTON_ARGUMENTS,MapHelper.instantiate(CommandButton.ConfiguratorImpl.FIELD_OBJECT,form
@@ -63,6 +66,7 @@ public class LayoutFormPage extends AbstractPageContainerManagedImpl implements 
 	public static class Data implements Serializable {
 		private String code;
 		private String name;
+		private Integer integer;
 		private Namable namable;
 	}
 	

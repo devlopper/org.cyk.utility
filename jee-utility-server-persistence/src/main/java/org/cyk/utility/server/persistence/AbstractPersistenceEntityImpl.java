@@ -80,8 +80,15 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	protected void __listenPostConstructPersistenceQueries__() {
 		super.__listenPostConstructPersistenceQueries__();
 		__systemIdentifierField__ = FieldHelper.getSystemIdentifier(__entityClass__);
+		
 		__businessIdentifierField__ = FieldHelper.getBusinessIdentifier(__entityClass__);
+		if(__businessIdentifierField__ != null && __businessIdentifierField__.getAnnotation(Transient.class)!=null)
+			__businessIdentifierField__ = null;
+		
 		__businessNameField__ = FieldHelper.getBusinessName(__entityClass__);
+		if(__businessNameField__ != null && __businessNameField__.getAnnotation(Transient.class)!=null)
+			__businessNameField__ = null;
+		
 		__tupleName__ = ClassHelper.getTupleName(__entityClass__);
 		__entityFields__ = FieldHelper.get(__entityClass__);
 		

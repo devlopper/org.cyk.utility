@@ -23,6 +23,7 @@ public abstract class AbstractInput<VALUE> extends AbstractInputOutput<VALUE> im
 	
 	protected OutputLabel outputLabel;
 	protected Message message;
+	protected Object converter;
 	
 	/**/
 	
