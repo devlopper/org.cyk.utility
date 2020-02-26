@@ -100,6 +100,9 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 			
 			if(dataTable.isExportable == null)
 				dataTable.isExportable = Boolean.TRUE;
+			
+			if(dataTable.getRecordMenu() != null && CollectionHelper.isNotEmpty(dataTable.getRecordMenu().getItems()))
+				dataTable.menuColumn.setRendered(Boolean.TRUE);
 		}
 	}
 	

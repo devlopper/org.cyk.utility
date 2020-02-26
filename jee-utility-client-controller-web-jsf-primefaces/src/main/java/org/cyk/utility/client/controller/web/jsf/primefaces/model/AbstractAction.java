@@ -139,26 +139,27 @@ public abstract class AbstractAction extends AbstractObject implements Serializa
 				}
 			}
 			
-			if(action.runnerArguments == null) {
+			if(action.runnerArguments == null)
 				action.runnerArguments = new Runner.Arguments().assignDefaultMessageArguments();
-			}
-			
-			if(Boolean.TRUE.equals(MapHelper.readByKey(arguments, FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_NULLABLE))) {
+			if(Boolean.TRUE.equals(MapHelper.readByKey(arguments, FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_NULLABLE)))
 				action.getRunnerArguments().setSuccessMessageArguments(null);
-			}
-			
 			if(action.getRunnerArguments().getSuccessMessageArguments() != null) {
 				Collection<RenderType> renderTypes = (Collection<RenderType>) MapHelper.readByKey(arguments, FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_RENDER_TYPES);
 				if(renderTypes != null) {
 					action.getRunnerArguments().getSuccessMessageArguments().setRenderTypes(renderTypes);
 				}
 			}
-			
 			//we need to update any messages after processing
 			// global
 			action.addUpdates(__inject__(ComponentHelper.class).getGlobalMessagesTargetInlineComponentClientIdentifier()
 					,__inject__(ComponentHelper.class).getGlobalMessagesTargetDialogComponentClientIdentifier()
 					,":form:"+__inject__(ComponentHelper.class).getGlobalMessagesTargetGrowlComponentIdentifier());
+			
+			//we need to update other component
+			Collection<AbstractObject> updatables = (Collection<AbstractObject>) MapHelper.readByKey(arguments, FIELD_UPDATABLES);
+			if(CollectionHelper.isNotEmpty(updatables)) {
+				action.addUpdatables(updatables);
+			}
 			
 			BlockUI blockUI = (BlockUI) MapHelper.readByKey(arguments, FIELD_BLOCK_UI);
 			if(blockUI != null) {
@@ -169,7 +170,7 @@ public abstract class AbstractAction extends AbstractObject implements Serializa
 			}
 			
 			if(action.global == null)
-				action.global = Boolean.TRUE;
+				action.global = Boolean.TRUE;			
 		}
 		
 		/**/
@@ -179,6 +180,7 @@ public abstract class AbstractAction extends AbstractObject implements Serializa
 		public static final String FIELD_CLASS = "class";
 		public static final String FIELD_OBJECT = "object";
 		public static final String FIELD_METHOD_NAME = "methodName";
+		public static final String FIELD_UPDATABLES = "updatables";
 		
 		public static final String FIELD_LISTENER_NULLABLE = "LISTENER_NULLABLE";
 		public static final String FIELD_BLOCK_UI = "BLOCK_UI";

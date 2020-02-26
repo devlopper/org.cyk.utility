@@ -11,7 +11,6 @@ import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.object.Builder;
-import org.cyk.utility.__kernel__.user.interface_.message.MessageRenderer;
 import org.cyk.utility.__kernel__.user.interface_.message.RenderType;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
@@ -22,6 +21,7 @@ import org.cyk.utility.client.controller.web.jsf.primefaces.model.collection.Dat
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.Button;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.MenuItem;
+import org.cyk.utility.playground.client.controller.api.NamableController;
 import org.cyk.utility.playground.client.controller.entities.Namable;
 
 import lombok.Getter;
@@ -39,12 +39,16 @@ public class DataTableLazyPage extends AbstractPageContainerManagedImpl implemen
 		return "DataTable Lazy Page";
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
 		dataTable = Builder.build(DataTable.class,Map.of(DataTable.FIELD_LAZY,Boolean.TRUE,DataTable.ConfiguratorImpl.FIELD_ENTIY_CLASS,Namable.class
-				,DataTable.ConfiguratorImpl.FIELD_FILTERABLE,Boolean.TRUE,DataTable.FIELD_SELECTION_MODE,"multiple"));
+				,DataTable.ConfiguratorImpl.FIELD_FILTERABLE,Boolean.TRUE,DataTable.FIELD_SELECTION_MODE,"multiple"
+				,DataTable.ConfiguratorImpl.FIELD_RECORD_MENU_ITEMS_BY_ARGUMENTS,CollectionHelper.listOf(MapHelper.instantiate(MenuItem.FIELD_VALUE,"Delete",MenuItem.FIELD_ICON
+						,"fa fa-remove",MenuItem.FIELD_LISTENER,new AbstractAction.Listener() {			
+			@Override
+			public void listenAction(Object argument) { __inject__(NamableController.class).delete((Namable) argument);}
+		},MenuItem.ConfiguratorImpl.FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_RENDER_TYPES,CollectionHelper.listOf(RenderType.GROWL)))));
 		
 		dataTable.addColumnsAfterRowIndex(Builder.build(Column.class, Map.of(Column.FIELD_FIELD_NAME,"code",Column.ConfiguratorImpl.FIELD_FILTERABLE,Boolean.TRUE
 				,Column.FIELD_WIDTH,"100"))
@@ -83,15 +87,6 @@ public class DataTableLazyPage extends AbstractPageContainerManagedImpl implemen
 				,Builder.build(Button.class,Map.of(Button.FIELD_VALUE,"Op2",Button.FIELD_OUTCOME,"namableEditView"))
 				,Builder.build(Button.class,Map.of(Button.FIELD_VALUE,"Op3",Button.FIELD_OUTCOME,"namableEditView",Button.FIELD_PARAMETERS,Map.of("p1","v1")))
 			);
-		
-		dataTable.getMenuColumn().setRendered(Boolean.TRUE);
-		
-		dataTable.getRecordMenu().addItemsByArguments(MapHelper.instantiate(MenuItem.FIELD_VALUE,"Do something",MenuItem.FIELD_LISTENER,new AbstractAction.Listener() {			
-			@Override
-			public void listenAction(Object argument) {
-				MessageRenderer.getInstance().render("Something did with : "+argument, RenderType.GROWL);
-			}
-		},MenuItem.ConfiguratorImpl.FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_RENDER_TYPES,CollectionHelper.listOf(RenderType.GROWL)));
 		
 		dataTable.getDialog().getCloseAjax().setListener(new AbstractAction.Listener() {			
 			@Override

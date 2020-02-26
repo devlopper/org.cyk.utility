@@ -24,6 +24,7 @@ import org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax.Ajax;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.AbstractCommand;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.AbstractMenu;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.MenuButton;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.MenuItem;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.panel.Dialog;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.panel.OutputPanel;
 
@@ -163,12 +164,18 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 					);		
 			
 			collection.recordMenu = MenuButton.build();
+			Collection<Map<Object,Object>> recordMenuItemsByArguments = (Collection<Map<Object, Object>>) MapHelper.readByKey(arguments, FIELD_RECORD_MENU_ITEMS_BY_ARGUMENTS);
+			if(CollectionHelper.isNotEmpty(recordMenuItemsByArguments)) {
+				for(Map<Object,Object> map : recordMenuItemsByArguments)
+					MapHelper.writeByKey(map, MenuItem.ConfiguratorImpl.FIELD_UPDATABLES, CollectionHelper.listOf(collection), Boolean.FALSE);
+			}			
+			collection.recordMenu.addItemsByArguments(recordMenuItemsByArguments);
 		}
 		
 		public static final String FIELD_ENTIY_CLASS = "entityClass";
 		public static final String FIELD_ENTITY_FIELDS_NAMES = "entityFieldsNames";
 		public static final String FIELD_FILTERABLE = "filterable";
-		
+		public static final String FIELD_RECORD_MENU_ITEMS_BY_ARGUMENTS = "recordMenuItemsByArguments";
 	}
 	
 	/**/
