@@ -3,11 +3,16 @@ package org.cyk.utility.playground.client.controller.component;
 import java.io.Serializable;
 import java.util.Map;
 
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
+import org.cyk.utility.__kernel__.identifier.resource.PathAsFunctionParameter;
+import org.cyk.utility.__kernel__.identifier.resource.QueryAsFunctionParameter;
+import org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierAsFunctionParameter;
+import org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.user.interface_.message.RenderType;
@@ -43,6 +48,22 @@ public class DataTableLazyPage extends AbstractPageContainerManagedImpl implemen
 		super.__listenPostConstruct__();
 		dataTable = Builder.build(DataTable.class,Map.of(DataTable.FIELD_LAZY,Boolean.TRUE,DataTable.ConfiguratorImpl.FIELD_ENTIY_CLASS,Namable.class
 				,DataTable.ConfiguratorImpl.FIELD_FILTERABLE,Boolean.TRUE,DataTable.FIELD_SELECTION_MODE,"multiple"));
+		
+		dataTable.addRecordMenuItemByArguments(MenuItem.FIELD_VALUE,"Edit",MenuItem.FIELD_ICON,"fa fa-pencil",MenuItem.FIELD_LISTENER,new AbstractAction.Listener() {			
+			@Override public void listenAction(Object argument) {
+				UniformResourceIdentifierAsFunctionParameter p = new UniformResourceIdentifierAsFunctionParameter();
+				p.setRequest(__getRequest__());
+				p.setPath(new PathAsFunctionParameter());
+				p.getPath().setIdentifier("namableEditView");
+				p.setQuery(new QueryAsFunctionParameter());
+				p.getQuery().setValue("entityidentifier="+((Namable)argument).getIdentifier());
+				try {
+					FacesContext.getCurrentInstance().getExternalContext().redirect(UniformResourceIdentifierHelper.build(p));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		},MenuItem.ConfiguratorImpl.FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_NULLABLE,Boolean.TRUE);
 		
 		dataTable.addRecordMenuItemByArguments(MenuItem.FIELD_VALUE,"Delete",MenuItem.FIELD_ICON,"fa fa-remove",MenuItem.FIELD_LISTENER,new AbstractAction.Listener() {			
 			@Override public void listenAction(Object argument) {__inject__(NamableController.class).delete((Namable) argument);}
