@@ -11,6 +11,7 @@
 	
 	<c:set var="isHasValue" value="#{not empty commandButton.value}"/>
 	<c:set var="identifier" value="#{commandButton == null ? userInterfaceController.randomIdentifier : commandButton.identifier}" />
+	<c:set var="confirmTemplate" value="#{primefacesHelper.getModelTemplate(commandButton.confirm)}"/>
 	
 	<c:if test="#{isHasValue}">
 		<p:commandButton
@@ -27,7 +28,7 @@
 			
 			onclick="#{commandButton.onClick}"
 		>
-			<ui:decorate template="/confirm/default.xhtml">
+			<ui:decorate template="#{confirmTemplate}">
 	    		<ui:param name="confirm" value="#{commandButton.confirm}"/>
 	    	</ui:decorate>
 		</p:commandButton>
@@ -46,7 +47,7 @@
 			
 			onclick="#{commandButton.onClick}"			
 		>
-			<ui:decorate template="/confirm/default.xhtml">
+			<ui:decorate template="#{confirmTemplate}">
 	    		<ui:param name="confirm" value="#{commandButton.confirm}"/>
 	    	</ui:decorate>
 		</p:commandButton>

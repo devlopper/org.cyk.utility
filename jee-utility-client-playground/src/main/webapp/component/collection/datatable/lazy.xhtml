@@ -13,10 +13,6 @@
     	<ui:define name="centerCenter">
     		<ui:decorate template="/collection/datatable/default.xhtml">
     			<ui:param name="dataTable" value="#{dataTableLazyPage.dataTable}"/>
-    			<!--
-    			<ui:param name="rowStyleClass" value="#{record.code.contains('10') ? 'cyk-background-highlight' : 'ui-state-default'}"/>
-    			-->
-    			
     			<ui:define name="columnsAfterRowIndexBodies">
     				<ui:fragment rendered="#{columnIndex == 0}">
     					<h:outputText value="#{record[column.fieldName]}" style="font-weight: bold;"/>

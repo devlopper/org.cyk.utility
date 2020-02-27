@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
@@ -86,6 +88,51 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 		if(ArrayHelper.isEmpty(recordCommands))
 			return this;
 		return addRecordCommands(CollectionHelper.listOf(recordCommands));
+	}
+	
+	public AbstractMenu getRecordMenu(Boolean injectIfNull) {
+		if(recordMenu == null && Boolean.TRUE.equals(injectIfNull))
+			recordMenu = MenuButton.build();
+		return recordMenu;
+	}
+	
+	public AbstractCollection addRecordMenuItems(Collection<MenuItem> menuItems) {
+		if(CollectionHelper.isEmpty(menuItems))
+			return this;
+		getRecordMenu(Boolean.TRUE).addItems(menuItems);
+		return this;
+	}
+	
+	public AbstractCollection addRecordMenuItems(MenuItem...menuItems) {
+		if(ArrayHelper.isEmpty(menuItems))
+			return this;
+		return addRecordMenuItems(CollectionHelper.listOf(menuItems));
+	}
+	
+	public AbstractCollection addRecordMenuItemsByArguments(Collection<Map<Object,Object>> menuItemsArguments) {
+		if(CollectionHelper.isEmpty(menuItemsArguments))
+			return this;
+		menuItemsArguments.forEach(new Consumer<Map<Object,Object>>() {
+			@Override
+			public void accept(Map<Object, Object> map) {
+				map.put(MenuItem.ConfiguratorImpl.FIELD_COLLECTION, AbstractCollection.this);
+			}
+		});	
+		addRecordMenuItems(menuItemsArguments.stream().map(map -> MenuItem.build(map)).collect(Collectors.toList()));
+		return this;
+	}
+	
+	public AbstractCollection addRecordMenuItemsByArguments(@SuppressWarnings("unchecked") Map<Object,Object>...menuItemsArguments) {
+		if(ArrayHelper.isEmpty(menuItemsArguments))
+			return this;
+		return addRecordMenuItemsByArguments(CollectionHelper.listOf(menuItemsArguments));
+	}
+	
+	@SuppressWarnings("unchecked")
+	public AbstractCollection addRecordMenuItemByArguments(Object...arguments) {
+		if(ArrayHelper.isEmpty(arguments))
+			return this;
+		return addRecordMenuItemsByArguments(MapHelper.instantiate(arguments));
 	}
 	
 	/**/

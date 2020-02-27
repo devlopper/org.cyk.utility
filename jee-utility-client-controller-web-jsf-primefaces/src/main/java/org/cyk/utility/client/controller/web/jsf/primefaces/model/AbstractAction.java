@@ -20,6 +20,7 @@ import org.cyk.utility.__kernel__.user.interface_.message.MessageRenderer;
 import org.cyk.utility.__kernel__.user.interface_.message.RenderType;
 import org.cyk.utility.__kernel__.user.interface_.message.Severity;
 import org.cyk.utility.client.controller.web.ComponentHelper;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.collection.AbstractCollection;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.AbstractInput;
 
 import lombok.Getter;
@@ -170,12 +171,36 @@ public abstract class AbstractAction extends AbstractObject implements Serializa
 			}
 			
 			if(action.global == null)
-				action.global = Boolean.TRUE;			
+				action.global = Boolean.TRUE;
+			
+			AbstractCollection collection = (AbstractCollection) MapHelper.readByKey(arguments, FIELD_COLLECTION);
+			if(collection == null) {
+				
+			}else {
+				//is collection updatable ?
+				Boolean collectionUpdatable = (Boolean) MapHelper.readByKey(arguments, FIELD_COLLECTION_UPDATABLE);
+				if(collectionUpdatable == null)
+					collectionUpdatable = MapHelper.readByKey(arguments, FIELD_LISTENER) != null;
+				if(Boolean.TRUE.equals(collectionUpdatable)) {
+					action.addUpdatables(collection);
+				}else {
+					//action does not impact collection so no need to notify success
+					action.runnerArguments.setSuccessMessageArguments(null);
+				}
+					
+				if(collection.getDialogOutputPanel() == null) {
+					
+				}else {
+					action.update += " :form:"+collection.getDialogOutputPanel().getIdentifier();						
+				}
+			}
 		}
 		
 		/**/
 		
 		public static final String FIELD_INPUTS = "inputs";
+		public static final String FIELD_COLLECTION = "collection";
+		public static final String FIELD_COLLECTION_UPDATABLE = "collectionUpdatable";
 		public static final String FIELD_DATA_TABLE = "dataTable";
 		public static final String FIELD_CLASS = "class";
 		public static final String FIELD_OBJECT = "object";

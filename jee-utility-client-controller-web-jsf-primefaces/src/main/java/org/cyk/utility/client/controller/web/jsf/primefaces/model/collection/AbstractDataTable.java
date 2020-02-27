@@ -10,6 +10,7 @@ import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.MenuItem;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -72,6 +73,15 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 		if(listener instanceof AbstractDataTable.Listener)
 			return ((AbstractDataTable.Listener)listener).listenGetStyleClassByRecordByColumn(record, recordIndex,column,columnIndex);
 		return null;
+	}
+	
+	@Override
+	public AbstractCollection addRecordMenuItems(Collection<MenuItem> menuItems) {		
+		if(CollectionHelper.isEmpty(menuItems))
+			return this;
+		super.addRecordMenuItems(menuItems);
+		menuColumn.setRendered(Boolean.TRUE);
+		return this;
 	}
 	
 	/**/

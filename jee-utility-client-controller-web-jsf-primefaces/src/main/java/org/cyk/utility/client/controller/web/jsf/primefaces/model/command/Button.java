@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.model.command;
 import java.io.Serializable;
 import java.util.Map;
 
+import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
 
@@ -13,13 +14,7 @@ import lombok.experimental.Accessors;
 @Getter @Setter @Accessors(chain=true)
 public class Button extends AbstractCommand implements Serializable {
 
-	private String outcome;
-	private Map<String,String> parameters;
-	
 	/**/
-	
-	public static final String FIELD_OUTCOME = "outcome";
-	public static final String FIELD_PARAMETERS = "parameters";
 	
 	/**/
 	
@@ -32,6 +27,10 @@ public class Button extends AbstractCommand implements Serializable {
 
 	public static Button build(Map<Object,Object> arguments) {
 		return Builder.build(Button.class,arguments);
+	}
+	
+	public static Button build(Object...objects) {
+		return build(MapHelper.instantiate(objects));
 	}
 	
 	static {

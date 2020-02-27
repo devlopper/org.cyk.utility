@@ -7,8 +7,6 @@ import org.cyk.utility.__kernel__.icon.Icon;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
-import org.cyk.utility.client.controller.web.jsf.primefaces.model.Confirm;
-import org.cyk.utility.client.controller.web.jsf.primefaces.model.collection.DataTable;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +15,6 @@ import lombok.experimental.Accessors;
 @Getter @Setter @Accessors(chain=true)
 public class CommandButton extends AbstractCommand implements Serializable {
 	
-	private Confirm confirm = new Confirm().setDisabled(Boolean.TRUE);
 	private String type = "submit";
 	
 	@Override
@@ -36,17 +33,7 @@ public class CommandButton extends AbstractCommand implements Serializable {
 		@Override
 		public void configure(CommandButton commandButton, Map<Object, Object> arguments) {
 			super.configure(commandButton, arguments);
-			DataTable dataTable = (DataTable) MapHelper.readByKey(arguments, FIELD_DATA_TABLE);
-			if(dataTable == null) {
-				
-			}else {
-				if(dataTable.getDialogOutputPanel() == null) {
-					
-				}else {
-					commandButton.update += " :form:"+dataTable.getDialogOutputPanel().getIdentifier();	
-				}				
-				commandButton.getRunnerArguments().setSuccessMessageArguments(null);
-			}
+			
 		}
 		
 		@Override

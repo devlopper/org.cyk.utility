@@ -9,14 +9,42 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
-	<p:menuitem
-		id="#{menuitem == null ? userInterfaceController.randomIdentifier : menuitem.identifier}"
-		action="#{menuitem.action(actionArgument)}"
-		icon="#{menuitem.icon}"
-		update="#{menuitem.update}"
-		value="#{menuitem.value}"
-	>
+	<c:set var="isHasOutcome" value="#{not empty menuitem.outcome}"/>
+	<c:set var="confirmTemplate" value="#{primefacesHelper.getModelTemplate(menuitem.confirm)}"/>
 	
-	</p:menuitem>
+	<c:if test="#{isHasOutcome}">
+		<p:menuitem
+			id="#{menuitem == null ? userInterfaceController.randomIdentifier : menuitem.identifier}"
+			icon="#{menuitem.icon}"
+			update="#{menuitem.update}"
+			value="#{menuitem.value}"
+			global="#{menuitem.global}"
+			outcome="#{menuitem.outcome}"
+		>
+			<c:forEach items="#{menuitem.parameters}" var="parameter">
+				<f:param name="#{parameter.key}" value="#{parameter.value}"/>
+			</c:forEach>
+		</p:menuitem>
+	</c:if>
+	
+	<c:if test="#{not isHasOutcome}">
+		<p:menuitem
+			id="#{menuitem == null ? userInterfaceController.randomIdentifier : menuitem.identifier}"
+			action="#{menuitem.action(actionArgument)}"
+			icon="#{menuitem.icon}"
+			update="#{menuitem.update}"
+			value="#{menuitem.value}"
+			global="#{menuitem.global}"
+		>
+			<c:forEach items="#{menuitem.parameters}" var="parameter">
+				<f:param name="#{parameter.key}" value="#{parameter.value}"/>
+			</c:forEach>
+			
+			<ui:decorate template="#{confirmTemplate}">
+		    	<ui:param name="confirm" value="#{menuitem.confirm}"/>
+		    </ui:decorate>
+		</p:menuitem>
+	</c:if>
+	
 	
 </ui:composition>

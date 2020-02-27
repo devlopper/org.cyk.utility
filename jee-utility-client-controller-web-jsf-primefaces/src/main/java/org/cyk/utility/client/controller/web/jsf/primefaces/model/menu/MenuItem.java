@@ -19,6 +19,11 @@ public class MenuItem extends AbstractCommand implements Serializable {
 	public static class ConfiguratorImpl extends AbstractConfiguratorImpl<MenuItem> implements Serializable {
 
 		@Override
+		protected String __getTemplate__() {
+			return "/menu/item/default.xhtml";
+		}
+		
+		@Override
 		protected Class<MenuItem> __getClass__() {
 			return MenuItem.class;
 		}

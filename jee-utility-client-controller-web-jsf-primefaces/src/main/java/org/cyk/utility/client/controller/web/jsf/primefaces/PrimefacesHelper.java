@@ -43,6 +43,12 @@ import org.primefaces.model.TreeNode;
 public class PrimefacesHelper extends AbstractObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	public String getModelTemplate(org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObject model) {
+		if(model == null)
+			return "/__dummy__.xhtml";
+		return model.get__template__();
+	}
+	
 	public String getScriptInstructionHide(String widgetVar) {
 		return String.format(SCRIPT_INSTRUCTION_COMPONENT_METHOD_CALL_FORMAT, widgetVar,"hide");
 	}

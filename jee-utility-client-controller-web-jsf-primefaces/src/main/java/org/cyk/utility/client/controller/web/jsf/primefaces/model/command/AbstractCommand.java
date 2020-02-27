@@ -11,6 +11,7 @@ import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.string.Case;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.Confirm;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +20,11 @@ import lombok.experimental.Accessors;
 @Getter @Setter @Accessors(chain=true)
 public abstract class AbstractCommand extends AbstractAction implements Serializable {
 
+	protected Confirm confirm;
 	protected String value,title,icon;
+	
+	protected String outcome;
+	protected Map<String,String> parameters;
 	
 	public AbstractCommand setIcon(Icon icon) {
 		if(icon == null)
@@ -56,6 +61,9 @@ public abstract class AbstractCommand extends AbstractAction implements Serializ
 	public static final String FIELD_TITLE = "title";
 	public static final String FIELD_ICON = "icon";
 	
+	public static final String FIELD_OUTCOME = "outcome";
+	public static final String FIELD_PARAMETERS = "parameters";
+	
 	/**/
 	
 	public static abstract class AbstractConfiguratorImpl<COMMAND extends AbstractCommand> extends AbstractAction.AbstractConfiguratorImpl<COMMAND> implements Serializable {
@@ -71,6 +79,12 @@ public abstract class AbstractCommand extends AbstractAction implements Serializ
 			}
 			command.applyValue(value,Boolean.FALSE);
 			command.applyTitle(command.getTitle());
+			
+			if(command.confirm == null && Boolean.TRUE.equals(MapHelper.readByKey(arguments, FIELD_CONFIRMABLE))) {
+				command.confirm = Confirm.build();
+			}
 		}
+		
+		public static final String FIELD_CONFIRMABLE = "confirmable";
 	}
 }
