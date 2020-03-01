@@ -61,6 +61,10 @@ public class Column extends AbstractObject implements Serializable {
 		return Builder.build(Column.class,arguments);
 	}
 	
+	public static Column build(Object...objects) {
+		return build(MapHelper.instantiate(objects));
+	}
+	
 	static {
 		Configurator.set(Column.class, new ConfiguratorImpl());
 	}

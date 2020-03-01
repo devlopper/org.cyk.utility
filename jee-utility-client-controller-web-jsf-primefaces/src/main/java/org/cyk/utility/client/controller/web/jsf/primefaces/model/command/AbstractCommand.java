@@ -7,6 +7,7 @@ import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.icon.Icon;
 import org.cyk.utility.__kernel__.icon.IconIdentifierGetter;
 import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
+import org.cyk.utility.__kernel__.internationalization.InternationalizationKeyStringType;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.string.Case;
 import org.cyk.utility.__kernel__.string.StringHelper;
@@ -75,7 +76,7 @@ public abstract class AbstractCommand extends AbstractAction implements Serializ
 			if(StringHelper.isBlank(value)) {
 				String methodName = (String) MapHelper.readByKey(arguments, FIELD_METHOD_NAME);
 				if(StringHelper.isNotBlank(methodName))
-					value = InternationalizationHelper.buildString(InternationalizationHelper.buildKey(methodName), null, null, Case.FIRST_CHARACTER_UPPER);					
+					value = InternationalizationHelper.buildString(InternationalizationHelper.buildKey(methodName,InternationalizationKeyStringType.VERB), null, null, Case.FIRST_CHARACTER_UPPER);					
 			}
 			command.applyValue(value,Boolean.FALSE);
 			command.applyTitle(command.getTitle());

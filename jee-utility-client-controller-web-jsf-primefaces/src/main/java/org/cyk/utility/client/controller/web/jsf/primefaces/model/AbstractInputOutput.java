@@ -45,9 +45,12 @@ public abstract class AbstractInputOutput<VALUE> extends AbstractObjectAjaxable 
 					if(object != null) {
 						io.object = object;
 						io.field = FieldHelper.getByName(object.getClass(), fieldName);
-						io.value = FieldHelper.read(io.object, io.field);
 					}
 				}
+			}
+			
+			if(io.object != null && io.field != null) {
+				io.value = FieldHelper.read(io.object, io.field);
 			}
 		}
 		

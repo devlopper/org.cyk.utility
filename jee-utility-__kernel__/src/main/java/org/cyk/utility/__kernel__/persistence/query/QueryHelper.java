@@ -5,9 +5,15 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.array.ArrayHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.log.LogHelper;
+import org.cyk.utility.__kernel__.persistence.EntityManagerGetter;
 import org.cyk.utility.__kernel__.persistence.PersistenceHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.StringHelper;
@@ -30,6 +36,18 @@ public interface QueryHelper {
 		if(StringHelper.isBlank(identifier))
 			map.put(name, identifier = QueryIdentifierBuilder.getInstance().build(klass,name));
 		return identifier;
+	}
+	
+	static String getIdentifierReadAll(Class<?> klass) {
+		if(klass == null)
+			return null;
+		return getIdentifier(klass, "readAll");
+	}
+	
+	static String getIdentifierCountAll(Class<?> klass) {
+		if(klass == null)
+			return null;
+		return getIdentifier(klass, "countAll");
 	}
 	
 	static String getIdentifierReadByFilters(Class<?> klass) {
@@ -80,6 +98,21 @@ public interface QueryHelper {
 		return getIdentifier(klass, "countWhereBusinessIdentifierOrNameContains");
 	}
 	
+	/* add */
+	
+	static void addQueries(Collection<Query> queries) {
+		if(CollectionHelper.isEmpty(queries))
+			return;
+		getQueries().add(queries);
+		LogHelper.logInfo("Queries added : "+queries.stream().map(Query::getIdentifier).collect(Collectors.toList()), QueryHelper.class);
+	}
+	
+	static void addQueries(Query...queries) {
+		if(ArrayHelper.isEmpty(queries))
+			return;
+		addQueries(CollectionHelper.listOf(queries));
+	}
+	
 	/* execute */
 	
 	static void execute(Query query,Properties properties) {
@@ -103,6 +136,7 @@ public interface QueryHelper {
 	static void clear() {
 		IDENTIFIERS.clear();
 		QUERIES.removeAll();
+		QUERIES.setIsRegisterableToEntityManager(null);
 	}
 	
 	Map<Class<?>,Map<String,String>> IDENTIFIERS = new HashMap<>();
@@ -120,7 +154,7 @@ public interface QueryHelper {
 		protected void __listenAdded__(Collection<Query> queries) {
 			super.__listenAdded__(queries);
 			if(Boolean.TRUE.equals(getIsRegisterableToEntityManager())) {
-				EntityManager entityManager = PersistenceHelper.getEntityManager(null);
+				EntityManager entityManager = DependencyInjection.inject(EntityManagerGetter.class).get();
 				for(Query query : queries) {
 					Class<?> resultClass = query.getResultClass();
 					javax.persistence.Query __query__ = resultClass == null ? entityManager.createQuery(query.getValue()) : entityManager.createQuery(query.getValue(), resultClass);

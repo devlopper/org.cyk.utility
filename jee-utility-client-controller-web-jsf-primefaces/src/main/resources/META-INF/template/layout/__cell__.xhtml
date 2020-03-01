@@ -12,12 +12,16 @@
 	<c:set var="template" value="#{empty cell.control.__template__ ? '/__dummy__.xhtml' : cell.control.__template__}"/>
 	<c:set var="classSimpleName" value="#{cell.control.class.simpleName}"/>
 	
+	<!-- output -->
+	
 	<c:if test="#{classSimpleName eq 'OutputLabel'}">
 		<c:set var="processed" value="true"/>
 		<ui:decorate template="#{template}">
 	    	<ui:param name="outputLabel" value="#{cell.control}"/>
 	    </ui:decorate>
 	</c:if>
+	
+	<!-- input -->
 	
 	<c:if test="#{classSimpleName eq 'InputText'}">
 		<c:set var="processed" value="true"/>
@@ -40,10 +44,21 @@
 	    </ui:decorate>
 	</c:if>
 	
+	<!-- action -->
+	
 	<c:if test="#{classSimpleName eq 'CommandButton'}">
 		<c:set var="processed" value="true"/>
 		<ui:decorate template="#{template}">
 	    	<ui:param name="commandButton" value="#{cell.control}"/>
+	    </ui:decorate>
+	</c:if>
+	
+	<!-- other -->
+	
+	<c:if test="#{classSimpleName eq 'DataTable'}">
+		<c:set var="processed" value="true"/>
+		<ui:decorate template="#{template}">
+	    	<ui:param name="dataTable" value="#{cell.control}"/>
 	    </ui:decorate>
 	</c:if>
 	

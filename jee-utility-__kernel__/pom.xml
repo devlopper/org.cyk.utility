@@ -185,6 +185,20 @@
 		    <version>${com.google.zxing.javase.version}</version>
 		</dependency>
 		
+		<dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-entitymanager</artifactId>
+		    <version>5.4.12.Final</version>
+		    <scope>test</scope>
+		</dependency>
+		
+		<dependency>
+					<groupId>com.h2database</groupId>
+					<artifactId>h2</artifactId>
+					<version>1.4.197</version>
+					<scope>test</scope>
+				</dependency>
+				
 		<!-- Search -->
 		<!--
 		<dependency>

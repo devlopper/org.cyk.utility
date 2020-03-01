@@ -6,6 +6,7 @@ import java.util.Map;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
+import org.cyk.utility.__kernel__.string.Case;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractInputOutput;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.message.Message;
@@ -69,7 +70,7 @@ public abstract class AbstractInput<VALUE> extends AbstractInputOutput<VALUE> im
 				if(input.field == null) {
 					outputLabelValue = "Input Text Label";
 				}else {
-					outputLabelValue = InternationalizationHelper.buildString(InternationalizationHelper.buildKey(input.field.getName()));
+					outputLabelValue = InternationalizationHelper.buildString(InternationalizationHelper.buildKey(input.field.getName()),null,null,Case.FIRST_CHARACTER_UPPER);
 				}
 				input.outputLabel = OutputLabel.build(OutputLabel.FIELD_VALUE,outputLabelValue,OutputLabel.FIELD_FOR,input.getIdentifier());
 			}

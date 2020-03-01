@@ -15,6 +15,12 @@
 		</navigation-case>
 		
 		<navigation-case>
+			<from-outcome>namableListView</from-outcome>
+			<to-view-id>/private/namable/list.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
 			<from-outcome>google</from-outcome>
 			<to-view-id>http://www.google.com</to-view-id>
 			<redirect />

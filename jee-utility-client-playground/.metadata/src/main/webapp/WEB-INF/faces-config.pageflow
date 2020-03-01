@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf15665000862070" configfile="/jee-utility-client-playground/src/main/webapp/WEB-INF/faces-config.xml">
-  <nodes xsi:type="pageflow:PFPage" name="*" id="pf15698607343260" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf15698607343271 pf15698610075119 pf15820123611020" path="*"/>
-  <nodes xsi:type="pageflow:PFPage" name="http://www.google.com" id="pf15698607343273" referenceLink="//@navigationRule.0/@navigationCase.0/@toViewId|" inlinks="pf15698607343271" path="http://www.google.com"/>
-  <nodes xsi:type="pageflow:PFPage" name="outcome.jsf" id="pf156986100751110" referenceLink="//@navigationRule.0/@navigationCase.0/@toViewId|" inlinks="pf15698610075119" path="/outcome.jsf"/>
-  <nodes xsi:type="pageflow:PFPage" name="private/namable/edit.jsf" id="pf15820123611061" referenceLink="//@navigationRule.0/@navigationCase.0/@toViewId|" inlinks="pf15820123611020" path="/private/namable/edit.jsf"/>
+  <nodes xsi:type="pageflow:PFPage" name="*" id="pf15698607343260" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf15698607343271 pf15698610075119 pf15820123611020 pf15828066902130" path="*"/>
+  <nodes xsi:type="pageflow:PFPage" name="http://www.google.com" id="pf15698607343273" referenceLink="//@navigationRule.0/@navigationCase.1/@toViewId|" inlinks="pf15698607343271" path="http://www.google.com"/>
+  <nodes xsi:type="pageflow:PFPage" name="outcome.jsf" id="pf156986100751110" referenceLink="//@navigationRule.0/@navigationCase.2/@toViewId|" inlinks="pf15698610075119" path="/outcome.jsf"/>
+  <nodes xsi:type="pageflow:PFPage" name="private/namable/edit.jsf" id="pf15820123611061" referenceLink="//@navigationRule.0/@navigationCase.1/@toViewId|" inlinks="pf15820123611020" path="/private/namable/edit.jsf"/>
+  <nodes xsi:type="pageflow:PFPage" name="private/namable/list.jsf" id="pf15828066902131" referenceLink="//@navigationRule.0/@navigationCase.1/@toViewId|" inlinks="pf15828066902130" path="/private/namable/list.jsf"/>
   <links id="pf15698607343271" target="pf15698607343273" source="pf15698607343260" outcome="google" redirect="true"/>
   <links id="pf15698610075119" target="pf156986100751110" source="pf15698607343260" outcome="outcome" redirect="true"/>
   <links id="pf15820123611020" target="pf15820123611061" source="pf15698607343260" outcome="namableEditView" redirect="true"/>
+  <links id="pf15828066902130" target="pf15828066902131" source="pf15698607343260" outcome="namableListView" redirect="true"/>
 </pageflow:Pageflow>

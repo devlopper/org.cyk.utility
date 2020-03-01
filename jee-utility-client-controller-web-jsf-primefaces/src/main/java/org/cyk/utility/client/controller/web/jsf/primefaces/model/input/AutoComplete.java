@@ -138,6 +138,11 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 		@Override
 		public void configure(AutoComplete autoComplete, Map<Object, Object> arguments) {
 			super.configure(autoComplete, arguments);
+			if(autoComplete.entityClass == null) {
+				if(autoComplete.field != null)
+					autoComplete.entityClass = autoComplete.field.getType();
+			}
+			
 			if(autoComplete.controllerEntity == null) {
 				if(autoComplete.entityClass != null) {
 					autoComplete.controllerEntity = __inject__(ControllerLayer.class).injectInterfaceClassFromEntityClass(autoComplete.entityClass);
