@@ -41,24 +41,44 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 	public List<ENTITY> load(int first, int pageSize, String sortField, SortOrder sortOrder,Map<String, Object> filters) {
 		if(controller == null)
 			return null;
+		FilterDto filter = __instantiateFilter__(first, pageSize, sortField, sortOrder, filters);
+		List<ENTITY> list = (List<ENTITY>) controller.read(__getReadProperties__(filter,first, pageSize));
+		if(CollectionHelper.isEmpty(list))
+			setRowCount(0);
+		else {
+			Long count = controller.count(__getCountProperties__(filter));
+			setRowCount(count == null ? 0 : count.intValue());	
+		}
+		return list;
+	}
+	
+	protected FilterDto __instantiateFilter__(int first, int pageSize, String sortField, SortOrder sortOrder,Map<String, Object> filters) {
 		FilterDto filter = new FilterDto();
 		if(MapHelper.isNotEmpty(filters)) {
 			for(Map.Entry<String, Object> entry : filters.entrySet())
 				filter.addField(entry.getKey(), entry.getValue());
 		}
+		return filter;
+	}
+	
+	protected String __getPropertiesFields__() {
 		if(entityFieldsNamesAsString == null && CollectionHelper.isNotEmpty(entityFieldsNames))
 			entityFieldsNamesAsString = StringHelper.concatenate(entityFieldsNames, ",");
-		Properties properties = new Properties().setQueryIdentifier(readQueryIdentifier).setFields(entityFieldsNamesAsString).setFilters(filter).setIsPageable(Boolean.TRUE).setFrom(first)
-				.setCount(pageSize);		
-		List<ENTITY> list = (List<ENTITY>) controller.read(properties);
-		if(CollectionHelper.isEmpty(list))
-			setRowCount(0);
-		else {
-			Long count = controller.count(new Properties().setQueryIdentifier(countQueryIdentifier).setFilters(filter));
-			setRowCount(count == null ? 0 : count.intValue());	
-		}
-		return list;
+		return entityFieldsNamesAsString;
 	}
+	
+	protected Properties __getReadProperties__(FilterDto filter,int first, int pageSize) {
+		return new Properties().setQueryIdentifier(readQueryIdentifier)
+				.setFields(__getPropertiesFields__())
+				.setFilters(filter)
+				.setIsPageable(Boolean.TRUE).setFrom(first).setCount(pageSize);
+	}
+	
+	protected Properties __getCountProperties__(FilterDto filter) {
+		return new Properties().setQueryIdentifier(countQueryIdentifier).setFilters(filter);
+	}
+	
+	/**/
 	
 	@Override
 	public Object getRowKey(ENTITY entity) {

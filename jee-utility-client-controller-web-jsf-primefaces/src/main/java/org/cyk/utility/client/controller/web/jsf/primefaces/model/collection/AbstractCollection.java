@@ -172,7 +172,14 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 				if(entityClass == null) {
 					
 				}else {
-					LazyDataModel<Object> value = new LazyDataModel<Object>(entityClass);
+					LazyDataModel<Object> value = (LazyDataModel<Object>) MapHelper.readByKey(arguments, FIELD_LAZY_DATA_MODEL);
+					if(value == null) {
+						/*Class<?> lazyzDataModelClass = (Class<?>) MapHelper.readByKey(arguments, FIELD_LAZY_DATA_MODEL_CLASS);
+						if(lazyzDataModelClass == null)
+							lazyzDataModelClass = LazyDataModel.class;
+						*/
+						value = new LazyDataModel<Object>(entityClass);	
+					}					
 					if(Boolean.TRUE.equals(filterable)) {						
 						String persistenceEntityClassName = ClassHelper.buildName(entityClass.getPackageName(), entityClass.getSimpleName()
 								, new NamingModel().client().controller().entities(), new NamingModel().server().persistence().entities());						
@@ -223,6 +230,8 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 		public static final String FIELD_ENTITY_FIELDS_NAMES = "entityFieldsNames";
 		public static final String FIELD_FILTERABLE = "filterable";
 		public static final String FIELD_RECORD_MENU_ITEMS_BY_ARGUMENTS = "recordMenuItemsByArguments";
+		public static final String FIELD_LAZY_DATA_MODEL_CLASS = "lazyDataModelClass";
+		public static final String FIELD_LAZY_DATA_MODEL = "lazyDataModel";
 	}
 	
 	/**/

@@ -2,6 +2,8 @@ package org.cyk.utility.__kernel__.persistence.query.filter;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.enterprise.context.Dependent;
 
@@ -9,6 +11,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.field.FieldInstancesRuntime;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
@@ -33,8 +36,12 @@ public class Filter extends AbstractObject implements Serializable {
 		if(CollectionHelper.isNotEmpty(fields))
 			for(Field index : fields.get()) {
 				if(index.getInstance() == null) {
-					if(StringHelper.isNotBlank(index.getName()))
+					if(StringHelper.isNotBlank(index.getName())) {
+						java.lang.reflect.Field javaField = FieldHelper.getByName(this.klass, index.getName());
+						if(javaField == null)
+							continue;
 						index.setInstance(__inject__(FieldInstancesRuntime.class).get(this.klass, index.getName()));
+					}
 				}
 			}
 		return this;
@@ -102,7 +109,19 @@ public class Filter extends AbstractObject implements Serializable {
 
 	/**/
 	
-	public String toString() {
+	public Map<Object,Object> generateMap() {
+		if(CollectionHelper.isEmpty(fields))
+			return null;
+		Map<Object,Object> map = new HashMap<>();
+		for(Field field : fields.get()) {
+			map.put(field.getName(), field.getValue());
+		}
+		return map;
+	}
+	
+	/**/
+	
+ 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}
 }

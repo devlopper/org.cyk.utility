@@ -2,15 +2,8 @@ package org.cyk.utility.__kernel__.persistence.query;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Collection;
-
 import javax.persistence.ManyToOne;
-import javax.persistence.Persistence;
 
-import org.cyk.utility.__kernel__.persistence.EntityCreator;
-import org.cyk.utility.__kernel__.persistence.EntityFinder;
-import org.cyk.utility.__kernel__.persistence.EntityManagerFactoryGetterImpl;
-import org.cyk.utility.__kernel__.persistence.EntityReader;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 
@@ -46,28 +39,7 @@ public class QueryHelperUnitTest extends AbstractWeldUnitTest {
 		QueryHelper.getQueries().add(new Query());
 		assertThat(QueryHelper.QUERIES.getSize()).isEqualTo(1);
 	}
-	
-	@Test
-	public void create(){
-		EntityManagerFactoryGetterImpl.ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("pu");
-		TestedEntityParent testedEntity = EntityFinder.getInstance().find(TestedEntityParent.class, "1");
-		assertThat(testedEntity).isNull();
-		EntityCreator.getInstance().createOneInTransaction(new TestedEntityParent().setIdentifier("1"));
-		testedEntity = EntityFinder.getInstance().find(TestedEntityParent.class, "1");
-		assertThat(testedEntity).isNotNull();
-	}
-	
-	@Test
-	public void readAll(){
-		QueryHelper.getQueries().setIsRegisterableToEntityManager(Boolean.TRUE);
-		EntityManagerFactoryGetterImpl.ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("pu");
-		Collection<TestedEntityParent> testedEntities = EntityReader.getInstance().read(TestedEntityParent.class);
-		assertThat(testedEntities).isNull();
-		EntityCreator.getInstance().createOneInTransaction(new TestedEntityParent().setIdentifier("1"));
-		testedEntities = EntityReader.getInstance().read(TestedEntityParent.class);
-		assertThat(testedEntities).isNotNull();
-	}
-	
+		
 	/**/
 	
 	@Getter @Setter @Accessors(chain=true)

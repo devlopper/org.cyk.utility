@@ -17,6 +17,7 @@ import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
 import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.stacktrace.StackTraceHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.sql.builder.QueryStringBuilder;
 import org.cyk.utility.sql.builder.QueryStringBuilderSelect;
@@ -360,7 +361,7 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	
 	@Override
 	public PersistenceServiceProvider<OBJECT> addQuery(Object identifier, String value, Class<?> resultClass) {
-		addQueries(new Query().setIdentifier(identifier).setValue(value).setResultClass(resultClass));
+		addQueries(new Query().setIdentifier(StringHelper.get(identifier)).setValue(value).setResultClass(resultClass));
 		return this;
 	}
 	

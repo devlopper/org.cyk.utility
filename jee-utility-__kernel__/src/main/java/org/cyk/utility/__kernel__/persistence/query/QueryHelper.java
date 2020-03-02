@@ -1,8 +1,12 @@
 package org.cyk.utility.__kernel__.persistence.query;
 
+import static org.cyk.utility.__kernel__.klass.ClassHelper.filter;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -22,6 +26,40 @@ public interface QueryHelper {
 
 	static Queries getQueries() {
 		return QUERIES;
+	}
+	
+	/* scan */
+	
+	static void scan(Collection<Package> packages) {
+		LogHelper.logInfo(String.format("query helper scanning packages %s", packages),QueryHelper.class);
+		if(CollectionHelper.isEmpty(packages))
+			return;
+		Collection<java.lang.Class<?>> classes = filter(packages, List.of(ByReferencesQuerier.class),Boolean.TRUE);
+		if(CollectionHelper.isEmpty(classes))
+			return;
+		Collection<Query> queries = null;
+		for(Class<?> klass : classes) {
+			org.cyk.utility.__kernel__.persistence.query.annotation.Query queryAnnotation = klass.getAnnotation(org.cyk.utility.__kernel__.persistence.query.annotation.Query.class);
+			if(queryAnnotation != null) {
+				Collection<Query> __queries__ = Query.buildFromAnnotation(queryAnnotation);
+				if(CollectionHelper.isNotEmpty(__queries__)) {
+					if(queries == null)
+						queries = new ArrayList<>();
+					queries.addAll(__queries__);
+				}
+			}
+			org.cyk.utility.__kernel__.persistence.query.annotation.Queries queriesAnnotation = klass.getAnnotation(org.cyk.utility.__kernel__.persistence.query.annotation.Queries.class);
+			if(queriesAnnotation != null && ArrayHelper.isNotEmpty(queriesAnnotation.value())) {
+				Collection<Query> __queries__ = Query.buildFromAnnotation(queriesAnnotation);
+				if(CollectionHelper.isNotEmpty(__queries__)) {
+					if(queries == null)
+						queries = new ArrayList<>();
+					queries.addAll(__queries__);		
+				}
+			}
+		}
+		addQueries(queries);
+		LogHelper.logInfo(String.format("query helper scanned packages %s", packages),QueryHelper.class);
 	}
 	
 	/* get */
@@ -113,6 +151,9 @@ public interface QueryHelper {
 		addQueries(CollectionHelper.listOf(queries));
 	}
 	
+	/**/
+
+	
 	/* execute */
 	
 	static void execute(Query query,Properties properties) {
@@ -136,6 +177,7 @@ public interface QueryHelper {
 	static void clear() {
 		IDENTIFIERS.clear();
 		QUERIES.removeAll();
+		QUERIES.set(null);
 		QUERIES.setIsRegisterableToEntityManager(null);
 	}
 	
@@ -155,6 +197,10 @@ public interface QueryHelper {
 			super.__listenAdded__(queries);
 			if(Boolean.TRUE.equals(getIsRegisterableToEntityManager())) {
 				EntityManager entityManager = DependencyInjection.inject(EntityManagerGetter.class).get();
+				if(entityManager == null) {
+					LogHelper.logSevere(String.format("we cannot register queries to entitymanager because it is null. %s", queries), getClass());
+					return;
+				}
 				for(Query query : queries) {
 					Class<?> resultClass = query.getResultClass();
 					javax.persistence.Query __query__ = resultClass == null ? entityManager.createQuery(query.getValue()) : entityManager.createQuery(query.getValue(), resultClass);
