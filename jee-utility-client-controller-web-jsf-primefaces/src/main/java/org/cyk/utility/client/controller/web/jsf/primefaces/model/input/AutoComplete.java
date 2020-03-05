@@ -9,6 +9,7 @@ import javax.faces.event.AjaxBehaviorEvent;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.klass.NamingModel;
 import org.cyk.utility.__kernel__.map.MapHelper;
@@ -21,6 +22,7 @@ import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
 import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.runnable.Runner;
+import org.cyk.utility.__kernel__.string.Case;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.user.interface_.message.Message;
 import org.cyk.utility.__kernel__.user.interface_.message.MessageRenderer;
@@ -159,7 +161,7 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 			
 			autoComplete.addAjaxes(Map.of(Ajax.FIELD_EVENT,"query",Ajax.FIELD_DISABLED,Boolean.FALSE)
 					,Map.of(Ajax.FIELD_EVENT,"moreText",Ajax.FIELD_DISABLED,Boolean.FALSE,Ajax.FIELD_LISTENER
-					,new AbstractAction.Listener() {
+					,new AbstractAction.Listener.AbstractImpl() {
 						@Override
 						public void listenAction(Object argument) {
 							if(argument instanceof AjaxBehaviorEvent) {
@@ -202,6 +204,13 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 			if(autoComplete.dropdown == null) {
 				autoComplete.dropdown = Boolean.TRUE;
 			}
+		}
+		
+		@Override
+		protected String __getDefaultOutputLabelValue__(AutoComplete autoComplete) {
+			if(autoComplete.entityClass == null)
+				return super.__getDefaultOutputLabelValue__(autoComplete);
+			return InternationalizationHelper.buildString(InternationalizationHelper.buildKey(autoComplete.entityClass.getSimpleName()),null,null,Case.FIRST_CHARACTER_UPPER);
 		}
 		
 		@Override

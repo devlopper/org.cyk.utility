@@ -13,9 +13,11 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.file.File;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.object.Objects;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
@@ -31,7 +33,7 @@ import org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString;
 import org.cyk.utility.client.controller.data.hierarchy.Hierarchy;
 import org.cyk.utility.client.controller.data.hierarchy.TreeNodeListener;
 import org.cyk.utility.client.controller.event.Event;
-import org.cyk.utility.__kernel__.file.File;
+import org.omnifaces.util.Ajax;
 import org.primefaces.PrimeFaces;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.DefaultTreeNode;
@@ -337,6 +339,45 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 		if(root.getChildCount() > 0)
 			for(org.primefaces.model.TreeNode index : root.getChildren())
 				__addDatas__(index, datas,isHavingNumberOfChildren);
+	}
+	
+	/**/
+	
+	public static String formatScript(String widgetVar,String methodName,Object...arguments) {
+		if(StringHelper.isBlank(widgetVar) || StringHelper.isBlank(methodName))
+			return null;
+		return String.format(SCRIPT_INSTRUCTION_COMPONENT_METHOD_CALL_FORMAT, widgetVar,methodName);
+	}
+	
+	public static String formatScriptHide(String widgetVar) {
+		if(StringHelper.isBlank(widgetVar))
+			return null;
+		return formatScript(widgetVar, "hide");
+	}
+	
+	public static void executeOnComplete(Collection<String> scripts) {
+		if(CollectionHelper.isEmpty(scripts))
+			return;
+		Ajax.oncomplete(scripts.toArray(new String[]{}));
+	}
+	
+	public static void executeOnComplete(String...scripts) {
+		if(ArrayHelper.isEmpty(scripts))
+			return;
+		executeOnComplete(CollectionHelper.listOf(scripts));
+	}
+	
+	public static void updateOnComplete(Collection<String> identifiers) {
+		if(CollectionHelper.isEmpty(identifiers))
+			return;
+		PrimeFaces.current().ajax().update(identifiers);
+		//PrimeFaces.current().ajax().update(identifiers.stream().map(identifier -> ":form:"+identifier).collect(Collectors.toSet()));
+	}
+	
+	public static void updateOnComplete(String...identifiers) {
+		if(ArrayHelper.isEmpty(identifiers))
+			return;
+		updateOnComplete(CollectionHelper.listOf(identifiers));
 	}
 	
 	/**/

@@ -29,14 +29,14 @@ public class CommandPage extends AbstractPageContainerManagedImpl implements Ser
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
-		commandServerOnClick = Builder.build(Command.class,Map.of(Command.FIELD_LISTENER,new Command.Listener() {
+		commandServerOnClick = Builder.build(Command.class,Map.of(Command.FIELD_LISTENER,new Command.Listener.AbstractImpl() {
 			@Override
 			public void listenAction(Object argument) {
 				MessageRenderer.getInstance().render("You have click", RenderType.GROWL);
 			}
 		}));
 		
-		commandServerOnDoubleClick = Builder.build(Command.class,Map.of(Command.FIELD_LISTENER,new Command.Listener() {
+		commandServerOnDoubleClick = Builder.build(Command.class,Map.of(Command.FIELD_LISTENER,new Command.Listener.AbstractImpl() {
 			@Override
 			public void listenAction(Object argument) {
 				MessageRenderer.getInstance().render("You have double click", RenderType.GROWL);

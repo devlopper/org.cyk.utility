@@ -142,8 +142,11 @@ public class Layout extends OutputPanel implements Serializable {
 	
 	public static class ConfiguratorImpl extends OutputPanel.AbstractConfiguratorImpl<Layout> implements Serializable {
 
+		//TODO it has been set to false because cell's control need to be updated even layout is not rebuilt
+		public static Boolean IS_CACHABLE = Boolean.FALSE;
+		
 		{
-			setIsCachable(Boolean.TRUE);
+			setIsCachable(IS_CACHABLE);
 		}
 		
 		@Override

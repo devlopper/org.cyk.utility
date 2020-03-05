@@ -27,6 +27,5 @@ public class TestedEntityChildByParentsQuerierImpl extends AbstractObject implem
 			arguments = new Arguments().setQuery(QueryGetter.getInstance().getByCount(TestedEntityChild.class,QUERY_NAME_COUNT))
 			.addFilterField(PARAMETER_NAME_PARENTS_CODES,businessIdentifiers);
 		return QueryExecutor.getInstance().executeCount(arguments);
-	}
-	
+	}	
 }

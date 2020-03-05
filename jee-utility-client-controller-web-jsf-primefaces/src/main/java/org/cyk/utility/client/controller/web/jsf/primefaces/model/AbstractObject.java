@@ -11,6 +11,7 @@ import org.cyk.utility.__kernel__.map.MapInstance;
 import org.cyk.utility.__kernel__.object.Configurator;
 import org.cyk.utility.__kernel__.random.RandomHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.client.controller.web.jsf.primefaces.PrimefacesHelper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -40,6 +41,11 @@ public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractOb
 	
 	public Boolean getIsOutput() {
 		return null;
+	}
+	
+	public AbstractObject hideOnComplete() {
+		PrimefacesHelper.executeOnComplete(PrimefacesHelper.formatScriptHide(widgetVar));
+		return this;
 	}
 	
 	/**/

@@ -10,6 +10,7 @@ import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
+import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.StringHelper;
@@ -29,6 +30,7 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 	private ControllerEntity<ENTITY> controller;
 	private String readQueryIdentifier,countQueryIdentifier,entityFieldsNamesAsString;
 	private Collection<String> entityFieldsNames;
+	private Listener listener;
 	
 	public LazyDataModel(Class<ENTITY> entityClass) {
 		this.entityClass = entityClass;
@@ -42,6 +44,8 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 		if(controller == null)
 			return null;
 		FilterDto filter = __instantiateFilter__(first, pageSize, sortField, sortOrder, filters);
+		if(listener != null && filter != null)
+			listener.processFilter(filter);
 		List<ENTITY> list = (List<ENTITY>) controller.read(__getReadProperties__(filter,first, pageSize));
 		if(CollectionHelper.isEmpty(list))
 			setRowCount(0);
@@ -100,4 +104,19 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 		return map.get(identifier);
 	}
 	
+	/**/
+	
+	public static interface Listener {
+		
+		void processFilter(FilterDto filter);
+		
+		/**/
+		
+		public static abstract class AbstractImpl extends AbstractObject implements Listener,Serializable{
+			
+			@Override
+			public void processFilter(FilterDto filter) {}
+			
+		}
+	}
 }

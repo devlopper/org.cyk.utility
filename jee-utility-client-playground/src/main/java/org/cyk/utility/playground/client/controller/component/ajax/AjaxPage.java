@@ -29,7 +29,7 @@ public class AjaxPage extends AbstractPageContainerManagedImpl implements Serial
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
-		ajaxServerOnClick = Builder.build(Ajax.class,Map.of(Ajax.FIELD_LISTENER,new Ajax.Listener() {
+		ajaxServerOnClick = Builder.build(Ajax.class,Map.of(Ajax.FIELD_LISTENER,new Ajax.Listener.AbstractImpl() {
 			@Override
 			public void listenAction(Object argument) {
 				MessageRenderer.getInstance().render("You have click", RenderType.GROWL);
@@ -38,7 +38,7 @@ public class AjaxPage extends AbstractPageContainerManagedImpl implements Serial
 		ajaxServerOnClick.getRunnerArguments().setSuccessMessageArguments(null);
 		ajaxServerOnClick.setDisabled(Boolean.FALSE);
 		
-		ajaxServerOnDoubleClick = Builder.build(Ajax.class,Map.of(Ajax.FIELD_EVENT,"dblclick",Ajax.FIELD_LISTENER,new Ajax.Listener() {
+		ajaxServerOnDoubleClick = Builder.build(Ajax.class,Map.of(Ajax.FIELD_EVENT,"dblclick",Ajax.FIELD_LISTENER,new Ajax.Listener.AbstractImpl() {
 			@Override
 			public void listenAction(Object argument) {
 				MessageRenderer.getInstance().render("You have double click", RenderType.GROWL);
@@ -47,7 +47,7 @@ public class AjaxPage extends AbstractPageContainerManagedImpl implements Serial
 		ajaxServerOnDoubleClick.getRunnerArguments().setSuccessMessageArguments(null);
 		ajaxServerOnDoubleClick.setDisabled(Boolean.FALSE);
 		
-		ajaxServerOnChange = Builder.build(Ajax.class,Map.of(Ajax.FIELD_EVENT,"change",Ajax.FIELD_LISTENER,new Ajax.Listener() {
+		ajaxServerOnChange = Builder.build(Ajax.class,Map.of(Ajax.FIELD_EVENT,"change",Ajax.FIELD_LISTENER,new Ajax.Listener.AbstractImpl() {
 			@Override
 			public void listenAction(Object argument) {
 				MessageRenderer.getInstance().render("You have change", RenderType.GROWL);
@@ -56,7 +56,7 @@ public class AjaxPage extends AbstractPageContainerManagedImpl implements Serial
 		ajaxServerOnChange.getRunnerArguments().setSuccessMessageArguments(null);
 		ajaxServerOnChange.setDisabled(Boolean.FALSE);
 		
-		ajaxServerOnBlur = Builder.build(Ajax.class,Map.of(Ajax.FIELD_EVENT,"blur",Ajax.FIELD_LISTENER,new Ajax.Listener() {
+		ajaxServerOnBlur = Builder.build(Ajax.class,Map.of(Ajax.FIELD_EVENT,"blur",Ajax.FIELD_LISTENER,new Ajax.Listener.AbstractImpl() {
 			@Override
 			public void listenAction(Object argument) {
 				MessageRenderer.getInstance().render("You have blur", RenderType.GROWL);

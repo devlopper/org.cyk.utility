@@ -17,26 +17,23 @@ import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
-import org.cyk.utility.__kernel__.user.interface_.message.MessageRenderer;
-import org.cyk.utility.__kernel__.user.interface_.message.RenderType;
-import org.cyk.utility.__kernel__.user.interface_.message.Severity;
-import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObjectAjaxable;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax.Ajax;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.AbstractCommand;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.AbstractMenu;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.MenuButton;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.MenuItem;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.output.OutputText;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.panel.Dialog;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.panel.OutputPanel;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 
 @Getter @Setter
 public abstract class AbstractCollection extends AbstractObjectAjaxable implements Serializable {
 
+	protected OutputText title;
 	protected Object value,selectedCommandIdentifier;
 	protected String emptyMessage,rowsPerPageTemplate,paginatorTemplate,currentPageReportTemplate,selectionMode,fileName;
 	protected String rowStyleClass;
@@ -137,6 +134,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	
 	/**/
 	
+	public static final String FIELD_TITLE = "title";
 	public static final String FIELD_VALUE = "value";
 	public static final String FIELD_EMPTY_MESSAGE = "emptyMessage";
 	public static final String FIELD_ROWS_PER_PAGE_TEMPLATE = "rowsPerPageTemplate";
@@ -224,6 +222,10 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 					MapHelper.writeByKey(map, MenuItem.ConfiguratorImpl.FIELD_UPDATABLES, CollectionHelper.listOf(collection), Boolean.FALSE);
 			}			
 			collection.recordMenu.addItemsByArguments(recordMenuItemsByArguments);
+			
+			if(collection.title == null && StringHelper.isNotBlank((String) MapHelper.readByKey(arguments, FIELD_TITLE_VALUE))) {
+				collection.title = OutputText.build(OutputText.FIELD_VALUE,MapHelper.readByKey(arguments, FIELD_TITLE_VALUE));
+			}
 		}
 		
 		public static final String FIELD_ENTIY_CLASS = "entityClass";
@@ -232,49 +234,6 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 		public static final String FIELD_RECORD_MENU_ITEMS_BY_ARGUMENTS = "recordMenuItemsByArguments";
 		public static final String FIELD_LAZY_DATA_MODEL_CLASS = "lazyDataModelClass";
 		public static final String FIELD_LAZY_DATA_MODEL = "lazyDataModel";
-	}
-	
-	/**/
-	
-	@Getter @Setter @Accessors(chain=true)
-	public static abstract class AbstractActionListenerImpl extends org.cyk.utility.__kernel__.object.AbstractObject implements AbstractAction.Listener,Serializable {
-		
-		protected AbstractCollection collection;
-		protected Integer minimumSelectionSize=1,maximumSelectionSize;
-		protected Boolean isSelectionShowable=Boolean.TRUE;
-		protected Object commandIdentifier;
-		
-		public AbstractActionListenerImpl(AbstractCollection collection) {
-			this.collection = collection;
-		}
-		
-		@Override
-		public void listenAction(Object argument) {
-			if(Boolean.TRUE.equals(isDialogShowable())) {
-				__showDialog__();
-			}else {
-				MessageRenderer.getInstance().render(getDialogNotShowableMessageSummary(), Severity.WARNING, RenderType.GROWL);
-			}
-		}
-		
-		protected void __showDialog__() {
-			collection.setSelectedCommandIdentifier(commandIdentifier);
-			collection.setIsSelectionShowableInDialog(isSelectionShowable);			
-			org.omnifaces.util.Ajax.oncomplete("PF('"+collection.dialog.getWidgetVar()+"').show();");
-		}
-		
-		protected Boolean isDialogShowable() {
-			if(minimumSelectionSize == null && maximumSelectionSize == null)
-				return Boolean.TRUE;
-			if(minimumSelectionSize != null)
-				return CollectionHelper.getSize(collection.selection) >= minimumSelectionSize;
-			return Boolean.TRUE;
-		}
-		
-		protected String getDialogNotShowableMessageSummary() {
-			if(minimumSelectionSize != null)
-				return "Sélectionner au moins "+minimumSelectionSize;
-			return "Impossible d'ouvrir la boite de dialogue";
-		}
+		public static final String FIELD_TITLE_VALUE = "titleValue";
 	}
 }

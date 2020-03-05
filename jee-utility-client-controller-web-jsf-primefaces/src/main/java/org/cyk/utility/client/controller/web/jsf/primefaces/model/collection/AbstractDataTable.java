@@ -92,7 +92,7 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 		public void configure(DATATABLE dataTable, Map<Object, Object> arguments) {
 			super.configure(dataTable, arguments);
 			if(dataTable.getOrderNumberColumn() == null) {
-				Map<Object,Object> map = new HashMap<>(Map.of(Column.FIELD_HEADER,"#",Column.FIELD_WIDTH,"55"));
+				Map<Object,Object> map = new HashMap<>(Map.of(Column.FIELD_HEADER_TEXT,"#",Column.FIELD_WIDTH,"55"));
 				if(StringHelper.isBlank(dataTable.getSelectionMode())) {
 					
 				}else {
@@ -101,7 +101,7 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 				dataTable.setOrderNumberColumn(Builder.build(Column.class,map));
 			}
 			if(dataTable.getMenuColumn() == null) {
-				Map<Object,Object> map = new HashMap<>(Map.of(Column.FIELD_HEADER,"",Column.FIELD_WIDTH,"50",Column.ConfiguratorImpl.FIELD_FILTERABLE,Boolean.FALSE
+				Map<Object,Object> map = new HashMap<>(Map.of(Column.FIELD_HEADER_TEXT,"",Column.FIELD_WIDTH,"50",Column.ConfiguratorImpl.FIELD_FILTERABLE,Boolean.FALSE
 						,Column.FIELD_RENDERED,Boolean.FALSE));
 				dataTable.setMenuColumn(Builder.build(Column.class,map));
 			}

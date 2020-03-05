@@ -17,7 +17,7 @@ import lombok.Setter;
 @Getter @Setter
 public class Column extends AbstractObject implements Serializable {
 
-	private String header,footer,selectionMode,width,filterBy,fieldName;
+	private String headerText,footerText,selectionMode,width,filterBy,fieldName;
 	private Boolean visible = Boolean.TRUE;
 	private Object filterValue;
 	private Integer index;
@@ -25,7 +25,8 @@ public class Column extends AbstractObject implements Serializable {
 	/**/
 	
 	public static final String FIELD_INDEX = "index";
-	public static final String FIELD_HEADER = "header";
+	public static final String FIELD_HEADER_TEXT = "headerText";
+	public static final String FIELD_FOOTER_TEXT = "footerText";
 	public static final String FIELD_SELECTION_MODE = "selectionMode";
 	public static final String FIELD_WIDTH = "width";
 	public static final String FIELD_FIELD_NAME = "fieldName";
@@ -39,8 +40,8 @@ public class Column extends AbstractObject implements Serializable {
 		@Override
 		public void configure(Column column, Map<Object, Object> arguments) {
 			super.configure(column, arguments);
-			if(column.header == null && StringHelper.isNotBlank(column.fieldName)) {
-				column.header = InternationalizationHelper.buildString(InternationalizationHelper.buildKey(column.fieldName),null,null,Case.FIRST_CHARACTER_UPPER);
+			if(column.headerText == null && StringHelper.isNotBlank(column.fieldName)) {
+				column.headerText = InternationalizationHelper.buildString(InternationalizationHelper.buildKey(column.fieldName),null,null,Case.FIRST_CHARACTER_UPPER);
 			}
 			Boolean isFilterable = (Boolean) MapHelper.readByKey(arguments, FIELD_FILTERABLE);
 			if(isFilterable == null)

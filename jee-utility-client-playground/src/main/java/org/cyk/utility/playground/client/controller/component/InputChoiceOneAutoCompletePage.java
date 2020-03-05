@@ -28,7 +28,7 @@ public class InputChoiceOneAutoCompletePage extends AbstractPageContainerManaged
 		super.__listenPostConstruct__();
 		autoComplete = Builder.build(AutoComplete.class,Map.of(AutoComplete.FIELD_ENTITY_CLASS,Namable.class));
 		commandButton = Builder.build(CommandButton.class,Map.of(CommandButton.FIELD_VALUE,"Enregistrer"));
-		commandButton.setListener(new CommandButton.Listener() {
+		commandButton.setListener(new CommandButton.Listener.AbstractImpl() {
 			@Override
 			public void listenAction(Object argument) {
 				MessageRenderer.getInstance().render("Value : "+autoComplete.getValue());

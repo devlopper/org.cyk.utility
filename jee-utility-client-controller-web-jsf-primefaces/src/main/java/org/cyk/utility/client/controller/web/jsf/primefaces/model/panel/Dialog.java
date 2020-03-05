@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
-import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObject;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.Event;
@@ -50,6 +49,8 @@ public class Dialog extends AbstractObject implements Serializable {
 	
 	/**/
 	
+	/**/
+	
 	public static final String FIELD_HEADER = "header";
 	public static final String FIELD_MODAL = "modal";
 	public static final String FIELD_FIT_VIEWPORT = "fitViewport";
@@ -65,16 +66,16 @@ public class Dialog extends AbstractObject implements Serializable {
 		@Override
 		public void configure(DIALOG dialog, Map<Object, Object> arguments) {
 			super.configure(dialog, arguments);
-			dialog.setExecuteCommandButton(Builder.build(CommandButton.class,Map.of(CommandButton.FIELD_VALUE,"Exécuter",CommandButton.FIELD_ICON,"fa fa-check")));
+			dialog.setExecuteCommandButton(CommandButton.build(CommandButton.FIELD_VALUE,"Exécuter",CommandButton.FIELD_ICON,"fa fa-check"));
 			
-			dialog.setCloseCommandButton(Builder.build(CommandButton.class,Map.of(CommandButton.FIELD_VALUE,"Fermer",CommandButton.FIELD_ICON,"fa fa-remove")));
+			dialog.setCloseCommandButton(CommandButton.build(CommandButton.FIELD_VALUE,"Fermer",CommandButton.FIELD_ICON,"fa fa-remove"));
 			dialog.getCloseCommandButton().getEventScripts(Boolean.TRUE).write(Event.CLICK, "PF('"+dialog.getWidgetVar()+"').hide();");
 			dialog.getCloseCommandButton().getRunnerArguments().setSuccessMessageArguments(null);
 			dialog.getCloseCommandButton().setType("button");
 			
 			dialog.addCommandButtons(dialog.getExecuteCommandButton(),dialog.getCloseCommandButton());
 			
-			dialog.setCloseAjax(Builder.build(Ajax.class,Map.of(Ajax.FIELD_EVENT,"close")));
+			dialog.setCloseAjax(Ajax.build(Ajax.FIELD_EVENT,"close"));
 			dialog.getCloseAjax().getRunnerArguments().setSuccessMessageArguments(null);
 		}
 		

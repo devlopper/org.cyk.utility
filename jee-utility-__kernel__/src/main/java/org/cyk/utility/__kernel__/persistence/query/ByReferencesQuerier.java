@@ -6,6 +6,7 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.persistence.query.QueryExecutor.Arguments;
 
+@Deprecated
 public interface ByReferencesQuerier<ENTITY,ENTITY_BUSINESS_IDENTIFIER,REFERENCE_ENTITY,REFERENCE_ENTITY_BUSINESS_IDENTIFIER> {
 
 	/* read */

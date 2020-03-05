@@ -6,6 +6,7 @@ import java.util.Map;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
+import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.string.Case;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractInputOutput;
@@ -66,14 +67,22 @@ public abstract class AbstractInput<VALUE> extends AbstractInputOutput<VALUE> im
 			}
 			
 			if(input.outputLabel == null) {
-				String outputLabelValue = null;
-				if(input.field == null) {
-					outputLabelValue = "Input Text Label";
-				}else {
-					outputLabelValue = InternationalizationHelper.buildString(InternationalizationHelper.buildKey(input.field.getName()),null,null,Case.FIRST_CHARACTER_UPPER);
-				}
+				String outputLabelValue = (String) MapHelper.readByKey(arguments, FIELD_OUTPUT_LABEL_VALUE);
+				if(StringHelper.isBlank(outputLabelValue)) {
+					if(input.field == null) {
+						outputLabelValue = __getDefaultOutputLabelValue__(input);
+					}else {
+						outputLabelValue = InternationalizationHelper.buildString(InternationalizationHelper.buildKey(input.field.getName()),null,null,Case.FIRST_CHARACTER_UPPER);
+					}	
+				}				
 				input.outputLabel = OutputLabel.build(OutputLabel.FIELD_VALUE,outputLabelValue,OutputLabel.FIELD_FOR,input.getIdentifier());
 			}
-		}		
+		}
+		
+		protected String __getDefaultOutputLabelValue__(INPUT input) {
+			return "Input Text Label";
+		}
+		
+		public static final String FIELD_OUTPUT_LABEL_VALUE = "outputLabelValue";
 	}
 }

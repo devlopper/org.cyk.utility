@@ -34,7 +34,7 @@ public interface QueryHelper {
 		LogHelper.logInfo(String.format("query helper scanning packages %s", packages),QueryHelper.class);
 		if(CollectionHelper.isEmpty(packages))
 			return;
-		Collection<java.lang.Class<?>> classes = filter(packages, List.of(ByReferencesQuerier.class),Boolean.TRUE);
+		Collection<java.lang.Class<?>> classes = filter(packages, List.of(ByDimensionOneQuerier.class,ByDimensionTwoQuerier.class),Boolean.TRUE);
 		if(CollectionHelper.isEmpty(classes))
 			return;
 		Collection<Query> queries = null;
@@ -206,7 +206,9 @@ public interface QueryHelper {
 					javax.persistence.Query __query__ = resultClass == null ? entityManager.createQuery(query.getValue()) : entityManager.createQuery(query.getValue(), resultClass);
 					entityManager.getEntityManagerFactory().addNamedQuery((String) query.getIdentifier(), __query__);
 				}	
-			}			
+			}else {
+				LogHelper.logWarning(String.format("Queries not added to entity manager : %s", queries), QueriesImpl.class);
+			}
 		}		
 	}
 }

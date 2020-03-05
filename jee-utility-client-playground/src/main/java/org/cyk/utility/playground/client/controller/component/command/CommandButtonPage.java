@@ -47,7 +47,7 @@ public class CommandButtonPage extends AbstractPageContainerManagedImpl implemen
 		commandButtonServer = Builder.build(CommandButton.class,Map.of("value","Server"));
 		
 		commandButtonServerArgument1 = Builder.build(CommandButton.class,Map.of("value","Server Argument1"));
-		commandButtonServerArgument1.setListener(new CommandButton.Listener() {
+		commandButtonServerArgument1.setListener(new CommandButton.Listener.AbstractImpl() {
 			@Override
 			public void listenAction(Object argument) {
 				System.out.println("Argument1 : "+argument);
@@ -55,7 +55,7 @@ public class CommandButtonPage extends AbstractPageContainerManagedImpl implemen
 		});
 		
 		commandButtonServerArgument2 = Builder.build(CommandButton.class,Map.of("value","Server Argument2"));
-		commandButtonServerArgument2.setListener(new CommandButton.Listener() {
+		commandButtonServerArgument2.setListener(new CommandButton.Listener.AbstractImpl() {
 			@Override
 			public void listenAction(Object argument) {
 				System.out.println("Argument2 : "+argument);
@@ -66,7 +66,7 @@ public class CommandButtonPage extends AbstractPageContainerManagedImpl implemen
 		commandButtonServerDoNotNotifySuccess.getRunnerArguments().setSuccessMessageArguments(null);
 		
 		commandButtonServerDoErrorJava = Builder.build(CommandButton.class,Map.of("value","Server Do Error Java"));
-		commandButtonServerDoErrorJava.setListener(new CommandButton.Listener() {
+		commandButtonServerDoErrorJava.setListener(new CommandButton.Listener.AbstractImpl() {
 			@Override
 			public void listenAction(Object argument) {
 				throw new RuntimeException("Something goes wrong from controller");
@@ -74,7 +74,7 @@ public class CommandButtonPage extends AbstractPageContainerManagedImpl implemen
 		});
 		
 		commandButtonServerDoErrorCyk = Builder.build(CommandButton.class,Map.of("value","Server Do Error Cyk"));
-		commandButtonServerDoErrorCyk.setListener(new CommandButton.Listener() {
+		commandButtonServerDoErrorCyk.setListener(new CommandButton.Listener.AbstractImpl() {
 			@Override
 			public void listenAction(Object argument) {
 				throw new org.cyk.utility.__kernel__.throwable.RuntimeException("Something goes wrong from controller");
@@ -82,7 +82,7 @@ public class CommandButtonPage extends AbstractPageContainerManagedImpl implemen
 		});
 		
 		commandButtonServerDoErrorCykMessageOne = Builder.build(CommandButton.class,Map.of("value","Server Do Error Cyk One Message"));
-		commandButtonServerDoErrorCykMessageOne.setListener(new CommandButton.Listener() {
+		commandButtonServerDoErrorCykMessageOne.setListener(new CommandButton.Listener.AbstractImpl() {
 			@Override
 			public void listenAction(Object argument) {
 				throw new org.cyk.utility.__kernel__.throwable.RuntimeException().addMessages(new Message().setSummary("Something goes wrong from controller"));
@@ -93,7 +93,7 @@ public class CommandButtonPage extends AbstractPageContainerManagedImpl implemen
 		commandButtonServerRenderMessageSuccessGrowl.getRunnerArguments().getSuccessMessageArguments().setRenderTypes(List.of(RenderType.GROWL));
 		
 		commandButtonServerRenderMessageErrorGrowl = Builder.build(CommandButton.class,Map.of("value","Server Do Error Render Message Error Growl"));
-		commandButtonServerRenderMessageErrorGrowl.setListener(new CommandButton.Listener() {
+		commandButtonServerRenderMessageErrorGrowl.setListener(new CommandButton.Listener.AbstractImpl() {
 			@Override
 			public void listenAction(Object argument) {
 				throw new RuntimeException("Something goes wrong from controller");
@@ -106,7 +106,7 @@ public class CommandButtonPage extends AbstractPageContainerManagedImpl implemen
 		
 		commandButtonServerConfirmDialogUpdated = Builder.build(CommandButton.class,Map.of("value","Server Confirm Dialog Updated"));
 		commandButtonServerConfirmDialogUpdated.getConfirm().setDisabled(Boolean.FALSE);
-		commandButtonServerConfirmDialogUpdated.setListener(new CommandButton.Listener() {
+		commandButtonServerConfirmDialogUpdated.setListener(new CommandButton.Listener.AbstractImpl() {
 			@Override
 			public void listenAction(Object argument) {
 				commandButtonServerConfirmDialogUpdated.getConfirm().setMessage("Time is "+LocalDateTime.now()+". Do you want to continue ?");

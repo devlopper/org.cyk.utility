@@ -12,4 +12,12 @@ import lombok.experimental.Accessors;
 public class Namable extends AbstractDataIdentifiableSystemStringIdentifiableBusinessStringNamableImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	public String getCodeStyled() {
+		return getCode();
+	}
+	
+	@Override
+	public String toString() {
+		return getCode()+" "+getName();
+	}
 }

@@ -22,7 +22,7 @@ public class AbstractAjax<ARGUMENT> extends AbstractAction implements Serializab
 	protected Boolean throwNotYetImplemented = Boolean.TRUE;
 	
 	{
-		listener = new Listener() {
+		listener = new Listener.AbstractImpl() {
 			@Override
 			public void listenAction(Object argument) {
 				if(Boolean.TRUE.equals(throwNotYetImplemented))

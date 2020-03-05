@@ -18,7 +18,6 @@ import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.user.interface_.message.RenderType;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
-import org.cyk.utility.client.controller.web.jsf.primefaces.model.collection.AbstractCollection;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.collection.AbstractDataTable;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.collection.Column;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.collection.DataTable;
@@ -49,7 +48,7 @@ public class DataTableLazyPage extends AbstractPageContainerManagedImpl implemen
 		dataTable = Builder.build(DataTable.class,Map.of(DataTable.FIELD_LAZY,Boolean.TRUE,DataTable.ConfiguratorImpl.FIELD_ENTIY_CLASS,Namable.class
 				,DataTable.ConfiguratorImpl.FIELD_FILTERABLE,Boolean.TRUE,DataTable.FIELD_SELECTION_MODE,"multiple"));
 		
-		dataTable.addRecordMenuItemByArguments(MenuItem.FIELD_VALUE,"Edit",MenuItem.FIELD_ICON,"fa fa-pencil",MenuItem.FIELD_LISTENER,new AbstractAction.Listener() {			
+		dataTable.addRecordMenuItemByArguments(MenuItem.FIELD_VALUE,"Edit",MenuItem.FIELD_ICON,"fa fa-pencil",MenuItem.FIELD_LISTENER,new AbstractAction.Listener.AbstractImpl() {			
 			@Override public void listenAction(Object argument) {
 				UniformResourceIdentifierAsFunctionParameter p = new UniformResourceIdentifierAsFunctionParameter();
 				p.setRequest(__getRequest__());
@@ -65,7 +64,7 @@ public class DataTableLazyPage extends AbstractPageContainerManagedImpl implemen
 			}
 		},MenuItem.ConfiguratorImpl.FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_NULLABLE,Boolean.TRUE);
 		
-		dataTable.addRecordMenuItemByArguments(MenuItem.FIELD_VALUE,"Delete",MenuItem.FIELD_ICON,"fa fa-remove",MenuItem.FIELD_LISTENER,new AbstractAction.Listener() {			
+		dataTable.addRecordMenuItemByArguments(MenuItem.FIELD_VALUE,"Delete",MenuItem.FIELD_ICON,"fa fa-remove",MenuItem.FIELD_LISTENER,new AbstractAction.Listener.AbstractImpl() {			
 			@Override public void listenAction(Object argument) {__inject__(NamableController.class).delete((Namable) argument);}
 		},MenuItem.ConfiguratorImpl.FIELD_CONFIRMABLE,Boolean.TRUE
 						,MenuItem.ConfiguratorImpl.FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_RENDER_TYPES,CollectionHelper.listOf(RenderType.GROWL));
@@ -76,29 +75,29 @@ public class DataTableLazyPage extends AbstractPageContainerManagedImpl implemen
 				
 		dataTable.addHeaderToolbarLeftCommands(
 				Builder.build(CommandButton.class,Map.of(CommandButton.FIELD_VALUE,"Opération 1. Min1",CommandButton.ConfiguratorImpl.FIELD_COLLECTION,dataTable
-						,CommandButton.FIELD_LISTENER,new AbstractCollection.AbstractActionListenerImpl(dataTable) {
+						,CommandButton.FIELD_LISTENER,new AbstractAction.Listener.AbstractImpl() {
 					@Override
 					protected void __showDialog__() {
 						dataTable.getDialog().setHeader("Réalisation de l'opération 1");
 						super.__showDialog__();
 					}
-				},CommandButton.ConfiguratorImpl.FIELD_COLLECTION_UPDATABLE,Boolean.FALSE))
+				}.setCollection(dataTable),CommandButton.ConfiguratorImpl.FIELD_COLLECTION_UPDATABLE,Boolean.FALSE))
 				,Builder.build(CommandButton.class,Map.of(CommandButton.FIELD_VALUE,"Opération 2. Min2",CommandButton.ConfiguratorImpl.FIELD_COLLECTION,dataTable
-						,CommandButton.FIELD_LISTENER,new AbstractCollection.AbstractActionListenerImpl(dataTable) {
+						,CommandButton.FIELD_LISTENER,new AbstractAction.Listener.AbstractImpl() {
 					@Override
 					protected void __showDialog__() {
 						dataTable.getDialog().setHeader("Réalisation de l'opération 2");
 						super.__showDialog__();
 					}
-				}.setMinimumSelectionSize(2),CommandButton.ConfiguratorImpl.FIELD_COLLECTION_UPDATABLE,Boolean.FALSE))
+				}.setCollection(dataTable).setMinimumSelectionSize(2),CommandButton.ConfiguratorImpl.FIELD_COLLECTION_UPDATABLE,Boolean.FALSE))
 				,Builder.build(CommandButton.class,Map.of(CommandButton.FIELD_VALUE,"Opération 3. No Constraint",CommandButton.ConfiguratorImpl.FIELD_COLLECTION,dataTable
-						,CommandButton.FIELD_LISTENER,new AbstractCollection.AbstractActionListenerImpl(dataTable) {
+						,CommandButton.FIELD_LISTENER,new AbstractAction.Listener.AbstractImpl() {
 					@Override
 					protected void __showDialog__() {
 						dataTable.getDialog().setHeader("Réalisation de l'opération 3");
 						super.__showDialog__();
 					}
-				}.setMinimumSelectionSize(0).setIsSelectionShowable(Boolean.FALSE),CommandButton.ConfiguratorImpl.FIELD_COLLECTION_UPDATABLE,Boolean.FALSE))
+				}.setCollection(dataTable).setMinimumSelectionSize(0).setIsSelectionShowable(Boolean.FALSE),CommandButton.ConfiguratorImpl.FIELD_COLLECTION_UPDATABLE,Boolean.FALSE))
 				,Builder.build(Button.class,Map.of(Button.FIELD_VALUE,"Button Without Params",Button.FIELD_OUTCOME,"namableEditView"))
 				,Builder.build(Button.class,Map.of(Button.FIELD_VALUE,"Button With Params",Button.FIELD_OUTCOME,"namableEditView",Button.FIELD_PARAMETERS,Map.of("p1","v1")))
 			);
@@ -108,7 +107,7 @@ public class DataTableLazyPage extends AbstractPageContainerManagedImpl implemen
 				,Builder.build(Button.class,Map.of(Button.FIELD_VALUE,"Op3",Button.FIELD_OUTCOME,"namableEditView",Button.FIELD_PARAMETERS,Map.of("p1","v1")))
 			);
 		
-		dataTable.getDialog().getCloseAjax().setListener(new AbstractAction.Listener() {			
+		dataTable.getDialog().getCloseAjax().setListener(new AbstractAction.Listener.AbstractImpl() {			
 			@Override
 			public void listenAction(Object argument) {
 				

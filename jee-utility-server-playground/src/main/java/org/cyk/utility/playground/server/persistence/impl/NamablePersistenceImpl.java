@@ -1,6 +1,7 @@
 package org.cyk.utility.playground.server.persistence.impl;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -38,6 +39,7 @@ public class NamablePersistenceImpl extends AbstractPersistenceEntityImpl<Namabl
 			}
 			int index = 0;
 			objects = new Object[]{"code",objects[index++],"name",objects[index++],"name1",objects[index++],"name2",objects[index++],"name3",objects[index++],"name4",objects[index++]};
+			System.out.println("NamablePersistenceImpl.__getQueryParameters__() ::: "+Arrays.toString(objects));
 			return objects;
 		}
 		return super.__getQueryParameters__(queryContext, properties, objects);
