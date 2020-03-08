@@ -20,8 +20,8 @@ public interface DialogOpener {
 	default Map<String,Object> getOptions(String outcome,Map<String,List<String>> parameters) {
 		Map<String,Object> options = new HashMap<>();
         options.put("modal", true);
-        options.put("width", 1000);
-        options.put("height", 580);
+        options.put("width", "90%");
+        options.put("height", "90%");
         options.put("contentWidth", "100%");
         options.put("contentHeight", "100%"); 
         //options.put("windowrendertype", "windowrendertypedialog"); 
@@ -36,7 +36,7 @@ public interface DialogOpener {
 		if(parameters == null)
 			parameters = new HashMap<String, List<String>>();
 		parameters.put("windowrendertype", List.of("windowrendertypedialog")); 
-        PrimeFaces.current().dialog().openDynamic(outcome, options, parameters);
+		PrimeFaces.current().dialog().openDynamic(outcome, options, parameters);
 	}
 	
 	default void openByEntityIdentifier(String outcome,String entityIdentifier,Map<String,Object> options) {

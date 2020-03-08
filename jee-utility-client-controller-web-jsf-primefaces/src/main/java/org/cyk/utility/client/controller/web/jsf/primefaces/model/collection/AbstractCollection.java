@@ -2,6 +2,7 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.model.collection;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -9,17 +10,26 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.enumeration.Action;
+import org.cyk.utility.__kernel__.identifier.resource.ParameterName;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.klass.NamingModel;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.user.interface_.message.RenderType;
+import org.cyk.utility.client.controller.ControllerEntity;
+import org.cyk.utility.client.controller.ControllerLayer;
+import org.cyk.utility.client.controller.web.jsf.OutcomeGetter;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObjectAjaxable;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax.Ajax;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.AbstractCommand;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.AbstractMenu;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.MenuButton;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.MenuItem;
@@ -33,6 +43,7 @@ import lombok.Setter;
 @Getter @Setter
 public abstract class AbstractCollection extends AbstractObjectAjaxable implements Serializable {
 
+	protected Class<?> elementClass;
 	protected OutputText title;
 	protected Object value,selectedCommandIdentifier;
 	protected String emptyMessage,rowsPerPageTemplate,paginatorTemplate,currentPageReportTemplate,selectionMode,fileName;
@@ -67,6 +78,51 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 			return this;
 		return addHeaderToolbarLeftCommands(CollectionHelper.listOf(headerToolbarLeftCommands));
 	}
+	
+	public AbstractCollection addHeaderToolbarLeftCommandsByArguments(Collection<Map<Object,Object>> headerToolbarLeftCommandsArguments) {
+		if(CollectionHelper.isEmpty(headerToolbarLeftCommandsArguments))
+			return this;
+		headerToolbarLeftCommandsArguments.forEach(new Consumer<Map<Object,Object>>() {
+			@Override
+			public void accept(Map<Object, Object> map) {
+				map.put(AbstractCommand.AbstractConfiguratorImpl.FIELD_COLLECTION, AbstractCollection.this);
+			}
+		});	
+		addHeaderToolbarLeftCommands(headerToolbarLeftCommandsArguments.stream().map(map -> CommandButton.build(map)).collect(Collectors.toList()));
+		return this;
+	}
+	
+	public AbstractCollection addHeaderToolbarLeftCommandsByArguments(@SuppressWarnings("unchecked") Map<Object,Object>...headerToolbarLeftCommandsArguments) {
+		if(ArrayHelper.isEmpty(headerToolbarLeftCommandsArguments))
+			return this;
+		return addHeaderToolbarLeftCommandsByArguments(CollectionHelper.listOf(headerToolbarLeftCommandsArguments));
+	}
+	
+	@SuppressWarnings("unchecked")
+	public AbstractCollection addHeaderToolbarLeftCommandsByArguments(Object...headerToolbarLeftCommandsArguments) {
+		if(ArrayHelper.isEmpty(headerToolbarLeftCommandsArguments))
+			return this;
+		return addHeaderToolbarLeftCommandsByArguments(MapHelper.instantiate(headerToolbarLeftCommandsArguments));
+	}
+	
+	public AbstractCollection addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialog(String outcome,Object...objects) {
+		if(StringHelper.isNotBlank(outcome))
+			objects = ArrayUtils.addAll(objects, AbstractCommand.AbstractConfiguratorImpl.FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER_OUTCOME,outcome);
+		return addHeaderToolbarLeftCommandsByArguments(objects);
+	}
+	
+	public AbstractCollection addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialog(Action action,Object...objects) {
+		if(action != null)
+			objects = ArrayUtils.addAll(objects, AbstractCommand.AbstractConfiguratorImpl.FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER_PARAMETERS
+					,Map.of(ParameterName.ACTION_IDENTIFIER.getValue(),List.of(action.name())));
+		return addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialog(OutcomeGetter.getInstance().get(elementClass, action),objects);
+	}
+	
+	public AbstractCollection addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialogCreate() {
+		return addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialog(Action.CREATE,AbstractCommand.FIELD_VALUE,"Créer",AbstractCommand.FIELD_ICON,"fa fa-plus");
+	}
+	
+	/**/
 	
 	public Collection<AbstractCommand> getRecordCommands(Boolean injectIfNull) {
 		if(recordCommands == null && Boolean.TRUE.equals(injectIfNull))
@@ -132,8 +188,47 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 		return addRecordMenuItemsByArguments(MapHelper.instantiate(arguments));
 	}
 	
+	public AbstractCollection addRecordMenuItemByArgumentsOpenViewInDialog(String outcome,Object...objects) {
+		if(StringHelper.isNotBlank(outcome))
+			objects = ArrayUtils.addAll(objects, MenuItem.ConfiguratorImpl.FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER_OUTCOME,outcome);
+		return addRecordMenuItemByArguments(objects);
+	}
+	
+	public AbstractCollection addRecordMenuItemByArgumentsOpenViewInDialog(Action action,Object...objects) {
+		if(action != null)
+			objects = ArrayUtils.addAll(objects, AbstractCommand.AbstractConfiguratorImpl.FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER_PARAMETERS
+					,Map.of(ParameterName.ACTION_IDENTIFIER.getValue(),List.of(action.name())));
+		return addRecordMenuItemByArgumentsOpenViewInDialog(OutcomeGetter.getInstance().get(elementClass, action),objects);
+	}
+	
+	public AbstractCollection addRecordMenuItemByArgumentsOpenViewInDialogRead() {
+		return addRecordMenuItemByArgumentsOpenViewInDialog(Action.READ,AbstractCommand.FIELD_VALUE,"Consulter",AbstractCommand.FIELD_ICON,"fa fa-eye");
+	}
+	
+	public AbstractCollection addRecordMenuItemByArgumentsOpenViewInDialogUpdate() {
+		return addRecordMenuItemByArgumentsOpenViewInDialog(Action.EDIT,AbstractCommand.FIELD_VALUE,"Modifier",AbstractCommand.FIELD_ICON,"fa fa-edit");
+	}
+	
+	public AbstractCollection addRecordMenuItemByArgumentsExecuteFunctionDelete() {
+		if(elementClass != null) {
+			@SuppressWarnings("unchecked")
+			ControllerEntity<Object> controllerEntity = (ControllerEntity<Object>) __inject__(ControllerLayer.class).injectInterfaceClassFromEntityClass(elementClass);
+			return addRecordMenuItemByArguments(MenuItem.FIELD_VALUE,"Supprimer",MenuItem.FIELD_ICON,"fa fa-remove"
+					,MenuItem.FIELD_LISTENER,new AbstractAction.Listener.AbstractImpl() {
+				@Override
+				protected void __executeFunction__(Object argument) {
+					super.__executeFunction__(argument);
+					controllerEntity.delete(argument);
+				}
+			}.setAction(AbstractAction.Listener.Action.EXECUTE_FUNCTION),MenuItem.ConfiguratorImpl.FIELD_CONFIRMABLE,Boolean.TRUE
+							,MenuItem.ConfiguratorImpl.FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_RENDER_TYPES,CollectionHelper.listOf(RenderType.GROWL));
+		}
+		return this;
+	}
+	
 	/**/
 	
+	public static final String FIELD_ELEMENT_CLASS = "elementClass";
 	public static final String FIELD_TITLE = "title";
 	public static final String FIELD_VALUE = "value";
 	public static final String FIELD_EMPTY_MESSAGE = "emptyMessage";
@@ -152,7 +247,6 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 		@Override
 		public void configure(COLLECTION collection, Map<Object, Object> arguments) {
 			super.configure(collection, arguments);
-			Class<Object> entityClass = (Class<Object>) MapHelper.readByKey(arguments, FIELD_ENTIY_CLASS);
 			Boolean filterable = (Boolean) MapHelper.readByKey(arguments, FIELD_FILTERABLE);
 			if(filterable == null)
 				filterable = collection.lazy;
@@ -169,7 +263,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 				collection.paginatorTemplate = "{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}";
 				collection.currentPageReportTemplate = "Total {totalRecords} | Page {currentPage}/{totalPages}";
 				collection.paginator = Boolean.TRUE;
-				if(entityClass == null) {
+				if(collection.elementClass == null) {
 					
 				}else {
 					LazyDataModel<Object> value = (LazyDataModel<Object>) MapHelper.readByKey(arguments, FIELD_LAZY_DATA_MODEL);
@@ -178,10 +272,10 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 						if(lazyzDataModelClass == null)
 							lazyzDataModelClass = LazyDataModel.class;
 						*/
-						value = new LazyDataModel<Object>(entityClass);	
+						value = new LazyDataModel<Object>((Class<Object>) collection.elementClass);	
 					}					
 					if(Boolean.TRUE.equals(filterable)) {						
-						String persistenceEntityClassName = ClassHelper.buildName(entityClass.getPackageName(), entityClass.getSimpleName()
+						String persistenceEntityClassName = ClassHelper.buildName(collection.elementClass.getPackageName(), collection.elementClass.getSimpleName()
 								, new NamingModel().client().controller().entities(), new NamingModel().server().persistence().entities());						
 						Class<?> persistenceEntityClass = ClassHelper.getByName(persistenceEntityClassName);
 						if(StringHelper.isBlank(value.getReadQueryIdentifier()))
@@ -230,7 +324,6 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 			}
 		}
 		
-		public static final String FIELD_ENTIY_CLASS = "entityClass";
 		public static final String FIELD_ENTITY_FIELDS_NAMES = "entityFieldsNames";
 		public static final String FIELD_FILTERABLE = "filterable";
 		public static final String FIELD_RECORD_MENU_ITEMS_BY_ARGUMENTS = "recordMenuItemsByArguments";

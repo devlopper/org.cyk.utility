@@ -27,7 +27,7 @@ public class DataTableLazyCustomPage extends AbstractPageContainerManagedImpl im
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
-		dataTable = DataTable.build(DataTable.ConfiguratorImpl.FIELD_TITLE_VALUE,"List of namable",DataTable.FIELD_LAZY,Boolean.TRUE,DataTable.ConfiguratorImpl.FIELD_ENTIY_CLASS,Namable.class
+		dataTable = DataTable.build(DataTable.ConfiguratorImpl.FIELD_TITLE_VALUE,"List of namable",DataTable.FIELD_LAZY,Boolean.TRUE,DataTable.FIELD_ELEMENT_CLASS,Namable.class
 				,DataTable.ConfiguratorImpl.FIELD_FILTERABLE,Boolean.TRUE,DataTable.FIELD_SELECTION_MODE,"multiple");
 		
 		dataTable.addColumnsAfterRowIndex(

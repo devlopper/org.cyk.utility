@@ -9,7 +9,6 @@ import org.cyk.utility.__kernel__.map.MapHelper;
 
 public interface Builder<OBJECT> {
 
-	@SuppressWarnings("unchecked")
 	static <OBJECT> OBJECT build(Class<OBJECT> klass,Map<Object,Object> arguments) {
 		if(klass == null)
 			return null;		

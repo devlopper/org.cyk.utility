@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.identifier.resource.ParameterName;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.runnable.Runner;
@@ -290,6 +293,39 @@ public abstract class AbstractAction extends AbstractObject implements Serializa
 				
 				if(action.listener == null) {
 					OpenViewInDialogArgumentsGetter openViewInDialogArgumentsGetter = (OpenViewInDialogArgumentsGetter) MapHelper.readByKey(arguments, FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER);
+					if(openViewInDialogArgumentsGetter == null) {
+						String __outcome__ = (String) MapHelper.readByKey(arguments, FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER_OUTCOME);
+						if(StringHelper.isNotBlank(__outcome__)) {
+							Map<String, List<String>> __parameters__ = (Map<String, List<String>>) MapHelper.readByKey(arguments, FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER_PARAMETERS);
+							openViewInDialogArgumentsGetter = new OpenViewInDialogArgumentsGetter.AbstractImpl() {
+								@Override
+								public String getOutcome(Object argument, String outcome) {
+									return __outcome__;
+								}
+								
+								@Override
+								public Map<String, List<String>> getParameters(Object argument,Map<String, List<String>> parameters) {
+									if(MapHelper.isNotEmpty(__parameters__)) {
+										if(parameters == null)
+											parameters = new HashMap<>();
+										parameters.putAll(__parameters__);
+									}
+									Object identifier = FieldHelper.readSystemIdentifier(argument);
+									if(identifier == null)
+										return parameters;
+									String identifierAsString = identifier.toString();
+									if(StringHelper.isBlank(identifierAsString))
+										return parameters;
+									if(parameters == null)
+										parameters = new HashMap<>();
+									if(MapHelper.isNotEmpty(__parameters__))
+										parameters.putAll(__parameters__);
+									MapHelper.writeByKey(parameters,ParameterName.ENTITY_IDENTIFIER.getValue(),List.of(identifierAsString),Boolean.FALSE);
+									return parameters;
+								}
+							};
+						}
+					}
 					if(openViewInDialogArgumentsGetter != null) {
 						action.listener = new AbstractAction.Listener.AbstractImpl() {
 							@Override
@@ -392,6 +428,8 @@ public abstract class AbstractAction extends AbstractObject implements Serializa
 		/**/
 		
 		public static final String FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER = "openViewInDialogArgumentsGetter";
+		public static final String FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER_OUTCOME = "openViewInDialogArgumentsGetterOutcome";
+		public static final String FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER_PARAMETERS = "openViewInDialogArgumentsGetterParameters";
 		public static final String FIELD_INPUTS = "inputs";
 		public static final String FIELD_DIALOG = "dialog";
 		public static final String FIELD_COLLECTION = "collection";

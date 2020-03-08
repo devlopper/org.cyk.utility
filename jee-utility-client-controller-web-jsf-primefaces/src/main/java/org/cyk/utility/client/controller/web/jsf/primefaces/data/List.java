@@ -45,7 +45,7 @@ public class List extends AbstractObject implements Serializable {
 		public void configure(List list, Map<Object, Object> arguments) {
 			super.configure(list, arguments);
 			if(list.entityClass != null) {
-				list.dataTable = DataTable.build(DataTable.ConfiguratorImpl.FIELD_ENTIY_CLASS,list.entityClass,DataTable.FIELD_LAZY,Boolean.TRUE);
+				list.dataTable = DataTable.build(DataTable.FIELD_ELEMENT_CLASS,list.entityClass,DataTable.FIELD_LAZY,Boolean.TRUE);
 				
 				list.editionForm = Form.build(Form.FIELD_ENTITY_CLASS,list.entityClass,Form.FIELD_ACTION,Action.CREATE,Form.FIELD_CONTAINER,list.dataTable.getDialog(),Form.FIELD_LISTENER
 						,new Form.Listener.AbstractImpl() {				
@@ -55,6 +55,12 @@ public class List extends AbstractObject implements Serializable {
 							}
 						});
 				
+				list.dataTable.addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialogCreate();
+				//list.dataTable.addRecordMenuItemByArgumentsOpenViewInDialogRead();
+				list.dataTable.addRecordMenuItemByArgumentsOpenViewInDialogUpdate();
+				list.dataTable.addRecordMenuItemByArgumentsExecuteFunctionDelete();
+				
+				/*
 				list.dataTable.addHeaderToolbarLeftCommands(
 						CommandButton.build(CommandButton.FIELD_VALUE,"Créer",CommandButton.FIELD_ICON,"fa fa-plus",CommandButton.ConfiguratorImpl.FIELD_COLLECTION,list.dataTable
 								,CommandButton.FIELD_LISTENER,new AbstractAction.Listener.AbstractImpl() {
@@ -87,6 +93,7 @@ public class List extends AbstractObject implements Serializable {
 					@Override public void listenAction(Object argument) {controllerEntity.delete(argument);}
 				},MenuItem.ConfiguratorImpl.FIELD_CONFIRMABLE,Boolean.TRUE
 								,MenuItem.ConfiguratorImpl.FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_RENDER_TYPES,CollectionHelper.listOf(RenderType.GROWL));
+				*/
 			}
 		}
 		

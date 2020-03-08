@@ -207,7 +207,7 @@ public class Form extends AbstractObject implements Serializable {
 				CollectionHelper.setElementAt(dialog.getCommandButtons(), 0, form.submitCommandButton);
 				dialog.setExecuteCommandButton(form.submitCommandButton);
 			}else {
-				cells.add(submitCommandArguments);
+				cells.add(MapHelper.instantiate(Cell.FIELD_CONTROL,CommandButton.build(submitCommandArguments)));
 			}
 			
 			return cells;

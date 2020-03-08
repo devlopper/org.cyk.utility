@@ -45,7 +45,7 @@ public class DataTableLazyPage extends AbstractPageContainerManagedImpl implemen
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
-		dataTable = Builder.build(DataTable.class,Map.of(DataTable.FIELD_LAZY,Boolean.TRUE,DataTable.ConfiguratorImpl.FIELD_ENTIY_CLASS,Namable.class
+		dataTable = Builder.build(DataTable.class,Map.of(DataTable.FIELD_LAZY,Boolean.TRUE,DataTable.FIELD_ELEMENT_CLASS,Namable.class
 				,DataTable.ConfiguratorImpl.FIELD_FILTERABLE,Boolean.TRUE,DataTable.FIELD_SELECTION_MODE,"multiple"));
 		
 		dataTable.addRecordMenuItemByArguments(MenuItem.FIELD_VALUE,"Edit",MenuItem.FIELD_ICON,"fa fa-pencil",MenuItem.FIELD_LISTENER,new AbstractAction.Listener.AbstractImpl() {			

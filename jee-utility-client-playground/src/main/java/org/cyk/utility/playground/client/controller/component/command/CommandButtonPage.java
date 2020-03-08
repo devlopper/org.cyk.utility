@@ -82,17 +82,17 @@ public class CommandButtonPage extends AbstractPageContainerManagedImpl implemen
 			}
 		});
 		
-		commandButtonServerRenderMessageSuccessGrowl = CommandButton.build("value","Server Render Message Success Growl");
-		commandButtonServerRenderMessageSuccessGrowl.getRunnerArguments().getSuccessMessageArguments().setRenderTypes(List.of(RenderType.GROWL));
+		commandButtonServerRenderMessageSuccessGrowl = CommandButton.build("value","Server Render Message Success Growl"
+				,CommandButton.ConfiguratorImpl.FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_RENDER_TYPES,List.of(RenderType.GROWL));
 		
 		commandButtonServerRenderMessageErrorGrowl = CommandButton.build("value","Server Do Error Render Message Error Growl");
+		commandButtonServerRenderMessageErrorGrowl.getRunnerArguments().getThrowableMessageArguments().setRenderTypes(List.of(RenderType.GROWL));
 		commandButtonServerRenderMessageErrorGrowl.setListener(new CommandButton.Listener.AbstractImpl() {
 			@Override
 			public void listenAction(Object argument) {
 				throw new RuntimeException("Something goes wrong from controller");
 			}
 		});
-		commandButtonServerRenderMessageErrorGrowl.getRunnerArguments().getThrowableMessageArguments().setRenderTypes(List.of(RenderType.GROWL));
 		
 		commandButtonServerConfirmDialog = CommandButton.build("value","Server Confirm Dialog",CommandButton.ConfiguratorImpl.FIELD_CONFIRMABLE,Boolean.TRUE);
 		
@@ -112,13 +112,8 @@ public class CommandButtonPage extends AbstractPageContainerManagedImpl implemen
 		dialog = Dialog.build();
 		commandButtonShowDialog = CommandButton.build(CommandButton.FIELD_VALUE,"Show Dialog",CommandButton.ConfiguratorImpl.FIELD_DIALOG,dialog);
 		
-		commandButtonOpenDialog = CommandButton.build(CommandButton.FIELD_VALUE,"Open Dialog",CommandButton.ConfiguratorImpl.FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER
-				,new CommandButton.Listener.OpenViewInDialogArgumentsGetter.AbstractImpl() {
-					@Override
-					public String getOutcome(Object argument, String outcome) {
-						return "namableListView";
-					}
-				});
+		commandButtonOpenDialog = CommandButton.build(CommandButton.FIELD_VALUE,"Open Dialog"
+				,CommandButton.ConfiguratorImpl.FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER_OUTCOME,"namableListView");
 	}
 	
 }

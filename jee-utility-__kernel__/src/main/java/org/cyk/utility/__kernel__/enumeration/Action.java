@@ -9,6 +9,8 @@ public enum Action {
 	,UPDATE
 	,DELETE
 	
+	,EDIT
+	
 	;
 	
 	public static Action getByName(String name,Boolean isNameCaseSensitive) {

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.MenuItem;
@@ -123,6 +124,22 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 		String listenGetStyleClassByRecord(Object record,Integer recordIndex);
 		
 		String listenGetStyleClassByRecordByColumn(Object record,Integer recordIndex,Column column,Integer columnIndex);
+		
+		/**/
+		
+		public static abstract class AbstractImpl extends AbstractObject implements Listener,Serializable {
+			
+			@Override
+			public String listenGetStyleClassByRecord(Object record, Integer recordIndex) {
+				return null;
+			}
+			
+			@Override
+			public String listenGetStyleClassByRecordByColumn(Object record, Integer recordIndex, Column column,Integer columnIndex) {
+				return null;
+			}
+			
+		}
 		
 	}
 }
