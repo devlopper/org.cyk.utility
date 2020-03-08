@@ -154,6 +154,8 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 			super.configure(collection, arguments);
 			Class<Object> entityClass = (Class<Object>) MapHelper.readByKey(arguments, FIELD_ENTIY_CLASS);
 			Boolean filterable = (Boolean) MapHelper.readByKey(arguments, FIELD_FILTERABLE);
+			if(filterable == null)
+				filterable = collection.lazy;
 			if(collection.rows == null)
 				collection.rows = 0;
 			if(collection.filterDelay == null)

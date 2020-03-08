@@ -21,10 +21,10 @@ public class NamableListPage extends AbstractEntityListPageContainerManagedImpl<
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
 
-		dataTable.addColumnsAfterRowIndex(
-				Column.build(Map.of(Column.FIELD_FIELD_NAME,Namable.FIELD_CODE,Column.FIELD_WIDTH,"200",Column.ConfiguratorImpl.FIELD_FILTERABLE,Boolean.TRUE))
-				,Column.build(Map.of(Column.FIELD_FIELD_NAME,Namable.FIELD_NAME,Column.ConfiguratorImpl.FIELD_FILTERABLE,Boolean.TRUE))
-				);
+		list.getDataTable().addColumnsAfterRowIndex(
+			Column.build(Map.of(Column.FIELD_FIELD_NAME,Namable.FIELD_CODE,Column.FIELD_WIDTH,"200",Column.ConfiguratorImpl.FIELD_FILTERABLE,Boolean.TRUE))
+			,Column.build(Map.of(Column.FIELD_FIELD_NAME,Namable.FIELD_NAME,Column.ConfiguratorImpl.FIELD_FILTERABLE,Boolean.TRUE))
+		);
 	}
 	
 	@Override

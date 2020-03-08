@@ -11,15 +11,15 @@
     <cyk:page value="#{namableListPage}">
     	<ui:define name="centerCenter">
     		<ui:decorate template="/collection/datatable/default.xhtml">
-    			<ui:param name="dataTable" value="#{namableListPage.dataTable}"/>
+    			<ui:param name="dataTable" value="#{namableListPage.list.dataTable}"/>
     			<ui:define name="columnsAfterRowIndexBodies1">
-    				<h4>
+    				<h6>
     					<h:outputText value="#{record[column.fieldName]}" />
-    				</h4>
+    				</h6>
     			</ui:define>
     			<ui:define name="dataTableDialogBodyDataTableAfter">
     				<ui:decorate template="/layout/default.xhtml">
-		    			<ui:param name="layout" value="#{namableListPage.editionForm.layout}"/>   			
+		    			<ui:param name="layout" value="#{namableListPage.list.editionForm.layout}"/>   			
 		    		</ui:decorate>
     			</ui:define>
     		</ui:decorate>	   

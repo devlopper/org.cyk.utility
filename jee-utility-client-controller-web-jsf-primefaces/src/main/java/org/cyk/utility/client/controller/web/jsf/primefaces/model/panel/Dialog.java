@@ -7,6 +7,8 @@ import java.util.Map;
 
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.map.MapHelper;
+import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObject;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.Event;
@@ -84,10 +86,23 @@ public class Dialog extends AbstractObject implements Serializable {
 	public static class ConfiguratorImpl extends AbstractConfiguratorImpl<Dialog> implements Serializable {
 
 		@Override
+		protected String __getTemplate__() {
+			return "/dialog/default.xhtml";
+		}
+		
+		@Override
 		protected Class<Dialog> __getClass__() {
 			return Dialog.class;
 		}
 
+	}
+	
+	public static Dialog build(Map<Object,Object> arguments) {
+		return Builder.build(Dialog.class,arguments);
+	}
+	
+	public static Dialog build(Object...objects) {
+		return build(MapHelper.instantiate(objects));
 	}
 	
 	static {

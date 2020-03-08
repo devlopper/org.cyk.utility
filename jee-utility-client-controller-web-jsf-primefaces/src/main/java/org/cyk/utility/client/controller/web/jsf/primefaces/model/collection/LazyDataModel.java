@@ -72,10 +72,13 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 	}
 	
 	protected Properties __getReadProperties__(FilterDto filter,int first, int pageSize) {
-		return new Properties().setQueryIdentifier(readQueryIdentifier)
+		Properties properties = new Properties().setQueryIdentifier(readQueryIdentifier)
 				.setFields(__getPropertiesFields__())
 				.setFilters(filter)
 				.setIsPageable(Boolean.TRUE).setFrom(first).setCount(pageSize);
+		if(listener != null && filter != null)
+			listener.processReadProperties(properties);
+		return properties;
 	}
 	
 	protected Properties __getCountProperties__(FilterDto filter) {
@@ -110,6 +113,8 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 		
 		void processFilter(FilterDto filter);
 		
+		void processReadProperties(Properties properties);
+		
 		/**/
 		
 		public static abstract class AbstractImpl extends AbstractObject implements Listener,Serializable{
@@ -117,6 +122,8 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 			@Override
 			public void processFilter(FilterDto filter) {}
 			
+			@Override
+			public void processReadProperties(Properties properties) {}
 		}
 	}
 }

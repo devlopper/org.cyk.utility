@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -21,6 +22,8 @@ import org.cyk.utility.__kernel__.user.interface_.message.MessageRenderer;
 import org.cyk.utility.__kernel__.user.interface_.message.RenderType;
 import org.cyk.utility.__kernel__.user.interface_.message.Severity;
 import org.cyk.utility.client.controller.web.ComponentHelper;
+import org.cyk.utility.client.controller.web.jsf.primefaces.dialog.DialogOpener;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction.Listener.OpenViewInDialogArgumentsGetter;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.collection.AbstractCollection;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.AbstractInput;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.panel.OutputPanel;
@@ -97,9 +100,18 @@ public abstract class AbstractAction extends AbstractObject implements Serializa
 	
 	public static interface Listener {
 		
-		public static enum Action {SHOW_DIALOG,NAVIGATE_TO_VIEW,EXECUTE_FUNCTION}
+		public static enum Action {SHOW_DIALOG,NAVIGATE_TO_VIEW,OPEN_VIEW_IN_DIALOG,EXECUTE_FUNCTION}
 		
 		void listenAction(Object argument);
+		
+		AbstractCollection getCollection();
+		Listener setCollection(AbstractCollection collection);
+		
+		Integer getMinimumSelectionSize();
+		Listener setMinimumSelectionSize(Integer minimumSelectionSize);
+		
+		Boolean getIsSelectionShowable();
+		Listener setIsSelectionShowable(Boolean isSelectionShowable);
 		
 		Listener setAction(Action action);
 		Action getAction();
@@ -110,15 +122,23 @@ public abstract class AbstractAction extends AbstractObject implements Serializa
 		OutputPanel getDialogOutputPanel();
 		Listener setDialogOutputPanel(OutputPanel dialogOutputPanel);
 		
+		Listener setOpenViewInDialogArgumentsGetter(OpenViewInDialogArgumentsGetter openViewInDialogArgumentsGetter);
+		OpenViewInDialogArgumentsGetter getOpenViewInDialogArgumentsGetter();
+		
+		Listener setOutcome(String outcome);
+		String getOutcome();
+		
 		/**/
 		
 		@Getter @Setter @Accessors(chain=true)
 		public static abstract class AbstractImpl extends org.cyk.utility.__kernel__.object.AbstractObject implements Listener,Serializable {			
 			
+			protected OpenViewInDialogArgumentsGetter openViewInDialogArgumentsGetter;
+			protected String outcome;
 			protected Action action;
 			protected AbstractCollection collection;
-			protected Integer minimumSelectionSize=1,maximumSelectionSize;
-			protected Boolean isSelectionShowable=Boolean.TRUE;
+			protected Integer minimumSelectionSize,maximumSelectionSize;
+			protected Boolean isSelectionShowable;
 			protected org.cyk.utility.client.controller.web.jsf.primefaces.model.panel.Dialog dialog;
 			protected OutputPanel dialogOutputPanel;
 			protected Object commandIdentifier;
@@ -127,20 +147,22 @@ public abstract class AbstractAction extends AbstractObject implements Serializa
 			public void listenAction(Object argument) {
 				if(Action.SHOW_DIALOG.equals(action)) {
 					if(Boolean.TRUE.equals(__isDialogShowable__())) {
-						__showDialog__();
+						__showDialog__(argument);
 					}else {
 						MessageRenderer.getInstance().render(__getDialogNotShowableMessageSummary__(), Severity.WARNING, RenderType.GROWL);
 					}
 				}else if(Action.NAVIGATE_TO_VIEW.equals(action)) {
-					__navigateToView__();
+					__navigateToView__(argument);
 				}else if(Action.EXECUTE_FUNCTION.equals(action)) {
-					__executeFunction__();
+					__executeFunction__(argument);
+				}else if(Action.OPEN_VIEW_IN_DIALOG.equals(action)) {
+					__openViewInDialog__(argument);
 				}else {
 					throw new RuntimeException("One of the following action need to be defined for the listener in order to process : "+Arrays.toString(Action.values()));
 				}
 			}
 			
-			protected void __showDialog__() {
+			protected void __showDialog__(Object argument) {
 				String widgetVar = __getDialogWidgetVar__();
 				if(StringHelper.isBlank(widgetVar))
 					throw new RuntimeException("Dialog widget var is required");
@@ -159,11 +181,21 @@ public abstract class AbstractAction extends AbstractObject implements Serializa
 				return null;
 			}
 			
-			protected void __navigateToView__() {
+			protected void __navigateToView__(Object argument) {
 				
 			}
 			
-			protected void __executeFunction__() {
+			protected void __openViewInDialog__(Object argument) {
+				OpenViewInDialogArgumentsGetter openViewInDialogArgumentsGetter = getOpenViewInDialogArgumentsGetter();
+				if(openViewInDialogArgumentsGetter == null)
+					throw new RuntimeException("arguments getter is required to open view in dialog");
+				String outcome = openViewInDialogArgumentsGetter.getOutcome(argument,getOutcome());
+				if(StringHelper.isBlank(outcome))
+					throw new RuntimeException("Outcome is required to open view in dialog");
+				DialogOpener.getInstance().open(outcome, openViewInDialogArgumentsGetter.getParameters(argument, null), openViewInDialogArgumentsGetter.getOptions(argument, null));
+			}
+			
+			protected void __executeFunction__(Object argument) {
 				
 			}
 			
@@ -181,6 +213,31 @@ public abstract class AbstractAction extends AbstractObject implements Serializa
 				return "Impossible d'ouvrir la boite de dialogue";
 			}
 			
+		}
+		
+		public static interface OpenViewInDialogArgumentsGetter {
+			
+			String getOutcome(Object argument,String outcome);
+			Map<String,List<String>> getParameters(Object argument,Map<String,List<String>> parameters);
+			Map<String,Object> getOptions(Object argument,Map<String,Object> options);
+		
+			public static abstract class AbstractImpl extends org.cyk.utility.__kernel__.object.AbstractObject implements OpenViewInDialogArgumentsGetter,Serializable {
+				
+				@Override
+				public String getOutcome(Object argument, String outcome) {
+					return outcome;
+				}
+				
+				@Override
+				public Map<String, List<String>> getParameters(Object argument, Map<String, List<String>> parameters) {
+					return parameters;
+				}
+				
+				@Override
+				public Map<String, Object> getOptions(Object argument, Map<String, Object> options) {
+					return options;
+				}
+			}
 		}
 	}
 	
@@ -218,6 +275,30 @@ public abstract class AbstractAction extends AbstractObject implements Serializa
 						}						
 					}
 				}
+				
+				if(action.listener == null) {
+					org.cyk.utility.client.controller.web.jsf.primefaces.model.panel.Dialog dialog = (org.cyk.utility.client.controller.web.jsf.primefaces.model.panel.Dialog) MapHelper.readByKey(arguments, FIELD_DIALOG);
+					if(dialog != null) {
+						action.listener = new AbstractAction.Listener.AbstractImpl() {
+							@Override
+							public void listenAction(Object argument) {
+								__showDialog__(argument);
+							}
+						}.setAction(Listener.Action.SHOW_DIALOG).setDialog(dialog);
+					}
+				}
+				
+				if(action.listener == null) {
+					OpenViewInDialogArgumentsGetter openViewInDialogArgumentsGetter = (OpenViewInDialogArgumentsGetter) MapHelper.readByKey(arguments, FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER);
+					if(openViewInDialogArgumentsGetter != null) {
+						action.listener = new AbstractAction.Listener.AbstractImpl() {
+							@Override
+							public void listenAction(Object argument) {
+								__openViewInDialog__(argument);
+							}
+						}.setAction(Listener.Action.OPEN_VIEW_IN_DIALOG).setOpenViewInDialogArgumentsGetter(openViewInDialogArgumentsGetter);
+					}
+				}
 			}
 			
 			if(action.runnerArguments == null)
@@ -253,16 +334,39 @@ public abstract class AbstractAction extends AbstractObject implements Serializa
 			if(action.global == null)
 				action.global = Boolean.TRUE;
 			
+			AbstractCollection collection = (AbstractCollection) MapHelper.readByKey(arguments, FIELD_COLLECTION);
+			
 			if(action.listener != null) {
 				Listener listener = (Listener) action.listener;
+				
+				if(listener.getCollection() == null)
+					listener.setCollection(collection);
+				
+				if(listener.getMinimumSelectionSize() == null) {
+					listener.setMinimumSelectionSize(0);
+				}
+				
+				if(listener.getIsSelectionShowable() == null)
+					listener.setIsSelectionShowable(listener.getMinimumSelectionSize() > 0);
+				
+				if(listener.getAction() == null && listener.getCollection() != null)
+					listener.setAction(Listener.Action.SHOW_DIALOG);
+				
+				if(listener.getDialog() == null && listener.getCollection() != null)
+					listener.setDialog(listener.getCollection().getDialog());
+				
+				if(listener.getDialogOutputPanel() == null && listener.getCollection() != null)
+					listener.setDialogOutputPanel(listener.getCollection().getDialogOutputPanel());
+				
 				if(Listener.Action.SHOW_DIALOG.equals(listener.getAction()) && listener.getDialogOutputPanel() != null) {
 					action.addUpdates(":form:"+listener.getDialogOutputPanel().getIdentifier());
 				}
+				
 				if(!Listener.Action.EXECUTE_FUNCTION.equals(listener.getAction()))
 					action.runnerArguments.setSuccessMessageArguments(null);
 			}
 			
-			AbstractCollection collection = (AbstractCollection) MapHelper.readByKey(arguments, FIELD_COLLECTION);
+			
 			if(collection == null) {
 				
 			}else {
@@ -287,10 +391,11 @@ public abstract class AbstractAction extends AbstractObject implements Serializa
 		
 		/**/
 		
+		public static final String FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER = "openViewInDialogArgumentsGetter";
 		public static final String FIELD_INPUTS = "inputs";
+		public static final String FIELD_DIALOG = "dialog";
 		public static final String FIELD_COLLECTION = "collection";
 		public static final String FIELD_COLLECTION_UPDATABLE = "collectionUpdatable";
-		public static final String FIELD_DATA_TABLE = "dataTable";
 		public static final String FIELD_CLASS = "class";
 		public static final String FIELD_OBJECT = "object";
 		public static final String FIELD_METHOD_NAME = "methodName";

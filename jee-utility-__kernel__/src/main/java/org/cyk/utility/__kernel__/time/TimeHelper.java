@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 
@@ -31,4 +32,11 @@ public interface TimeHelper {
 		return Duration.between(parseLocalDateTimeFromString(string), LocalDateTime.now());
 	}
 	
+	static void pause(Long numberOfMillisecond) {
+		try {
+			Thread.sleep(numberOfMillisecond);
+		} catch (InterruptedException exception) {
+			LogHelper.log(exception, TimeHelper.class);
+		}
+	}
 }

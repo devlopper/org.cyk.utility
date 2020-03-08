@@ -77,25 +77,25 @@ public class DataTableLazyPage extends AbstractPageContainerManagedImpl implemen
 				Builder.build(CommandButton.class,Map.of(CommandButton.FIELD_VALUE,"Opération 1. Min1",CommandButton.ConfiguratorImpl.FIELD_COLLECTION,dataTable
 						,CommandButton.FIELD_LISTENER,new AbstractAction.Listener.AbstractImpl() {
 					@Override
-					protected void __showDialog__() {
+					protected void __showDialog__(Object argument) {
 						dataTable.getDialog().setHeader("Réalisation de l'opération 1");
-						super.__showDialog__();
+						super.__showDialog__(argument);
 					}
 				}.setCollection(dataTable),CommandButton.ConfiguratorImpl.FIELD_COLLECTION_UPDATABLE,Boolean.FALSE))
 				,Builder.build(CommandButton.class,Map.of(CommandButton.FIELD_VALUE,"Opération 2. Min2",CommandButton.ConfiguratorImpl.FIELD_COLLECTION,dataTable
 						,CommandButton.FIELD_LISTENER,new AbstractAction.Listener.AbstractImpl() {
 					@Override
-					protected void __showDialog__() {
+					protected void __showDialog__(Object argument) {
 						dataTable.getDialog().setHeader("Réalisation de l'opération 2");
-						super.__showDialog__();
+						super.__showDialog__(argument);
 					}
 				}.setCollection(dataTable).setMinimumSelectionSize(2),CommandButton.ConfiguratorImpl.FIELD_COLLECTION_UPDATABLE,Boolean.FALSE))
 				,Builder.build(CommandButton.class,Map.of(CommandButton.FIELD_VALUE,"Opération 3. No Constraint",CommandButton.ConfiguratorImpl.FIELD_COLLECTION,dataTable
 						,CommandButton.FIELD_LISTENER,new AbstractAction.Listener.AbstractImpl() {
 					@Override
-					protected void __showDialog__() {
+					protected void __showDialog__(Object argument) {
 						dataTable.getDialog().setHeader("Réalisation de l'opération 3");
-						super.__showDialog__();
+						super.__showDialog__(argument);
 					}
 				}.setCollection(dataTable).setMinimumSelectionSize(0).setIsSelectionShowable(Boolean.FALSE),CommandButton.ConfiguratorImpl.FIELD_COLLECTION_UPDATABLE,Boolean.FALSE))
 				,Builder.build(Button.class,Map.of(Button.FIELD_VALUE,"Button Without Params",Button.FIELD_OUTCOME,"namableEditView"))

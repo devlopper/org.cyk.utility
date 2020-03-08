@@ -65,7 +65,18 @@
 	    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonIconOnly}"/>
 	    		</ui:decorate>
 	    		
-    		</p:panelGrid>	    		
+	    		<ui:decorate template="/command/commandbutton/default.xhtml">
+	    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonShowDialog}"/>
+	    		</ui:decorate>
+	    		
+	    		<ui:decorate template="/command/commandbutton/default.xhtml">
+	    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonOpenDialog}"/>
+	    		</ui:decorate>
+    		</p:panelGrid>	    
+    		
+    		<ui:decorate template="/dialog/default.xhtml">
+	    		<ui:param name="dialog" value="#{commandButtonPage.dialog}"/>
+	    	</ui:decorate>		
     	</ui:define>
     </cyk:page>
     

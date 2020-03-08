@@ -35,6 +35,24 @@ public class InstanceCopierUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	@Test
+	public void copy_all_specified(){
+		NotNested notNestedSource = new NotNested().setString("string01").setInteger(1);
+		NotNested notNestedDestination = new NotNested();
+		InstanceHelper.copy(notNestedSource, notNestedDestination, List.of("string","integer"));
+		assertThat(notNestedSource.getString()).isEqualTo(notNestedDestination.getString());
+		assertThat(notNestedSource.getInteger()).isEqualTo(notNestedDestination.getInteger());
+	}
+	
+	@Test
+	public void copy_all_notSpecified(){
+		NotNested notNestedSource = new NotNested().setString("string01").setInteger(1);
+		NotNested notNestedDestination = new NotNested();
+		InstanceCopier.getInstance().copy(notNestedSource, notNestedDestination);
+		assertThat(notNestedSource.getString()).isEqualTo(notNestedDestination.getString());
+		assertThat(notNestedSource.getInteger()).isEqualTo(notNestedDestination.getInteger());
+	}
+	
+	@Test
 	public void copy_javaUtilDate_to_javaLocalDateTime(){
 		JavaUtilDate javaUtilDate = new JavaUtilDate().setValue(Date.from(LocalDateTime.of(2020,05,10,11,30).toInstant(ZoneOffset.UTC)));
 		JavaLocalDateTime javaLocalDateTime = new JavaLocalDateTime();
@@ -147,6 +165,12 @@ public class InstanceCopierUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	/**/
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class NotNested {		
+		private String string;
+		private Integer integer;
+	}
 	
 	/* Persistence */
 	

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
@@ -15,9 +16,18 @@ public interface InstanceCopier {
 
 	void copy(Object source,Object destination,Map<String,String> fieldsNames);
 	
+	default void copy(Object source,Object destination) {
+		if(source == null || destination == null)
+			return;	
+		Collection<String> fieldsNames = FieldHelper.getNames(source.getClass());
+		if(CollectionHelper.isEmpty(fieldsNames))
+			return;
+		copy(source, destination,fieldsNames);
+	}
+	
 	default void copy(Object source,Object destination,Collection<String> fieldsNames) {
 		if(source == null || destination == null || CollectionHelper.isEmpty(fieldsNames))
-			return;	
+			return;
 		Map<String,String> map = new LinkedHashMap<>();
 		for(String index : fieldsNames)
 			map.put(index, index);

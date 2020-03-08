@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.identifier.resource.ParameterName;
-import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.__kernel__.system.action.SystemActionRead;
@@ -24,7 +24,7 @@ public interface DialogOpener {
         options.put("height", 580);
         options.put("contentWidth", "100%");
         options.put("contentHeight", "100%"); 
-        options.put(ParameterName.WINDOW_RENDER_TYPE_CLASS.getValue(), "windowrendertypedialog"); 
+        //options.put("windowrendertype", "windowrendertypedialog"); 
 		return options;
 	}
 	
@@ -33,6 +33,9 @@ public interface DialogOpener {
 			return;
 		if(options == null)
 			options = getOptions(outcome, parameters);
+		if(parameters == null)
+			parameters = new HashMap<String, List<String>>();
+		parameters.put("windowrendertype", List.of("windowrendertypedialog")); 
         PrimeFaces.current().dialog().openDynamic(outcome, options, parameters);
 	}
 	
@@ -70,12 +73,7 @@ public interface DialogOpener {
 	/**/
 	
 	static DialogOpener getInstance() {
-		DialogOpener instance = (DialogOpener) INSTANCE.get();
-		if(instance != null)
-			return instance;
-		INSTANCE.set(instance = DependencyInjection.inject(DialogOpener.class));
-		LogHelper.logInfo("instance has been set. <<"+instance.getClass()+">>", DialogOpener.class);
-		return instance;
+		return Helper.getInstance(DialogOpener.class, INSTANCE);
 	}
 	
 	Value INSTANCE = DependencyInjection.inject(Value.class);

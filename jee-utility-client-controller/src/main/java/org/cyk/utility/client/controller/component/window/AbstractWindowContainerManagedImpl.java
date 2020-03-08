@@ -39,6 +39,7 @@ import lombok.experimental.Accessors;
 public abstract class AbstractWindowContainerManagedImpl extends AbstractObject implements WindowContainerManaged,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Getter @Setter @Accessors(chain=true) protected Boolean isRenderTypeDialog;
 	protected SystemAction systemAction;
 	protected Window window;
 	protected WindowBuilder __windowBuilder__;
@@ -140,11 +141,11 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 		this.window = window;
 		return this;
 	}
-	
+	/*
 	public Boolean getIsRenderTypeDialog() {
 		return getWindow().getIsRenderTypeDialog();
 	}
-	
+	*/
 	/**/
 	
 	protected WindowBuilder __getWindowBuilder__(List<String> subDurations) {
@@ -167,6 +168,8 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 		
 		if(windowBuilder!=null) {
 			DurationBuilder subDurationBuilder = __inject__(DurationBuilder.class).setBeginToNow();
+			
+			//windowBuilder.setRenderType(renderType);
 			
 			String titleValue = __getWindowTitleValue__();
 			if(StringHelper.isNotBlank(titleValue))

@@ -21,6 +21,13 @@ public abstract class AbstractInputOutput<VALUE> extends AbstractObjectAjaxable 
 	
 	/**/
 	
+	@SuppressWarnings("unchecked")
+	public AbstractInputOutput<VALUE> readValueFromField() {
+		if(object != null && field != null)
+			value = (VALUE) FieldHelper.read(object, field);
+		return this;
+	}
+	
 	/**/
 	
 	public static final String FIELD_VALUE = "value";
@@ -47,11 +54,8 @@ public abstract class AbstractInputOutput<VALUE> extends AbstractObjectAjaxable 
 						io.field = FieldHelper.getByName(object.getClass(), fieldName);
 					}
 				}
-			}
-			
-			if(io.object != null && io.field != null) {
-				io.value = FieldHelper.read(io.object, io.field);
-			}
+			}			
+			io.readValueFromField();
 		}
 		
 		public static final String FIELD_OBJECT = "object";

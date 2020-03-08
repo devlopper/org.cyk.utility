@@ -59,6 +59,7 @@ public class Form extends AbstractObject implements Serializable {
 	private Object request;
 	private Layout layout;
 	private Collection<String> entityFieldsNames;
+	private Collection<String> updatableEntityFieldsNames;
 	private CommandButton submitCommandButton;
 	private Object container;
 	private Listener listener;
@@ -66,9 +67,11 @@ public class Form extends AbstractObject implements Serializable {
 	public void execute() {
 		if(Action.CREATE.equals(action))
 			controllerEntity.create(entity);
-		else if(Action.UPDATE.equals(action))			 
-			controllerEntity.update(entity,new Properties().setFields(StringHelper.concatenate(entityFieldsNames, ",")));
-		else
+		else if(Action.UPDATE.equals(action)) {			 
+			if(CollectionHelper.isEmpty(updatableEntityFieldsNames))
+				throw new RuntimeException("No fields names have been defined for update");			
+			controllerEntity.update(entity,new Properties().setFields(StringHelper.concatenate(updatableEntityFieldsNames, ",")));
+		} else
 			throw new RuntimeException(String.format("Action %s not yet handled", action));
 		
 		if(container instanceof Dialog) {
@@ -157,6 +160,15 @@ public class Form extends AbstractObject implements Serializable {
 			
 			if(form.request == null) {
 				form.request = __inject__(HttpServletRequest.class);
+			}
+			
+			if(form.updatableEntityFieldsNames == null) {
+				if(CollectionHelper.isNotEmpty(form.entityFieldsNames)) {
+					form.updatableEntityFieldsNames = new ArrayList<String>(form.entityFieldsNames);
+					Field systemIdentifierField = FieldHelper.getSystemIdentifier(form.entityClass);
+					if(systemIdentifierField != null)
+						form.updatableEntityFieldsNames.add(systemIdentifierField.getName());
+				}
 			}
 		}
 		
