@@ -25,18 +25,22 @@ import org.cyk.utility.__kernel__.user.interface_.message.MessageRenderer;
 import org.cyk.utility.__kernel__.user.interface_.message.RenderType;
 import org.cyk.utility.__kernel__.user.interface_.message.Severity;
 import org.cyk.utility.client.controller.web.ComponentHelper;
+import org.cyk.utility.client.controller.web.jsf.primefaces.PrimefacesHelper;
 import org.cyk.utility.client.controller.web.jsf.primefaces.dialog.DialogOpener;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction.Listener.OpenViewInDialogArgumentsGetter;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax.Ajax;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.collection.AbstractCollection;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.AbstractInput;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.panel.OutputPanel;
+import org.primefaces.PrimeFaces;
+import org.primefaces.event.SelectEvent;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
-public abstract class AbstractAction extends AbstractObject implements Serializable {
+public abstract class AbstractAction extends AbstractObjectAjaxable implements Serializable {
 
 	protected String process,update;
 	protected Boolean global;
@@ -103,7 +107,7 @@ public abstract class AbstractAction extends AbstractObject implements Serializa
 	
 	public static interface Listener {
 		
-		public static enum Action {SHOW_DIALOG,NAVIGATE_TO_VIEW,OPEN_VIEW_IN_DIALOG,EXECUTE_FUNCTION}
+		public static enum Action {SHOW_DIALOG,NAVIGATE_TO_VIEW,OPEN_VIEW_IN_DIALOG,RETURN_FROM_VIEW_IN_DIALOG,EXECUTE_FUNCTION}
 		
 		void listenAction(Object argument);
 		
@@ -131,6 +135,9 @@ public abstract class AbstractAction extends AbstractObject implements Serializa
 		Listener setOutcome(String outcome);
 		String getOutcome();
 		
+		Boolean getIsWindowContainerRenderedAsDialog();
+		Listener setIsWindowContainerRenderedAsDialog(Boolean isWindowContainerRenderedAsDialog);
+		
 		/**/
 		
 		@Getter @Setter @Accessors(chain=true)
@@ -145,6 +152,7 @@ public abstract class AbstractAction extends AbstractObject implements Serializa
 			protected org.cyk.utility.client.controller.web.jsf.primefaces.model.panel.Dialog dialog;
 			protected OutputPanel dialogOutputPanel;
 			protected Object commandIdentifier;
+			protected Boolean isWindowContainerRenderedAsDialog;
 			
 			@Override
 			public void listenAction(Object argument) {
@@ -157,9 +165,13 @@ public abstract class AbstractAction extends AbstractObject implements Serializa
 				}else if(Action.NAVIGATE_TO_VIEW.equals(action)) {
 					__navigateToView__(argument);
 				}else if(Action.EXECUTE_FUNCTION.equals(action)) {
-					__executeFunction__(argument);
+					Object object = __executeFunction__(argument);
+					if(Boolean.TRUE.equals(getIsWindowContainerRenderedAsDialog()))
+						PrimeFaces.current().dialog().closeDynamic(object);
 				}else if(Action.OPEN_VIEW_IN_DIALOG.equals(action)) {
 					__openViewInDialog__(argument);
+				}else if(Action.RETURN_FROM_VIEW_IN_DIALOG.equals(action)) {
+					__returnFromViewInDialog__(argument);
 				}else {
 					throw new RuntimeException("One of the following action need to be defined for the listener in order to process : "+Arrays.toString(Action.values()));
 				}
@@ -198,8 +210,28 @@ public abstract class AbstractAction extends AbstractObject implements Serializa
 				DialogOpener.getInstance().open(outcome, openViewInDialogArgumentsGetter.getParameters(argument, null), openViewInDialogArgumentsGetter.getOptions(argument, null));
 			}
 			
-			protected void __executeFunction__(Object argument) {
+			protected void __returnFromViewInDialog__(Object argument) {
+				AbstractCollection collection = getCollection();
+				if(collection != null) {
+					PrimefacesHelper.updateOnComplete(":form:"+collection.getIdentifier());
+				}
 				
+				//Notifications
+				MessageRenderer.getInstance().clear();
+				MessageRenderer.getInstance().render("Opération bien éffectuée",RenderType.GROWL);
+				if(argument instanceof SelectEvent) {
+					argument = ((SelectEvent)argument).getObject();
+					if(argument instanceof String) {
+						String message = (String) argument;
+						if(StringHelper.isNotBlank(message))
+							MessageRenderer.getInstance().render(message,RenderType.GROWL);
+					}
+				}
+				
+			}
+			
+			protected Object __executeFunction__(Object argument) {
+				return null;
 			}
 			
 			protected Boolean __isDialogShowable__() {
@@ -251,7 +283,8 @@ public abstract class AbstractAction extends AbstractObject implements Serializa
 		@SuppressWarnings("unchecked")
 		@Override
 		public void configure(ACTION action, Map<Object, Object> arguments) {
-			super.configure(action, arguments);			
+			super.configure(action, arguments);
+			AbstractCollection collection = (AbstractCollection) MapHelper.readByKey(arguments, FIELD_COLLECTION);
 			Collection<AbstractInput<?>> inputs = (Collection<AbstractInput<?>>) MapHelper.readByKey(arguments, FIELD_INPUTS);			
 			if(action.listener == null) {
 				Object object = MapHelper.readByKey(arguments, FIELD_OBJECT);
@@ -264,17 +297,31 @@ public abstract class AbstractAction extends AbstractObject implements Serializa
 						}else {
 							action.listener = new AbstractAction.Listener.AbstractImpl() {
 								@Override
-								public void listenAction(Object argument) {
+								public Object __executeFunction__(Object argument) {
 									if(CollectionHelper.isNotEmpty(inputs))
 										for(AbstractInput<?> input : inputs)
 											input.writeValueToObjectField();
 									try {
-										method.invoke(object);
+										return method.invoke(object);
 									} catch (Exception exception) {
 										throw new RuntimeException(exception);
 									}
 								}
 							}.setAction(Listener.Action.EXECUTE_FUNCTION);
+							
+							/*
+							Boolean isWindowRenderedAsDialog = (Boolean) MapHelper.readByKey(arguments, FIELD_LISTENER_IS_WINDOW_RENDERED_AS_DIALOG);
+							if(Boolean.TRUE.equals(isWindowRenderedAsDialog)) {
+								//register dialogReturn ajax
+								if(action.getAjaxes() == null || action.getAjaxes().get("dialogReturn") == null) {
+									Ajax ajax = Ajax.build(Ajax.FIELD_EVENT,"dialogReturn",Ajax.FIELD_DISABLED,Boolean.FALSE);
+									ajax.setListener(new AbstractAction.Listener.AbstractImpl() {
+										
+									}.setAction(Listener.Action.RETURN_FROM_VIEW_IN_DIALOG).setCollection(((Listener)action.listener).getCollection()));
+									action.getAjaxes(Boolean.TRUE).put("dialogReturn", ajax);
+								}
+							}
+							*/
 						}						
 					}
 				}
@@ -326,13 +373,23 @@ public abstract class AbstractAction extends AbstractObject implements Serializa
 							};
 						}
 					}
+					
 					if(openViewInDialogArgumentsGetter != null) {
 						action.listener = new AbstractAction.Listener.AbstractImpl() {
 							@Override
 							public void listenAction(Object argument) {
 								__openViewInDialog__(argument);
 							}
-						}.setAction(Listener.Action.OPEN_VIEW_IN_DIALOG).setOpenViewInDialogArgumentsGetter(openViewInDialogArgumentsGetter);
+						}.setAction(Listener.Action.OPEN_VIEW_IN_DIALOG).setOpenViewInDialogArgumentsGetter(openViewInDialogArgumentsGetter).setCollection(collection);
+												
+						//register dialogReturn ajax
+						if(action.getAjaxes() == null || action.getAjaxes().get("dialogReturn") == null) {
+							Ajax ajax = Ajax.build(Ajax.FIELD_EVENT,"dialogReturn",Ajax.FIELD_DISABLED,Boolean.FALSE);
+							ajax.setListener(new AbstractAction.Listener.AbstractImpl() {
+								
+							}.setAction(Listener.Action.RETURN_FROM_VIEW_IN_DIALOG).setCollection(((Listener)action.listener).getCollection()));
+							action.getAjaxes(Boolean.TRUE).put("dialogReturn", ajax);
+						}						
 					}
 				}
 			}
@@ -370,10 +427,12 @@ public abstract class AbstractAction extends AbstractObject implements Serializa
 			if(action.global == null)
 				action.global = Boolean.TRUE;
 			
-			AbstractCollection collection = (AbstractCollection) MapHelper.readByKey(arguments, FIELD_COLLECTION);
+			
 			
 			if(action.listener != null) {
 				Listener listener = (Listener) action.listener;
+				if(listener.getIsWindowContainerRenderedAsDialog() == null)
+					listener.setIsWindowContainerRenderedAsDialog((Boolean) MapHelper.readByKey(arguments, FIELD_LISTENER_IS_WINDOW_RENDERED_AS_DIALOG));
 				
 				if(listener.getCollection() == null)
 					listener.setCollection(collection);
@@ -398,8 +457,12 @@ public abstract class AbstractAction extends AbstractObject implements Serializa
 					action.addUpdates(":form:"+listener.getDialogOutputPanel().getIdentifier());
 				}
 				
-				if(!Listener.Action.EXECUTE_FUNCTION.equals(listener.getAction()))
+				if(Listener.Action.EXECUTE_FUNCTION.equals(listener.getAction())) {
+					if(Boolean.TRUE.equals(listener.getIsWindowContainerRenderedAsDialog()))
+						action.runnerArguments.setSuccessMessageArguments(null);
+				}else {
 					action.runnerArguments.setSuccessMessageArguments(null);
+				}
 			}
 			
 			
@@ -427,6 +490,7 @@ public abstract class AbstractAction extends AbstractObject implements Serializa
 		
 		/**/
 		
+		public static final String FIELD_LISTENER_IS_WINDOW_RENDERED_AS_DIALOG = "listenerIsWindowRenderedAsDialog";
 		public static final String FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER = "openViewInDialogArgumentsGetter";
 		public static final String FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER_OUTCOME = "openViewInDialogArgumentsGetterOutcome";
 		public static final String FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER_PARAMETERS = "openViewInDialogArgumentsGetterParameters";

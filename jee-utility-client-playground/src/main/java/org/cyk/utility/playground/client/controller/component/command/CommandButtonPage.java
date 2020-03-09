@@ -113,7 +113,7 @@ public class CommandButtonPage extends AbstractPageContainerManagedImpl implemen
 		commandButtonShowDialog = CommandButton.build(CommandButton.FIELD_VALUE,"Show Dialog",CommandButton.ConfiguratorImpl.FIELD_DIALOG,dialog);
 		
 		commandButtonOpenDialog = CommandButton.build(CommandButton.FIELD_VALUE,"Open Dialog"
-				,CommandButton.ConfiguratorImpl.FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER_OUTCOME,"namableListView");
+				,CommandButton.ConfiguratorImpl.FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER_OUTCOME,"openedfromcommandbutton");
 	}
 	
 }

@@ -2,7 +2,6 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.model.collection;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -216,9 +215,10 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 			return addRecordMenuItemByArguments(MenuItem.FIELD_VALUE,"Supprimer",MenuItem.FIELD_ICON,"fa fa-remove"
 					,MenuItem.FIELD_LISTENER,new AbstractAction.Listener.AbstractImpl() {
 				@Override
-				protected void __executeFunction__(Object argument) {
+				protected Object __executeFunction__(Object argument) {
 					super.__executeFunction__(argument);
 					controllerEntity.delete(argument);
+					return argument+" has been deleted.";
 				}
 			}.setAction(AbstractAction.Listener.Action.EXECUTE_FUNCTION),MenuItem.ConfiguratorImpl.FIELD_CONFIRMABLE,Boolean.TRUE
 							,MenuItem.ConfiguratorImpl.FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_RENDER_TYPES,CollectionHelper.listOf(RenderType.GROWL));

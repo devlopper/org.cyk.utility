@@ -23,7 +23,7 @@ public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractOb
 	protected String widgetVar;
 	protected String style,styleClass;
 	protected MapInstance<Event, String> eventScripts;
-	protected Boolean rendered;
+	protected Boolean rendered,__isLoggable__;
 	
 	/* Working variables */
 	

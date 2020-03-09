@@ -23,6 +23,10 @@ public abstract class AbstractObjectAjaxable extends AbstractObject implements S
 	
 	/**/
 	
+	public static final String FIELD_AJAXES = "ajaxes";
+	
+	/**/
+	
 	public Map<String,Ajax> getAjaxes(Boolean injectIfNull) {
 		if(ajaxes == null && Boolean.TRUE.equals(injectIfNull))
 			ajaxes = new HashMap<>();
@@ -62,6 +66,7 @@ public abstract class AbstractObjectAjaxable extends AbstractObject implements S
 			super.configure(ajaxable, arguments);			
 			if(ajaxable.blockUI == null)
 				ajaxable.blockUI = Builder.build(BlockUI.class, Map.of(BlockUI.FIELD_BLOCK,ajaxable.identifier,BlockUI.FIELD_TRIGGER,ajaxable.identifier));		
+			
 			@SuppressWarnings("unchecked")
 			Collection<Map<Object,Object>> ajaxesArguments = (Collection<Map<Object, Object>>) MapHelper.readByKey(arguments, FIELD_AJAXES_ARGUMENTS);
 			if(CollectionHelper.isNotEmpty(ajaxesArguments))
@@ -70,6 +75,6 @@ public abstract class AbstractObjectAjaxable extends AbstractObject implements S
 		
 		/**/
 		
-		private static final String FIELD_AJAXES_ARGUMENTS = "ajaxesArguments";
+		public static final String FIELD_AJAXES_ARGUMENTS = "ajaxesArguments";
 	}	
 }

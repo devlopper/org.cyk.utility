@@ -28,6 +28,11 @@ public class Ajax extends AbstractAjax<AjaxBehaviorEvent> implements Serializabl
 			super.configure(ajax, arguments);
 			
 		}
+		
+		@Override
+		protected String __getTemplate__() {
+			return "/ajax/default.xhtml";
+		}
 
 		@Override
 		protected Class<Ajax> __getClass__() {

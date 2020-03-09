@@ -9,6 +9,12 @@
 		<from-view-id>*</from-view-id>
 		
 		<navigation-case>
+			<from-outcome>openedfromcommandbutton</from-outcome>
+			<to-view-id>/component/command/commandbutton/openedfromcommandbutton.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
 			<from-outcome>namableEditView</from-outcome>
 			<to-view-id>/private/namable/edit.jsf</to-view-id>
 			<redirect />
