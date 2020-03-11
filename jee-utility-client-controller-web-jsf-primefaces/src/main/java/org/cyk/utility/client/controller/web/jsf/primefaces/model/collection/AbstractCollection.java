@@ -15,6 +15,7 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.enumeration.Action;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.identifier.resource.ParameterName;
+import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.klass.NamingModel;
 import org.cyk.utility.__kernel__.map.MapHelper;
@@ -225,6 +226,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 			objects = ArrayUtils.addAll(objects, MenuItem.ConfiguratorImpl.FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER_OUTCOME,outcome
 					,CommandButton.ConfiguratorImpl.FIELD_LISTENER_ACTION,AbstractAction.Listener.Action.OPEN_VIEW_IN_DIALOG
 					,CommandButton.ConfiguratorImpl.FIELD_COLLECTION_SELECTION_SESSIONABLE,Boolean.FALSE
+					,CommandButton.ConfiguratorImpl.FIELD_COLLECTIONABLE,Boolean.FALSE
 					);
 		return addRecordMenuItemByArguments(objects);
 	}
@@ -241,7 +243,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	}
 	
 	public AbstractCollection addRecordMenuItemByArgumentsOpenViewInDialogUpdate() {
-		return addRecordMenuItemByArgumentsOpenViewInDialog(Action.EDIT,AbstractCommand.FIELD_VALUE,"Modifier",AbstractCommand.FIELD_ICON,"fa fa-edit");
+		return addRecordMenuItemByArgumentsOpenViewInDialog(Action.UPDATE,AbstractCommand.FIELD_VALUE,"Modifier",AbstractCommand.FIELD_ICON,"fa fa-edit");
 	}
 	
 	public AbstractCollection addRecordMenuItemByArgumentsExecuteFunctionDelete() {
@@ -356,8 +358,12 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 			}			
 			collection.recordMenu.addItemsByArguments(recordMenuItemsByArguments);
 			
-			if(collection.title == null && StringHelper.isNotBlank((String) MapHelper.readByKey(arguments, FIELD_TITLE_VALUE))) {
-				collection.title = OutputText.build(OutputText.FIELD_VALUE,MapHelper.readByKey(arguments, FIELD_TITLE_VALUE));
+			if(collection.title == null) {
+				if(StringHelper.isNotBlank((String) MapHelper.readByKey(arguments, FIELD_TITLE_VALUE)))
+					collection.title = OutputText.build(OutputText.FIELD_VALUE,MapHelper.readByKey(arguments, FIELD_TITLE_VALUE));
+				if(collection.title == null && collection.elementClass!=null)
+					collection.title = OutputText.build(OutputText.FIELD_VALUE,InternationalizationHelper.buildPhraseFromKeysValues("list","of"
+							,InternationalizationHelper.buildKey(collection.elementClass).getValue()),OutputText.FIELD_RENDERED,Boolean.FALSE);
 			}
 		}
 		

@@ -199,18 +199,19 @@ public class Form extends AbstractObject implements Serializable {
 					cells.add(MapHelper.instantiate(Cell.FIELD_CONTROL,input));
 				}			
 			});
-			Map<Object,Object> submitCommandArguments = MapHelper.instantiate(CommandButton.FIELD_ICON,"fa fa-floppy-o",CommandButton.ConfiguratorImpl.FIELD_OBJECT,form
-					,CommandButton.ConfiguratorImpl.FIELD_METHOD_NAME,METHOD_EXECUTE,CommandButton.ConfiguratorImpl.FIELD_INPUTS,inputs);
-			if(form.container instanceof Dialog) {
-				Dialog dialog = (Dialog) form.container;
-				form.submitCommandButton = CommandButton.build(submitCommandArguments);
-				form.submitCommandButton.getRunnerArguments().getSuccessMessageArguments().setRenderTypes(List.of(RenderType.GROWL,RenderType.INLINE));
-				CollectionHelper.setElementAt(dialog.getCommandButtons(), 0, form.submitCommandButton);
-				dialog.setExecuteCommandButton(form.submitCommandButton);
-			}else {
-				cells.add(MapHelper.instantiate(Cell.FIELD_CONTROL,CommandButton.build(submitCommandArguments)));
-			}
-			
+			if(Action.CREATE.equals(form.action) || Action.UPDATE.equals(form.action) || Action.DELETE.equals(form.action) || Action.EDIT.equals(form.action)) {
+				Map<Object,Object> submitCommandArguments = MapHelper.instantiate(CommandButton.FIELD_ICON,"fa fa-floppy-o",CommandButton.ConfiguratorImpl.FIELD_OBJECT,form
+						,CommandButton.ConfiguratorImpl.FIELD_METHOD_NAME,METHOD_EXECUTE,CommandButton.ConfiguratorImpl.FIELD_INPUTS,inputs);
+				if(form.container instanceof Dialog) {
+					Dialog dialog = (Dialog) form.container;
+					form.submitCommandButton = CommandButton.build(submitCommandArguments);
+					form.submitCommandButton.getRunnerArguments().getSuccessMessageArguments().setRenderTypes(List.of(RenderType.GROWL,RenderType.INLINE));
+					CollectionHelper.setElementAt(dialog.getCommandButtons(), 0, form.submitCommandButton);
+					dialog.setExecuteCommandButton(form.submitCommandButton);
+				}else {
+					cells.add(MapHelper.instantiate(Cell.FIELD_CONTROL,CommandButton.build(submitCommandArguments)));
+				}
+			}			
 			return cells;
 		}	
 		
