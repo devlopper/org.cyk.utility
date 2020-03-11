@@ -13,6 +13,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.enumeration.Action;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.identifier.resource.ParameterName;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.klass.NamingModel;
@@ -43,6 +44,7 @@ import lombok.Setter;
 public abstract class AbstractCollection extends AbstractObjectAjaxable implements Serializable {
 
 	protected Class<?> elementClass;
+	protected Object __parentElement__;
 	protected OutputText title;
 	protected Object value,selectedCommandIdentifier;
 	protected String emptyMessage,rowsPerPageTemplate,paginatorTemplate,currentPageReportTemplate,selectionMode,fileName;
@@ -106,20 +108,51 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	
 	public AbstractCollection addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialog(String outcome,Object...objects) {
 		if(StringHelper.isNotBlank(outcome))
-			objects = ArrayUtils.addAll(objects, AbstractCommand.AbstractConfiguratorImpl.FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER_OUTCOME,outcome);
+			objects = ArrayUtils.addAll(objects, AbstractCommand.AbstractConfiguratorImpl.FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER_OUTCOME,outcome
+					,CommandButton.ConfiguratorImpl.FIELD_LISTENER_ACTION,AbstractAction.Listener.Action.OPEN_VIEW_IN_DIALOG
+					,CommandButton.ConfiguratorImpl.FIELD_COLLECTION_SELECTION_SESSIONABLE,Boolean.TRUE);
+		if(__parentElement__ != null) {
+			objects = ArrayUtils.addAll(objects, AbstractCommand.AbstractConfiguratorImpl.FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER_PARAMETERS
+					,Map.of(__parentElement__.getClass().getSimpleName().toLowerCase(),List.of(StringHelper.get(FieldHelper.readSystemIdentifier(__parentElement__))))
+					);
+		}
 		return addHeaderToolbarLeftCommandsByArguments(objects);
 	}
 	
 	public AbstractCollection addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialog(Action action,Object...objects) {
+		/*
 		if(action != null)
 			objects = ArrayUtils.addAll(objects, AbstractCommand.AbstractConfiguratorImpl.FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER_PARAMETERS
 					,Map.of(ParameterName.ACTION_IDENTIFIER.getValue(),List.of(action.name())));
 		return addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialog(OutcomeGetter.getInstance().get(elementClass, action),objects);
+		*/
+		
+		objects = ArrayUtils.addAll(objects, CommandButton.ConfiguratorImpl.FIELD_ACTION,action,CommandButton.ConfiguratorImpl.FIELD_COLLECTION,this
+				,CommandButton.ConfiguratorImpl.FIELD_LISTENER_ACTION,AbstractAction.Listener.Action.OPEN_VIEW_IN_DIALOG
+				,CommandButton.ConfiguratorImpl.FIELD_COLLECTION_SELECTION_SESSIONABLE,Boolean.TRUE);
+		if(__parentElement__ != null) {
+			objects = ArrayUtils.addAll(objects, AbstractCommand.AbstractConfiguratorImpl.FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER_PARAMETERS
+					,Map.of(__parentElement__.getClass().getSimpleName().toLowerCase(),List.of(StringHelper.get(FieldHelper.readSystemIdentifier(__parentElement__))))
+					);
+		}
+		return addHeaderToolbarLeftCommands(CommandButton.build(objects));
 	}
 	
 	public AbstractCollection addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialogCreate() {
-		return addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialog(Action.CREATE,AbstractCommand.FIELD_VALUE,"Créer",AbstractCommand.FIELD_ICON,"fa fa-plus");
+		return addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialog(Action.CREATE,CommandButton.ConfiguratorImpl.FIELD_COLLECTIONABLE,Boolean.FALSE);
 	}
+	
+	public AbstractCollection addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialogRead() {
+		return addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialog(Action.READ);
+	}
+	
+	public AbstractCollection addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialogUpdate() {
+		return addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialog(Action.UPDATE);
+	}
+	/*
+	public AbstractCollection addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialogDelete() {
+		return addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialog(Action.DELETE);
+	}*/
 	
 	/**/
 	
@@ -189,7 +222,10 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	
 	public AbstractCollection addRecordMenuItemByArgumentsOpenViewInDialog(String outcome,Object...objects) {
 		if(StringHelper.isNotBlank(outcome))
-			objects = ArrayUtils.addAll(objects, MenuItem.ConfiguratorImpl.FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER_OUTCOME,outcome);
+			objects = ArrayUtils.addAll(objects, MenuItem.ConfiguratorImpl.FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER_OUTCOME,outcome
+					,CommandButton.ConfiguratorImpl.FIELD_LISTENER_ACTION,AbstractAction.Listener.Action.OPEN_VIEW_IN_DIALOG
+					,CommandButton.ConfiguratorImpl.FIELD_COLLECTION_SELECTION_SESSIONABLE,Boolean.FALSE
+					);
 		return addRecordMenuItemByArguments(objects);
 	}
 	
@@ -229,6 +265,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	/**/
 	
 	public static final String FIELD_ELEMENT_CLASS = "elementClass";
+	public static final String FIELD___PARENT_ELEMENT__ = "__parentElement__";
 	public static final String FIELD_TITLE = "title";
 	public static final String FIELD_VALUE = "value";
 	public static final String FIELD_EMPTY_MESSAGE = "emptyMessage";

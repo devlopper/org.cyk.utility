@@ -7,12 +7,15 @@ import java.util.List;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
+import org.cyk.utility.__kernel__.enumeration.Action;
 import org.cyk.utility.__kernel__.icon.Icon;
 import org.cyk.utility.__kernel__.throwable.Message;
 import org.cyk.utility.__kernel__.user.interface_.message.RenderType;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.panel.Dialog;
+import org.cyk.utility.playground.client.controller.entities.Namable;
 import org.primefaces.PrimeFaces;
 
 import lombok.Getter;
@@ -25,7 +28,7 @@ public class CommandButtonPage extends AbstractPageContainerManagedImpl implemen
 	private CommandButton commandButtonServer,commandButtonServerArgument1,commandButtonServerArgument2,commandButtonServerDoNotNotifySuccess,commandButtonServerDoErrorJava
 		,commandButtonServerDoErrorCyk,commandButtonServerDoErrorCykMessageOne,commandButtonServerRenderMessageSuccessGrowl,commandButtonServerRenderMessageErrorGrowl
 		,commandButtonServerConfirmDialog,commandButtonServerConfirmDialogUpdated
-		,commandButtonIcon,commandButtonIconOnly,commandButtonShowDialog,commandButtonOpenDialog;
+		,commandButtonIcon,commandButtonIconOnly,commandButtonShowDialog,commandButtonOpenDialog,commandButtonCreateNamableInOpenedDialog,commandButtonListNamableInOpenedDialog;
 	
 	private Dialog dialog;
 	
@@ -112,8 +115,16 @@ public class CommandButtonPage extends AbstractPageContainerManagedImpl implemen
 		dialog = Dialog.build();
 		commandButtonShowDialog = CommandButton.build(CommandButton.FIELD_VALUE,"Show Dialog",CommandButton.ConfiguratorImpl.FIELD_DIALOG,dialog);
 		
-		commandButtonOpenDialog = CommandButton.build(CommandButton.FIELD_VALUE,"Open Dialog"
+		commandButtonOpenDialog = CommandButton.build(CommandButton.FIELD_VALUE,"Open Dialog",CommandButton.ConfiguratorImpl.FIELD_LISTENER_ACTION,AbstractAction.Listener.Action.OPEN_VIEW_IN_DIALOG
 				,CommandButton.ConfiguratorImpl.FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER_OUTCOME,"openedfromcommandbutton");
+		
+		commandButtonCreateNamableInOpenedDialog = CommandButton.build(CommandButton.ConfiguratorImpl.FIELD_ACTION,Action.CREATE
+				,CommandButton.ConfiguratorImpl.FIELD_ACTION_ON_CLASS,Namable.class,CommandButton.ConfiguratorImpl.FIELD_LISTENER_ACTION
+				,AbstractAction.Listener.Action.OPEN_VIEW_IN_DIALOG);
+		
+		commandButtonListNamableInOpenedDialog = CommandButton.build(CommandButton.ConfiguratorImpl.FIELD_ACTION,Action.LIST
+				,CommandButton.ConfiguratorImpl.FIELD_ACTION_ON_CLASS,Namable.class,CommandButton.ConfiguratorImpl.FIELD_LISTENER_ACTION
+				,AbstractAction.Listener.Action.OPEN_VIEW_IN_DIALOG);
 	}
 	
 }

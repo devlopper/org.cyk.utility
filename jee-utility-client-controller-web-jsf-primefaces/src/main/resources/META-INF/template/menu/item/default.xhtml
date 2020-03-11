@@ -11,6 +11,7 @@
 	
 	<c:set var="isHasOutcome" value="#{not empty menuitem.outcome}"/>
 	<c:set var="confirmTemplate" value="#{primefacesHelper.getModelTemplate(menuitem.confirm)}"/>
+	<c:set var="dialogReturnTemplate" value="#{primefacesHelper.getModelTemplate(menuitem.ajaxes.get('dialogReturn'))}"/>
 	
 	<c:if test="#{isHasOutcome}">
 		<p:menuitem
@@ -24,6 +25,9 @@
 			<c:forEach items="#{menuitem.parameters}" var="parameter">
 				<f:param name="#{parameter.key}" value="#{parameter.value}"/>
 			</c:forEach>
+			<ui:decorate template="#{dialogReturnTemplate}">
+				<ui:param name="ajax" value="#{menuitem.ajaxes.get('dialogReturn')}"/>
+			</ui:decorate>
 		</p:menuitem>
 	</c:if>
 	
@@ -43,6 +47,9 @@
 			<ui:decorate template="#{confirmTemplate}">
 		    	<ui:param name="confirm" value="#{menuitem.confirm}"/>
 		    </ui:decorate>
+		    <ui:decorate template="#{dialogReturnTemplate}">
+				<ui:param name="ajax" value="#{menuitem.ajaxes.get('dialogReturn')}"/>
+			</ui:decorate>
 		</p:menuitem>
 	</c:if>
 	

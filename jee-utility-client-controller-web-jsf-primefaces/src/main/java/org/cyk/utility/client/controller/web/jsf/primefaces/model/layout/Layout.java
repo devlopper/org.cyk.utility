@@ -204,6 +204,11 @@ public class Layout extends OutputPanel implements Serializable {
 		protected Class<Layout> __getClass__() {
 			return Layout.class;
 		}
+		
+		@Override
+		protected String __getTemplate__() {
+			return "/layout/default.xhtml";
+		}
 
 		/**/
 		

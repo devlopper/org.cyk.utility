@@ -6,12 +6,14 @@ import org.cyk.utility.client.controller.data.AbstractDataIdentifiableSystemStri
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 
-@Getter @Setter @Accessors(chain=true)
+@Getter @Setter
 public class Namable extends AbstractDataIdentifiableSystemStringIdentifiableBusinessStringNamableImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private String __code__;
+	private String __name__;
+	
 	public String getCodeStyled() {
 		return getCode();
 	}

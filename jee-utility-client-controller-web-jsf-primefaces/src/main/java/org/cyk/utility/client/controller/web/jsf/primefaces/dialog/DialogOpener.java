@@ -24,8 +24,7 @@ public interface DialogOpener {
         options.put("height", "90%");
         options.put("contentWidth", "100%");
         options.put("contentHeight", "100%"); 
-        //options.put("windowrendertype", "windowrendertypedialog"); 
-		return options;
+        return options;
 	}
 	
 	default void open(String outcome,Map<String,List<String>> parameters,Map<String,Object> options) {

@@ -28,6 +28,8 @@ public enum ParameterName {
 	
 	,WINDOW_RENDER_TYPE_CLASS
 	
+	,SESSION_IDENTIFIER
+	,MULTIPLE
 	;
 	
 	@Getter @Setter private String value;

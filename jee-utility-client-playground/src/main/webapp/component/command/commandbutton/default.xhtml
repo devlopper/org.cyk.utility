@@ -72,6 +72,14 @@
 	    		<ui:decorate template="/command/commandbutton/default.xhtml">
 	    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonOpenDialog}"/>
 	    		</ui:decorate>
+	    		
+	    		<ui:decorate template="/command/commandbutton/default.xhtml">
+	    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonCreateNamableInOpenedDialog}"/>
+	    		</ui:decorate>
+	    		
+	    		<ui:decorate template="/command/commandbutton/default.xhtml">
+	    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonListNamableInOpenedDialog}"/>
+	    		</ui:decorate>
     		</p:panelGrid>	    
     		
     		<ui:decorate template="/dialog/default.xhtml">

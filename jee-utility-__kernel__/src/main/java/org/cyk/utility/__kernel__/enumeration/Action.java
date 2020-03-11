@@ -11,6 +11,8 @@ public enum Action {
 	
 	,EDIT
 	
+	,LIST
+	
 	;
 	
 	public static Action getByName(String name,Boolean isNameCaseSensitive) {

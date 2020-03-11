@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
+import org.cyk.utility.__kernel__.enumeration.Action;
 import org.cyk.utility.__kernel__.icon.Icon;
 import org.cyk.utility.__kernel__.icon.IconIdentifierGetter;
 import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
@@ -32,6 +33,11 @@ public abstract class AbstractCommand extends AbstractAction implements Serializ
 			this.icon = null;
 		else
 			this.icon = IconIdentifierGetter.FONT_AWSOME.get(icon);
+		return this;
+	}
+	
+	public AbstractCommand setIcon(String icon) {
+		this.icon = icon;
 		return this;
 	}
 	
@@ -72,7 +78,12 @@ public abstract class AbstractCommand extends AbstractAction implements Serializ
 		@Override
 		public void configure(COMMAND command, Map<Object, Object> arguments) {
 			super.configure(command, arguments);
+			Action action = (Action) MapHelper.readByKey(arguments, FIELD_ACTION);
 			String value = command.getValue();
+			if(StringHelper.isBlank(value)) {
+				if(action != null)
+					value = InternationalizationHelper.buildString(InternationalizationHelper.buildKey(action.name().toLowerCase()), null, null, Case.FIRST_CHARACTER_UPPER);
+			}
 			if(StringHelper.isBlank(value)) {
 				String methodName = (String) MapHelper.readByKey(arguments, FIELD_METHOD_NAME);
 				if(StringHelper.isNotBlank(methodName))
@@ -80,6 +91,22 @@ public abstract class AbstractCommand extends AbstractAction implements Serializ
 			}
 			command.applyValue(value,Boolean.FALSE);
 			command.applyTitle(command.getTitle());
+			
+			String icon = command.getIcon();
+			if(StringHelper.isBlank(icon)) {
+				if(action != null) {
+					switch(action) {
+					case CREATE:icon = "fa fa-plus";break;
+					case READ:icon = "fa fa-eye";break;
+					case UPDATE:icon = "fa fa-pencil";break;
+					case DELETE:icon = "fa fa-remove";break;
+					case EDIT:icon = "fa fa-edit";break;
+					case LIST:icon = "fa fa-list";break;
+					}
+				}
+				if(StringHelper.isNotBlank(icon))
+					command.setIcon(icon);
+			}
 			
 			if(command.confirm == null && Boolean.TRUE.equals(MapHelper.readByKey(arguments, FIELD_CONFIRMABLE))) {
 				command.confirm = Confirm.build();

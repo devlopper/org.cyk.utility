@@ -34,6 +34,7 @@ import org.cyk.utility.client.controller.ControllerEntity;
 import org.cyk.utility.client.controller.ControllerLayer;
 import org.cyk.utility.client.controller.component.annotation.Input;
 import org.cyk.utility.client.controller.data.AbstractDataIdentifiableSystemStringIdentifiableBusinessStringImpl;
+import org.cyk.utility.client.controller.web.WebController;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.AbstractInput;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.AutoComplete;
@@ -77,7 +78,7 @@ public class Form extends AbstractObject implements Serializable {
 		if(container instanceof Dialog) {
 			((Dialog)container).hideOnComplete();
 			//PrimefacesHelper.updateOnComplete(":form:"+dataTable.getIdentifier());
-		}else
+		}else if(!WebController.getInstance().isPageRenderedAsDialog())
 			Faces.redirect(UniformResourceIdentifierHelper.build(request, SystemActionList.class, null, entityClass, null, null, null, null));
 		
 		if(listener != null)

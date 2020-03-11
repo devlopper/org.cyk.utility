@@ -382,5 +382,9 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 	
 	/**/
 	
+	
+	
+	/**/
+	
 	private static final String SCRIPT_INSTRUCTION_COMPONENT_METHOD_CALL_FORMAT = "PF('%s').%s();";
 }
