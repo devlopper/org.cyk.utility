@@ -49,6 +49,10 @@ public class InputText extends AbstractInput<String> implements Serializable {
 	public static InputText build(Object...objects) {
 		return build(MapHelper.instantiate(objects));
 	}
+	
+	public static InputText buildFromArray(Object...objects) {
+		return build(objects);
+	}
 
 	static {
 		Configurator.set(InputText.class, new ConfiguratorImpl());

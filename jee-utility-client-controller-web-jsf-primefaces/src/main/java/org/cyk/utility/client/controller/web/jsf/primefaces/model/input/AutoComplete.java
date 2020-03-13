@@ -236,6 +236,10 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 		return build(MapHelper.instantiate(objects));
 	}
 	
+	public static AutoComplete buildFromArray(Object...objects) {
+		return build(objects);
+	}
+	
 	/**/
 	
 	private static void __complete__(Runner.Arguments arguments,ControllerEntity<?> controllerEntity,String readQueryIdentifier,FilterDto filter,String queryString) {

@@ -53,6 +53,11 @@ public class QueryContext extends AbstractObject implements Serializable {
 		return filter == null ? Boolean.FALSE : filter.hasFieldWithPath(keys);
 	}
 	
+	public String getString(String fieldName) {
+		Field field = getFilterFieldByKeys(fieldName);				
+		return field == null ? ConstantEmpty.STRING : (String) field.getValue();
+	}
+	
 	public String getStringLike(String fieldName) {
 		Field field = getFilterFieldByKeys(fieldName);				
 		return "%"+(field == null ? ConstantEmpty.STRING : StringUtils.trimToEmpty((String) field.getValue()))+"%";
@@ -85,7 +90,6 @@ public class QueryContext extends AbstractObject implements Serializable {
 		return list;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public Collection<String> getStrings(String fieldName) {
 		if(StringHelper.isBlank(fieldName))
 			return ConstantEmpty.STRINGS_WITH_ONE_ELEMENT;
@@ -100,7 +104,6 @@ public class QueryContext extends AbstractObject implements Serializable {
 	public Collection<String> getCodes(Class<? extends IdentifiableBusiness<String>> entityClass,String fieldName,Boolean readIfEmpty) {
 		ThrowableHelper.throwIllegalArgumentExceptionIfBlank("entity class", entityClass);
 		ThrowableHelper.throwIllegalArgumentExceptionIfBlank("field name", fieldName);
-		@SuppressWarnings("unchecked")
 		Collection<String> codes = (Collection<String>) getFilterByKeysValue(fieldName);
 		if(CollectionHelper.isEmpty(codes) && Boolean.TRUE.equals(readIfEmpty)) {
 			if(codes == null)

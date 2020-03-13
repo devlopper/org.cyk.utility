@@ -35,17 +35,22 @@ public abstract class AbstractEntityListPageContainerManagedImpl<ENTITY> extends
 		Collection<Column> columns = __getColumns__(entityClass);
 		if(CollectionHelper.isEmpty(columns))
 			return dataTable;
-		dataTable.addColumnsAfterRowIndex(columns);
-		
+		dataTable.addColumnsAfterRowIndex(columns);		
+		__addDataTableHeaderToolbarLeftCommandsByArguments__(dataTable);				
+		__addDataTableRecordMenuItemByArguments__(dataTable);
+		return dataTable;
+	}
+	
+	protected void __addDataTableHeaderToolbarLeftCommandsByArguments__(DataTable dataTable) {
 		dataTable.addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialogCreate();
 		dataTable.addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialogRead();
 		dataTable.addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialogUpdate();
-				
+	}
+	
+	protected void __addDataTableRecordMenuItemByArguments__(DataTable dataTable) {
 		dataTable.addRecordMenuItemByArgumentsOpenViewInDialogRead();
 		dataTable.addRecordMenuItemByArgumentsOpenViewInDialogUpdate();
 		dataTable.addRecordMenuItemByArgumentsExecuteFunctionDelete();
-		
-		return dataTable;
 	}
 	
 	protected Collection<Column> __getColumns__(Class<ENTITY> entityClass) {

@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.enumeration.Action;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.identifier.resource.ParameterName;
@@ -139,8 +140,9 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 		return addHeaderToolbarLeftCommands(CommandButton.build(objects));
 	}
 	
-	public AbstractCollection addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialogCreate() {
-		return addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialog(Action.CREATE,CommandButton.ConfiguratorImpl.FIELD_COLLECTIONABLE,Boolean.FALSE);
+	public AbstractCollection addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialogCreate(Object...objects) {
+		objects = ArrayUtils.addAll(objects,CommandButton.ConfiguratorImpl.FIELD_COLLECTIONABLE,Boolean.FALSE);
+		return addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialog(Action.CREATE,objects);
 	}
 	
 	public AbstractCollection addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialogRead() {
@@ -266,6 +268,24 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	
 	/**/
 	
+	public AbstractCollection addRecordMenuItemByArgumentsNavigateToView(Action action,String outcome,Object...objects) {
+		if(StringHelper.isBlank(outcome))
+			outcome = OutcomeGetter.getInstance().get(elementClass, action);
+		if(StringHelper.isNotBlank(outcome))
+			objects = ArrayUtils.addAll(objects, MenuItem.FIELD_OUTCOME,outcome
+					,MenuItem.ConfiguratorImpl.FIELD_LISTENER_ACTION,AbstractAction.Listener.Action.NAVIGATE_TO_VIEW
+					,MenuItem.ConfiguratorImpl.FIELD_ACTION,action);
+		if(action != null)
+			objects = ArrayUtils.addAll(objects, MenuItem.FIELD_PARAMETERS,Map.of(ParameterName.ACTION_IDENTIFIER.getValue(),List.of(action.name())));
+		return addRecordMenuItemByArguments(objects);
+	}
+	
+	public AbstractCollection addRecordMenuItemByArgumentsNavigateToViewRead(Object...objects) {
+		return addRecordMenuItemByArgumentsNavigateToView(Action.READ,ConstantEmpty.STRING);
+	}
+	
+	/**/
+	
 	public static final String FIELD_ELEMENT_CLASS = "elementClass";
 	public static final String FIELD___PARENT_ELEMENT__ = "__parentElement__";
 	public static final String FIELD_TITLE = "title";
@@ -298,7 +318,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 			
 			if(Boolean.TRUE.equals(collection.lazy)) {
 				collection.rows = 20;
-				collection.rowsPerPageTemplate = "20,50,100,500,1000";
+				collection.rowsPerPageTemplate = "20,50,100,500,1000,2000";
 				collection.paginatorTemplate = "{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}";
 				collection.currentPageReportTemplate = "Total {totalRecords} | Page {currentPage}/{totalPages}";
 				collection.paginator = Boolean.TRUE;

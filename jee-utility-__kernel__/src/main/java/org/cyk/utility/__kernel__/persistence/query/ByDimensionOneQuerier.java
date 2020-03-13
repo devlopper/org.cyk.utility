@@ -33,7 +33,7 @@ public interface ByDimensionOneQuerier<ENTITY,ENTITY_BUSINESS_IDENTIFIER,DIMENSI
 	default Collection<ENTITY> read(Collection<DIMENSION> dimensions,Arguments arguments) {
 		if(CollectionHelper.isEmpty(dimensions))
 			return null;
-		Collection<DIMENSION_BUSINESS_IDENTIFIER> identifiers = (Collection<DIMENSION_BUSINESS_IDENTIFIER>) FieldHelper.readSystemIdentifiers(dimensions); 
+		Collection<DIMENSION_BUSINESS_IDENTIFIER> identifiers = (Collection<DIMENSION_BUSINESS_IDENTIFIER>) FieldHelper.readBusinessIdentifiers(dimensions); 
 		if(CollectionHelper.isEmpty(identifiers))
 			return null;
 		return readByBusinessIdentifiers(identifiers, arguments);
@@ -82,7 +82,7 @@ public interface ByDimensionOneQuerier<ENTITY,ENTITY_BUSINESS_IDENTIFIER,DIMENSI
 	default Long count(Collection<DIMENSION> dimensions,Arguments arguments) {
 		if(CollectionHelper.isEmpty(dimensions))
 			return null;
-		Collection<DIMENSION_BUSINESS_IDENTIFIER> identifiers = (Collection<DIMENSION_BUSINESS_IDENTIFIER>) FieldHelper.readSystemIdentifiers(dimensions); 
+		Collection<DIMENSION_BUSINESS_IDENTIFIER> identifiers = (Collection<DIMENSION_BUSINESS_IDENTIFIER>) FieldHelper.readBusinessIdentifiers(dimensions); 
 		if(CollectionHelper.isEmpty(identifiers))
 			return null;
 		return countByBusinessIdentifiers(identifiers, arguments);

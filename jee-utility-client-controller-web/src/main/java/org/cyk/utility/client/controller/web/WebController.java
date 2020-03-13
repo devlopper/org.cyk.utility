@@ -10,6 +10,8 @@ import org.cyk.utility.__kernel__.enumeration.Action;
 import org.cyk.utility.__kernel__.identifier.resource.ParameterName;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.client.controller.ControllerEntity;
+import org.cyk.utility.client.controller.ControllerLayer;
 
 @ApplicationScoped
 public class WebController extends AbstractObject implements Serializable {
@@ -36,6 +38,22 @@ public class WebController extends AbstractObject implements Serializable {
 		if(StringHelper.isBlank(value))
 			return null;
 		return Action.getByNameCaseInsensitive(value);
+	}
+	
+	public <T> T getRequestParameterEntityBySystemIdentifier(Class<T> entityClass) {
+		if(entityClass == null)
+			return null;
+		String identifier = getRequestParameter("entityidentifier");
+		if(StringHelper.isBlank(identifier))
+			return null;
+		ControllerEntity<T> controllerEntity = __inject__(ControllerLayer.class).injectInterfaceClassFromEntityClass(entityClass);
+		if(controllerEntity == null)
+			return null;
+		return controllerEntity.readBySystemIdentifier(identifier);
+	}
+	
+	public <T> T getRequestParameterEntity(Class<T> entityClass) {
+		return getRequestParameterEntityBySystemIdentifier(entityClass);
 	}
 	
 	/**/

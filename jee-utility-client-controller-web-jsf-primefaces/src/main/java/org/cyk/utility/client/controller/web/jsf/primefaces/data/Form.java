@@ -7,10 +7,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.enumeration.Action;
 import org.cyk.utility.__kernel__.field.FieldHelper;
@@ -24,6 +24,8 @@ import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
+import org.cyk.utility.__kernel__.object.__static__.controller.AbstractDataIdentifiableSystemStringIdentifiableBusinessStringImpl;
+import org.cyk.utility.__kernel__.object.__static__.controller.annotation.Input;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.Case;
 import org.cyk.utility.__kernel__.string.StringHelper;
@@ -32,8 +34,6 @@ import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.user.interface_.message.RenderType;
 import org.cyk.utility.client.controller.ControllerEntity;
 import org.cyk.utility.client.controller.ControllerLayer;
-import org.cyk.utility.client.controller.component.annotation.Input;
-import org.cyk.utility.client.controller.data.AbstractDataIdentifiableSystemStringIdentifiableBusinessStringImpl;
 import org.cyk.utility.client.controller.web.WebController;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.AbstractInput;
@@ -147,16 +147,27 @@ public class Form extends AbstractObject implements Serializable {
 				if(CollectionHelper.isEmpty(inputsFieldsNames)) {
 					inputsFieldsNames = form.entityFieldsNames;
 				}
-				Collection<AbstractInput<?>> inputs = form.entityFieldsNames.stream().map(fieldName -> __buildInput__(form,fieldName)).filter(input -> input != null).collect(Collectors.toList());
-				Collection<Map<Object,Object>> cells = __getLayoutCellsArgumentsMaps__(form,inputs);
-				if(CollectionHelper.isNotEmpty(cells)) {
-					Object[] layoutArguments = new Object[] {
-							Layout.FIELD_CELL_WIDTH_UNIT,Cell.WidthUnit.UI_G,Layout.FIELD_NUMBER_OF_COLUMNS,2
-							,Layout.FIELD_ROW_CELL_MODEL,Map.of(0,new Cell().setWidth(3),1,new Cell().setWidth(9))
-							,Layout.ConfiguratorImpl.FIELD_CELLS_MAPS,cells
-					};
-					form.layout = Layout.build(layoutArguments);
-				}				
+				
+				Collection<AbstractInput<?>> inputs = null;
+				for(String fieldName : form.entityFieldsNames) {
+					AbstractInput<?> input = __buildInput__(form,fieldName);
+					if(input == null)
+						continue;
+					if(inputs == null)
+						inputs = new ArrayList<>();
+					inputs.add(input);
+				}
+				if(CollectionHelper.isNotEmpty(inputs)) {
+					Collection<Map<Object,Object>> cells = __getLayoutCellsArgumentsMaps__(form,inputs);
+					if(CollectionHelper.isNotEmpty(cells)) {
+						Object[] layoutArguments = new Object[] {
+								Layout.FIELD_CELL_WIDTH_UNIT,Cell.WidthUnit.UI_G,Layout.FIELD_NUMBER_OF_COLUMNS,2
+								,Layout.FIELD_ROW_CELL_MODEL,Map.of(0,new Cell().setWidth(3),1,new Cell().setWidth(9))
+								,Layout.ConfiguratorImpl.FIELD_CELLS_MAPS,cells
+						};
+						form.layout = Layout.build(layoutArguments);
+					}			
+				}					
 			}
 			
 			if(form.request == null) {
@@ -174,18 +185,7 @@ public class Form extends AbstractObject implements Serializable {
 		}
 		
 		protected AbstractInput<?> __buildInput__(Form form,String fieldName) {
-			if(StringHelper.isBlank(fieldName))
-				return null;
-			Field field = FieldHelper.getByName(form.entityClass, fieldName);
-			Class<?> fieldType = (Class<?>) FieldHelper.getType(field, form.entityClass);
-			if(String.class.equals(fieldType))
-				return InputText.build(InputText.FIELD_OBJECT,form.entity,InputText.FIELD_FIELD,field);
-			if(ClassHelper.isInstanceOfNumber(fieldType))
-				return InputNumber.build(InputNumber.FIELD_OBJECT,form.entity,InputNumber.FIELD_FIELD,field);
-			if(!ClassHelper.isBelongsToJavaPackages(fieldType))
-				return AutoComplete.build(AutoComplete.FIELD_OBJECT,form.entity,AutoComplete.FIELD_FIELD,field);
-			LogHelper.logWarning(String.format("input not built for field %s.%s",form.entity.getClass().getSimpleName(),fieldName),getClass());
-			return null;
+			return Listener.AbstractImpl.buildInput(form, fieldName,form.listener);
 		}
 		
 		protected Collection<Map<Object,Object>> __getLayoutCellsArgumentsMaps__(Form form,Collection<AbstractInput<?>> inputs) {
@@ -242,12 +242,82 @@ public class Form extends AbstractObject implements Serializable {
 	
 	public static interface Listener {
 		
+		AbstractInput<?> buildInput(Form form,String fieldName);		
+		void processInput(Form form,AbstractInput<?> input);
+		Class<?> getInputClass(Form form,String fieldName,Field field,Input annotation,Class<?> fieldType);
+		Object[] getInputArguments(Form form,String fieldName,Field field,Input annotation,Class<?> fieldType);
 		void listenExecute(Form form);
 		
 		/**/
 		
 		public static abstract class AbstractImpl extends AbstractObject implements Listener,Serializable {
 			
+			@Override
+			public AbstractInput<?> buildInput(Form form,String fieldName) {
+				return buildInput(form,fieldName,form.listener);
+			}
+			
+			@Override
+			public void processInput(Form form, AbstractInput<?> input) {}
+			
+			@Override
+			public Class<?> getInputClass(Form form, String fieldName, Field field,Input annotation,Class<?> fieldType) {
+				Class<?> klass = null;
+				if(annotation != null)
+					klass = annotation.klass();
+				if(klass != null && Void.class.equals(klass))
+					klass = null;
+				if(klass == null) {
+					if(String.class.equals(fieldType))
+						klass = InputText.class;
+					else if(ClassHelper.isInstanceOfNumber(fieldType))
+						klass = InputNumber.class;
+					else if(!ClassHelper.isBelongsToJavaPackages(fieldType))
+						klass = AutoComplete.class;
+				}
+				if(klass == null)
+					LogHelper.logSevere(String.format("Input class cannot be deduced from field %s", field), getClass());
+				return klass;
+			}
+			
+			@Override
+			public Object[] getInputArguments(Form form, String fieldName, Field field, Input annotation,Class<?> fieldType) {
+				return new Object[] {AbstractInput.FIELD_OBJECT,form.entity,AbstractInput.FIELD_FIELD,field};
+			}
+			
+			@Override
+			public void listenExecute(Form form) {}
+			
+			/**/
+			
+			public static AbstractInput<?> buildInput(Form form,String fieldName,Listener listener) {
+				if(StringHelper.isBlank(fieldName))
+					return null;
+				Field field = FieldHelper.getByName(form.entityClass, fieldName);
+				Input annotation = field.getAnnotation(Input.class);
+				Class<?> fieldType = (Class<?>) FieldHelper.getType(field, form.entityClass);
+				Class<?> inputClass = listener.getInputClass(form, fieldName, field, annotation, fieldType);
+				if(inputClass == null)
+					return null;
+				Object[] inputArguments = listener.getInputArguments(form, fieldName, field, annotation, fieldType);
+				if(ArrayHelper.isEmpty(inputArguments))
+					return null;
+				AbstractInput<?> input = null;
+				try {
+					//input = (AbstractInput<?>) MethodUtils.invokeStaticMethod(inputClass, "buildFromArray", inputArguments);
+					if(InputText.class.equals(inputClass))
+						input = InputText.build(inputArguments);
+					else if(InputNumber.class.equals(inputClass))
+						input = InputNumber.build(inputArguments);
+					else if(AutoComplete.class.equals(inputClass))
+						input = AutoComplete.build(inputArguments);
+				} catch (Exception exception) {
+					LogHelper.log(exception, AbstractImpl.class);
+				}
+				if(input == null)
+					LogHelper.logSevere(String.format("Input cannot be deduced from field named %s", fieldName), AbstractImpl.class);
+				return input;
+			}
 		}
 	}
 }

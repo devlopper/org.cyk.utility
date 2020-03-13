@@ -17,6 +17,8 @@ import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.identifier.resource.ParameterName;
+import org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierAsFunctionParameter;
+import org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.random.RandomHelper;
@@ -209,7 +211,16 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 			}
 			
 			protected void __navigateToView__(Object argument) {
-				
+				String __outcome__ = __getOutcome__(argument,outcome);
+				if(StringHelper.isBlank(__outcome__))
+					throw new RuntimeException("View outcome is required in order to navigate to");
+				UniformResourceIdentifierAsFunctionParameter parameter = new UniformResourceIdentifierAsFunctionParameter();
+				parameter.getPath(Boolean.TRUE).setIdentifier(__outcome__);
+				parameter.getQuery(Boolean.TRUE).setValue(ParameterName.ENTITY_IDENTIFIER.getValue()+"="+FieldHelper.readSystemIdentifier(argument));
+				String url = UniformResourceIdentifierHelper.build(parameter);
+				if(StringHelper.isBlank(url))
+					throw new RuntimeException("Uniform resource identifier is required in order to navigate to");
+				Faces.redirect(url);
 			}
 			
 			protected void __openViewInDialog__(Object argument) {
@@ -264,6 +275,11 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 				return "Impossible d'ouvrir la boite de dialogue";
 			}
 			
+			/**/
+			
+			protected String __getOutcome__(Object argument,String outcome) {
+				return outcome;
+			}
 		}
 		
 		public static interface OpenViewInDialogArgumentsGetter {

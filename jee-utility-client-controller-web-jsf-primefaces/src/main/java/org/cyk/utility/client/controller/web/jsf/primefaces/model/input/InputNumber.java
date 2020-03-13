@@ -89,6 +89,10 @@ public class InputNumber extends AbstractInput<Number> implements Serializable {
 	public static InputNumber build(Object...objects) {
 		return build(MapHelper.instantiate(objects));
 	}
+	
+	public static InputNumber buildFromArray(Object...objects) {
+		return build(objects);
+	}
 
 	static {
 		Configurator.set(InputNumber.class, new ConfiguratorImpl());
