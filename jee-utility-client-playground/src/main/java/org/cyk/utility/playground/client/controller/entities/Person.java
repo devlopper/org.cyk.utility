@@ -26,4 +26,8 @@ public class Person extends AbstractDataIdentifiableSystemStringIdentifiableBusi
 	@Output @OutputString @OutputStringText private String output;
 	@Input @InputChoice @InputChoiceOne @InputChoiceOneCombo private PersonType type;
 
+	public static final String FIELD_FIRST_NAME = "firstName";
+	public static final String FIELD_LAST_NAMES = "lastNames";
+	public static final String FIELD_TYPE = "type";
+	
 }

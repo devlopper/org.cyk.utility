@@ -27,6 +27,30 @@
 		</navigation-case>
 		
 		<navigation-case>
+			<from-outcome>personTypeEditView</from-outcome>
+			<to-view-id>/private/persontype/edit.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>personTypeListView</from-outcome>
+			<to-view-id>/private/persontype/list.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>personEditView</from-outcome>
+			<to-view-id>/private/person/edit.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>personListView</from-outcome>
+			<to-view-id>/private/person/list.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
 			<from-outcome>google</from-outcome>
 			<to-view-id>http://www.google.com</to-view-id>
 			<redirect />

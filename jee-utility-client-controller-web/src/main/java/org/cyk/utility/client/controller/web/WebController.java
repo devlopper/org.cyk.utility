@@ -40,10 +40,10 @@ public class WebController extends AbstractObject implements Serializable {
 		return Action.getByNameCaseInsensitive(value);
 	}
 	
-	public <T> T getRequestParameterEntityBySystemIdentifier(Class<T> entityClass) {
-		if(entityClass == null)
+	public <T> T getRequestParameterEntityBySystemIdentifier(Class<T> entityClass,String parameterName) {
+		if(entityClass == null || StringHelper.isBlank(parameterName))
 			return null;
-		String identifier = getRequestParameter("entityidentifier");
+		String identifier = getRequestParameter(parameterName);
 		if(StringHelper.isBlank(identifier))
 			return null;
 		ControllerEntity<T> controllerEntity = __inject__(ControllerLayer.class).injectInterfaceClassFromEntityClass(entityClass);
@@ -52,8 +52,24 @@ public class WebController extends AbstractObject implements Serializable {
 		return controllerEntity.readBySystemIdentifier(identifier);
 	}
 	
+	public <T> T getRequestParameterEntityBySystemIdentifier(Class<T> entityClass) {
+		return getRequestParameterEntityBySystemIdentifier(entityClass,ParameterName.ENTITY_IDENTIFIER.getValue());
+	}
+	
+	public <T> T getRequestParameterEntity(Class<T> entityClass,String parameterName) {
+		return getRequestParameterEntityBySystemIdentifier(entityClass,parameterName);
+	}
+	
 	public <T> T getRequestParameterEntity(Class<T> entityClass) {
 		return getRequestParameterEntityBySystemIdentifier(entityClass);
+	}
+	
+	public <T> T getRequestParameterEntityAsParentBySystemIdentifier(Class<T> entityClass) {
+		return getRequestParameterEntityBySystemIdentifier(entityClass,ParameterName.stringify(entityClass));
+	}
+	
+	public <T> T getRequestParameterEntityAsParent(Class<T> entityClass) {
+		return getRequestParameterEntityAsParentBySystemIdentifier(entityClass);
 	}
 	
 	/**/

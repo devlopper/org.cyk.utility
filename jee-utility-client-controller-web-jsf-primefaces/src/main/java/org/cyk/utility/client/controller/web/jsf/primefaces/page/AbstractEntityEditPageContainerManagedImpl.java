@@ -45,7 +45,11 @@ public abstract class AbstractEntityEditPageContainerManagedImpl<ENTITY> extends
 		Collection<String> arguments = __getFormArgumentsFieldInputsFieldsNames__(klass);
 		if(CollectionHelper.isEmpty(arguments))
 			return null;
-		return new Object[] {Form.FIELD_ENTITY_CLASS,klass,Form.ConfiguratorImpl.FIELD_INPUTS_FIELDS_NAMES,arguments};
+		return new Object[] {Form.FIELD_ENTITY_CLASS,klass,Form.FIELD_ENTITY,__getFormEntity__(),Form.ConfiguratorImpl.FIELD_INPUTS_FIELDS_NAMES,arguments};
+	}
+	
+	protected ENTITY __getFormEntity__() {
+		return null;
 	}
 	
 	protected Collection<String> __getFormArgumentsFieldInputsFieldsNames__(Class<?> klass) {

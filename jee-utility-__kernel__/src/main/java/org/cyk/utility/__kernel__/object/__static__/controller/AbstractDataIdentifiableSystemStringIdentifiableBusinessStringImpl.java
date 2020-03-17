@@ -9,9 +9,8 @@ import org.cyk.utility.__kernel__.string.StringHelper;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 
-@Getter @Setter @Accessors(chain=true)
+@Getter @Setter /*@Accessors(chain=true) /*: because of jsf not supporting chain setter*/
 public abstract class AbstractDataIdentifiableSystemStringIdentifiableBusinessStringImpl extends AbstractDataIdentifiableSystemStringImpl implements IdentifiableBusiness<String>,Serializable {
 	private static final long serialVersionUID = 1L;
 	

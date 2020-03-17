@@ -10,6 +10,7 @@ import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
+import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
 import org.cyk.utility.__kernel__.properties.Properties;
@@ -32,6 +33,9 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 	private Collection<String> entityFieldsNames;
 	private Listener listener;
 	
+	private List<ENTITY> list;
+	private Integer count;
+	
 	public LazyDataModel(Class<ENTITY> entityClass) {
 		this.entityClass = entityClass;
 		if(this.entityClass != null) {
@@ -46,13 +50,11 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 		FilterDto filter = __instantiateFilter__(first, pageSize, sortField, sortOrder, filters);
 		if(listener != null && filter != null)
 			listener.processFilter(filter);
-		List<ENTITY> list = (List<ENTITY>) controller.read(__getReadProperties__(filter,first, pageSize));
+		list = (List<ENTITY>) controller.read(__getReadProperties__(filter,first, pageSize));
 		if(CollectionHelper.isEmpty(list))
-			setRowCount(0);
-		else {
-			Long count = controller.count(__getCountProperties__(filter));
-			setRowCount(count == null ? 0 : count.intValue());	
-		}
+			setRowCount(count = 0);
+		else
+			setRowCount(count = NumberHelper.getInteger(controller.count(__getCountProperties__(filter)),0));	
 		return list;
 	}
 	

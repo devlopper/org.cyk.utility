@@ -2,7 +2,7 @@ package org.cyk.utility.playground.client.controller.entities;
 
 import java.io.Serializable;
 
-import org.cyk.utility.client.controller.data.AbstractDataIdentifiableSystemStringIdentifiableBusinessStringNamableImpl;
+import org.cyk.utility.__kernel__.object.__static__.controller.AbstractDataIdentifiableSystemStringIdentifiableBusinessStringNamableImpl;
 
 import lombok.Getter;
 import lombok.Setter;

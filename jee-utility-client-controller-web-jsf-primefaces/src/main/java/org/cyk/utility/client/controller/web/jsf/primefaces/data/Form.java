@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -64,8 +65,12 @@ public class Form extends AbstractObject implements Serializable {
 	private CommandButton submitCommandButton;
 	private Object container;
 	private Listener listener;
+	private Map<String,AbstractInput<?>> inputs;
 	
 	public void execute() {
+		if(listener != null)
+			listener.listenBeforeExecute(this);
+		
 		if(Action.CREATE.equals(action))
 			controllerEntity.create(entity);
 		else if(Action.UPDATE.equals(action)) {			 
@@ -82,7 +87,16 @@ public class Form extends AbstractObject implements Serializable {
 			Faces.redirect(UniformResourceIdentifierHelper.build(request, SystemActionList.class, null, entityClass, null, null, null, null));
 		
 		if(listener != null)
-			listener.listenExecute(this);
+			listener.listenAfterExecute(this);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T> T getInput(Class<T> klass,String fieldName) {
+		if(klass == null || StringHelper.isBlank(fieldName))
+			return null;
+		if(MapHelper.isEmpty(inputs))
+			return null;
+		return (T) inputs.get(fieldName);
 	}
 	
 	/**/
@@ -149,7 +163,7 @@ public class Form extends AbstractObject implements Serializable {
 				}
 				
 				Collection<AbstractInput<?>> inputs = null;
-				for(String fieldName : form.entityFieldsNames) {
+				for(String fieldName : inputsFieldsNames) {
 					AbstractInput<?> input = __buildInput__(form,fieldName);
 					if(input == null)
 						continue;
@@ -191,12 +205,14 @@ public class Form extends AbstractObject implements Serializable {
 		protected Collection<Map<Object,Object>> __getLayoutCellsArgumentsMaps__(Form form,Collection<AbstractInput<?>> inputs) {
 			if(CollectionHelper.isEmpty(inputs))
 				return null;
+			form.inputs = new HashMap<>();
 			Collection<Map<Object,Object>> cells = new ArrayList<>();
 			inputs.forEach(new Consumer<AbstractInput<?>>() {
 				@Override
 				public void accept(AbstractInput<?> input) {
 					cells.add(MapHelper.instantiate(Cell.FIELD_CONTROL,input.getOutputLabel()));
 					cells.add(MapHelper.instantiate(Cell.FIELD_CONTROL,input));
+					form.inputs.put(input.getField().getName(), input);//TODO nested wont work. use path instead
 				}			
 			});
 			if(Action.CREATE.equals(form.action) || Action.UPDATE.equals(form.action) || Action.DELETE.equals(form.action) || Action.EDIT.equals(form.action)) {
@@ -246,7 +262,8 @@ public class Form extends AbstractObject implements Serializable {
 		void processInput(Form form,AbstractInput<?> input);
 		Class<?> getInputClass(Form form,String fieldName,Field field,Input annotation,Class<?> fieldType);
 		Object[] getInputArguments(Form form,String fieldName,Field field,Input annotation,Class<?> fieldType);
-		void listenExecute(Form form);
+		void listenBeforeExecute(Form form);
+		void listenAfterExecute(Form form);
 		
 		/**/
 		
@@ -286,7 +303,10 @@ public class Form extends AbstractObject implements Serializable {
 			}
 			
 			@Override
-			public void listenExecute(Form form) {}
+			public void listenBeforeExecute(Form form) {}
+			
+			@Override
+			public void listenAfterExecute(Form form) {}
 			
 			/**/
 			
@@ -296,6 +316,12 @@ public class Form extends AbstractObject implements Serializable {
 				Field field = FieldHelper.getByName(form.entityClass, fieldName);
 				Input annotation = field.getAnnotation(Input.class);
 				Class<?> fieldType = (Class<?>) FieldHelper.getType(field, form.entityClass);
+				
+				//FIXME should not be created like this : 
+				if(listener == null)
+					listener = new Listener.AbstractImpl() {
+					};
+				
 				Class<?> inputClass = listener.getInputClass(form, fieldName, field, annotation, fieldType);
 				if(inputClass == null)
 					return null;

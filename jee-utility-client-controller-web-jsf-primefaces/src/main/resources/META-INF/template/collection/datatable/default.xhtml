@@ -21,6 +21,7 @@
 		paginatorTemplate="#{dataTable.paginatorTemplate}" currentPageReportTemplate="#{dataTable.currentPageReportTemplate}"
 		widgetVar="#{dataTable.widgetVar}" rowIndexVar="rowIndex" filterDelay="#{dataTable.filterDelay}" selection="#{dataTable.selection}"
 		rowStyleClass="#{dataTable.getStyleClassByRecord(record,rowIndex)}" 
+		editable="#{dataTable.editable}" editMode="#{dataTable.editMode}" 
 	>
  		<f:facet name="header">
  			<ui:insert name="header">
@@ -87,6 +88,7 @@
 	 		</ui:insert>
 	 		
 	 		<ui:insert name="columnsAfterRowIndex">
+	 			<!-- field="#{column.field}" -->
 	 			<p:columns value="#{dataTable.columnsAfterRowIndex}" var="column" columnIndexVar="columnIndex" width="#{column.width}" filterBy="#{column.filterBy}"
 	 				visible="#{column.visible}" styleClass="#{dataTable.getStyleClassByRecordByColumn(record,rowIndex,column,columnIndex)}" headerText="#{column.headerText}" 
 	 					footerText="#{column.footerText}">
@@ -278,6 +280,12 @@
  		</ui:insert>
  		
  		<!-- Listeners -->
+ 		<!--
+ 		<c:forEach items="#{dataTable.ajaxes.entrySet}" var="ajax">
+ 			<ui:decorate template="/ajax/default.xhtml"/>
+ 		</c:forEach>
+ 		-->
+ 		
  		<ui:decorate template="/ajax/default.xhtml">
 	 		<ui:param name="ajax" value="#{dataTable.ajaxes.get('page')}"/>
 	 	</ui:decorate>
@@ -299,6 +307,10 @@
 	 	<ui:decorate template="/ajax/default.xhtml">
 	 		<ui:param name="ajax" value="#{dataTable.ajaxes.get('rowUnselectCheckbox')}"/>
 	 	</ui:decorate>
+	 	<ui:decorate template="/ajax/default.xhtml">
+	 		<ui:param name="ajax" value="#{dataTable.ajaxes.get('cellEdit')}"/>
+	 	</ui:decorate>
+	 	
  	</p:dataTable>
  	
  	<ui:insert name="afterDataTable"/>

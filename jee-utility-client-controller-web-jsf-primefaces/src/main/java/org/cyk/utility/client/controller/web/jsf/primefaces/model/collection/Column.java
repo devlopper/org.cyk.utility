@@ -17,7 +17,7 @@ import lombok.Setter;
 @Getter @Setter
 public class Column extends AbstractObject implements Serializable {
 
-	private String headerText,footerText,selectionMode,width,filterBy,fieldName;
+	private String headerText,footerText,selectionMode,width,filterBy,fieldName,field;
 	private Boolean visible = Boolean.TRUE;
 	private Object filterValue;
 	private Integer index;
@@ -29,6 +29,7 @@ public class Column extends AbstractObject implements Serializable {
 	public static final String FIELD_FOOTER_TEXT = "footerText";
 	public static final String FIELD_SELECTION_MODE = "selectionMode";
 	public static final String FIELD_WIDTH = "width";
+	//public static final String FIELD_FIELD = "field";
 	public static final String FIELD_FIELD_NAME = "fieldName";
 	public static final String FIELD_FILTER_BY = "filterBy";
 	public static final String FIELD_VISIBLE = "visible";
@@ -40,14 +41,21 @@ public class Column extends AbstractObject implements Serializable {
 		@Override
 		public void configure(Column column, Map<Object, Object> arguments) {
 			super.configure(column, arguments);
-			if(column.headerText == null && StringHelper.isNotBlank(column.fieldName)) {
-				column.headerText = InternationalizationHelper.buildString(InternationalizationHelper.buildKey(column.fieldName),null,null,Case.FIRST_CHARACTER_UPPER);
+			
+			if(column.field == null) {		
+				column.field = column.fieldName;
+			}
+			
+			if(column.headerText == null) {				
+				if(StringHelper.isNotBlank(column.fieldName)) {
+					column.headerText = InternationalizationHelper.buildString(InternationalizationHelper.buildKey(column.fieldName),null,null,Case.FIRST_CHARACTER_UPPER);	
+				}				
 			}
 			Boolean isFilterable = (Boolean) MapHelper.readByKey(arguments, FIELD_FILTERABLE);
 			if(isFilterable == null)
 				isFilterable = Boolean.FALSE;
-			if(StringHelper.isBlank(column.getFilterBy()) && Boolean.TRUE.equals(isFilterable) && StringHelper.isNotBlank(column.getFieldName()))
-				column.setFilterBy(column.getFieldName());
+			if(StringHelper.isBlank(column.getFilterBy()) && Boolean.TRUE.equals(isFilterable) && StringHelper.isNotBlank(column.fieldName))
+				column.setFilterBy(column.fieldName);
 		}
 		
 		@Override

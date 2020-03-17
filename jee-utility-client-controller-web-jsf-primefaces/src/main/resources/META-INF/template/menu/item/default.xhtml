@@ -25,7 +25,7 @@
 			<c:forEach items="#{menuitem.parameters}" var="parameter">
 				<f:param name="#{parameter.key}" value="#{parameter.value}"/>
 			</c:forEach>
-			<f:param name="entityidentifier" value="#{actionArgument.identifier}"/>
+			<f:param name="#{menuitem.__actionArgumentIdentifierParameterName__}" value="#{actionArgument.identifier}"/>
 			<ui:decorate template="#{dialogReturnTemplate}">
 				<ui:param name="ajax" value="#{menuitem.ajaxes.get('dialogReturn')}"/>
 			</ui:decorate>
@@ -41,11 +41,6 @@
 			value="#{menuitem.value}"
 			global="#{menuitem.global}"
 		>
-			<c:forEach items="#{menuitem.parameters}" var="parameter">
-				<f:param name="#{parameter.key}" value="#{parameter.value}"/>
-			</c:forEach>
-			<f:param name="entityidentifier" value="#{actionArgument.identifier}"/>
-			
 			<ui:decorate template="#{confirmTemplate}">
 		    	<ui:param name="confirm" value="#{menuitem.confirm}"/>
 		    </ui:decorate>
@@ -54,6 +49,4 @@
 			</ui:decorate>
 		</p:menuitem>
 	</c:if>
-	
-	
 </ui:composition>

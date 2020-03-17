@@ -458,7 +458,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		String identifier = null;
 		Field identifierField = ValueUsageType.BUSINESS.equals(valueUsageType) ? __businessIdentifierField__ : __systemIdentifierField__;
 		org.cyk.utility.__kernel__.persistence.query.filter.Field field = null;
-		if(filters != null)
+		if(filters != null && identifierField != null)
 			field = filters.getFieldByPath(identifierField.getName());
 		if(field != null) {
 			Object identifiers = field.getValue();

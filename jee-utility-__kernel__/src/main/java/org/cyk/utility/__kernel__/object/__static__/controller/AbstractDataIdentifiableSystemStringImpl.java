@@ -10,9 +10,8 @@ import org.cyk.utility.__kernel__.string.StringHelper;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 
-@Getter @Setter @Accessors(chain=true) @EqualsAndHashCode(callSuper = false,of = "identifier")
+@Getter @Setter /*@Accessors(chain=true)/* : because of jsf not supporting chain setter */ @EqualsAndHashCode(callSuper = false,of = "identifier")
 public abstract class AbstractDataIdentifiableSystemStringImpl extends AbstractDataImpl implements IdentifiableSystem<String>,Serializable {
 	private static final long serialVersionUID = 1L;
 	

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.string.StringHelper;
@@ -25,6 +26,12 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 	protected Boolean areColumnsChoosable;
 	
 	/**/
+	
+	public Object getCellValueByRecordByColumn(Object record,Integer recordIndex,Column column,Integer columnIndex) {
+		if(record == null || recordIndex == null || column == null || columnIndex == null)
+			return null;
+		return FieldHelper.read(record, column.getFieldName());
+	}
 	
 	public Collection<Column> getColumnsAfterRowIndex(Boolean injectIfNull) {
 		if(columnsAfterRowIndex == null && Boolean.TRUE.equals(injectIfNull))

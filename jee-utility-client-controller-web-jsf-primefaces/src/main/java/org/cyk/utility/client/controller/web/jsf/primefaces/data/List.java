@@ -3,21 +3,12 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.data;
 import java.io.Serializable;
 import java.util.Map;
 
-import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.enumeration.Action;
-import org.cyk.utility.__kernel__.instance.InstanceCopier;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
-import org.cyk.utility.__kernel__.user.interface_.message.RenderType;
-import org.cyk.utility.client.controller.ControllerEntity;
-import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.collection.DataTable;
-import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
-import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.AbstractInput;
-import org.cyk.utility.client.controller.web.jsf.primefaces.model.layout.Cell;
-import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.MenuItem;
 import org.primefaces.PrimeFaces;
 
 import lombok.Getter;
@@ -50,7 +41,7 @@ public class List extends AbstractObject implements Serializable {
 				list.editionForm = Form.build(Form.FIELD_ENTITY_CLASS,list.entityClass,Form.FIELD_ACTION,Action.CREATE,Form.FIELD_CONTAINER,list.dataTable.getDialog(),Form.FIELD_LISTENER
 						,new Form.Listener.AbstractImpl() {				
 							@Override
-							public void listenExecute(Form form) {
+							public void listenAfterExecute(Form form) {
 								PrimeFaces.current().ajax().update(":form:"+list.dataTable.getIdentifier());
 							}
 						});

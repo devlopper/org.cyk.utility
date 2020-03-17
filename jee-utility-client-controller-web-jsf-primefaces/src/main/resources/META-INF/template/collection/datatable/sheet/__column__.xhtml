@@ -9,6 +9,13 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
-	<h:outputText value="#{dataTable.getCellValueByRecordByColumn(record,rowIndex,column,columnIndex)}" />
+	<pe:sheetcolumn
+		id="#{column.identifier}"
+		headerText="#{column.headerText}"
+		
+		value="#{column.value}"
+	>
+	
+	</pe:sheetcolumn>
 	
 </ui:composition>

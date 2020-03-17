@@ -23,6 +23,7 @@ import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.user.interface_.message.RenderType;
 import org.cyk.utility.client.controller.ControllerEntity;
 import org.cyk.utility.client.controller.ControllerLayer;
@@ -32,6 +33,7 @@ import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObject
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax.Ajax;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.AbstractCommand;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.AutoComplete;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.AbstractMenu;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.MenuButton;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.MenuItem;
@@ -50,8 +52,8 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	protected OutputText title;
 	protected Object value,selectedCommandIdentifier;
 	protected String emptyMessage,rowsPerPageTemplate,paginatorTemplate,currentPageReportTemplate,selectionMode,fileName;
-	protected String rowStyleClass;
-	protected Boolean lazy,paginator,paginatorAlwaysVisible,isExportable,isSelectionShowableInDialog;
+	protected String rowStyleClass,editMode;
+	protected Boolean lazy,paginator,paginatorAlwaysVisible,isExportable,isSelectionShowableInDialog,editable;
 	protected Integer rows,filterDelay;
 	protected List<?> selection;
 	protected Map<String,Object> map = new HashMap<>();
@@ -62,6 +64,25 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	protected AbstractMenu recordMenu;
 	
 	/**/
+	
+	public AbstractCollection useQueryIdentifiersFiltersLike() {
+		if(value instanceof LazyDataModel<?>) {
+			LazyDataModel<?> lazyDataModel = (LazyDataModel<?>) value;
+			lazyDataModel.setReadQueryIdentifier(QueryHelper.getIdentifierReadByFiltersLike(elementClass));
+			lazyDataModel.setCountQueryIdentifier(QueryHelper.getIdentifierCountByFiltersLike(elementClass));
+		}
+		return this;
+	}
+	
+	public Object getValueAt(Integer index) {
+		if(value == null || index == null || index < 0)
+			return null;
+		if(value instanceof Collection)
+			return CollectionHelper.getElementAt((Collection<?>) value, index);
+		if(value instanceof LazyDataModel<?>)
+			return CollectionHelper.getElementAt(((LazyDataModel<?>) value).getList(), index);
+		throw new RuntimeException("we cannot get value at from value of type "+value.getClass());
+	}
 	
 	public Collection<AbstractCommand> getHeaderToolbarLeftCommands(Boolean injectIfNull) {
 		if(headerToolbarLeftCommands == null && Boolean.TRUE.equals(injectIfNull))
@@ -132,7 +153,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 		objects = ArrayUtils.addAll(objects, CommandButton.ConfiguratorImpl.FIELD_ACTION,action,CommandButton.ConfiguratorImpl.FIELD_COLLECTION,this
 				,CommandButton.ConfiguratorImpl.FIELD_LISTENER_ACTION,AbstractAction.Listener.Action.OPEN_VIEW_IN_DIALOG
 				,CommandButton.ConfiguratorImpl.FIELD_COLLECTION_SELECTION_SESSIONABLE,Boolean.TRUE);
-		if(__parentElement__ != null) {
+		if(__parentElement__ != null) {			
 			objects = ArrayUtils.addAll(objects, AbstractCommand.AbstractConfiguratorImpl.FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER_PARAMETERS
 					,Map.of(__parentElement__.getClass().getSimpleName().toLowerCase(),List.of(StringHelper.get(FieldHelper.readSystemIdentifier(__parentElement__))))
 					);
@@ -145,12 +166,12 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 		return addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialog(Action.CREATE,objects);
 	}
 	
-	public AbstractCollection addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialogRead() {
-		return addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialog(Action.READ);
+	public AbstractCollection addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialogRead(Object...objects) {
+		return addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialog(Action.READ,objects);
 	}
 	
-	public AbstractCollection addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialogUpdate() {
-		return addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialog(Action.UPDATE);
+	public AbstractCollection addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialogUpdate(Object...objects) {
+		return addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialog(Action.UPDATE,objects);
 	}
 	/*
 	public AbstractCollection addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialogDelete() {
@@ -297,6 +318,8 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	public static final String FIELD_FILTER_DELAY = "filterDelay";
 	public static final String FIELD_LAZY = "lazy";
 	public static final String FIELD_SELECTION_MODE = "selectionMode";
+	public static final String FIELD_EDITABLE = "editable";
+	public static final String FIELD_EDIT_MODE = "editMode";
 	
 	/**/
 	
@@ -332,18 +355,24 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 							lazyzDataModelClass = LazyDataModel.class;
 						*/
 						value = new LazyDataModel<Object>((Class<Object>) collection.elementClass);	
-					}					
-					if(Boolean.TRUE.equals(filterable)) {						
-						String persistenceEntityClassName = ClassHelper.buildName(collection.elementClass.getPackageName(), collection.elementClass.getSimpleName()
-								, new NamingModel().client().controller().entities(), new NamingModel().server().persistence().entities());						
-						Class<?> persistenceEntityClass = ClassHelper.getByName(persistenceEntityClassName);
+					}	
+					
+					String persistenceEntityClassName = ClassHelper.buildName(collection.elementClass.getPackageName(), collection.elementClass.getSimpleName()
+							, new NamingModel().client().controller().entities(), new NamingModel().server().persistence().entities());						
+					Class<?> persistenceEntityClass = ClassHelper.getByName(persistenceEntityClassName);
+					if(Boolean.TRUE.equals(filterable)) {											
 						if(StringHelper.isBlank(value.getReadQueryIdentifier()))
 							value.setReadQueryIdentifier(QueryHelper.getIdentifierReadByFiltersLike(persistenceEntityClass));
 						if(StringHelper.isBlank(value.getCountQueryIdentifier()))
-							value.setCountQueryIdentifier(QueryHelper.getIdentifierCountByFiltersLike(persistenceEntityClass));						
-						if(value.getEntityFieldsNames() == null)
-							value.setEntityFieldsNames((Collection<String>) MapHelper.readByKey(arguments, FIELD_ENTITY_FIELDS_NAMES));													
-					}					
+							value.setCountQueryIdentifier(QueryHelper.getIdentifierCountByFiltersLike(persistenceEntityClass));																	
+					}else {
+						if(StringHelper.isBlank(value.getReadQueryIdentifier()))
+							value.setReadQueryIdentifier(QueryHelper.getIdentifierReadAll(persistenceEntityClass));
+						if(StringHelper.isBlank(value.getCountQueryIdentifier()))
+							value.setCountQueryIdentifier(QueryHelper.getIdentifierCountAll(persistenceEntityClass));												
+					}
+					if(value.getEntityFieldsNames() == null)
+						value.setEntityFieldsNames((Collection<String>) MapHelper.readByKey(arguments, FIELD_ENTITY_FIELDS_NAMES));	
 					collection.value = value;	
 				}				
 			}else {
@@ -368,6 +397,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 					,Map.of(Ajax.FIELD_EVENT,"rowUnselect",Ajax.ConfiguratorImpl.FIELD_LISTENER_NULLABLE,Boolean.TRUE)
 					,Map.of(Ajax.FIELD_EVENT,"rowSelectCheckbox",Ajax.ConfiguratorImpl.FIELD_LISTENER_NULLABLE,Boolean.TRUE)
 					,Map.of(Ajax.FIELD_EVENT,"rowUnselectCheckbox",Ajax.ConfiguratorImpl.FIELD_LISTENER_NULLABLE,Boolean.TRUE)
+					,Map.of(Ajax.FIELD_EVENT,"cellEdit",Ajax.ConfiguratorImpl.FIELD_LISTENER_NULLABLE,Boolean.TRUE)
 					);		
 			
 			collection.recordMenu = MenuButton.build();
@@ -385,6 +415,12 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 					collection.title = OutputText.build(OutputText.FIELD_VALUE,InternationalizationHelper.buildPhraseFromKeysValues("list","of"
 							,InternationalizationHelper.buildKey(collection.elementClass).getValue()),OutputText.FIELD_RENDERED,Boolean.FALSE);
 			}
+			
+			if(collection.editable == null)
+				collection.editable = Boolean.FALSE;
+			
+			if(StringHelper.isBlank(collection.editMode))
+				collection.editMode = "cell";
 		}
 		
 		public static final String FIELD_ENTITY_FIELDS_NAMES = "entityFieldsNames";

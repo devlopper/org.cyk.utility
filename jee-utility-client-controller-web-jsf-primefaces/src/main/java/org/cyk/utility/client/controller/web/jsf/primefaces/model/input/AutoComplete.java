@@ -55,6 +55,7 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 	private String dropdownMode = "current",emptyMessage="-- Aucun résultat --";
 	private Integer queryDelay = QUERY_DELAY;
 	private Boolean multiple,dropdown;
+	private Object itemSelected;
 	
 	private ReadListener readItemLabelListener;
 	private ReadListener readItemValueListener;
@@ -100,6 +101,45 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 		if(readItemLabelListener == null)
 			return entity;
 		return readItemLabelListener.read(entity);
+	}
+	
+	public AutoComplete enableAjaxItemSelect() {
+		getAjaxes().get("itemSelect").setDisabled(Boolean.FALSE).setListener(new Ajax.Listener.AbstractImpl() {
+			@Override
+			public void listenAction(Object argument) {
+				itemSelected = FieldHelper.read(argument, "source.value");
+			}
+		});
+		return this;
+	}
+	
+	public AutoComplete listenComplete(AutoComplete parent,String parentFieldName) {
+		if(parent == null || StringHelper.isBlank(parentFieldName))
+			return this;
+		setListener(new AutoComplete.Listener.AbstractImpl() {
+			@Override
+			public void listenComplete(AutoComplete autoComplete, Runner.Arguments arguments, FilterDto filter,String queryString) {
+				if(parent != null && parent.getValue() != null) {
+					filter.addField(parentFieldName, FieldHelper.readBusinessIdentifier(parent.getValue()));
+					//System.out.println("AutoComplete.listenComplete(...).new AbstractImpl() {...}.listenComplete()");
+					//System.out.println(parent+" : "+parentFieldName+" ::: "+filter);
+				}
+				super.listenComplete(autoComplete, arguments, filter, queryString);
+			}
+		});
+		return this;
+	}
+	
+	public AutoComplete listenComplete(AutoComplete parent) {
+		if(parent == null)
+			return this;
+		return listenComplete(parent,StringHelper.getVariableNameFrom(parent.getEntityClass().getSimpleName()));
+	}
+	
+	public AutoComplete useQueryIdentifiersFiltersLike() {
+		setReadQueryIdentifier(QueryHelper.getIdentifierReadByFiltersLike(entityClass));
+		setCountQueryIdentifier(QueryHelper.getIdentifierCountByFiltersLike(entityClass));
+		return this;
 	}
 	
 	/**/

@@ -54,6 +54,7 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 	protected String process,update;
 	protected Boolean global;
 	protected Runner.Arguments runnerArguments;
+	protected String __actionArgumentIdentifierParameterName__;
 	
 	public void action(Object argument) {
 		if(runnerArguments == null) {
@@ -111,6 +112,7 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 	public static final String FIELD_PROCESS = "process";
 	public static final String FIELD_UPDATE = "update";
 	public static final String FIELD_RUNNER_ARGUMENTS = "runnerArguments";
+	public static final String FIELD___ACTION_ARGUMENT_IDENTIFIER_PARAMETER_NAME__ = "__actionArgumentIdentifierParameterName__";
 	
 	/**/
 	
@@ -539,7 +541,7 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 										parameters = new HashMap<>();
 									if(MapHelper.isNotEmpty(__parameters__))
 										parameters.putAll(__parameters__);
-									MapHelper.writeByKey(parameters,ParameterName.ENTITY_IDENTIFIER.getValue(),List.of(identifierAsString),Boolean.FALSE);
+									MapHelper.writeByKey(parameters,action.__actionArgumentIdentifierParameterName__,List.of(identifierAsString),Boolean.FALSE);
 								}
 							}
 							return parameters;

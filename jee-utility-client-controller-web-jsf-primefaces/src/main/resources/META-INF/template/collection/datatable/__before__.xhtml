@@ -9,6 +9,9 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
-	<h:outputText value="#{dataTable.getCellValueByRecordByColumn(record,rowIndex,column,columnIndex)}" />
-	
+	<ui:insert name="beforeDataTable">
+		<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.title)}">
+	 		<ui:param name="outputText" value="#{dataTable.title}"/>
+	 	</ui:decorate>
+	</ui:insert>
 </ui:composition>

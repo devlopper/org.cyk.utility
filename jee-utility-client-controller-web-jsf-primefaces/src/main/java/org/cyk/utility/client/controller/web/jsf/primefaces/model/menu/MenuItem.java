@@ -6,6 +6,7 @@ import java.util.Map;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.AbstractCommand;
 
 import lombok.Getter;
@@ -18,6 +19,13 @@ public class MenuItem extends AbstractCommand implements Serializable {
 	
 	public static class ConfiguratorImpl extends AbstractConfiguratorImpl<MenuItem> implements Serializable {
 
+		@Override
+		public void configure(MenuItem menuItem, Map<Object, Object> arguments) {
+			super.configure(menuItem, arguments);
+			if(StringHelper.isBlank(menuItem.__actionArgumentIdentifierParameterName__))
+				menuItem.__actionArgumentIdentifierParameterName__ = "entityidentifier";
+		}
+		
 		@Override
 		protected String __getTemplate__() {
 			return "/menu/item/default.xhtml";

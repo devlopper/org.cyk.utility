@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<p:dataTable id="#{dataTable.identifier}" value="#{dataTable.value}" var="record" editable="true" editMode="cell"> 		
+ 		<ui:insert name="columns">			
+	 		<ui:insert name="columnsAfterRowIndex">
+	 			<p:columns value="#{dataTable.columnsAfterRowIndex}" var="column" columnIndexVar="columnIndex" width="#{column.width}"  headerText="#{column.headerText}" >
+					<ui:insert name="columnsAfterRowIndexBodies">
+						
+							<p:cellEditor>
+							
+								
+									
+										<f:facet name="output">
+											<ui:fragment rendered="#{columnIndex == 0}">
+											<ui:insert name="columnsAfterRowIndexBodies0Output">
+												<ui:include src="__columnsAfterRowIndexBodies__.xhtml"/>
+											</ui:insert>
+											</ui:fragment>
+											<ui:fragment rendered="#{columnIndex == 1}">
+											<ui:insert name="columnsAfterRowIndexBodies1Output">
+												<ui:include src="__columnsAfterRowIndexBodies__.xhtml"/>
+											</ui:insert>
+											</ui:fragment>
+										</f:facet>
+										<f:facet name="input">
+											<ui:fragment rendered="#{columnIndex == 0}">
+											<ui:insert name="columnsAfterRowIndexBodies0Input">
+												<ui:include src="__columnsAfterRowIndexBodies__.xhtml"/>
+											</ui:insert>
+											</ui:fragment>
+											<ui:fragment rendered="#{columnIndex == 1}">
+											<ui:insert name="columnsAfterRowIndexBodies1Input">
+												<ui:include src="__columnsAfterRowIndexBodies__.xhtml"/>
+											</ui:insert>
+											</ui:fragment>
+										</f:facet>
+																	
+							</p:cellEditor>	
+					</ui:insert>
+						
+						
+					
+	 			</p:columns>
+	 		</ui:insert> 			
+ 		</ui:insert>		 	
+ 	</p:dataTable> 	
+</ui:composition>

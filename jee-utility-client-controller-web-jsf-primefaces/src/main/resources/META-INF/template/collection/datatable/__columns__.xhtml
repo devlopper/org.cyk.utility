@@ -9,6 +9,18 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
-	<h:outputText value="#{dataTable.getCellValueByRecordByColumn(record,rowIndex,column,columnIndex)}" />
+	<p:columns 
+		value="#{dataTable.columnsAfterRowIndex}" 
+		var="column" 
+		columnIndexVar="columnIndex" 
+		width="#{column.width}" 
+		filterBy="#{column.filterBy}"
+	 	visible="#{column.visible}" 
+	 	styleClass="#{dataTable.getStyleClassByRecordByColumn(record,rowIndex,column,columnIndex)}" 
+	 	headerText="#{column.headerText}" 
+	 	footerText="#{column.footerText}"
+	>
+		<ui:insert name="columnsBody" /> 
+	</p:columns>
 	
 </ui:composition>

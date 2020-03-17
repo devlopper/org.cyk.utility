@@ -3,10 +3,11 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.page;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
-import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.collection.Column;
@@ -19,19 +20,27 @@ import lombok.Setter;
 public abstract class AbstractEntityListPageContainerManagedImpl<ENTITY> extends AbstractPageContainerManagedImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	protected Class<ENTITY> entityClass;
 	protected DataTable dataTable;
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
-		@SuppressWarnings("unchecked")
-		Class<ENTITY> entityClass = (Class<ENTITY>) ClassHelper.getParameterAt(getClass(), 0);
-		dataTable = __buildDataTable__(entityClass);		
+		entityClass = (Class<ENTITY>) ClassHelper.getParameterAt(getClass(), 0);
+		dataTable = __buildDataTable__();		
 	}
 	
+	protected Map<Object,Object> __getDataTableArguments__() {
+		return MapHelper.instantiate(DataTable.FIELD_LAZY,Boolean.TRUE,DataTable.FIELD_ELEMENT_CLASS,entityClass
+				,DataTable.ConfiguratorImpl.FIELD_FILTERABLE,Boolean.FALSE);
+	}
 	
-	protected DataTable __buildDataTable__(Class<ENTITY> entityClass) {
-		DataTable dataTable = DataTable.build(DataTable.FIELD_LAZY,Boolean.TRUE,DataTable.FIELD_ELEMENT_CLASS,entityClass,DataTable.FIELD_SELECTION_MODE,"multiple");
+	protected DataTable __buildDataTable__() {
+		Map<Object,Object> arguments = __getDataTableArguments__();
+		if(MapHelper.isEmpty(arguments))
+			return null;
+		DataTable dataTable = DataTable.build(arguments);
 		Collection<Column> columns = __getColumns__(entityClass);
 		if(CollectionHelper.isEmpty(columns))
 			return dataTable;
@@ -72,14 +81,14 @@ public abstract class AbstractEntityListPageContainerManagedImpl<ENTITY> extends
 	protected Column __buildColumn__(String fieldName) {
 		if(StringHelper.isBlank(fieldName))
 			return null;
-		Object[] arguments = __getColumnFieldNameArguments__(fieldName);
-		if(ArrayHelper.isEmpty(arguments))
+		Map<Object,Object> arguments = __getColumnArguments__(fieldName);
+		if(MapHelper.isEmpty(arguments))
 			return null;
 		return Column.build(arguments);
 	}
 	
-	protected Object[] __getColumnFieldNameArguments__(String fieldName) {
-		return new Object[] {Column.FIELD_FIELD_NAME,fieldName};
+	protected Map<Object,Object> __getColumnArguments__(String fieldName) {
+		return MapHelper.instantiate(Column.FIELD_FIELD_NAME,fieldName);
 	}
 	
 	protected abstract Collection<String> __getColumnsFieldsNames__(Class<ENTITY> entityClass);
