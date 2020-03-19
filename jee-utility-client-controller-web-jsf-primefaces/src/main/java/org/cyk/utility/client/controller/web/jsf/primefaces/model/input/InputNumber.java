@@ -68,7 +68,7 @@ public class InputNumber extends AbstractInput<Number> implements Serializable {
 		}
 		
 		@Override
-		protected String __getTemplate__() {
+		protected String __getTemplate__(InputNumber inputNumber, Map<Object, Object> arguments) {
 			return "/input/number/default.xhtml";
 		}
 		

@@ -12,4 +12,11 @@ import lombok.experimental.Accessors;
 public class PersonType extends AbstractDataIdentifiableSystemStringIdentifiableBusinessStringNamableImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private String codeAndName;
+	
+	{
+		codeAndName = getCode()+" "+getName();
+	}
+	
+	public static final String FIELD_CODE_AND_NAME = "codeAndName";
 }

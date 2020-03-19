@@ -37,7 +37,7 @@ public class CommandButton extends AbstractCommand implements Serializable {
 		}
 		
 		@Override
-		protected String __getTemplate__() {
+		protected String __getTemplate__(CommandButton commandButton, Map<Object, Object> arguments) {
 			return "/command/commandbutton/default.xhtml";
 		}
 		

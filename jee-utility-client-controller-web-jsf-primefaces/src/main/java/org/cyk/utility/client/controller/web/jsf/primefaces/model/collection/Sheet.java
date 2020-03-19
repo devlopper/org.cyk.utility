@@ -18,7 +18,7 @@ public class Sheet extends AbstractDataTable implements Serializable {
 	public static class ConfiguratorImpl extends AbstractDataTable.AbstractConfiguratorImpl<Sheet> implements Serializable {
 
 		@Override
-		protected String __getTemplate__() {
+		protected String __getTemplate__(Sheet sheet, Map<Object, Object> arguments) {
 			return "/collection/datatable/sheet.xhtml";
 		}
 		

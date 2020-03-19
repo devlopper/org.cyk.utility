@@ -18,11 +18,6 @@ public class DataTable extends AbstractDataTable implements Serializable {
 	public static class ConfiguratorImpl extends AbstractDataTable.AbstractConfiguratorImpl<DataTable> implements Serializable {
 
 		@Override
-		protected String __getTemplate__() {
-			return "/collection/datatable/default.xhtml";
-		}
-		
-		@Override
 		protected Class<DataTable> __getClass__() {
 			return DataTable.class;
 		}

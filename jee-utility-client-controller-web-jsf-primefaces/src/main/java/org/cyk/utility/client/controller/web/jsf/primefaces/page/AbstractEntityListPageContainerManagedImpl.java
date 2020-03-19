@@ -52,8 +52,8 @@ public abstract class AbstractEntityListPageContainerManagedImpl<ENTITY> extends
 	
 	protected void __addDataTableHeaderToolbarLeftCommandsByArguments__(DataTable dataTable) {
 		dataTable.addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialogCreate();
-		dataTable.addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialogRead();
-		dataTable.addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialogUpdate();
+		//dataTable.addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialogRead();
+		//dataTable.addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialogUpdate();
 	}
 	
 	protected void __addDataTableRecordMenuItemByArguments__(DataTable dataTable) {

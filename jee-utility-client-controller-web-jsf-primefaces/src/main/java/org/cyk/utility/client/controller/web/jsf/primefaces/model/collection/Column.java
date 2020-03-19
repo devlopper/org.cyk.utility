@@ -21,6 +21,7 @@ public class Column extends AbstractObject implements Serializable {
 	private Boolean visible = Boolean.TRUE;
 	private Object filterValue;
 	private Integer index;
+	private CellEditor cellEditor;
 	
 	/**/
 	
@@ -56,6 +57,11 @@ public class Column extends AbstractObject implements Serializable {
 				isFilterable = Boolean.FALSE;
 			if(StringHelper.isBlank(column.getFilterBy()) && Boolean.TRUE.equals(isFilterable) && StringHelper.isNotBlank(column.fieldName))
 				column.setFilterBy(column.fieldName);
+			
+			Boolean isEditable = (Boolean) MapHelper.readByKey(arguments, FIELD_EDITABLE);
+			if(isEditable != null) {
+				column.cellEditor = CellEditor.build(CellEditor.FIELD_DISABLED,!isEditable);
+			}
 		}
 		
 		@Override
@@ -64,6 +70,7 @@ public class Column extends AbstractObject implements Serializable {
 		}
 		
 		public static final String FIELD_FILTERABLE = "filterable";
+		public static final String FIELD_EDITABLE = "editable";
 	}
 	
 	public static Column build(Map<Object,Object> arguments) {

@@ -39,7 +39,7 @@ public class Confirm extends AbstractObject implements Serializable {
 		}
 		
 		@Override
-		protected String __getTemplate__() {
+		protected String __getTemplate__(Confirm confirm, Map<Object, Object> arguments) {
 			return "/confirm/default.xhtml";
 		}
 		

@@ -110,5 +110,9 @@ public interface Configurator<OBJECT> {
 				return;
 			__set__(object, fieldName, arguments, fieldName);
 		}
+	
+		/**/
+		
+		public static final String FIELD_LISTENER = "listener";
 	}
 }

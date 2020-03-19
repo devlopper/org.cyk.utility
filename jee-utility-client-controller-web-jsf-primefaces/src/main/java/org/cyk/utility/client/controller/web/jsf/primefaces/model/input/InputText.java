@@ -29,7 +29,7 @@ public class InputText extends AbstractInput<String> implements Serializable {
 		}
 		
 		@Override
-		protected String __getTemplate__() {
+		protected String __getTemplate__(InputText inputText, Map<Object, Object> arguments) {
 			return "/input/text/default.xhtml";
 		}
 		

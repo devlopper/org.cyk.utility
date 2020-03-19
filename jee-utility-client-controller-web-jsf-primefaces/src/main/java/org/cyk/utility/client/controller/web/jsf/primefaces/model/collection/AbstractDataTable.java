@@ -9,10 +9,16 @@ import java.util.Map;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.object.Builder;
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.throwable.RuntimeException;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.MenuItem;
+import org.primefaces.component.api.DynamicColumn;
+import org.primefaces.event.CellEditEvent;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -26,6 +32,27 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 	protected Boolean areColumnsChoosable;
 	
 	/**/
+	
+	public void enableAjaxCellEdit() {
+		setEditable(Boolean.TRUE);
+		setEditMode("cell");
+		getAjaxes().get("cellEdit").setDisabled(Boolean.FALSE);
+		getAjaxes().get("cellEdit").setListener(new AbstractAction.Listener.AbstractImpl() {
+			protected Object __executeFunction__(Object argument) {
+				if(controllerEntity == null)
+					throw new RuntimeException("Controller is required to execute update function");
+				CellEditEvent event = (CellEditEvent) argument;
+				DynamicColumn dynamicColumn = (DynamicColumn) event.getColumn();
+				Object record = getValueAt(event.getRowIndex());
+				String fieldName = CollectionHelper.getElementAt(getColumnsAfterRowIndex(), dynamicColumn.getIndex()).getFieldName();
+				System.out.println(
+						"AbstractDataTable.enableAjaxCellEdit().new AbstractImpl() {...}.__executeFunction__() : "+fieldName);
+				System.out.println(record+" ::: "+FieldHelper.read(record, fieldName));
+				controllerEntity.update(record,new Properties().setFields(fieldName));
+				return null;
+			}
+		}.setAction(AbstractAction.Listener.Action.EXECUTE_FUNCTION));
+	}
 	
 	public Object getCellValueByRecordByColumn(Object record,Integer recordIndex,Column column,Integer columnIndex) {
 		if(record == null || recordIndex == null || column == null || columnIndex == null)
@@ -97,6 +124,11 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 	public static abstract class AbstractConfiguratorImpl<DATATABLE extends AbstractDataTable> extends AbstractCollection.AbstractConfiguratorImpl<DATATABLE> implements Serializable {
 
 		@Override
+		protected String __getTemplate__(DATATABLE datatable, Map<Object, Object> arguments) {
+			return Boolean.TRUE.equals(datatable.getEditable()) ? "/collection/datatable/editable.xhtml" : "/collection/datatable/default.xhtml";
+		}
+		
+		@Override
 		public void configure(DATATABLE dataTable, Map<Object, Object> arguments) {
 			super.configure(dataTable, arguments);
 			if(dataTable.getOrderNumberColumn() == null) {
@@ -121,6 +153,10 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 			
 			if(dataTable.getRecordMenu() != null && CollectionHelper.isNotEmpty(dataTable.getRecordMenu().getItems()))
 				dataTable.menuColumn.setRendered(Boolean.TRUE);
+			
+			if(Boolean.TRUE.equals(MapHelper.readByKey(arguments, FIELD_EDITABLE_CELL))) {
+				dataTable.enableAjaxCellEdit();
+			}
 		}
 	}
 	

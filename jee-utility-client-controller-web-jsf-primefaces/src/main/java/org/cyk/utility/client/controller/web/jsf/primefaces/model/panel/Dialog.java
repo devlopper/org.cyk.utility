@@ -86,7 +86,7 @@ public class Dialog extends AbstractObject implements Serializable {
 	public static class ConfiguratorImpl extends AbstractConfiguratorImpl<Dialog> implements Serializable {
 
 		@Override
-		protected String __getTemplate__() {
+		protected String __getTemplate__(Dialog dialog, Map<Object, Object> arguments) {
 			return "/dialog/default.xhtml";
 		}
 		

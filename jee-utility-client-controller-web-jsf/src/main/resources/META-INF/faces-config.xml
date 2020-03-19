@@ -18,7 +18,8 @@
 	
 
 	<locale-config>
-		<supported-locale>fr</supported-locale>
+		<default-locale>fr_FR</default-locale>
+		<supported-locale>fr_FR</supported-locale>
 	</locale-config>
 
 </faces-config>

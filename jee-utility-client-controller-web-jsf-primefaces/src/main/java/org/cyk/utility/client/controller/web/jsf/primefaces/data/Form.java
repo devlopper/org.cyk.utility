@@ -1,6 +1,10 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces.data;
 
 import java.io.Serializable;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -64,7 +68,7 @@ public class Form extends AbstractObject implements Serializable {
 	private Collection<String> updatableEntityFieldsNames;
 	private CommandButton submitCommandButton;
 	private Object container;
-	private Listener listener;
+	private Form.Listener listener;
 	private Map<String,AbstractInput<?>> inputs;
 	
 	public void execute() {
@@ -92,9 +96,7 @@ public class Form extends AbstractObject implements Serializable {
 	
 	@SuppressWarnings("unchecked")
 	public <T> T getInput(Class<T> klass,String fieldName) {
-		if(klass == null || StringHelper.isBlank(fieldName))
-			return null;
-		if(MapHelper.isEmpty(inputs))
+		if(klass == null || StringHelper.isBlank(fieldName) || MapHelper.isEmpty(inputs))
 			return null;
 		return (T) inputs.get(fieldName);
 	}
@@ -163,13 +165,17 @@ public class Form extends AbstractObject implements Serializable {
 				}
 				
 				Collection<AbstractInput<?>> inputs = null;
-				for(String fieldName : inputsFieldsNames) {
-					AbstractInput<?> input = __buildInput__(form,fieldName);
-					if(input == null)
-						continue;
-					if(inputs == null)
-						inputs = new ArrayList<>();
-					inputs.add(input);
+				if(MapHelper.isEmpty(form.inputs)) {
+					for(String fieldName : inputsFieldsNames) {
+						AbstractInput<?> input = __buildInput__(form,fieldName);
+						if(input == null)
+							continue;
+						if(inputs == null)
+							inputs = new ArrayList<>();
+						inputs.add(input);
+					}
+				}else {
+					inputs = form.inputs.values();
 				}
 				if(CollectionHelper.isNotEmpty(inputs)) {
 					Collection<Map<Object,Object>> cells = __getLayoutCellsArgumentsMaps__(form,inputs);
@@ -181,7 +187,7 @@ public class Form extends AbstractObject implements Serializable {
 						};
 						form.layout = Layout.build(layoutArguments);
 					}			
-				}					
+				}
 			}
 			
 			if(form.request == null) {
@@ -240,6 +246,9 @@ public class Form extends AbstractObject implements Serializable {
 		
 		public static final String FIELD_INPUTS_FIELDS_NAMES = "inputsFieldsNames";
 		public static final String FIELD_METHOD_NAME = "methodName";
+	
+		/**/
+		
 	}
 	
 	public static Form build(Map<Object,Object> arguments) {
@@ -310,7 +319,7 @@ public class Form extends AbstractObject implements Serializable {
 			
 			/**/
 			
-			public static AbstractInput<?> buildInput(Form form,String fieldName,Listener listener) {
+			public static AbstractInput<?> buildInput(Form form,String fieldName,Form.Listener listener) {
 				if(StringHelper.isBlank(fieldName))
 					return null;
 				Field field = FieldHelper.getByName(form.entityClass, fieldName);
@@ -345,5 +354,13 @@ public class Form extends AbstractObject implements Serializable {
 				return input;
 			}
 		}
+	}
+
+	/**/
+	
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(value={ElementType.TYPE})
+	public static @interface Annotation {
+		
 	}
 }

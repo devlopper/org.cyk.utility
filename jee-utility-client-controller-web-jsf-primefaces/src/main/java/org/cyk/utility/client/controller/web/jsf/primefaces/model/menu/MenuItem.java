@@ -27,7 +27,7 @@ public class MenuItem extends AbstractCommand implements Serializable {
 		}
 		
 		@Override
-		protected String __getTemplate__() {
+		protected String __getTemplate__(MenuItem menuItem, Map<Object, Object> arguments) {
 			return "/menu/item/default.xhtml";
 		}
 		

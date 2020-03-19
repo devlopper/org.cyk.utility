@@ -1,6 +1,10 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces.model;
 
 import java.io.Serializable;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 import java.util.Map;
 
@@ -60,5 +64,13 @@ public abstract class AbstractInputOutput<VALUE> extends AbstractObjectAjaxable 
 		
 		public static final String FIELD_OBJECT = "object";
 		public static final String FIELD_FIELD_NAME = "fieldName";
+	}
+	
+	/**/
+	
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(value={ElementType.TYPE})
+	public static @interface Annotation {
+		
 	}
 }

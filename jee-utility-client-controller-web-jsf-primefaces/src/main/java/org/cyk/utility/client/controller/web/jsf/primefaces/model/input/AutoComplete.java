@@ -259,7 +259,7 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 		}
 		
 		@Override
-		protected String __getTemplate__() {
+		protected String __getTemplate__(AutoComplete autoComplete, Map<Object, Object> arguments) {
 			return "/input/select/one/autoComplete.xhtml";
 		}
 		

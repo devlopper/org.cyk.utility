@@ -30,7 +30,7 @@ public class Ajax extends AbstractAjax<AjaxBehaviorEvent> implements Serializabl
 		}
 		
 		@Override
-		protected String __getTemplate__() {
+		protected String __getTemplate__(Ajax ajax, Map<Object, Object> arguments) {
 			return "/ajax/default.xhtml";
 		}
 

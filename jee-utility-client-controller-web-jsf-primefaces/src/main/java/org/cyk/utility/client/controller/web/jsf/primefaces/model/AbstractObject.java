@@ -144,10 +144,10 @@ public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractOb
 				object.rendered = Boolean.TRUE;
 			
 			if(StringHelper.isBlank(object.__template__))
-				object.__template__ = __getTemplate__();
+				object.__template__ = __getTemplate__(object,arguments);
 		}
 		
-		protected String __getTemplate__() {
+		protected String __getTemplate__(OBJECT object, Map<Object, Object> arguments) {
 			return null;
 		}
 	}

@@ -32,7 +32,7 @@ public class OutputLabel extends AbstractOutput<String> implements Serializable 
 		}
 		
 		@Override
-		protected String __getTemplate__() {
+		protected String __getTemplate__(OutputLabel outputLabel, Map<Object, Object> arguments) {
 			return "/output/label/default.xhtml";
 		}
 		

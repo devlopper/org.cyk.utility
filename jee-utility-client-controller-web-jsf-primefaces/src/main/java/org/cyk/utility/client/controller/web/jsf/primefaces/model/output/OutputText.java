@@ -28,7 +28,7 @@ public class OutputText extends AbstractOutput<String> implements Serializable {
 		}
 		
 		@Override
-		protected String __getTemplate__() {
+		protected String __getTemplate__(OutputText outputText, Map<Object, Object> arguments) {
 			return "/output/text/default.xhtml";
 		}
 		

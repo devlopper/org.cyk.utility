@@ -9,17 +9,10 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
-	<p:columns 
-		value="#{dataTable.columnsAfterRowIndex}" 
-		var="column" 
-		columnIndexVar="columnIndex"
-		width="#{column.width}"
-	 	visible="#{column.visible}"
-	 	styleClass="#{dataTable.getStyleClassByRecordByColumn(record,rowIndex,column,columnIndex)}" 
-	 	headerText="#{column.headerText}"
-	 	footerText="#{column.footerText}"
-	 	filterBy="#{column.filterBy}"
+	<p:cellEditor 
+		disabled="#{cellEditor.disabled}"
+		rendered="#{cellEditor.rendered}"
 	>
-		<ui:insert name="columnsBody" /> 
-	</p:columns>
+		
+	</p:cellEditor>
 </ui:composition>

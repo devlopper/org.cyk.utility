@@ -33,7 +33,6 @@ import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObject
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax.Ajax;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.AbstractCommand;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
-import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.AutoComplete;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.AbstractMenu;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.MenuButton;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.MenuItem;
@@ -62,6 +61,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	protected Collection<AbstractCommand> headerToolbarLeftCommands;
 	protected Collection<AbstractCommand> recordCommands;
 	protected AbstractMenu recordMenu;
+	protected ControllerEntity<Object> controllerEntity;
 	
 	/**/
 	
@@ -271,13 +271,15 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	
 	public AbstractCollection addRecordMenuItemByArgumentsExecuteFunctionDelete() {
 		if(elementClass != null) {
-			@SuppressWarnings("unchecked")
-			ControllerEntity<Object> controllerEntity = (ControllerEntity<Object>) __inject__(ControllerLayer.class).injectInterfaceClassFromEntityClass(elementClass);
+			//@SuppressWarnings("unchecked")
+			//ControllerEntity<Object> controllerEntity = (ControllerEntity<Object>) __inject__(ControllerLayer.class).injectInterfaceClassFromEntityClass(elementClass);
 			return addRecordMenuItemByArguments(MenuItem.FIELD_VALUE,"Supprimer",MenuItem.FIELD_ICON,"fa fa-remove"
 					,MenuItem.FIELD_LISTENER,new AbstractAction.Listener.AbstractImpl() {
 				@Override
 				protected Object __executeFunction__(Object argument) {
 					super.__executeFunction__(argument);
+					if(controllerEntity == null)
+						throw new RuntimeException("Controller is required to execute delete function");
 					controllerEntity.delete(argument);
 					return argument+" has been deleted.";
 				}
@@ -329,6 +331,10 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 		@Override
 		public void configure(COLLECTION collection, Map<Object, Object> arguments) {
 			super.configure(collection, arguments);
+			if(collection.controllerEntity == null) {
+				if(collection.elementClass != null)
+					collection.controllerEntity = (ControllerEntity<Object>) __inject__(ControllerLayer.class).injectInterfaceClassFromEntityClass(collection.elementClass);
+			}
 			Boolean filterable = (Boolean) MapHelper.readByKey(arguments, FIELD_FILTERABLE);
 			if(filterable == null)
 				filterable = collection.lazy;
@@ -425,6 +431,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 		
 		public static final String FIELD_ENTITY_FIELDS_NAMES = "entityFieldsNames";
 		public static final String FIELD_FILTERABLE = "filterable";
+		public static final String FIELD_EDITABLE_CELL = "editableCell";
 		public static final String FIELD_RECORD_MENU_ITEMS_BY_ARGUMENTS = "recordMenuItemsByArguments";
 		public static final String FIELD_LAZY_DATA_MODEL_CLASS = "lazyDataModelClass";
 		public static final String FIELD_LAZY_DATA_MODEL = "lazyDataModel";
