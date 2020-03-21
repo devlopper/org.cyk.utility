@@ -9,31 +9,104 @@ import java.util.Map;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
+import org.cyk.utility.client.controller.web.jsf.primefaces.PrimefacesHelper;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.MenuItem;
 import org.primefaces.component.api.DynamicColumn;
 import org.primefaces.event.CellEditEvent;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
-@Getter @Setter
+@Getter @Setter @Accessors(chain=true)
 public abstract class AbstractDataTable extends AbstractCollection implements Serializable {
 
 	protected Column orderNumberColumn;
 	protected Column menuColumn;
 	protected Collection<Column> columnsAfterRowIndex,selectedColumnsAfterRowIndex;
-	protected Boolean areColumnsChoosable;
+	protected Boolean areColumnsChoosable,isRowAddable,isColumnAddable;
+	protected CommandButton addRowCommandButton,addColumnCommandButton;
+	protected String columnVariableFormat;
 	
 	/**/
 	
-	public void enableAjaxCellEdit() {
+	public AbstractDataTable enableCommandButtonAddRow() {
+		enableCommandButtonAddRow(null);
+		return this;
+	}
+	
+	public AbstractDataTable enableCommandButtonAddRow(String title) {
+		setIsRowAddable(Boolean.TRUE);
+		if(title == null)
+			title = "Ajouter une ligne";
+		addRowCommandButton = CommandButton.build(CommandButton.FIELD_TITLE,title,CommandButton.FIELD_ICON,"fa fa-plus",CommandButton.ConfiguratorImpl.FIELD_COLLECTION,this
+				,CommandButton.ConfiguratorImpl.FIELD_COLLECTION_UPDATABLE,Boolean.TRUE
+				,CommandButton.ConfiguratorImpl.FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_NULLABLE,Boolean.TRUE
+				,CommandButton.FIELD_LISTENER,new AbstractAction.Listener.AbstractImpl() {
+			@SuppressWarnings("unchecked")
+			protected Object __executeFunction__(Object argument) {
+				if(value != null && !(value instanceof Collection))
+					throw new RuntimeException("Cannot add instance into value of type "+value.getClass());
+				if(value == null)
+					setValue(value = new ArrayList<>());
+				Object element = ClassHelper.instanciate(elementClass);				
+				((Collection<Object>)value).add(element);
+				if(listener != null)
+					((Listener)listener).listenAddRow(AbstractDataTable.this, element);
+				//PrimefacesHelper.updateOnComplete(":form:"+identifier);
+				return "row added";
+			}
+		}.setAction(AbstractAction.Listener.Action.EXECUTE_FUNCTION));
+		return this;
+	}
+	
+	public AbstractDataTable enableCommandButtonAddColumn() {
+		enableCommandButtonAddColumn(null, null,null);
+		return this;
+	}
+	
+	public AbstractDataTable enableCommandButtonAddColumn(String value,String icon,String variableFormat) {
+		setIsColumnAddable(Boolean.TRUE);
+		if(value == null)
+			value = "Ajouter une colonne";
+		if(icon == null)
+			icon = "fa fa-plus";
+		if(StringHelper.isBlank(variableFormat))
+			variableFormat = "value%s";
+		columnVariableFormat = variableFormat;
+		addColumnCommandButton = CommandButton.build(CommandButton.FIELD_VALUE,value,CommandButton.FIELD_ICON,icon,CommandButton.ConfiguratorImpl.FIELD_COLLECTION,this
+				,CommandButton.ConfiguratorImpl.FIELD_COLLECTION_UPDATABLE,Boolean.TRUE
+				,CommandButton.ConfiguratorImpl.FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_NULLABLE,Boolean.TRUE
+				,CommandButton.FIELD_LISTENER,new AbstractAction.Listener.AbstractImpl() {
+			protected Object __executeFunction__(Object argument) {
+				Map<Object,Object> arguments = null;
+				if(listener == null)
+					arguments = MapHelper.instantiate(Column.FIELD_HEADER_TEXT,"NewCol",Column.FIELD_FIELD_NAME,String.format(columnVariableFormat, CollectionHelper.getSize(columnsAfterRowIndex)));
+				else
+					arguments = ((Listener)listener).listenAddColumnGetArguments(AbstractDataTable.this);
+				Column column = Column.build(arguments);
+				addColumnsAfterRowIndex(column);
+				if(listener == null)
+					;
+				else
+					((Listener)listener).listenAddColumn(AbstractDataTable.this,column);
+				//PrimefacesHelper.updateOnComplete(":form:"+identifier);
+				return "column added";
+			}
+		}.setAction(AbstractAction.Listener.Action.EXECUTE_FUNCTION));
+		return this;
+	}
+	
+	public AbstractDataTable enableAjaxCellEdit() {
 		setEditable(Boolean.TRUE);
 		setEditMode("cell");
 		getAjaxes().get("cellEdit").setDisabled(Boolean.FALSE);
@@ -45,19 +118,19 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 				DynamicColumn dynamicColumn = (DynamicColumn) event.getColumn();
 				Object record = getValueAt(event.getRowIndex());
 				String fieldName = CollectionHelper.getElementAt(getColumnsAfterRowIndex(), dynamicColumn.getIndex()).getFieldName();
-				System.out.println(
-						"AbstractDataTable.enableAjaxCellEdit().new AbstractImpl() {...}.__executeFunction__() : "+fieldName);
-				System.out.println(record+" ::: "+FieldHelper.read(record, fieldName));
 				controllerEntity.update(record,new Properties().setFields(fieldName));
 				return null;
 			}
 		}.setAction(AbstractAction.Listener.Action.EXECUTE_FUNCTION));
+		return this;
 	}
 	
 	public Object getCellValueByRecordByColumn(Object record,Integer recordIndex,Column column,Integer columnIndex) {
 		if(record == null || recordIndex == null || column == null || columnIndex == null)
 			return null;
-		return FieldHelper.read(record, column.getFieldName());
+		if(listener == null)
+			return FieldHelper.read(record, column.getFieldName());
+		return ((Listener)listener).listenGetCellValueByRecordByColumn(record, recordIndex, column, columnIndex);
 	}
 	
 	public Collection<Column> getColumnsAfterRowIndex(Boolean injectIfNull) {
@@ -164,13 +237,25 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 	
 	public static interface Listener {
 		
+		Object listenGetCellValueByRecordByColumn(Object record,Integer recordIndex,Column column,Integer columnIndex);
+		
 		String listenGetStyleClassByRecord(Object record,Integer recordIndex);
 		
 		String listenGetStyleClassByRecordByColumn(Object record,Integer recordIndex,Column column,Integer columnIndex);
 		
+		void listenAddRow(AbstractDataTable dataTable,Object element);
+		
+		void listenAddColumn(AbstractDataTable dataTable,Column column);
+		
+		Map<Object,Object> listenAddColumnGetArguments(AbstractDataTable dataTable);
 		/**/
 		
 		public static abstract class AbstractImpl extends AbstractObject implements Listener,Serializable {
+			
+			@Override
+			public Object listenGetCellValueByRecordByColumn(Object record, Integer recordIndex, Column column,Integer columnIndex) {
+				return null;
+			}
 			
 			@Override
 			public String listenGetStyleClassByRecord(Object record, Integer recordIndex) {
@@ -182,6 +267,18 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 				return null;
 			}
 			
+			@Override
+			public void listenAddRow(AbstractDataTable dataTable, Object element) {}
+			
+			@Override
+			public void listenAddColumn(AbstractDataTable dataTable, Column column) {}
+			
+			
+			
+			@Override
+			public Map<Object, Object> listenAddColumnGetArguments(AbstractDataTable dataTable) {
+				return MapHelper.instantiate(Column.FIELD_HEADER_TEXT,"NewCol");
+			}
 		}
 		
 	}

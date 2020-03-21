@@ -21,52 +21,9 @@
 		paginatorTemplate="#{dataTable.paginatorTemplate}" currentPageReportTemplate="#{dataTable.currentPageReportTemplate}"
 		widgetVar="#{dataTable.widgetVar}" rowIndexVar="rowIndex" filterDelay="#{dataTable.filterDelay}" selection="#{dataTable.selection}"
 		rowStyleClass="#{dataTable.getStyleClassByRecord(record,rowIndex)}" 
-		editable="#{dataTable.editable}" editMode="#{dataTable.editMode}" 
+		editable="#{dataTable.editable}" editMode="#{dataTable.editMode}"
 	>
- 		<f:facet name="header">
- 			<ui:insert name="header">
- 				<p:toolbar>
- 					<f:facet name="left">
- 						<ui:insert name="headerToolbarLeft">
- 							<ui:insert name="headerToolbarLeftCommands">
- 								<c:forEach items="#{dataTable.headerToolbarLeftCommands}" var="command" >
- 									<c:if test="#{command.class.simpleName eq 'CommandButton'}">
- 										<ui:decorate template="/command/commandbutton/default.xhtml">
-	 										<ui:param name="commandButton" value="#{command}"/>
-	 									</ui:decorate>
- 									</c:if>
-	 								<c:if test="#{command.class.simpleName eq 'Button'}">
- 										<ui:decorate template="/command/button/default.xhtml">
-	 										<ui:param name="button" value="#{command}"/>
-	 									</ui:decorate>
- 									</c:if>	
- 								</c:forEach>
- 							</ui:insert>
- 						</ui:insert>
- 					</f:facet>
- 					<f:facet name="right">
- 						<ui:insert name="headerToolbarRight">
- 							<ui:fragment rendered="#{dataTable.isExportable}">
- 								<ui:insert name="headerToolbarRightExports">
- 									<ui:fragment rendered="#{dataTable.isExportable}">
-		 								<p:commandButton id="export_excel" icon="fa fa-file-excel-o" ajax="false">
-					    					<p:dataExporter type="xls" target="#{dataTable.identifier}" fileName="#{dataTable.fileName}" />
-					    				</p:commandButton>
-					    				<p:tooltip for="export_excel" value="Exporter en excel" />
-				    				</ui:fragment>
-	 							</ui:insert>
- 							</ui:fragment>
-	 						<ui:fragment rendered="#{dataTable.areColumnsChoosable}">
-	 							<ui:insert name="headerToolbarRightColumns">
-		 							<p:commandButton id="toggler" type="button" value="Colonnes" icon="fa fa-columns" />
-				       				<p:columnToggler datasource="#{dataTable.identifier}" trigger="toggler" />
-		 						</ui:insert>	
-	 						</ui:fragment>			 									    				
- 						</ui:insert>
- 					</f:facet>
- 				</p:toolbar>
-			</ui:insert> 			
- 		</f:facet>
+		<ui:include src="__header__.xhtml"/>
  		
  		<ui:insert name="columns">
  			<ui:insert name="columnRowIndex">
@@ -83,6 +40,16 @@
 		 				<div style="float: left !important;">
 			 				<h:outputText value="#{rowIndex+1}" />
 			 			</div>
+ 					</ui:define>
+ 					
+ 					<ui:define name="columnFooter">
+ 						<ui:insert name="columnFooterOrderNumber">
+ 							<ui:fragment rendered="#{dataTable.isRowAddable}">
+	 							<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.addRowCommandButton)}">
+									<ui:param name="commandButton" value="#{dataTable.addRowCommandButton}"/>
+								</ui:decorate>	
+							</ui:fragment>
+ 						</ui:insert>
  					</ui:define>
  				</ui:decorate>
 	 		</ui:insert>

@@ -13,9 +13,10 @@ public class Namable extends AbstractDataIdentifiableSystemStringIdentifiableBus
 
 	private String __code__;
 	private String __name__;
+	private String codeStyled;
 	
-	public String getCodeStyled() {
-		return getCode();
+	{
+		setCodeStyled(getCode());
 	}
 	
 	@Override

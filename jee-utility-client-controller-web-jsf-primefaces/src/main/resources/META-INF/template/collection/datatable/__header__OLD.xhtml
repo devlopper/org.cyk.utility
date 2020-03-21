@@ -9,8 +9,6 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
-	<!-- Data Table header -->
-	
 	<f:facet name="header">
  		<ui:insert name="header">
  			<p:toolbar>
@@ -49,21 +47,10 @@
 	 							<p:commandButton id="toggler" type="button" value="Colonnes" icon="fa fa-columns" />
 			       				<p:columnToggler datasource="#{dataTable.identifier}" trigger="toggler" />
 	 						</ui:insert>	
- 						</ui:fragment>
- 						<ui:fragment rendered="#{dataTable.isColumnAddable}">
- 							<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.addColumnCommandButton)}">
-								<ui:param name="commandButton" value="#{dataTable.addColumnCommandButton}"/>
-							</ui:decorate>		
- 						</ui:fragment>	 								 									    				
-					</ui:insert>
-				</f:facet>
-			</p:toolbar>
+ 						</ui:fragment>			 									    				
+						</ui:insert>
+					</f:facet>
+				</p:toolbar>
 		</ui:insert> 			
 	</f:facet>
-	
-	<!-- Column Grouping -->
-	<ui:insert name="headerColumnsGroups"/>
-	
-	
-	
 </ui:composition>

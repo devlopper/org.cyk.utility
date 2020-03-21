@@ -115,7 +115,7 @@ public class DataTableLazyPage extends AbstractPageContainerManagedImpl implemen
 		});
 		dataTable.getDialog().getCloseAjax().setDisabled(Boolean.FALSE);
 		
-		dataTable.setListener(new AbstractDataTable.Listener() {
+		dataTable.setListener(new AbstractDataTable.Listener.AbstractImpl() {
 			
 			@Override
 			public String listenGetStyleClassByRecord(Object record,Integer recordIndex) {
