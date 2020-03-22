@@ -13,8 +13,26 @@
     	<ui:define name="centerCenter">
     		<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTableDynamicPage.dataTable)}">
     			<ui:param name="dataTable" value="#{dataTableDynamicPage.dataTable}"/>
-			
-    		</ui:decorate>	   
+				
+				<ui:define name="columnsAfterRowIndexCellEditorOutput0">    				
+	    			<h:outputText value="#{record.values[column.fieldName]}">
+	    				
+	    			</h:outputText>
+    			</ui:define>
+    			<ui:define name="columnsAfterRowIndexCellEditorInput0">    				
+	    			<p:inputNumber value="#{record.values[column.fieldName]}" decimalPlaces="0" inputStyleClass="cyk-text-align-right"/>						                
+    			</ui:define>
+				
+				<ui:define name="columnsAfterRowIndexCellEditorOutput1">    				
+	    			<h:outputText value="#{record.values[column.fieldName]}">
+	    				
+	    			</h:outputText>
+    			</ui:define>
+    			<ui:define name="columnsAfterRowIndexCellEditorInput1">    				
+	    			<p:inputNumber value="#{record.values[column.fieldName]}" decimalPlaces="0" inputStyleClass="cyk-text-align-right"/>						                
+    			</ui:define>
+				
+    		</ui:decorate>	
     	</ui:define>
     </cyk:page>
     

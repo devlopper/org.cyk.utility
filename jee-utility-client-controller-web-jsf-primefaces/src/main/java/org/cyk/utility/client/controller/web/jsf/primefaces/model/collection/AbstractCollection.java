@@ -20,7 +20,9 @@ import org.cyk.utility.__kernel__.internationalization.InternationalizationHelpe
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.klass.NamingModel;
 import org.cyk.utility.__kernel__.map.MapHelper;
+import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.object.Builder;
+import org.cyk.utility.__kernel__.object.__static__.controller.DataGrid;
 import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
@@ -52,7 +54,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	protected Object value,selectedCommandIdentifier;
 	protected String emptyMessage,rowsPerPageTemplate,paginatorTemplate,currentPageReportTemplate,selectionMode,fileName;
 	protected String rowStyleClass,editMode;
-	protected Boolean lazy,paginator,paginatorAlwaysVisible,isExportable,isSelectionShowableInDialog,editable;
+	protected Boolean lazy,paginator,paginatorAlwaysVisible,isExportable,isSelectionShowableInDialog,editable,isSavable;
 	protected Integer rows,filterDelay;
 	protected List<?> selection;
 	protected Map<String,Object> map = new HashMap<>();
@@ -62,6 +64,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	protected Collection<AbstractCommand> recordCommands;
 	protected AbstractMenu recordMenu;
 	protected ControllerEntity<Object> controllerEntity;
+	protected CommandButton saveCommandButton;
 	
 	/**/
 	
@@ -307,6 +310,19 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 		return addRecordMenuItemByArgumentsNavigateToView(Action.READ,ConstantEmpty.STRING);
 	}
 	
+	public AbstractCollection enableCommandButtonSave() {
+		setIsSavable(Boolean.TRUE);
+		saveCommandButton = CommandButton.build(CommandButton.FIELD_VALUE,"Enregistrer",CommandButton.FIELD_ICON,"fa fa-floppy-o",CommandButton.FIELD_LISTENER,new CommandButton.Listener.AbstractImpl() {
+			protected Object __executeFunction__(Object argument) {
+				if(listener == null)
+					return null;
+				else
+					return ((Listener)listener).listenSave(AbstractCollection.this);
+			}
+		}.setAction(org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction.Listener.Action.EXECUTE_FUNCTION));
+		return this;
+	}
+	
 	/**/
 	
 	public static final String FIELD_ELEMENT_CLASS = "elementClass";
@@ -332,7 +348,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 		public void configure(COLLECTION collection, Map<Object, Object> arguments) {
 			super.configure(collection, arguments);
 			if(collection.controllerEntity == null) {
-				if(collection.elementClass != null)
+				if(collection.elementClass != null && !DataGrid.Row.class.equals(collection.elementClass))
 					collection.controllerEntity = (ControllerEntity<Object>) __inject__(ControllerLayer.class).injectInterfaceClassFromEntityClass(collection.elementClass);
 			}
 			Boolean filterable = (Boolean) MapHelper.readByKey(arguments, FIELD_FILTERABLE);
@@ -427,6 +443,11 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 			
 			if(StringHelper.isBlank(collection.editMode))
 				collection.editMode = "cell";
+			
+			if(Boolean.TRUE.equals(collection.editable)) {
+				collection.isExportable = Boolean.FALSE;
+				collection.isSavable = Boolean.TRUE;
+			}	
 		}
 		
 		public static final String FIELD_ENTITY_FIELDS_NAMES = "entityFieldsNames";
@@ -436,5 +457,18 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 		public static final String FIELD_LAZY_DATA_MODEL_CLASS = "lazyDataModelClass";
 		public static final String FIELD_LAZY_DATA_MODEL = "lazyDataModel";
 		public static final String FIELD_TITLE_VALUE = "titleValue";
+	}
+
+	/**/
+	
+	public static interface Listener {
+		Object listenSave(AbstractCollection dataTable);
+		/**/
+		public static abstract class AbstractImpl extends AbstractObject implements Listener,Serializable {
+			@Override
+			public Object listenSave(AbstractCollection dataTable) {
+				return null;
+			}
+		}
 	}
 }

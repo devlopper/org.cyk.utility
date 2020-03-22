@@ -33,6 +33,7 @@
  					</ui:insert>
  				</f:facet>
  				<f:facet name="right">
+ 					<span>
  					<ui:insert name="headerToolbarRight">
  						<ui:fragment rendered="#{dataTable.isExportable}">
  							<ui:insert name="headerToolbarRightExports">
@@ -53,9 +54,15 @@
  						<ui:fragment rendered="#{dataTable.isColumnAddable}">
  							<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.addColumnCommandButton)}">
 								<ui:param name="commandButton" value="#{dataTable.addColumnCommandButton}"/>
+							</ui:decorate>
+ 						</ui:fragment>
+ 						<ui:fragment rendered="#{dataTable.isSavable}">
+ 							<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.saveCommandButton)}">
+								<ui:param name="commandButton" value="#{dataTable.saveCommandButton}"/>
 							</ui:decorate>		
- 						</ui:fragment>	 								 									    				
+ 						</ui:fragment>	 	 								 									    				
 					</ui:insert>
+					</span>
 				</f:facet>
 			</p:toolbar>
 		</ui:insert> 			
