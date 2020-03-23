@@ -13,7 +13,7 @@
 		<ui:define name="columnsAfterRowIndex">
 			<ui:decorate template="__columns__.xhtml">
 				<ui:define name="columnsBody">
-					
+					<ui:decorate template="__columns__header.xhtml" />		
 					<ui:decorate template="__columns__filter.xhtml" />
 					
 					<p:cellEditor disabled="#{column.cellEditor != null and column.cellEditor.disabled}">

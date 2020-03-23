@@ -13,6 +13,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
+import org.cyk.utility.__kernel__.data.structure.grid.Grid;
 import org.cyk.utility.__kernel__.enumeration.Action;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.identifier.resource.ParameterName;
@@ -22,7 +23,6 @@ import org.cyk.utility.__kernel__.klass.NamingModel;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.object.Builder;
-import org.cyk.utility.__kernel__.object.__static__.controller.DataGrid;
 import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
@@ -348,7 +348,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 		public void configure(COLLECTION collection, Map<Object, Object> arguments) {
 			super.configure(collection, arguments);
 			if(collection.controllerEntity == null) {
-				if(collection.elementClass != null && !DataGrid.Row.class.equals(collection.elementClass))
+				if(collection.elementClass != null && !Grid.Row.class.equals(collection.elementClass))
 					collection.controllerEntity = (ControllerEntity<Object>) __inject__(ControllerLayer.class).injectInterfaceClassFromEntityClass(collection.elementClass);
 			}
 			Boolean filterable = (Boolean) MapHelper.readByKey(arguments, FIELD_FILTERABLE);

@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
@@ -18,11 +20,12 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@Getter @Setter @Accessors(chain=true)
+@Getter @Setter @Accessors(chain=true) @Deprecated
 public class DataGrid extends AbstractObjectImpl implements Serializable {
 
 	private List<Row> rows;
 	private String columnKeyFormat = Row.COLUMN_KEY_FORMAT;
+	private Set<java.lang.Object> defaultColumnsKeys = new LinkedHashSet<>();
 	private Listener listener;
 	
 	public List<Row> getRows(Boolean injectIfNull) {
@@ -33,9 +36,20 @@ public class DataGrid extends AbstractObjectImpl implements Serializable {
 	
 	public DataGrid addRow() {
 		Row row = ClassHelper.instanciate(Row.class);
+		getRows(Boolean.TRUE).add(row);
+		if(CollectionHelper.isNotEmpty(defaultColumnsKeys))
+			defaultColumnsKeys.forEach(key -> {row.addColumn(key);});
 		if(listener != null)
 			listener.listenAddRow(this, row);
-		getRows(Boolean.TRUE).add(row);
+		return this;
+	}
+	
+	public DataGrid removeRow(Row row) {
+		if(row == null || CollectionHelper.isEmpty(rows))
+			return this;
+		rows.remove(row);
+		if(listener != null)
+			listener.listenRemoveRow(this, row);
 		return this;
 	}
 	
@@ -60,6 +74,18 @@ public class DataGrid extends AbstractObjectImpl implements Serializable {
 		return addColumn(null);
 	}
 	
+	public DataGrid removeColumn(String key) {
+		if(StringHelper.isBlank(key) || CollectionHelper.isEmpty(rows))
+			return this;
+		rows.forEach(row -> {
+			row.removeColumn(key);
+			if(listener != null)
+				listener.listenRemoveColumn(this, row,key);
+			}
+		);		
+		return this;
+	}
+	
 	public Integer getNumberOfRows() {
 		return CollectionHelper.getSize(rows);
 	}
@@ -75,6 +101,21 @@ public class DataGrid extends AbstractObjectImpl implements Serializable {
 		return this;
 	}
 	
+	public java.lang.Object getValue(Row row,java.lang.Object key) {
+		if(row == null || key == null)
+			return null;
+		return row.getValue(key);
+	}
+	
+	public java.lang.Object formatValue(Row row,java.lang.Object key) {
+		if(row == null || key == null)
+			return null;
+		java.lang.Object value = getValue(row, key);
+		if(listener != null)
+			value = listener.listenFormatValue(this, row, key, value);
+		return value;
+	}
+	
 	@Override
 	public String toString() {
 		if(CollectionHelper.isEmpty(rows))
@@ -87,7 +128,7 @@ public class DataGrid extends AbstractObjectImpl implements Serializable {
 	
 	/**/
 	
-	@Getter @Setter
+	@Getter @Setter @Deprecated
 	public static class Row extends AbstractObject implements Serializable {
 		
 		private Object identifiable;
@@ -108,6 +149,13 @@ public class DataGrid extends AbstractObjectImpl implements Serializable {
 			return addColumn(key, null);
 		}
 		
+		public Row removeColumn(java.lang.Object key) {
+			if(MapHelper.isEmpty(values))
+				return this;
+			values.remove(key);
+			return this;
+		}
+		
 		public Integer getnumberOfColumns() {
 			return MapHelper.isEmpty(values) ? 0 : values.size();
 		}
@@ -117,6 +165,12 @@ public class DataGrid extends AbstractObjectImpl implements Serializable {
 				return this;
 			getValues(Boolean.TRUE).put(key, value);
 			return this;
+		}
+		
+		public java.lang.Object getValue(java.lang.Object key) {
+			if(key == null || MapHelper.isEmpty(values))
+				return null;
+			return values.get(key);
 		}
 		
 		@Override
@@ -129,17 +183,29 @@ public class DataGrid extends AbstractObjectImpl implements Serializable {
 		 */
 		public static final String COLUMN_KEY_FORMAT = "value%s";
 	}
-	
+	@Deprecated
 	public static interface Listener {
 		void listenAddRow(DataGrid grid,Row row);
+		void listenRemoveRow(DataGrid grid,Row row);
 		void listenAddColumn(DataGrid grid,Row row,java.lang.Object columnKey);
+		void listenRemoveColumn(DataGrid grid,Row row,java.lang.Object columnKey);
+		java.lang.Object listenFormatValue(DataGrid grid,Row row,java.lang.Object columnKey,java.lang.Object formatted);
 		/**/
 		
 		public static abstract class AbstractImpl extends AbstractObject implements Listener,Serializable{
 			@Override
 			public void listenAddRow(DataGrid grid, Row row) {}
 			@Override
+			public void listenRemoveRow(DataGrid grid, Row row) {}
+			@Override
 			public void listenAddColumn(DataGrid grid, Row row, java.lang.Object columnKey) {}
+			@Override
+			public void listenRemoveColumn(DataGrid grid, Row row, java.lang.Object columnKey) {}
+			
+			@Override
+			public java.lang.Object listenFormatValue(DataGrid grid, Row row, java.lang.Object columnKey,java.lang.Object formatted) {
+				return formatted;
+			}
 		}
 	}
 }

@@ -10,5 +10,15 @@
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
 	<h:outputText value="#{column.headerText}" />
+	<!--
+	<ui:decorate template="/command/commandbutton/default.xhtml">
+ 		<ui:param name="commandButton" value="#{column.removeCommandButton}"/>
+ 		<ui:param name="actionArgument" value="#{column}"/>
+ 	</ui:decorate>
+	-->
+	
+	<p:commandButton action="#{column.removeCommandButton.action(column)}" update="#{column.removeCommandButton.update}"
+		process="#{column.removeCommandButton.process}" title="#{column.removeCommandButton.title}" icon="#{column.removeCommandButton.icon}"
+		rendered="#{column.removeCommandButton!=null and column.removeCommandButton.rendered}"/>
 	
 </ui:composition>

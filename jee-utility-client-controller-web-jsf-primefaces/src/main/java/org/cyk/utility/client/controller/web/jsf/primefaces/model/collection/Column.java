@@ -10,6 +10,7 @@ import org.cyk.utility.__kernel__.object.Configurator;
 import org.cyk.utility.__kernel__.string.Case;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObject;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -22,6 +23,7 @@ public class Column extends AbstractObject implements Serializable {
 	private Object filterValue;
 	private Integer index;
 	private CellEditor cellEditor;
+	private CommandButton removeCommandButton;
 	
 	/**/
 	
@@ -34,6 +36,7 @@ public class Column extends AbstractObject implements Serializable {
 	public static final String FIELD_FIELD_NAME = "fieldName";
 	public static final String FIELD_FILTER_BY = "filterBy";
 	public static final String FIELD_VISIBLE = "visible";
+	public static final String FIELD_REMOVE_COMMAND_BUTTON = "removeCommandButton";
 	
 	/**/
 	

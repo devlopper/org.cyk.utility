@@ -8,12 +8,11 @@ import java.util.Map;
 
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.data.structure.grid.Grid;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
-import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.object.Builder;
-import org.cyk.utility.__kernel__.object.__static__.controller.DataGrid;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
@@ -34,9 +33,9 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 	protected Column menuColumn;
 	protected Collection<Column> columnsAfterRowIndex,selectedColumnsAfterRowIndex;
 	protected Boolean areColumnsChoosable,isRowAddable,isColumnAddable;
-	protected CommandButton addRowCommandButton,addColumnCommandButton;
+	protected CommandButton addRowCommandButton,removeRowCommandButton,addColumnCommandButton;
 	protected String columnFieldNameFormat;
-	protected DataGrid dataGrid;
+	protected Grid dataGrid;
 	
 	/**/
 	
@@ -69,6 +68,23 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 				return "row added";
 			}
 		}.setAction(AbstractAction.Listener.Action.EXECUTE_FUNCTION));
+		
+		removeRowCommandButton = CommandButton.build(CommandButton.FIELD_TITLE,"Retirer",CommandButton.FIELD_ICON,"fa fa-minus",CommandButton.ConfiguratorImpl.FIELD_COLLECTION,this
+				,CommandButton.ConfiguratorImpl.FIELD_COLLECTION_UPDATABLE,Boolean.TRUE
+				,CommandButton.ConfiguratorImpl.FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_NULLABLE,Boolean.TRUE
+				,CommandButton.FIELD_LISTENER,new AbstractAction.Listener.AbstractImpl() {
+			protected Object __executeFunction__(Object argument) {
+				if(dataGrid == null) {
+					
+				}else {
+					if(argument instanceof Grid.Row)
+						dataGrid.removeRow((Grid.Row) argument);
+				}
+				return "row removed";
+			}
+		}.setAction(AbstractAction.Listener.Action.EXECUTE_FUNCTION));
+		menuColumn.setRendered(Boolean.TRUE);
+		recordMenu = null;
 		return this;
 	}
 	
@@ -93,9 +109,9 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 			protected Object __executeFunction__(Object argument) {
 				Map<Object,Object> arguments = null;
 				if(listener == null)
-					arguments = Listener.AbstractImpl.__getColumnArguments__(AbstractDataTable.this);
+					arguments = Listener.AbstractImpl.__getColumnArguments__(AbstractDataTable.this,null);
 				else
-					arguments = ((Listener)listener).listenAddColumnGetArguments(AbstractDataTable.this);
+					arguments = ((Listener)listener).listenAddColumnGetArguments(AbstractDataTable.this,null);
 				Column column = Column.build(arguments);
 				addColumnsAfterRowIndex(column);
 				if(listener == null)
@@ -111,8 +127,6 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 		}.setAction(AbstractAction.Listener.Action.EXECUTE_FUNCTION));
 		return this;
 	}
-	
-	
 	
 	public AbstractDataTable enableAjaxCellEdit() {
 		setEditable(Boolean.TRUE);
@@ -218,8 +232,14 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 		
 		@Override
 		public void configure(DATATABLE dataTable, Map<Object, Object> arguments) {
-			if(DataGrid.Row.class.equals(MapHelper.readByKey(arguments, DataTable.FIELD_ELEMENT_CLASS))) {
-				dataTable.setDataGrid(new DataGrid().setRows(new ArrayList<DataGrid.Row>()));
+			Listener listener = (Listener) MapHelper.readByKey(arguments, DataTable.FIELD_LISTENER);
+			if(Grid.Row.class.equals(MapHelper.readByKey(arguments, DataTable.FIELD_ELEMENT_CLASS))) {
+				dataTable.setDataGrid((Grid) MapHelper.readByKey(arguments, DataTable.FIELD_DATA_GRID));
+				if(dataTable.getDataGrid() == null)
+					dataTable.setDataGrid(new Grid());
+				if(dataTable.getDataGrid().getRows() == null)
+					dataTable.getDataGrid().setRows(new ArrayList<Grid.Row>());
+				arguments.put(DataTable.FIELD_DATA_GRID, null);
 			}
 			if(dataTable.getDataGrid() != null) {
 				if(MapHelper.readByKey(arguments, DataTable.FIELD_VALUE) == null)
@@ -267,7 +287,19 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 				}else {
 					dataTable.enableCommandButtonAddRow().enableCommandButtonAddColumn().enableCommandButtonSave();	
 				}
-			}	
+			}
+			
+			if(dataTable.getDataGrid() != null) {
+				if(CollectionHelper.isNotEmpty(dataTable.dataGrid.getColumnsKeys())) {
+					dataTable.dataGrid.getColumnsKeys().forEach(key -> {
+						if(key != null) {
+							Map<Object,Object> columnArguments = listener == null ? Listener.AbstractImpl.__getColumnArguments__(dataTable, key.toString())
+									: listener.listenAddColumnGetArguments(dataTable, key.toString());
+							dataTable.addColumnsAfterRowIndex(Column.build(columnArguments));	
+						}						
+					});
+				}
+			}
 		}
 	}
 	
@@ -283,9 +315,13 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 		
 		void listenAddRow(AbstractDataTable dataTable,Object element);
 		
+		void listenRemoveRow(AbstractDataTable dataTable,Object element);
+		
 		void listenAddColumn(AbstractDataTable dataTable,Column column);
 		
-		Map<Object,Object> listenAddColumnGetArguments(AbstractDataTable dataTable);
+		Map<Object,Object> listenAddColumnGetArguments(AbstractDataTable dataTable,String fieldName);
+		
+		void listenRemoveColumn(AbstractDataTable dataTable,Column column);
 		
 		/**/
 		
@@ -310,19 +346,45 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 			public void listenAddRow(AbstractDataTable dataTable, Object element) {}
 			
 			@Override
+			public void listenRemoveRow(AbstractDataTable dataTable, Object element) {}
+			
+			@Override
 			public void listenAddColumn(AbstractDataTable dataTable, Column column) {}
 						
 			@Override
-			public Map<Object, Object> listenAddColumnGetArguments(AbstractDataTable dataTable) {
-				return __getColumnArguments__(dataTable);
+			public Map<Object, Object> listenAddColumnGetArguments(AbstractDataTable dataTable,String fieldName) {
+				return __getColumnArguments__(dataTable,fieldName);
 			}
+			
+			@Override
+			public void listenRemoveColumn(AbstractDataTable dataTable, Column column) {}
 			
 			/**/
 			
-			public static Map<Object, Object> __getColumnArguments__(AbstractDataTable dataTable) {
-				return MapHelper.instantiate(Column.FIELD_HEADER_TEXT,"NewCol",Column.FIELD_FIELD_NAME
-						,String.format(dataTable.columnFieldNameFormat, CollectionHelper.getSize(dataTable.columnsAfterRowIndex))
-						,Column.ConfiguratorImpl.FIELD_EDITABLE,dataTable.editable);
+			public static Map<Object, Object> __getColumnArguments__(AbstractDataTable dataTable,String fieldName) {
+				if(StringHelper.isBlank(fieldName))
+					fieldName = String.format(dataTable.columnFieldNameFormat, CollectionHelper.getSize(dataTable.columnsAfterRowIndex));
+				return MapHelper.instantiate(Column.FIELD_HEADER_TEXT,fieldName,Column.FIELD_FIELD_NAME,fieldName
+						,Column.ConfiguratorImpl.FIELD_EDITABLE,dataTable.editable,Column.FIELD_REMOVE_COMMAND_BUTTON
+						,CommandButton.build(CommandButton.FIELD_TITLE,"Retirer",CommandButton.FIELD_ICON,"fa fa-minus"
+								,CommandButton.ConfiguratorImpl.FIELD_COLLECTION,dataTable
+								,CommandButton.ConfiguratorImpl.FIELD_COLLECTION_UPDATABLE,Boolean.TRUE
+								,CommandButton.ConfiguratorImpl.FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_NULLABLE,Boolean.TRUE
+								,CommandButton.FIELD_LISTENER,new AbstractAction.Listener.AbstractImpl() {
+							
+							protected Object __executeFunction__(Object argument) {
+								if(!(argument instanceof Column) || CollectionHelper.isEmpty(dataTable.columnsAfterRowIndex))
+									return null;
+								Column column = (Column) argument;
+								dataTable.columnsAfterRowIndex.remove(column);
+								if(dataTable.getDataGrid() == null) {
+									
+								}else {
+									dataTable.getDataGrid().removeColumn(column.getFieldName());
+								}
+								return "column removed";
+							}
+						}.setAction(AbstractAction.Listener.Action.EXECUTE_FUNCTION)));
 			}
 		}
 		

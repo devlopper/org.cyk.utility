@@ -443,7 +443,8 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 				if(collectionUpdatable == null)
 					collectionUpdatable = MapHelper.readByKey(arguments, FIELD_LISTENER) != null;
 				if(Boolean.TRUE.equals(collectionUpdatable)) {
-					action.addUpdatables(collection);
+					//action.addUpdatables(collection);
+					action.addUpdates(":form:"+collection.getIdentifier());
 				}else {
 					//action does not impact collection so no need to notify success
 					action.runnerArguments.setSuccessMessageArguments(null);

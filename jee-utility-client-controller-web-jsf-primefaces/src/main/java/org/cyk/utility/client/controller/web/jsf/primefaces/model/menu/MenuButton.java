@@ -25,6 +25,11 @@ public class MenuButton extends AbstractMenu implements Serializable {
 	public static class ConfiguratorImpl extends AbstractConfiguratorImpl<MenuButton> implements Serializable {
 
 		@Override
+		protected String __getTemplate__(MenuButton object, Map<Object, Object> arguments) {
+			return "/menu/button/default.xhtml";
+		}
+		
+		@Override
 		protected Class<MenuButton> __getClass__() {
 			return MenuButton.class;
 		}
