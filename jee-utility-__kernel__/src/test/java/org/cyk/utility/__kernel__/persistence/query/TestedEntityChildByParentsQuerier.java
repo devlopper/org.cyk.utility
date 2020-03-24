@@ -10,7 +10,7 @@ import org.cyk.utility.__kernel__.value.Value;
 @Queries(value = {
 		@Query(tupleClass = TestedEntityChild.class,name = "readByParentsCodes",value = "SELECT t FROM TestedEntityChild t WHERE t.parent.code IN :"+TestedEntityChildByParentsQuerier.PARAMETER_NAME_PARENTS_CODES)
 })
-public interface TestedEntityChildByParentsQuerier extends ByDimensionOneQuerier<TestedEntityChild, String,TestedEntityParent,String> {
+public interface TestedEntityChildByParentsQuerier extends ByDimensionOneBusinessIdentifierQuerier<TestedEntityChild,TestedEntityParent,String> {
 
 	/**/
 	

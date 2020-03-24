@@ -10,7 +10,7 @@ import org.cyk.utility.__kernel__.persistence.query.QueryExecutor.Arguments;
 public class TestedEntityChildByParentsQuerierImpl extends AbstractObject implements TestedEntityChildByParentsQuerier,Serializable {
 
 	@Override
-	public Collection<TestedEntityChild> readByBusinessIdentifiers(Collection<String> businessIdentifiers,Arguments arguments) {
+	public Collection<TestedEntityChild> readByIdentifiers(Collection<String> businessIdentifiers,Arguments arguments) {
 		if(CollectionHelper.isEmpty(businessIdentifiers))
 			return null;
 		if(arguments == null)
@@ -20,7 +20,7 @@ public class TestedEntityChildByParentsQuerierImpl extends AbstractObject implem
 	}
 
 	@Override
-	public Long countByBusinessIdentifiers(Collection<String> businessIdentifiers, Arguments arguments) {
+	public Long countByIdentifiers(Collection<String> businessIdentifiers, Arguments arguments) {
 		if(CollectionHelper.isEmpty(businessIdentifiers))
 			return null;
 		if(arguments == null)

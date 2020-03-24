@@ -12,6 +12,7 @@ import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.object.marker.IdentifiableSystem;
 import org.cyk.utility.__kernel__.value.Value;
 
@@ -21,7 +22,6 @@ import lombok.experimental.Accessors;
 
 public interface EntityCreator {
 
-	@SuppressWarnings("unchecked")
 	default void createMany(Arguments arguments) {
 		if(arguments == null || CollectionHelper.isEmpty(arguments.objects))
 			return;
@@ -121,6 +121,11 @@ public interface EntityCreator {
 			addObjects(CollectionHelper.listOf(objects));
 			return this;
 		}
+	}
+	
+	public abstract class AbstractEntityCreatorImpl extends AbstractObject implements EntityCreator,Serializable {
+		private static final long serialVersionUID = 1L;
+	
 	}
 	
 	/**/

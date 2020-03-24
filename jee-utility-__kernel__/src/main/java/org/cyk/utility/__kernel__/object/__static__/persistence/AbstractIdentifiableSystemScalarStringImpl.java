@@ -19,6 +19,6 @@ public abstract class AbstractIdentifiableSystemScalarStringImpl extends Abstrac
 	private static final long serialVersionUID = 1L;
 	
 	@Id @Column(name=COLUMN_IDENTIFIER)
-	private String identifier;
+	protected String identifier;
 	
 }

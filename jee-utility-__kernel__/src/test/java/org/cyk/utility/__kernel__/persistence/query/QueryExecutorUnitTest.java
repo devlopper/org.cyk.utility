@@ -113,14 +113,14 @@ public class QueryExecutorUnitTest extends AbstractWeldUnitTest {
 	public void testedEntityChild_withTuple_many_readByParentsCodes_2_usingCustomObject(){		
 		EntityCreator.getInstance().createManyInTransaction(new TestedEntityParent("1","1","1"),new TestedEntityParent("2","2","1"),new TestedEntityParent("3","3","1"));
 		EntityCreator.getInstance().createManyInTransaction(new TestedEntityChild("1.1","1.1","1","1"),new TestedEntityChild("1.2","1.2","1","1"),new TestedEntityChild("2.1","2.1","1","2"));
-		__assertReadMany__(TestedEntityChildByParentsQuerier.getInstance().readByBusinessIdentifiers("2"),"2.1");
+		__assertReadMany__(TestedEntityChildByParentsQuerier.getInstance().readByIdentifiers("2"),"2.1");
 	}
 	
 	@Test
 	public void testedEntityChild_withTuple_many_readByParentsCodes_3_usingCustomObject(){		
 		EntityCreator.getInstance().createManyInTransaction(new TestedEntityParent("1","1","1"),new TestedEntityParent("2","2","1"),new TestedEntityParent("3","3","1"));
 		EntityCreator.getInstance().createManyInTransaction(new TestedEntityChild("1.1","1.1","1","1"),new TestedEntityChild("1.2","1.2","1","1"),new TestedEntityChild("2.1","2.1","1","2"));
-		__assertReadMany__(TestedEntityChildByParentsQuerier.getInstance().readByBusinessIdentifiers("3"));
+		__assertReadMany__(TestedEntityChildByParentsQuerier.getInstance().readByIdentifiers("3"));
 	}
 	
 	/* read one */
