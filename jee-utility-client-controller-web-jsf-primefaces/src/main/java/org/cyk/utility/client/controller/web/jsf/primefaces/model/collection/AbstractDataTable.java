@@ -99,6 +99,8 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 			value = "Ajouter une colonne";
 		if(icon == null)
 			icon = "fa fa-plus";
+		if(StringHelper.isBlank(variableFormat) && dataGrid != null)
+			variableFormat = dataGrid.getColumnKeyFormat();
 		if(StringHelper.isBlank(variableFormat))
 			variableFormat = "value%s";
 		columnFieldNameFormat = variableFormat;
@@ -107,11 +109,18 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 				,CommandButton.ConfiguratorImpl.FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_NULLABLE,Boolean.TRUE
 				,CommandButton.FIELD_LISTENER,new AbstractAction.Listener.AbstractImpl() {
 			protected Object __executeFunction__(Object argument) {
+				String fieldName;
+				if(dataGrid == null) {
+					fieldName = null;
+				}else
+					fieldName = (String) dataGrid.formatNextColumnKey();
+				System.out.println(
+						"AbstractDataTable.enableCommandButtonAddColumn(...).new AbstractImpl() {...}.__executeFunction__() : "+fieldName);
 				Map<Object,Object> arguments = null;
 				if(listener == null)
-					arguments = Listener.AbstractImpl.__getColumnArguments__(AbstractDataTable.this,null);
+					arguments = Listener.AbstractImpl.__getColumnArguments__(AbstractDataTable.this,fieldName);
 				else
-					arguments = ((Listener)listener).listenAddColumnGetArguments(AbstractDataTable.this,null);
+					arguments = ((Listener)listener).listenAddColumnGetArguments(AbstractDataTable.this,fieldName);
 				Column column = Column.build(arguments);
 				addColumnsAfterRowIndex(column);
 				if(listener == null)
@@ -121,7 +130,7 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 				if(dataGrid == null) {
 					
 				}else
-					dataGrid.addColumn();
+					dataGrid.addColumn(fieldName);
 				return "column added";
 			}
 		}.setAction(AbstractAction.Listener.Action.EXECUTE_FUNCTION));

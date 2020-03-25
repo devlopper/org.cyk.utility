@@ -106,27 +106,27 @@ public interface EntitySaver {
 		private Collection<T> existingCollection;
 		private EntityManager entityManager;
 		private Boolean isTransactional;
-		private Listener listener;
+		private Listener<T> listener;
 	}
 	
-	public static interface Listener {
-		void create(Collection<?> collection,EntityManager entityManager);
-		void update(Collection<?> collection,EntityManager entityManager);
-		void delete(Collection<?> collection,EntityManager entityManager);
+	public static interface Listener<T> {
+		void create(Collection<T> collection,EntityManager entityManager);
+		void update(Collection<T> collection,EntityManager entityManager);
+		void delete(Collection<T> collection,EntityManager entityManager);
 		
-		public static abstract class AbstractImpl extends AbstractObject implements Listener,Serializable {
+		public static abstract class AbstractImpl<T> extends AbstractObject implements Listener<T>,Serializable {
 			@Override
-			public void create(Collection<?> collection,EntityManager entityManager) {
+			public void create(Collection<T> collection,EntityManager entityManager) {
 				__create__(collection, entityManager);
 			}
 
 			@Override
-			public void update(Collection<?> collection,EntityManager entityManager) {
+			public void update(Collection<T> collection,EntityManager entityManager) {
 				__update__(collection, entityManager);
 			}
 
 			@Override
-			public void delete(Collection<?> collection,EntityManager entityManager) {
+			public void delete(Collection<T> collection,EntityManager entityManager) {
 				__delete__(collection, entityManager);
 			}
 			

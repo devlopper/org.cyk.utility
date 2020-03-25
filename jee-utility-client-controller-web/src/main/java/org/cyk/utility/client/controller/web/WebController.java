@@ -9,6 +9,7 @@ import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.enumeration.Action;
 import org.cyk.utility.__kernel__.identifier.resource.ParameterName;
 import org.cyk.utility.__kernel__.object.AbstractObject;
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.ControllerEntity;
 import org.cyk.utility.client.controller.ControllerLayer;
@@ -40,7 +41,7 @@ public class WebController extends AbstractObject implements Serializable {
 		return Action.getByNameCaseInsensitive(value);
 	}
 	
-	public <T> T getRequestParameterEntityBySystemIdentifier(Class<T> entityClass,String parameterName) {
+	public <T> T getRequestParameterEntityBySystemIdentifier(Class<T> entityClass,String parameterName,Properties properties) {
 		if(entityClass == null || StringHelper.isBlank(parameterName))
 			return null;
 		String identifier = getRequestParameter(parameterName);
@@ -49,7 +50,11 @@ public class WebController extends AbstractObject implements Serializable {
 		ControllerEntity<T> controllerEntity = __inject__(ControllerLayer.class).injectInterfaceClassFromEntityClass(entityClass);
 		if(controllerEntity == null)
 			return null;
-		return controllerEntity.readBySystemIdentifier(identifier);
+		return controllerEntity.readBySystemIdentifier(identifier,properties);
+	}
+	
+	public <T> T getRequestParameterEntityBySystemIdentifier(Class<T> entityClass,String parameterName) {
+		return getRequestParameterEntityBySystemIdentifier(entityClass, parameterName, null);
 	}
 	
 	public <T> T getRequestParameterEntityBySystemIdentifier(Class<T> entityClass) {

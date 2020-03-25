@@ -32,7 +32,7 @@ public class Grid extends AbstractObjectImpl implements Serializable {
 	private Set<java.lang.Object> columnsKeys;
 	private Listener listener;
 	
-	public Grid(Collection<Object> rowsObjects,String...columnsKeys) {
+	public Grid(Collection<?> rowsObjects,String...columnsKeys) {
 		addColumnsKeys(columnsKeys);
 		addRows(rowsObjects);
 	}
@@ -72,7 +72,7 @@ public class Grid extends AbstractObjectImpl implements Serializable {
 		return rows;
 	}
 	
-	public Grid addRows(Collection<Object> rowsObjects) {
+	public Grid addRows(Collection<?> rowsObjects) {
 		if(CollectionHelper.isEmpty(rowsObjects))
 			return this;
 		rowsObjects.forEach(object -> {
@@ -90,8 +90,8 @@ public class Grid extends AbstractObjectImpl implements Serializable {
 			columnsKeys.forEach(key -> {
 				Object value = null;
 				if(object!= null && key != null)
-					value = listener == null ? Listener.AbstractImpl.__listenGetColumnValueFromRowObject__(this, object, key) 
-							: listener.listenGetColumnValueFromRowObject(this, object, key);
+					value = listener == null ? Listener.AbstractImpl.__getColumnValueFromRowObject__(this, object, key) 
+							: listener.getColumnValueFromRowObject(this, object, key);
 				row.addColumn(key,value);
 			});
 		if(listener != null)
@@ -112,19 +112,27 @@ public class Grid extends AbstractObjectImpl implements Serializable {
 		return this;
 	}
 	
+	public Object formatNextColumnKey() {
+		if(listener == null) {
+			if(StringHelper.isBlank(columnKeyFormat))
+				return "row"+getNumberOfColumns();
+			return String.format(columnKeyFormat, getNumberOfColumns());	
+		}
+		return listener.formatNextColumnKey(this);
+	}
+	
 	public Grid addColumn(String key) {
 		if(CollectionHelper.isEmpty(rows)) {
 			LogHelper.logInfo("We cannot add column because there is no row", getClass());
 			return this;
 		}
 		if(StringHelper.isBlank(key) && StringHelper.isNotBlank(columnKeyFormat))
-			key = String.format(columnKeyFormat, getNumberOfColumns());
+			key = (String) formatNextColumnKey();
 		if(StringHelper.isBlank(key))
 			key = "row"+getNumberOfColumns();
 		for(Row row : rows) {
 			row.addColumn(key);
-			if(listener != null)
-				listener.listenAddColumn(this, row,key);
+			
 		}
 		return this;
 	}
@@ -172,10 +180,9 @@ public class Grid extends AbstractObjectImpl implements Serializable {
 	public java.lang.Object formatValue(Row row,java.lang.Object key) {
 		if(row == null || key == null)
 			return null;
-		java.lang.Object value = getValue(row, key);
-		if(listener != null)
-			value = listener.listenFormatValue(this, row, key, value);
-		return value;
+		if(listener == null)
+			Listener.AbstractImpl.__formatValue__(this, row, key);
+		return listener.formatValue(this, row, key);
 	}
 	
 	@Override
@@ -202,9 +209,9 @@ public class Grid extends AbstractObjectImpl implements Serializable {
 				return this;
 			values.forEach((key,value) -> {
 				if(grid == null || grid.listener == null)
-					Listener.AbstractImpl.__listenSetColumnValueToRowObject__(grid, this, key, value);
+					Listener.AbstractImpl.__setColumnValueToRowObject__(grid, this, key, value);
 				else
-					grid.listener.listenSetColumnValueToRowObject(grid, this, key, value);
+					grid.listener.setColumnValueToRowObject(grid, this, key, value);
 			});
 			return this;
 		}
@@ -217,6 +224,8 @@ public class Grid extends AbstractObjectImpl implements Serializable {
 		
 		public Row addColumn(java.lang.Object key,java.lang.Object value) {
 			getValues(Boolean.TRUE).put(key, value);
+			if(grid.listener != null)
+				grid.listener.listenAddColumn(grid, this,key);
 			return this;
 		}
 		
@@ -248,6 +257,14 @@ public class Grid extends AbstractObjectImpl implements Serializable {
 			return values.get(key);
 		}
 		
+		public java.lang.Object formatValue(java.lang.Object key) {
+			if(key == null)
+				return null;
+			if(grid == null || grid.listener == null)
+				Listener.AbstractImpl.__formatValue__(grid, this, key);
+			return grid.listener.formatValue(grid, this, key);
+		}
+		
 		@Override
 		public String toString() {
 			return values ==  null ? null : values.toString();
@@ -264,9 +281,10 @@ public class Grid extends AbstractObjectImpl implements Serializable {
 		void listenRemoveRow(Grid grid,Row row);
 		void listenAddColumn(Grid grid,Row row,java.lang.Object columnKey);
 		void listenRemoveColumn(Grid grid,Row row,java.lang.Object columnKey);
-		java.lang.Object listenGetColumnValueFromRowObject(Grid grid,Object rowObject,java.lang.Object columnKey);
-		void listenSetColumnValueToRowObject(Grid grid, Row row, Object columnKey,Object value);
-		java.lang.Object listenFormatValue(Grid grid,Row row,java.lang.Object columnKey,java.lang.Object formatted);
+		java.lang.Object getColumnValueFromRowObject(Grid grid,Object rowObject,java.lang.Object columnKey);
+		void setColumnValueToRowObject(Grid grid, Row row, Object columnKey,Object value);
+		java.lang.Object formatValue(Grid grid,Row row,java.lang.Object columnKey);
+		Object formatNextColumnKey(Grid grid);
 		/**/
 		
 		public static abstract class AbstractImpl extends AbstractObject implements Listener,Serializable{
@@ -280,28 +298,51 @@ public class Grid extends AbstractObjectImpl implements Serializable {
 			public void listenRemoveColumn(Grid grid, Row row, java.lang.Object columnKey) {}
 			
 			@Override
-			public Object listenGetColumnValueFromRowObject(Grid grid, Object rowObject, Object columnKey) {
-				return __listenGetColumnValueFromRowObject__(grid, rowObject, columnKey);
+			public Object getColumnValueFromRowObject(Grid grid, Object rowObject, Object columnKey) {
+				return __getColumnValueFromRowObject__(grid, rowObject, columnKey);
 			}
 			
 			@Override
-			public void listenSetColumnValueToRowObject(Grid grid, Row row, Object columnKey, Object value) {
-				__listenSetColumnValueToRowObject__(grid, row, columnKey, value);
+			public void setColumnValueToRowObject(Grid grid, Row row, Object columnKey, Object value) {
+				__setColumnValueToRowObject__(grid, row, columnKey, value);
 			}
 			
 			@Override
-			public java.lang.Object listenFormatValue(Grid grid, Row row, java.lang.Object columnKey,java.lang.Object formatted) {
-				return formatted;
+			public java.lang.Object formatValue(Grid grid, Row row, java.lang.Object columnKey) {
+				if(grid == null || row == null || columnKey == null)
+					return null;
+				return formatValue(grid, row, columnKey,row.getValue(columnKey));
+			}
+			
+			protected java.lang.Object formatValue(Grid grid, Row row, java.lang.Object columnKey,Object value) {
+				return value;
+			}
+			
+			@Override
+			public Object formatNextColumnKey(Grid grid) {
+				return __formatNextColumnKey__(grid);
 			}
 			
 			/**/
 			
-			public static Object __listenGetColumnValueFromRowObject__(Grid grid, Object rowObject, Object columnKey) {
+			public static Object __getColumnValueFromRowObject__(Grid grid, Object rowObject, Object columnKey) {
 				return FieldHelper.read(rowObject, columnKey.toString());
 			}
 			
-			public static void __listenSetColumnValueToRowObject__(Grid grid, Row row, Object columnKey,Object value) {
+			public static void __setColumnValueToRowObject__(Grid grid, Row row, Object columnKey,Object value) {
 				FieldHelper.write(row.getObject(), columnKey.toString(), value);
+			}
+			
+			public static java.lang.Object __formatValue__(Grid grid, Row row, java.lang.Object columnKey) {
+				return row.getValue(columnKey);
+			}
+			
+			public static Object __formatNextColumnKey__(Grid grid) {
+				if(grid == null)
+					return null;
+				if(StringHelper.isBlank(grid.columnKeyFormat))
+					return "row"+grid.getNumberOfColumns();
+				return String.format(grid.columnKeyFormat, grid.getNumberOfColumns());
 			}
 		}
 	}

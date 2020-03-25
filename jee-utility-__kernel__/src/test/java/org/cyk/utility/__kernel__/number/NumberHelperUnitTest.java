@@ -198,4 +198,11 @@ public class NumberHelperUnitTest extends AbstractWeldUnitTest {
 	public void operate_multiply(){
 		assertThat(NumberHelper.multiply(2,3).intValue()).isEqualTo(6);
 	}
+	
+	//@Test
+	public void formatThousandSeparator(){
+		//DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.FRENCH);		
+		//System.out.println(NumberFormat.getInstance(Locale.FRENCH).format(18000000l));
+		//assertThat(NumberHelper.multiply(2,3).intValue()).isEqualTo(6);
+	}
 }
