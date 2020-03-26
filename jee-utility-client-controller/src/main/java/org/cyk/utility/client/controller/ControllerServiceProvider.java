@@ -41,8 +41,5 @@ public interface ControllerServiceProvider<OBJECT> extends SystemServiceProvider
 	ControllerServiceProvider<OBJECT> process(OBJECT object,Properties properties);
 	ControllerServiceProvider<OBJECT> process(OBJECT object);
 	
-	
-	
 	/**/
-
 }

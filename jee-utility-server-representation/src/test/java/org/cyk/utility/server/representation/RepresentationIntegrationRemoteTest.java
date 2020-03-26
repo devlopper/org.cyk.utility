@@ -30,7 +30,22 @@ import org.junit.runner.RunWith;
 public class RepresentationIntegrationRemoteTest  {
 	
 	@ArquillianResource private URL url;
-	
+	/*
+	@Test
+	public void myEntity_create_one_reader() throws Exception{
+		MyEntityRepresentation myEntityRepresentation = __getProxy__(MyEntityRepresentation.class,url);
+		myEntityRepresentation.deleteAll();
+		myEntityRepresentation.createOne(new MyEntityDto().setCode("c01").setName("n01"));
+		ResourceReader resourceReader = __getProxy__(ResourceReader.class,url);
+		
+		Response response = resourceReader.read(new ResourceReader.Arguments().setPersistenceEntityClassName(MyEntity.class.getName())
+				.setRepresentationEntityClassName(MyEntityDto.class.getName()));
+		
+		System.out.println("RepresentationIntegrationRemoteTest.myEntity_create_one_reader()");
+		System.out.println(response.getStatusInfo());
+		//System.out.println(response.readEntity(entityType));
+	}
+	*/
 	@Test
 	public void myEntity_create_one() throws Exception{
 		MyEntityRepresentation myEntityRepresentation = __getProxy__(MyEntityRepresentation.class,url);

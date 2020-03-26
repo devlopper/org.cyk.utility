@@ -2,6 +2,8 @@ package org.cyk.utility.__kernel__.persistence.query;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
+import org.cyk.utility.__kernel__.__entities__.TestedEntityChild;
+import org.cyk.utility.__kernel__.__entities__.TestedEntityParent;
 import org.cyk.utility.__kernel__.persistence.query.annotation.Queries;
 import org.cyk.utility.__kernel__.persistence.query.annotation.Query;
 import org.cyk.utility.__kernel__.string.StringHelper;

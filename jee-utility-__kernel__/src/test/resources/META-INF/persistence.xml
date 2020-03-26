@@ -4,8 +4,8 @@
 	version="2.0">
 
 	<persistence-unit name="pu" transaction-type="RESOURCE_LOCAL">
-		<class>org.cyk.utility.__kernel__.persistence.query.TestedEntityParent</class>
-		<class>org.cyk.utility.__kernel__.persistence.query.TestedEntityChild</class>
+		<class>org.cyk.utility.__kernel__.__entities__.TestedEntityParent</class>
+		<class>org.cyk.utility.__kernel__.__entities__.TestedEntityChild</class>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		
 		<properties>

@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.instance.InstanceGetterImpl;
-import org.cyk.utility.__kernel__.mapping.AbstractMapperSourceDestinationImpl;
+import org.cyk.utility.__kernel__.mapping.MapperSourceDestination;
 import org.cyk.utility.__kernel__.object.__static__.persistence.embeddedable.AbstractObjectImpl;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
@@ -271,7 +271,7 @@ public class ValueConverterUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	@Mapper
-	public static abstract class RepresentationEmbbedableMapper extends AbstractMapperSourceDestinationImpl<RepresentationEmbbedable,PersistenceEmbbedable> {
+	public static abstract class RepresentationEmbbedableMapper extends MapperSourceDestination.AbstractImpl<RepresentationEmbbedable,PersistenceEmbbedable> {
 		private static final long serialVersionUID = 1L;
 		
 	}

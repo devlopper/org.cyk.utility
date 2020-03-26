@@ -13,6 +13,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.klass.PersistableClassesGetter;
+import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.assertion.AssertionsProviderClassMap;
 import org.cyk.utility.server.business.api.MyEntityAssertionsProvider;
@@ -25,7 +26,6 @@ import org.cyk.utility.server.persistence.entities.NodeHierarchy;
 import org.cyk.utility.server.persistence.entities.Parent;
 import org.cyk.utility.server.persistence.entities.ParentChild;
 import org.cyk.utility.server.persistence.entities.ParentType;
-import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
 import org.cyk.utility.server.representation.api.ChildRepresentation;
 import org.cyk.utility.server.representation.api.MyEntityRepresentation;
 import org.cyk.utility.server.representation.api.NodeRepresentation;
@@ -42,7 +42,6 @@ import org.junit.Test;
 public class RepresentationIntegrationTest extends AbstractRepresentationArquillianIntegrationTestWithDefaultDeployment {
 	private static final long serialVersionUID = 1L;
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void __listenBefore__() {
 		PersistableClassesGetter.COLLECTION.set(CollectionHelper.listOf(NodeHierarchy.class,Node.class,ParentChild.class,Parent.class,Child.class,ParentType.class,MyEntity.class));

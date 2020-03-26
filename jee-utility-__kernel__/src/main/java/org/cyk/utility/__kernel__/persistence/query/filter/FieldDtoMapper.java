@@ -11,7 +11,7 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldInstance;
 import org.cyk.utility.__kernel__.field.FieldInstancesRuntime;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
-import org.cyk.utility.__kernel__.mapping.AbstractMapperSourceDestinationImpl;
+import org.cyk.utility.__kernel__.mapping.MapperSourceDestination;
 import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.ValueDto;
@@ -19,7 +19,7 @@ import org.cyk.utility.__kernel__.value.ValueDto.Container;
 import org.mapstruct.Mapper;
 
 @Mapper
-public abstract class FieldDtoMapper extends AbstractMapperSourceDestinationImpl<FieldDto, Field> {
+public abstract class FieldDtoMapper extends MapperSourceDestination.AbstractImpl<FieldDto, Field> {
 	private static final long serialVersionUID = 1L;
 	
 	public ValueDto getValueDto(Object value) {

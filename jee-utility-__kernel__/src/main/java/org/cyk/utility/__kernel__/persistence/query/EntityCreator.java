@@ -1,7 +1,6 @@
-package org.cyk.utility.__kernel__.persistence;
+package org.cyk.utility.__kernel__.persistence.query;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -14,36 +13,33 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.object.marker.IdentifiableSystem;
+import org.cyk.utility.__kernel__.persistence.EntityManagerGetter;
 import org.cyk.utility.__kernel__.value.Value;
-
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 
 public interface EntityCreator {
 
-	default void createMany(Arguments arguments) {
-		if(arguments == null || CollectionHelper.isEmpty(arguments.objects))
+	default void createMany(QueryExecutorArguments arguments) {
+		if(arguments == null || CollectionHelper.isEmpty(arguments.getObjects()))
 			return;
-		EntityManager entityManager = arguments.entityManager;
+		EntityManager entityManager = arguments.getEntityManager();
 		if(entityManager == null)
 			entityManager = DependencyInjection.inject(EntityManagerGetter.class).get();
-		if(Boolean.TRUE.equals(arguments.isTransactional))
+		if(Boolean.TRUE.equals(arguments.getIsTransactional()))
 			entityManager.getTransaction().begin();
-		for(Object index : arguments.objects) {			
+		for(Object index : arguments.getObjects()) {			
 			if(index instanceof IdentifiableSystem && FieldHelper.readSystemIdentifier(index) == null) {
 				((IdentifiableSystem<String>)index).setSystemIdentifier(UUID.randomUUID().toString());
 			}
 			entityManager.persist(index);
 		}
-		if(Boolean.TRUE.equals(arguments.isTransactional))
+		if(Boolean.TRUE.equals(arguments.getIsTransactional()))
 			entityManager.getTransaction().commit();
 	}
 	
 	default void createMany(Collection<Object> objects,EntityManager entityManager) {
 		if(entityManager == null || CollectionHelper.isEmpty(objects))
 			return;
-		createMany(new Arguments().setObjects(objects).setEntityManager(entityManager));
+		createMany(new QueryExecutorArguments().setObjects(objects).setEntityManager(entityManager));
 	}
 	
 	default void createMany(Collection<Object> objects) {
@@ -67,7 +63,7 @@ public interface EntityCreator {
 	default void createManyInTransaction(Object...objects) {
 		if(ArrayHelper.isEmpty(objects))
 			return;
-		createMany(new Arguments().addObjects(CollectionHelper.listOf(objects)).setIsTransactional(Boolean.TRUE));
+		createMany(new QueryExecutorArguments().addObjects(CollectionHelper.listOf(objects)).setIsTransactional(Boolean.TRUE));
 	}
 	
 	default void createOne(Object object,EntityManager entityManager) {
@@ -79,13 +75,13 @@ public interface EntityCreator {
 	default void createOne(Object object) {
 		if(object == null)
 			return;
-		createMany(new Arguments().addObjects(object));
+		createMany(new QueryExecutorArguments().addObjects(object));
 	}
 	
 	default void createOne(Object object,Boolean isTransactional) {
 		if(object == null)
 			return;
-		createMany(new Arguments().addObjects(object).setIsTransactional(isTransactional));
+		createMany(new QueryExecutorArguments().addObjects(object).setIsTransactional(isTransactional));
 	}
 	
 	default void createOneInTransaction(Object object) {
@@ -96,34 +92,7 @@ public interface EntityCreator {
 	
 	/**/
 	
-	@Getter @Setter @Accessors(chain=true)
-	public static class Arguments implements Serializable {
-		private Collection<Object> objects;
-		private EntityManager entityManager;
-		private Boolean isTransactional;
-		
-		public Collection<Object> getObjects(Boolean injectIfNull) {
-			if(objects == null && Boolean.TRUE.equals(injectIfNull))
-				objects = new ArrayList<>();
-			return objects;
-		}
-		
-		public Arguments addObjects(Collection<Object> objects) {
-			if(CollectionHelper.isEmpty(objects))
-				return this;
-			getObjects(Boolean.TRUE).addAll(objects);
-			return this;
-		}
-		
-		public Arguments addObjects(Object...objects) {
-			if(ArrayHelper.isEmpty(objects))
-				return this;
-			addObjects(CollectionHelper.listOf(objects));
-			return this;
-		}
-	}
-	
-	public abstract class AbstractEntityCreatorImpl extends AbstractObject implements EntityCreator,Serializable {
+	public abstract class AbstractImpl extends AbstractObject implements EntityCreator,Serializable {
 		private static final long serialVersionUID = 1L;
 	
 	}

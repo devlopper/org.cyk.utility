@@ -1,14 +1,10 @@
 package org.cyk.utility.__kernel__.rest;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.io.Serializable;
 import java.util.Collection;
-import java.util.Map;
-
-import org.cyk.utility.__kernel__.string.StringHelper;
 
 public interface ResourceManager<RESOURCE> {
-
+	/*
 	URI getUniformResourceIdentifier();
 	ResourceManager<RESOURCE> setUniformResourceIdentifier(URI uniformResourceIdentifier);
 	
@@ -25,7 +21,18 @@ public interface ResourceManager<RESOURCE> {
 	
 	Map<String,String> getFieldsNamesMap();
 	ResourceManager<RESOURCE> setFieldsNamesMap(Map<String,String> fieldsNamesMap);
+	*/
+	Collection<RESOURCE> get();
 	
-	Collection<RESOURCE> getMany();
+	/**/
 	
+	public static abstract class AbstractResourceManagerImpl<RESOURCE> implements ResourceManager<RESOURCE>,Serializable {
+		private static final long serialVersionUID = 1L;
+		/*
+		@Getter @Setter @Accessors(chain=true) private URI uniformResourceIdentifier;
+		@Getter @Setter @Accessors(chain=true) private Class<RESOURCE> resourceClass;
+		@Getter @Setter @Accessors(chain=true) private Map<String,String> fieldsNamesMap;
+		*/
+	}
+
 }

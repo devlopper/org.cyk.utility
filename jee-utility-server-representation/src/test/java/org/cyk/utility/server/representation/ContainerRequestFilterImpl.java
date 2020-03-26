@@ -18,7 +18,6 @@ public class ContainerRequestFilterImpl implements ContainerRequestFilter,Serial
 	public void filter(ContainerRequestContext containerRequestContext) throws IOException {
 		if(containerRequestContext.getMethod().equals("POST")) {
 			byte[] bytes = IOUtils.toByteArray(containerRequestContext.getEntityStream());
-			System.out.println("REQUEST BODY : "+new String(bytes));
 			containerRequestContext.setEntityStream(new ByteArrayInputStream(bytes));
 		}
 	}

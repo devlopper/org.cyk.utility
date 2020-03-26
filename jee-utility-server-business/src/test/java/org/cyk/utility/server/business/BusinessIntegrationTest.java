@@ -31,7 +31,6 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 	
 	/* Create */
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void __listenBefore__() {
 		PersistableClassesGetter.COLLECTION.set(CollectionHelper.listOf(NodeHierarchy.class,Node.class,MyEntity.class));

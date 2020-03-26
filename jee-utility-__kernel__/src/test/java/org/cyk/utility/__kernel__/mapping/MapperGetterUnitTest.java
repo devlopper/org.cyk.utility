@@ -41,7 +41,7 @@ public class MapperGetterUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	@Mapper
-	public static abstract class SourceMapper extends AbstractMapperSourceDestinationImpl<Source, Destination> {
+	public static abstract class SourceMapper extends MapperSourceDestination.AbstractImpl<Source, Destination> {
 		private static final long serialVersionUID = 1L;
 
 	}

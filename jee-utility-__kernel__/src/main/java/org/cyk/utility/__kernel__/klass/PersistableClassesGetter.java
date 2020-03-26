@@ -42,6 +42,5 @@ public interface PersistableClassesGetter {
 	}
 	
 	Value INSTANCE = DependencyInjection.inject(Value.class);
-	Value COLLECTION = DependencyInjection.inject(Value.class);
-	
+	Value COLLECTION = DependencyInjection.inject(Value.class);	
 }

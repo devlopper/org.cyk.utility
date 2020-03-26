@@ -162,7 +162,7 @@ public class MapperUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	@Mapper
-	public static abstract class RepresentationEntityMapper extends AbstractMapperSourceDestinationImpl<RepresentationEntity, PersistenceEntity> {
+	public static abstract class RepresentationEntityMapper extends MapperSourceDestination.AbstractImpl<RepresentationEntity, PersistenceEntity> {
 		private static final long serialVersionUID = 1L;		
 		public static final RepresentationEntityMapper INSTANCE = Mappers.getMapper(RepresentationEntityMapper.class);
 		
@@ -175,7 +175,7 @@ public class MapperUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	@Mapper
-	public static abstract class RepresentationEntityDetailMapper extends AbstractMapperSourceDestinationImpl<RepresentationEntityDetail, PersistenceEntityDetail> {
+	public static abstract class RepresentationEntityDetailMapper extends MapperSourceDestination.AbstractImpl<RepresentationEntityDetail, PersistenceEntityDetail> {
 		private static final long serialVersionUID = 1L;
 		
 	}

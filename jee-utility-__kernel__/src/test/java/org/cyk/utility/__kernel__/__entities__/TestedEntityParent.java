@@ -1,8 +1,8 @@
-package org.cyk.utility.__kernel__.persistence.query;
+package org.cyk.utility.__kernel__.__entities__;
 
 import javax.persistence.Entity;
 
-import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringBoundedContextIdentifiableBusinessStringNamableImpl;
+import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 
 @Entity
 @Getter @Setter @Accessors(chain=true) @NoArgsConstructor
-public class TestedEntityParent extends AbstractIdentifiableSystemScalarStringBoundedContextIdentifiableBusinessStringNamableImpl {
+public class TestedEntityParent extends AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl {
 
 	public TestedEntityParent(String identifier, String code, String name) {
 		super();
