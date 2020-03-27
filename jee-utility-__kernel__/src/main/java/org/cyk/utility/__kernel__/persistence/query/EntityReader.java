@@ -11,7 +11,7 @@ import org.cyk.utility.__kernel__.value.Value;
 
 public interface EntityReader {
 
-	default <T> Collection<T> read(Class<T> tupleClass,QueryExecutorArguments arguments) {
+	default <T> Collection<T> readMany(Class<T> tupleClass,QueryExecutorArguments arguments) {
 		if(tupleClass == null)
 			throw new RuntimeException("Tuple class is required");
 		if(arguments == null)
@@ -20,17 +20,17 @@ public interface EntityReader {
 			String queryIdentifier = QueryHelper.getIdentifierReadAll(tupleClass);
 			arguments.setQuery(QueryHelper.getQueries().getByIdentifier(queryIdentifier));
 			if(arguments.getQuery() == null) {
-				arguments.setQuery(QueryGetter.getInstance().getBySelect(tupleClass, queryIdentifier,String.format("SELECT tuple  FROM %s tuple",tupleClass.getSimpleName())));
+				arguments.setQuery(QueryGetter.getInstance().getBySelect(tupleClass, queryIdentifier,String.format("SELECT tuple FROM %s tuple",tupleClass.getSimpleName())));
 				QueryHelper.addQueries(arguments.getQuery());
 			}
 		}
 		return QueryExecutor.getInstance().executeReadMany(tupleClass, arguments);
 	}
 	
-	default <T> Collection<T> read(Class<T> tupleClass) {
+	default <T> Collection<T> readMany(Class<T> tupleClass) {
 		if(tupleClass == null)
 			return null;
-		return read(tupleClass,null);
+		return readMany(tupleClass,null);
 	}
 	
 	/**/

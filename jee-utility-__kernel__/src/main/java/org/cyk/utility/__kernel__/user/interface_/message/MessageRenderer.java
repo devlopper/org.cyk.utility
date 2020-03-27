@@ -8,6 +8,7 @@ import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.value.Value;
 
 import lombok.Getter;
@@ -55,6 +56,20 @@ public interface MessageRenderer {
 	
 	default void render(String summary,RenderType...renderTypes) {
 		render(new Message().setSummary(summary).setSeverity(Severity.INFORMATION), renderTypes);
+	}
+	
+	/**/
+	
+	public abstract class AbstractImpl extends AbstractObject implements MessageRenderer,Serializable {
+
+		@Override
+		public void render(Collection<Message> messages, Collection<RenderType> renderTypes) {
+			if(CollectionHelper.isEmpty(messages) || CollectionHelper.isEmpty(renderTypes))
+				return;
+			__render__(messages, renderTypes);
+		}
+		
+		protected abstract void __render__(Collection<Message> messages, Collection<RenderType> renderTypes);
 	}
 	
 	/**/

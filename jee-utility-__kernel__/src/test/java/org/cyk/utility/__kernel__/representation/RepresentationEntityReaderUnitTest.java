@@ -8,31 +8,29 @@ import java.util.List;
 import javax.persistence.Persistence;
 import javax.ws.rs.core.Response;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.__entities__.TestedEntityParent;
 import org.cyk.utility.__kernel__.__entities__.TestedEntityParentDto;
 import org.cyk.utility.__kernel__.__entities__.TestedEntityParentDtoMapper;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
-import org.cyk.utility.__kernel__.mapping.MapperClassGetter;
-import org.cyk.utility.__kernel__.mapping.MapperClassGetterTestImpl;
+import org.cyk.utility.__kernel__.mapping.MapperClassGetterImpl;
 import org.cyk.utility.__kernel__.persistence.EntityManagerFactoryGetterImpl;
 import org.cyk.utility.__kernel__.persistence.query.EntityCreator;
 import org.cyk.utility.__kernel__.persistence.query.Query;
 import org.cyk.utility.__kernel__.persistence.query.QueryExecutorArgumentsDto;
 import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
+import org.cyk.utility.__kernel__.rest.ResponseHelper;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 
-public class EntityReaderUnitTest extends AbstractWeldUnitTest {
+public class RepresentationEntityReaderUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected void __listenBefore__() {
 		super.__listenBefore__();
-		DependencyInjection.setQualifierClass(MapperClassGetter.class, org.cyk.utility.__kernel__.annotation.Test.Class.class);
 		EntityManagerFactoryGetterImpl.ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("pu");
-		MapperClassGetterTestImpl.MAP.put(TestedEntityParentDto.class, TestedEntityParentDtoMapper.class);
+		MapperClassGetterImpl.MAP.put(TestedEntityParentDto.class, TestedEntityParentDtoMapper.class);
 		QueryHelper.getQueries().setIsRegisterableToEntityManager(Boolean.TRUE);
 		QueryHelper.scan(List.of(getClass().getPackage()));
 		QueryHelper.addQueries(Query.buildSelectBySystemIdentifiers(TestedEntityParent.class, "SELECT t FROM TestedEntityParent t WHERE t.identifier IN :identifiers"));
@@ -49,22 +47,19 @@ public class EntityReaderUnitTest extends AbstractWeldUnitTest {
 	
 	@Test
 	public void testedEntityParent_withoutTuple_read_all(){		
-		__assertReadMany__(EntityReader.getInstance().read(new EntityReader.Arguments().setRepresentationEntityClass(TestedEntityParentDto.class)
-				.setPersistenceEntityClass(TestedEntityParent.class)));
+		__assertReadMany__(EntityReader.getInstance().read(new Arguments().setRepresentationEntityClass(TestedEntityParentDto.class)));
 	}
 	
 	@Test
 	public void testedEntityParent_withTuple_one_read_all(){		
 		EntityCreator.getInstance().createOneInTransaction(new TestedEntityParent("1","1","1"));		
-		__assertReadMany__(EntityReader.getInstance().read(new EntityReader.Arguments().setRepresentationEntityClass(TestedEntityParentDto.class)
-				.setPersistenceEntityClass(TestedEntityParent.class)), "1");
+		__assertReadMany__(EntityReader.getInstance().read(new Arguments().setRepresentationEntityClass(TestedEntityParentDto.class)), "1");
 	}
 	
 	@Test
 	public void testedEntityParent_withTuple_many_read_all(){		
 		EntityCreator.getInstance().createManyInTransaction(new TestedEntityParent("1","1","1"),new TestedEntityParent("2","2","1"));		
-		__assertReadMany__(EntityReader.getInstance().read(new EntityReader.Arguments().setRepresentationEntityClass(TestedEntityParentDto.class)
-				.setPersistenceEntityClass(TestedEntityParent.class)), "1","2");
+		__assertReadMany__(EntityReader.getInstance().read(new Arguments().setRepresentationEntityClass(TestedEntityParentDto.class)), "1","2");
 	}
 	
 	/* read by system identifier */
@@ -72,8 +67,8 @@ public class EntityReaderUnitTest extends AbstractWeldUnitTest {
 	@Test
 	public void testedEntityParent_withoutTuple_read_bySystemIdentifier(){		
 		EntityCreator.getInstance().createManyInTransaction(new TestedEntityParent("1","1","1"),new TestedEntityParent("2","2","1"));
-		__assertReadMany__(EntityReader.getInstance().read(new EntityReader.Arguments().setRepresentationEntityClass(TestedEntityParentDto.class)
-				.setPersistenceEntityClass(TestedEntityParent.class).setQueryExecutorArguments(
+		__assertReadMany__(EntityReader.getInstance().read(new Arguments().setRepresentationEntityClass(TestedEntityParentDto.class)
+				.setQueryExecutorArguments(
 						new QueryExecutorArgumentsDto().setQueryIdentifier("TestedEntityParent.readBySystemIdentifiers")
 						.addFilterField("identifiers",List.of("1"))
 						)), "1");
@@ -82,6 +77,17 @@ public class EntityReaderUnitTest extends AbstractWeldUnitTest {
 	/* read by business identifier */
 	
 	/* read by filter */
+	
+	/* exceptions */
+	
+	@Test
+	public void notYetRegistered(){
+		Response response = EntityReader.getInstance().read(new Arguments().setRepresentationEntityClass(TestedEntityParentDto.class)
+				.setPersistenceEntityClass(TestedEntityParent.class).setQueryExecutorArguments(
+						new QueryExecutorArgumentsDto().setQueryIdentifier("TestedEntityParent.xxx").addFilterField("identifiers",List.of("1"))));
+		assertThat(response).isNotNull();
+		assertThat(ResponseHelper.isFamilyClientError(response)).isTrue();
+	}
 	
 	/**/
 	

@@ -57,6 +57,5 @@ public abstract class AbstractWeldTest extends org.cyk.utility.__kernel__.test.A
 				return deployment;
 			}
 		};
-	}
-	
+	}	
 }

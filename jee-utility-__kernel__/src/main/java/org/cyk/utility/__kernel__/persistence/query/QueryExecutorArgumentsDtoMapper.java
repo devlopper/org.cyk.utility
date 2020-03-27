@@ -14,7 +14,9 @@ public abstract class QueryExecutorArgumentsDtoMapper extends MapperSourceDestin
 	protected void __listenGetDestinationAfter__(QueryExecutorArgumentsDto source, QueryExecutorArguments destination) {
 		super.__listenGetDestinationAfter__(source, destination);
 		if(StringHelper.isNotBlank(source.getQueryIdentifier()))
-			destination.setQuery(QueryHelper.getQueries().getBySystemIdentifier(source.getQueryIdentifier()));
+			destination.setQuery(QueryGetter.getInstance().get(source.getQueryIdentifier()));
+		if(destination.getQuery() == null)
+			destination.setQuery(new Query().setIdentifier(source.getQueryIdentifier()));
 	}
 	
 	public FilterDto getFilterDto(Filter filter) {

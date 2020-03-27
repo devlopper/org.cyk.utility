@@ -16,7 +16,7 @@ import org.cyk.utility.__kernel__.user.interface_.message.RenderType;
 import org.cyk.utility.__kernel__.value.ValueConverter;
 import org.cyk.utility.client.controller.web.ComponentHelper;
 
-public abstract class AbstractMessageRendererImpl extends org.cyk.utility.__kernel__.user.interface_.message.AbstractMessageRendererImpl implements Serializable {
+public abstract class AbstractMessageRendererImpl extends MessageRenderer.AbstractImpl implements Serializable {
 
 	@Override
 	public MessageRenderer clear() {

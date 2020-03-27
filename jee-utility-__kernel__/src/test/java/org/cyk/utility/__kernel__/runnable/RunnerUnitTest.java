@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
-import org.cyk.utility.__kernel__.user.interface_.message.AbstractMessageRendererImpl;
 import org.cyk.utility.__kernel__.user.interface_.message.Message;
 import org.cyk.utility.__kernel__.user.interface_.message.MessageRenderer;
 import org.cyk.utility.__kernel__.user.interface_.message.RenderType;
@@ -85,7 +84,7 @@ public class RunnerUnitTest extends AbstractWeldUnitTest {
 	/**/
 	
 	@Getter
-	public class MessageRendererImpl extends AbstractMessageRendererImpl implements Serializable {
+	public class MessageRendererImpl extends MessageRenderer.AbstractImpl implements Serializable {
 
 		private Collection<Message> messages;
 		

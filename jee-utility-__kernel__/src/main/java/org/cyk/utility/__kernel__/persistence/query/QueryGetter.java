@@ -18,6 +18,10 @@ public interface QueryGetter {
 		return get(resultClass,queryIdentifier,null);
 	}
 	
+	default Query get(String queryIdentifier) {
+		return QueryHelper.getQueries().getBySystemIdentifier(queryIdentifier);
+	}
+	
 	/* Select */
 	
 	default Query getBySelect(Class<?> tupleClass,String queryName,String queryValue) {
@@ -67,7 +71,7 @@ public interface QueryGetter {
 			Query query = null;
 			if(StringHelper.isBlank(queryValue)) {
 				//no query value specified then get query from registered
-				query = QueryHelper.getQueries().getBySystemIdentifier(queryIdentifier);
+				query = get(queryIdentifier);
 				if(query == null)
 					throw new IllegalArgumentException(String.format("query with identifier %s has not been registered yet", queryIdentifier));
 				if(StringHelper.isBlank(query.getValue()))
@@ -78,7 +82,7 @@ public interface QueryGetter {
 					query = Query.build(Query.FIELD_VALUE,queryValue);
 					LogHelper.logWarning(String.format("You should assign an identifier to your read query %s(%s)", resultClass.getSimpleName(),queryValue), getClass());
 				}else {
-					query = QueryHelper.getQueries().getBySystemIdentifier(queryIdentifier);
+					query = get(queryIdentifier);
 					if(query == null) {
 						query = Query.build(Query.FIELD_IDENTIFIER,queryIdentifier,Query.FIELD_VALUE,queryValue,Query.FIELD_RESULT_CLASS,resultClass);
 						QueryHelper.addQueries(query);

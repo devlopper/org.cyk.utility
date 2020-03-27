@@ -41,19 +41,19 @@ public class EntitySaverUnitTest extends AbstractWeldUnitTest {
 		EntitySaver.Arguments<TestedEntityParent> arguments = new EntitySaver.Arguments<TestedEntityParent>().setIsTransactional(Boolean.TRUE)
 				.setProvidedCollection(List.of(new TestedEntityParent("1","c1","n1")));
 		EntitySaver.getInstance().save(TestedEntityParent.class,arguments);
-		__assertRead__(EntityReader.getInstance().read(TestedEntityParent.class), "1");
+		__assertRead__(EntityReader.getInstance().readMany(TestedEntityParent.class), "1");
 		
 		arguments = new EntitySaver.Arguments<TestedEntityParent>().setIsTransactional(Boolean.TRUE)
-				.setProvidedCollection(List.of(CollectionHelper.getFirst(EntityReader.getInstance().read(TestedEntityParent.class))
+				.setProvidedCollection(List.of(CollectionHelper.getFirst(EntityReader.getInstance().readMany(TestedEntityParent.class))
 						,new TestedEntityParent("2","c2","n2"),new TestedEntityParent("3","c3","n3")));
-		arguments.setExistingCollection(EntityReader.getInstance().read(TestedEntityParent.class));
+		arguments.setExistingCollection(EntityReader.getInstance().readMany(TestedEntityParent.class));
 		EntitySaver.getInstance().save(TestedEntityParent.class,arguments);
-		__assertRead__(EntityReader.getInstance().read(TestedEntityParent.class), "1","2","3");
+		__assertRead__(EntityReader.getInstance().readMany(TestedEntityParent.class), "1","2","3");
 	
 		arguments = new EntitySaver.Arguments<TestedEntityParent>().setIsTransactional(Boolean.TRUE);
-		arguments.setProvidedCollection(List.of(new TestedEntityParent("4","c4","n4"))).setExistingCollection(EntityReader.getInstance().read(TestedEntityParent.class));
+		arguments.setProvidedCollection(List.of(new TestedEntityParent("4","c4","n4"))).setExistingCollection(EntityReader.getInstance().readMany(TestedEntityParent.class));
 		EntitySaver.getInstance().save(TestedEntityParent.class,arguments);
-		__assertRead__(EntityReader.getInstance().read(TestedEntityParent.class), "4");
+		__assertRead__(EntityReader.getInstance().readMany(TestedEntityParent.class), "4");
 	}
 	
 	/**/
