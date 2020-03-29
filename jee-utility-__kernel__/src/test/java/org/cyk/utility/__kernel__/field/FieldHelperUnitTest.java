@@ -608,6 +608,27 @@ public class FieldHelperUnitTest extends AbstractWeldUnitTest {
 		assertThat(object.getCode()).isEqualTo("c01");
 	}	
 	
+	@Test
+	public void nullify_composite(){
+		ClassCompsite object = new ClassCompsite().setString_f01("v00").setChild(new ClassParent().setParent_string_f01("v01"))
+				.setParent(new ClassParent().setParent_string_f01("v02"));
+		FieldHelper.nullifyByFieldsNames(object, "string_f01");
+		assertThat(object.getString_f01()).isNull();
+		assertThat(object.getChild()).isNotNull();
+		assertThat(object.getChild().getParent_string_f01()).isEqualTo("v01");
+		assertThat(object.getParent()).isNotNull();
+		assertThat(object.getParent().getParent_string_f01()).isEqualTo("v02");
+		
+		object = new ClassCompsite().setString_f01("v00").setChild(new ClassParent().setParent_string_f01("v01"))
+				.setParent(new ClassParent().setParent_string_f01("v02"));
+		FieldHelper.nullifyByFieldsNames(object, "string_f01","parent.parent_string_f01");
+		assertThat(object.getString_f01()).isNull();
+		assertThat(object.getChild()).isNotNull();
+		assertThat(object.getChild().getParent_string_f01()).isEqualTo("v01");
+		assertThat(object.getParent()).isNotNull();
+		assertThat(object.getParent().getParent_string_f01()).isNull();
+	}
+	
 	//@Test
 	public void nullify_ClassFilter_notIdentifier(){
 		ClassFilter object = new ClassFilter().setIdentifier("i01").setCode("c01");

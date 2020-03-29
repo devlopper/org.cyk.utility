@@ -46,14 +46,42 @@ public interface QueryExecutor {
 	
 	/**/
 	
-	public static abstract class AbstractQueryExecutorImpl extends AbstractObject implements QueryExecutor,Serializable {
+	public static abstract class AbstractImpl extends AbstractObject implements QueryExecutor,Serializable {
 
 		@Override
 		public <T> Collection<T> executeReadMany(Class<T> resultClass, QueryExecutorArguments arguments) {
 			validatePreConditions(resultClass, arguments);
+			Boolean isEntityManagerClosable = arguments.getIsEntityManagerClosable();
+			Boolean isEntityManagerClearable = arguments.getIsEntityManagerClearable();
+			EntityManager entityManager = arguments.getEntityManager();
+			if(entityManager == null) {
+				entityManager = EntityManagerGetter.getInstance().get();
+				if(isEntityManagerClearable == null)
+					isEntityManagerClearable = Boolean.TRUE;
+				//if(isEntityManagerClosable == null)
+				//	isEntityManagerClosable = Boolean.TRUE;				
+			}
+			
+			Map<String,Object> hints = arguments.getHints();
+			if(hints == null) {
+				hints = new HashMap<>();
+				if(Boolean.TRUE.equals(isEntityManagerClearable) || Boolean.TRUE.equals(isEntityManagerClosable)) {
+					hints.put("org.hibernate.readOnly",Boolean.TRUE);
+				}
+			}
+			
+			if(Boolean.TRUE.equals(arguments.getIsResultCachable())) {
+				hints = new HashMap<>();
+				hints.put("org.hibernate.cacheable", Boolean.TRUE);
+			}
+			
 			TypedQuery<T> typedQuery = __getTypedQuery__(resultClass, arguments.getQuery().getIdentifier(),arguments.getQuery().getValue()
-					,arguments.getParameters(),arguments.getFilter(),arguments.getFirstTupleIndex(),arguments.getNumberOfTuples(), arguments.getEntityManager());
+					,arguments.getParameters(),arguments.getFilter(),arguments.getFirstTupleIndex(),arguments.getNumberOfTuples(),arguments.getHints(), entityManager);
 			Collection<T> collection = typedQuery.getResultList();
+			if(Boolean.TRUE.equals(isEntityManagerClearable))
+				entityManager.clear();
+			if(Boolean.TRUE.equals(isEntityManagerClosable))
+				entityManager.close();
 			return CollectionHelper.isEmpty(collection) ? null : collection;
 		}
 		
@@ -82,13 +110,13 @@ public interface QueryExecutor {
 				throw new RuntimeException("query is required");
 		}
 		
-		protected <T> TypedQuery<T> __getTypedQuery__(Class<T> resultClass, String queryIdentifier,String queryValue,Map<Object,Object> parameters,Filter filter,Integer firstTupleIndex,Integer numberOfTuples,EntityManager entityManager) {
+		protected <T> TypedQuery<T> __getTypedQuery__(Class<T> resultClass, String queryIdentifier,String queryValue,Map<Object,Object> parameters,Filter filter,Integer firstTupleIndex,Integer numberOfTuples,Map<String,Object> hints,EntityManager entityManager) {
 			if(resultClass == null)
 				throw new IllegalArgumentException("result class is required");
 			if(StringHelper.isBlank(queryIdentifier) && StringHelper.isBlank(queryValue))
 				throw new IllegalArgumentException("query identifier or query value is required");
 			if(entityManager == null)
-				entityManager = DependencyInjection.inject(EntityManagerGetter.class).get();
+				entityManager = EntityManagerGetter.getInstance().get();
 			Query query = QueryGetter.getInstance().get(resultClass, queryIdentifier, queryValue);
 			TypedQuery<T> typedQuery = (TypedQuery<T>) (StringHelper.isBlank(query.getIdentifier()) ? entityManager.createQuery(query.getValue(), resultClass) 
 					: entityManager.createNamedQuery(query.getIdentifier(), resultClass));
@@ -115,6 +143,11 @@ public interface QueryExecutor {
 						typedQuery.setParameter((String) entry.getKey(), entry.getValue());
 					}
 				}
+			if(MapHelper.isNotEmpty(hints)) {
+				hints.forEach( (key,value) -> {
+					typedQuery.setHint(key, value);
+				} );
+			}
 			return typedQuery;
 		}
 		

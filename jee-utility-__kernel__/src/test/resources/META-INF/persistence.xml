@@ -18,7 +18,52 @@
 		  	<property name ="hibernate.show_sql" value = "false" />
 			<property name="hibernate.format_sql" value="false" />
 			<property name="hibernate.use_sql_comments" value="false"/>
+			<!--
+			<property name="hibernate.hbm2ddl.import_files" value="/META-INF/sql/import.sql"/>
+			-->
+		</properties>
+	</persistence-unit>
+	
+	<persistence-unit name="pu_show_sql" transaction-type="RESOURCE_LOCAL">
+		<class>org.cyk.utility.__kernel__.__entities__.TestedEntityParent</class>
+		<class>org.cyk.utility.__kernel__.__entities__.TestedEntityChild</class>
+		<exclude-unlisted-classes>true</exclude-unlisted-classes>
+		
+		<properties>
+			<property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />
+		    <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:test" />
+		   	<property name="javax.persistence.jdbc.user" value="sa" />
+		  	<property name="javax.persistence.jdbc.password" value="" />  
+		  	<property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+		  	<property name="hibernate.hbm2ddl.auto" value="create-drop" />
+		  	<property name ="hibernate.show_sql" value = "true" />
+			<property name="hibernate.format_sql" value="true" />
+			<property name="hibernate.use_sql_comments" value="false"/>
+			
+			
 		</properties>
 	</persistence-unit>
 
+	<persistence-unit name="pu_cachable" transaction-type="RESOURCE_LOCAL">
+		<class>org.cyk.utility.__kernel__.__entities__.TestedEntityParent</class>
+		<class>org.cyk.utility.__kernel__.__entities__.TestedEntityChild</class>
+		<exclude-unlisted-classes>true</exclude-unlisted-classes>
+		<shared-cache-mode>ALL</shared-cache-mode>
+		
+		<properties>
+			<property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />
+		    <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:test" />
+		   	<property name="javax.persistence.jdbc.user" value="sa" />
+		  	<property name="javax.persistence.jdbc.password" value="" />  
+		  	<property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+		  	<property name="hibernate.hbm2ddl.auto" value="create-drop" />
+		  	<property name ="hibernate.show_sql" value = "false" />
+			<property name="hibernate.format_sql" value="false" />
+			<property name="hibernate.use_sql_comments" value="false"/>
+			
+			<property name="hibernate.cache.use_second_level_cache" value="true"/>
+			<property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.ehcache.EhCacheRegionFactory"/>
+			<property name="hibernate.cache.use_query_cache" value="true"/>
+		</properties>
+	</persistence-unit>
 </persistence>

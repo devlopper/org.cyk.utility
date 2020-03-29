@@ -1,7 +1,11 @@
 package org.cyk.utility.__kernel__.test.weld;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,18 +15,18 @@ public abstract class AbstractWeldUnitTestBenchmark extends AbstractWeldUnitTest
 	private static final long serialVersionUID = 1L;
 
 	protected void execute(Job job) {
-		System.out.print(String.format("\t%s - Using %s : ", job.orderNumber,job.name));
-		Long t1 = System.currentTimeMillis();
-		__start__(t1);
+		if(Boolean.TRUE.equals(job.isSystemOutable))
+			System.out.print(String.format("\t%s - Using %s : ", job.orderNumber,job.name));
+		job.start();
+		__start__(job.startNumberOfMillisecondIndex);
 		
 		for(Integer index = 0 ; index < job.jobs.numberOfRound ; index = index + 1)
 			job.runnable.run();
 		
-		Long t2 = System.currentTimeMillis();
-		Long duration = t2 - t1;
-		__end__(t2,duration);
-		job.numberOfMillisecond = duration;
-		System.out.println(String.format("duration=%s", __formatDuration__(duration)));
+		job.end();
+		__end__(job.endNumberOfMillisecondIndex,job.numberOfMillisecond);
+		if(Boolean.TRUE.equals(job.isSystemOutable))
+			System.out.println(String.format("duration=%s , rate=%s", __formatDuration__(job.numberOfMillisecond),job.rate));
 	}
 	
 	protected void execute(Jobs jobs) {
@@ -34,8 +38,14 @@ public abstract class AbstractWeldUnitTestBenchmark extends AbstractWeldUnitTest
 			if(jobs.jobHavingHighestNumberOfMillisecond == null || index.numberOfMillisecond > jobs.jobHavingHighestNumberOfMillisecond.numberOfMillisecond)
 				jobs.jobHavingHighestNumberOfMillisecond = index;
 		}
-		System.out.println(String.format("----    BEST CHOICE IS : %s    ----",jobs.jobHavingLowestNumberOfMillisecond.name));
-		System.out.println(String.format("****    Field benchmark <<%s>> is done.    ****",jobs.name));
+		//System.out.println(String.format("----    BEST CHOICE IS : %s    ----",jobs.jobHavingLowestNumberOfMillisecond.name));
+		jobs.sort();
+		//System.out.println("          ----    ORDER    ----");
+		for(Integer index = 0 ; index < jobs.collection.size() ; index = index + 1) {
+			Job job = jobs.collection.get(index);
+			System.out.println(String.format("          ----    %s - %s - %s - %s    ----",index+1,job.name,job.numberOfMillisecond,job.rate));
+		}
+		//System.out.println(String.format("****    Field benchmark <<%s>> is done.    ****",jobs.name));
 	}
 	
 	/**/
@@ -57,12 +67,36 @@ public abstract class AbstractWeldUnitTestBenchmark extends AbstractWeldUnitTest
 		
 		private String name;
 		private Integer numberOfRound;
-		private Collection<Job> collection = new ArrayList<>();
+		private List<Job> collection = new ArrayList<>();
 		private Job jobHavingLowestNumberOfMillisecond;
 		private Job jobHavingHighestNumberOfMillisecond;
 		
+		public List<Job> getCollection(Boolean injectIfNull){
+			if(collection == null && Boolean.TRUE.equals(injectIfNull))
+				collection = new ArrayList<>();
+			return collection;
+		}
+		
+		public Jobs add(Job job) {
+			if(job == null)
+				return this;
+			job.setJobs(this).setOrderNumber(collection.size()+1);
+			getCollection(Boolean.TRUE).add(job);
+			return this;
+		}
+		
 		public Jobs add(String name,Runnable runnable) {
-			collection.add(new Job().setJobs(this).setOrderNumber(collection.size()+1).setName(name).setRunnable(runnable));
+			add(new Job().setName(name).setRunnable(runnable));
+			return this;
+		}
+		
+		public Jobs sort() {
+			Collections.sort(collection, new Comparator<Job>() {
+				@Override
+				public int compare(Job o1, Job o2) {
+					return o1.numberOfMillisecond.compareTo(o2.numberOfMillisecond);
+				}
+			});
 			return this;
 		}
 	}
@@ -75,6 +109,21 @@ public abstract class AbstractWeldUnitTestBenchmark extends AbstractWeldUnitTest
 		private Integer orderNumber;
 		private String name;
 		private Runnable runnable;
+		private Boolean isSystemOutable=Boolean.FALSE;
+		private Long startNumberOfMillisecondIndex,endNumberOfMillisecondIndex;
 		private Long numberOfMillisecond;
+		private BigDecimal rate;
+		
+		public Job start() {
+			startNumberOfMillisecondIndex = System.currentTimeMillis();
+			return this;
+		}
+		
+		public Job end() {
+			endNumberOfMillisecondIndex = System.currentTimeMillis();
+			numberOfMillisecond =endNumberOfMillisecondIndex - startNumberOfMillisecondIndex;
+			rate = new BigDecimal(numberOfMillisecond).divide(new BigDecimal(jobs.numberOfRound),2,RoundingMode.DOWN);
+			return this;
+		}
 	}
 }

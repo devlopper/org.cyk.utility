@@ -37,6 +37,7 @@ public class ControllerEntityReaderUnitTest extends AbstractWeldUnitTest {
 		QueryHelper.getQueries().setIsRegisterableToEntityManager(Boolean.TRUE);
 		QueryHelper.scan(List.of(getClass().getPackage()));	
 		QueryHelper.addQueries(Query.buildSelectBySystemIdentifiers(TestedEntityParent.class, "SELECT t FROM TestedEntityParent t WHERE t.identifier IN :identifiers"));
+		QueryHelper.addQueries(Query.build(TestedEntityParent.class,"read.1", "SELECT new org.cyk.utility.__kernel__.__entities__.TestedEntityParent(t.identifier,t.code,t.name) FROM TestedEntityParent t"));
 		Arguments.IS_REPRESENTATION_PROXYABLE = Boolean.FALSE;
 	}
 	
@@ -59,7 +60,7 @@ public class ControllerEntityReaderUnitTest extends AbstractWeldUnitTest {
 	
 	@Test
 	public void testedEntityParent_withTuple_one_read_all(){		
-		EntityCreator.getInstance().createOneInTransaction(new TestedEntityParent("1","1","1"));		
+		EntityCreator.getInstance().createOneInTransaction(new TestedEntityParent("1","1","1").setLazy("lazy").setEager("eager"));
 		__assertRead__(EntityReader.getInstance().readMany(TestedEntityParentData.class), "1");
 	}
 	
@@ -67,6 +68,19 @@ public class ControllerEntityReaderUnitTest extends AbstractWeldUnitTest {
 	public void testedEntityParent_withTuple_many_read_all(){		
 		EntityCreator.getInstance().createManyInTransaction(new TestedEntityParent("1","1","1"),new TestedEntityParent("2","2","1"));		
 		__assertRead__(EntityReader.getInstance().readMany(TestedEntityParentData.class), "1","2");
+	}
+	
+	@Test
+	public void testedEntityParent_withTuple_projection(){		
+		EntityCreator.getInstance().createOneInTransaction(new TestedEntityParent("1","2","3").setLazy("lazy").setEager("eager"));
+		Collection<TestedEntityParentData> testedEntityParents = EntityReader.getInstance().readMany(TestedEntityParentData.class,new Arguments()
+				.setRepresentationArguments(new org.cyk.utility.__kernel__.representation.Arguments()
+						.setQueryExecutorArguments(new QueryExecutorArgumentsDto().setQueryIdentifier("TestedEntityParent.read.1"))));
+		assertThat(testedEntityParents.stream().map(TestedEntityParentData::getIdentifier).collect(Collectors.toList())).containsExactly(new String[] {"1"});
+		assertThat(testedEntityParents.stream().map(TestedEntityParentData::getCode).collect(Collectors.toList())).containsExactly(new String[] {"2"});
+		assertThat(testedEntityParents.stream().map(TestedEntityParentData::getName).collect(Collectors.toList())).containsExactly(new String[] {"3"});
+		assertThat(testedEntityParents.stream().map(TestedEntityParentData::getLazy).collect(Collectors.toList())).containsExactly(new String[] {null});
+		assertThat(testedEntityParents.stream().map(TestedEntityParentData::getEarger).collect(Collectors.toList())).containsExactly(new String[] {null});
 	}
 	
 	/* read by system identifier */

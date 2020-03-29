@@ -16,10 +16,6 @@ import org.cyk.utility.__kernel__.rest.ResponseHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.MessageDto;
 import org.cyk.utility.__kernel__.throwable.RuntimeExceptionDto;
-import org.cyk.utility.__kernel__.user.interface_.message.Message;
-import org.cyk.utility.__kernel__.user.interface_.message.MessageRenderer;
-import org.cyk.utility.__kernel__.user.interface_.message.RenderType;
-import org.cyk.utility.__kernel__.user.interface_.message.Severity;
 import org.cyk.utility.__kernel__.value.Value;
 
 public interface EntityReader {
@@ -91,7 +87,7 @@ public interface EntityReader {
 				if(CollectionHelper.isEmpty(runtimeExceptionDto.getMessages())) {
 					
 				}else {
-					org.cyk.utility.__kernel__.throwable.RuntimeException runtimeException = new org.cyk.utility.__kernel__.throwable.RuntimeException();
+					org.cyk.utility.__kernel__.throwable.RuntimeException runtimeException = new org.cyk.utility.__kernel__.throwable.RuntimeException(runtimeExceptionDto.toString());
 					for(MessageDto message : runtimeExceptionDto.getMessages())
 						runtimeException.addMessages(new org.cyk.utility.__kernel__.throwable.Message().setSummary(message.getSummary()).setDetails(message.getDetails()));
 					throw runtimeException;

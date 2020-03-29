@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -966,12 +967,90 @@ public interface FieldHelper {
 	 * @param fields
 	 */
 	static void nullify(Object object, Collection<Field> fields) {
+		if(object == null || CollectionHelper.isEmpty(fields))
+			return;
 		writeMany(object, fields, null);
+	}
+	
+	static void nullify(Object object, Field...fields) {
+		if(object == null || ArrayHelper.isEmpty(fields))
+			return;
+		writeMany(object, CollectionHelper.listOf(fields), null);
 	}
 	
 	static void nullify(Object object, String fieldNameRegularExpression,Integer modifiers) {
 		writeMany(object, fieldNameRegularExpression, modifiers,null);
 	}
+	
+	static void nullifyByFieldsNames(Object object, Collection<String> fieldsNames) {
+		if(object == null || CollectionHelper.isEmpty(fieldsNames))
+			return;
+		Map<String,Collection<String>> map = null;
+		for(String fieldName : fieldsNames) {
+			if(StringHelper.isBlank(fieldName))
+				continue;
+			if(fieldName.contains(DOT)) {
+				if(map == null)
+					map = new HashMap<>();
+				List<String> tokens = CollectionHelper.listOf(StringUtils.split(fieldName,"."));
+				Collection<String> list = map.get(tokens.get(0));
+				if(list == null)
+					map.put(tokens.get(0), list = new HashSet<>());
+				list.addAll(CollectionHelper.getElementsFrom(tokens, 1));
+			}else {
+				write(object, fieldName, null);
+			}			
+		}
+		if(map != null) {
+			for(Map.Entry<String,Collection<String>> entry : map.entrySet()) {
+				Object child = FieldHelper.read(object, entry.getKey());
+				if(child == null)
+					continue;
+				nullifyByFieldsNames(child, entry.getValue());
+			}
+		}
+	}
+	
+	static void nullifyByFieldsNames(Object object, String...fieldsNames) {
+		if(object == null || ArrayHelper.isEmpty(fieldsNames))
+			return;
+		nullifyByFieldsNames(object, CollectionHelper.listOf(fieldsNames));
+	}
+	
+	/*static Collection<String> getNullables(Object object,String parentFieldName,Collection<String> fieldsNames) {
+		if(object == null)
+			return null;
+		Collection<String> result = null;
+		Map<String,Collection<String>> map = null;
+		for(String fieldName : fieldsNames) {
+			if(StringHelper.isBlank(fieldName))
+				continue;
+			if(fieldName.contains(DOT)) {
+				if(map == null)
+					map = new HashMap<>();
+				List<String> tokens = CollectionHelper.listOf(StringUtils.split(fieldName,"."));
+				Collection<String> list = map.get(tokens.get(0));
+				if(list == null)
+					map.put(tokens.get(0), list = new HashSet<>());
+				list.addAll(CollectionHelper.getElementsFrom(tokens, 1));
+			}else {
+				if(result == null)
+					result = new ArrayList<>();
+				result.add((StringHelper.isBlank(parentFieldName) ? ConstantEmpty.STRING : parentFieldName+DOT)+fieldName);
+			}			
+		}
+		if(map != null) {
+			for(Map.Entry<String,Collection<String>> entry : map.entrySet()) {
+				Object child = FieldHelper.read(object, entry.getKey());
+				if(child == null)
+					continue;
+				Collection<String> nullables = getNullables(child, (StringHelper.isBlank(parentFieldName) ? ConstantEmpty.STRING : parentFieldName+DOT)+entry.getKey(),entry.getValue());
+				if(CollectionHelper.isNotEmpty(nullables))
+					result.addAll(nullables);
+			}
+		}
+		return result;
+	}*/
 	
 	/**/
 		

@@ -9,6 +9,8 @@ import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true) @NoArgsConstructor
 public class TestedEntityParentDto extends AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl {
-	
+
+	private String lazy;
+	private String earger;
 	
 }

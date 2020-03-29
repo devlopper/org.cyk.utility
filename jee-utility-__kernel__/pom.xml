@@ -193,11 +193,18 @@
 		</dependency>
 		
 		<dependency>
-					<groupId>com.h2database</groupId>
-					<artifactId>h2</artifactId>
-					<version>1.4.197</version>
-					<scope>test</scope>
-				</dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-ehcache</artifactId>
+		    <version>5.4.12.Final</version>
+		    <scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.4.197</version>
+			<scope>test</scope>
+		</dependency>
 				
 		<!-- Search -->
 		<!--
@@ -234,5 +241,38 @@
 		</dependency>
 		-->
 	</dependencies>
-
+	
+	<profiles>
+		<profile>
+			<id>be</id>
+			<build>
+				<plugins>
+					<plugin>
+			            <groupId>org.hibernate.orm.tooling</groupId>
+			            <artifactId>hibernate-enhance-maven-plugin</artifactId>
+			            <version>5.4.12.Final</version>
+			            <executions>
+			                <execution>
+			                    <configuration>
+			                        
+			                        <failOnError>false</failOnError>
+			                   
+			                        <base>E:\Repositories\source code\git\org\cyk\utility\jee-utility-__kernel__\target\test-classes</base>
+			                       	<dir>E:\Repositories\source code\git\org\cyk\utility\jee-utility-__kernel__\target\test-classes</dir>
+			                        
+			                        <enableLazyInitialization>true</enableLazyInitialization>
+			                        <enableDirtyTracking>true</enableDirtyTracking>
+			                        <enableAssociationManagement>true</enableAssociationManagement>
+			                    </configuration>
+			                    <goals>
+			                        <goal>enhance</goal>
+			                    </goals>
+			                </execution>
+			            </executions>
+			        </plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	
 </project>

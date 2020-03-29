@@ -1,25 +1,13 @@
 package org.cyk.utility.__kernel__.controller;
 
 import java.io.Serializable;
-import java.util.Collection;
 
 import javax.ws.rs.core.Response;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
-import org.cyk.utility.__kernel__.TypeHelper;
-import org.cyk.utility.__kernel__.collection.CollectionHelper;
-import org.cyk.utility.__kernel__.mapping.MappingHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
-import org.cyk.utility.__kernel__.rest.ResponseHelper;
-import org.cyk.utility.__kernel__.throwable.MessageDto;
-import org.cyk.utility.__kernel__.throwable.RuntimeExceptionDto;
-import org.cyk.utility.__kernel__.user.interface_.message.Message;
-import org.cyk.utility.__kernel__.user.interface_.message.MessageRenderer;
-import org.cyk.utility.__kernel__.user.interface_.message.RenderType;
-import org.cyk.utility.__kernel__.user.interface_.message.Severity;
 import org.cyk.utility.__kernel__.value.Value;
-import org.jboss.weld.exceptions.IllegalArgumentException;
 
 public interface ResponseProcessor {
 

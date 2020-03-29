@@ -7,12 +7,15 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 
 import org.cyk.utility.__kernel__.__entities__.TestedEntityParent;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.persistence.EntityManagerFactoryGetterImpl;
+import org.cyk.utility.__kernel__.persistence.EntityManagerGetter;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 
@@ -45,6 +48,22 @@ public class PersistenceEntityReaderUnitTest extends AbstractWeldUnitTest {
 	public void testedEntityParent_withTuple_one_read_all(){		
 		EntityCreator.getInstance().createOneInTransaction(new TestedEntityParent("1","1","1"));		
 		__assertRead__(EntityReader.getInstance().readMany(TestedEntityParent.class), "1");
+	}
+	
+	@Test
+	public void testedEntityParent_withTuple_one_read_all_attached(){		
+		EntityCreator.getInstance().createOneInTransaction(new TestedEntityParent("1","1","1"));		
+		EntityManager entityManager = EntityManagerGetter.getInstance().get();
+		__assertAttached__(EntityReader.getInstance().readMany(TestedEntityParent.class,new QueryExecutorArguments().setEntityManager(entityManager)
+				), entityManager,Boolean.TRUE);
+	}
+	
+	@Test
+	public void testedEntityParent_withTuple_one_read_all_dettached(){		
+		EntityCreator.getInstance().createOneInTransaction(new TestedEntityParent("1","1","1"));		
+		EntityManager entityManager = EntityManagerGetter.getInstance().get();
+		__assertAttached__(EntityReader.getInstance().readMany(TestedEntityParent.class,new QueryExecutorArguments().setEntityManager(entityManager)
+				.setIsEntityManagerClearable(Boolean.TRUE)), entityManager,Boolean.FALSE);
 	}
 	
 	@Test
@@ -89,6 +108,16 @@ public class PersistenceEntityReaderUnitTest extends AbstractWeldUnitTest {
 		}
 		assertThat(entities).isNotNull();
 		assertThat(entities.stream().map(entity -> FieldHelper.readSystemIdentifier(entity)).collect(Collectors.toList())).containsExactly(expectedSystemIdentifiers);
+	}
+	
+	private <T> void __assertAttached__(Collection<T> entities,EntityManager entityManager,Boolean expected) {
+		if(CollectionHelper.isEmpty(entities))
+			return;
+		if(entityManager == null)
+			throw new IllegalArgumentException("entity manager is required");
+		entities.forEach(entity -> {
+			assertThat(entityManager.contains(entity)).as(entity+" is contains in entity manager. expected %s",expected).isEqualTo(expected);
+		});
 	}
 	
 	/**/

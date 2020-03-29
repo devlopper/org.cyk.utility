@@ -17,4 +17,8 @@ public class MessageDto extends AbstractObject implements Serializable {
 	private String summary;
 	private String details;
 	
+	@Override
+	public String toString() {
+		return identifier+" "+summary+" "+details;
+	}
 }

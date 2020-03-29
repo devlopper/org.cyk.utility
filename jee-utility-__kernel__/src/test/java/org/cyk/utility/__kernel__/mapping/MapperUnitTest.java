@@ -2,6 +2,8 @@ package org.cyk.utility.__kernel__.mapping;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
@@ -130,6 +132,32 @@ public class MapperUnitTest extends AbstractWeldUnitTest {
 		assertThat(persistenceEntity.getInteger01()).isEqualTo(12);
 	}
 	
+	//@Test
+	public void map_getter_persistenceEntity_to_representationEntity_integer01_and_detail() {
+		PersistenceEntity persistenceEntity = new PersistenceEntity().setString01("s01").setInteger01(12).setDetail(new PersistenceEntityDetail().setIdentifier("159").setCode("a01").setInteger01(123456));
+		MapperSourceDestination<RepresentationEntity,PersistenceEntity> mapper = MapperGetter.getInstance().getBySourceClassByDestinationClass(RepresentationEntity.class,PersistenceEntity.class);
+		RepresentationEntity representationEntity = mapper.getSource(persistenceEntity,new MapperSourceDestination.Arguments().setFieldsNames(List.of("integer01","detail")));
+		assertThat(representationEntity.getString01()).isNull();
+		assertThat(representationEntity.getInteger01()).isEqualTo("12");
+		assertThat(representationEntity.getDetail()).isNotNull();
+		assertThat(representationEntity.getDetail().getIdentifier()).isEqualTo("159");
+		assertThat(representationEntity.getDetail().getCode()).isEqualTo("a01");
+		assertThat(representationEntity.getDetail().getInteger01()).isEqualTo("123456");
+	}
+	
+	//@Test
+	public void map_getter_persistenceEntity_to_representationEntity_integer01_and_detailCode() {
+		PersistenceEntity persistenceEntity = new PersistenceEntity().setString01("s01").setInteger01(12).setDetail(new PersistenceEntityDetail().setIdentifier("159").setCode("a01").setInteger01(123456));
+		MapperSourceDestination<RepresentationEntity,PersistenceEntity> mapper = MapperGetter.getInstance().getBySourceClassByDestinationClass(RepresentationEntity.class,PersistenceEntity.class);
+		RepresentationEntity representationEntity = mapper.getSource(persistenceEntity,new MapperSourceDestination.Arguments().setFieldsNames(List.of("integer01","detail.code")));
+		assertThat(representationEntity.getString01()).isNull();
+		assertThat(representationEntity.getInteger01()).isEqualTo("12");
+		assertThat(representationEntity.getDetail()).isNotNull();
+		assertThat(representationEntity.getDetail().getIdentifier()).isNull();
+		assertThat(representationEntity.getDetail().getCode()).isEqualTo("a01");
+		assertThat(representationEntity.getDetail().getInteger01()).isNull();
+	}
+	
 	/**/
 	
 	@Getter @Setter @Accessors(chain=true) @ToString
@@ -172,6 +200,8 @@ public class MapperUnitTest extends AbstractWeldUnitTest {
 			__destinationClass__ = PersistenceEntity.class;
 			super.__listenPostConstruct__();
 		}
+		
+		
 	}
 	
 	@Mapper

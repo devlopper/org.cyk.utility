@@ -22,12 +22,16 @@ import lombok.experimental.Accessors;
 public class QueryExecutorArguments extends AbstractObject implements Serializable {
 	private Query query;
 	private Map<Object,Object> parameters;
+	private Map<String,Object> hints;
+	private Boolean isResultCachable;
 	private Filter filter;
 	private Integer firstTupleIndex;
 	private Integer numberOfTuples;
 	private Collection<Object> objects;
 	private Boolean isTransactional;
 	private EntityManager entityManager;
+	private Boolean isEntityManagerClearable;
+	private Boolean isEntityManagerClosable;
 	
 	public Map<Object,Object> getParameters(Boolean injectIfNull) {
 		if(parameters == null && Boolean.TRUE.equals(injectIfNull))

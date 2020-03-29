@@ -2,18 +2,29 @@ package org.cyk.utility.__kernel__.mapping;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.instance.InstanceHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.runnable.RunnableHelper;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.MappingTarget;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 public interface MapperSourceDestination<SOURCE,DESTINATION> extends Mapper {
 
@@ -21,8 +32,11 @@ public interface MapperSourceDestination<SOURCE,DESTINATION> extends Mapper {
 	Collection<DESTINATION> getDestinations(Collection<SOURCE> sources);
 	
 	SOURCE getSource(DESTINATION destination);
+	SOURCE getSource(DESTINATION destination,Arguments arguments);
 	SOURCE getSource(DESTINATION destination,Properties properties);
+	
 	Collection<SOURCE> getSources(Collection<DESTINATION> destinations);
+	Collection<SOURCE> getSources(Collection<DESTINATION> destinations,Arguments arguments);
 	Collection<SOURCE> getSources(Collection<DESTINATION> destinations,Properties properties);
 	
 	/**/
@@ -36,12 +50,25 @@ public interface MapperSourceDestination<SOURCE,DESTINATION> extends Mapper {
 		protected Class<SOURCE> __sourceClass__;
 		protected Class<DESTINATION> __destinationClass__;
 		protected Collection<Field> __persistableFields__;
+		protected Collection<String> __sourceFieldsNameSettable__;
 		
 		@Override
 		protected void __listenPostConstruct__() {
 			super.__listenPostConstruct__();
 			if(__sourceClass__ == null)
 				__sourceClass__ = (Class<SOURCE>) ClassHelper.getParameterAt(getClass(), 0);
+			if(__sourceClass__ != null) {
+				Collection<Field> fields = FieldHelper.get(__sourceClass__);
+				if(CollectionHelper.isNotEmpty(fields))
+					for(Field field : fields) {
+						if(Modifier.isStatic(field.getModifiers()) || Modifier.isFinal(field.getModifiers()))
+							continue;
+						if(__sourceFieldsNameSettable__ == null)
+							__sourceFieldsNameSettable__ = new ArrayList<>();
+						__sourceFieldsNameSettable__.add(field.getName());
+					}
+			}
+			
 			if(__destinationClass__ == null)
 				__destinationClass__ = (Class<DESTINATION>) ClassHelper.getParameterAt(getClass(), 1);
 			if(__persistableFields__ == null)
@@ -102,6 +129,13 @@ public interface MapperSourceDestination<SOURCE,DESTINATION> extends Mapper {
 		}
 		
 		@Override
+		public SOURCE getSource(DESTINATION destination, Arguments arguments) {
+			SOURCE source = getSource(destination);
+			__listenGetSourceAfter__(List.of(destination), List.of(source), arguments);
+			return source;
+		}
+		
+		@Override
 		public Collection<SOURCE> getSources(Collection<DESTINATION> destinations, Properties properties) {
 			if(destinations == null || destinations.isEmpty())
 				return null;		
@@ -130,8 +164,17 @@ public interface MapperSourceDestination<SOURCE,DESTINATION> extends Mapper {
 		}
 		
 		@Override
+		public Collection<SOURCE> getSources(Collection<DESTINATION> destinations, Arguments arguments) {
+			if(CollectionHelper.isEmpty(destinations))
+				return null;
+			Collection<SOURCE> sources = destinations.parallelStream().map(destination -> getSource(destination, arguments)).collect(Collectors.toList());
+			__listenGetSourceAfter__(destinations, sources, arguments);
+			return sources;
+		}
+		
+		@Override
 		public Collection<SOURCE> getSources(Collection<DESTINATION> destinations) {
-			return getSources(destinations, null);
+			return getSources(destinations, (Properties)null);
 		}
 		
 		@BeforeMapping
@@ -152,9 +195,48 @@ public interface MapperSourceDestination<SOURCE,DESTINATION> extends Mapper {
 			
 		}
 		
-		protected void __listenGetSourceAfter__(DESTINATION destination,SOURCE source, Properties properties) {
-			
+		protected void __listenGetSourceAfter__(DESTINATION destination,SOURCE source, Properties properties) {}
+		
+		protected void __listenGetSourceAfter__(DESTINATION destination,SOURCE source, Arguments arguments) {}
+		
+		protected void __listenGetSourceAfter__(Collection<DESTINATION> destinations,Collection<SOURCE> sources, Arguments arguments) {
+			if(CollectionHelper.isEmpty(sources))
+				return;
+			/*Collection<String> fieldsNamesNullable = new HashSet<>();
+			if(CollectionHelper.isNotEmpty(arguments.getFieldsNamesNullable()))
+				fieldsNamesNullable.addAll(arguments.getFieldsNamesNullable());
+			*/
+			/*if(CollectionHelper.isNotEmpty(arguments.fieldsNames)) {
+				FieldHelper.getNullables(sources, parentFieldName, fieldsNames)
+			}
+			*/
+			//fieldsNamesNullable.addAll(__sourceFieldsNameSettable__.stream().filter(fieldName -> !arguments.fieldsNames.contains(fieldName)).collect(Collectors.toList()));				
+			/*
+			sources.parallelStream().forEach(source -> {
+				Collection<String> nullables = FieldHelper.getNullables(source, null, arguments.fieldsNames);
+				FieldHelper.nullifyByFieldsNames(source, fieldsNamesNullable);
+			});*/				
 		}
 	}
 
+	/**/
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class Arguments extends AbstractObject implements Serializable {
+		private String mapIdentifier;
+		private Collection<String> fieldsNames;
+		private Collection<String> fieldsNamesNullable;
+		
+		@XmlRootElement @Getter @Setter @Accessors(chain=true)
+		public static class Dto extends AbstractObject implements Serializable {
+			private String mapIdentifier;
+			private ArrayList<String> fieldsNames;
+			private ArrayList<String> fieldsNamesNullable;
+			
+			@org.mapstruct.Mapper
+			public static abstract class Mapper extends MapperSourceDestination.AbstractImpl<MapperSourceDestination.Arguments.Dto, MapperSourceDestination.Arguments>{
+				
+			}
+		}
+	}
 }

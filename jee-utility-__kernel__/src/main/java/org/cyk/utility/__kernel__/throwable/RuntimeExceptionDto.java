@@ -48,4 +48,9 @@ public class RuntimeExceptionDto extends AbstractObject implements Serializable 
 			return this;
 		return addMessages(CollectionHelper.listOf(messages));
 	}
+	
+	@Override
+	public String toString() {
+		return messages == null ? super.toString() : messages.toString();
+	}
 }

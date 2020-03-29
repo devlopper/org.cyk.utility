@@ -19,6 +19,7 @@ public class QueryExecutorArgumentsDto extends AbstractObject implements Seriali
 	private FilterDto filter;
 	private Integer firstTupleIndex;
 	private Integer numberOfTuples;
+	private Boolean isResultCachable;
 	
 	public FilterDto getFilter(Boolean injectIfNull) {
 		if(filter == null && Boolean.TRUE.equals(injectIfNull))
