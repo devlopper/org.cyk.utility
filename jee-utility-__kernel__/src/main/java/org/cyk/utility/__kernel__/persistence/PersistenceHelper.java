@@ -14,6 +14,7 @@ import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.jboss.weld.exceptions.IllegalArgumentException;
 
 public interface PersistenceHelper {
 
@@ -27,7 +28,21 @@ public interface PersistenceHelper {
 	static EntityManager getEntityManager(Properties properties) {
 		return getEntityManager(properties, Boolean.TRUE);
 	}
-
+	
+	static <T> T getEntityWithItsReferenceOnly(Class<T> klass,Object identifier,EntityManager entityManager) {
+		if(klass == null)
+			throw new IllegalArgumentException("class is required");		
+		if(identifier == null)
+			return null;
+		if(entityManager == null)
+			entityManager = EntityManagerGetter.getInstance().get();
+		return entityManager.getReference(klass, identifier);
+	}
+	
+	static <T> T getEntityWithItsReferenceOnly(Class<T> klass,Object identifier) {
+		return getEntityWithItsReferenceOnly(klass, identifier, EntityManagerGetter.getInstance().get());
+	}
+	
 	/**/
 	
 	static Boolean areRelated(Class<?> class1,Class<?> class2,Collection<Class<? extends Annotation>> relationsAnnotationsClasses) {
@@ -94,4 +109,7 @@ public interface PersistenceHelper {
 		return sort(Boolean.TRUE,classes);
 	}
 
+	/**/
+	
+	
 }

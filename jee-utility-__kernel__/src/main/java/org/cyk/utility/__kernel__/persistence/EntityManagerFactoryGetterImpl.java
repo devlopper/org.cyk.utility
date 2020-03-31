@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.EntityManagerFactory;
 
-public class EntityManagerFactoryGetterImpl extends AbstractEntityManagerFactoryGetterImpl implements Serializable {
+public class EntityManagerFactoryGetterImpl extends EntityManagerFactoryGetter.AbstractImpl implements Serializable {
 
 	public static EntityManagerFactory ENTITY_MANAGER_FACTORY; 
 	

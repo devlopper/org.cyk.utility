@@ -5,6 +5,7 @@ import java.io.Serializable;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.log.LogHelper;
+import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.__kernel__.value.ValueHelper;
@@ -42,6 +43,14 @@ public interface QueryIdentifierBuilder {
 			return null;
 		return build(new Parameters().setClassSimpleName(klass.getSimpleName()).setName(name));
 	}
+	
+	/**/
+	
+	public abstract class AbstractImpl extends AbstractObject implements QueryIdentifierBuilder,Serializable {
+		private static final long serialVersionUID = 1L;
+		
+	}
+
 	
 	/**/
 	

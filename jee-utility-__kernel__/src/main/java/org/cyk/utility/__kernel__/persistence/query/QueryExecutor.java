@@ -51,37 +51,13 @@ public interface QueryExecutor {
 		@Override
 		public <T> Collection<T> executeReadMany(Class<T> resultClass, QueryExecutorArguments arguments) {
 			validatePreConditions(resultClass, arguments);
-			Boolean isEntityManagerClosable = arguments.getIsEntityManagerClosable();
-			Boolean isEntityManagerClearable = arguments.getIsEntityManagerClearable();
-			EntityManager entityManager = arguments.getEntityManager();
-			if(entityManager == null) {
-				entityManager = EntityManagerGetter.getInstance().get();
-				if(isEntityManagerClearable == null)
-					isEntityManagerClearable = Boolean.TRUE;
-				//if(isEntityManagerClosable == null)
-				//	isEntityManagerClosable = Boolean.TRUE;				
-			}
-			
-			Map<String,Object> hints = arguments.getHints();
-			if(hints == null) {
-				hints = new HashMap<>();
-				if(Boolean.TRUE.equals(isEntityManagerClearable) || Boolean.TRUE.equals(isEntityManagerClosable)) {
-					hints.put("org.hibernate.readOnly",Boolean.TRUE);
-				}
-			}
-			
-			if(Boolean.TRUE.equals(arguments.getIsResultCachable())) {
-				hints = new HashMap<>();
-				hints.put("org.hibernate.cacheable", Boolean.TRUE);
-			}
-			
+			arguments.prepare();
 			TypedQuery<T> typedQuery = __getTypedQuery__(resultClass, arguments.getQuery().getIdentifier(),arguments.getQuery().getValue()
-					,arguments.getParameters(),arguments.getFilter(),arguments.getFirstTupleIndex(),arguments.getNumberOfTuples(),arguments.getHints(), entityManager);
+					,arguments.getParameters(),arguments.getFilter(),arguments.getFirstTupleIndex(),arguments.getNumberOfTuples(),arguments.get__hints__()
+					,arguments.get__entityManager__());
 			Collection<T> collection = typedQuery.getResultList();
-			if(Boolean.TRUE.equals(isEntityManagerClearable))
-				entityManager.clear();
-			if(Boolean.TRUE.equals(isEntityManagerClosable))
-				entityManager.close();
+			arguments.set__objects__(collection);
+			arguments.finalise();
 			return CollectionHelper.isEmpty(collection) ? null : collection;
 		}
 		

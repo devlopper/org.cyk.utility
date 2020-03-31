@@ -21,6 +21,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.json.bind.annotation.JsonbProperty;
+import javax.persistence.FetchType;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -243,6 +244,39 @@ public interface FieldHelper {
 		if(persistables != null)
 			PERSISTABLES_SINGLE_VALUE_ASSOCIATION_MAP.put(klass, persistables);
 		return persistables;
+	}
+	
+	static Collection<Field> getPersistablesLazillyFetchable(Class<?> klass) {
+		if(klass == null)
+			return null;
+		Collection<Field> persistablesLazillyFetchable = PERSISTABLES_LAZYLLY_FETCHABLE_MAP.get(klass);
+		if(persistablesLazillyFetchable != null)
+			return persistablesLazillyFetchable;
+		Collection<Field> fields = get(klass);
+		if(fields == null)
+			return null;		
+		for(Field index : fields) {
+			if(index.isAnnotationPresent(javax.persistence.ManyToOne.class) || index.isAnnotationPresent(javax.persistence.OneToMany.class))
+				;
+			else
+				continue;
+			if(index.isAnnotationPresent(javax.persistence.ManyToOne.class)) {
+				javax.persistence.ManyToOne manyToOne = index.getAnnotation(javax.persistence.ManyToOne.class);
+				if(!FetchType.LAZY.equals(manyToOne.fetch()))					
+					continue;
+			}
+			if(index.isAnnotationPresent(javax.persistence.OneToMany.class)) {
+				javax.persistence.OneToMany oneToMany = index.getAnnotation(javax.persistence.OneToMany.class);
+				if(!FetchType.LAZY.equals(oneToMany.fetch()))					
+					continue;
+			}
+			if(persistablesLazillyFetchable == null)
+				persistablesLazillyFetchable = new ArrayList<>();
+			persistablesLazillyFetchable.add(index);
+		}
+		if(persistablesLazillyFetchable != null)
+			PERSISTABLES_LAZYLLY_FETCHABLE_MAP.put(klass, persistablesLazillyFetchable);
+		return persistablesLazillyFetchable;
 	}
 	
 	static Collection<Field> getJsonbs(Class<?> klass) {
@@ -1162,6 +1196,7 @@ public interface FieldHelper {
 	static void clear() {
 		CLASS_FIELDS_MAP.clear();
 		PERSISTABLES_SINGLE_VALUE_ASSOCIATION_MAP.clear();
+		PERSISTABLES_LAZYLLY_FETCHABLE_MAP.clear();
 		FIELDS_MAP.clear();
 		TYPES_MAP.clear();
 		CLASSES_FIELDNAMES_MAP.clear();
@@ -1178,6 +1213,7 @@ public interface FieldHelper {
 	
 	Map<Class<?>,List<Field>> CLASS_FIELDS_MAP = new HashMap<>();
 	Map<Class<?>,Collection<Field>> PERSISTABLES_SINGLE_VALUE_ASSOCIATION_MAP = new HashMap<>();
+	Map<Class<?>,Collection<Field>> PERSISTABLES_LAZYLLY_FETCHABLE_MAP = new HashMap<>();
 	Map<Class<?>,Map<Class<? extends Annotation>,Collection<Field>>> HAVING_ANNOTATION_MAP = new HashMap<>();
 	Map<String,Field> FIELDS_MAP = new HashMap<>();
 	Map<String,Type> TYPES_MAP = new HashMap<>();

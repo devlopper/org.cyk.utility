@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.EntityManager;
 
-public class EntityManagerGetterImpl extends AbstractEntityManagerGetterImpl implements Serializable {
+public class EntityManagerGetterImpl extends EntityManagerGetter.AbstractImpl implements Serializable {
 
 	public static EntityManager ENTITY_MANAGER;
 	
