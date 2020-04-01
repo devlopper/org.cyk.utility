@@ -9,6 +9,10 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
+	<!-- 
+		footerText="#{column.footerText}"
+	 -->
+	
 	<p:columns 
 		value="#{dataTable.columnsAfterRowIndex}" 
 		var="column" 
@@ -17,7 +21,7 @@
 	 	visible="#{column.visible}"
 	 	styleClass="#{dataTable.getStyleClassByRecordByColumn(record,rowIndex,column,columnIndex)}" 
 	 	headerText="#{column.headerText}"
-	 	footerText="#{column.footerText}"
+	 	
 	 	filterBy="#{column.filterBy}"
 	>	
 		<ui:insert name="columnsBody" />

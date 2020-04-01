@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.array.ArrayHelper;
@@ -32,8 +33,8 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 	protected Column orderNumberColumn;
 	protected Column menuColumn;
 	protected Collection<Column> columnsAfterRowIndex,selectedColumnsAfterRowIndex;
-	protected Boolean areColumnsChoosable,isRowAddable,isColumnAddable;
-	protected CommandButton addRowCommandButton,removeRowCommandButton,addColumnCommandButton;
+	protected Boolean areColumnsChoosable,isRowAddable,isColumnAddable,isLastColumnRemovable;
+	protected CommandButton addRowCommandButton,removeRowCommandButton,addColumnCommandButton,removeLastColumnCommandButton;
 	protected String columnFieldNameFormat;
 	protected Grid dataGrid;
 	
@@ -90,6 +91,7 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 	
 	public AbstractDataTable enableCommandButtonAddColumn() {
 		enableCommandButtonAddColumn(null, null,null);
+		enableCommandButtonRemoveLastColumn();
 		return this;
 	}
 	
@@ -114,8 +116,6 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 					fieldName = null;
 				}else
 					fieldName = (String) dataGrid.formatNextColumnKey();
-				System.out.println(
-						"AbstractDataTable.enableCommandButtonAddColumn(...).new AbstractImpl() {...}.__executeFunction__() : "+fieldName);
 				Map<Object,Object> arguments = null;
 				if(listener == null)
 					arguments = Listener.AbstractImpl.__getColumnArguments__(AbstractDataTable.this,fieldName);
@@ -135,6 +135,35 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 			}
 		}.setAction(AbstractAction.Listener.Action.EXECUTE_FUNCTION));
 		return this;
+	}
+	
+	public AbstractDataTable enableCommandButtonRemoveLastColumn(String value,String icon) {
+		setIsLastColumnRemovable(Boolean.TRUE);
+		if(value == null)
+			value = "Retirer la dernière colonne";
+		if(icon == null)
+			icon = "fa fa-minus";
+		removeLastColumnCommandButton = CommandButton.build(CommandButton.FIELD_VALUE,value,CommandButton.FIELD_ICON,icon,CommandButton.ConfiguratorImpl.FIELD_COLLECTION,this
+				,CommandButton.ConfiguratorImpl.FIELD_COLLECTION_UPDATABLE,Boolean.TRUE
+				,CommandButton.ConfiguratorImpl.FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_NULLABLE,Boolean.TRUE
+				,CommandButton.FIELD_LISTENER,new AbstractAction.Listener.AbstractImpl() {
+			protected Object __executeFunction__(Object argument) {
+				if(!((List<Column>)columnsAfterRowIndex).isEmpty()) {
+					Column column = ((List<Column>)columnsAfterRowIndex).get(((List<Column>)columnsAfterRowIndex).size()-1);
+					columnsAfterRowIndex.remove(column);
+					if(dataGrid == null) {
+						
+					}else
+						dataGrid.removeColumn(column.getFieldName());	
+				}				
+				return "column removed";
+			}
+		}.setAction(AbstractAction.Listener.Action.EXECUTE_FUNCTION));
+		return this;
+	}
+	
+	public AbstractDataTable enableCommandButtonRemoveLastColumn() {
+		return enableCommandButtonRemoveLastColumn(null, null);
 	}
 	
 	public AbstractDataTable enableAjaxCellEdit() {
@@ -375,6 +404,7 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 					fieldName = String.format(dataTable.columnFieldNameFormat, CollectionHelper.getSize(dataTable.columnsAfterRowIndex));
 				return MapHelper.instantiate(Column.FIELD_HEADER_TEXT,fieldName,Column.FIELD_FIELD_NAME,fieldName
 						,Column.ConfiguratorImpl.FIELD_EDITABLE,dataTable.editable,Column.FIELD_REMOVE_COMMAND_BUTTON
+						/*
 						,CommandButton.build(CommandButton.FIELD_TITLE,"Retirer",CommandButton.FIELD_ICON,"fa fa-minus"
 								,CommandButton.ConfiguratorImpl.FIELD_COLLECTION,dataTable
 								,CommandButton.ConfiguratorImpl.FIELD_COLLECTION_UPDATABLE,Boolean.TRUE
@@ -393,7 +423,9 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 								}
 								return "column removed";
 							}
-						}.setAction(AbstractAction.Listener.Action.EXECUTE_FUNCTION)));
+						}.setAction(AbstractAction.Listener.Action.EXECUTE_FUNCTION))
+						*/
+						);
 			}
 		}
 		

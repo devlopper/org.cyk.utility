@@ -28,7 +28,7 @@ public interface EntitySaver {
 	
 	/**/
 	
-	public abstract class AbstractEntitySaverImpl extends AbstractObject implements EntitySaver,Serializable {
+	public abstract class AbstractImpl extends AbstractObject implements EntitySaver,Serializable {
 
 		@Override
 		public <T> void save(Class<T> tupleClass,Arguments<T> arguments) {
@@ -62,7 +62,13 @@ public interface EntitySaver {
 					if(CollectionHelper.contains(providedSystemIdentifiers, FieldHelper.readSystemIdentifier(entity))) {
 						if(modification == null)
 							modification = new ArrayList<>();
-						modification.add(entity);
+						for(T provided : arguments.getProvidedCollection()) {
+							if(FieldHelper.readSystemIdentifier(provided).equals(FieldHelper.readSystemIdentifier(entity))) {
+								modification.add(provided);
+								break;
+							}
+						}
+						//modification.add(entity);
 					}else {
 						if(deletion == null)
 							deletion = new ArrayList<>();

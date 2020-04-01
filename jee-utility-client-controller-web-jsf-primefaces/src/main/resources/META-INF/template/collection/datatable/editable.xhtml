@@ -13,85 +13,10 @@
 		<ui:define name="columnsAfterRowIndex">
 			<ui:decorate template="__columns__.xhtml">
 				<ui:define name="columnsBody">
-					<ui:decorate template="__columns__header.xhtml" />		
+					<ui:decorate template="__columns__header.xhtml" />
 					<ui:decorate template="__columns__filter.xhtml" />
-					
-					<p:cellEditor disabled="#{column.cellEditor != null and column.cellEditor.disabled}">
-		    			<f:facet name="output">
-		    				<ui:fragment rendered="#{columnIndex == 0}">
-			    				<ui:insert name="columnsAfterRowIndexCellEditorOutput0">
-			    					<ui:include src="__columnsAfterRowIndexBodies__.xhtml"/>
-			    				</ui:insert>
-		    				</ui:fragment>
-		    				<ui:fragment rendered="#{columnIndex == 1}">
-			    				<ui:insert name="columnsAfterRowIndexCellEditorOutput1">
-			    					<ui:include src="__columnsAfterRowIndexBodies__.xhtml"/>
-			    				</ui:insert>
-		    				</ui:fragment>
-		    				<ui:fragment rendered="#{columnIndex == 2}">
-			    				<ui:insert name="columnsAfterRowIndexCellEditorOutput2">
-			    					<ui:include src="__columnsAfterRowIndexBodies__.xhtml"/>
-			    				</ui:insert>
-		    				</ui:fragment>
-		    				<ui:fragment rendered="#{columnIndex == 3}">
-			    				<ui:insert name="columnsAfterRowIndexCellEditorOutput3">
-			    					<ui:include src="__columnsAfterRowIndexBodies__.xhtml"/>
-			    				</ui:insert>
-		    				</ui:fragment>
-		    				<ui:fragment rendered="#{columnIndex == 4}">
-			    				<ui:insert name="columnsAfterRowIndexCellEditorOutput4">
-			    					<ui:include src="__columnsAfterRowIndexBodies__.xhtml"/>
-			    				</ui:insert>
-		    				</ui:fragment>
-		    				<ui:fragment rendered="#{columnIndex == 5}">
-			    				<ui:insert name="columnsAfterRowIndexCellEditorOutput5">
-			    					<ui:include src="__columnsAfterRowIndexBodies__.xhtml"/>
-			    				</ui:insert>
-		    				</ui:fragment>
-		    				<ui:fragment rendered="#{columnIndex == 6}">
-			    				<ui:insert name="columnsAfterRowIndexCellEditorOutput6">
-			    					<ui:include src="__columnsAfterRowIndexBodies__.xhtml"/>
-			    				</ui:insert>
-		    				</ui:fragment>
-		    			</f:facet>
-		    			<f:facet name="input">
-		    				<ui:fragment rendered="#{columnIndex == 0}">
-			    				<ui:insert name="columnsAfterRowIndexCellEditorInput0">
-			    					<p:inputText />	
-			    				</ui:insert>
-		    				</ui:fragment>
-		    				<ui:fragment rendered="#{columnIndex == 1}">
-			    				<ui:insert name="columnsAfterRowIndexCellEditorInput1">
-			    					<p:inputText />	
-			    				</ui:insert>
-		    				</ui:fragment>
-		    				<ui:fragment rendered="#{columnIndex == 2}">
-			    				<ui:insert name="columnsAfterRowIndexCellEditorInput2">
-			    					<p:inputText />	
-			    				</ui:insert>
-		    				</ui:fragment>
-		    				<ui:fragment rendered="#{columnIndex == 3}">
-			    				<ui:insert name="columnsAfterRowIndexCellEditorInput3">
-			    					<p:inputText />	
-			    				</ui:insert>
-		    				</ui:fragment>
-		    				<ui:fragment rendered="#{columnIndex == 4}">
-			    				<ui:insert name="columnsAfterRowIndexCellEditorInput4">
-			    					<p:inputText />	
-			    				</ui:insert>
-		    				</ui:fragment>
-		    				<ui:fragment rendered="#{columnIndex == 5}">
-			    				<ui:insert name="columnsAfterRowIndexCellEditorInput5">
-			    					<p:inputText />	
-			    				</ui:insert>
-		    				</ui:fragment>
-		    				<ui:fragment rendered="#{columnIndex == 6}">
-			    				<ui:insert name="columnsAfterRowIndexCellEditorInput6">
-			    					<p:inputText />	
-			    				</ui:insert>
-		    				</ui:fragment>
-		    			</f:facet>
-		    		</p:cellEditor>  	  
+					<ui:decorate template="__columns__cellEditor.xhtml" />
+					<ui:decorate template="__columns__footer.xhtml" />
 				</ui:define>
 			</ui:decorate>						                
     	</ui:define>

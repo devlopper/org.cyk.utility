@@ -56,6 +56,11 @@
 								<ui:param name="commandButton" value="#{dataTable.addColumnCommandButton}"/>
 							</ui:decorate>
  						</ui:fragment>
+ 						<ui:fragment rendered="#{dataTable.isLastColumnRemovable}">
+ 							<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.removeLastColumnCommandButton)}">
+								<ui:param name="commandButton" value="#{dataTable.removeLastColumnCommandButton}"/>
+							</ui:decorate>
+ 						</ui:fragment>
  						<ui:fragment rendered="#{dataTable.isSavable}">
  							<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.saveCommandButton)}">
 								<ui:param name="commandButton" value="#{dataTable.saveCommandButton}"/>

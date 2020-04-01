@@ -18,7 +18,7 @@ import lombok.Setter;
 @Getter @Setter
 public class Column extends AbstractObject implements Serializable {
 
-	private String headerText,footerText,selectionMode,width,filterBy,fieldName,field;
+	private String headerText,footerText,footerStyle,footerStyleClass,selectionMode,width,filterBy,fieldName,field;
 	private Boolean visible = Boolean.TRUE;
 	private Object filterValue;
 	private Integer index;
@@ -30,6 +30,8 @@ public class Column extends AbstractObject implements Serializable {
 	public static final String FIELD_INDEX = "index";
 	public static final String FIELD_HEADER_TEXT = "headerText";
 	public static final String FIELD_FOOTER_TEXT = "footerText";
+	public static final String FIELD_FOOTER_STYLE = "footerStyle";
+	public static final String FIELD_FOOTER_STYLE_CLASS = "footerStyleClass";
 	public static final String FIELD_SELECTION_MODE = "selectionMode";
 	public static final String FIELD_WIDTH = "width";
 	//public static final String FIELD_FIELD = "field";

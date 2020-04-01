@@ -9,6 +9,12 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
-	<h:outputText value="#{column.footerText}" styleClass="#{column.footerStyleClass}" style="#{column.footerStyle}"/>
-	
+	<p:cellEditor disabled="#{column.cellEditor != null and column.cellEditor.disabled}">
+   		<f:facet name="output">
+   			<ui:include src="__columns__cellEditor_output.xhtml"/>
+   		</f:facet>
+   		<f:facet name="input">
+   			<ui:include src="__columns__cellEditor_input.xhtml"/>
+   		</f:facet>
+   	</p:cellEditor>  			
 </ui:composition>
