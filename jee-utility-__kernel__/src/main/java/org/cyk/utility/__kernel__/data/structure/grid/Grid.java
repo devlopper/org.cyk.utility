@@ -14,7 +14,6 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.data.structure.AbstractObjectImpl;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
-import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
@@ -100,7 +99,7 @@ public class Grid extends AbstractObjectImpl implements Serializable {
 	}
 	
 	public Grid addRow() {
-		return addRow(null);
+		return addRow(listener == null ? null : listener.instantiateRowObject());
 	}
 	
 	public Grid removeRow(Row row) {
@@ -122,18 +121,14 @@ public class Grid extends AbstractObjectImpl implements Serializable {
 	}
 	
 	public Grid addColumn(String key) {
-		if(CollectionHelper.isEmpty(rows)) {
-			LogHelper.logInfo("We cannot add column because there is no row", getClass());
-			return this;
-		}
 		if(StringHelper.isBlank(key) && StringHelper.isNotBlank(columnKeyFormat))
 			key = (String) formatNextColumnKey();
 		if(StringHelper.isBlank(key))
 			key = "row"+getNumberOfColumns();
-		for(Row row : rows) {
-			row.addColumn(key);
-			
-		}
+		getColumnsKeys(Boolean.TRUE).add(key);
+		if(CollectionHelper.isNotEmpty(rows))
+			for(Row row : rows)
+				row.addColumn(key);					
 		return this;
 	}
 	
@@ -161,7 +156,8 @@ public class Grid extends AbstractObjectImpl implements Serializable {
 	}
 	
 	public Integer getNumberOfColumns() {
-		return CollectionHelper.isEmpty(rows) ? 0 : rows.iterator().next().getnumberOfColumns();
+		return CollectionHelper.getSize(columnsKeys);
+		//return CollectionHelper.isEmpty(rows) ? CollectionHelper.getSize(columnsKeys) : rows.iterator().next().getnumberOfColumns();
 	}
 	
 	public Grid setValue(Row row,java.lang.Object key,java.lang.Object value) {
@@ -224,8 +220,10 @@ public class Grid extends AbstractObjectImpl implements Serializable {
 		
 		public Row addColumn(java.lang.Object key,java.lang.Object value) {
 			getValues(Boolean.TRUE).put(key, value);
-			if(grid.listener != null)
+			if(grid.listener != null) {
 				grid.listener.listenAddColumn(grid, this,key);
+				setValue(key, grid.listener.getColumnValueFromRowObject(grid, object, key));
+			}			
 			return this;
 		}
 		
@@ -277,6 +275,7 @@ public class Grid extends AbstractObjectImpl implements Serializable {
 	}
 	
 	public static interface Listener {
+		Object instantiateRowObject();
 		void listenAddRow(Grid grid,Row row);
 		void listenRemoveRow(Grid grid,Row row);
 		void listenAddColumn(Grid grid,Row row,java.lang.Object columnKey);
@@ -288,6 +287,10 @@ public class Grid extends AbstractObjectImpl implements Serializable {
 		/**/
 		
 		public static abstract class AbstractImpl extends AbstractObject implements Listener,Serializable{
+			@Override
+			public Object instantiateRowObject() {
+				return null;
+			}
 			@Override
 			public void listenAddRow(Grid grid, Row row) {}
 			@Override

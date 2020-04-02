@@ -11,6 +11,7 @@ import org.cyk.utility.__kernel__.string.Case;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObject;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.output.OutputText;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -22,6 +23,7 @@ public class Column extends AbstractObject implements Serializable {
 	private Boolean visible = Boolean.TRUE;
 	private Object filterValue;
 	private Integer index;
+	private OutputText footerOutputText;
 	private CellEditor cellEditor;
 	private CommandButton removeCommandButton;
 	
@@ -30,6 +32,7 @@ public class Column extends AbstractObject implements Serializable {
 	public static final String FIELD_INDEX = "index";
 	public static final String FIELD_HEADER_TEXT = "headerText";
 	public static final String FIELD_FOOTER_TEXT = "footerText";
+	public static final String FIELD_FOOTER_OUTPUT_TEXT = "footerOutputText";
 	public static final String FIELD_FOOTER_STYLE = "footerStyle";
 	public static final String FIELD_FOOTER_STYLE_CLASS = "footerStyleClass";
 	public static final String FIELD_SELECTION_MODE = "selectionMode";

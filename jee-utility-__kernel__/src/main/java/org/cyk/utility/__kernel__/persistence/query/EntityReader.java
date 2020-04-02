@@ -19,10 +19,8 @@ public interface EntityReader {
 		if(arguments.getQuery() == null) {
 			String queryIdentifier = QueryHelper.getIdentifierReadAll(tupleClass);
 			arguments.setQuery(QueryHelper.getQueries().getByIdentifier(queryIdentifier));
-			if(arguments.getQuery() == null) {
-				arguments.setQuery(QueryGetter.getInstance().getBySelect(tupleClass, queryIdentifier,String.format("SELECT tuple FROM %s tuple",tupleClass.getSimpleName())));
-				QueryHelper.addQueries(arguments.getQuery());
-			}
+			if(arguments.getQuery() == null)
+				arguments.setQuery(QueryGetter.getInstance().get(tupleClass, queryIdentifier,String.format("SELECT tuple FROM %s tuple",tupleClass.getSimpleName())));
 		}
 		return QueryExecutor.getInstance().executeReadMany(tupleClass, arguments);
 	}

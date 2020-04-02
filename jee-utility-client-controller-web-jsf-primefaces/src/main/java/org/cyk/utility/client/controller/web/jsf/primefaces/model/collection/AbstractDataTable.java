@@ -17,6 +17,7 @@ import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
+import org.cyk.utility.client.controller.web.jsf.primefaces.PrimefacesHelper;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.MenuItem;
@@ -255,6 +256,12 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 		return this;
 	}
 	
+	public AbstractDataTable updateFooters() {
+		PrimefacesHelper.updateDataTableFooters(this);
+		return this;
+	}
+	
+	
 	/**/
 	
 	public static final String FIELD_DATA_GRID = "dataGrid";
@@ -427,7 +434,31 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 						*/
 						);
 			}
+		}	
+	}
+	
+	public static class AbstractAddRowCommandButtonActionListenerImpl extends AbstractAction.Listener.AbstractImpl implements Serializable {
+		
+		private AbstractDataTable dataTable;
+		
+		public AbstractAddRowCommandButtonActionListenerImpl(AbstractDataTable dataTable) {
+			this.dataTable = dataTable;
 		}
 		
+		@SuppressWarnings("unchecked")
+		protected Object __executeFunction__(Object argument) {
+			if(dataTable.dataGrid == null) {
+				if(dataTable.value != null && !(dataTable.value instanceof Collection))
+					throw new RuntimeException("Cannot add instance into value of type "+dataTable.value.getClass());
+				if(dataTable.value == null)
+					dataTable.value = new ArrayList<>();
+				Object element = ClassHelper.instanciate(dataTable.elementClass);				
+				((Collection<Object>)dataTable.value).add(element);
+				if(dataTable.listener != null)
+					((Listener)dataTable.listener).listenAddRow(dataTable, element);
+			}else
+				dataTable.dataGrid.addRow();
+			return "row added";
+		}
 	}
 }

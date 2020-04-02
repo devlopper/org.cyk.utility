@@ -24,9 +24,13 @@ public abstract class AbstractIdentifiableSystemScalarStringIdentifiableBusiness
 	@NotNull @Column(name=COLUMN_NAME,nullable=false)
 	protected String name;
 	
-	public AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl(String code,String name) {
-		super(code);
+	public AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl(String identifier,String code,String name) {
+		super(identifier,code);
 		this.name = name;
+	}
+	
+	public AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl(String code,String name) {
+		this(null,code,name);
 	}
 	
 	@Override

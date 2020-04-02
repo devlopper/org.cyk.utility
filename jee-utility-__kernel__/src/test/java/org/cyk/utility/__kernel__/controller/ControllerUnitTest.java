@@ -25,7 +25,7 @@ import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.user.interface_.message.MessageRenderer;
 import org.junit.jupiter.api.Test;
 
-public class ControllerEntityReaderUnitTest extends AbstractWeldUnitTest {
+public class ControllerUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Override

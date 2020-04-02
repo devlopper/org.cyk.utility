@@ -3,6 +3,7 @@ package org.cyk.utility.__kernel__.__entities__;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -29,11 +30,19 @@ public class Employee extends AbstractIdentifiableSystemScalarStringIdentifiable
 	//@JoinColumn(name = "identifier")
 	private Collection<EmployeeAddress> employeeAddresses;
 	
-	@OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true,mappedBy = "employee")
+	@OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "employee")
 	private Collection<DepartmentEmployee> departmentEmployees;
 	
-	@OneToMany(fetch = FetchType.LAZY,cascade = {CascadeType.ALL},orphanRemoval = true,mappedBy = "employee")
+	@OneToMany(fetch = FetchType.LAZY,cascade = {CascadeType.ALL},mappedBy = "employee")
 	private Collection<Mark> marks;
+	
+	public Employee(String identifier,String code,String name) {
+		super(identifier,code,name);
+	}
+	
+	public Employee(String code,String name) {
+		super(code,name);
+	}
 	
 	@Override
 	public Employee setIdentifier(String identifier) {
@@ -81,5 +90,25 @@ public class Employee extends AbstractIdentifiableSystemScalarStringIdentifiable
 			mark.setEmployee(this);
 		this.marks.addAll(CollectionHelper.listOf(marks));
 		return this;
+	}
+	
+	/**/
+	
+	public static Employee instantiateOneRandomlyByIdentifier(String identifier) {
+		if(StringHelper.isBlank(identifier))
+			return null;
+		return new Employee(identifier,identifier,"name");
+	}
+	
+	public static Collection<Employee> instantiateManyRandomlyByIdentifiers(Collection<String> identifiers) {
+		if(CollectionHelper.isEmpty(identifiers))
+			return null;
+		return identifiers.stream().map(identifier -> instantiateOneRandomlyByIdentifier(identifier)).collect(Collectors.toList());
+	}
+	
+	public static Collection<Employee> instantiateManyRandomlyByIdentifiers(String...identifiers) {
+		if(ArrayHelper.isEmpty(identifiers))
+			return null;
+		return instantiateManyRandomlyByIdentifiers(CollectionHelper.listOf(identifiers));
 	}
 }

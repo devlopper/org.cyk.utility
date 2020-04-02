@@ -28,7 +28,10 @@ public interface EntityFinder {
 		arguments.prepare();
 		Map<String,Object> properties = arguments.getProperties() == null ? null : arguments.getProperties().deriveMap(klass, arguments.get__entityManager__());
 		T object = arguments.get__entityManager__().find(klass, CollectionHelper.getFirst(arguments.getSystemIdentifiers()),properties);
-		arguments.set__objects__(List.of(object));
+		if(object == null)
+			arguments.set__objects__(null);
+		else
+			arguments.set__objects__(List.of(object));
 		arguments.finalise();
 		return object;
 	}

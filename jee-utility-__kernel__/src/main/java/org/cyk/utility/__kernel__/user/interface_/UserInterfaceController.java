@@ -30,6 +30,6 @@ public class UserInterfaceController implements Serializable {
     }
     
     public Object getRandomIdentifier() {
-    	return RandomHelper.getAlphabetic(10);
+    	return "random"+RandomHelper.getAlphabetic(10);
     }
 }

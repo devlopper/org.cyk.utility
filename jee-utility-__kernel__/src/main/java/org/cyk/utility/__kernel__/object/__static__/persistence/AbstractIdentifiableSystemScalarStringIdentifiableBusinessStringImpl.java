@@ -16,16 +16,21 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@Getter @Setter @Accessors(chain=true) @NoArgsConstructor
-@MappedSuperclass @Access(AccessType.FIELD)
+@Getter @Setter @Accessors(chain=true)
+@MappedSuperclass @Access(AccessType.FIELD) @NoArgsConstructor
 public abstract class AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringImpl extends AbstractIdentifiableSystemScalarStringImpl implements IdentifiableBusiness<String>,Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@NotNull @Column(name=COLUMN_CODE,nullable=false,unique=true)
 	protected String code;
 	
-	public AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringImpl(String code) {
+	public AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringImpl(String identifier,String code) {
+		super(identifier);
 		this.code = code;
+	}
+	
+	public AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringImpl(String code) {
+		this(null,code);
 	}
 	
 	@Override

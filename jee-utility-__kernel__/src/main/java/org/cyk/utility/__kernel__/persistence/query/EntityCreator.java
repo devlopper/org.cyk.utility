@@ -60,6 +60,12 @@ public interface EntityCreator {
 		createMany(CollectionHelper.listOf(objects));
 	}
 	
+	default void createManyInTransaction(Collection<Object> objects) {
+		if(CollectionHelper.isEmpty(objects))
+			return;
+		createMany(new QueryExecutorArguments().addObjects(objects).setIsTransactional(Boolean.TRUE));
+	}
+	
 	default void createManyInTransaction(Object...objects) {
 		if(ArrayHelper.isEmpty(objects))
 			return;

@@ -33,6 +33,7 @@ import org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString;
 import org.cyk.utility.client.controller.data.hierarchy.Hierarchy;
 import org.cyk.utility.client.controller.data.hierarchy.TreeNodeListener;
 import org.cyk.utility.client.controller.event.Event;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.collection.AbstractDataTable;
 import org.omnifaces.util.Ajax;
 import org.primefaces.PrimeFaces;
 import org.primefaces.model.DefaultStreamedContent;
@@ -378,6 +379,10 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 		if(ArrayHelper.isEmpty(identifiers))
 			return;
 		updateOnComplete(CollectionHelper.listOf(identifiers));
+	}
+	
+	public static void updateDataTableFooters(AbstractDataTable dataTable) {
+		Ajax.oncomplete("update_"+dataTable.getIdentifier()+"_footers();");
 	}
 	
 	/**/

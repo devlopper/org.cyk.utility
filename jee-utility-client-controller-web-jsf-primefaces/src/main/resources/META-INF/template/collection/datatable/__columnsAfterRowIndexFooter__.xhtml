@@ -9,6 +9,23 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
-	<h:outputText value="#{column.footerText}" styleClass="#{column.footerStyleClass}" style="#{column.footerStyle}"/>
+	<!--
+	<ui:decorate template="#{primefacesHelper.getModelTemplate(column.footerOutputText)}">
+		<ui:param name="outputText" value="#{column.footerOutputText}"/>
+	</ui:decorate>
+	-->
 	
+	<ui:param name="identifier" value="#{identifier == null ? (empty column.footerOutputText.identifier ? userInterfaceController.randomIdentifier : column.footerOutputText.identifier) : identifier}"/>
+	
+	<ui:fragment rendered="#{not empty column.footerOutputText.identifier}">
+		<h:outputText 
+			id="#{identifier}" 
+			value="#{column.footerOutputText.value}" 
+			styleClass="#{column.footerOutputText.styleClass}" 
+			style="#{column.footerOutputText.style}"/>
+	</ui:fragment>
+	
+	<!--
+	<h:outputText value="#{column.footerText}" styleClass="#{column.footerStyleClass}" style="#{column.footerStyle}"/>
+	-->
 </ui:composition>

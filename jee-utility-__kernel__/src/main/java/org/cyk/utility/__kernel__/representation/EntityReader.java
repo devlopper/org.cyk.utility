@@ -13,14 +13,12 @@ import javax.ws.rs.core.Response;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
-import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.mapping.MapperSourceDestination;
 import org.cyk.utility.__kernel__.mapping.MappingHelper;
 import org.cyk.utility.__kernel__.mapping.MappingSourceBuilder;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.__kernel__.rest.ResponseBuilder;
-import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.Value;
 
 import io.swagger.annotations.Api;
@@ -45,34 +43,26 @@ public interface EntityReader {
 		public Response read(Arguments arguments) {
 			if(arguments == null)
 				return ResponseBuilder.getInstance().buildRuntimeException(null,"arguments are required");
-			if(StringHelper.isBlank(arguments.getRepresentationEntityClassName()))
-				return ResponseBuilder.getInstance().buildRuntimeException(null,"representation entity class name is required");
-			Class<?> representationEntityClass = ClassHelper.getByName(arguments.getRepresentationEntityClassName());
-			if(representationEntityClass == null)
-				return ResponseBuilder.getInstance().buildRuntimeException(null,"representation entity class named "+arguments.getRepresentationEntityClassName()+" not found");			
-			Class<?> persistenceEntityClass = null;
-			String persistenceEntityClassName = arguments.getPersistenceEntityClassName();
-			if(StringHelper.isNotBlank(persistenceEntityClassName))
-				persistenceEntityClass = ClassHelper.getByName(persistenceEntityClassName);
-			if(persistenceEntityClass == null)
-				persistenceEntityClass = PersistenceEntityClassGetter.getInstance().get(representationEntityClass);
-			if(persistenceEntityClass == null)
-				return ResponseBuilder.getInstance().buildRuntimeException(null,"persistence entity class of representation entity class "+representationEntityClass+" not found");
-			QueryExecutorArguments queryExecutorArguments = null;
-			if(arguments.getQueryExecutorArguments() != null)
-				queryExecutorArguments = MappingHelper.getDestination(arguments.getQueryExecutorArguments(), QueryExecutorArguments.class);
-			Collection<?> persistences;
+			Arguments.Internal internal;
 			try {
-				persistences = org.cyk.utility.__kernel__.persistence.query.EntityReader.getInstance().readMany(persistenceEntityClass,queryExecutorArguments);
+				internal = new Arguments.Internal(arguments, EntityReader.class);
+				QueryExecutorArguments queryExecutorArguments = null;
+				if(arguments.getQueryExecutorArguments() == null)
+					queryExecutorArguments = new QueryExecutorArguments();
+				else
+					queryExecutorArguments = MappingHelper.getDestination(arguments.getQueryExecutorArguments(), QueryExecutorArguments.class);
+				if(queryExecutorArguments.getIsResultProcessable() == null)
+					queryExecutorArguments.setIsResultProcessable(Boolean.TRUE);
+				Collection<?> persistences = org.cyk.utility.__kernel__.persistence.query.EntityReader.getInstance().readMany(internal.persistenceEntityClass,queryExecutorArguments);				
+				MapperSourceDestination.Arguments mapperSourceDestinationArguments = null;
+				if(arguments.getMappingArguments() != null)
+					mapperSourceDestinationArguments = MappingHelper.getDestination(arguments.getMappingArguments(), MapperSourceDestination.Arguments.class);				
+				Collection<?> representations =  CollectionHelper.isEmpty(persistences) ? null : MappingSourceBuilder.getInstance().build(persistences, internal.representationEntityClass
+						,mapperSourceDestinationArguments);
+				return ResponseBuilder.getInstance().build(new ResponseBuilder.Arguments().setEntities(representations));
 			} catch (Exception exception) {
 				return ResponseBuilder.getInstance().build(exception);
 			}
-			MapperSourceDestination.Arguments mapperSourceDestinationArguments = null;
-			if(arguments.getMappingArguments() != null)
-				mapperSourceDestinationArguments = MappingHelper.getDestination(arguments.getMappingArguments(), MapperSourceDestination.Arguments.class);
-			Collection<?> representations =  CollectionHelper.isEmpty(persistences) ? null : MappingSourceBuilder.getInstance().build(persistences, representationEntityClass
-					,mapperSourceDestinationArguments);
-			return ResponseBuilder.getInstance().build(new ResponseBuilder.Arguments().setEntities(representations));
 		}
 	}
 	

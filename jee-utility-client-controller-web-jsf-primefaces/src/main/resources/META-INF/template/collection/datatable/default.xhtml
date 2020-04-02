@@ -9,6 +9,8 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
+	<p:remoteCommand name="update_#{dataTable.identifier}_footers" update=":form:#{dataTable.identifier}" global="false" value="update datatable footers"/>
+	
 	<ui:insert name="beforeDataTable">
 		<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.title)}">
 	 		<ui:param name="outputText" value="#{dataTable.title}"/>

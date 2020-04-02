@@ -1,10 +1,8 @@
-package org.cyk.utility.__kernel__.business;
+package org.cyk.utility.__kernel__.persistence;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 
@@ -13,7 +11,6 @@ import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
-import org.cyk.utility.__kernel__.persistence.EntityManagerGetter;
 import org.cyk.utility.__kernel__.persistence.query.EntityCreator;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.value.Value;
@@ -22,7 +19,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@Deprecated
 public interface EntitySaver {
 
 	<T> void save(Class<T> tupleClass,Arguments<T> arguments);
@@ -30,66 +26,27 @@ public interface EntitySaver {
 	/**/
 	
 	public abstract class AbstractImpl extends AbstractObject implements EntitySaver,Serializable {
-
+		
 		@Override
 		public <T> void save(Class<T> tupleClass,Arguments<T> arguments) {
 			validatePreConditions(tupleClass,arguments);
-			if(CollectionHelper.isEmpty(arguments.providedCollection) && CollectionHelper.isEmpty(arguments.existingCollection))
-				return;
-			//deduce the partitions : 1 : creation - 2 : modification - 3 : deletion
-			Collection<T> creation = null;
-			Collection<Object> existingSystemIdentifiers = null;
-			if(CollectionHelper.isNotEmpty(arguments.getExistingCollection()))
-				existingSystemIdentifiers = arguments.getExistingCollection().stream().map(tuple -> FieldHelper.readSystemIdentifier(tuple)).collect(Collectors.toSet());
-			Collection<Object> providedSystemIdentifiers = null;
-			if(CollectionHelper.isNotEmpty(arguments.getProvidedCollection()))
-				for(T entity : arguments.getProvidedCollection()) {
-					Object systemIdentifier = FieldHelper.readSystemIdentifier(entity);
-					if(!CollectionHelper.contains(existingSystemIdentifiers, systemIdentifier)) {
-						if(creation == null)
-							creation = new ArrayList<>();
-						creation.add(entity);
-					}else {
-						if(providedSystemIdentifiers == null)
-							providedSystemIdentifiers = new LinkedHashSet<>();
-						providedSystemIdentifiers.add(systemIdentifier);
-					}
-				}
-			
-			Collection<T> deletion = null;
-			Collection<T> modification = null;
-			if(CollectionHelper.isNotEmpty(arguments.getExistingCollection()))
-				for(T entity : arguments.getExistingCollection()) {
-					if(CollectionHelper.contains(providedSystemIdentifiers, FieldHelper.readSystemIdentifier(entity))) {
-						if(modification == null)
-							modification = new ArrayList<>();
-						for(T provided : arguments.getProvidedCollection()) {
-							if(FieldHelper.readSystemIdentifier(provided).equals(FieldHelper.readSystemIdentifier(entity))) {
-								modification.add(provided);
-								break;
-							}
-						}
-						//modification.add(entity);
-					}else {
-						if(deletion == null)
-							deletion = new ArrayList<>();
-						deletion.add(entity);
-					}
-				}
-			
+			arguments.computeExistingIdentifiers();
+			arguments.computeCreatables();
+			arguments.computeUpdatables();
+			arguments.computeDeletables();
 			EntityManager entityManager = arguments.getEntityManager();
 			if(entityManager == null)
 				entityManager = EntityManagerGetter.getInstance().get();
 			if(Boolean.TRUE.equals(arguments.isTransactional))
 				entityManager.getTransaction().begin();
 			if(arguments.listener == null) {
-				Listener.AbstractImpl.__create__(creation, entityManager);
-				Listener.AbstractImpl.__update__(modification, entityManager);
-				Listener.AbstractImpl.__delete__(deletion, entityManager);
+				Listener.AbstractImpl.__create__(arguments.__creatables__, entityManager);
+				Listener.AbstractImpl.__update__(arguments.__updatables__, entityManager);
+				Listener.AbstractImpl.__delete__(arguments.__deletables__, entityManager);
 			}else {
-				arguments.listener.create(creation,entityManager);
-				arguments.listener.update(modification,entityManager);
-				arguments.listener.delete(deletion,entityManager);
+				arguments.listener.create(arguments.__creatables__,entityManager);
+				arguments.listener.update(arguments.__updatables__,entityManager);
+				arguments.listener.delete(arguments.__deletables__,entityManager);
 			}
 			if(Boolean.TRUE.equals(arguments.isTransactional))
 				entityManager.getTransaction().commit();
@@ -97,12 +54,14 @@ public interface EntitySaver {
 		
 		/**/
 		
-		protected <T> void validatePreConditions(Class<T> tupleClass,Arguments<?> arguments) {
+		protected <T> void validatePreConditions(Class<T> tupleClass,Arguments<T> arguments) {
 			if(tupleClass == null)
 				throw new RuntimeException("tuple class is required");
 			if(arguments == null)
 				throw new RuntimeException("arguments are required");
 		}
+		
+		
 	}
 	
 	/**/
@@ -110,10 +69,102 @@ public interface EntitySaver {
 	@Getter @Setter @Accessors(chain=true)
 	public static class Arguments<T> implements Serializable {
 		private Collection<T> providedCollection;
+		private Collection<T> creatables;
+		private Collection<T> updatables;
+		private Collection<T> deletables;
+		
 		private Collection<T> existingCollection;
+		
+		private Boolean isNotBelogingToProvidedCollectionDeletable;
+		
 		private EntityManager entityManager;
 		private Boolean isTransactional;
 		private Listener<T> listener;
+		
+		private Collection<T> __creatables__;
+		private Collection<T> __updatables__;
+		private Collection<T> __deletables__;
+		
+		private Collection<Object> __existingIdentifiers__;
+		
+		public void computeExistingIdentifiers() {
+			__existingIdentifiers__ = FieldHelper.readSystemIdentifiers(existingCollection);
+		}
+		
+		/**
+		 * Collect from provided where identifier is null OR not in existing
+		 */
+		public void computeCreatables() {
+			__creatables__ = null;
+			if(CollectionHelper.isEmpty(creatables) && CollectionHelper.isEmpty(providedCollection))
+				return;
+			if(CollectionHelper.isNotEmpty(creatables)) {
+				if(__creatables__ == null)
+					__creatables__ = new ArrayList<>();
+				__creatables__.addAll(creatables);
+			}
+			if(CollectionHelper.isEmpty(providedCollection))
+				return;
+			for(T object : providedCollection) {
+				Object identifier = FieldHelper.readSystemIdentifier(object);
+				if(identifier == null || !CollectionHelper.contains(__existingIdentifiers__, identifier)) {
+					if(__creatables__ == null)
+						__creatables__ = new ArrayList<>();
+					__creatables__.add(object);
+				}
+			}
+		}
+		
+		/**
+		 * Collect from provided where identifier is not null AND in existing
+		 */
+		protected void computeUpdatables() {
+			__updatables__ = null;
+			if(CollectionHelper.isNotEmpty(updatables)) {
+				if(__updatables__ == null)
+					__updatables__ = new ArrayList<>();
+				__updatables__.addAll(updatables);
+			}
+			if(CollectionHelper.isEmpty(providedCollection))
+				return;
+			for(T object : providedCollection) {
+				Object identifier = FieldHelper.readSystemIdentifier(object);
+				if(identifier != null || CollectionHelper.contains(__existingIdentifiers__, identifier)) {
+					if(__updatables__ == null)
+						__updatables__ = new ArrayList<>();
+					__updatables__.add(object);
+				}
+			}
+		}
+		/**
+		 * Collect from existing where not in update able
+		 */
+		protected void computeDeletables() {
+			__deletables__ = null;
+			if(CollectionHelper.isNotEmpty(deletables)) {
+				if(__deletables__ == null)
+					__deletables__ = new ArrayList<>();
+				__deletables__.addAll(deletables);
+			}
+			if(CollectionHelper.isEmpty(existingCollection))
+				return;
+			Collection<Object> updatablesIdentifiers = FieldHelper.readSystemIdentifiers(__updatables__);
+			for(T object : existingCollection) {
+				Object identifier = FieldHelper.readSystemIdentifier(object);
+				if(!CollectionHelper.contains(updatablesIdentifiers, identifier)) {
+					if(__deletables__ == null)
+						__deletables__ = new ArrayList<>();
+					__deletables__.add(object);
+				}
+			}
+		}		
+	
+		/**/
+		
+		@Getter @Setter @Accessors(chain=true)
+		public static class Dto extends AbstractObject implements Serializable {
+			
+		}
 	}
 	
 	public static interface Listener<T> {

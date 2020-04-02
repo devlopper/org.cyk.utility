@@ -20,9 +20,12 @@ import org.cyk.utility.__kernel__.__entities__.DepartmentEmployee;
 import org.cyk.utility.__kernel__.__entities__.Employee;
 import org.cyk.utility.__kernel__.__entities__.EmployeeDto;
 import org.cyk.utility.__kernel__.__entities__.Mark;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.mapping.MappingSourceBuilder;
 import org.cyk.utility.__kernel__.persistence.EntityManagerFactoryGetterImpl;
 import org.cyk.utility.__kernel__.persistence.EntityManagerGetter;
+import org.cyk.utility.__kernel__.persistence.EntitySaver;
+import org.cyk.utility.__kernel__.persistence.EntitySaver.Arguments;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.hibernate.LazyInitializationException;
 import org.junit.jupiter.api.Test;
@@ -34,6 +37,7 @@ public class PersistenceQueriesUnitTest extends AbstractWeldUnitTest {
 	protected void __listenBefore__() {
 		super.__listenBefore__();
 		EntityManagerFactoryGetterImpl.ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("persistence_queries");
+		QueryHelper.getQueries().setIsRegisterableToEntityManager(Boolean.TRUE);
 	}
 	
 	@Override
@@ -130,6 +134,37 @@ public class PersistenceQueriesUnitTest extends AbstractWeldUnitTest {
 		
 		//employeeDto = MappingSourceBuilder.getInstance().build(employee03, EmployeeDto.class, null);
 		//assertThat(employeeDto.getDepartmentEmployees()).isNotNull();
+	}
+	
+	/* Save */
+	
+	@Test
+	public void save_employees(){
+		assertThat(EntityReader.getInstance().readMany(Employee.class)).isNull();
+		EntitySaver.getInstance().save(Employee.class, new Arguments<Employee>());
+		assertThat(EntityReader.getInstance().readMany(Employee.class)).isNull();
+		EntityCreator.getInstance().createOneInTransaction(Employee.instantiateOneRandomlyByIdentifier("1"));
+		assertThat(EntityReader.getInstance().readMany(Employee.class).stream().map(Employee::getIdentifier).collect(Collectors.toList())).containsExactlyInAnyOrder("1");
+		EntityCreator.getInstance().createOneInTransaction(Employee.instantiateOneRandomlyByIdentifier("2"));
+		assertThat(EntityReader.getInstance().readMany(Employee.class).stream().map(Employee::getIdentifier).collect(Collectors.toList())).containsExactlyInAnyOrder("1","2");
+		EntityCreator.getInstance().createManyInTransaction((Collection<Object>)CollectionHelper.cast(Object.class, Employee.instantiateManyRandomlyByIdentifiers("3","4","5")));
+		assertThat(EntityReader.getInstance().readMany(Employee.class).stream().map(Employee::getIdentifier).collect(Collectors.toList())).containsExactlyInAnyOrder("1","2"
+				,"3","4","5");
+		EntitySaver.getInstance().save(Employee.class, new Arguments<Employee>()
+				.setDeletables(List.of(EntityFinder.getInstance().find(Employee.class, "2")))
+				.setCreatables(List.of(Employee.instantiateOneRandomlyByIdentifier("a").setName("myname")))
+				.setIsTransactional(Boolean.TRUE));
+		assertThat(EntityFinder.getInstance().find(Employee.class, "a").getName()).isEqualTo("myname");
+		assertThat(EntityReader.getInstance().readMany(Employee.class).stream().map(Employee::getIdentifier).collect(Collectors.toList())).containsExactlyInAnyOrder("1"
+				,"3","4","5","a");
+		EntitySaver.getInstance().save(Employee.class, new Arguments<Employee>()
+				.setCreatables(List.of(Employee.instantiateOneRandomlyByIdentifier("a1"),Employee.instantiateOneRandomlyByIdentifier("a2")))
+				.setUpdatables(List.of(Employee.instantiateOneRandomlyByIdentifier("a").setName("n01")))
+				.setDeletables(List.of(EntityFinder.getInstance().find(Employee.class, "1")))
+				.setIsTransactional(Boolean.TRUE));
+		assertThat(EntityReader.getInstance().readMany(Employee.class).stream().map(Employee::getIdentifier).collect(Collectors.toList())).containsExactlyInAnyOrder(
+				"3","4","5","a","a1","a2");
+		assertThat(EntityFinder.getInstance().find(Employee.class, "a").getName()).isEqualTo("n01");
 	}
 	
 	//@Test
