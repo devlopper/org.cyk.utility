@@ -24,6 +24,7 @@ public abstract class AbstractWeldTest extends org.cyk.utility.__kernel__.test.A
 		Weld weld = __getWeld__();
 		if(weld == null)
 			weld = new Weld();
+		//weld.property("org.jboss.weld.se.archive.isolation", Boolean.FALSE);
 		return WeldInitiator.of(weld);
 	}
 	

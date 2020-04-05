@@ -7,16 +7,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
+import org.cyk.utility.__kernel__.mapping.MapperSourceDestination;
+import org.cyk.utility.__kernel__.mapping.MappingHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.persistence.EntityManagerGetter;
 import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
+import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
+import org.cyk.utility.__kernel__.string.StringHelper;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
@@ -147,5 +154,54 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 			return this;
 		addSystemIdentifiers(CollectionHelper.listOf(systemIdentifiers));
 		return this;
+	}
+
+	/**/
+	
+	@XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor @ToString(callSuper = false,doNotUseGetters = true)
+	public static class Dto extends AbstractObject implements Serializable {
+		private String queryIdentifier;
+		private FilterDto filter;
+		private Integer firstTupleIndex;
+		private Integer numberOfTuples;
+		private Boolean isResultCachable;
+		
+		public FilterDto getFilter(Boolean injectIfNull) {
+			if(filter == null && Boolean.TRUE.equals(injectIfNull))
+				filter = new FilterDto();
+			return filter;
+		}
+		
+		public Dto addFilterField(String fieldName, Object fieldValue) {
+			getFilter(Boolean.TRUE).addField(fieldName, fieldValue);
+			return this;
+		}
+		
+		/**/
+		
+		@org.mapstruct.Mapper
+		public static abstract class Mapper extends MapperSourceDestination.AbstractImpl<Dto, QueryExecutorArguments> {
+
+			@Override
+			protected void __listenGetDestinationAfter__(Dto source, QueryExecutorArguments destination) {
+				super.__listenGetDestinationAfter__(source, destination);
+				if(StringHelper.isNotBlank(source.getQueryIdentifier()))
+					destination.setQuery(QueryGetter.getInstance().get(source.getQueryIdentifier()));
+				if(destination.getQuery() == null)
+					destination.setQuery(new Query().setIdentifier(source.getQueryIdentifier()));
+			}
+			
+			public FilterDto getFilterDto(Filter filter) {
+				if(filter == null)
+					return null;
+				return MappingHelper.getSource(filter, FilterDto.class);
+			}
+			
+			public Filter getFilter(FilterDto filter) {
+				if(filter == null)
+					return null;
+				return MappingHelper.getDestination(filter, Filter.class);
+			}
+		}
 	}
 }

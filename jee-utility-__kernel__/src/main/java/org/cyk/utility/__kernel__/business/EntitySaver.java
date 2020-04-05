@@ -1,20 +1,14 @@
 package org.cyk.utility.__kernel__.business;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
-import org.cyk.utility.__kernel__.collection.CollectionHelper;
-import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
-import org.cyk.utility.__kernel__.persistence.EntityManagerGetter;
-import org.cyk.utility.__kernel__.persistence.query.EntityCreator;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.value.Value;
 
@@ -22,77 +16,26 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@Deprecated
 public interface EntitySaver {
 
+	@Transactional
 	<T> void save(Class<T> tupleClass,Arguments<T> arguments);
 	
 	/**/
 	
 	public abstract class AbstractImpl extends AbstractObject implements EntitySaver,Serializable {
 
+		@Transactional
 		@Override
 		public <T> void save(Class<T> tupleClass,Arguments<T> arguments) {
 			validatePreConditions(tupleClass,arguments);
-			if(CollectionHelper.isEmpty(arguments.providedCollection) && CollectionHelper.isEmpty(arguments.existingCollection))
-				return;
-			//deduce the partitions : 1 : creation - 2 : modification - 3 : deletion
-			Collection<T> creation = null;
-			Collection<Object> existingSystemIdentifiers = null;
-			if(CollectionHelper.isNotEmpty(arguments.getExistingCollection()))
-				existingSystemIdentifiers = arguments.getExistingCollection().stream().map(tuple -> FieldHelper.readSystemIdentifier(tuple)).collect(Collectors.toSet());
-			Collection<Object> providedSystemIdentifiers = null;
-			if(CollectionHelper.isNotEmpty(arguments.getProvidedCollection()))
-				for(T entity : arguments.getProvidedCollection()) {
-					Object systemIdentifier = FieldHelper.readSystemIdentifier(entity);
-					if(!CollectionHelper.contains(existingSystemIdentifiers, systemIdentifier)) {
-						if(creation == null)
-							creation = new ArrayList<>();
-						creation.add(entity);
-					}else {
-						if(providedSystemIdentifiers == null)
-							providedSystemIdentifiers = new LinkedHashSet<>();
-						providedSystemIdentifiers.add(systemIdentifier);
-					}
-				}
-			
-			Collection<T> deletion = null;
-			Collection<T> modification = null;
-			if(CollectionHelper.isNotEmpty(arguments.getExistingCollection()))
-				for(T entity : arguments.getExistingCollection()) {
-					if(CollectionHelper.contains(providedSystemIdentifiers, FieldHelper.readSystemIdentifier(entity))) {
-						if(modification == null)
-							modification = new ArrayList<>();
-						for(T provided : arguments.getProvidedCollection()) {
-							if(FieldHelper.readSystemIdentifier(provided).equals(FieldHelper.readSystemIdentifier(entity))) {
-								modification.add(provided);
-								break;
-							}
-						}
-						//modification.add(entity);
-					}else {
-						if(deletion == null)
-							deletion = new ArrayList<>();
-						deletion.add(entity);
-					}
-				}
-			
-			EntityManager entityManager = arguments.getEntityManager();
-			if(entityManager == null)
-				entityManager = EntityManagerGetter.getInstance().get();
-			if(Boolean.TRUE.equals(arguments.isTransactional))
-				entityManager.getTransaction().begin();
-			if(arguments.listener == null) {
-				Listener.AbstractImpl.__create__(creation, entityManager);
-				Listener.AbstractImpl.__update__(modification, entityManager);
-				Listener.AbstractImpl.__delete__(deletion, entityManager);
-			}else {
-				arguments.listener.create(creation,entityManager);
-				arguments.listener.update(modification,entityManager);
-				arguments.listener.delete(deletion,entityManager);
-			}
-			if(Boolean.TRUE.equals(arguments.isTransactional))
-				entityManager.getTransaction().commit();
+			arguments.prepare();
+			__save__(tupleClass, arguments);
+			arguments.finalise();
+		}
+		
+		protected <T> void __save__(Class<T> tupleClass,Arguments<T> arguments) {
+			org.cyk.utility.__kernel__.persistence.EntitySaver.getInstance().save(tupleClass, arguments.__persistenceArguments__);
 		}
 		
 		/**/
@@ -109,57 +52,25 @@ public interface EntitySaver {
 	
 	@Getter @Setter @Accessors(chain=true)
 	public static class Arguments<T> implements Serializable {
-		private Collection<T> providedCollection;
-		private Collection<T> existingCollection;
-		private EntityManager entityManager;
-		private Boolean isTransactional;
-		private Listener<T> listener;
-	}
-	
-	public static interface Listener<T> {
-		void create(Collection<T> collection,EntityManager entityManager);
-		void update(Collection<T> collection,EntityManager entityManager);
-		void delete(Collection<T> collection,EntityManager entityManager);
+		private org.cyk.utility.__kernel__.persistence.EntitySaver.Arguments<T> persistenceArguments;
 		
-		public static abstract class AbstractImpl<T> extends AbstractObject implements Listener<T>,Serializable {
-			@Override
-			public void create(Collection<T> collection,EntityManager entityManager) {
-				__create__(collection, entityManager);
-			}
-
-			@Override
-			public void update(Collection<T> collection,EntityManager entityManager) {
-				__update__(collection, entityManager);
-			}
-
-			@Override
-			public void delete(Collection<T> collection,EntityManager entityManager) {
-				__delete__(collection, entityManager);
-			}
-			
-			/**/
-			
-			public static void __create__(Collection<?> collection,EntityManager entityManager) {
-				EntityCreator.getInstance().createMany((Collection<Object>)collection, entityManager);
-			}
-			
-			public static void __update__(Collection<?> collection,EntityManager entityManager) {
-				if(CollectionHelper.isEmpty(collection))
-					return;
-				if(entityManager == null)
-					entityManager = EntityManagerGetter.getInstance().get();
-				for(Object object : collection)
-					entityManager.merge(object);
-			}
-			
-			public static void __delete__(Collection<?> collection,EntityManager entityManager) {
-				if(CollectionHelper.isEmpty(collection))
-					return;
-				if(entityManager == null)
-					entityManager = EntityManagerGetter.getInstance().get();
-				for(Object object : collection)
-					entityManager.remove(entityManager.merge(object));
-			}
+		private org.cyk.utility.__kernel__.persistence.EntitySaver.Arguments<T> __persistenceArguments__;
+		
+		public org.cyk.utility.__kernel__.persistence.EntitySaver.Arguments<T> getPersistenceArguments(Boolean injectIfNull) {
+			if(persistenceArguments == null && Boolean.TRUE.equals(injectIfNull))
+				persistenceArguments = new org.cyk.utility.__kernel__.persistence.EntitySaver.Arguments<T>();
+			return persistenceArguments;
+		}
+		
+		public Arguments<T> prepare() {
+			__persistenceArguments__ = persistenceArguments;
+			if(__persistenceArguments__ == null)
+				__persistenceArguments__ = new org.cyk.utility.__kernel__.persistence.EntitySaver.Arguments<T>();
+			return this;
+		}
+		
+		public Arguments<T> finalise() {
+			return this;
 		}
 	}
 	
@@ -170,4 +81,15 @@ public interface EntitySaver {
 	}
 	
 	Value INSTANCE = DependencyInjection.inject(Value.class);
+	
+	/**/
+	
+	public static class AbstractPersistenceArgumentsListener<T> extends org.cyk.utility.__kernel__.persistence.EntitySaver.Listener.AbstractImpl<T> {
+		
+		@Override
+		public void create(Collection<T> collection, EntityManager entityManager) {
+			EntityCreator.getInstance().createMany(collection);
+		}
+		
+	}
 }

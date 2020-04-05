@@ -3,10 +3,10 @@ package org.cyk.utility.__kernel__.user.interface_.message;
 import java.io.Serializable;
 import java.util.Collection;
 
-import org.cyk.utility.__kernel__.annotation.Test;
+import org.cyk.utility.__kernel__.annotation.SystemOut;
 
-@Test
-public class MessageRendererTestImpl extends MessageRenderer.AbstractImpl implements Serializable {
+@SystemOut
+public class MessageRendererSystemOutImpl extends MessageRenderer.AbstractImpl implements Serializable {
 
 	@Override
 	public MessageRenderer clear() {
@@ -19,5 +19,4 @@ public class MessageRendererTestImpl extends MessageRenderer.AbstractImpl implem
 			System.out.println(message);
 		});
 	}
-
 }

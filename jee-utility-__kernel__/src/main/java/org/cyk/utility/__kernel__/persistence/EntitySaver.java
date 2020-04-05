@@ -12,6 +12,8 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.persistence.query.EntityCreator;
+import org.cyk.utility.__kernel__.persistence.query.EntityDeletor;
+import org.cyk.utility.__kernel__.persistence.query.EntityUpdater;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.value.Value;
 
@@ -40,13 +42,19 @@ public interface EntitySaver {
 			if(Boolean.TRUE.equals(arguments.isTransactional))
 				entityManager.getTransaction().begin();
 			if(arguments.listener == null) {
-				Listener.AbstractImpl.__create__(arguments.__creatables__, entityManager);
-				Listener.AbstractImpl.__update__(arguments.__updatables__, entityManager);
-				Listener.AbstractImpl.__delete__(arguments.__deletables__, entityManager);
+				if(CollectionHelper.isNotEmpty(arguments.__creatables__))
+					Listener.AbstractImpl.__create__(arguments.__creatables__, entityManager);
+				if(CollectionHelper.isNotEmpty(arguments.__updatables__))
+					Listener.AbstractImpl.__update__(arguments.__updatables__, entityManager);
+				if(CollectionHelper.isNotEmpty(arguments.__deletables__))
+					Listener.AbstractImpl.__delete__(arguments.__deletables__, entityManager);
 			}else {
-				arguments.listener.create(arguments.__creatables__,entityManager);
-				arguments.listener.update(arguments.__updatables__,entityManager);
-				arguments.listener.delete(arguments.__deletables__,entityManager);
+				if(CollectionHelper.isNotEmpty(arguments.__creatables__))
+					arguments.listener.create(arguments.__creatables__,entityManager);
+				if(CollectionHelper.isNotEmpty(arguments.__updatables__))
+					arguments.listener.update(arguments.__updatables__,entityManager);
+				if(CollectionHelper.isNotEmpty(arguments.__deletables__))
+					arguments.listener.delete(arguments.__deletables__,entityManager);
 			}
 			if(Boolean.TRUE.equals(arguments.isTransactional))
 				entityManager.getTransaction().commit();
@@ -68,6 +76,8 @@ public interface EntitySaver {
 	
 	@Getter @Setter @Accessors(chain=true)
 	public static class Arguments<T> implements Serializable {
+		public static Boolean IS_TRANSACTIONAL = Boolean.FALSE;
+		
 		private Collection<T> providedCollection;
 		private Collection<T> creatables;
 		private Collection<T> updatables;
@@ -78,7 +88,7 @@ public interface EntitySaver {
 		private Boolean isNotBelogingToProvidedCollectionDeletable;
 		
 		private EntityManager entityManager;
-		private Boolean isTransactional;
+		private Boolean isTransactional = IS_TRANSACTIONAL;
 		private Listener<T> listener;
 		
 		private Collection<T> __creatables__;
@@ -191,25 +201,21 @@ public interface EntitySaver {
 			/**/
 			
 			public static void __create__(Collection<?> collection,EntityManager entityManager) {
+				if(CollectionHelper.isEmpty(collection))
+					return;
 				EntityCreator.getInstance().createMany((Collection<Object>)collection, entityManager);
 			}
 			
 			public static void __update__(Collection<?> collection,EntityManager entityManager) {
 				if(CollectionHelper.isEmpty(collection))
 					return;
-				if(entityManager == null)
-					entityManager = EntityManagerGetter.getInstance().get();
-				for(Object object : collection)
-					entityManager.merge(object);
+				EntityUpdater.getInstance().updateMany((Collection<Object>)collection,entityManager);
 			}
 			
 			public static void __delete__(Collection<?> collection,EntityManager entityManager) {
 				if(CollectionHelper.isEmpty(collection))
 					return;
-				if(entityManager == null)
-					entityManager = EntityManagerGetter.getInstance().get();
-				for(Object object : collection)
-					entityManager.remove(entityManager.merge(object));
+				EntityDeletor.getInstance().deleteMany((Collection<Object>)collection,entityManager);
 			}
 		}
 	}

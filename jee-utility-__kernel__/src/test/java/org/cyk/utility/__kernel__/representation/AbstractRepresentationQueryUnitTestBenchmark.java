@@ -7,7 +7,7 @@ import org.cyk.utility.__kernel__.__entities__.TestedEntityParentDto;
 import org.cyk.utility.__kernel__.__entities__.TestedEntityParentDtoMapper;
 import org.cyk.utility.__kernel__.mapping.MapperClassGetterImpl;
 import org.cyk.utility.__kernel__.persistence.query.Query;
-import org.cyk.utility.__kernel__.persistence.query.QueryExecutorArgumentsDto;
+import org.cyk.utility.__kernel__.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
 import org.cyk.utility.__kernel__.test.weld.AbstractQueryUnitTestBenchmark;
 
@@ -59,7 +59,7 @@ public abstract class AbstractRepresentationQueryUnitTestBenchmark extends Abstr
 		@Override
 		protected void __run__() {
 			EntityReader.getInstance().read(new Arguments().setRepresentationEntityClass(TestedEntityParentDto.class)
-					.setQueryExecutorArguments(new QueryExecutorArgumentsDto().setQueryIdentifier(queryIdentifier)));
+					.setQueryExecutorArguments(new QueryExecutorArguments.Dto().setQueryIdentifier(queryIdentifier)));
 		}
 	}
 }

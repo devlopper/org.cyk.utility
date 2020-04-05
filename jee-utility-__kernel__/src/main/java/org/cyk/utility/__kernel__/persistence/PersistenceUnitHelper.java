@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
@@ -24,6 +25,9 @@ public interface PersistenceUnitHelper {
 		return getFields(klass, LAZY_ASSOCIATIONS_FIELDS, GetFieldsListener.AbstractImpl.LazyAssociationImpl.INSTANCE);
 	}
 	
+	static Collection<Field> getTransientFields(Class<?> klass) {
+		return getFields(klass, TRANSIENT_FIELDS, GetFieldsListener.AbstractImpl.AbstractTransientImpl.Impl.INSTANCE);
+	}
 	/**/
 	
 	static Collection<Field> getFields(Class<?> klass,Map<Class<?>,Collection<Field>> map,GetFieldsListener listener) {
@@ -58,6 +62,17 @@ public interface PersistenceUnitHelper {
 		public static abstract class AbstractImpl implements GetFieldsListener {
 			
 			/**/
+			
+			public abstract static class AbstractTransientImpl extends AbstractImpl {
+				@Override
+				public Boolean accept(Field field) {
+					return field.isAnnotationPresent(Transient.class);
+				}
+				
+				public static class Impl extends AbstractTransientImpl {				
+					public static final Impl INSTANCE = new Impl();
+				}
+			}
 			
 			public abstract static class AbstractAssociationImpl extends AbstractImpl {
 				@Override
@@ -96,4 +111,5 @@ public interface PersistenceUnitHelper {
 	
 	Map<Class<?>,Collection<Field>> ASSOCIATIONS_FIELDS = new HashMap<>();
 	Map<Class<?>,Collection<Field>> LAZY_ASSOCIATIONS_FIELDS = new HashMap<>();
+	Map<Class<?>,Collection<Field>> TRANSIENT_FIELDS = new HashMap<>();
 }

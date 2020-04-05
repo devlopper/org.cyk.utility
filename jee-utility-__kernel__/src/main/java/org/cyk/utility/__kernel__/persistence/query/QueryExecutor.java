@@ -56,9 +56,17 @@ public interface QueryExecutor {
 					,arguments.getParameters(),arguments.getFilter(),arguments.getFirstTupleIndex(),arguments.getNumberOfTuples(),arguments.get__hints__()
 					,arguments.get__entityManager__());
 			Collection<T> collection = typedQuery.getResultList();
+			if(CollectionHelper.isEmpty(collection))
+				collection = null;
 			arguments.set__objects__(collection);
 			arguments.finalise();
-			return CollectionHelper.isEmpty(collection) ? null : collection;
+			if(CollectionHelper.isNotEmpty(collection))
+				collection = processResult(resultClass, arguments, collection);
+			return collection;
+		}
+		
+		protected <T> Collection<T> processResult(Class<T> resultClass, QueryExecutorArguments arguments,Collection<T> collection) {
+			return collection;
 		}
 		
 		@Override

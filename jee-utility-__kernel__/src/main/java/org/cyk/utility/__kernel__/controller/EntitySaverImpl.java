@@ -1,4 +1,4 @@
-package org.cyk.utility.__kernel__.business;
+package org.cyk.utility.__kernel__.controller;
 
 import java.io.Serializable;
 

@@ -35,6 +35,10 @@ public interface EntitySaver<T> {
 		
 		protected abstract Class<T> getRepresentationEntityClass();
 		
+		protected org.cyk.utility.__kernel__.business.EntitySaver.Arguments<Object> instantiateBusinessEntitySaverArguments() {
+			return new org.cyk.utility.__kernel__.business.EntitySaver.Arguments<Object>();
+		}
+		
 		@Override
 		public Response save(Collection<T> creatables,Collection<T> updatables,Collection<T> deletables,Arguments arguments) {
 			if(CollectionHelper.isEmpty(creatables) && CollectionHelper.isEmpty(updatables) && CollectionHelper.isEmpty(deletables))
@@ -49,15 +53,14 @@ public interface EntitySaver<T> {
 				Collection<?> __creatables__ = CollectionHelper.isEmpty(creatables) ? null : MappingHelper.getDestinations(creatables, internal.persistenceEntityClass);
 				Collection<?> __updatables__ = CollectionHelper.isEmpty(updatables) ? null : MappingHelper.getDestinations(updatables, internal.persistenceEntityClass);
 				Collection<?> __deletables__ = CollectionHelper.isEmpty(deletables) ? null : MappingHelper.getDestinations(deletables, internal.persistenceEntityClass);		
-				org.cyk.utility.__kernel__.persistence.EntitySaver.Arguments<Object> persistenceEntitySaverArguments = new org.cyk.utility.__kernel__.persistence.EntitySaver.Arguments<Object>();
-				persistenceEntitySaverArguments.setCreatables((Collection<Object>) __creatables__);
-				persistenceEntitySaverArguments.setUpdatables((Collection<Object>) __updatables__);
-				persistenceEntitySaverArguments.setDeletables((Collection<Object>) __deletables__);
-				if(persistenceEntitySaverArguments.getIsTransactional() == null)
-					persistenceEntitySaverArguments.setIsTransactional(Boolean.TRUE);
-				org.cyk.utility.__kernel__.persistence.EntitySaver.getInstance().save((Class<Object>)internal.persistenceEntityClass, persistenceEntitySaverArguments);
+				org.cyk.utility.__kernel__.business.EntitySaver.Arguments<Object> businessEntitySaverArguments = instantiateBusinessEntitySaverArguments();
+				businessEntitySaverArguments.getPersistenceArguments(Boolean.TRUE).setCreatables((Collection<Object>) __creatables__);
+				businessEntitySaverArguments.getPersistenceArguments(Boolean.TRUE).setUpdatables((Collection<Object>) __updatables__);
+				businessEntitySaverArguments.getPersistenceArguments(Boolean.TRUE).setDeletables((Collection<Object>) __deletables__);
+				org.cyk.utility.__kernel__.business.EntitySaver.getInstance().save((Class<Object>)internal.persistenceEntityClass, businessEntitySaverArguments);
 				return ResponseBuilder.getInstance().build(new ResponseBuilder.Arguments());
 			} catch (Exception exception) {
+				exception.printStackTrace();
 				return ResponseBuilder.getInstance().build(exception);
 			}		
 		}

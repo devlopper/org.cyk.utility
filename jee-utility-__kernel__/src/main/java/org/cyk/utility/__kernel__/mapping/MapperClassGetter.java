@@ -6,6 +6,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
+import org.cyk.utility.__kernel__.persistence.query.QueryExecutorArguments;
+import org.cyk.utility.__kernel__.throwable.Message;
+import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.value.Value;
 
 public interface MapperClassGetter {
@@ -25,6 +28,12 @@ public interface MapperClassGetter {
 		}
 		
 		protected Class<?> __get__(Class<?> klass) {
+			if(klass.equals(Message.class) || klass.equals(Message.Dto.class))
+				return Message.Dto.Mapper.class;
+			if(klass.equals(RuntimeException.class) || klass.equals(RuntimeException.Dto.class))
+				return RuntimeException.Dto.Mapper.class;
+			if(klass.equals(QueryExecutorArguments.class) || klass.equals(QueryExecutorArguments.Dto.class))
+				return QueryExecutorArguments.Dto.Mapper.class;
 			Class<?> result = org.cyk.utility.__kernel__.klass.ClassHelper.getByName(MapperClassNameGetter.getInstance().get(klass));
 			if(result == null) {
 				if(klass.getName().endsWith("Impl"))

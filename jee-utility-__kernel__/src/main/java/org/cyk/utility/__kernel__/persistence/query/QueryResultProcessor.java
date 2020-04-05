@@ -11,6 +11,8 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.persistence.PersistenceUnitHelper;
+import org.cyk.utility.__kernel__.persistence.query.EntityGraphArguments.Attributes;
+import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.value.Value;
 import org.jboss.weld.exceptions.IllegalArgumentException;
 
@@ -39,11 +41,13 @@ public interface QueryResultProcessor {
 		}
 		
 		protected <T> void __process__(Class<T> klass, Collection<T> entities, QueryExecutorArguments arguments) {
-			__initializeLazyAttributes__(klass, entities, arguments == null || arguments.getProperties() == null || arguments.getProperties().getEntityGraph() == null ? null 
-					: arguments.getProperties().getEntityGraph().getAttributes());
+			Attributes attributes = arguments == null || arguments.getProperties() == null || arguments.getProperties().getEntityGraph() == null ? null 
+					: arguments.getProperties().getEntityGraph().getAttributes();
+			initializeLazyAttributes(klass, entities, attributes);
+			initializeTransientAttributes(klass, entities, attributes);
 		}
 		
-		protected <T> void __initializeLazyAttributes__(Class<T> klass, Collection<T> entities, EntityGraphArguments.Attributes attributes) {
+		protected <T> void initializeLazyAttributes(Class<T> klass, Collection<T> entities, EntityGraphArguments.Attributes attributes) {
 			Collection<Field> lazyFields = PersistenceUnitHelper.getLazyAssociationsFields(klass);
 			if(CollectionHelper.isEmpty(lazyFields))
 				return;
@@ -51,12 +55,33 @@ public interface QueryResultProcessor {
 			if(CollectionHelper.isEmpty(lazyFieldsNotYetInitialized))
 				return;
 			entities.parallelStream().forEach(entity -> {
-				__initializeLazyAttributes__(entity, lazyFieldsNotYetInitialized,attributes);
+				initializeLazyAttributes(entity, lazyFieldsNotYetInitialized,attributes);
 			});
 		}
 		
-		protected <T> void __initializeLazyAttributes__(Object entity,Collection<Field> lazyFields, EntityGraphArguments.Attributes attributes) {
+		protected <T> void initializeLazyAttributes(Object entity,Collection<Field> lazyFields, EntityGraphArguments.Attributes attributes) {
 			lazyFields.forEach(field-> {FieldHelper.write(entity, field, null);});
+		}
+		
+		protected <T> void initializeTransientAttributes(Class<T> klass, Collection<T> entities, EntityGraphArguments.Attributes attributes) {
+			Collection<Field> transientFields = PersistenceUnitHelper.getTransientFields(klass);
+			if(CollectionHelper.isEmpty(transientFields))
+				return;
+			Collection<Field> transientFieldsToBeInitialized = transientFields.stream().filter(field -> attributes!=null && attributes.isContainsName(field.getName())).collect(Collectors.toList());
+			if(CollectionHelper.isEmpty(transientFieldsToBeInitialized))
+				return;
+			initializeTransientAttributes(klass, entities, transientFieldsToBeInitialized, attributes);
+		}
+		
+		protected <T> void initializeTransientAttributes(Class<T> klass, Collection<T> entities,Collection<Field> fields, EntityGraphArguments.Attributes attributes) {
+			fields.forEach(field -> {
+				Attributes fieldAttributes = attributes == null || attributes.getNamesMap() == null ? null : attributes.getNamesMap().get(field.getName());
+				initializeTransientAttributes(klass, entities, field, fieldAttributes);
+			});
+		}
+		
+		protected <T> void initializeTransientAttributes(Class<T> klass, Collection<T> entities,Field field, EntityGraphArguments.Attributes attributes) {
+			throw new RuntimeException(String.format("initialize transient field %s.%s not yet handled",klass.getName(),field.getName()));
 		}
 	}
 	

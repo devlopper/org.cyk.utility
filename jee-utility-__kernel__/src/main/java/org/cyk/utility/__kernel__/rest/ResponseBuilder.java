@@ -14,8 +14,8 @@ import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.TypeHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
-import org.cyk.utility.__kernel__.throwable.MessageDto;
-import org.cyk.utility.__kernel__.throwable.RuntimeExceptionDto;
+import org.cyk.utility.__kernel__.throwable.Message;
+import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.value.Value;
 import org.jboss.weld.exceptions.IllegalArgumentException;
 
@@ -28,22 +28,22 @@ public interface ResponseBuilder {
 
 	Response build(Arguments arguments);
 	
-	default Response build(RuntimeExceptionDto runtimeException) {
+	default Response build(RuntimeException.Dto runtimeException) {
 		if(runtimeException == null)
 			throw new IllegalArgumentException("runtime exception is required");
 		return build(new Arguments().setRuntimeException(runtimeException));
 	}
 	
 	default Response buildRuntimeException(String messageIdentifier,String messageSummary,String messageDetails) {
-		return build(new RuntimeExceptionDto(messageIdentifier, messageSummary, messageDetails));
+		return build(new RuntimeException.Dto(messageIdentifier, messageSummary, messageDetails));
 	}
 	
 	default Response buildRuntimeException(String messageIdentifier,String messageSummary) {
-		return build(new RuntimeExceptionDto(messageIdentifier, messageSummary));
+		return build(new RuntimeException.Dto(messageIdentifier, messageSummary));
 	}
 	
 	default Response buildRuntimeException(String messageIdentifier) {
-		return build(new RuntimeExceptionDto(messageIdentifier));
+		return build(new RuntimeException.Dto(messageIdentifier));
 	}
 	
 	default Response build(Exception exception) {
@@ -98,16 +98,16 @@ public interface ResponseBuilder {
 	public static class Arguments extends AbstractObject implements Serializable {
 		private Response.Status status;
 		private Object entity;
-		private RuntimeExceptionDto runtimeException;
-		private Collection<MessageDto> messageDtos;
+		private RuntimeException.Dto runtimeException;
+		private Collection<Message.Dto> messageDtos;
 		private Collection<?> entities;
 		
-		public Arguments(RuntimeExceptionDto runtimeException,Response.Status status) {
+		public Arguments(RuntimeException.Dto runtimeException,Response.Status status) {
 			this.runtimeException = runtimeException;
 			this.status = status;
 		}
 		
-		public Arguments(RuntimeExceptionDto runtimeException) {
+		public Arguments(RuntimeException.Dto runtimeException) {
 			this(runtimeException,Response.Status.BAD_REQUEST);
 		}
 	}

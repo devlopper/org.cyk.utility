@@ -30,7 +30,7 @@ import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.hibernate.LazyInitializationException;
 import org.junit.jupiter.api.Test;
 
-public class PersistenceQueriesUnitTest extends AbstractWeldUnitTest {
+public class PersistenceUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Override

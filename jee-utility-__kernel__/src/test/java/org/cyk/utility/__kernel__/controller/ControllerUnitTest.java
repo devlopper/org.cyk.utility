@@ -10,15 +10,18 @@ import java.util.stream.Collectors;
 import javax.persistence.Persistence;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.__kernel__.__entities__.TestedEntityParent;
-import org.cyk.utility.__kernel__.__entities__.TestedEntityParentData;
-import org.cyk.utility.__kernel__.__entities__.TestedEntityParentDto;
+import org.cyk.utility.__kernel__.__entities__.Employee;
+import org.cyk.utility.__kernel__.__entities__.EmployeeData;
+import org.cyk.utility.__kernel__.__entities__.EmployeeDto;
+import org.cyk.utility.__kernel__.__entities__.EmployeeSaver;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.persistence.EntityManagerFactoryGetterImpl;
 import org.cyk.utility.__kernel__.persistence.query.EntityCreator;
+import org.cyk.utility.__kernel__.persistence.query.EntityFinder;
 import org.cyk.utility.__kernel__.persistence.query.Query;
-import org.cyk.utility.__kernel__.persistence.query.QueryExecutorArgumentsDto;
+import org.cyk.utility.__kernel__.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
@@ -31,14 +34,15 @@ public class ControllerUnitTest extends AbstractWeldUnitTest {
 	@Override
 	protected void __listenBefore__() {
 		super.__listenBefore__();
-		DependencyInjection.setQualifierClass(MessageRenderer.class, org.cyk.utility.__kernel__.annotation.Test.Class.class);
-		EntityManagerFactoryGetterImpl.ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("pu");
-		RepresentationEntityClassGetterImpl.MAP.put(TestedEntityParentData.class, TestedEntityParentDto.class);
+		DependencyInjection.setQualifierClass(MessageRenderer.class, org.cyk.utility.__kernel__.annotation.SystemOut.Class.class);
+		EntityManagerFactoryGetterImpl.ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("controller_queries");
+		RepresentationEntityClassGetterImpl.MAP.put(EmployeeData.class, EmployeeDto.class);
+		RepresentationClassGetterImpl.put(EmployeeData.class, RepresentationClassGetter.Function.SAVER, EmployeeSaver.class);
 		QueryHelper.getQueries().setIsRegisterableToEntityManager(Boolean.TRUE);
-		QueryHelper.scan(List.of(getClass().getPackage()));	
-		QueryHelper.addQueries(Query.buildSelectBySystemIdentifiers(TestedEntityParent.class, "SELECT t FROM TestedEntityParent t WHERE t.identifier IN :identifiers"));
-		QueryHelper.addQueries(Query.build(TestedEntityParent.class,"read.1", "SELECT new org.cyk.utility.__kernel__.__entities__.TestedEntityParent(t.identifier,t.code,t.name) FROM TestedEntityParent t"));
+		QueryHelper.addQueries(Query.buildSelectBySystemIdentifiers(Employee.class, "SELECT t FROM Employee t WHERE t.identifier IN :identifiers"));
+		QueryHelper.addQueries(Query.build(Employee.class,"read.1", "SELECT new org.cyk.utility.__kernel__.__entities__.Employee(t.code,t.name) FROM Employee t"));
 		Arguments.IS_REPRESENTATION_PROXYABLE = Boolean.FALSE;
+		org.cyk.utility.__kernel__.persistence.EntitySaver.Arguments.IS_TRANSACTIONAL = Boolean.TRUE;
 	}
 	
 	@Override
@@ -54,42 +58,40 @@ public class ControllerUnitTest extends AbstractWeldUnitTest {
 	/* read all*/
 	
 	@Test
-	public void testedEntityParent_withoutTuple_read_all(){		
-		__assertRead__(EntityReader.getInstance().readMany(TestedEntityParentData.class));
+	public void employee_withoutTuple_read_all(){		
+		__assertRead__(EntityReader.getInstance().readMany(EmployeeData.class));
 	}
 	
 	@Test
-	public void testedEntityParent_withTuple_one_read_all(){		
-		EntityCreator.getInstance().createOneInTransaction(new TestedEntityParent("1","1","1").setLazy("lazy").setEager("eager"));
-		__assertRead__(EntityReader.getInstance().readMany(TestedEntityParentData.class), "1");
+	public void employee_withTuple_one_read_all(){		
+		EntityCreator.getInstance().createOneInTransaction(new Employee("1","1","1"));
+		__assertRead__(EntityReader.getInstance().readMany(EmployeeData.class), "1");
 	}
 	
 	@Test
-	public void testedEntityParent_withTuple_many_read_all(){		
-		EntityCreator.getInstance().createManyInTransaction(new TestedEntityParent("1","1","1"),new TestedEntityParent("2","2","1"));		
-		__assertRead__(EntityReader.getInstance().readMany(TestedEntityParentData.class), "1","2");
+	public void employee_withTuple_many_read_all(){		
+		EntityCreator.getInstance().createManyInTransaction(new Employee("1","1","1"),new Employee("2","2","1"));		
+		__assertRead__(EntityReader.getInstance().readMany(EmployeeData.class), "1","2");
 	}
 	
 	@Test
-	public void testedEntityParent_withTuple_projection(){		
-		EntityCreator.getInstance().createOneInTransaction(new TestedEntityParent("1","2","3").setLazy("lazy").setEager("eager"));
-		Collection<TestedEntityParentData> testedEntityParents = EntityReader.getInstance().readMany(TestedEntityParentData.class,new Arguments()
+	public void employee_withTuple_projection(){		
+		EntityCreator.getInstance().createOneInTransaction(new Employee("1","2","3"));
+		Collection<EmployeeData> employees = EntityReader.getInstance().readMany(EmployeeData.class,new Arguments<EmployeeData>()
 				.setRepresentationArguments(new org.cyk.utility.__kernel__.representation.Arguments()
-						.setQueryExecutorArguments(new QueryExecutorArgumentsDto().setQueryIdentifier("TestedEntityParent.read.1"))));
-		assertThat(testedEntityParents.stream().map(TestedEntityParentData::getIdentifier).collect(Collectors.toList())).containsExactly(new String[] {"1"});
-		assertThat(testedEntityParents.stream().map(TestedEntityParentData::getCode).collect(Collectors.toList())).containsExactly(new String[] {"2"});
-		assertThat(testedEntityParents.stream().map(TestedEntityParentData::getName).collect(Collectors.toList())).containsExactly(new String[] {"3"});
-		assertThat(testedEntityParents.stream().map(TestedEntityParentData::getLazy).collect(Collectors.toList())).containsExactly(new String[] {null});
-		assertThat(testedEntityParents.stream().map(TestedEntityParentData::getEarger).collect(Collectors.toList())).containsExactly(new String[] {null});
+						.setQueryExecutorArguments(new QueryExecutorArguments.Dto().setQueryIdentifier("Employee.read.1"))));
+		assertThat(employees.stream().map(EmployeeData::getIdentifier).collect(Collectors.toList())).containsExactly(new String[] {null});
+		assertThat(employees.stream().map(EmployeeData::getCode).collect(Collectors.toList())).containsExactly(new String[] {"2"});
+		assertThat(employees.stream().map(EmployeeData::getName).collect(Collectors.toList())).containsExactly(new String[] {"3"});
 	}
 	
 	/* read by system identifier */
 	
 	@Test
-	public void testedEntityParent_withoutTuple_read_bySystemIdentifier(){
-		EntityCreator.getInstance().createManyInTransaction(new TestedEntityParent("1","1","1"),new TestedEntityParent("2","2","1"));		
-		__assertRead__(EntityReader.getInstance().readMany(TestedEntityParentData.class,new Arguments().setRepresentationArguments(new org.cyk.utility.__kernel__.representation
-				.Arguments().setQueryExecutorArguments(new QueryExecutorArgumentsDto().setQueryIdentifier("TestedEntityParent.readBySystemIdentifiers")
+	public void employee_withoutTuple_read_bySystemIdentifier(){
+		EntityCreator.getInstance().createManyInTransaction(new Employee("1","1","1"),new Employee("2","2","1"));		
+		__assertRead__(EntityReader.getInstance().readMany(EmployeeData.class,new Arguments<EmployeeData>().setRepresentationArguments(new org.cyk.utility.__kernel__.representation
+				.Arguments().setQueryExecutorArguments(new QueryExecutorArguments.Dto().setQueryIdentifier("Employee.readBySystemIdentifiers")
 						.addFilterField("identifiers",List.of("1"))))), "1");
 	}
 	
@@ -97,13 +99,47 @@ public class ControllerUnitTest extends AbstractWeldUnitTest {
 	
 	/* read by filter */
 	
+	/* save */
+	
+	@Test
+	public void save_employees(){
+		org.cyk.utility.__kernel__.persistence.query.EntityReader entityReader = org.cyk.utility.__kernel__.persistence.query.EntityReader.getInstance();
+		assertThat(entityReader.readMany(Employee.class)).isNull();
+		EmployeeSaver.getInstance().save(null,null,null, new org.cyk.utility.__kernel__.representation.Arguments());
+		assertThat(entityReader.readMany(Employee.class)).isNull();
+		EntityCreator.getInstance().createOneInTransaction(Employee.instantiateOneRandomlyByIdentifier("1"));
+		assertThat(entityReader.readMany(Employee.class).stream().map(Employee::getIdentifier).collect(Collectors.toList())).containsExactlyInAnyOrder("1");
+		EntityCreator.getInstance().createOneInTransaction(Employee.instantiateOneRandomlyByIdentifier("2"));
+		assertThat(entityReader.readMany(Employee.class).stream().map(Employee::getIdentifier).collect(Collectors.toList())).containsExactlyInAnyOrder("1","2");
+		EntityCreator.getInstance().createManyInTransaction((Collection<Object>)CollectionHelper.cast(Object.class, Employee.instantiateManyRandomlyByIdentifiers("3","4","5")));
+		assertThat(entityReader.readMany(Employee.class).stream().map(Employee::getIdentifier).collect(Collectors.toList())).containsExactlyInAnyOrder("1","2"
+				,"3","4","5");
+		EmployeeData employeeData = EmployeeData.instantiateOneRandomlyByIdentifier("a");
+		employeeData.setName("myname");
+		EntitySaver.getInstance().save(EmployeeData.class, new Arguments<EmployeeData>()
+				.setCreatables(List.of(employeeData)).setDeletables(List.of(EmployeeData.instantiat(EntityFinder.getInstance().find(Employee.class, "2")))));	
+		assertThat(EntityFinder.getInstance().find(Employee.class, "a").getName()).isEqualTo("myname");
+		assertThat(entityReader.readMany(Employee.class).stream().map(Employee::getIdentifier).collect(Collectors.toList())).containsExactlyInAnyOrder("1"
+				,"3","4","5","a");
+		employeeData = EmployeeData.instantiateOneRandomlyByIdentifier("a");
+		employeeData.setName("n01");
+		EntitySaver.getInstance().save(EmployeeData.class, new Arguments<EmployeeData>().setRepresentation(EmployeeSaver.getInstance())
+				.setCreatables(List.of(EmployeeData.instantiateOneRandomlyByIdentifier("a1"),EmployeeData.instantiateOneRandomlyByIdentifier("a2")))
+				.setUpdatables(List.of(employeeData))
+				.setDeletables(List.of(EmployeeData.instantiat(EntityFinder.getInstance().find(Employee.class, "1"))))
+				);	
+		assertThat(entityReader.readMany(Employee.class).stream().map(Employee::getIdentifier).collect(Collectors.toList())).containsExactlyInAnyOrder(
+				"3","4","5","a","a1","a2");
+		assertThat(EntityFinder.getInstance().find(Employee.class, "a").getName()).isEqualTo("n01");
+	}
+	
 	/* exception */
 	
 	@Test
 	public void notYetRegistered(){
 		assertThrows(RuntimeException.class, () -> {
-			EntityReader.getInstance().readMany(TestedEntityParentData.class,new Arguments().setRepresentationArguments(new org.cyk.utility.__kernel__.representation
-					.Arguments().setQueryExecutorArguments(new QueryExecutorArgumentsDto().setQueryIdentifier("TestedEntityParent.xxx")
+			EntityReader.getInstance().readMany(EmployeeData.class,new Arguments<EmployeeData>().setRepresentationArguments(new org.cyk.utility.__kernel__.representation
+					.Arguments().setQueryExecutorArguments(new QueryExecutorArguments.Dto().setQueryIdentifier("Employee.xxx")
 							.addFilterField("identifiers",List.of("1")))));
 		});
 	}

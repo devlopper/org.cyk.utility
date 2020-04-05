@@ -88,6 +88,12 @@ public interface QueryHelper {
 		return getIdentifier(klass, "count");
 	}
 	
+	static String getIdentifierReadBySystemIdentifiers(Class<?> klass) {
+		if(klass == null)
+			return null;
+		return getIdentifier(klass, "readBySystemIdentifiers");
+	}
+	
 	static String getIdentifierReadByFilters(Class<?> klass) {
 		if(klass == null)
 			return null;

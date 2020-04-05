@@ -8,7 +8,7 @@ import org.cyk.utility.__kernel__.__entities__.TestedEntityParentData;
 import org.cyk.utility.__kernel__.__entities__.TestedEntityParentDto;
 import org.cyk.utility.__kernel__.persistence.query.EntityCreator;
 import org.cyk.utility.__kernel__.persistence.query.Query;
-import org.cyk.utility.__kernel__.persistence.query.QueryExecutorArgumentsDto;
+import org.cyk.utility.__kernel__.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
 import org.cyk.utility.__kernel__.test.weld.AbstractQueryUnitTestBenchmark;
 import org.cyk.utility.__kernel__.user.interface_.message.MessageRenderer;
@@ -65,9 +65,9 @@ public abstract class AbstractControllerQueryUnitTestBenchmark extends AbstractQ
 
 		@Override
 		protected void __run__() {
-			EntityReader.getInstance().readMany(TestedEntityParentData.class,new Arguments()
+			EntityReader.getInstance().readMany(TestedEntityParentData.class,new Arguments<TestedEntityParentData>()
 					.setRepresentationArguments(new org.cyk.utility.__kernel__.representation.Arguments()
-							.setQueryExecutorArguments(new QueryExecutorArgumentsDto().setQueryIdentifier(queryIdentifier))));
+							.setQueryExecutorArguments(new QueryExecutorArguments.Dto().setQueryIdentifier(queryIdentifier))));
 		}
 	}
 }

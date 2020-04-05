@@ -9,8 +9,8 @@ import java.util.stream.Collectors;
 import javax.persistence.Persistence;
 import javax.ws.rs.core.Response;
 
-import org.cyk.utility.__kernel__.__entities__.EmployeeDto;
 import org.cyk.utility.__kernel__.__entities__.Employee;
+import org.cyk.utility.__kernel__.__entities__.EmployeeDto;
 import org.cyk.utility.__kernel__.__entities__.EmployeeDtoMapper;
 import org.cyk.utility.__kernel__.__entities__.EmployeeSaver;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
@@ -21,7 +21,7 @@ import org.cyk.utility.__kernel__.persistence.EntityManagerFactoryGetterImpl;
 import org.cyk.utility.__kernel__.persistence.query.EntityCreator;
 import org.cyk.utility.__kernel__.persistence.query.EntityFinder;
 import org.cyk.utility.__kernel__.persistence.query.Query;
-import org.cyk.utility.__kernel__.persistence.query.QueryExecutorArgumentsDto;
+import org.cyk.utility.__kernel__.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
 import org.cyk.utility.__kernel__.rest.ResponseHelper;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
@@ -37,6 +37,7 @@ public class RepresentationUnitTest extends AbstractWeldUnitTest {
 		MapperClassGetterImpl.MAP.put(EmployeeDto.class, EmployeeDtoMapper.class);
 		QueryHelper.getQueries().setIsRegisterableToEntityManager(Boolean.TRUE);
 		QueryHelper.addQueries(Query.buildSelectBySystemIdentifiers(Employee.class, "SELECT t FROM Employee t WHERE t.identifier IN :identifiers"));
+		org.cyk.utility.__kernel__.persistence.EntitySaver.Arguments.IS_TRANSACTIONAL = Boolean.TRUE;
 	}
 	
 	@Override
@@ -72,7 +73,7 @@ public class RepresentationUnitTest extends AbstractWeldUnitTest {
 		EntityCreator.getInstance().createManyInTransaction(new Employee("1","1","1"),new Employee("2","2","1"));
 		__assertReadMany__(EntityReader.getInstance().read(new Arguments().setRepresentationEntityClass(EmployeeDto.class)
 				.setQueryExecutorArguments(
-						new QueryExecutorArgumentsDto().setQueryIdentifier("Employee.readBySystemIdentifiers")
+						new QueryExecutorArguments.Dto().setQueryIdentifier("Employee.readBySystemIdentifiers")
 						.addFilterField("identifiers",List.of("1"))
 						)), "1");
 	}
@@ -117,7 +118,7 @@ public class RepresentationUnitTest extends AbstractWeldUnitTest {
 	public void notYetRegistered(){
 		Response response = EntityReader.getInstance().read(new Arguments().setRepresentationEntityClass(EmployeeDto.class)
 				.setPersistenceEntityClass(Employee.class).setQueryExecutorArguments(
-						new QueryExecutorArgumentsDto().setQueryIdentifier("Employee.xxx").addFilterField("identifiers",List.of("1"))));
+						new QueryExecutorArguments.Dto().setQueryIdentifier("Employee.xxx").addFilterField("identifiers",List.of("1"))));
 		assertThat(response).isNotNull();
 		assertThat(ResponseHelper.isFamilyClientError(response)).isTrue();
 	}

@@ -14,7 +14,7 @@ import org.cyk.utility.__kernel__.persistence.EntityManagerFactoryGetterImpl;
 import org.cyk.utility.__kernel__.persistence.EntityManagerGetter;
 import org.cyk.utility.__kernel__.persistence.query.EntityCreator;
 import org.cyk.utility.__kernel__.persistence.query.Query;
-import org.cyk.utility.__kernel__.persistence.query.QueryExecutorArgumentsDto;
+import org.cyk.utility.__kernel__.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTestBenchmark;
 import org.cyk.utility.__kernel__.user.interface_.message.MessageRenderer;
@@ -82,23 +82,23 @@ public class ControllerEntityReaderUnitTestBenchmark extends AbstractWeldUnitTes
 				.add("read.full | result is cachable = "+isResultCachable,new Runnable() {
 				@Override
 				public void run() {
-					EntityReader.getInstance().readMany(TestedEntityParentData.class,new Arguments()
+					EntityReader.getInstance().readMany(TestedEntityParentData.class,new Arguments<TestedEntityParentData>()
 							.setRepresentationArguments(new org.cyk.utility.__kernel__.representation.Arguments()
-									.setQueryExecutorArguments(new QueryExecutorArgumentsDto().setQueryIdentifier("TestedEntityParent.read.full"))));
+									.setQueryExecutorArguments(new QueryExecutorArguments.Dto().setQueryIdentifier("TestedEntityParent.read.full"))));
 				}
 			}).add("read.full.constructor | result is cachable = ",new Runnable() {
 				@Override
 				public void run() {
-					EntityReader.getInstance().readMany(TestedEntityParentData.class,new Arguments()
+					EntityReader.getInstance().readMany(TestedEntityParentData.class,new Arguments<TestedEntityParentData>()
 							.setRepresentationArguments(new org.cyk.utility.__kernel__.representation.Arguments()
-									.setQueryExecutorArguments(new QueryExecutorArgumentsDto().setQueryIdentifier("TestedEntityParent.read.full.constructor"))));
+									.setQueryExecutorArguments(new QueryExecutorArguments.Dto().setQueryIdentifier("TestedEntityParent.read.full.constructor"))));
 				}
 			}).add("read.portion | result is cachable = ",new Runnable() {
 				@Override
 				public void run() {
-					EntityReader.getInstance().readMany(TestedEntityParentData.class,new Arguments()
+					EntityReader.getInstance().readMany(TestedEntityParentData.class,new Arguments<TestedEntityParentData>()
 							.setRepresentationArguments(new org.cyk.utility.__kernel__.representation.Arguments()
-									.setQueryExecutorArguments(new QueryExecutorArgumentsDto().setQueryIdentifier("TestedEntityParent.read.portion"))));
+									.setQueryExecutorArguments(new QueryExecutorArguments.Dto().setQueryIdentifier("TestedEntityParent.read.portion"))));
 				}
 			})
 		);
@@ -114,9 +114,9 @@ public class ControllerEntityReaderUnitTestBenchmark extends AbstractWeldUnitTes
 			setRunnable(new Runnable() {
 				@Override
 				public void run() {
-					EntityReader.getInstance().readMany(TestedEntityParentData.class,new Arguments()
+					EntityReader.getInstance().readMany(TestedEntityParentData.class,new Arguments<TestedEntityParentData>()
 							.setRepresentationArguments(new org.cyk.utility.__kernel__.representation.Arguments()
-									.setQueryExecutorArguments(new QueryExecutorArgumentsDto().setQueryIdentifier(queryIdentifier))));
+									.setQueryExecutorArguments(new QueryExecutorArguments.Dto().setQueryIdentifier(queryIdentifier))));
 				}
 			});
 		}		

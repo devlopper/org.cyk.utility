@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.mapping.MapperSourceDestination;
 import org.cyk.utility.__kernel__.object.AbstractObject;
-import org.cyk.utility.__kernel__.persistence.query.QueryExecutorArgumentsDto;
+import org.cyk.utility.__kernel__.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
 
@@ -22,7 +22,7 @@ public class Arguments extends AbstractObject implements Serializable {
 	private String actionIdentifier;
 	private String representationEntityClassName;
 	private String persistenceEntityClassName;
-	private QueryExecutorArgumentsDto queryExecutorArguments;
+	private QueryExecutorArguments.Dto queryExecutorArguments;
 	private MapperSourceDestination.Arguments.Dto mappingArguments;
 	
 	public Arguments setRepresentationEntityClass(Class<?> entityClass) {

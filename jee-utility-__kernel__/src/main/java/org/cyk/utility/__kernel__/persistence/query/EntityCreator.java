@@ -23,7 +23,7 @@ public interface EntityCreator {
 			return;
 		EntityManager entityManager = arguments.getEntityManager();
 		if(entityManager == null)
-			entityManager = DependencyInjection.inject(EntityManagerGetter.class).get();
+			entityManager = EntityManagerGetter.getInstance().get();
 		if(Boolean.TRUE.equals(arguments.getIsTransactional()))
 			entityManager.getTransaction().begin();
 		for(Object index : arguments.getObjects()) {			
@@ -45,7 +45,7 @@ public interface EntityCreator {
 	default void createMany(Collection<Object> objects) {
 		if(CollectionHelper.isEmpty(objects))
 			return;
-		createMany(objects, DependencyInjection.inject(EntityManagerGetter.class).get());
+		createMany(objects, EntityManagerGetter.getInstance().get());
 	}
 	
 	default void createMany(EntityManager entityManager,Object...objects) {

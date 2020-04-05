@@ -11,14 +11,14 @@ import org.cyk.utility.__kernel__.value.Value;
 
 public interface ResponseProcessor {
 
-	void process(Response response,Arguments arguments);
+	void process(Response response,Arguments<?> arguments);
 	
 	/**/
 	
 	public static abstract class AbstractImpl extends AbstractObject implements ResponseProcessor,Serializable {
 		
 		@Override
-		public void process(Response response,Arguments arguments) {
+		public void process(Response response,Arguments<?> arguments) {
 			/*if(arguments == null)
 				throw new IllegalArgumentException("arguments are required");
 			arguments.setResponse(response);
