@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<p:selectManyCheckbox
+		id="#{selectManyCheckbox.identifier}"
+		value="#{selectManyCheckbox.value}"
+		columns="#{selectManyCheckbox.columns}"
+		converter="#{selectManyCheckbox.converter}"
+		converterMessage="#{selectManyCheckbox.converterMessage}"
+		disabled="#{selectManyCheckbox.disabled}"
+		layout="#{selectManyCheckbox.layout}"
+		required="#{selectManyCheckbox.required}"
+		requiredMessage="#{selectManyCheckbox.requiredMessage}"
+		rendered="#{selectManyCheckbox.rendered}"
+		
+		widgetVar="#{selectManyCheckbox.widgetVar}"
+		
+		styleClass="#{selectManyCheckbox.styleClass}"
+		style="#{selectManyCheckbox.style}"
+		
+	>
+		<f:selectItems
+			var="choice"
+			value="#{selectManyCheckbox.choices}"
+			itemValue="#{selectManyCheckbox.getChoiceValue(choice)}"
+			itemLabel="#{selectManyCheckbox.getChoiceLabel(choice)}"
+			itemDescription="#{selectManyCheckbox.getChoiceDescription(choice)}"
+			itemDisabled="#{selectManyCheckbox.getIsChoiceDisabled(choice)}"
+			itemLabelEscaped="#{selectManyCheckbox.getIsChoiceLabelEscaped(choice)}"			
+		/>
+	</p:selectManyCheckbox>
+			
+</ui:composition>

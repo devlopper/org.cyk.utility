@@ -12,10 +12,9 @@ import org.cyk.utility.__kernel__.representation.AbstractMapperSourceDestination
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import lombok.experimental.Accessors;
 
-@Getter @Setter @Accessors(chain=true) @ToString(callSuper = false)
+@Getter @Setter @Accessors(chain=true)
 public class RuntimeException extends java.lang.RuntimeException implements Serializable {
 
 	private Collection<Message> messages;
@@ -59,9 +58,16 @@ public class RuntimeException extends java.lang.RuntimeException implements Seri
 		return addMessages(CollectionHelper.listOf(messages));
 	}
 	
+	@Override
+	public String toString() {
+		if(CollectionHelper.isEmpty(messages))
+			return super.toString();
+		return super.toString()+" : "+messages;
+	}
+	
 	/**/
 	
-	@Getter @Setter @Accessors(chain=true) @NoArgsConstructor @ToString(callSuper = false)
+	@Getter @Setter @Accessors(chain=true) @NoArgsConstructor
 	public static class Dto extends AbstractObject implements Serializable {
 
 		private String message;
@@ -96,6 +102,11 @@ public class RuntimeException extends java.lang.RuntimeException implements Seri
 			if(ArrayHelper.isEmpty(messages))
 				return this;
 			return addMessages(CollectionHelper.listOf(messages));
+		}
+		
+		@Override
+		public String toString() {
+			return message+" : "+messages;
 		}
 		
 		/**/

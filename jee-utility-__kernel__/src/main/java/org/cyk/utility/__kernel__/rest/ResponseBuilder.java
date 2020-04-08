@@ -61,6 +61,8 @@ public interface ResponseBuilder {
 				throw new IllegalArgumentException("arguments are required");
 			javax.ws.rs.core.Response.ResponseBuilder responseBuilder = Response.status(__buildStatus__(arguments));
 			responseBuilder.entity(__buildEntity__(arguments));
+			if(arguments.xTotalCount != null)
+				responseBuilder.header(ResponseHelper.HEADER_X_TOTAL_COUNT, arguments.xTotalCount);
 			return responseBuilder.build();
 		}
 		
@@ -101,6 +103,7 @@ public interface ResponseBuilder {
 		private RuntimeException.Dto runtimeException;
 		private Collection<Message.Dto> messageDtos;
 		private Collection<?> entities;
+		private Long xTotalCount;
 		
 		public Arguments(RuntimeException.Dto runtimeException,Response.Status status) {
 			this.runtimeException = runtimeException;

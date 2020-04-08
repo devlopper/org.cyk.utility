@@ -20,7 +20,7 @@ import lombok.Setter;
 public abstract class AbstractInput<VALUE> extends AbstractInputOutput<VALUE> implements Serializable {
 
 	protected Boolean required;
-	protected String requiredMessage;
+	protected String requiredMessage,converterMessage;
 	protected String placeholder;
 	
 	protected OutputLabel outputLabel;

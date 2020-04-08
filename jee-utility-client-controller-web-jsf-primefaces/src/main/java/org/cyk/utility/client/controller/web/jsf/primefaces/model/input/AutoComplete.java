@@ -144,6 +144,7 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 	
 	/**/
 	
+	public static final String FIELD_CONTROLLER_ENTITY = "controllerEntity";
 	public static final String FIELD_DROPDOWN = "dropdown";
 	public static final String FIELD_MULTIPLE = "multiple";
 	public static final String FIELD_ENTITY_CLASS = "entityClass";

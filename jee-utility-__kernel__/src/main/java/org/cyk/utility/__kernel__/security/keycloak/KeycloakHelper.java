@@ -1,8 +1,11 @@
 package org.cyk.utility.__kernel__.security.keycloak;
 
 import java.security.Principal;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
 import org.cyk.utility.__kernel__.security.SecurityHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
@@ -10,15 +13,19 @@ import org.cyk.utility.__kernel__.variable.VariableName;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.RealmResource;
+import org.keycloak.admin.client.resource.RolesResource;
 import org.keycloak.admin.client.resource.UserResource;
+import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.AccessToken;
+import org.keycloak.representations.idm.RoleRepresentation;
+import org.keycloak.representations.idm.UserRepresentation;
 
 public interface KeycloakHelper {
 
 	static Keycloak getClient(Boolean throwIfNull) {
 		Keycloak client =  KeycloakClientGetter.getInstance().get();
 		if(client == null && Boolean.TRUE.equals(throwIfNull))
-			throw new RuntimeException("keycloak client is null");
+			throw new RuntimeException("keycloak client is required");
 		return client;
 	}
 	
@@ -26,8 +33,20 @@ public interface KeycloakHelper {
 		return getClient(Boolean.TRUE);
 	}
 	
+	static RealmResource getRealmResource(Boolean throwIfNull) {
+		return getClient(throwIfNull).realm(ConfigurationHelper.getValueAsString(VariableName.KEYCLOAK_REALM_NAME));
+	}
+	
 	static RealmResource getRealmResource() {
-		return getClient().realm(ConfigurationHelper.getValueAsString(VariableName.KEYCLOAK_REALM_NAME));
+		return getRealmResource(Boolean.TRUE);
+	}
+	
+	static RolesResource getRolesResource() {
+		return getRealmResource(Boolean.TRUE).roles();
+	}
+	
+	static UsersResource getUsersResource() {
+		return getRealmResource(Boolean.TRUE).users();
 	}
 	
 	static AccessToken getAccessToken(Principal principal) {
@@ -70,5 +89,25 @@ public interface KeycloakHelper {
 	
 	static void executeActionEmailUpdatePassword() {
 		executeActionEmailUpdatePassword(SecurityHelper.getPrincipal());
+	}
+	
+	static Collection<Role> getRoles() {
+		RolesResource rolesResource = getRealmResource(Boolean.TRUE).roles();
+		if(rolesResource == null)
+			throw new RuntimeException("keycloak roles resource not found");
+		Collection<RoleRepresentation> roleRepresentations = rolesResource.list();
+		if(CollectionHelper.isEmpty(roleRepresentations))
+			return null;
+		return roleRepresentations.stream().map(roleRepresentation -> new Role().setIdentifier(roleRepresentation.getId()).setName(roleRepresentation.getName())).collect(Collectors.toList());
+	}
+	
+	static Collection<User> getUsers() {
+		UsersResource usersResource = getRealmResource(Boolean.TRUE).users();
+		if(usersResource == null)
+			throw new RuntimeException("keycloak users resource not found");
+		Collection<UserRepresentation> userRepresentations = usersResource.list();
+		if(CollectionHelper.isEmpty(userRepresentations))
+			return null;
+		return userRepresentations.stream().map(userRepresentation -> new User().setIdentifier(userRepresentation.getId()).setName(userRepresentation.getUsername())).collect(Collectors.toList());
 	}
 }

@@ -15,7 +15,6 @@ import java.util.function.Consumer;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.enumeration.Action;
 import org.cyk.utility.__kernel__.field.FieldHelper;
@@ -24,7 +23,6 @@ import org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierH
 import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
 import org.cyk.utility.__kernel__.internationalization.InternationalizationPhrase;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
-import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.object.Builder;
@@ -42,9 +40,8 @@ import org.cyk.utility.client.controller.ControllerLayer;
 import org.cyk.utility.client.controller.web.WebController;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.AbstractInput;
-import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.AutoComplete;
-import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.InputNumber;
-import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.InputText;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.InputBuilder;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.InputClassGetter;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.layout.Cell;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.layout.Layout;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.panel.Dialog;
@@ -72,26 +69,15 @@ public class Form extends AbstractObject implements Serializable {
 	private Map<String,AbstractInput<?>> inputs;
 	
 	public void execute() {
-		if(listener != null)
-			listener.listenBeforeExecute(this);
-		
-		if(Action.CREATE.equals(action))
-			controllerEntity.create(entity);
-		else if(Action.UPDATE.equals(action)) {			 
-			if(CollectionHelper.isEmpty(updatableEntityFieldsNames))
-				throw new RuntimeException("No fields names have been defined for update");			
-			controllerEntity.update(entity,new Properties().setFields(StringHelper.concatenate(updatableEntityFieldsNames, ",")));
-		} else
-			throw new RuntimeException(String.format("Action %s not yet handled", action));
-		
+		Listener listener = this.listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : this.listener;
+		listener.listenBeforeExecute(this);
+		listener.act(this);		
 		if(container instanceof Dialog) {
 			((Dialog)container).hideOnComplete();
 			//PrimefacesHelper.updateOnComplete(":form:"+dataTable.getIdentifier());
 		}else if(!WebController.getInstance().isPageRenderedAsDialog())
-			Faces.redirect(UniformResourceIdentifierHelper.build(request, SystemActionList.class, null, entityClass, null, null, null, null));
-		
-		if(listener != null)
-			listener.listenAfterExecute(this);
+			listener.redirect(this, request);		
+		listener.listenAfterExecute(this);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -124,6 +110,7 @@ public class Form extends AbstractObject implements Serializable {
 		@Override
 		public void configure(Form form, Map<Object, Object> arguments) {
 			super.configure(form, arguments);
+			Listener listener = (Listener) MapHelper.readByKey(arguments, FIELD_LISTENER);
 			if(form.action == null) {
 				form.action = Action.getByNameCaseInsensitive(Faces.getRequestParameter(ParameterName.ACTION_IDENTIFIER.getValue()));
 			}
@@ -143,12 +130,7 @@ public class Form extends AbstractObject implements Serializable {
 			}
 			
 			if(form.entityFieldsNames == null && form.entityClass != null) {
-				form.entityFieldsNames = FieldHelper.getNames(FieldHelper.getByAnnotationClass(form.entityClass, Input.class));
-				if(CollectionHelper.isNotEmpty(form.entityFieldsNames)) {
-					if(form.entityFieldsNames.contains(AbstractDataIdentifiableSystemStringIdentifiableBusinessStringImpl.FIELD_IDENTIFIER)
-							&& form.entityFieldsNames.contains(AbstractDataIdentifiableSystemStringIdentifiableBusinessStringImpl.FIELD_CODE))
-						form.entityFieldsNames.remove(AbstractDataIdentifiableSystemStringIdentifiableBusinessStringImpl.FIELD_IDENTIFIER);
-				}
+				form.entityFieldsNames = listener == null ? Listener.AbstractImpl.getFieldsNames_static(form.entity) : listener.getFieldsNames(form);
 			}
 			
 			if(form.title == null && form.entityClass != null && form.action != null) {
@@ -167,7 +149,9 @@ public class Form extends AbstractObject implements Serializable {
 				Collection<AbstractInput<?>> inputs = null;
 				if(MapHelper.isEmpty(form.inputs)) {
 					for(String fieldName : inputsFieldsNames) {
-						AbstractInput<?> input = __buildInput__(form,fieldName);
+						AbstractInput<?> input = listener == null 
+								? Listener.AbstractImpl.buildInput_static(form.entity, fieldName, Listener.AbstractImpl.getInputArguments_static(form.entity, fieldName)) 
+										: listener.buildInput(form, fieldName);
 						if(input == null)
 							continue;
 						if(inputs == null)
@@ -202,10 +186,6 @@ public class Form extends AbstractObject implements Serializable {
 						form.updatableEntityFieldsNames.add(systemIdentifierField.getName());
 				}
 			}
-		}
-		
-		protected AbstractInput<?> __buildInput__(Form form,String fieldName) {
-			return Listener.AbstractImpl.buildInput(form, fieldName,form.listener);
 		}
 		
 		protected Collection<Map<Object,Object>> __getLayoutCellsArgumentsMaps__(Form form,Collection<AbstractInput<?>> inputs) {
@@ -246,9 +226,65 @@ public class Form extends AbstractObject implements Serializable {
 		
 		public static final String FIELD_INPUTS_FIELDS_NAMES = "inputsFieldsNames";
 		public static final String FIELD_METHOD_NAME = "methodName";
+		public static final String FIELD_LISTENER = "configurator.listener";
 	
 		/**/
 		
+		public static interface Listener {
+			Collection<String> getFieldsNames(Form form);
+			AbstractInput<?> buildInput(Form form,String fieldName);		
+			Class<?> getInputClass(Form form,String fieldName);
+			Map<Object,Object> getInputArguments(Form form,String fieldName);
+			
+			public static abstract class AbstractImpl extends AbstractObject implements Listener,Serializable {
+				@Override
+				public Collection<String> getFieldsNames(Form form) {
+					return getFieldsNames_static(form.getEntity());
+				}
+				
+				@Override
+				public AbstractInput<?> buildInput(Form form,String fieldName) {
+					return buildInput_static(form.getEntity(),fieldName,getInputArguments(form,fieldName));
+				}
+				
+				@Override
+				public Class<?> getInputClass(Form form,String fieldName) {
+					return getInputClass_static(form.getEntity(),fieldName);
+				}
+				
+				@Override
+				public Map<Object,Object> getInputArguments(Form form,String fieldName) {
+					return getInputArguments_static(form.getEntity(),fieldName);
+				}
+				
+				/**/
+				
+				public static Collection<String> getFieldsNames_static(Object object) {
+					Collection<String> fieldsNames = FieldHelper.getNames(FieldHelper.getByAnnotationClass(object.getClass(), Input.class));
+					if(CollectionHelper.getSize(fieldsNames) < 2)
+						return fieldsNames;
+					if(fieldsNames.contains(AbstractDataIdentifiableSystemStringIdentifiableBusinessStringImpl.FIELD_IDENTIFIER)
+							&& fieldsNames.contains(AbstractDataIdentifiableSystemStringIdentifiableBusinessStringImpl.FIELD_CODE))
+						fieldsNames.remove(AbstractDataIdentifiableSystemStringIdentifiableBusinessStringImpl.FIELD_IDENTIFIER);
+					return fieldsNames;
+				}
+				
+				public static AbstractInput<?> buildInput_static(Object object,String fieldName,Map<Object,Object> arguments) {
+					return InputBuilder.getInstance().build(object, fieldName, arguments);
+				}
+				
+				public static Map<Object,Object> getInputArguments_static(Object object,String fieldName) {
+					Map<Object,Object> arguments = new HashMap<>();
+					arguments.put(AbstractInput.FIELD_OBJECT, object);
+					arguments.put(AbstractInput.FIELD_FIELD, FieldHelper.getByName(object.getClass(), fieldName));
+					return arguments;
+				}
+				
+				public Class<?> getInputClass_static( Object object,String fieldName) {
+					return InputClassGetter.getInstance().get(object.getClass(), fieldName);
+				}
+			}
+		}
 	}
 	
 	public static Form build(Map<Object,Object> arguments) {
@@ -266,49 +302,32 @@ public class Form extends AbstractObject implements Serializable {
 	/**/
 	
 	public static interface Listener {
-		
-		AbstractInput<?> buildInput(Form form,String fieldName);		
-		void processInput(Form form,AbstractInput<?> input);
-		Class<?> getInputClass(Form form,String fieldName,Field field,Input annotation,Class<?> fieldType);
-		Object[] getInputArguments(Form form,String fieldName,Field field,Input annotation,Class<?> fieldType);
 		void listenBeforeExecute(Form form);
+		void act(Form form);
 		void listenAfterExecute(Form form);
+		void redirect(Form form,Object request);
 		
 		/**/
 		
 		public static abstract class AbstractImpl extends AbstractObject implements Listener,Serializable {
 			
 			@Override
-			public AbstractInput<?> buildInput(Form form,String fieldName) {
-				return buildInput(form,fieldName,form.listener);
+			public void act(Form form) {
+				if(Action.CREATE.equals(form.action))
+					form.controllerEntity.create(form.entity);
+				else if(Action.UPDATE.equals(form.action)) {			 
+					if(CollectionHelper.isEmpty(form.updatableEntityFieldsNames))
+						throw new RuntimeException("No fields names have been defined for update");			
+					form.controllerEntity.update(form.entity,new Properties().setFields(StringHelper.concatenate(form.updatableEntityFieldsNames, ",")));
+				}else if(Action.DELETE.equals(form.action)) {
+					form.controllerEntity.delete(form.entity);
+				}else
+					throw new RuntimeException(String.format("Action %s not yet handled", form.action));
 			}
 			
 			@Override
-			public void processInput(Form form, AbstractInput<?> input) {}
-			
-			@Override
-			public Class<?> getInputClass(Form form, String fieldName, Field field,Input annotation,Class<?> fieldType) {
-				Class<?> klass = null;
-				if(annotation != null)
-					klass = annotation.klass();
-				if(klass != null && Void.class.equals(klass))
-					klass = null;
-				if(klass == null) {
-					if(String.class.equals(fieldType))
-						klass = InputText.class;
-					else if(ClassHelper.isInstanceOfNumber(fieldType))
-						klass = InputNumber.class;
-					else if(!ClassHelper.isBelongsToJavaPackages(fieldType))
-						klass = AutoComplete.class;
-				}
-				if(klass == null)
-					LogHelper.logSevere(String.format("Input class cannot be deduced from field %s", field), getClass());
-				return klass;
-			}
-			
-			@Override
-			public Object[] getInputArguments(Form form, String fieldName, Field field, Input annotation,Class<?> fieldType) {
-				return new Object[] {AbstractInput.FIELD_OBJECT,form.entity,AbstractInput.FIELD_FIELD,field};
+			public void redirect(Form form,Object request) {
+				Faces.redirect(UniformResourceIdentifierHelper.build(request, SystemActionList.class, null, form.entityClass, null, null, null, null));
 			}
 			
 			@Override
@@ -319,39 +338,8 @@ public class Form extends AbstractObject implements Serializable {
 			
 			/**/
 			
-			public static AbstractInput<?> buildInput(Form form,String fieldName,Form.Listener listener) {
-				if(StringHelper.isBlank(fieldName))
-					return null;
-				Field field = FieldHelper.getByName(form.entityClass, fieldName);
-				Input annotation = field.getAnnotation(Input.class);
-				Class<?> fieldType = (Class<?>) FieldHelper.getType(field, form.entityClass);
-				
-				//FIXME should not be created like this : 
-				if(listener == null)
-					listener = new Listener.AbstractImpl() {
-					};
-				
-				Class<?> inputClass = listener.getInputClass(form, fieldName, field, annotation, fieldType);
-				if(inputClass == null)
-					return null;
-				Object[] inputArguments = listener.getInputArguments(form, fieldName, field, annotation, fieldType);
-				if(ArrayHelper.isEmpty(inputArguments))
-					return null;
-				AbstractInput<?> input = null;
-				try {
-					//input = (AbstractInput<?>) MethodUtils.invokeStaticMethod(inputClass, "buildFromArray", inputArguments);
-					if(InputText.class.equals(inputClass))
-						input = InputText.build(inputArguments);
-					else if(InputNumber.class.equals(inputClass))
-						input = InputNumber.build(inputArguments);
-					else if(AutoComplete.class.equals(inputClass))
-						input = AutoComplete.build(inputArguments);
-				} catch (Exception exception) {
-					LogHelper.log(exception, AbstractImpl.class);
-				}
-				if(input == null)
-					LogHelper.logSevere(String.format("Input cannot be deduced from field named %s", fieldName), AbstractImpl.class);
-				return input;
+			public static class DefaultImpl extends AbstractImpl implements Serializable {
+				public static final Form.Listener INSTANCE = new DefaultImpl();
 			}
 		}
 	}

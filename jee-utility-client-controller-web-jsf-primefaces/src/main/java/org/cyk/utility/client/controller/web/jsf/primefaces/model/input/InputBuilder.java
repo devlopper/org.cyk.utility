@@ -7,21 +7,34 @@ import java.util.Map;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.value.Value;
 
 public interface InputBuilder {
 
 	AbstractInput<?> build(Object object,Field field,Map<Object,Object> arguments);
 	
+	default AbstractInput<?> build(Object object,String fieldName,Map<Object,Object> arguments) {
+		if(object == null)
+			throw new RuntimeException("object is required");
+		if(StringHelper.isBlank(fieldName))
+			throw new RuntimeException("field name is required");
+		return build(object, FieldHelper.getByName(object.getClass(), fieldName), arguments);
+	}
+	
 	/**/
 	
 	public static abstract class AbstractInputBuilderImpl extends AbstractObject implements Serializable,InputBuilder {		
 		@Override
 		public AbstractInput<?> build(Object object,Field field,Map<Object,Object> arguments) {
-			if(object == null || field == null)
-				return null;
+			if(object == null)
+				throw new RuntimeException("object is required");
+			if(field == null)
+				throw new RuntimeException("field is required");
 			Class<?> inputClass = InputClassGetter.getInstance().get(object.getClass(), field);
 			if(inputClass == null) {
 				LogHelper.logSevere(String.format("Input class cannot be deduced from field %s", field), getClass());
@@ -43,6 +56,8 @@ public interface InputBuilder {
 			} catch (Exception exception) {
 				LogHelper.log(exception, AbstractInputBuilderImpl.class);
 			}
+			if(input == null)
+				LogHelper.logSevere(String.format("Input cannot be deduced from field %s", field), getClass());
 			return input;
 		}
 	}

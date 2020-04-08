@@ -34,7 +34,7 @@ public interface QueryHelper {
 		LogHelper.logInfo(String.format("query helper scanning packages %s", packages),QueryHelper.class);
 		if(CollectionHelper.isEmpty(packages))
 			return;
-		Collection<java.lang.Class<?>> classes = filter(packages, List.of(ByDimensionOneSystemIdentifierQuerier.class,ByDimensionOneBusinessIdentifierQuerier.class,ByDimensionTwoQuerier.class),Boolean.TRUE);
+		Collection<java.lang.Class<?>> classes = filter(packages, List.of(ByDimensionOneSystemIdentifierQuerier.class,ByDimensionOneBusinessIdentifierQuerier.class,ByDimensionTwoQuerier.class,Querier.class),Boolean.TRUE);
 		if(CollectionHelper.isEmpty(classes))
 			return;
 		Collection<Query> queries = null;

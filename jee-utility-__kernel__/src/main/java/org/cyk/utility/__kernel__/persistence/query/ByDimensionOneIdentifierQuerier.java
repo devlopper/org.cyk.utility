@@ -7,7 +7,7 @@ import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 
-public interface ByDimensionOneIdentifierQuerier<ENTITY,DIMENSION,DIMENSION_IDENTIFIER> {
+public interface ByDimensionOneIdentifierQuerier<ENTITY,DIMENSION,DIMENSION_IDENTIFIER> extends Querier {
 
 	ValueUsageType getIdentifierValueUsageType();
 	

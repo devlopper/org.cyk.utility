@@ -272,12 +272,16 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 		return addRecordMenuItemByArgumentsOpenViewInDialog(Action.UPDATE,AbstractCommand.FIELD_VALUE,"Modifier",AbstractCommand.FIELD_ICON,"fa fa-edit");
 	}
 	
+	public AbstractCollection addRecordMenuItemByArgumentsExecuteFunction(String value,String icon,AbstractAction.Listener listener) {
+		return addRecordMenuItemByArguments(MenuItem.FIELD_VALUE,value,MenuItem.FIELD_ICON,icon
+				,MenuItem.FIELD_LISTENER,listener.setAction(AbstractAction.Listener.Action.EXECUTE_FUNCTION)
+				,MenuItem.ConfiguratorImpl.FIELD_CONFIRMABLE,Boolean.TRUE
+						,MenuItem.ConfiguratorImpl.FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_RENDER_TYPES,CollectionHelper.listOf(RenderType.GROWL));
+	}
+	
 	public AbstractCollection addRecordMenuItemByArgumentsExecuteFunctionDelete() {
 		if(elementClass != null) {
-			//@SuppressWarnings("unchecked")
-			//ControllerEntity<Object> controllerEntity = (ControllerEntity<Object>) __inject__(ControllerLayer.class).injectInterfaceClassFromEntityClass(elementClass);
-			return addRecordMenuItemByArguments(MenuItem.FIELD_VALUE,"Supprimer",MenuItem.FIELD_ICON,"fa fa-remove"
-					,MenuItem.FIELD_LISTENER,new AbstractAction.Listener.AbstractImpl() {
+			return addRecordMenuItemByArgumentsExecuteFunction("Supprimer", "fa fa-remove", new AbstractAction.Listener.AbstractImpl() {
 				@Override
 				protected Object __executeFunction__(Object argument) {
 					super.__executeFunction__(argument);
@@ -286,8 +290,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 					controllerEntity.delete(argument);
 					return argument+" has been deleted.";
 				}
-			}.setAction(AbstractAction.Listener.Action.EXECUTE_FUNCTION),MenuItem.ConfiguratorImpl.FIELD_CONFIRMABLE,Boolean.TRUE
-							,MenuItem.ConfiguratorImpl.FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_RENDER_TYPES,CollectionHelper.listOf(RenderType.GROWL));
+			});
 		}
 		return this;
 	}

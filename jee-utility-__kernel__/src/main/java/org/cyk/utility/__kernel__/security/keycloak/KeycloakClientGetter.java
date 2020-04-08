@@ -1,8 +1,12 @@
 package org.cyk.utility.__kernel__.security.keycloak;
 
+import javax.ws.rs.ProcessingException;
+
 import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
+import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.__kernel__.variable.VariableName;
@@ -30,19 +34,20 @@ public interface KeycloakClientGetter {
 				.password(ValueHelper.returnOrThrowIfBlank("keycloak credentials password",ConfigurationHelper.getValueAsString(VariableName.KEYCLOAK_CREDENTIAL_PASSWORD)))				
 				.build()
 				);
-		LogHelper.logInfo("keycloak client has been created", KeycloakClientGetter.class);
+		Keycloak keycloak = (Keycloak) CLIENT.get();
+		try {
+			keycloak.realms().findAll();
+			LogHelper.logInfo("keycloak client has been created", KeycloakClientGetter.class);
+		} catch (ProcessingException exception) {
+			throw new RuntimeException("keycloak client cannot be created : "+exception.getMessage(), exception);
+		}		
 		return (Keycloak) CLIENT.get();
 	}
 	
 	/**/
 	
 	static KeycloakClientGetter getInstance() {
-		KeycloakClientGetter instance = (KeycloakClientGetter) INSTANCE.get();
-		if(instance != null)
-			return instance;
-		INSTANCE.set(instance = DependencyInjection.inject(KeycloakClientGetter.class));
-		LogHelper.logInfo("instance has been set. <<"+instance.getClass()+">>", KeycloakClientGetter.class);
-		return instance;
+		return Helper.getInstance(KeycloakClientGetter.class, INSTANCE);
 	}
 	
 	Value INSTANCE = DependencyInjection.inject(Value.class);

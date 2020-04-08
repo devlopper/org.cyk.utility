@@ -38,6 +38,7 @@ public class Arguments<T> extends AbstractObject implements Serializable {
 	private Collection<T> deletables;	
 	private Collection<T> existingCollection;
 	private Boolean isNotBelogingToProvidedCollectionDeletable;
+	private Boolean countable;
 	
 	Class<T> __controllerEntityClass__;
 	Class<?> __representationEntityClass__;
@@ -99,30 +100,31 @@ public class Arguments<T> extends AbstractObject implements Serializable {
 		if(response == null)
 			throw new RuntimeException("Response is recquired");
 		__response__ = response;
-		
-		RuntimeException.Dto runtimeExceptionDto = null;
-		if(__isRepresentationProxyable__) {
-			if(ResponseHelper.isFamilySuccessful(response)) {
-				if(ClassHelper.isInstanceOf(responseEntityClass, Collection.class))
-					__responseEntity__ = response.readEntity(TypeHelper.instantiateGenericCollectionParameterizedTypeForJaxrs(Collection.class,__representationEntityClass__));
-			}else
-				runtimeExceptionDto = response.readEntity(RuntimeException.Dto.class);
-		}else {
-			if(ResponseHelper.isFamilySuccessful(response))
-				__responseEntity__ = response.getEntity();
-			else
-				runtimeExceptionDto = (RuntimeException.Dto) response.getEntity();
-		}
-		if(runtimeExceptionDto == null) {
-			if(ClassHelper.isInstanceOf(responseEntityClass, Collection.class)) {
-				if(CollectionHelper.isEmpty((Collection<?>) __responseEntity__))
-					;
+		if(response.hasEntity()) {
+			RuntimeException.Dto runtimeExceptionDto = null;
+			if(__isRepresentationProxyable__) {
+				if(ResponseHelper.isFamilySuccessful(response)) {
+					if(ClassHelper.isInstanceOf(responseEntityClass, Collection.class))
+						__responseEntity__ = response.readEntity(TypeHelper.instantiateGenericCollectionParameterizedTypeForJaxrs(Collection.class,__representationEntityClass__));
+				}else
+					runtimeExceptionDto = response.readEntity(RuntimeException.Dto.class);
+			}else {
+				if(ResponseHelper.isFamilySuccessful(response))
+					__responseEntity__ = response.getEntity();
 				else
-					__responseEntity__ = (Collection<T>) MappingHelper.getSources((Collection<?>)__responseEntity__, __controllerEntityClass__);
+					runtimeExceptionDto = (RuntimeException.Dto) response.getEntity();
 			}
-		}else {
-			__runtimeException__ = MappingHelper.getDestination(runtimeExceptionDto, RuntimeException.class);
-			throw __runtimeException__;
+			if(runtimeExceptionDto == null) {
+				if(ClassHelper.isInstanceOf(responseEntityClass, Collection.class)) {
+					if(CollectionHelper.isEmpty((Collection<?>) __responseEntity__))
+						;
+					else
+						__responseEntity__ = (Collection<T>) MappingHelper.getSources((Collection<?>)__responseEntity__, __controllerEntityClass__);
+				}
+			}else {
+				__runtimeException__ = MappingHelper.getDestination(runtimeExceptionDto, RuntimeException.class);
+				throw __runtimeException__;
+			}
 		}
 	}
 }
