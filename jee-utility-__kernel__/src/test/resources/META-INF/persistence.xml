@@ -199,4 +199,31 @@
 			<property name="hibernate.cache.use_query_cache" value="true"/>
 		</properties>
 	</persistence-unit>
+	
+	<persistence-unit name="user_interface" transaction-type="RESOURCE_LOCAL">
+		<class>org.cyk.utility.__kernel__.__entities__.Employee</class>
+		<class>org.cyk.utility.__kernel__.__entities__.Mark</class>
+		<class>org.cyk.utility.__kernel__.__entities__.Department</class>
+		<class>org.cyk.utility.__kernel__.__entities__.Address</class>
+		<class>org.cyk.utility.__kernel__.__entities__.DepartmentAddress</class>
+		<class>org.cyk.utility.__kernel__.__entities__.DepartmentEmployee</class>
+		<class>org.cyk.utility.__kernel__.__entities__.EmployeeAddress</class>
+		
+		<exclude-unlisted-classes>true</exclude-unlisted-classes>
+		
+		<properties>
+			<property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />
+		    <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:test" />
+		   	<property name="javax.persistence.jdbc.user" value="sa" />
+		  	<property name="javax.persistence.jdbc.password" value="" />  
+		  	<property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+		  	<property name="hibernate.hbm2ddl.auto" value="create-drop" />
+		  	<property name ="hibernate.show_sql" value = "false" />
+			<property name="hibernate.format_sql" value="true" />
+			<property name="hibernate.use_sql_comments" value="false"/>
+			<!--
+			<property name="hibernate.hbm2ddl.import_files" value="/META-INF/sql/import.sql"/>
+			-->
+		</properties>
+	</persistence-unit>
 </persistence>

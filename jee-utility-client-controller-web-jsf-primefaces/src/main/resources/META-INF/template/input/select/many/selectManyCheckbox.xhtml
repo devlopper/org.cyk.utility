@@ -26,15 +26,9 @@
 		style="#{selectManyCheckbox.style}"
 		
 	>
-		<f:selectItems
-			var="choice"
-			value="#{selectManyCheckbox.choices}"
-			itemValue="#{selectManyCheckbox.getChoiceValue(choice)}"
-			itemLabel="#{selectManyCheckbox.getChoiceLabel(choice)}"
-			itemDescription="#{selectManyCheckbox.getChoiceDescription(choice)}"
-			itemDisabled="#{selectManyCheckbox.getIsChoiceDisabled(choice)}"
-			itemLabelEscaped="#{selectManyCheckbox.getIsChoiceLabelEscaped(choice)}"			
-		/>
+		<ui:include src="../__selectItems__.xhtml">
+			<ui:param name="selectItems" value="#{selectManyCheckbox}"/>
+		</ui:include>
 	</p:selectManyCheckbox>
 			
 </ui:composition>

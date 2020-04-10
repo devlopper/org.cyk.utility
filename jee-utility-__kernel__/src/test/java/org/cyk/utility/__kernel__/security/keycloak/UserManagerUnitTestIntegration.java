@@ -60,25 +60,35 @@ public class UserManagerUnitTestIntegration extends AbstractWeldUnitTest {
 		UserManager.getInstance().delete("user01");
 		UserManager.getInstance().create(new User().setName("user01").setElectronicMailAddress("test@mail.com").setFirstName("komenan").setLastNames("yao christian"));
 		User user = UserManager.getInstance().readByUserName("user01");
-		assertThat(user.getRoles()).doesNotContain("REQUERANT");
-		assertThat(user.getRoles()).doesNotContain("AGENT_TRAITANT");
+		assertThat(user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList())).doesNotContain("REQUERANT");
+		assertThat(user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList())).doesNotContain("AGENT_TRAITANT");
 		
-		user.addRoles("REQUERANT");
+		user.addRoles(new Role("REQUERANT"));
 		UserManager.getInstance().update(List.of(Property.ROLES),user);
 		
 		user = UserManager.getInstance().readByUserName("user01");
 		assertThat(user.getRoles()).isNotNull();
-		assertThat(user.getRoles()).contains("REQUERANT");
-		assertThat(user.getRoles()).doesNotContain("AGENT_TRAITANT");
+		assertThat(user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList())).contains("REQUERANT");
+		assertThat(user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList())).doesNotContain("AGENT_TRAITANT");
 		
 		user.getRoles().clear();
-		user.addRoles("AGENT_TRAITANT");
+		user.addRoles(new Role("AGENT_TRAITANT"));
 		UserManager.getInstance().update(List.of(Property.ROLES),user);
 		
 		user = UserManager.getInstance().readByUserName("user01");
 		assertThat(user.getRoles()).isNotNull();
-		assertThat(user.getRoles()).contains("AGENT_TRAITANT");
-		assertThat(user.getRoles()).doesNotContain("REQUERANT");
+		assertThat(user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList())).contains("AGENT_TRAITANT");
+		assertThat(user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList())).doesNotContain("REQUERANT");
+		
+		user.getRoles().clear();
+		user.addRoles(new Role("ADMINISTRATEUR"),new Role("AGENT_TRAITANT"),new Role("COLLABORATEUR"),new Role("GESTIONNAIRE_ETAT"),new Role("GESTIONNAIRE_REPONSE")
+				,new Role("REQUERANT"),new Role("RESPONSABLE"));
+		UserManager.getInstance().update(List.of(Property.ROLES),user);
+		
+		user = UserManager.getInstance().readByUserName("user01");
+		assertThat(user.getRoles()).isNotNull();
+		assertThat(user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList())).contains("ADMINISTRATEUR","AGENT_TRAITANT","COLLABORATEUR","GESTIONNAIRE_ETAT"
+				,"GESTIONNAIRE_REPONSE","REQUERANT","RESPONSABLE");
 		
 		UserManager.getInstance().delete("user01");
 	}

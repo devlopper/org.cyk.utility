@@ -68,11 +68,15 @@ public class Arguments<T> extends AbstractObject implements Serializable {
 			if(__isRepresentationProxyable__) {
 				if(org.cyk.utility.__kernel__.representation.EntityReader.class.equals(representationClass))
 					__representation__ = ProxyGetter.getInstance().get(org.cyk.utility.__kernel__.representation.EntityReader.class);
+				else if(org.cyk.utility.__kernel__.representation.EntityCounter.class.equals(representationClass))
+					__representation__ = ProxyGetter.getInstance().get(org.cyk.utility.__kernel__.representation.EntityCounter.class);
 				else if(org.cyk.utility.__kernel__.representation.EntitySaver.class.equals(representationClass))
 					__representation__ = ProxyGetter.getInstance().get(RepresentationClassGetter.getInstance().get(__controllerEntityClass__, RepresentationClassGetter.Function.SAVER));
 			}else {
 				if(org.cyk.utility.__kernel__.representation.EntityReader.class.equals(representationClass))
 					__representation__ = org.cyk.utility.__kernel__.representation.EntityReader.getInstance();
+				else if(org.cyk.utility.__kernel__.representation.EntityCounter.class.equals(representationClass))
+					__representation__ = org.cyk.utility.__kernel__.representation.EntityCounter.getInstance();
 				else if(org.cyk.utility.__kernel__.representation.EntitySaver.class.equals(representationClass))
 					try {
 						__representation__ = MethodUtils.invokeExactStaticMethod(RepresentationClassGetter.getInstance().get(__controllerEntityClass__, RepresentationClassGetter.Function.SAVER)
@@ -106,8 +110,9 @@ public class Arguments<T> extends AbstractObject implements Serializable {
 				if(ResponseHelper.isFamilySuccessful(response)) {
 					if(ClassHelper.isInstanceOf(responseEntityClass, Collection.class))
 						__responseEntity__ = response.readEntity(TypeHelper.instantiateGenericCollectionParameterizedTypeForJaxrs(Collection.class,__representationEntityClass__));
-				}else
+				}else {
 					runtimeExceptionDto = response.readEntity(RuntimeException.Dto.class);
+				}
 			}else {
 				if(ResponseHelper.isFamilySuccessful(response))
 					__responseEntity__ = response.getEntity();
@@ -120,10 +125,12 @@ public class Arguments<T> extends AbstractObject implements Serializable {
 						;
 					else
 						__responseEntity__ = (Collection<T>) MappingHelper.getSources((Collection<?>)__responseEntity__, __controllerEntityClass__);
+				}else if(ClassHelper.isInstanceOf(responseEntityClass, __controllerEntityClass__)){
+					if(__responseEntity__ != null)
+						__responseEntity__ = (T) MappingHelper.getSource(__responseEntity__, __controllerEntityClass__);
 				}
 			}else {
-				__runtimeException__ = MappingHelper.getDestination(runtimeExceptionDto, RuntimeException.class);
-				throw __runtimeException__;
+				throw MappingHelper.getDestination(runtimeExceptionDto, RuntimeException.class);				
 			}
 		}
 	}

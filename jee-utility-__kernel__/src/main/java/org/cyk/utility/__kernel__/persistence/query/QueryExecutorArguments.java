@@ -32,6 +32,7 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 	private Map<Object,Object> parameters;
 	private PropertiesArguments properties;
 	private Map<String,Object> hints;
+	private Boolean collectionable;
 	private Boolean isResultCachable;
 	private Boolean isResultProcessable;
 	private Filter filter;
@@ -45,6 +46,7 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 	private Boolean isEntityManagerClosable;
 	
 	private EntityManager __entityManager__;
+	private Map<Object,Object> __parameters__;
 	private Map<String,Object> __hints__;
 	private Boolean __isEntityManagerClearable__;
 	private Boolean __isEntityManagerClosable__;
@@ -62,6 +64,28 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 				__isEntityManagerClosable__ = Boolean.TRUE;		
 		}
 		
+		/* parameters */
+		
+		if(filter != null) {
+			Map<Object,Object> map = filter.generateMap();
+			if(MapHelper.isNotEmpty(map)) {
+				for(Map.Entry<Object,Object> entry : map.entrySet()) {
+					if(__parameters__ == null || !__parameters__.containsKey(entry.getKey())) {
+						if(__parameters__ == null)
+							__parameters__ = new HashMap<>();
+						__parameters__.put(entry.getKey(), entry.getValue());
+					}
+				}
+			}
+		}
+		if(MapHelper.isNotEmpty(parameters))
+			for(Map.Entry<Object,Object> entry : parameters.entrySet()) {
+				if(entry.getKey() instanceof String) {
+					__parameters__.put((String) entry.getKey(), entry.getValue());
+				}
+			}
+		
+		/* hints */
 		__hints__ = new HashMap<>();
 		if(MapHelper.isNotEmpty(hints))
 			__hints__.putAll(hints);
@@ -165,6 +189,7 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 		private Integer firstTupleIndex;
 		private Integer numberOfTuples;
 		private Boolean isResultCachable;
+		private Boolean collectionable;
 		
 		public FilterDto getFilter(Boolean injectIfNull) {
 			if(filter == null && Boolean.TRUE.equals(injectIfNull))

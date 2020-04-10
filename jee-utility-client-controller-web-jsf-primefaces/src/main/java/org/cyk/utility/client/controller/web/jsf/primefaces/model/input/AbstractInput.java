@@ -3,10 +3,16 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.model.input;
 import java.io.Serializable;
 import java.util.Map;
 
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.validator.ValidatorException;
+import javax.validation.constraints.NotNull;
+
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
+import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.Case;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractInputOutput;
@@ -20,7 +26,7 @@ import lombok.Setter;
 public abstract class AbstractInput<VALUE> extends AbstractInputOutput<VALUE> implements Serializable {
 
 	protected Boolean required;
-	protected String requiredMessage,converterMessage;
+	protected String requiredMessage,converterMessage,validatorMessage;
 	protected String placeholder;
 	
 	protected OutputLabel outputLabel;
@@ -28,6 +34,10 @@ public abstract class AbstractInput<VALUE> extends AbstractInputOutput<VALUE> im
 	protected Object converter;
 	
 	/**/
+	
+	public void validate(FacesContext context, UIComponent component,Object value) throws ValidatorException {
+		((Listener)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).validate(context, component, value);
+	}
 	
 	public AbstractInput<VALUE> writeValueToObjectField() {
 		if(object == null || field == null) {
@@ -47,9 +57,22 @@ public abstract class AbstractInput<VALUE> extends AbstractInputOutput<VALUE> im
 	
 	public static final String FIELD_REQUIRED = "required";
 	public static final String FIELD_REQUIRED_MESSAGE = "requiredMessage";
+	public static final String FIELD_VALIDATOR = "validator";
+	public static final String FIELD_VALIDATOR_MESSAGE = "validatorMessage";
 	public static final String FIELD_PLACEHOLDER = "placeholder";
 	
 	/**/
+	
+	public static interface Listener {
+		void validate(FacesContext context, UIComponent component,Object value) throws ValidatorException;
+		public static abstract class AbstractImpl extends AbstractObject implements Listener,Serializable {
+			@Override
+			public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {}
+			public static class DefaultImpl extends AbstractImpl implements Serializable {
+				public static final Listener INSTANCE = new DefaultImpl();
+			}
+		}
+	}
 	
 	/**/
 	
@@ -58,6 +81,10 @@ public abstract class AbstractInput<VALUE> extends AbstractInputOutput<VALUE> im
 		@Override
 		public void configure(INPUT input, Map<Object, Object> arguments) {
 			super.configure(input, arguments);
+			if(input.required == null) {
+				if(input.field != null)
+					input.required = input.field.isAnnotationPresent(NotNull.class);
+			}
 			if(Boolean.TRUE.equals(input.required)) {
 				if(input.message == null)
 					input.message = Message.build(Map.of(Message.ConfiguratorImpl.FIELD_INPUT,input));

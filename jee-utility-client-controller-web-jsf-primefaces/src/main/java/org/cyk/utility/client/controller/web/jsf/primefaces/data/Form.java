@@ -1,10 +1,6 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces.data;
 
 import java.io.Serializable;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -111,6 +107,8 @@ public class Form extends AbstractObject implements Serializable {
 		public void configure(Form form, Map<Object, Object> arguments) {
 			super.configure(form, arguments);
 			Listener listener = (Listener) MapHelper.readByKey(arguments, FIELD_LISTENER);
+			if(listener == null)
+				listener = Listener.AbstractImpl.DefaultImpl.INSTANCE;
 			if(form.action == null) {
 				form.action = Action.getByNameCaseInsensitive(Faces.getRequestParameter(ParameterName.ACTION_IDENTIFIER.getValue()));
 			}
@@ -130,7 +128,7 @@ public class Form extends AbstractObject implements Serializable {
 			}
 			
 			if(form.entityFieldsNames == null && form.entityClass != null) {
-				form.entityFieldsNames = listener == null ? Listener.AbstractImpl.getFieldsNames_static(form.entity) : listener.getFieldsNames(form);
+				form.entityFieldsNames = listener.getFieldsNames(form);
 			}
 			
 			if(form.title == null && form.entityClass != null && form.action != null) {
@@ -149,9 +147,7 @@ public class Form extends AbstractObject implements Serializable {
 				Collection<AbstractInput<?>> inputs = null;
 				if(MapHelper.isEmpty(form.inputs)) {
 					for(String fieldName : inputsFieldsNames) {
-						AbstractInput<?> input = listener == null 
-								? Listener.AbstractImpl.buildInput_static(form.entity, fieldName, Listener.AbstractImpl.getInputArguments_static(form.entity, fieldName)) 
-										: listener.buildInput(form, fieldName);
+						AbstractInput<?> input = listener.buildInput(form, fieldName);
 						if(input == null)
 							continue;
 						if(inputs == null)
@@ -162,14 +158,13 @@ public class Form extends AbstractObject implements Serializable {
 					inputs = form.inputs.values();
 				}
 				if(CollectionHelper.isNotEmpty(inputs)) {
-					Collection<Map<Object,Object>> cells = __getLayoutCellsArgumentsMaps__(form,inputs);
+					Collection<Map<Object,Object>> cells = __getLayoutCellsArgumentsMaps__(form,inputs,listener);
 					if(CollectionHelper.isNotEmpty(cells)) {
-						Object[] layoutArguments = new Object[] {
-								Layout.FIELD_CELL_WIDTH_UNIT,Cell.WidthUnit.UI_G,Layout.FIELD_NUMBER_OF_COLUMNS,2
-								,Layout.FIELD_ROW_CELL_MODEL,Map.of(0,new Cell().setWidth(3),1,new Cell().setWidth(9))
-								,Layout.ConfiguratorImpl.FIELD_CELLS_MAPS,cells
-						};
+						Map<Object,Object> layoutArguments = listener.getLayoutArguments(form, cells);
 						form.layout = Layout.build(layoutArguments);
+						if(form.submitCommandButton != null) {
+							form.submitCommandButton.addUpdatables(form.layout);
+						}
 					}			
 				}
 			}
@@ -188,7 +183,7 @@ public class Form extends AbstractObject implements Serializable {
 			}
 		}
 		
-		protected Collection<Map<Object,Object>> __getLayoutCellsArgumentsMaps__(Form form,Collection<AbstractInput<?>> inputs) {
+		protected Collection<Map<Object,Object>> __getLayoutCellsArgumentsMaps__(Form form,Collection<AbstractInput<?>> inputs,Listener listener) {
 			if(CollectionHelper.isEmpty(inputs))
 				return null;
 			form.inputs = new HashMap<>();
@@ -202,8 +197,7 @@ public class Form extends AbstractObject implements Serializable {
 				}			
 			});
 			if(Action.CREATE.equals(form.action) || Action.UPDATE.equals(form.action) || Action.DELETE.equals(form.action) || Action.EDIT.equals(form.action)) {
-				Map<Object,Object> submitCommandArguments = MapHelper.instantiate(CommandButton.FIELD_ICON,"fa fa-floppy-o",CommandButton.ConfiguratorImpl.FIELD_OBJECT,form
-						,CommandButton.ConfiguratorImpl.FIELD_METHOD_NAME,METHOD_EXECUTE,CommandButton.ConfiguratorImpl.FIELD_INPUTS,inputs);
+				Map<Object,Object> submitCommandArguments = listener.getCommandButtonArguments(form, inputs);
 				if(form.container instanceof Dialog) {
 					Dialog dialog = (Dialog) form.container;
 					form.submitCommandButton = CommandButton.build(submitCommandArguments);
@@ -211,7 +205,7 @@ public class Form extends AbstractObject implements Serializable {
 					CollectionHelper.setElementAt(dialog.getCommandButtons(), 0, form.submitCommandButton);
 					dialog.setExecuteCommandButton(form.submitCommandButton);
 				}else {
-					cells.add(MapHelper.instantiate(Cell.FIELD_CONTROL,CommandButton.build(submitCommandArguments)));
+					cells.add(MapHelper.instantiate(Cell.FIELD_CONTROL,form.submitCommandButton = CommandButton.build(submitCommandArguments)));
 				}
 			}			
 			return cells;
@@ -235,32 +229,13 @@ public class Form extends AbstractObject implements Serializable {
 			AbstractInput<?> buildInput(Form form,String fieldName);		
 			Class<?> getInputClass(Form form,String fieldName);
 			Map<Object,Object> getInputArguments(Form form,String fieldName);
+			Map<Object,Object> getCommandButtonArguments(Form form,Collection<AbstractInput<?>> inputs);
+			Map<Object,Object> getLayoutArguments(Form form,Collection<Map<Object,Object>> cellsArguments);
 			
 			public static abstract class AbstractImpl extends AbstractObject implements Listener,Serializable {
 				@Override
 				public Collection<String> getFieldsNames(Form form) {
-					return getFieldsNames_static(form.getEntity());
-				}
-				
-				@Override
-				public AbstractInput<?> buildInput(Form form,String fieldName) {
-					return buildInput_static(form.getEntity(),fieldName,getInputArguments(form,fieldName));
-				}
-				
-				@Override
-				public Class<?> getInputClass(Form form,String fieldName) {
-					return getInputClass_static(form.getEntity(),fieldName);
-				}
-				
-				@Override
-				public Map<Object,Object> getInputArguments(Form form,String fieldName) {
-					return getInputArguments_static(form.getEntity(),fieldName);
-				}
-				
-				/**/
-				
-				public static Collection<String> getFieldsNames_static(Object object) {
-					Collection<String> fieldsNames = FieldHelper.getNames(FieldHelper.getByAnnotationClass(object.getClass(), Input.class));
+					Collection<String> fieldsNames = FieldHelper.getNames(FieldHelper.getByAnnotationClass(form.entity.getClass(), Input.class));
 					if(CollectionHelper.getSize(fieldsNames) < 2)
 						return fieldsNames;
 					if(fieldsNames.contains(AbstractDataIdentifiableSystemStringIdentifiableBusinessStringImpl.FIELD_IDENTIFIER)
@@ -269,19 +244,41 @@ public class Form extends AbstractObject implements Serializable {
 					return fieldsNames;
 				}
 				
-				public static AbstractInput<?> buildInput_static(Object object,String fieldName,Map<Object,Object> arguments) {
-					return InputBuilder.getInstance().build(object, fieldName, arguments);
+				@Override
+				public AbstractInput<?> buildInput(Form form,String fieldName) {
+					return InputBuilder.getInstance().build(form.entity, fieldName, getInputArguments(form, fieldName),getInputClass(form, fieldName));
 				}
 				
-				public static Map<Object,Object> getInputArguments_static(Object object,String fieldName) {
+				@Override
+				public Class<?> getInputClass(Form form,String fieldName) {
+					return InputClassGetter.getInstance().get(form.entityClass, fieldName);
+				}
+				
+				@Override
+				public Map<Object,Object> getInputArguments(Form form,String fieldName) {
 					Map<Object,Object> arguments = new HashMap<>();
-					arguments.put(AbstractInput.FIELD_OBJECT, object);
-					arguments.put(AbstractInput.FIELD_FIELD, FieldHelper.getByName(object.getClass(), fieldName));
+					arguments.put(AbstractInput.FIELD_OBJECT, form.entity);
+					arguments.put(AbstractInput.FIELD_FIELD, FieldHelper.getByName(form.entityClass, fieldName));
 					return arguments;
 				}
 				
-				public Class<?> getInputClass_static( Object object,String fieldName) {
-					return InputClassGetter.getInstance().get(object.getClass(), fieldName);
+				@Override
+				public Map<Object, Object> getCommandButtonArguments(Form form,Collection<AbstractInput<?>> inputs) {
+					return MapHelper.instantiate(CommandButton.FIELD_ICON,"fa fa-floppy-o",CommandButton.ConfiguratorImpl.FIELD_OBJECT,form
+							,CommandButton.ConfiguratorImpl.FIELD_METHOD_NAME,METHOD_EXECUTE,CommandButton.ConfiguratorImpl.FIELD_INPUTS,inputs);
+				}
+				
+				@Override
+				public Map<Object, Object> getLayoutArguments(Form form,Collection<Map<Object,Object>> cellsArguments) {
+					return MapHelper.instantiate(Layout.FIELD_CELL_WIDTH_UNIT,Cell.WidthUnit.UI_G,Layout.FIELD_NUMBER_OF_COLUMNS,2
+								,Layout.FIELD_ROW_CELL_MODEL,Map.of(0,new Cell().setWidth(3),1,new Cell().setWidth(9))
+								,Layout.ConfiguratorImpl.FIELD_CELLS_MAPS,cellsArguments);
+				}
+				
+				/**/
+				
+				public static class DefaultImpl extends AbstractImpl implements Serializable {
+					public static final Listener INSTANCE = new DefaultImpl();
 				}
 			}
 		}
@@ -344,11 +341,4 @@ public class Form extends AbstractObject implements Serializable {
 		}
 	}
 
-	/**/
-	
-	@Retention(RetentionPolicy.RUNTIME)
-	@Target(value={ElementType.TYPE})
-	public static @interface Annotation {
-		
-	}
 }

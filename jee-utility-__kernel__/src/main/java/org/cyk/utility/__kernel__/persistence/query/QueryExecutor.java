@@ -2,7 +2,6 @@ package org.cyk.utility.__kernel__.persistence.query;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
@@ -14,9 +13,7 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.persistence.EntityManagerGetter;
-import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 import org.cyk.utility.__kernel__.string.StringHelper;
-import org.cyk.utility.__kernel__.throwable.Message;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.value.Value;
 import org.jboss.weld.exceptions.IllegalArgumentException;
@@ -32,7 +29,7 @@ public interface QueryExecutor {
 	default <T> T executeReadOne(Class<T> resultClass,QueryExecutorArguments arguments) {
 		Collection<T> collection = executeReadMany(resultClass, arguments);
 		if(CollectionHelper.getSize(collection) > 1)
-			throw new RuntimeException().addMessages(new Message().setSummary(String.format("Too much result found after executing query %s",arguments.getQuery())));
+			throw new RuntimeException(String.format("read.one : too much result found after executing query %s with filter %s",arguments.getQuery(),arguments.get__parameters__()));
 		return CollectionHelper.getFirst(collection);
 	}
 	
@@ -53,7 +50,7 @@ public interface QueryExecutor {
 			validatePreConditions(resultClass, arguments);
 			arguments.prepare();
 			TypedQuery<T> typedQuery = __getTypedQuery__(resultClass, arguments.getQuery().getIdentifier(),arguments.getQuery().getValue()
-					,arguments.getParameters(),arguments.getFilter(),arguments.getFirstTupleIndex(),arguments.getNumberOfTuples(),arguments.get__hints__()
+					,arguments.get__parameters__(),arguments.getFirstTupleIndex(),arguments.getNumberOfTuples(),arguments.get__hints__()
 					,arguments.get__entityManager__());
 			Collection<T> collection = typedQuery.getResultList();
 			if(CollectionHelper.isEmpty(collection))
@@ -94,7 +91,7 @@ public interface QueryExecutor {
 				throw new RuntimeException("query is required");
 		}
 		
-		protected <T> TypedQuery<T> __getTypedQuery__(Class<T> resultClass, String queryIdentifier,String queryValue,Map<Object,Object> parameters,Filter filter,Integer firstTupleIndex,Integer numberOfTuples,Map<String,Object> hints,EntityManager entityManager) {
+		protected <T> TypedQuery<T> __getTypedQuery__(Class<T> resultClass, String queryIdentifier,String queryValue,Map<Object,Object> parameters,Integer firstTupleIndex,Integer numberOfTuples,Map<String,Object> hints,EntityManager entityManager) {
 			if(resultClass == null)
 				throw new IllegalArgumentException("result class is required");
 			if(StringHelper.isBlank(queryIdentifier) && StringHelper.isBlank(queryValue))
@@ -109,18 +106,6 @@ public interface QueryExecutor {
 			if(numberOfTuples != null && numberOfTuples >= 1)
 				typedQuery.setMaxResults(numberOfTuples);
 			
-			if(filter != null) {
-				Map<Object,Object> map = filter.generateMap();
-				if(MapHelper.isNotEmpty(map)) {
-					for(Map.Entry<Object,Object> entry : map.entrySet()) {
-						if(parameters == null || !parameters.containsKey(entry.getKey())) {
-							if(parameters == null)
-								parameters = new HashMap<>();
-							parameters.put(entry.getKey(), entry.getValue());
-						}
-					}
-				}
-			}
 			if(MapHelper.isNotEmpty(parameters))
 				for(Map.Entry<Object,Object> entry : parameters.entrySet()) {
 					if(entry.getKey() instanceof String) {

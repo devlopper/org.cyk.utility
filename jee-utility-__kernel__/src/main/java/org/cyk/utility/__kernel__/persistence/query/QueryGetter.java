@@ -47,7 +47,7 @@ public interface QueryGetter {
 	/* Count */
 	
 	default Query getByCount(Class<?> tupleClass,String queryName,String queryValue) {
-		return get(tupleClass, QueryIdentifierBuilder.getInstance().build(tupleClass, queryName), queryValue);
+		return get(Long.class, QueryIdentifierBuilder.getInstance().build(tupleClass, queryName), queryValue);
 	}
 	
 	default Query getByCount(Class<?> tupleClass,String queryName) {

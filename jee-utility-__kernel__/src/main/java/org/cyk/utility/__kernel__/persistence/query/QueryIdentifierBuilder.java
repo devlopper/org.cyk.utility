@@ -73,4 +73,8 @@ public interface QueryIdentifierBuilder {
 		private Boolean isDerivedFromQueryIdentifier,isCountInstances;
 		private String name,derivedFromQueryIdentifier,classSimpleName,format = FORMAT;
 	}
+
+	/**/
+	
+	
 }

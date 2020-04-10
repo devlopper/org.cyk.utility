@@ -88,6 +88,7 @@ public interface ResponseBuilder {
 					}					
 				}else {
 					entity = arguments.getRuntimeException();
+					System.out.println("ResponseBuilder.AbstractImpl.__buildEntity__() : "+entity);
 				}
 			}
 			return entity;
@@ -122,5 +123,4 @@ public interface ResponseBuilder {
 	}
 	
 	Value INSTANCE = DependencyInjection.inject(Value.class);
-	
 }

@@ -146,7 +146,8 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 			public Arguments<T> instantiateArguments(LazyDataModel<T> lazyDataModel) {
 				Arguments<T> arguments = new Arguments<T>()
 						.setRepresentationArguments(new org.cyk.utility.__kernel__.representation.Arguments().setQueryExecutorArguments(new QueryExecutorArguments.Dto()
-								.setQueryIdentifier(lazyDataModel.readQueryIdentifier).setFirstTupleIndex(lazyDataModel.__first__).setNumberOfTuples(lazyDataModel.__pageSize__)));
+								.setQueryIdentifier(lazyDataModel.readQueryIdentifier).setFirstTupleIndex(lazyDataModel.__first__).setNumberOfTuples(lazyDataModel.__pageSize__))
+								.setCountable(Boolean.TRUE));
 				return arguments;
 			}
 			

@@ -14,9 +14,10 @@ import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 
-@XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor
+@XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor @ToString(callSuper = false)
 public class Arguments extends AbstractObject implements Serializable {
 	
 	private String actionIdentifier;
@@ -38,6 +39,12 @@ public class Arguments extends AbstractObject implements Serializable {
 			return this;
 		setPersistenceEntityClassName(entityClass.getName());
 		return this;
+	}
+	
+	public QueryExecutorArguments.Dto getQueryExecutorArguments(Boolean injectIfNull) {
+		if(queryExecutorArguments == null && Boolean.TRUE.equals(injectIfNull))
+			queryExecutorArguments = new QueryExecutorArguments.Dto();
+		return queryExecutorArguments;
 	}
 	
 	/**/

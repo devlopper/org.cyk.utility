@@ -21,6 +21,8 @@ public interface EntityReader {
 		return readMany(controllerEntityClass, arguments);
 	}
 	
+	<ENTITY> ENTITY readOne(Class<ENTITY> controllerEntityClass,Arguments<ENTITY> arguments);
+	
 	/**/
 	
 	public abstract static class AbstractImpl extends AbstractObject implements EntityReader,Serializable {
@@ -37,6 +39,23 @@ public interface EntityReader {
 			Response response = ((org.cyk.utility.__kernel__.representation.EntityReader)arguments.__representation__).read(arguments.__representationArguments__);
 			arguments.finalise(response);
 			return (Collection<ENTITY>) arguments.__responseEntity__;			
+		}
+		
+		@Override
+		public <ENTITY> ENTITY readOne(Class<ENTITY> controllerEntityClass, Arguments<ENTITY> arguments) {
+			if(controllerEntityClass == null)
+				throw new RuntimeException("controller entity class is required");
+			if(arguments == null)
+				throw new RuntimeException("arguments are required");
+			if(arguments.getResponseEntityClass() == null)
+				arguments.setResponseEntityClass(controllerEntityClass);
+			arguments.prepare(controllerEntityClass, org.cyk.utility.__kernel__.representation.EntityReader.class);
+			arguments.__representationArguments__.getQueryExecutorArguments(Boolean.TRUE).setCollectionable(Boolean.FALSE);
+			System.out.println("EntityReader.AbstractImpl.readOne() 01 : "+arguments.__representationArguments__);
+			Response response = ((org.cyk.utility.__kernel__.representation.EntityReader)arguments.__representation__).read(arguments.__representationArguments__);
+			System.out.println("EntityReader.AbstractImpl.readOne() 02 : "+response.readEntity(String.class));
+			arguments.finalise(response);
+			return (ENTITY) arguments.__responseEntity__;	
 		}
 	}
 	

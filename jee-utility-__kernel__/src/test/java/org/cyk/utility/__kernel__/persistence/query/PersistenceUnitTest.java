@@ -47,6 +47,30 @@ public class PersistenceUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	@Test
+	public void read_employee_identiier_system(){
+		assertThat(EntityReader.getInstance().readOneBySystemIdentifier(Employee.class,"1s")).isNull();
+		for(Integer index = 0 ; index < 10 ; index = index + 1)
+			EntityCreator.getInstance().createOneInTransaction(new Employee().setIdentifier(index+"s").setCode(index+"b").setName(index+""));
+		assertThat(EntityReader.getInstance().readOneBySystemIdentifier(Employee.class,"1s")).isNotNull();
+	}
+	
+	@Test
+	public void read_employee_identiier_business(){
+		assertThat(EntityReader.getInstance().readOneByBusinessIdentifier(Employee.class,"1b")).isNull();
+		for(Integer index = 0 ; index < 10 ; index = index + 1)
+			EntityCreator.getInstance().createOneInTransaction(new Employee().setIdentifier(index+"s").setCode(index+"b").setName(index+""));
+		assertThat(EntityReader.getInstance().readOneByBusinessIdentifier(Employee.class,"1b")).isNotNull();
+	}
+	
+	@Test
+	public void count_employee(){
+		assertThat(EntityCounter.getInstance().count(Employee.class)).isEqualTo(0l);
+		for(Integer index = 0 ; index < 10 ; index = index + 1)
+			EntityCreator.getInstance().createOneInTransaction(new Employee().setIdentifier(index+"").setCode(index+"").setName(index+""));
+		assertThat(EntityCounter.getInstance().count(Employee.class)).isEqualTo(10l);
+	}
+	
+	@Test
 	public void create_employee(){
 		EntityCreator.getInstance().createOneInTransaction(new Employee().setIdentifier("1").setCode("1").setName("1"));
 		Employee employee = EntityFinder.getInstance().find(Employee.class, "1");

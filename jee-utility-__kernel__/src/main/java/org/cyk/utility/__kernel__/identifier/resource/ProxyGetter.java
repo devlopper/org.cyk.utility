@@ -3,7 +3,7 @@ package org.cyk.utility.__kernel__.identifier.resource;
 import java.net.URI;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.__kernel__.log.LogHelper;
+import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.value.Value;
 
 public interface ProxyGetter {
@@ -27,14 +27,8 @@ public interface ProxyGetter {
 	/**/
 	
 	static ProxyGetter getInstance() {
-		ProxyGetter instance = (ProxyGetter) INSTANCE.get();
-		if(instance != null)
-			return instance;
-		INSTANCE.set(instance = DependencyInjection.inject(ProxyGetter.class));
-		LogHelper.logInfo("instance has been set. <<"+instance.getClass()+">>", ProxyGetter.class);
-		return instance;
+		return Helper.getInstance(ProxyGetter.class, INSTANCE);
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
-	
+	Value INSTANCE = DependencyInjection.inject(Value.class);	
 }

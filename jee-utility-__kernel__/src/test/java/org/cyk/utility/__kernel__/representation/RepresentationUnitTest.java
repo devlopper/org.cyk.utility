@@ -47,6 +47,14 @@ public class RepresentationUnitTest extends AbstractWeldUnitTest {
 		EntityReader.INSTANCE.set(null);
 	}
 	
+	@Test
+	public void count_employee(){
+		assertThat(EntityCounter.getInstance().count(new Arguments().setRepresentationEntityClass(EmployeeDto.class)).getEntity()).isEqualTo(0l);
+		for(Integer index = 0 ; index < 10 ; index = index + 1)
+			EntityCreator.getInstance().createOneInTransaction(new Employee().setIdentifier(index+"").setCode(index+"").setName(index+""));
+		assertThat(EntityCounter.getInstance().count(new Arguments().setRepresentationEntityClass(EmployeeDto.class)).getEntity()).isEqualTo(10l);
+	}
+	
 	/* read all */
 	
 	@Test
@@ -69,11 +77,21 @@ public class RepresentationUnitTest extends AbstractWeldUnitTest {
 	/* read by system identifier */
 	
 	@Test
-	public void employee_withoutTuple_read_bySystemIdentifier(){		
+	public void employee_withoutTuple_read_bySystemIdentifiers(){		
 		EntityCreator.getInstance().createManyInTransaction(new Employee("1","1","1"),new Employee("2","2","1"));
 		__assertReadMany__(EntityReader.getInstance().read(new Arguments().setRepresentationEntityClass(EmployeeDto.class)
 				.setQueryExecutorArguments(
 						new QueryExecutorArguments.Dto().setQueryIdentifier("Employee.readBySystemIdentifiers")
+						.addFilterField("identifiers",List.of("1"))
+						)), "1");
+	}
+	
+	@Test
+	public void employee_withoutTuple_read_bySystemIdentifier(){		
+		EntityCreator.getInstance().createManyInTransaction(new Employee("1","1","1"),new Employee("2","2","1"));
+		__assertReadOne__(EntityReader.getInstance().read(new Arguments().setRepresentationEntityClass(EmployeeDto.class)
+				.setQueryExecutorArguments(
+						new QueryExecutorArguments.Dto().setCollectionable(Boolean.FALSE).setQueryIdentifier("Employee.readBySystemIdentifiers")
 						.addFilterField("identifiers",List.of("1"))
 						)), "1");
 	}
@@ -127,6 +145,8 @@ public class RepresentationUnitTest extends AbstractWeldUnitTest {
 	
 	private <T> void __assertReadMany__(Response response,Object...expectedSystemIdentifiers) {
 		assertThat(response).as("response is not null").isNotNull();
+		if(response.hasEntity())
+			assertThat(response.getEntity()).isInstanceOf(Collection.class);
 		Collection<?> entities = (Collection<?>) response.getEntity();
 		if(ArrayHelper.isEmpty(expectedSystemIdentifiers)) {
 			assertThat(entities).isNull();
@@ -134,6 +154,18 @@ public class RepresentationUnitTest extends AbstractWeldUnitTest {
 		}
 		assertThat(entities).isNotNull();
 		assertThat(FieldHelper.readSystemIdentifiers(entities)).containsExactly(expectedSystemIdentifiers);
+	}
+	
+	private <T> void __assertReadOne__(Response response,Object expectedSystemIdentifier) {
+		assertThat(response).as("response is not null").isNotNull();
+		assertThat(response.getEntity()).isNotInstanceOf(Collection.class);
+		Object entity = response.getEntity();
+		if(expectedSystemIdentifier == null) {
+			assertThat(entity).isNull();
+			return;
+		}
+		assertThat(entity).isNotNull();
+		assertThat(FieldHelper.readSystemIdentifier(entity)).isEqualTo(expectedSystemIdentifier);
 	}
 	
 	/**/

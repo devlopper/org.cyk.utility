@@ -16,26 +16,35 @@ import org.cyk.utility.__kernel__.value.Value;
 
 public interface InputBuilder {
 
-	AbstractInput<?> build(Object object,Field field,Map<Object,Object> arguments);
+	AbstractInput<?> build(Object object,Field field,Map<Object,Object> arguments,Class<?> inputClass);
 	
-	default AbstractInput<?> build(Object object,String fieldName,Map<Object,Object> arguments) {
+	default AbstractInput<?> build(Object object,Field field,Map<Object,Object> arguments) {
+		return build(object, field, arguments,null);
+	}
+	
+	default AbstractInput<?> build(Object object,String fieldName,Map<Object,Object> arguments,Class<?> inputClass) {
 		if(object == null)
 			throw new RuntimeException("object is required");
 		if(StringHelper.isBlank(fieldName))
 			throw new RuntimeException("field name is required");
-		return build(object, FieldHelper.getByName(object.getClass(), fieldName), arguments);
+		return build(object, FieldHelper.getByName(object.getClass(), fieldName), arguments,inputClass);
+	}
+	
+	default AbstractInput<?> build(Object object,String fieldName,Map<Object,Object> arguments) {
+		return build(object, fieldName, arguments, null);
 	}
 	
 	/**/
 	
 	public static abstract class AbstractInputBuilderImpl extends AbstractObject implements Serializable,InputBuilder {		
 		@Override
-		public AbstractInput<?> build(Object object,Field field,Map<Object,Object> arguments) {
+		public AbstractInput<?> build(Object object,Field field,Map<Object,Object> arguments,Class<?> inputClass) {
 			if(object == null)
 				throw new RuntimeException("object is required");
 			if(field == null)
 				throw new RuntimeException("field is required");
-			Class<?> inputClass = InputClassGetter.getInstance().get(object.getClass(), field);
+			if(inputClass == null)
+				inputClass = InputClassGetter.getInstance().get(object.getClass(), field);
 			if(inputClass == null) {
 				LogHelper.logSevere(String.format("Input class cannot be deduced from field %s", field), getClass());
 				return null;
@@ -53,6 +62,10 @@ public interface InputBuilder {
 					input = InputNumber.build(arguments);
 				else if(AutoComplete.class.equals(inputClass))
 					input = AutoComplete.build(arguments);
+				else if(SelectManyCheckbox.class.equals(inputClass))
+					input = SelectManyCheckbox.build(arguments);
+				else if(SelectOneRadio.class.equals(inputClass))
+					input = SelectOneRadio.build(arguments);
 			} catch (Exception exception) {
 				LogHelper.log(exception, AbstractInputBuilderImpl.class);
 			}

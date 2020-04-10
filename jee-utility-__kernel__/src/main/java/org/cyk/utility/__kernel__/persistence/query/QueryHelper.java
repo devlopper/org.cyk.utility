@@ -79,13 +79,13 @@ public interface QueryHelper {
 	static String getIdentifierReadAll(Class<?> klass) {
 		if(klass == null)
 			return null;
-		return getIdentifier(klass, "read");
+		return getIdentifier(klass, QueryName.READ.getValue());
 	}
 	
 	static String getIdentifierCountAll(Class<?> klass) {
 		if(klass == null)
 			return null;
-		return getIdentifier(klass, "count");
+		return getIdentifier(klass, QueryName.COUNT.getValue());
 	}
 	
 	static String getIdentifierReadBySystemIdentifiers(Class<?> klass) {

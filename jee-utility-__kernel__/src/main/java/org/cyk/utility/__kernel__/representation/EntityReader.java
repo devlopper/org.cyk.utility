@@ -58,27 +58,41 @@ public interface EntityReader {
 					queryExecutorArguments = MappingHelper.getDestination(arguments.getQueryExecutorArguments(), QueryExecutorArguments.class);
 				if(queryExecutorArguments.getIsResultProcessable() == null)
 					queryExecutorArguments.setIsResultProcessable(Boolean.TRUE);
-				Collection<?> persistences = org.cyk.utility.__kernel__.persistence.query.EntityReader.getInstance().readMany(internal.persistenceEntityClass,queryExecutorArguments);				
-				MapperSourceDestination.Arguments mapperSourceDestinationArguments = null;
-				if(arguments.getMappingArguments() != null)
-					mapperSourceDestinationArguments = MappingHelper.getDestination(arguments.getMappingArguments(), MapperSourceDestination.Arguments.class);				
-				Collection<?> representations =  CollectionHelper.isEmpty(persistences) ? null : MappingSourceBuilder.getInstance().build(persistences, internal.representationEntityClass
-						,mapperSourceDestinationArguments);
-				
-				Long xTotalCount = null;
-				if(Boolean.TRUE.equals(arguments.getCountable())) {			
-					String countQueryIdentifier = queryExecutorArguments.getQuery() == null ? null : queryExecutorArguments.getQuery().getIdentifier();
-					if(StringHelper.isNotBlank(countQueryIdentifier)) {
-						if(StringUtils.contains(countQueryIdentifier, ".read")) {
-							countQueryIdentifier = StringUtils.replaceOnce(countQueryIdentifier, ".read", ".count");
-							queryExecutorArguments.setQuery(QueryGetter.getInstance().get(countQueryIdentifier));
-							if(queryExecutorArguments.getQuery() != null) {
-								xTotalCount = QueryExecutor.getInstance().executeCount(queryExecutorArguments);
-							}
-						}					
+				if(queryExecutorArguments.getCollectionable() == null)
+					queryExecutorArguments.setCollectionable(Boolean.TRUE);
+				ResponseBuilder.Arguments responseBuilderArguments = new ResponseBuilder.Arguments();
+				if(Boolean.TRUE.equals(queryExecutorArguments.getCollectionable())) {
+					Collection<?> persistences = org.cyk.utility.__kernel__.persistence.query.EntityReader.getInstance().readMany(internal.persistenceEntityClass,queryExecutorArguments);				
+					MapperSourceDestination.Arguments mapperSourceDestinationArguments = null;
+					if(arguments.getMappingArguments() != null)
+						mapperSourceDestinationArguments = MappingHelper.getDestination(arguments.getMappingArguments(), MapperSourceDestination.Arguments.class);				
+					Collection<?> representations =  CollectionHelper.isEmpty(persistences) ? null : MappingSourceBuilder.getInstance().build(persistences, internal.representationEntityClass
+							,mapperSourceDestinationArguments);
+					
+					Long xTotalCount = null;
+					if(Boolean.TRUE.equals(arguments.getCountable())) {			
+						String countQueryIdentifier = queryExecutorArguments.getQuery() == null ? null : queryExecutorArguments.getQuery().getIdentifier();
+						if(StringHelper.isNotBlank(countQueryIdentifier)) {
+							if(StringUtils.contains(countQueryIdentifier, ".read")) {
+								countQueryIdentifier = StringUtils.replaceOnce(countQueryIdentifier, ".read", ".count");
+								queryExecutorArguments.setQuery(QueryGetter.getInstance().get(countQueryIdentifier));
+								if(queryExecutorArguments.getQuery() != null) {
+									xTotalCount = QueryExecutor.getInstance().executeCount(queryExecutorArguments);
+								}
+							}					
+						}
 					}
-				}				
-				return ResponseBuilder.getInstance().build(new ResponseBuilder.Arguments().setEntities(representations).setXTotalCount(xTotalCount));
+					responseBuilderArguments.setEntities(representations).setXTotalCount(xTotalCount);
+				}else {
+					Object persistence = org.cyk.utility.__kernel__.persistence.query.EntityReader.getInstance().readOne(internal.persistenceEntityClass,queryExecutorArguments);
+					MapperSourceDestination.Arguments mapperSourceDestinationArguments = null;
+					if(arguments.getMappingArguments() != null)
+						mapperSourceDestinationArguments = MappingHelper.getDestination(arguments.getMappingArguments(), MapperSourceDestination.Arguments.class);				
+					Object representation =  persistence == null ? null : MappingSourceBuilder.getInstance().build(persistence, internal.representationEntityClass
+							,mapperSourceDestinationArguments);
+					responseBuilderArguments.setEntity(representation);
+				}
+				return ResponseBuilder.getInstance().build(responseBuilderArguments);
 			} catch (Exception exception) {
 				LogHelper.log(exception, getClass());
 				return ResponseBuilder.getInstance().build(exception);

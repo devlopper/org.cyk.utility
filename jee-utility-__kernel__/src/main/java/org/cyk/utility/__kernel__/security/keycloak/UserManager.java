@@ -2,7 +2,6 @@ package org.cyk.utility.__kernel__.security.keycloak;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -114,11 +113,16 @@ public interface UserManager {
 			credentialRepresentation.setType(CredentialRepresentation.PASSWORD);
 			credentialRepresentation.setValue(ValueHelper.defaultToIfNull(user.getPass(), "123"));
 			userResource.resetPassword(credentialRepresentation);							
-			if(CollectionHelper.isNotEmpty(user.getRoles())) 
-				for(String index : user.getRoles()) {
-					RoleRepresentation roleRepresentation = rolesResource.get(index).toRepresentation();
-					userResource.roles().realmLevel().add(Arrays.asList(roleRepresentation));					
-				}
+			if(CollectionHelper.isNotEmpty(user.getRoles()))
+				__addRoles__(userResource, rolesResource, user);
+		}
+		
+		protected void __addRoles__(UserResource userResource,RolesResource rolesResource,User user) {
+			List<RoleRepresentation> roleRepresentations = new ArrayList<>();
+			for(Role index : user.getRoles()) {
+				roleRepresentations.add(rolesResource.get(index.getName()).toRepresentation());
+			}
+			userResource.roles().realmLevel().add(roleRepresentations);		
 		}
 		
 		@Override
@@ -141,10 +145,8 @@ public interface UserManager {
 						.setFirstName(userRepresentation.getFirstName())
 						.setLastNames(userRepresentation.getLastName())
 						.setElectronicMailAddress(userRepresentation.getEmail())
-						.setRoles(userRepresentation.getRealmRoles());
-				Collection<RoleRepresentation> roleRepresentations = usersResource.get(userRepresentation.getId()).roles().getAll().getRealmMappings();
-				if(CollectionHelper.isNotEmpty(roleRepresentations))
-					user.setRoles(roleRepresentations.stream().map(roleRepresentation -> roleRepresentation.getName()).collect(Collectors.toList()));
+						.setRoles(RoleManager.getInstance().map(usersResource.get(userRepresentation.getId()).roles().getAll().getRealmMappings()))
+						;
 				if(users == null)
 					users = new ArrayList<User>();
 				users.add(user);
@@ -161,27 +163,18 @@ public interface UserManager {
 				UsersResource usersResource = KeycloakHelper.getUsersResource();			
 				users.forEach(user -> {
 					UserResource userResource = usersResource.get(readByUserName(user.getName()).getIdentifier());
-					//collect existing
-					Collection<RoleRepresentation> roleRepresentations = userResource.roles().getAll().getRealmMappings();
-					//add new roles
-					if(CollectionHelper.isNotEmpty(user.getRoles())) 
-						for(String index : user.getRoles()) {
-							RoleRepresentation roleRepresentation = rolesResource.get(index).toRepresentation();
-							userResource.roles().realmLevel().add(List.of(roleRepresentation));					
-						}
-					//delete old roles
-					if(CollectionHelper.isNotEmpty(roleRepresentations)) {
-						for(RoleRepresentation roleRepresentation : roleRepresentations) {
-							if(!CollectionHelper.contains(user.getRoles(),roleRepresentation.getName()))
-								userResource.roles().realmLevel().remove(List.of(roleRepresentation));					
-						}
-					}
-					
+					//remove existing
+					userResource.roles().realmLevel().remove(userResource.roles().getAll().getRealmMappings());					
+					//create current and hidden
+					if(CollectionHelper.isNotEmpty(RoleManager.HIDDEN))
+						user.getRoles(Boolean.TRUE).addAll(RoleManager.HIDDEN.stream().map(role -> new Role(role)).collect(Collectors.toList()));
+					if(CollectionHelper.isNotEmpty(user.getRoles()))
+						__addRoles__(userResource, rolesResource, user);
 				});
 			}			
 			return this;
 		}
-		
+			
 		@Override
 		public UserManager delete(Collection<String> usersNames) {
 			if(CollectionHelper.isEmpty(usersNames))

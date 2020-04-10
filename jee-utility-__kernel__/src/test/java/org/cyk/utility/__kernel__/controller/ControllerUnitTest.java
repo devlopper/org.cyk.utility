@@ -55,6 +55,14 @@ public class ControllerUnitTest extends AbstractWeldUnitTest {
 		EntityCreator.INSTANCE.set(null);
 	}
 	
+	@Test
+	public void count_employee(){
+		assertThat(EntityCounter.getInstance().count(Employee.class)).isEqualTo(0l);
+		for(Integer index = 0 ; index < 10 ; index = index + 1)
+			EntityCreator.getInstance().createOneInTransaction(new Employee().setIdentifier(index+"").setCode(index+"").setName(index+""));
+		assertThat(EntityCounter.getInstance().count(Employee.class)).isEqualTo(10l);
+	}
+	
 	/* read all*/
 	
 	@Test
@@ -88,11 +96,23 @@ public class ControllerUnitTest extends AbstractWeldUnitTest {
 	/* read by system identifier */
 	
 	@Test
-	public void employee_withoutTuple_read_bySystemIdentifier(){
+	public void employee_withoutTuple_read_bySystemIdentifiers(){
 		EntityCreator.getInstance().createManyInTransaction(new Employee("1","1","1"),new Employee("2","2","1"));		
 		__assertRead__(EntityReader.getInstance().readMany(EmployeeData.class,new Arguments<EmployeeData>().setRepresentationArguments(new org.cyk.utility.__kernel__.representation
 				.Arguments().setQueryExecutorArguments(new QueryExecutorArguments.Dto().setQueryIdentifier("Employee.readBySystemIdentifiers")
 						.addFilterField("identifiers",List.of("1"))))), "1");
+	}
+	
+	@Test
+	public void employee_withoutTuple_read_bySystemIdentifier(){
+		EntityCreator.getInstance().createManyInTransaction(new Employee("1","1","1"),new Employee("2","2","1"));		
+		__assertReadOne__(EntityReader.getInstance().readOne(EmployeeData.class,new Arguments<EmployeeData>().setRepresentationArguments(new org.cyk.utility.__kernel__.representation
+				.Arguments().setQueryExecutorArguments(new QueryExecutorArguments.Dto().setQueryIdentifier("Employee.readBySystemIdentifiers")
+						.addFilterField("identifiers",List.of("1"))))), "1");
+		
+		__assertReadOne__(EntityReader.getInstance().readOne(EmployeeData.class,new Arguments<EmployeeData>().setRepresentationArguments(new org.cyk.utility.__kernel__.representation
+				.Arguments().setQueryExecutorArguments(new QueryExecutorArguments.Dto().setQueryIdentifier("Employee.readBySystemIdentifiers")
+						.addFilterField("identifiers",List.of("2"))))), "2");
 	}
 	
 	/* read by business identifier */
@@ -154,5 +174,13 @@ public class ControllerUnitTest extends AbstractWeldUnitTest {
 		assertThat(entities).isNotNull();
 		assertThat(entities.stream().map(entity -> FieldHelper.readSystemIdentifier(entity)).collect(Collectors.toList())).containsExactly(expectedSystemIdentifiers);
 	}
-		
+	
+	private <T> void __assertReadOne__(T entity,Object expectedSystemIdentifier) {
+		if(expectedSystemIdentifier == null) {
+			assertThat(entity).isNull();
+			return;
+		}
+		assertThat(entity).isNotNull();
+		assertThat(FieldHelper.readSystemIdentifier(entity)).isEqualTo(expectedSystemIdentifier);
+	}
 }
