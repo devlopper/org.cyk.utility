@@ -63,7 +63,7 @@ public interface QueryIdentifierBuilder {
 		return instance;
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
 	String FORMAT = "%s.%s";
 	
 	@Getter @Setter @Accessors(chain=true)

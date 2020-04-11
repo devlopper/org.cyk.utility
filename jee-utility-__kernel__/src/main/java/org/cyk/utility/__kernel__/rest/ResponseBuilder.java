@@ -9,7 +9,6 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.TypeHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
@@ -122,5 +121,5 @@ public interface ResponseBuilder {
 		return Helper.getInstance(ResponseBuilder.class, INSTANCE);
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
 }

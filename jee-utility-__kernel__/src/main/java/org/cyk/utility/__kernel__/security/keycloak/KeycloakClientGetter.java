@@ -2,7 +2,6 @@ package org.cyk.utility.__kernel__.security.keycloak;
 
 import javax.ws.rs.ProcessingException;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
@@ -50,6 +49,6 @@ public interface KeycloakClientGetter {
 		return Helper.getInstance(KeycloakClientGetter.class, INSTANCE);
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
-	Value CLIENT = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
+	Value CLIENT = new Value();
 }

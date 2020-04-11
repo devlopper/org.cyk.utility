@@ -2,7 +2,6 @@ package org.cyk.utility.__kernel__.string.freemarker;
 
 import java.io.StringReader;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.Value;
 
@@ -45,5 +44,5 @@ public interface FreeMarkerHelper {
 		}
 	}
 	
-	Value CONFIGURATION = DependencyInjection.inject(Value.class);
+	Value CONFIGURATION = new Value();
 }

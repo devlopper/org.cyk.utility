@@ -7,7 +7,6 @@ import java.util.LinkedHashSet;
 
 import javax.persistence.EntityManager;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
@@ -154,5 +153,5 @@ public interface QuerySaveExecutor {
 		return Helper.getInstance(QuerySaveExecutor.class, INSTANCE);
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
 }

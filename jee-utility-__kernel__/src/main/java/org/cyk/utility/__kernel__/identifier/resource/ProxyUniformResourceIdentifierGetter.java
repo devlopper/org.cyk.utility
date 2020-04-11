@@ -35,8 +35,8 @@ public interface ProxyUniformResourceIdentifierGetter {
 		return instance;
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
 	
-	Value UNIFORM_RESOURCE_IDENTIFIER_STRING = DependencyInjection.inject(Value.class).setConfigurationValueName(VariableName.PROXY_UNIFORM_RESOURCE_IDENTIFIER);
-	Value UNIFORM_RESOURCE_IDENTIFIER = DependencyInjection.inject(Value.class);
+	Value UNIFORM_RESOURCE_IDENTIFIER_STRING = new Value().setConfigurationValueName(VariableName.PROXY_UNIFORM_RESOURCE_IDENTIFIER);
+	Value UNIFORM_RESOURCE_IDENTIFIER = new Value();
 }

@@ -1,6 +1,5 @@
 package org.cyk.utility.__kernel__.file.microsoft.excel;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.array.ArrayTwoDimensionString;
 import org.cyk.utility.__kernel__.number.Interval;
@@ -22,6 +21,6 @@ public interface SheetReader {
 		return Helper.getInstance(SheetReader.class, INSTANCE);
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
 	
 }

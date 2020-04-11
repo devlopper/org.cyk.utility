@@ -1,5 +1,9 @@
 package org.cyk.utility.__kernel__.persistence.query.filter;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.mapping.MapperSourceDestination;
 import org.cyk.utility.__kernel__.mapping.MappingHelper;
@@ -18,24 +22,22 @@ public abstract class FilterDtoMapper extends MapperSourceDestination.AbstractIm
 		return klass == null ? null : klass.getName();
 	}
 	
-	public Fields getFields(FieldDtoCollection fieldDtoCollection) {
-		Fields fields = null;
-		if(fieldDtoCollection != null && fieldDtoCollection.getCollection()!=null && !fieldDtoCollection.getCollection().isEmpty()) {
-			fields = new Fields();
-			for(FieldDto index : fieldDtoCollection.getCollection())
-				fields.add(MappingHelper.getDestination(index, Field.class));
-		}
+	public Collection<Field> getFields(ArrayList<Field.Dto> dtos) {
+		if(CollectionHelper.isEmpty(dtos))
+			return null;
+		Collection<Field> fields = new ArrayList<>();
+		for(Field.Dto index : dtos)
+			fields.add(MappingHelper.getDestination(index, Field.class));
 		return fields;
 	}
 	
-	public FieldDtoCollection getFieldDtoCollection(Fields fields) {
-		FieldDtoCollection fieldDtoCollection = null;
-		if(fields != null && fields.get()!=null && !fields.get().isEmpty()) {
-			fieldDtoCollection = new FieldDtoCollection();
-			for(Field index : fields.get())
-				fieldDtoCollection.add(MappingHelper.getDestination(index, FieldDto.class));
-		}
-		return fieldDtoCollection;
+	public ArrayList<Field.Dto> getFieldDtos(Collection<Field> fields) {
+		if(CollectionHelper.isEmpty(fields))
+			return null;
+		ArrayList<Field.Dto> dtos = new ArrayList<>();		
+		for(Field index : fields)
+			dtos.add(MappingHelper.getDestination(index, Field.Dto.class));
+		return dtos;
 	}
 	
 	@Override

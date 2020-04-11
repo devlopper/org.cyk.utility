@@ -50,7 +50,7 @@ public interface InputClassGetter {
 		return Helper.getInstance(InputClassGetter.class, INSTANCE);
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
 	
 	Map<Field,Class<?>> CLASSES = new HashMap<>();
 }

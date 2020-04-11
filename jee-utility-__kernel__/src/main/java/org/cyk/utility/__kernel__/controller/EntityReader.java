@@ -5,7 +5,6 @@ import java.util.Collection;
 
 import javax.ws.rs.core.Response;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
@@ -51,9 +50,7 @@ public interface EntityReader {
 				arguments.setResponseEntityClass(controllerEntityClass);
 			arguments.prepare(controllerEntityClass, org.cyk.utility.__kernel__.representation.EntityReader.class);
 			arguments.__representationArguments__.getQueryExecutorArguments(Boolean.TRUE).setCollectionable(Boolean.FALSE);
-			System.out.println("EntityReader.AbstractImpl.readOne() 01 : "+arguments.__representationArguments__);
 			Response response = ((org.cyk.utility.__kernel__.representation.EntityReader)arguments.__representation__).read(arguments.__representationArguments__);
-			System.out.println("EntityReader.AbstractImpl.readOne() 02 : "+response.readEntity(String.class));
 			arguments.finalise(response);
 			return (ENTITY) arguments.__responseEntity__;	
 		}
@@ -65,5 +62,5 @@ public interface EntityReader {
 		return Helper.getInstance(EntityReader.class, INSTANCE);
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
 }

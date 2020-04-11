@@ -1,6 +1,5 @@
 package org.cyk.utility.__kernel__.persistence.query;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.__entities__.TestedEntityChild;
 import org.cyk.utility.__kernel__.__entities__.TestedEntityParent;
@@ -20,7 +19,7 @@ public interface TestedEntityChildByParentsQuerier extends ByDimensionOneBusines
 		return Helper.getInstance(TestedEntityChildByParentsQuerier.class, INSTANCE);
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
 	
 	String QUERY_NAME_READ = "readByParentsCodes";
 	String QUERY_NAME_COUNT = StringHelper.get("countByParentsCodes");

@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.object.__static__.identifiable.AbstractObject;
@@ -46,7 +45,7 @@ public interface RoleManager {
 		return Helper.getInstance(RoleManager.class, INSTANCE);
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
 	
 	Collection<String> HIDDEN = new HashSet<>(List.of("offline_access","uma_authorization"));
 }

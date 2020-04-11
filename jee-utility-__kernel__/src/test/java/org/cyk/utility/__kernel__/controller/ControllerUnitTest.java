@@ -108,7 +108,8 @@ public class ControllerUnitTest extends AbstractWeldUnitTest {
 		EntityCreator.getInstance().createManyInTransaction(new Employee("1","1","1"),new Employee("2","2","1"));		
 		__assertReadOne__(EntityReader.getInstance().readOne(EmployeeData.class,new Arguments<EmployeeData>().setRepresentationArguments(new org.cyk.utility.__kernel__.representation
 				.Arguments().setQueryExecutorArguments(new QueryExecutorArguments.Dto().setQueryIdentifier("Employee.readBySystemIdentifiers")
-						.addFilterField("identifiers",List.of("1"))))), "1");
+						.addFilterField("identifiers",List.of("1"))
+						))), "1");
 		
 		__assertReadOne__(EntityReader.getInstance().readOne(EmployeeData.class,new Arguments<EmployeeData>().setRepresentationArguments(new org.cyk.utility.__kernel__.representation
 				.Arguments().setQueryExecutorArguments(new QueryExecutorArguments.Dto().setQueryIdentifier("Employee.readBySystemIdentifiers")

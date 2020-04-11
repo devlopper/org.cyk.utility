@@ -28,7 +28,7 @@ public interface OutcomeGetter {
 		return Helper.getInstance(OutcomeGetter.class, INSTANCE);
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
 	
 	/**/
 	

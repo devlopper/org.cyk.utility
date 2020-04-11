@@ -6,7 +6,6 @@ import java.util.Collection;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
@@ -80,7 +79,7 @@ public interface EntitySaver {
 		return Helper.getInstance(EntitySaver.class, INSTANCE);
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
 	
 	/**/
 	

@@ -91,6 +91,6 @@ public interface InstanceGetter {
 		return instance;
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
 	
 }

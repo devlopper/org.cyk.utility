@@ -75,6 +75,6 @@ public interface DialogOpener {
 		return Helper.getInstance(DialogOpener.class, INSTANCE);
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
 	
 }

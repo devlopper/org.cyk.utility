@@ -2,7 +2,6 @@ package org.cyk.utility.__kernel__.controller;
 
 import java.io.Serializable;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.klass.NamingModel;
@@ -34,5 +33,5 @@ public interface RepresentationEntityClassGetter {
 		return Helper.getInstance(RepresentationEntityClassGetter.class, INSTANCE);
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
 }

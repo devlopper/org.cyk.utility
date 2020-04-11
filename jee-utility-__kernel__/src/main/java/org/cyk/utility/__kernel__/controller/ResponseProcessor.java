@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import javax.ws.rs.core.Response;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.value.Value;
@@ -59,6 +58,6 @@ public interface ResponseProcessor {
 		return Helper.getInstance(ResponseProcessor.class, INSTANCE);
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
 	
 }

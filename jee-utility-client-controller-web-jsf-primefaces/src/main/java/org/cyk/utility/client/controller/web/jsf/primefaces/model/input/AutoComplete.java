@@ -290,7 +290,7 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 			filter.addField(AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringImpl.FIELD_CODE, queryString)
 			.addField(AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl.FIELD_NAME, queryString);
 		Properties properties = new Properties().setQueryIdentifier(readQueryIdentifier).setIsPageable(Boolean.TRUE);
-		if(filter.getFields() != null && CollectionHelper.isNotEmpty(filter.getFields().getCollection())) {
+		if(filter.getFields() != null && CollectionHelper.isNotEmpty(filter.getFields())) {
 			properties.setFilters(filter);
 		}
 		arguments.setResult(controllerEntity.read(properties));

@@ -2,7 +2,6 @@ package org.cyk.utility.__kernel__.persistence.query;
 
 import java.io.Serializable;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
@@ -45,5 +44,5 @@ public interface EntityCounter {
 		return Helper.getInstance(EntityCounter.class, INSTANCE);
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);	
+	Value INSTANCE = new Value();	
 }

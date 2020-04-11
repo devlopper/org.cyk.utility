@@ -3,7 +3,6 @@ package org.cyk.utility.__kernel__.file.microsoft.excel;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.Value;
@@ -28,6 +27,6 @@ public interface WorkBookGetter {
 		return Helper.getInstance(WorkBookGetter.class, INSTANCE);
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
 	
 }

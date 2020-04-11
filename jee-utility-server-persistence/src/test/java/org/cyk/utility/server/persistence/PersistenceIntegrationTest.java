@@ -14,6 +14,7 @@ import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 
 import org.cyk.utility.__kernel__.array.ArrayHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
 import org.cyk.utility.__kernel__.computation.SortOrder;
 import org.cyk.utility.__kernel__.field.FieldHelper;
@@ -22,11 +23,10 @@ import org.cyk.utility.__kernel__.mapping.MappingHelper;
 import org.cyk.utility.__kernel__.persistence.query.Query;
 import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
 import org.cyk.utility.__kernel__.persistence.query.filter.Field;
-import org.cyk.utility.__kernel__.persistence.query.filter.FieldDto;
 import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.__kernel__.value.ValueDto;
+import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.server.persistence.api.MyEntityPersistence;
 import org.cyk.utility.server.persistence.api.NamablePersistence;
@@ -1136,7 +1136,7 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 	public void map_filter_field_to_dto_string() throws Exception{
 		Field field = __inject__(Field.class).setInstance(__inject__(FieldInstancesRuntime.class).get(Class.class, "f01")).setValue("12")
 				.setValueUsageType(ValueUsageType.BUSINESS).setArithmeticOperator(ArithmeticOperator.LIKE);
-		FieldDto fieldDto = MappingHelper.getSource(field, FieldDto.class);
+		Field.Dto fieldDto = MappingHelper.getSource(field, Field.Dto.class);
 		assertThat(fieldDto).isNotNull();
 		assertThat(fieldDto.getArithmeticOperator()).isEqualTo(ArithmeticOperator.LIKE);
 		assertThat(fieldDto.getField()).isNotNull();
@@ -1145,17 +1145,17 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		assertThat(fieldDto.getField().getType()).isEqualTo(org.cyk.utility.__kernel__.field.FieldDto.Type.STRING);
 		assertThat(fieldDto.getValue()).isNotNull();
 		assertThat(fieldDto.getValue().getValue()).isEqualTo("12");
-		assertThat(fieldDto.getValue().getContainer()).isEqualTo(ValueDto.Container.NONE);
-		assertThat(fieldDto.getValue().getType()).isEqualTo(ValueDto.Type.STRING);
+		assertThat(fieldDto.getValue().getContainer()).isEqualTo(Value.Dto.Container.NONE);
+		assertThat(fieldDto.getValue().getType()).isEqualTo(Value.Dto.Type.STRING);
 		assertThat(fieldDto.getValue().getUsageType()).isEqualTo(ValueUsageType.BUSINESS);
 	}
 	
 	@Test
 	public void map_filter_field_dto_to_field_string() throws Exception{
-		FieldDto fieldDto = new FieldDto();
+		Field.Dto fieldDto = new Field.Dto();
 		fieldDto.setArithmeticOperator(ArithmeticOperator.LIKE);
 		fieldDto.setField(new org.cyk.utility.__kernel__.field.FieldDto().setKlass(Class.class.getName()).setPath("f01").setType(org.cyk.utility.__kernel__.field.FieldDto.Type.STRING));
-		fieldDto.setValue(new ValueDto().setContainer(ValueDto.Container.NONE).setType(ValueDto.Type.STRING).setUsageType(ValueUsageType.BUSINESS).setValue("hello"));
+		fieldDto.setValue(new Value.Dto().setContainer(Value.Dto.Container.NONE).setType(Value.Dto.Type.STRING).setUsageType(ValueUsageType.BUSINESS).setValue("hello"));
 		
 		Field field = MappingHelper.getDestination(fieldDto, Field.class);
 		assertThat(field).isNotNull();
@@ -1174,7 +1174,7 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 	public void map_filter_field_to_dto_collection_string() throws Exception{
 		Field field = __inject__(Field.class).setInstance(__inject__(FieldInstancesRuntime.class).get(Class.class, "f01")).setValue(Arrays.asList("12","a"))
 				.setValueUsageType(ValueUsageType.BUSINESS).setArithmeticOperator(ArithmeticOperator.IN);
-		FieldDto fieldDto = MappingHelper.getSource(field, FieldDto.class);
+		Field.Dto fieldDto = MappingHelper.getSource(field, Field.Dto.class);
 		assertThat(fieldDto).isNotNull();
 		assertThat(fieldDto.getArithmeticOperator()).isEqualTo(ArithmeticOperator.IN);
 		assertThat(fieldDto.getField()).isNotNull();
@@ -1183,18 +1183,18 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		assertThat(fieldDto.getField().getType()).isEqualTo(org.cyk.utility.__kernel__.field.FieldDto.Type.STRING);
 		assertThat(fieldDto.getValue()).isNotNull();
 		assertThat(fieldDto.getValue().getValue()).isEqualTo("[\"12\",\"a\"]");
-		assertThat(fieldDto.getValue().getContainer()).isEqualTo(ValueDto.Container.COLLECTION);
-		assertThat(fieldDto.getValue().getType()).isEqualTo(ValueDto.Type.STRING);
+		assertThat(fieldDto.getValue().getContainer()).isEqualTo(Value.Dto.Container.COLLECTION);
+		assertThat(fieldDto.getValue().getType()).isEqualTo(Value.Dto.Type.STRING);
 		assertThat(fieldDto.getValue().getUsageType()).isEqualTo(ValueUsageType.BUSINESS);
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Test
 	public void map_filter_dto_to_field_collection_string() throws Exception{
-		FieldDto fieldDto = new FieldDto();
+		Field.Dto fieldDto = new Field.Dto();
 		fieldDto.setArithmeticOperator(ArithmeticOperator.IN);
 		fieldDto.setField(new org.cyk.utility.__kernel__.field.FieldDto().setKlass(Class.class.getName()).setPath("f01").setType(org.cyk.utility.__kernel__.field.FieldDto.Type.STRING));
-		fieldDto.setValue(new ValueDto().setContainer(ValueDto.Container.COLLECTION).setType(ValueDto.Type.STRING).setUsageType(ValueUsageType.BUSINESS).setValue("[\"12\",\"a\"]"));
+		fieldDto.setValue(new Value.Dto().setContainer(Value.Dto.Container.COLLECTION).setType(Value.Dto.Type.STRING).setUsageType(ValueUsageType.BUSINESS).setValue("[\"12\",\"a\"]"));
 		
 		Field field = MappingHelper.getDestination(fieldDto, Field.class);
 		assertThat(field).isNotNull();
@@ -1213,7 +1213,7 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 	public void map_filter_field_to_dto_collection_integer() throws Exception{
 		Field field = __inject__(Field.class).setInstance(__inject__(FieldInstancesRuntime.class).get(Class.class, "f01")).setValue(Arrays.asList(12,27))
 				.setValueUsageType(ValueUsageType.BUSINESS).setArithmeticOperator(ArithmeticOperator.IN);
-		FieldDto fieldDto = MappingHelper.getSource(field, FieldDto.class);
+		Field.Dto fieldDto = MappingHelper.getSource(field, Field.Dto.class);
 		assertThat(fieldDto).isNotNull();
 		assertThat(fieldDto.getArithmeticOperator()).isEqualTo(ArithmeticOperator.IN);
 		assertThat(fieldDto.getField()).isNotNull();
@@ -1222,18 +1222,18 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		assertThat(fieldDto.getField().getType()).isEqualTo(org.cyk.utility.__kernel__.field.FieldDto.Type.STRING);
 		assertThat(fieldDto.getValue()).isNotNull();
 		assertThat(fieldDto.getValue().getValue()).isEqualTo("[12,27]");
-		assertThat(fieldDto.getValue().getContainer()).isEqualTo(ValueDto.Container.COLLECTION);
-		assertThat(fieldDto.getValue().getType()).isEqualTo(ValueDto.Type.INTEGER);
+		assertThat(fieldDto.getValue().getContainer()).isEqualTo(Value.Dto.Container.COLLECTION);
+		assertThat(fieldDto.getValue().getType()).isEqualTo(Value.Dto.Type.INTEGER);
 		assertThat(fieldDto.getValue().getUsageType()).isEqualTo(ValueUsageType.BUSINESS);
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Test
 	public void map_filter_dto_to_field_collection_integer() throws Exception{
-		FieldDto fieldDto = new FieldDto();
+		Field.Dto fieldDto = new Field.Dto();
 		fieldDto.setArithmeticOperator(ArithmeticOperator.IN);
 		fieldDto.setField(new org.cyk.utility.__kernel__.field.FieldDto().setKlass(Class.class.getName()).setPath("f01").setType(org.cyk.utility.__kernel__.field.FieldDto.Type.STRING));
-		fieldDto.setValue(new ValueDto().setContainer(ValueDto.Container.COLLECTION).setType(ValueDto.Type.INTEGER).setUsageType(ValueUsageType.BUSINESS).setValue("[12,7]"));
+		fieldDto.setValue(new Value.Dto().setContainer(Value.Dto.Container.COLLECTION).setType(Value.Dto.Type.INTEGER).setUsageType(ValueUsageType.BUSINESS).setValue("[12,7]"));
 		
 		Field field = MappingHelper.getDestination(fieldDto, Field.class);
 		assertThat(field).isNotNull();
@@ -1251,12 +1251,12 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 	@Test
 	public void map_filter_dto_to_field_string() throws Exception{
 		FilterDto filterDto = new FilterDto().useKlass(Class.class);
-		filterDto.addField("f01", "hello", org.cyk.utility.__kernel__.field.FieldDto.Type.STRING, ValueDto.Container.NONE, ValueDto.Type.STRING, ValueUsageType.BUSINESS, ArithmeticOperator.LIKE);
+		filterDto.addField("f01", "hello", org.cyk.utility.__kernel__.field.FieldDto.Type.STRING, Value.Dto.Container.NONE, Value.Dto.Type.STRING, ValueUsageType.BUSINESS, ArithmeticOperator.LIKE);
 		Filter filter = MappingHelper.getDestination(filterDto, Filter.class);
 		assertThat(filter).isNotNull();
 		assertThat(filter.getFields()).isNotNull();
-		assertThat(filter.getFields().get()).hasSize(1);
-		Field field = filter.getFields().getFirst();
+		assertThat(filter.getFields()).hasSize(1);
+		Field field = CollectionHelper.getFirst(filter.getFields());
 		assertThat(field).isNotNull();
 		assertThat(field.getArithmeticOperator()).isEqualTo(ArithmeticOperator.LIKE);
 		assertThat(field.getInstance()).isNotNull();
@@ -1272,14 +1272,14 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 	@Test
 	public void stringfy_filterDto() throws Exception{
 		FilterDto filterDto = new FilterDto().useKlass(Class.class);
-		filterDto.addField("f01", "hello", org.cyk.utility.__kernel__.field.FieldDto.Type.STRING, ValueDto.Container.NONE, ValueDto.Type.STRING, ValueUsageType.BUSINESS, ArithmeticOperator.LIKE);
+		filterDto.addField("f01", "hello", org.cyk.utility.__kernel__.field.FieldDto.Type.STRING, Value.Dto.Container.NONE, Value.Dto.Type.STRING, ValueUsageType.BUSINESS, ArithmeticOperator.LIKE);
 		String string = JsonbBuilder.create().toJson(filterDto);
 		filterDto = JsonbBuilder.create().fromJson(string, FilterDto.class);
 		Filter filter = MappingHelper.getDestination(filterDto, Filter.class);
 		assertThat(filter).isNotNull();
 		assertThat(filter.getFields()).isNotNull();
-		assertThat(filter.getFields().get()).hasSize(1);
-		Field field = filter.getFields().getFirst();
+		assertThat(filter.getFields()).hasSize(1);
+		Field field = CollectionHelper.getFirst(filter.getFields());
 		assertThat(field).isNotNull();
 		assertThat(field.getArithmeticOperator()).isEqualTo(ArithmeticOperator.LIKE);
 		assertThat(field.getInstance()).isNotNull();

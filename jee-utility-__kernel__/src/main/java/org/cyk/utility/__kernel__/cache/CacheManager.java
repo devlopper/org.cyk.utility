@@ -1,6 +1,5 @@
 package org.cyk.utility.__kernel__.cache;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.value.Value;
 
@@ -18,5 +17,5 @@ public interface CacheManager {
 		return Helper.getInstance(CacheManager.class, INSTANCE);
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
 }

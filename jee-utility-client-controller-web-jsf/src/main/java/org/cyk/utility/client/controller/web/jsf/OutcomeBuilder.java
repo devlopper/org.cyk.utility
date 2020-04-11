@@ -16,7 +16,7 @@ public interface OutcomeBuilder {
 		return Helper.getInstance(OutcomeBuilder.class, INSTANCE);
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
 	
 	String FORMAT = "%s%sView";
 }

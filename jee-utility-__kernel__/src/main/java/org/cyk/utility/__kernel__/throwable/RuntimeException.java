@@ -6,8 +6,8 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.mapping.MapperSourceDestination;
 import org.cyk.utility.__kernel__.object.AbstractObject;
-import org.cyk.utility.__kernel__.representation.AbstractMapperSourceDestinationImpl;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -112,7 +112,7 @@ public class RuntimeException extends java.lang.RuntimeException implements Seri
 		/**/
 		
 		@org.mapstruct.Mapper
-		public static abstract class Mapper extends AbstractMapperSourceDestinationImpl<Dto, RuntimeException> {
+		public static abstract class Mapper extends MapperSourceDestination.AbstractImpl<Dto, RuntimeException> {
 			
 			@Override
 			protected void __listenGetSourceAfter__(RuntimeException destination, Dto source) {

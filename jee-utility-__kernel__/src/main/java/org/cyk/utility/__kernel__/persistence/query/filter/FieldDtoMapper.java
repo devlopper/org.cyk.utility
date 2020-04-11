@@ -14,32 +14,31 @@ import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.mapping.MapperSourceDestination;
 import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
-import org.cyk.utility.__kernel__.value.ValueDto;
-import org.cyk.utility.__kernel__.value.ValueDto.Container;
-import org.mapstruct.Mapper;
+import org.cyk.utility.__kernel__.value.Value;
+import org.cyk.utility.__kernel__.value.Value.Dto.Container;
 
-@Mapper
+@Deprecated
 public abstract class FieldDtoMapper extends MapperSourceDestination.AbstractImpl<FieldDto, Field> {
 	private static final long serialVersionUID = 1L;
 	
-	public ValueDto getValueDto(Object value) {
-		ValueDto valueDto = null;
+	public Value.Dto getValueDto(Object value) {
+		Value.Dto valueDto = null;
 		if(value != null) {
-			valueDto = new ValueDto();
+			valueDto = new Value.Dto();
 			String valueAsJson = null;
 			if(value instanceof String) {
 				valueAsJson = (String) value;
-				valueDto.setContainer(ValueDto.Container.NONE);
-				valueDto.setType(ValueDto.Type.STRING);
+				valueDto.setContainer(Value.Dto.Container.NONE);
+				valueDto.setType(Value.Dto.Type.STRING);
 			}else if(value instanceof Collection) {
 				valueAsJson = JsonbBuilder.create().toJson(value);
-				valueDto.setContainer(ValueDto.Container.COLLECTION);
+				valueDto.setContainer(Value.Dto.Container.COLLECTION);
 				Object element = CollectionHelper.getFirst((Collection<?>) value);
 				if(element != null) {
 					if(element instanceof String)
-						valueDto.setType(ValueDto.Type.STRING);
+						valueDto.setType(Value.Dto.Type.STRING);
 					else if(element instanceof Integer)
-						valueDto.setType(ValueDto.Type.INTEGER);
+						valueDto.setType(Value.Dto.Type.INTEGER);
 				}
 			}
 			valueDto.setValue(valueAsJson);
@@ -47,31 +46,31 @@ public abstract class FieldDtoMapper extends MapperSourceDestination.AbstractImp
 		return valueDto;
 	}
 	
-	public Object getValue(ValueDto valueDto) {
+	public Object getValue(Value.Dto valueDto) {
 		Object value = null;
 		if(valueDto != null) {
 			Container container = valueDto.getContainer();
-			ValueDto.Type type = valueDto.getType();
+			Value.Dto.Type type = valueDto.getType();
 			if(type == null)
-				type = ValueDto.Type.STRING;
+				type = Value.Dto.Type.STRING;
 			if(container == null)
 				container = Container.NONE;
 			if(Container.NONE.equals(container)) {
-				if(ValueDto.Type.STRING.equals(type))
+				if(Value.Dto.Type.STRING.equals(type))
 					value = valueDto.getValue();
-				else if(ValueDto.Type.INTEGER.equals(type))
+				else if(Value.Dto.Type.INTEGER.equals(type))
 					value = NumberHelper.getInteger(valueDto.getValue(), null);
-				else if(ValueDto.Type.LONG.equals(type))
+				else if(Value.Dto.Type.LONG.equals(type))
 					value = NumberHelper.getLong(valueDto.getValue(), null);
 			}else if(Container.COLLECTION.equals(container)) {
 				Collection<?> collection = null;
 				if(valueDto.getValue()!= null && !valueDto.getValue().isBlank()) {
 					Type __type__ = null;
-					if(ValueDto.Type.INTEGER.equals(valueDto.getType()))
+					if(Value.Dto.Type.INTEGER.equals(valueDto.getType()))
 						__type__ = new ArrayList<Integer>(){private static final long serialVersionUID = 1L;}.getClass().getGenericSuperclass();
-					else if(ValueDto.Type.LONG.equals(valueDto.getType()))
+					else if(Value.Dto.Type.LONG.equals(valueDto.getType()))
 						__type__ = new ArrayList<Long>(){private static final long serialVersionUID = 1L;}.getClass().getGenericSuperclass();
-					else if(ValueDto.Type.STRING.equals(valueDto.getType()))
+					else if(Value.Dto.Type.STRING.equals(valueDto.getType()))
 						__type__ = new ArrayList<String>(){private static final long serialVersionUID = 1L;}.getClass().getGenericSuperclass();
 					else
 						__type__ = new ArrayList<String>(){private static final long serialVersionUID = 1L;}.getClass().getGenericSuperclass();	

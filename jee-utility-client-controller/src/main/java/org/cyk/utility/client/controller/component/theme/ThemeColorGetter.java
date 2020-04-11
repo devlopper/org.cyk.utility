@@ -35,6 +35,6 @@ public interface ThemeColorGetter {
 		return instance;
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
 	
 }

@@ -2,7 +2,6 @@ package org.cyk.utility.__kernel__.protocol.smtp;
 
 import java.util.Collection;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.value.Value;
@@ -39,7 +38,7 @@ public interface MailSender {
 		return Helper.getInstance(MailSender.class, INSTANCE);
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
 	
 	/**/
 	

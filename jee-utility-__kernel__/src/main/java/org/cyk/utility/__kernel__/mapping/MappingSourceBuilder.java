@@ -3,7 +3,6 @@ package org.cyk.utility.__kernel__.mapping;
 import java.io.Serializable;
 import java.util.Collection;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.mapping.MapperSourceDestination.Arguments;
@@ -48,5 +47,5 @@ public interface MappingSourceBuilder {
 		return Helper.getInstance(MappingSourceBuilder.class, INSTANCE);
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);	
+	Value INSTANCE = new Value();	
 }

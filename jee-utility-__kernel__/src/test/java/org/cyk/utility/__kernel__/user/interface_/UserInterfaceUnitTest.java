@@ -1,15 +1,10 @@
 package org.cyk.utility.__kernel__.user.interface_;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import javax.persistence.Persistence;
 
-import org.cyk.utility.__kernel__.__entities__.Employee;
 import org.cyk.utility.__kernel__.persistence.EntityManagerFactoryGetterImpl;
-import org.cyk.utility.__kernel__.persistence.query.EntityCreator;
 import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
-import org.cyk.utility.__kernel__.time.TimeHelper;
 import org.junit.jupiter.api.Test;
 
 public class UserInterfaceUnitTest extends AbstractWeldUnitTest {

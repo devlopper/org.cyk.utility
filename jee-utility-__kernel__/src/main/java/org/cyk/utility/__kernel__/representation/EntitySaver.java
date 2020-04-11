@@ -11,6 +11,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.mapping.MappingHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.rest.ResponseBuilder;
@@ -60,7 +61,7 @@ public interface EntitySaver<T> {
 				org.cyk.utility.__kernel__.business.EntitySaver.getInstance().save((Class<Object>)internal.persistenceEntityClass, businessEntitySaverArguments);
 				return ResponseBuilder.getInstance().build(new ResponseBuilder.Arguments());
 			} catch (Exception exception) {
-				exception.printStackTrace();
+				LogHelper.log(exception, getClass());
 				return ResponseBuilder.getInstance().build(exception);
 			}		
 		}

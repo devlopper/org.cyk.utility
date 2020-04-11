@@ -13,7 +13,6 @@ import java.util.Date;
 
 import javax.persistence.Transient;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
@@ -24,7 +23,6 @@ import org.cyk.utility.__kernel__.number.NumberHelper;
 
 public interface ValueConverter {
 
-	@SuppressWarnings("unchecked")
 	default <T> T convert(Object value,Class<T> klass) {
 		if(value == null)
 			return null;
@@ -169,5 +167,5 @@ public interface ValueConverter {
 		return Helper.getInstance(ValueConverter.class, INSTANCE);
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
 }

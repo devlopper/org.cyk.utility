@@ -34,6 +34,10 @@ public interface MapperClassGetter {
 				return RuntimeException.Dto.Mapper.class;
 			if(klass.equals(QueryExecutorArguments.class) || klass.equals(QueryExecutorArguments.Dto.class))
 				return QueryExecutorArguments.Dto.Mapper.class;
+			if(klass.equals(Value.class) || klass.equals(Value.Dto.class))
+				return Value.Dto.Mapper.class;
+			if(klass.equals(org.cyk.utility.__kernel__.persistence.query.filter.Field.class) || klass.equals(org.cyk.utility.__kernel__.persistence.query.filter.Field.Dto.class))
+				return org.cyk.utility.__kernel__.persistence.query.filter.Field.Dto.Mapper.class;
 			Class<?> result = org.cyk.utility.__kernel__.klass.ClassHelper.getByName(MapperClassNameGetter.getInstance().get(klass));
 			if(result == null) {
 				if(klass.getName().endsWith("Impl"))
@@ -54,5 +58,5 @@ public interface MapperClassGetter {
 		return instance;
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
 }

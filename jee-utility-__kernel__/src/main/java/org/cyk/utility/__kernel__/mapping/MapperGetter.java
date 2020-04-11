@@ -46,5 +46,5 @@ public interface MapperGetter {
 		return Helper.getInstance(MapperGetter.class, INSTANCE);
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
 }

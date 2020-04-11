@@ -106,10 +106,15 @@ public class Arguments<T> extends AbstractObject implements Serializable {
 		__response__ = response;
 		if(response.hasEntity()) {
 			RuntimeException.Dto runtimeExceptionDto = null;
+			//read entity
 			if(__isRepresentationProxyable__) {
 				if(ResponseHelper.isFamilySuccessful(response)) {
 					if(ClassHelper.isInstanceOf(responseEntityClass, Collection.class))
 						__responseEntity__ = response.readEntity(TypeHelper.instantiateGenericCollectionParameterizedTypeForJaxrs(Collection.class,__representationEntityClass__));
+					else if(ClassHelper.isInstanceOf(responseEntityClass, __controllerEntityClass__))
+						__responseEntity__ = response.readEntity(__representationEntityClass__);
+					else
+						throw new RuntimeException("response entity class not yet handled");
 				}else {
 					runtimeExceptionDto = response.readEntity(RuntimeException.Dto.class);
 				}
@@ -119,6 +124,7 @@ public class Arguments<T> extends AbstractObject implements Serializable {
 				else
 					runtimeExceptionDto = (RuntimeException.Dto) response.getEntity();
 			}
+			//convert entity
 			if(runtimeExceptionDto == null) {
 				if(ClassHelper.isInstanceOf(responseEntityClass, Collection.class)) {
 					if(CollectionHelper.isEmpty((Collection<?>) __responseEntity__))

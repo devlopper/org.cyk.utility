@@ -43,7 +43,7 @@ public interface InstancePropertyValueBuilder {
 		return instance;
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
 	
 	/**/
 	

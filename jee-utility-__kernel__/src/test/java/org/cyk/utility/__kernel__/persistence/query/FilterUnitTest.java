@@ -27,7 +27,7 @@ public class FilterUnitTest extends AbstractWeldUnitTest {
 		Filter filter = new Filter();
 		filter.addField("identifier", "1");
 		filter.normalize(Entity.class);
-		assertThat(filter.getFields().get().size()).isEqualTo(1);
+		assertThat(filter.getFields().size()).isEqualTo(1);
 	}
 	
 	@Test
@@ -35,7 +35,7 @@ public class FilterUnitTest extends AbstractWeldUnitTest {
 		Filter filter = new Filter();
 		filter.addField("identifierAndCode", "1");
 		filter.normalize(Entity.class);
-		assertThat(filter.getFields().get().size()).isEqualTo(1);
+		assertThat(filter.getFields().size()).isEqualTo(1);
 	}
 	
 	@Test

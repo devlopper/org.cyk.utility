@@ -1,6 +1,5 @@
 package org.cyk.utility.__kernel__.file.microsoft.excel;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.value.Value;
 
@@ -16,6 +15,6 @@ public interface SheetGetter {
 		return Helper.getInstance(SheetGetter.class, INSTANCE);
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
 	
 }

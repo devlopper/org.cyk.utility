@@ -81,5 +81,5 @@ public interface InputBuilder {
 		return Helper.getInstance(InputBuilder.class, INSTANCE);
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
 }

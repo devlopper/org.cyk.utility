@@ -5,7 +5,6 @@ import java.util.Collection;
 
 import javax.persistence.EntityManager;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
@@ -103,5 +102,5 @@ public interface EntityUpdater {
 		return Helper.getInstance(EntityUpdater.class, INSTANCE);
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
 }

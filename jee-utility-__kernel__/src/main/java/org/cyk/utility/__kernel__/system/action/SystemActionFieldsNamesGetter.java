@@ -15,5 +15,5 @@ public interface SystemActionFieldsNamesGetter extends SystemActionXXXGetter<Str
 		return instance;
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
 }

@@ -10,6 +10,7 @@ import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.field.FieldInstance;
 import org.cyk.utility.__kernel__.string.StringHelper;
 
+@Deprecated
 public class Fields extends AbstractCollectionInstanceImpl<Field> implements Serializable {
 	private static final long serialVersionUID = 1L;
 

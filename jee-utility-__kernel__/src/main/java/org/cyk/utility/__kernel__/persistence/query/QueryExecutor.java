@@ -137,5 +137,5 @@ public interface QueryExecutor {
 		return Helper.getInstance(QueryExecutor.class, INSTANCE);
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
 }

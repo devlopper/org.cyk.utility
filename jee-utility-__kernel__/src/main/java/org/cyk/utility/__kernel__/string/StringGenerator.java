@@ -2,7 +2,6 @@ package org.cyk.utility.__kernel__.string;
 
 import java.util.Map;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.value.Value;
 
@@ -16,5 +15,5 @@ public interface StringGenerator {
 		return Helper.getInstance(StringGenerator.class, INSTANCE);
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
 }

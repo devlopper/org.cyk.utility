@@ -100,5 +100,5 @@ public interface InputClassBuilder {
 		return Helper.getInstance(InputClassBuilder.class, INSTANCE);
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
 }

@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
@@ -211,5 +210,5 @@ public interface InstanceHelper {
 	String METHOD_GETTER_PREFIX = "get";
 	String METHOD_SETTER_PREFIX = "set";
 	
-	Value INSTANCE_GETTER = DependencyInjection.inject(Value.class);
+	Value INSTANCE_GETTER = new Value();
 }

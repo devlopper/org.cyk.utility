@@ -2,8 +2,8 @@ package org.cyk.utility.__kernel__.throwable;
 
 import java.io.Serializable;
 
+import org.cyk.utility.__kernel__.mapping.MapperSourceDestination;
 import org.cyk.utility.__kernel__.object.AbstractObject;
-import org.cyk.utility.__kernel__.representation.AbstractMapperSourceDestinationImpl;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,7 +30,7 @@ public class Message extends AbstractObject implements Serializable {
 		/**/
 		
 		@org.mapstruct.Mapper
-		public static abstract class Mapper extends AbstractMapperSourceDestinationImpl<Dto, Message> {
+		public static abstract class Mapper extends MapperSourceDestination.AbstractImpl<Dto, Message> {
 			
 		}
 	}

@@ -45,6 +45,9 @@ public class RepresentationUnitTest extends AbstractWeldUnitTest {
 		super.__listenAfter__();
 		QueryHelper.clear();
 		EntityReader.INSTANCE.set(null);
+		EntityCounter.INSTANCE.set(null);
+		EntityCreator.INSTANCE.set(null);
+		EmployeeSaver.INSTANCE.set(null);
 	}
 	
 	@Test

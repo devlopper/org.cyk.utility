@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import javax.ws.rs.Path;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.representation.EntitySaver;
 import org.cyk.utility.__kernel__.value.Value;
@@ -27,7 +26,7 @@ public interface EmployeeSaver extends EntitySaver<EmployeeDto> {
 		return Helper.getInstance(EmployeeSaver.class, INSTANCE);
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
 	
 	String PATH = "/cyk/entity/employee/saver";
 	

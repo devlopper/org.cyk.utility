@@ -3,7 +3,6 @@ package org.cyk.utility.__kernel__.persistence.query;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
@@ -110,7 +109,7 @@ public interface QueryValueBuilder {
 		return Helper.getInstance(QueryValueBuilder.class, INSTANCE);
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
 	
 	String FORMAT_SELECT = "SELECT %2$s FROM %1$s %2$s";
 	String FORMAT_SELECT_WHERE_FIELD_IN = FORMAT_SELECT+" WHERE %2$s.%3$s IN :%4$s";

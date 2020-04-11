@@ -79,7 +79,7 @@ public interface InputGetter {
 		return Helper.getInstance(InputGetter.class, INSTANCE);
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);
+	Value INSTANCE = new Value();
 	
 	Map<Field,AbstractInput<?>> CLASSES = new HashMap<>();
 }

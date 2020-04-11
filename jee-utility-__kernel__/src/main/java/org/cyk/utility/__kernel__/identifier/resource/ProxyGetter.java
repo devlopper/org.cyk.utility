@@ -2,7 +2,6 @@ package org.cyk.utility.__kernel__.identifier.resource;
 
 import java.net.URI;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.value.Value;
 
@@ -30,5 +29,5 @@ public interface ProxyGetter {
 		return Helper.getInstance(ProxyGetter.class, INSTANCE);
 	}
 	
-	Value INSTANCE = DependencyInjection.inject(Value.class);	
+	Value INSTANCE = new Value();	
 }
