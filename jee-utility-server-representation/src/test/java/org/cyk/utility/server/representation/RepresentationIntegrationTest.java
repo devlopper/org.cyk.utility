@@ -13,7 +13,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.klass.PersistableClassesGetter;
-import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
+import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.assertion.AssertionsProviderClassMap;
 import org.cyk.utility.server.business.api.MyEntityAssertionsProvider;
@@ -201,37 +201,37 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 		Collection<Object> identifiers = ((Collection<MyEntityDto>)__inject__(MyEntityRepresentation.class).getMany(null,Boolean.FALSE, null, null, "identifier", null).getEntity())
 				.stream().map(MyEntityDto::getIdentifier).collect(Collectors.toList());
 		assertThat(identifiers).containsOnly(id1,id2,id3);
-		FilterDto filters = __inject__(FilterDto.class).addField(MyEntityDto.PROPERTY_IDENTIFIER, Arrays.asList(id1,id2,id3));
+		Filter.Dto filters = __inject__(Filter.Dto.class).addField(MyEntityDto.PROPERTY_IDENTIFIER, Arrays.asList(id1,id2,id3));
 		Collection<MyEntityDto> dtos = (Collection<MyEntityDto>) __inject__(MyEntityRepresentation.class).getMany(null,Boolean.FALSE,null,null,null,filters).getEntity();
 		assertThat(dtos.stream().map(MyEntityDto::getCode).collect(Collectors.toList()))
 			.containsOnly(code1,code2,code3);
 		
-		filters = __inject__(FilterDto.class);
+		filters = __inject__(Filter.Dto.class);
 		filters.addField(MyEntityDto.PROPERTY_IDENTIFIER, Arrays.asList(id1,id3));
 		dtos = (Collection<MyEntityDto>) __inject__(MyEntityRepresentation.class).getMany(null,Boolean.FALSE,null,null,null,filters).getEntity();
 		assertThat(dtos.stream().map(MyEntityDto::getCode).collect(Collectors.toList())).containsOnly(code1,code3);
 		
-		filters = __inject__(FilterDto.class);
+		filters = __inject__(Filter.Dto.class);
 		filters.addField(MyEntityDto.PROPERTY_IDENTIFIER, Arrays.asList(id1));
 		dtos = (Collection<MyEntityDto>) __inject__(MyEntityRepresentation.class).getMany(null,Boolean.FALSE,null,null,null,filters).getEntity();
 		assertThat(dtos.stream().map(MyEntityDto::getCode).collect(Collectors.toList())).containsOnly(code1);
 		
-		filters = __inject__(FilterDto.class);
+		filters = __inject__(Filter.Dto.class);
 		filters.addField(MyEntityDto.PROPERTY_IDENTIFIER, Arrays.asList(id2));
 		dtos = (Collection<MyEntityDto>) __inject__(MyEntityRepresentation.class).getMany(null,Boolean.FALSE,null,null,null,filters).getEntity();
 		assertThat(dtos.stream().map(MyEntityDto::getCode).collect(Collectors.toList())).containsOnly(code2);
 		
-		filters = __inject__(FilterDto.class);
+		filters = __inject__(Filter.Dto.class);
 		filters.addField(MyEntityDto.PROPERTY_IDENTIFIER, Arrays.asList(id3));
 		dtos = (Collection<MyEntityDto>) __inject__(MyEntityRepresentation.class).getMany(null,Boolean.FALSE,null,null,null,filters).getEntity();
 		assertThat(dtos.stream().map(MyEntityDto::getCode).collect(Collectors.toList())).containsOnly(code3);
 		
-		filters = __inject__(FilterDto.class);
+		filters = __inject__(Filter.Dto.class);
 		filters.addField(MyEntityDto.PROPERTY_IDENTIFIER, Arrays.asList());
 		dtos = (Collection<MyEntityDto>) __inject__(MyEntityRepresentation.class).getMany(null,Boolean.FALSE,null,null,null,filters).getEntity();
 		assertThat(dtos).isNull();
 		
-		filters = __inject__(FilterDto.class);
+		filters = __inject__(Filter.Dto.class);
 		filters.addField(MyEntityDto.PROPERTY_IDENTIFIER, null);
 		dtos = (Collection<MyEntityDto>) __inject__(MyEntityRepresentation.class).getMany(null,Boolean.FALSE,null,null,null,filters).getEntity();
 		assertThat(dtos.stream().map(MyEntityDto::getCode).collect(Collectors.toList())).containsOnly(code1,code2,code3);
@@ -254,38 +254,38 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 				.stream().map(MyEntityDto::getIdentifier).collect(Collectors.toList());
 		assertThat(identifiers).containsOnly(id1,id2,id3);
 		
-		FilterDto filters = __inject__(FilterDto.class);
+		Filter.Dto filters = __inject__(Filter.Dto.class);
 		filters.addField(MyEntityDto.PROPERTY_CODE, Arrays.asList(code1,code2,code3));
 		Collection<MyEntityDto> dtos = (Collection<MyEntityDto>) __inject__(MyEntityRepresentation.class).getMany(null,Boolean.FALSE,null,null,null,filters).getEntity();
 		assertThat(dtos.stream().map(MyEntityDto::getIdentifier).collect(Collectors.toList()))
 			.containsOnly(id1,id2,id3);
 		
-		filters = __inject__(FilterDto.class);
+		filters = __inject__(Filter.Dto.class);
 		filters.addField(MyEntityDto.PROPERTY_CODE, Arrays.asList(code1,code3));
 		dtos = (Collection<MyEntityDto>) __inject__(MyEntityRepresentation.class).getMany(null,Boolean.FALSE,null,null,null,filters).getEntity();
 		assertThat(dtos.stream().map(MyEntityDto::getIdentifier).collect(Collectors.toList())).containsOnly(id1,id3);
 		
-		filters = __inject__(FilterDto.class);
+		filters = __inject__(Filter.Dto.class);
 		filters.addField(MyEntityDto.PROPERTY_CODE, Arrays.asList(code1));
 		dtos = (Collection<MyEntityDto>) __inject__(MyEntityRepresentation.class).getMany(null,Boolean.FALSE,null,null,null,filters).getEntity();
 		assertThat(dtos.stream().map(MyEntityDto::getIdentifier).collect(Collectors.toList())).containsOnly(id1);
 		
-		filters = __inject__(FilterDto.class);
+		filters = __inject__(Filter.Dto.class);
 		filters.addField(MyEntityDto.PROPERTY_CODE, Arrays.asList(code2));
 		dtos = (Collection<MyEntityDto>) __inject__(MyEntityRepresentation.class).getMany(null,Boolean.FALSE,null,null,null,filters).getEntity();
 		assertThat(dtos.stream().map(MyEntityDto::getIdentifier).collect(Collectors.toList())).containsOnly(id2);
 		
-		filters = __inject__(FilterDto.class);
+		filters = __inject__(Filter.Dto.class);
 		filters.addField(MyEntityDto.PROPERTY_CODE, Arrays.asList(code3));
 		dtos = (Collection<MyEntityDto>) __inject__(MyEntityRepresentation.class).getMany(null,Boolean.FALSE,null,null,null,filters).getEntity();
 		assertThat(dtos.stream().map(MyEntityDto::getIdentifier).collect(Collectors.toList())).containsOnly(id3);
 		
-		filters = __inject__(FilterDto.class);
+		filters = __inject__(Filter.Dto.class);
 		filters.addField(MyEntityDto.PROPERTY_CODE, Arrays.asList());
 		dtos = (Collection<MyEntityDto>) __inject__(MyEntityRepresentation.class).getMany(null,Boolean.FALSE,null,null,null,filters).getEntity();
 		assertThat(dtos).isNull();
 		
-		filters = __inject__(FilterDto.class);
+		filters = __inject__(Filter.Dto.class);
 		filters.addField(MyEntityDto.PROPERTY_CODE, null);
 		dtos = (Collection<MyEntityDto>) __inject__(MyEntityRepresentation.class).getMany(null,Boolean.FALSE,null,null,null,filters).getEntity();
 		assertThat(dtos.stream().map(MyEntityDto::getIdentifier).collect(Collectors.toList())).containsOnly(id1,id2,id3);
@@ -326,9 +326,9 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 			collection.add(new MyEntity().setIdentifier(index.toString()).setCode(index.toString()).setName(__getRandomName__()));
 		__inject__(MyEntityBusiness.class).createMany(collection);
 		
-		assertThat( __inject__(MyEntityRepresentation.class).count(null,new FilterDto().addField("identifier", Arrays.asList("0"), ValueUsageType.SYSTEM))
+		assertThat( __inject__(MyEntityRepresentation.class).count(null,new Filter.Dto().addField("identifier", Arrays.asList("0"), ValueUsageType.SYSTEM))
 				.getEntity()).isEqualTo(1l);
-		assertThat( __inject__(MyEntityRepresentation.class).count(null,new FilterDto().addField("identifier", Arrays.asList("0","10","21"), ValueUsageType.SYSTEM))
+		assertThat( __inject__(MyEntityRepresentation.class).count(null,new Filter.Dto().addField("identifier", Arrays.asList("0","10","21"), ValueUsageType.SYSTEM))
 				.getEntity()).isEqualTo(3l);
 	}
 	
@@ -622,26 +622,26 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 				}	
 			}	
 		}
-		Collection<NodeDto> nodes = (Collection<NodeDto>) __inject__(NodeRepresentation.class).getMany(null,Boolean.FALSE, null, null, null, new FilterDto().addField(Node.FIELD_PARENTS, null)).getEntity();
+		Collection<NodeDto> nodes = (Collection<NodeDto>) __inject__(NodeRepresentation.class).getMany(null,Boolean.FALSE, null, null, null, new Filter.Dto().addField(Node.FIELD_PARENTS, null)).getEntity();
 		assertThat(nodes).isNotNull();
 		assertThat(nodes.stream().map(NodeDto::getCode).collect(Collectors.toList())).containsOnly("0","1","2","3");
-		assertThat(__inject__(NodeRepresentation.class).count(null,new FilterDto().addField(Node.FIELD_PARENTS, null)).getEntity()).isEqualTo(4l);
+		assertThat(__inject__(NodeRepresentation.class).count(null,new Filter.Dto().addField(Node.FIELD_PARENTS, null)).getEntity()).isEqualTo(4l);
 		
-		nodes = (Collection<NodeDto>) __inject__(NodeRepresentation.class).getMany(null,Boolean.FALSE, null, null, null,new FilterDto().addField(Node.FIELD_PARENTS, Arrays.asList("0"),ValueUsageType.BUSINESS)).getEntity();
+		nodes = (Collection<NodeDto>) __inject__(NodeRepresentation.class).getMany(null,Boolean.FALSE, null, null, null,new Filter.Dto().addField(Node.FIELD_PARENTS, Arrays.asList("0"),ValueUsageType.BUSINESS)).getEntity();
 		assertThat(nodes).isNotNull();
 		assertThat(nodes.stream().map(NodeDto::getCode).collect(Collectors.toList())).containsOnly("0.0","0.1","0.2");
-		assertThat(__inject__(NodeRepresentation.class).count(null,new FilterDto().addField(Node.FIELD_PARENTS, Arrays.asList("0"))).getEntity()).isEqualTo(3l);
+		assertThat(__inject__(NodeRepresentation.class).count(null,new Filter.Dto().addField(Node.FIELD_PARENTS, Arrays.asList("0"))).getEntity()).isEqualTo(3l);
 		
-		nodes = (Collection<NodeDto>) __inject__(NodeRepresentation.class).getMany(null,Boolean.FALSE, null, null, null,new FilterDto().addField(Node.FIELD_PARENTS, Arrays.asList("0.0"),ValueUsageType.BUSINESS)).getEntity();
+		nodes = (Collection<NodeDto>) __inject__(NodeRepresentation.class).getMany(null,Boolean.FALSE, null, null, null,new Filter.Dto().addField(Node.FIELD_PARENTS, Arrays.asList("0.0"),ValueUsageType.BUSINESS)).getEntity();
 		assertThat(nodes).isNotNull();
 		assertThat(nodes.stream().map(NodeDto::getCode).collect(Collectors.toList())).containsOnly("0.0.0","0.0.1");
-		assertThat(__inject__(NodeRepresentation.class).count(null,new FilterDto().addField(Node.FIELD_PARENTS, Arrays.asList("0.0"))).getEntity()).isEqualTo(2l);
+		assertThat(__inject__(NodeRepresentation.class).count(null,new Filter.Dto().addField(Node.FIELD_PARENTS, Arrays.asList("0.0"))).getEntity()).isEqualTo(2l);
 		
-		nodes = (Collection<NodeDto>) __inject__(NodeRepresentation.class).getMany(null,Boolean.FALSE, null, null, null,new FilterDto().addField(Node.FIELD_PARENTS, Arrays.asList("1"),ValueUsageType.BUSINESS)).getEntity();
+		nodes = (Collection<NodeDto>) __inject__(NodeRepresentation.class).getMany(null,Boolean.FALSE, null, null, null,new Filter.Dto().addField(Node.FIELD_PARENTS, Arrays.asList("1"),ValueUsageType.BUSINESS)).getEntity();
 		assertThat(nodes).isNotNull();
 		assertThat(nodes.stream().map(NodeDto::getCode).collect(Collectors.toList())).containsOnly("1.0","1.1","1.2");
 		
-		nodes = (Collection<NodeDto>) __inject__(NodeRepresentation.class).getMany(null,Boolean.FALSE, null, null, null,new FilterDto().addField(Node.FIELD_PARENTS, Arrays.asList("1.1"),ValueUsageType.BUSINESS)).getEntity();
+		nodes = (Collection<NodeDto>) __inject__(NodeRepresentation.class).getMany(null,Boolean.FALSE, null, null, null,new Filter.Dto().addField(Node.FIELD_PARENTS, Arrays.asList("1.1"),ValueUsageType.BUSINESS)).getEntity();
 		assertThat(nodes).isNotNull();
 		assertThat(nodes.stream().map(NodeDto::getCode).collect(Collectors.toList())).containsOnly("1.1.0","1.1.1");
 	}

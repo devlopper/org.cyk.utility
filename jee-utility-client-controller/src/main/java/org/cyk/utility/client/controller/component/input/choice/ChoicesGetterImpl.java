@@ -13,6 +13,7 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.object.Objects;
+import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
@@ -21,7 +22,6 @@ import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.client.controller.Controller;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
 import org.cyk.utility.server.representation.ResponseHelper;
 import org.cyk.utility.system.layer.SystemLayerController;
 
@@ -66,7 +66,7 @@ public class ChoicesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl
 			Properties properties = new Properties();
 			properties.setRequest(request);
 			properties.setContext(context);
-			FilterDto filter = new FilterDto().setValue(query);
+			Filter.Dto filter = new Filter.Dto().setValue(query);
 			//properties.setFilters(__injectMapHelper__().instanciateKeyAsStringValueAsObject("__global_query__",query));
 			properties.setFilters(filter);
 			properties.setCount(maximumNumberOfChoice);

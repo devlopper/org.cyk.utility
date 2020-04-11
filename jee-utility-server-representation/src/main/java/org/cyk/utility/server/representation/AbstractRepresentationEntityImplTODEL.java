@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
@@ -19,7 +20,6 @@ import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.clazz.ClassNameBuilder;
 import org.cyk.utility.map.MapInstanceIntegerToString;
 import org.cyk.utility.server.business.BusinessEntity;
-import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
 
 public abstract class AbstractRepresentationEntityImplTODEL<PERSISTENCE_ENTITY,BUSINESS extends BusinessEntity<PERSISTENCE_ENTITY>,ENTITY,ENTITY_COLLECTION> extends AbstractRepresentationServiceProviderImpl implements RepresentationEntityTODEL<PERSISTENCE_ENTITY,ENTITY,ENTITY_COLLECTION>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -72,7 +72,7 @@ public abstract class AbstractRepresentationEntityImplTODEL<PERSISTENCE_ENTITY,B
 	}
 	
 	@Override
-	public Response getMany(Boolean isPageable,Long from,Long count,String fields,FilterDto filter) {
+	public Response getMany(Boolean isPageable,Long from,Long count,String fields,Filter.Dto filter) {
 		RepresentationFunctionReader function = __inject__(RepresentationFunctionReader.class);
 		function.setIsCollectionable(Boolean.TRUE);
 		function.setEntityClass(__entityClass__).setPersistenceEntityClass(__persistenceEntityClass__)
@@ -149,7 +149,7 @@ public abstract class AbstractRepresentationEntityImplTODEL<PERSISTENCE_ENTITY,B
 	}
 
 	@Override
-	public Response count(FilterDto filter) {
+	public Response count(Filter.Dto filter) {
 		RepresentationFunctionCounter function = __inject__(RepresentationFunctionCounter.class);
 		function.setPersistenceEntityClass(__persistenceEntityClass__);
 		function.setProperty(Properties.QUERY_FILTERS,filter);

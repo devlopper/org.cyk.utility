@@ -8,7 +8,7 @@ import javax.ws.rs.ext.ParamConverter;
 import javax.ws.rs.ext.ParamConverterProvider;
 import javax.ws.rs.ext.Provider;
 
-import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
+import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 import org.cyk.utility.server.representation.RepresentationEntity;
 
 @Provider
@@ -19,7 +19,7 @@ public class ParameterConverterProvider  implements ParamConverterProvider {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> ParamConverter<T> getConverter(Class<T> rawType, Type genericType, Annotation[] annotations) {
-		if(FilterDto.class.equals(rawType))
+		if(Filter.Dto.class.equals(rawType))
 			return (ParamConverter<T>) FILTER_DTO_CONVERTER;	
 		if(annotations!=null && annotations.length==1 && annotations[0] instanceof QueryParam) {
 			QueryParam queryParam = (QueryParam) annotations[0];

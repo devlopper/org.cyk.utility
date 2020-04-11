@@ -7,6 +7,7 @@ import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.persistence.query.QueryExecutorArguments;
+import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 import org.cyk.utility.__kernel__.throwable.Message;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.value.Value;
@@ -36,6 +37,8 @@ public interface MapperClassGetter {
 				return QueryExecutorArguments.Dto.Mapper.class;
 			if(klass.equals(Value.class) || klass.equals(Value.Dto.class))
 				return Value.Dto.Mapper.class;
+			if(klass.equals(Filter.class) || klass.equals(Filter.Dto.class))
+				return Filter.Dto.Mapper.class;
 			if(klass.equals(org.cyk.utility.__kernel__.persistence.query.filter.Field.class) || klass.equals(org.cyk.utility.__kernel__.persistence.query.filter.Field.Dto.class))
 				return org.cyk.utility.__kernel__.persistence.query.filter.Field.Dto.Mapper.class;
 			Class<?> result = org.cyk.utility.__kernel__.klass.ClassHelper.getByName(MapperClassNameGetter.getInstance().get(klass));

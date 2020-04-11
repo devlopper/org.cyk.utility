@@ -3,10 +3,10 @@ package org.cyk.utility.client.controller;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
-import org.cyk.utility.server.representation.RepresentationEntity;
 import org.cyk.utility.__kernel__.system.action.SystemActionRead;
+import org.cyk.utility.server.representation.RepresentationEntity;
 
 public class ControllerFunctionCounterImpl extends AbstractControllerFunctionImpl implements ControllerFunctionCounter , Serializable {
 	private static final long serialVersionUID = 1L;
@@ -21,7 +21,7 @@ public class ControllerFunctionCounterImpl extends AbstractControllerFunctionImp
 	protected void __executeRepresentation__() {
 		Properties properties = getProperties();
 		String queryIdentifier = (String) Properties.getFromPath(properties,Properties.QUERY_IDENTIFIER);
-		FilterDto filters = (FilterDto) Properties.getFromPath(properties,Properties.FILTERS);
+		Filter.Dto filters = (Filter.Dto) Properties.getFromPath(properties,Properties.FILTERS);
 		if(__representation__ instanceof RepresentationEntity<?>)
 			__response__ = ((RepresentationEntity<?>)__representation__).count(queryIdentifier,filters);	
 		if(__response__!=null)

@@ -18,7 +18,7 @@ import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.clazz.ClassNameBuilder;
 import org.cyk.utility.map.MapInstanceIntegerToString;
-import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
+import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 
 public abstract class AbstractRepresentationEntityImpl<ENTITY> extends AbstractRepresentationServiceProviderImpl implements RepresentationEntity<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -67,7 +67,7 @@ public abstract class AbstractRepresentationEntityImpl<ENTITY> extends AbstractR
 	}
 	
 	@Override
-	public Response getMany(String queryIdentifier,Boolean isPageable,Long from,Long count,String fields,FilterDto filter) {
+	public Response getMany(String queryIdentifier,Boolean isPageable,Long from,Long count,String fields,Filter.Dto filter) {
 		RepresentationFunctionReader function = __inject__(RepresentationFunctionReader.class);
 		function.setIsCollectionable(Boolean.TRUE);
 		function.setEntityClass(__entityClass__).setPersistenceEntityClass(__persistenceEntityClass__)
@@ -145,7 +145,7 @@ public abstract class AbstractRepresentationEntityImpl<ENTITY> extends AbstractR
 	}
 
 	@Override
-	public Response count(String queryIdentifier,FilterDto filter) {
+	public Response count(String queryIdentifier,Filter.Dto filter) {
 		RepresentationFunctionCounter function = __inject__(RepresentationFunctionCounter.class);
 		function.setPersistenceEntityClass(__persistenceEntityClass__);
 		function.setProperty(Properties.QUERY_IDENTIFIER,queryIdentifier);

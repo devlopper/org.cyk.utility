@@ -5,9 +5,8 @@ import java.io.Serializable;
 import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.mapping.MappingHelper;
-import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
-import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
+import org.cyk.utility.__kernel__.properties.Properties;
 
 @Dependent
 public class RepresentationFunctionCounterImpl extends AbstractRepresentationFunctionCounterImpl implements Serializable {
@@ -19,7 +18,7 @@ public class RepresentationFunctionCounterImpl extends AbstractRepresentationFun
 	protected void __executeBusiness__() {
 		Properties properties = new Properties();
 		properties.setQueryIdentifier(getProperty(Properties.QUERY_IDENTIFIER));
-		FilterDto filterDto = (FilterDto) getProperty(Properties.QUERY_FILTERS);
+		Filter.Dto filterDto = (Filter.Dto) getProperty(Properties.QUERY_FILTERS);
 		if(filterDto != null) {
 			Filter filter = MappingHelper.getDestination(filterDto, Filter.class).normalize(__persistenceEntityClass__);
 			properties.setQueryFilters(filter);

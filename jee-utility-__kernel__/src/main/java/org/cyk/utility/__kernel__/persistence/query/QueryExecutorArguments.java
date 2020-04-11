@@ -17,7 +17,6 @@ import org.cyk.utility.__kernel__.mapping.MappingHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.persistence.EntityManagerGetter;
 import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
-import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
 import org.cyk.utility.__kernel__.string.StringHelper;
 
 import lombok.Getter;
@@ -185,15 +184,15 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 	@XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor @ToString(callSuper = false,doNotUseGetters = true)
 	public static class Dto extends AbstractObject implements Serializable {
 		private String queryIdentifier;
-		private FilterDto filter;
+		private Filter.Dto filter;
 		private Integer firstTupleIndex;
 		private Integer numberOfTuples;
 		private Boolean isResultCachable;
 		private Boolean collectionable;
 		
-		public FilterDto getFilter(Boolean injectIfNull) {
+		public Filter.Dto getFilter(Boolean injectIfNull) {
 			if(filter == null && Boolean.TRUE.equals(injectIfNull))
-				filter = new FilterDto();
+				filter = new Filter.Dto();
 			return filter;
 		}
 		
@@ -216,13 +215,13 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 					destination.setQuery(new Query().setIdentifier(source.getQueryIdentifier()));
 			}
 			
-			public FilterDto getFilterDto(Filter filter) {
+			public Filter.Dto getFilterDto(Filter filter) {
 				if(filter == null)
 					return null;
-				return MappingHelper.getSource(filter, FilterDto.class);
+				return MappingHelper.getSource(filter, Filter.Dto.class);
 			}
 			
-			public Filter getFilter(FilterDto filter) {
+			public Filter getFilter(Filter.Dto filter) {
 				if(filter == null)
 					return null;
 				return MappingHelper.getDestination(filter, Filter.class);

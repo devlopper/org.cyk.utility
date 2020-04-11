@@ -10,12 +10,12 @@ import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringImpl;
 import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl;
 import org.cyk.utility.__kernel__.persistence.query.QueryIdentifierBuilder;
+import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.server.persistence.PersistenceEntity;
-import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
 import org.cyk.utility.server.representation.RepresentationEntity;
 
 public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractControllerServiceProviderImpl<ENTITY> implements ControllerEntity<ENTITY>,Serializable {
@@ -165,7 +165,7 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 		String queryIdentifier = StringHelper.isBlank(string) ? "read" : PersistenceEntity.FIELD_NAME_READ_WHERE_CODE_OR_NAME_CONTAINS;
 		Collection<ENTITY> entities = read(new Properties().setQueryIdentifier(QueryIdentifierBuilder.getInstance()
 				.build(__entityClass__,queryIdentifier)).setIsPageable(Boolean.TRUE)
-						.setFilters(new FilterDto().addField(AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringImpl.FIELD_CODE, string)
+						.setFilters(new Filter.Dto().addField(AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringImpl.FIELD_CODE, string)
 								.addField(AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl.FIELD_NAME, string)));
 		return entities;
 	}

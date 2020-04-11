@@ -7,14 +7,14 @@ import java.util.Collection;
 import javax.ws.rs.core.Response;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.mapping.MappingHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
+import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.__kernel__.system.action.SystemActionRead;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.__kernel__.mapping.MappingHelper;
-import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
 import org.cyk.utility.server.representation.RepresentationEntity;
 import org.cyk.utility.type.TypeHelper;
 
@@ -43,7 +43,7 @@ public class ControllerFunctionReaderImpl extends AbstractControllerFunctionImpl
 					,Boolean.TRUE.equals(isPageable) ? FROM : null);
 			Long count = ValueHelper.defaultToIfNull(NumberHelper.getLong(Properties.getFromPath(properties,Properties.COUNT))
 					,Boolean.TRUE.equals(isPageable) ? COUNT : null);
-			FilterDto filters = (FilterDto) Properties.getFromPath(properties,Properties.FILTERS);
+			Filter.Dto filters = (Filter.Dto) Properties.getFromPath(properties,Properties.FILTERS);
 			if(__representation__ instanceof RepresentationEntity<?>)
 				__response__ = ((RepresentationEntity<Object>)__representation__).getMany(queryIdentifier,isPageable,from,count,fields,filters);	
 		}else {

@@ -15,7 +15,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
+import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -56,7 +56,7 @@ public interface RepresentationEntity<ENTITY> extends RepresentationServiceProvi
 	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
 	@ApiOperation(value = TAG_READ+" "+TAG_MANY,tags = {TAG_READ,TAG_MANY})
 	Response getMany(@QueryParam(PARAMETER_QUERY_IDENTIFIER) String queryIdentifier,@QueryParam(PARAMETER_IS_PAGEABLE) Boolean isPageable,@QueryParam(PARAMETER_FROM) Long from,@QueryParam(PARAMETER_COUNT) Long count,@QueryParam(PARAMETER_FIELDS) String fields
-			,@QueryParam(PARAMETER_FILTER) FilterDto filter);
+			,@QueryParam(PARAMETER_FILTER) Filter.Dto filter);
 	
 	/* Update */
 	
@@ -111,7 +111,7 @@ public interface RepresentationEntity<ENTITY> extends RepresentationServiceProvi
 	@GET
 	@Path(PATH_GET_COUNT)
 	@ApiOperation(value = TAG_COUNT,tags = {TAG_COUNT})
-	Response count(@QueryParam(PARAMETER_QUERY_IDENTIFIER) String queryIdentifier,@QueryParam(PARAMETER_FILTER) FilterDto filter);
+	Response count(@QueryParam(PARAMETER_QUERY_IDENTIFIER) String queryIdentifier,@QueryParam(PARAMETER_FILTER) Filter.Dto filter);
 	
 	/* Import */
 

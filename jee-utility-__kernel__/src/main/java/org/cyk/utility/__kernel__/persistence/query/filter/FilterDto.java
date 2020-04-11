@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor
+@XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor @Deprecated
 public class FilterDto extends AbstractRepresentationObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 

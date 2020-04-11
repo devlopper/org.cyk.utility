@@ -24,7 +24,6 @@ import org.cyk.utility.__kernel__.persistence.query.Query;
 import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
 import org.cyk.utility.__kernel__.persistence.query.filter.Field;
 import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
-import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
@@ -1250,7 +1249,7 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 	
 	@Test
 	public void map_filter_dto_to_field_string() throws Exception{
-		FilterDto filterDto = new FilterDto().useKlass(Class.class);
+		Filter.Dto filterDto = new Filter.Dto().useKlass(Class.class);
 		filterDto.addField("f01", "hello", org.cyk.utility.__kernel__.field.FieldDto.Type.STRING, Value.Dto.Container.NONE, Value.Dto.Type.STRING, ValueUsageType.BUSINESS, ArithmeticOperator.LIKE);
 		Filter filter = MappingHelper.getDestination(filterDto, Filter.class);
 		assertThat(filter).isNotNull();
@@ -1271,10 +1270,10 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 	
 	@Test
 	public void stringfy_filterDto() throws Exception{
-		FilterDto filterDto = new FilterDto().useKlass(Class.class);
+		Filter.Dto filterDto = new Filter.Dto().useKlass(Class.class);
 		filterDto.addField("f01", "hello", org.cyk.utility.__kernel__.field.FieldDto.Type.STRING, Value.Dto.Container.NONE, Value.Dto.Type.STRING, ValueUsageType.BUSINESS, ArithmeticOperator.LIKE);
 		String string = JsonbBuilder.create().toJson(filterDto);
-		filterDto = JsonbBuilder.create().fromJson(string, FilterDto.class);
+		filterDto = JsonbBuilder.create().fromJson(string, Filter.Dto.class);
 		Filter filter = MappingHelper.getDestination(filterDto, Filter.class);
 		assertThat(filter).isNotNull();
 		assertThat(filter.getFields()).isNotNull();
@@ -1294,11 +1293,11 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 	
 	@Test
 	public void stringfy_filterDto_veryLight() throws Exception{
-		FilterDto filterDto = new FilterDto().setValue("hello");
+		Filter.Dto filterDto = new Filter.Dto().setValue("hello");
 		//ObjectMapper objectMapper = new ObjectMapper();
 		//objectMapper.setSerializationInclusion(Include.NON_EMPTY);
 		String string = JsonbBuilder.create().toJson(filterDto);
-		filterDto = JsonbBuilder.create().fromJson(string, FilterDto.class);
+		filterDto = JsonbBuilder.create().fromJson(string, Filter.Dto.class);
 		Filter filter = MappingHelper.getDestination(filterDto, Filter.class);
 		assertThat(filter).isNotNull();
 		assertThat(filter.getKlass()).isNull();

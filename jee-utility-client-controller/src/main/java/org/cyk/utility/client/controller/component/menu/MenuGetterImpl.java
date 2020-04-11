@@ -1,15 +1,9 @@
 package org.cyk.utility.client.controller.component.menu;
 
 import java.io.Serializable;
-import java.util.Map;
 
-import org.cyk.utility.__kernel__.klass.ClassHelper;
-import org.cyk.utility.__kernel__.session.SessionHelper;
-import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
-import org.cyk.utility.client.controller.session.SessionAttributeEnumeration;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.scope.Scope;
-import org.cyk.utility.scope.ScopeSession;
 
 public class MenuGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Menu> implements MenuGetter,Serializable {
 	private static final long serialVersionUID = 1L;

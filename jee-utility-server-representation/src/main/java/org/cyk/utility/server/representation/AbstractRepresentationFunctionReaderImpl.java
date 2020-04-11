@@ -14,13 +14,12 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.__kernel__.mapping.MappingHelper;
+import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.__kernel__.system.action.SystemActionRead;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
-import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
-import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
 
 public abstract class AbstractRepresentationFunctionReaderImpl extends AbstractRepresentationFunctionImpl implements RepresentationFunctionReader, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -56,7 +55,7 @@ public abstract class AbstractRepresentationFunctionReaderImpl extends AbstractR
 		}
 		if(Boolean.TRUE.equals(__isCollectionable__)) {
 			if(Boolean.TRUE.equals(CollectionHelper.isEmpty(__entitiesSystemIdentifiers__)) && Boolean.TRUE.equals(CollectionHelper.isEmpty(__entitiesBusinessIdentifiers__))) {
-				FilterDto filterDto = (FilterDto) getProperty(Properties.QUERY_FILTERS);
+				Filter.Dto filterDto = (Filter.Dto) getProperty(Properties.QUERY_FILTERS);
 				if(filterDto != null) {
 					Filter filter = MappingHelper.getDestination(filterDto, Filter.class).normalize(__persistenceEntityClass__);
 					properties.setQueryFilters(filter);
