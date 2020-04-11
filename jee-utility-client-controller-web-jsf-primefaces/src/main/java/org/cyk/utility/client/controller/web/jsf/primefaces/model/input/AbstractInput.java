@@ -104,6 +104,11 @@ public abstract class AbstractInput<VALUE> extends AbstractInputOutput<VALUE> im
 				}				
 				input.outputLabel = OutputLabel.build(OutputLabel.FIELD_VALUE,outputLabelValue,OutputLabel.FIELD_FOR,input.getIdentifier());
 			}
+			
+			if(input.placeholder == null) {
+				if(input.outputLabel != null)
+					input.placeholder = input.outputLabel.getValue();
+			}
 		}
 		
 		protected String __getDefaultOutputLabelValue__(INPUT input) {
