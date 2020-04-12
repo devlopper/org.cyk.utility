@@ -69,7 +69,7 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT,MODEL extends Compo
 	}
 	
 	protected static ValueExpression __buildValueExpression__(String expression,Class<?> returnType) {
-		return __injectJavaServerFacesHelper__().buildValueExpression(expression, returnType);
+		return JavaServerFacesHelper.buildValueExpression(expression, returnType);
 	}
 	
 	protected static ValueExpression __buildValueExpressionString__(String expression) {

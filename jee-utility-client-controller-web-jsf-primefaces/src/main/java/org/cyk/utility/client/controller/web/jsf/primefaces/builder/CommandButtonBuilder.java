@@ -2,28 +2,7 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.builder;
 
 import java.io.Serializable;
 
-import javax.el.ValueExpression;
-import javax.faces.context.FacesContext;
-
-import org.cyk.utility.__kernel__.collection.CollectionHelper;
-import org.cyk.utility.__kernel__.object.Objects;
-import org.cyk.utility.__kernel__.string.StringHelper;
-import org.cyk.utility.__kernel__.system.action.SystemAction;
-import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
-import org.cyk.utility.__kernel__.system.action.SystemActionDelete;
-import org.cyk.utility.__kernel__.system.action.SystemActionProcess;
-import org.cyk.utility.__kernel__.system.action.SystemActionRead;
-import org.cyk.utility.__kernel__.system.action.SystemActionSelect;
-import org.cyk.utility.__kernel__.system.action.SystemActionUpdate;
-import org.cyk.utility.client.controller.component.ComponentRole;
-import org.cyk.utility.client.controller.component.VisibleComponent;
 import org.cyk.utility.client.controller.component.command.Commandable;
-import org.cyk.utility.client.controller.event.Event;
-import org.cyk.utility.client.controller.event.Events;
-import org.cyk.utility.client.controller.web.ComponentHelper;
-import org.cyk.utility.client.controller.web.jsf.JavaServerFacesHelper;
-import org.primefaces.behavior.ajax.AjaxBehavior;
-import org.primefaces.behavior.ajax.AjaxBehaviorListenerImpl;
 import org.primefaces.component.commandbutton.CommandButton;
 
 @Deprecated

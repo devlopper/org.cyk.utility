@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.controller.EntityReader;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.client.controller.web.jsf.converter.ObjectConverter;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -64,16 +66,20 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 			@SuppressWarnings("unchecked")
 			@Override
 			public Collection<Object> getChoices(AbstractInputChoice<VALUE> input) {
+				Class<?> entityClass = null;
 				if(input.choices == null) {
-					Class<?> klass;
 					if(ClassHelper.isInstanceOf(input.field.getType(),Collection.class)) {
-						klass = ClassHelper.getParameterAt(input.field.getType(), 0);
+						entityClass = ClassHelper.getParameterAt(input.field.getType(), 0);
 					}else {
-						klass = input.field.getType();
+						entityClass = input.field.getType();
 					}
-					input.choices = (Collection<Object>) EntityReader.getInstance().readMany(klass);
+					input.choices = (Collection<Object>) EntityReader.getInstance().readMany(entityClass);
 					if(input.choices == null)
 						input.choices = new ArrayList<>();
+				}
+				if(input.converter == null) {
+					if(!ClassHelper.isBelongsToJavaPackages(entityClass))
+						input.converter = DependencyInjection.inject(ObjectConverter.class);
 				}
 				return input.choices;
 			}

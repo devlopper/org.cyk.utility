@@ -17,7 +17,7 @@ import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.persistence.query.QueryExecutorArguments;
-import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
+import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.rest.ResponseHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
@@ -49,7 +49,7 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 	private String __sortField__,__entityFieldsNamesAsString__;
 	private SortOrder __sortOrder__;
 	private Map<String, Object> __filters__;
-	private FilterDto __filter__;
+	private Filter.Dto __filter__;
 	private Properties __readProperties__;
 	private Arguments<ENTITY> __readerArguments__;
 	private Response __response__;
@@ -122,7 +122,7 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 	/**/
 	
 	public static interface Listener<T> {
-		FilterDto instantiateFilter(LazyDataModel<T> lazyDataModel);
+		Filter.Dto instantiateFilter(LazyDataModel<T> lazyDataModel);
 		Arguments<T> instantiateArguments(LazyDataModel<T> lazyDataModel);
 		Properties instantiateReadProperties(LazyDataModel<T> lazyDataModel);
 		List<T> read(LazyDataModel<T> lazyDataModel);
@@ -132,10 +132,10 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 		
 		public static abstract class AbstractImpl<T> extends AbstractObject implements Listener<T>,Serializable{
 			@Override
-			public FilterDto instantiateFilter(LazyDataModel<T> lazyDataModel) {
+			public Filter.Dto instantiateFilter(LazyDataModel<T> lazyDataModel) {
 				if(MapHelper.isEmpty(lazyDataModel.__filters__))
 					return null;
-				FilterDto filter = new FilterDto();
+				Filter.Dto filter = new Filter.Dto();
 				lazyDataModel.__filters__.forEach((key,value) -> {
 					filter.addField(key, value);
 				});

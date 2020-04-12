@@ -42,6 +42,11 @@ public class Message extends AbstractObject implements Serializable {
 			return Message.class;
 		}
 		
+		@Override
+		protected String __getTemplate__(Message object, Map<Object, Object> arguments) {
+			return "/message/default.xhtml";
+		}
+		
 		public static final String FIELD_INPUT = "input";
 	}
 	

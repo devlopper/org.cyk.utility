@@ -10,7 +10,7 @@
 	
 	<ui:decorate template="/input/default.xhtml">
 		<ui:define name="message">
-			<ui:decorate template="#{inputText == null or inputText.message == null ? '/__dummy__.xhtml' : '/message/default.xhtml'}">
+			<ui:decorate template="#{primefacesHelper.getModelTemplate(inputText.message)}">
 				<ui:param name="message" value="#{inputText.message}"/>
 			</ui:decorate>
 		</ui:define>		

@@ -76,7 +76,9 @@ public class OrganigramNodeBuilderImpl extends AbstractComponentBuilderImpl<Orga
 
 	@Override
 	public HierarchyNode getHierarchyNode(Boolean injectIfNull) {
-		return (HierarchyNode) __getInjectIfNull__(FIELD_HIERARCHY_NODE, injectIfNull);
+		if(hierarchyNode == null && Boolean.TRUE.equals(injectIfNull))
+			return hierarchyNode;
+		return hierarchyNode;
 	}
 
 	@Override
@@ -84,6 +86,4 @@ public class OrganigramNodeBuilderImpl extends AbstractComponentBuilderImpl<Orga
 		this.hierarchyNode = hierarchyNode;
 		return this;
 	}
-	
-	private static final String FIELD_HIERARCHY_NODE = "hierarchyNode";
 }

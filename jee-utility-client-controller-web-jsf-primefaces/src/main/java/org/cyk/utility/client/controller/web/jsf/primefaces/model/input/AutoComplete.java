@@ -19,7 +19,7 @@ import org.cyk.utility.__kernel__.object.ReadListener;
 import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringImpl;
 import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl;
 import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
-import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
+import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.runnable.Runner;
 import org.cyk.utility.__kernel__.string.Case;
@@ -70,7 +70,7 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 				arguments.addRunnables(new Runnable() {				
 					@Override
 					public void run() {
-						((AutoComplete.Listener)listener).listenComplete(AutoComplete.this,arguments,new FilterDto(),queryString);
+						((AutoComplete.Listener)listener).listenComplete(AutoComplete.this,arguments,new Filter.Dto(),queryString);
 					}
 				});				
 			}else if(controllerEntity != null) {
@@ -80,7 +80,7 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 					arguments.addRunnables(new Runnable() {				
 						@Override
 						public void run() {
-							__complete__(arguments, controllerEntity, readQueryIdentifier, new FilterDto(), queryString);
+							__complete__(arguments, controllerEntity, readQueryIdentifier, new Filter.Dto(), queryString);
 						}
 					});
 				}				
@@ -118,7 +118,7 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 			return this;
 		setListener(new AutoComplete.Listener.AbstractImpl() {
 			@Override
-			public void listenComplete(AutoComplete autoComplete, Runner.Arguments arguments, FilterDto filter,String queryString) {
+			public void listenComplete(AutoComplete autoComplete, Runner.Arguments arguments, Filter.Dto filter,String queryString) {
 				if(parent != null && parent.getValue() != null) {
 					filter.addField(parentFieldName, FieldHelper.readBusinessIdentifier(parent.getValue()));
 					//System.out.println("AutoComplete.listenComplete(...).new AbstractImpl() {...}.listenComplete()");
@@ -160,7 +160,7 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 	
 	public static interface Listener {
 		
-		default void listenComplete(AutoComplete autoComplete,Runner.Arguments arguments,FilterDto filter,String queryString) {
+		default void listenComplete(AutoComplete autoComplete,Runner.Arguments arguments,Filter.Dto filter,String queryString) {
 			if(autoComplete == null || autoComplete.controllerEntity == null) {
 				MessageRenderer.getInstance().render("controller need to be defined to query data by "+queryString,Severity.WARNING, RenderType.GROWL);
 				return;
@@ -283,7 +283,7 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 	
 	/**/
 	
-	private static void __complete__(Runner.Arguments arguments,ControllerEntity<?> controllerEntity,String readQueryIdentifier,FilterDto filter,String queryString) {
+	private static void __complete__(Runner.Arguments arguments,ControllerEntity<?> controllerEntity,String readQueryIdentifier,Filter.Dto filter,String queryString) {
 		if(StringHelper.isBlank(queryString))
 			queryString = null;
 		if(queryString != null)

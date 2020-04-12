@@ -17,7 +17,7 @@ import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.client.controller.Controller;
 import org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString;
 import org.cyk.utility.client.controller.web.jsf.primefaces.PrimefacesHelper;
-import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
+import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 import org.primefaces.event.NodeExpandEvent;
 
 import lombok.Getter;
@@ -89,7 +89,7 @@ public class Tree extends AbstractObject implements Serializable {
 		super.__initialise__();
 		root = new TreeNode();
 		if(nodesNotHavingParent == null)
-			nodesNotHavingParent = __inject__(Controller.class).read(nodeClass,new Properties().setFilters(new FilterDto().addField(DataIdentifiedByString.PROPERTY_PARENTS, null))
+			nodesNotHavingParent = __inject__(Controller.class).read(nodeClass,new Properties().setFilters(new Filter.Dto().addField(DataIdentifiedByString.PROPERTY_PARENTS, null))
 				.setIsPageable(Boolean.FALSE).setFields(fields));
 		
 		if(CollectionHelper.isNotEmpty(nodesNotHavingParent))
@@ -236,7 +236,7 @@ public class Tree extends AbstractObject implements Serializable {
 	public void expand(TreeNode treeNode) {
 		treeNode.setExpanded(Boolean.TRUE);
 		Object node = treeNode.getData();
-		Collection<?> children = __inject__(Controller.class).read(nodeClass,new Properties().setFilters(new FilterDto().addField("parents"
+		Collection<?> children = __inject__(Controller.class).read(nodeClass,new Properties().setFilters(new Filter.Dto().addField("parents"
 				, Arrays.asList( ((org.cyk.utility.client.controller.data.DataIdentifiedByString)node).getIdentifier()),ValueUsageType.SYSTEM)).setIsPageable(Boolean.FALSE).setFields(fields));
 		if(CollectionHelper.isNotEmpty(children))
 			for(Object index : children)

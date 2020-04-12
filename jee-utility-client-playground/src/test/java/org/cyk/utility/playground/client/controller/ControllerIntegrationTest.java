@@ -19,7 +19,7 @@ import org.cyk.utility.playground.client.controller.api.NodeHierarchyController;
 import org.cyk.utility.playground.client.controller.entities.MyEntity;
 import org.cyk.utility.playground.client.controller.entities.Node;
 import org.cyk.utility.playground.client.controller.impl.ApplicationScopeLifeCycleListener;
-import org.cyk.utility.__kernel__.persistence.query.filter.FilterDto;
+import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 import org.cyk.utility.server.representation.ResponseHelper;
 import org.junit.Test;
 
@@ -113,7 +113,7 @@ public class ControllerIntegrationTest extends AbstractControllerArquillianInteg
 			collection.add(new MyEntity().setIdentifier(index.toString()).setCode(index.toString()).setName(__getRandomName__()));
 		__inject__(MyEntityController.class).createMany(collection);
 		
-		Properties properties = new Properties().setFilters(new FilterDto().addField("identifier", Arrays.asList("0"), ValueUsageType.SYSTEM));
+		Properties properties = new Properties().setFilters(new Filter.Dto().addField("identifier", Arrays.asList("0"), ValueUsageType.SYSTEM));
 		collection = __inject__(MyEntityController.class).read(properties);
 		Response response = (Response) properties.getResponse();
 		assertThat(response).isNotNull();
@@ -123,7 +123,7 @@ public class ControllerIntegrationTest extends AbstractControllerArquillianInteg
 		assertThat(collection.stream().map(MyEntity::getIdentifier).collect(Collectors.toList())).containsOnly("0");
 		assertThat(ResponseHelper.getHeaderXTotalCount(response)).isEqualTo(1l);
 		
-		properties = new Properties().setFilters(new FilterDto().addField("identifier", Arrays.asList("0","10","21"), ValueUsageType.SYSTEM));
+		properties = new Properties().setFilters(new Filter.Dto().addField("identifier", Arrays.asList("0","10","21"), ValueUsageType.SYSTEM));
 		collection = __inject__(MyEntityController.class).read(properties);
 		response = (Response) properties.getResponse();
 		assertThat(response).isNotNull();
@@ -142,10 +142,10 @@ public class ControllerIntegrationTest extends AbstractControllerArquillianInteg
 			collection.add(new MyEntity().setIdentifier(index.toString()).setCode(index.toString()).setName(__getRandomName__()));
 		__inject__(MyEntityController.class).createMany(collection);
 		
-		Properties properties = new Properties().setFilters(new FilterDto().addField("identifier", Arrays.asList("0"), ValueUsageType.SYSTEM));
+		Properties properties = new Properties().setFilters(new Filter.Dto().addField("identifier", Arrays.asList("0"), ValueUsageType.SYSTEM));
 		assertThat( __inject__(MyEntityController.class).count(properties)).isEqualTo(1l);
 		
-		properties = new Properties().setFilters(new FilterDto().addField("identifier", Arrays.asList("0","10","21"), ValueUsageType.SYSTEM));
+		properties = new Properties().setFilters(new Filter.Dto().addField("identifier", Arrays.asList("0","10","21"), ValueUsageType.SYSTEM));
 		assertThat( __inject__(MyEntityController.class).count(properties)).isEqualTo(3l);
 	}
 	
@@ -210,7 +210,7 @@ public class ControllerIntegrationTest extends AbstractControllerArquillianInteg
 		
 		Collection<Node> nodes;
 		try {
-			nodes = __inject__(NodeController.class).read(new Properties().setFilters(new FilterDto().addField(Node.PROPERTY_PARENTS, null)));
+			nodes = __inject__(NodeController.class).read(new Properties().setFilters(new Filter.Dto().addField(Node.PROPERTY_PARENTS, null)));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -218,23 +218,23 @@ public class ControllerIntegrationTest extends AbstractControllerArquillianInteg
 		}
 		assertThat(nodes).isNotNull();
 		assertThat(nodes.stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("0","1","2","3");
-		assertThat(__inject__(NodeController.class).count(new Properties().setFilters(new FilterDto().addField(Node.PROPERTY_PARENTS, null)))).isEqualTo(4l);
+		assertThat(__inject__(NodeController.class).count(new Properties().setFilters(new Filter.Dto().addField(Node.PROPERTY_PARENTS, null)))).isEqualTo(4l);
 		
-		nodes = __inject__(NodeController.class).read(new Properties().setFilters(new FilterDto().addField(Node.PROPERTY_PARENTS, Arrays.asList("0"),ValueUsageType.BUSINESS)));
+		nodes = __inject__(NodeController.class).read(new Properties().setFilters(new Filter.Dto().addField(Node.PROPERTY_PARENTS, Arrays.asList("0"),ValueUsageType.BUSINESS)));
 		assertThat(nodes).isNotNull();
 		assertThat(nodes.stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("0.0","0.1","0.2");
-		assertThat(__inject__(NodeController.class).count(new Properties().setFilters(new FilterDto().addField(Node.PROPERTY_PARENTS, Arrays.asList("0"))))).isEqualTo(3l);
+		assertThat(__inject__(NodeController.class).count(new Properties().setFilters(new Filter.Dto().addField(Node.PROPERTY_PARENTS, Arrays.asList("0"))))).isEqualTo(3l);
 		
-		nodes = __inject__(NodeController.class).read(new Properties().setFilters(new FilterDto().addField(Node.PROPERTY_PARENTS, Arrays.asList("0.0"),ValueUsageType.BUSINESS)));
+		nodes = __inject__(NodeController.class).read(new Properties().setFilters(new Filter.Dto().addField(Node.PROPERTY_PARENTS, Arrays.asList("0.0"),ValueUsageType.BUSINESS)));
 		assertThat(nodes).isNotNull();
 		assertThat(nodes.stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("0.0.0","0.0.1");
-		assertThat(__inject__(NodeController.class).count(new Properties().setFilters(new FilterDto().addField(Node.PROPERTY_PARENTS, Arrays.asList("0.0"))))).isEqualTo(2l);
+		assertThat(__inject__(NodeController.class).count(new Properties().setFilters(new Filter.Dto().addField(Node.PROPERTY_PARENTS, Arrays.asList("0.0"))))).isEqualTo(2l);
 		
-		nodes = __inject__(NodeController.class).read(new Properties().setFilters(new FilterDto().addField(Node.PROPERTY_PARENTS, Arrays.asList("1"),ValueUsageType.BUSINESS)));
+		nodes = __inject__(NodeController.class).read(new Properties().setFilters(new Filter.Dto().addField(Node.PROPERTY_PARENTS, Arrays.asList("1"),ValueUsageType.BUSINESS)));
 		assertThat(nodes).isNotNull();
 		assertThat(nodes.stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("1.0","1.1","1.2");
 		
-		nodes = __inject__(NodeController.class).read(new Properties().setFilters(new FilterDto().addField(Node.PROPERTY_PARENTS, Arrays.asList("1.1"),ValueUsageType.BUSINESS)));
+		nodes = __inject__(NodeController.class).read(new Properties().setFilters(new Filter.Dto().addField(Node.PROPERTY_PARENTS, Arrays.asList("1.1"),ValueUsageType.BUSINESS)));
 		assertThat(nodes).isNotNull();
 		assertThat(nodes.stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("1.1.0","1.1.1");
 		

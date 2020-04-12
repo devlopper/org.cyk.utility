@@ -8,28 +8,36 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
-	<p:selectOneRadio
-		id="#{selectOneRadio.identifier}"
-		value="#{selectOneRadio.value}"
-		columns="#{selectOneRadio.columns}"
-		converter="#{selectOneRadio.converter}"
-		converterMessage="#{selectOneRadio.converterMessage}"
-		disabled="#{selectOneRadio.disabled}"
-		layout="#{selectOneRadio.layout}"
-		required="#{selectOneRadio.required}"
-		requiredMessage="#{selectOneRadio.requiredMessage}"
-		rendered="#{selectOneRadio.rendered}"
-		
-		unselectable="#{selectOneRadio.unselectable}"
-			
-		widgetVar="#{selectOneRadio.widgetVar}"
-		
-		styleClass="#{selectOneRadio.styleClass}"
-		style="#{selectOneRadio.style}"
-	>
-		<ui:include src="../__selectItems__.xhtml">
-			<ui:param name="selectItems" value="#{selectOneRadio}"/>
-		</ui:include>			
-	</p:selectOneRadio>
-			
+	<ui:decorate template="/input/default.xhtml">
+		<ui:define name="message">
+			<ui:decorate template="#{primefacesHelper.getModelTemplate(selectOneRadio.message)}">
+				<ui:param name="message" value="#{selectOneRadio.message}"/>
+			</ui:decorate>
+		</ui:define>		
+		<ui:define name="input">
+			<p:selectOneRadio
+				id="#{selectOneRadio.identifier}"
+				value="#{selectOneRadio.value}"
+				columns="#{selectOneRadio.columns}"
+				converter="#{selectOneRadio.converter}"
+				converterMessage="#{selectOneRadio.converterMessage}"
+				disabled="#{selectOneRadio.disabled}"
+				layout="#{selectOneRadio.layout}"
+				required="#{selectOneRadio.required}"
+				requiredMessage="#{selectOneRadio.requiredMessage}"
+				rendered="#{selectOneRadio.rendered}"
+				
+				unselectable="#{selectOneRadio.unselectable}"
+					
+				widgetVar="#{selectOneRadio.widgetVar}"
+				
+				styleClass="#{selectOneRadio.styleClass}"
+				style="#{selectOneRadio.style}"
+			>
+				<ui:include src="../__selectItems__.xhtml">
+					<ui:param name="selectItems" value="#{selectOneRadio}"/>
+				</ui:include>			
+			</p:selectOneRadio>
+		</ui:define>
+	</ui:decorate>
 </ui:composition>
