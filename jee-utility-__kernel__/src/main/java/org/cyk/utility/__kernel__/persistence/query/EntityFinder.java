@@ -24,7 +24,7 @@ public interface EntityFinder {
 			throw new IllegalArgumentException("system identifier is required");
 		if(CollectionHelper.getSize(arguments.getSystemIdentifiers()) > 1)
 			throw new IllegalArgumentException("only one system identifier is required");
-		arguments.prepare();
+		arguments.prepare(klass);
 		Map<String,Object> properties = arguments.getProperties() == null ? null : arguments.getProperties().deriveMap(klass, arguments.get__entityManager__());
 		T object = arguments.get__entityManager__().find(klass, CollectionHelper.getFirst(arguments.getSystemIdentifiers()),properties);
 		if(object == null)

@@ -1,8 +1,10 @@
 package org.cyk.utility.__kernel__.persistence.query;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+import java.util.logging.Level;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Tuple;
@@ -11,13 +13,13 @@ import javax.persistence.TypedQuery;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.persistence.EntityManagerGetter;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.value.Value;
-import org.jboss.weld.exceptions.IllegalArgumentException;
 
 public interface QueryExecutor {
 
@@ -45,11 +47,13 @@ public interface QueryExecutor {
 	/**/
 	
 	public static abstract class AbstractImpl extends AbstractObject implements QueryExecutor,Serializable {
-
+		public static Boolean LOGGABLE = Boolean.TRUE;
+		public static Level LOG_LEVEL = Level.FINEST;
+				
 		@Override
 		public <T> Collection<T> executeReadMany(Class<T> resultClass, QueryExecutorArguments arguments) {
 			validatePreConditions(resultClass, arguments);
-			arguments.prepare();			
+			arguments.prepare(resultClass);
 			TypedQuery<?> typedQuery = __getTypedQuery__(arguments.get__resultClass__(), arguments.getQuery(),arguments.get__parameters__(),arguments.getFirstTupleIndex()
 					,arguments.getNumberOfTuples(),arguments.get__hints__(),arguments.get__entityManager__());
 			Collection<?> result = typedQuery.getResultList();
@@ -110,6 +114,20 @@ public interface QueryExecutor {
 		}
 		
 		protected <T> TypedQuery<T> __getTypedQuery__(Class<T> resultClass, Query query,Map<Object,Object> parameters,Integer firstTupleIndex,Integer numberOfTuples,Map<String,Object> hints,EntityManager entityManager) {
+			if(Boolean.TRUE.equals(LOGGABLE)) {
+				Collection<String> strings = new ArrayList<>();
+				if(resultClass != null)
+					strings.add(resultClass.getSimpleName());
+				if(query != null)
+					strings.add(query.getValue());
+				if(MapHelper.isNotEmpty(parameters))
+					strings.add(parameters.toString());
+				if(firstTupleIndex != null)
+					strings.add("Page("+firstTupleIndex+","+numberOfTuples+")");
+				if(MapHelper.isNotEmpty(hints))
+					strings.add(hints.toString());
+				LogHelper.log(StringHelper.concatenate(strings,">"),LOG_LEVEL,getClass());
+			}
 			if(resultClass == null)
 				throw new IllegalArgumentException("result class is required");
 			if(query == null)

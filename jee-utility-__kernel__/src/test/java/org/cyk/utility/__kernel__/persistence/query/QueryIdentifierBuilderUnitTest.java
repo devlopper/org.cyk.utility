@@ -10,8 +10,13 @@ public class QueryIdentifierBuilderUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test
-	public void build(){
+	public void build_read(){
 		assertThat(QueryIdentifierBuilder.getInstance().build(Product.class, "read")).isEqualTo("Product.read");
+	}
+	
+	@Test
+	public void buildCountFrom(){
+		assertThat(QueryIdentifierBuilder.getInstance().buildCountFrom("Product.read.xxx")).isEqualTo("Product.count.xxx");
 	}
 	
 	public static class Product {}

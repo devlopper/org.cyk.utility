@@ -10,7 +10,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
@@ -21,6 +20,7 @@ import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.persistence.query.EntityCounter;
 import org.cyk.utility.__kernel__.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.__kernel__.persistence.query.QueryGetter;
+import org.cyk.utility.__kernel__.persistence.query.QueryIdentifierBuilder;
 import org.cyk.utility.__kernel__.rest.ResponseBuilder;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.Value;
@@ -68,16 +68,12 @@ public interface EntityReader {
 					Collection<?> representations =  CollectionHelper.isEmpty(persistences) ? null : MappingSourceBuilder.getInstance().build(persistences, internal.representationEntityClass
 							,mapperSourceDestinationArguments);
 					Long xTotalCount = null;
-					if(Boolean.TRUE.equals(arguments.getCountable())) {			
-						String countQueryIdentifier = queryExecutorArguments.getQuery() == null ? null : queryExecutorArguments.getQuery().getIdentifier();
-						if(StringHelper.isNotBlank(countQueryIdentifier)) {
-							if(StringUtils.contains(countQueryIdentifier, ".read")) {
-								countQueryIdentifier = StringUtils.replaceOnce(countQueryIdentifier, ".read", ".count");
-								queryExecutorArguments.setQuery(QueryGetter.getInstance().get(countQueryIdentifier));
-								if(queryExecutorArguments.getQuery() != null) {
-									xTotalCount = EntityCounter.getInstance().count(internal.persistenceEntityClass,queryExecutorArguments);
-								}
-							}					
+					if(Boolean.TRUE.equals(arguments.getCountable()) && queryExecutorArguments.getQuery() != null) {			
+						String countQueryIdentifier =  QueryIdentifierBuilder.getInstance().buildCountFrom(queryExecutorArguments.getQuery().getIdentifier());
+						if(StringHelper.isNotBlank(countQueryIdentifier)) {							
+							queryExecutorArguments.setQuery(QueryGetter.getInstance().get(countQueryIdentifier));
+							if(queryExecutorArguments.getQuery() != null)
+								xTotalCount = EntityCounter.getInstance().count(internal.persistenceEntityClass,queryExecutorArguments);												
 						}
 					}
 					responseBuilderArguments.setEntities(representations).setXTotalCount(xTotalCount);

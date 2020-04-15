@@ -128,11 +128,23 @@ public interface UserManager {
 		public Collection<User> read(Arguments arguments) {
 			UsersResource usersResource = KeycloakHelper.getUsersResource();
 			Collection<UserRepresentation> userRepresentations = null;
+			if(userRepresentations == null && CollectionHelper.isNotEmpty(arguments.identifiers)) {
+				UserRepresentation userRepresentation = usersResource.get(CollectionHelper.getFirst(arguments.identifiers)).toRepresentation();
+				if(userRepresentation != null)
+					userRepresentations = CollectionHelper.listOf(userRepresentation);
+			}
+			if(userRepresentations == null && CollectionHelper.isNotEmpty(arguments.names)) {
+				userRepresentations = usersResource.search(CollectionHelper.getFirst(arguments.names));
+			}
+			if(userRepresentations == null) {
+				userRepresentations = usersResource.list();
+			}
+			/*
 			if(CollectionHelper.isEmpty(arguments.names))
 				userRepresentations = usersResource.list();
 			else
 				userRepresentations = usersResource.search(CollectionHelper.getFirst(arguments.names));
-						
+			*/			
 			if(CollectionHelper.isEmpty(userRepresentations))
 				return null;
 			userRepresentations = userRepresentations.stream().filter(userRepresentation -> !userRepresentation.getUsername().equals(ADMINISTRATOR_USERNAME)).collect(Collectors.toList());
@@ -193,7 +205,7 @@ public interface UserManager {
 	@Getter @Setter @Accessors(chain=true)
 	public static class Arguments extends AbstractObject implements Serializable {
 		private Collection<User> users;
-		private Collection<String> names;
+		private Collection<String> identifiers,names;
 		private Collection<String> electronicMailAddresses;
 	}
 	

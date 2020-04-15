@@ -28,7 +28,6 @@ public interface NamableQuerier extends Querier {
 		@Override
 		public Collection<Namable> readMany(QueryExecutorArguments arguments) {
 			if(arguments != null && arguments.getQuery() != null && QUERY_IDENTIFIER_READ_VIEW_01.equals(arguments.getQuery().getIdentifier())) {
-				System.out.println("NamableQuerier.AbstractImpl.readMany() 0 : "+arguments);
 				Filter filter = arguments.getFilter();
 				if(filter == null)
 					filter = new Filter();
@@ -43,7 +42,6 @@ public interface NamableQuerier extends Querier {
 				newFilter.addField("name4", tokens.get(3));
 				
 				arguments.setFilter(newFilter);					
-				System.out.println("NamableQuerier.AbstractImpl.readMany() 1 : "+arguments);
 			}
 			return QueryExecutor.getInstance().executeReadMany(Namable.class, arguments);
 		}

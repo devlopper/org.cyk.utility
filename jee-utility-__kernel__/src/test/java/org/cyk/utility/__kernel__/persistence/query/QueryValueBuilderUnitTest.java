@@ -31,6 +31,11 @@ public class QueryValueBuilderUnitTest extends AbstractWeldUnitTest {
 		assertThat(QueryValueBuilder.getInstance().buildSelectWhereFieldIn(Entity.class,"registrationNumber")).isEqualTo("SELECT entity FROM Entity entity WHERE entity.registrationNumber IN :registrationNumbers");
 	}
 	
+	@Test
+	public void buildCountFromSelect(){
+		assertThat(QueryValueBuilder.buildCountFromSelect("SELECT t FROM T t ORDER BY")).isEqualTo("SELECT COUNT(t) FROM T t");
+	}
+	
 	/**/
 	
 	@Getter @Setter @Accessors(chain=true)

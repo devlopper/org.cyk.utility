@@ -1,6 +1,7 @@
 package org.cyk.utility.playground.server;
 
 import java.io.Serializable;
+import java.util.logging.Level;
 
 import javax.servlet.ServletContext;
 import javax.servlet.annotation.WebListener;
@@ -9,6 +10,7 @@ import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.persistence.query.EntityCounter;
 import org.cyk.utility.__kernel__.persistence.query.EntityReader;
 import org.cyk.utility.__kernel__.persistence.query.Query;
+import org.cyk.utility.__kernel__.persistence.query.QueryExecutor;
 import org.cyk.utility.__kernel__.persistence.query.QueryGetter;
 import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
 import org.cyk.utility.playground.server.persistence.api.NamableQuerier;
@@ -32,6 +34,7 @@ public class ServletContextListener extends AbstractServletContextListener imple
 		QueryHelper.addQueries(Query.buildCountFromSelect(QueryGetter.getInstance().get(NamableQuerier.QUERY_IDENTIFIER_READ_VIEW_01)));
 		
 		DependencyInjection.setQualifierClassTo(System.class, EntityReader.class,EntityCounter.class);
+		QueryExecutor.AbstractImpl.LOG_LEVEL = Level.INFO;
 	}
 	
 }

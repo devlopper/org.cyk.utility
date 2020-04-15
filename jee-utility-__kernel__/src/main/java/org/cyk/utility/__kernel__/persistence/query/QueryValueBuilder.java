@@ -3,11 +3,13 @@ package org.cyk.utility.__kernel__.persistence.query;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.Value;
+import org.jboss.weld.exceptions.IllegalArgumentException;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -113,4 +115,27 @@ public interface QueryValueBuilder {
 	
 	String FORMAT_SELECT = "SELECT %2$s FROM %1$s %2$s";
 	String FORMAT_SELECT_WHERE_FIELD_IN = FORMAT_SELECT+" WHERE %2$s.%3$s IN :%4$s";
+	
+	/**/
+	
+	public static String buildCountFromSelect(String selectQueryValue) {
+		if(StringHelper.isBlank(selectQueryValue))
+			throw new IllegalArgumentException("select query value is required");
+		Integer selectIndex = StringUtils.indexOfIgnoreCase(selectQueryValue, "select");
+		if(selectIndex != null && selectIndex > -1) {
+			Integer fromIndex = StringUtils.indexOfIgnoreCase(selectQueryValue, "from");
+			if(fromIndex != null && fromIndex > -1) {
+				String variable = StringUtils.trimToNull(StringUtils.substring(selectQueryValue, selectIndex+6, fromIndex));
+				if(StringHelper.isNotBlank(variable)) {
+					String countQueryValue = StringUtils.replaceOnce(selectQueryValue, variable, String.format("COUNT(%s)", variable));
+					//we do not need order by
+					Integer orderByIndex = StringUtils.lastIndexOfIgnoreCase(countQueryValue, "order by");
+					if(orderByIndex != null && orderByIndex > -1)
+						countQueryValue = StringUtils.substring(countQueryValue, 0, orderByIndex).strip();
+					return countQueryValue;
+				}					
+			}
+		}			
+		throw new IllegalArgumentException(String.format("we cannot build count query from following select query : %s",selectQueryValue));
+	}
 }

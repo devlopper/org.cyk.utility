@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 
 import javax.persistence.Tuple;
 
-import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
@@ -194,19 +193,10 @@ public class Query extends AbstractObject implements Serializable {
 	public static Query buildCountFromSelect(Query selectQuery) {
 		if(selectQuery == null || StringHelper.isBlank(selectQuery.getValue()))
 			throw new IllegalArgumentException("select query is required");
-		Integer selectIndex = StringUtils.indexOfIgnoreCase(selectQuery.getValue(), "select");
-		if(selectIndex != null && selectIndex > -1) {
-			Integer fromIndex = StringUtils.indexOfIgnoreCase(selectQuery.getValue(), "from");
-			if(fromIndex != null && fromIndex > -1) {
-				String variable = StringUtils.trimToNull(StringUtils.substring(selectQuery.getValue(), selectIndex+6, fromIndex));
-				if(StringHelper.isNotBlank(variable)) {
-					String name = StringUtils.substringAfter(selectQuery.getIdentifier(), ".");
-					if(name.startsWith("read"))
-						name = RegExUtils.replaceFirst(name, "read", "count");
-					return buildCount(selectQuery.getTupleClass(), name,StringUtils.replaceOnce(selectQuery.getValue(), variable, String.format(" COUNT(%s) ", variable)));
-				}					
-			}
-		}			
+		String identifier = QueryIdentifierBuilder.getInstance().buildCountFrom(selectQuery.getIdentifier());
+		String value = QueryValueBuilder.buildCountFromSelect(selectQuery.getValue());
+		if(StringHelper.isNotBlank(value))
+			return new Query().setIdentifier(identifier).setValue(value).setTupleClass(selectQuery.getTupleClass()).setResultClass(Long.class);
 		throw new IllegalArgumentException(String.format("we cannot build count query from following select query : %s",selectQuery));
 	}
 	

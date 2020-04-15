@@ -51,13 +51,16 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 	private Class<?> __resultClass__;
 	private Collection<?> __objects__;
 	
-	public QueryExecutorArguments prepare() {
+	public QueryExecutorArguments prepare(Class<?> resultClass) {
 		if(query != null) {
 			if(query.getIntermediateResultClass() == null)
 				__resultClass__ = query.getResultClass();
 			else
 				__resultClass__ = query.getIntermediateResultClass();
 		}
+		
+		if(__resultClass__ == null)
+			__resultClass__ = resultClass;
 		
 		__isEntityManagerClearable__ = isEntityManagerClearable;
 		__isEntityManagerClosable__ = isEntityManagerClosable;		
