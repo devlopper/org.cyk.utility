@@ -9,7 +9,7 @@ public class SetupUnitTest extends AbstractWeldUnitTest {
 
 	@Test
 	public void setup(){
-		System.out.println(__inject__(Value.class));
+		System.out.println(new Value());
 	}
 	
 }

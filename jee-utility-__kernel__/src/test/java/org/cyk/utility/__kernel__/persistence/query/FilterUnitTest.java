@@ -56,6 +56,13 @@ public class FilterUnitTest extends AbstractWeldUnitTest {
 		assertThat(map).containsEntry("identifier", List.of("1"));
 	}
 	
+	@Test
+	public void getFieldValue(){		
+		Filter filter = new Filter();
+		filter.addField("code", "c01");
+		assertThat(filter.getFieldValue("code")).isEqualTo("c01");
+	}
+	
 	/**/
 	
 	@Getter @Setter

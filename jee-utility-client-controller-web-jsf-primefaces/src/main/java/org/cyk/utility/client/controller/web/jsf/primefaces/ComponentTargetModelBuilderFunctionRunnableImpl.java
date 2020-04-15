@@ -1,46 +1,30 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.component.html.HtmlOutputText;
-import javax.faces.model.ListDataModel;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.component.ComponentTargetModelBuilder;
 import org.cyk.utility.client.controller.component.Components;
 import org.cyk.utility.client.controller.component.command.Commandable;
 import org.cyk.utility.client.controller.component.grid.Grid;
-import org.cyk.utility.client.controller.component.grid.cell.Cell;
-import org.cyk.utility.client.controller.component.grid.cell.Cells;
-import org.cyk.utility.client.controller.component.grid.column.Column;
-import org.cyk.utility.client.controller.component.grid.column.Columns;
-import org.cyk.utility.client.controller.component.grid.row.Row;
-import org.cyk.utility.client.controller.component.grid.row.Rows;
 import org.cyk.utility.client.controller.component.input.InputStringLineOne;
 import org.cyk.utility.client.controller.component.menu.Menu;
-import org.cyk.utility.client.controller.component.output.OutputString;
 import org.cyk.utility.client.controller.component.output.OutputStringText;
 import org.cyk.utility.client.controller.component.tree.Tree;
 import org.cyk.utility.client.controller.component.view.View;
-import org.cyk.utility.client.controller.component.view.ViewMap;
-import org.cyk.utility.client.controller.web.jsf.primefaces.component.ColumnBuilder;
 import org.cyk.utility.client.controller.web.jsf.primefaces.component.CommandButtonBuilder;
 import org.cyk.utility.client.controller.web.jsf.primefaces.component.DataTableBuilder;
 import org.cyk.utility.client.controller.web.jsf.primefaces.component.MenuBuilder;
 import org.cyk.utility.client.controller.web.jsf.primefaces.component.OrganigramNodeBuilder;
-import org.cyk.utility.__kernel__.collection.CollectionHelper;
-import org.cyk.utility.__kernel__.object.Objects;
 import org.cyk.utility.time.DurationBuilder;
 import org.cyk.utility.time.DurationStringBuilder;
-import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.primefaces.component.datatable.DataTable;
-import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.outputpanel.OutputPanel;
 import org.primefaces.model.menu.MenuModel;
 

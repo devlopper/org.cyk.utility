@@ -21,7 +21,6 @@ import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.mapping.MapperSourceDestination;
 import org.cyk.utility.__kernel__.mapping.MappingHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
-import org.cyk.utility.__kernel__.object.__static__.representation.AbstractRepresentationObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
@@ -29,10 +28,9 @@ import org.cyk.utility.__kernel__.value.ValueUsageType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import lombok.experimental.Accessors;
 
-@Dependent @Getter @Setter @Accessors(chain=true) @ToString(callSuper = false)
+@Dependent @Getter @Setter @Accessors(chain=true)
 public class Filter extends AbstractObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -67,6 +65,7 @@ public class Filter extends AbstractObject implements Serializable {
 		return fields == null ? Boolean.FALSE : getFieldByPath(paths) != null;
 	}
 	
+	@Deprecated
 	public Field getFieldByPath(String... paths) {
 		return fields == null ? null : getField(paths);
 	}
@@ -77,11 +76,18 @@ public class Filter extends AbstractObject implements Serializable {
 		String path = FieldHelper.join(paths);
 		if(StringHelper.isBlank(path))
 			return null;		
+		/*
 		for(Field index : fields) {
 			FieldInstance fieldInstance = index.getInstance();
 			if(fieldInstance != null && path.equals(fieldInstance.getPath()))
 				return index;
-		}		
+		}
+		*/
+		for(Field index : fields) {
+			FieldInstance fieldInstance = index.getInstance();
+			if(fieldInstance == null && path.equals(index.getName()) || fieldInstance != null && path.equals(fieldInstance.getPath()))			
+				return index;
+		}
 		return null;
 	}
 	
@@ -91,6 +97,20 @@ public class Filter extends AbstractObject implements Serializable {
 		return getField(CollectionHelper.listOf(paths));
 	}
 	
+	public Object getFieldValue(Collection<String> paths) {
+		if(CollectionHelper.isEmpty(paths))
+			return null;
+		Field field = getField(paths);
+		return field == null ? null : field.getValue();
+	}
+	
+	public Object getFieldValue(String...paths) {
+		if(ArrayHelper.isEmpty(paths))
+			return null;
+		return getFieldValue(CollectionHelper.listOf(paths));
+	}
+	
+	@Deprecated
 	public Object getFieldValueByPath(String... paths) {
 		Field field = getFieldByPath(paths);
 		return field == null ? null : field.getValue();
@@ -129,6 +149,18 @@ public class Filter extends AbstractObject implements Serializable {
 		return addField(fieldName, fieldValue, null);
 	}
 
+	@Override
+	public String toString() {
+		Collection<String> strings = new ArrayList<>();
+		if(klass != null)
+			strings.add("Class="+klass);
+		if(StringHelper.isNotBlank(value))
+			strings.add("Value="+value);
+		if(CollectionHelper.isNotEmpty(fields))
+			strings.add("Fields="+fields);			
+		return StringHelper.concatenate(strings, " ");
+	}
+	
 	/**/
 	
 	/**/
@@ -146,7 +178,7 @@ public class Filter extends AbstractObject implements Serializable {
 	/**/
 	
 	@XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor
-	public static class Dto extends AbstractRepresentationObject implements Serializable {
+	public static class Dto extends AbstractObject implements Serializable {
 		private static final long serialVersionUID = 1L;
 
 		private String klass;
@@ -166,44 +198,44 @@ public class Filter extends AbstractObject implements Serializable {
 			return fields;
 		}
 		
-		public Dto addField(String path,String value,org.cyk.utility.__kernel__.field.FieldDto.Type type,Value.Dto.Container valueContainer,Value.Dto.Type valueType,ValueUsageType valueUsageType,ArithmeticOperator arithmeticOperator) {
+		public Dto addField(String path,String value,org.cyk.utility.__kernel__.field.Field.Dto.Type type,Value.Dto.Container valueContainer,Value.Dto.Type valueType,ValueUsageType valueUsageType,ArithmeticOperator arithmeticOperator) {
 			Field.Dto fieldDto = new Field.Dto();
 			fieldDto.setArithmeticOperator(arithmeticOperator);
 			if(StringUtils.isBlank(klass))
 				fieldDto.setName(path);
 			else
-				fieldDto.setField(new org.cyk.utility.__kernel__.field.FieldDto().setKlass(klass).setPath(path).setType(type));
+				fieldDto.setField(new org.cyk.utility.__kernel__.field.Field.Dto().setKlass(klass).setPath(path).setType(type));
 			fieldDto.setValue(new Value.Dto().setContainer(valueContainer).setType(valueType).setUsageType(valueUsageType).setValue(value));
 			getFields(Boolean.TRUE).add(fieldDto);
 			return this;
 		}
 		
-		public Dto addField(String path,String value,org.cyk.utility.__kernel__.field.FieldDto.Type type,Value.Dto.Container valueContainer,Value.Dto.Type valueType,ValueUsageType valueUsageType) {
+		public Dto addField(String path,String value,org.cyk.utility.__kernel__.field.Field.Dto.Type type,Value.Dto.Container valueContainer,Value.Dto.Type valueType,ValueUsageType valueUsageType) {
 			addField(path, value, type, valueContainer, valueType, valueUsageType,null);
 			return this;
 		}
 		
-		public Dto addField(String path,String value,org.cyk.utility.__kernel__.field.FieldDto.Type type,Value.Dto.Container valueContainer,Value.Dto.Type valueType) {
+		public Dto addField(String path,String value,org.cyk.utility.__kernel__.field.Field.Dto.Type type,Value.Dto.Container valueContainer,Value.Dto.Type valueType) {
 			addField(path, value, type, valueContainer, valueType,null);
 			return this;
 		}
 		
 		public Dto addField(String path,Object value,ValueUsageType valueUsageType) {
-			org.cyk.utility.__kernel__.field.FieldDto.Type type = null;
+			org.cyk.utility.__kernel__.field.Field.Dto.Type type = null;
 			Value.Dto.Container valueContainer = Value.Dto.Container.NONE;
 			Value.Dto.Type valueType = null;
 			String valueAsString = null;
 			if(value != null) {
 				if(value instanceof Collection) {
-					type = org.cyk.utility.__kernel__.field.FieldDto.Type.COLLECTION;
+					type = org.cyk.utility.__kernel__.field.Field.Dto.Type.COLLECTION;
 					valueContainer = Value.Dto.Container.COLLECTION;
 					valueType = Value.Dto.Type.STRING;
 				}else if(value instanceof String) {
-					type = org.cyk.utility.__kernel__.field.FieldDto.Type.STRING;
+					type = org.cyk.utility.__kernel__.field.Field.Dto.Type.STRING;
 					valueType = Value.Dto.Type.STRING;
 					valueAsString = (String) value;
 				}else if(value instanceof Integer) {
-					type = org.cyk.utility.__kernel__.field.FieldDto.Type.INTEGER;
+					type = org.cyk.utility.__kernel__.field.Field.Dto.Type.INTEGER;
 					valueType = Value.Dto.Type.INTEGER;
 				}
 				if(StringHelper.isBlank(valueAsString))
@@ -218,6 +250,18 @@ public class Filter extends AbstractObject implements Serializable {
 		
 		public Dto addField(String path,Object value) {
 			return addField(path,value,null);
+		}
+		
+		@Override
+		public String toString() {
+			Collection<String> strings = new ArrayList<>();
+			if(StringHelper.isNotBlank(klass))
+				strings.add("Class="+klass);
+			if(StringHelper.isNotBlank(value))
+				strings.add("Value="+value);
+			if(CollectionHelper.isNotEmpty(fields))
+				strings.add("Fields="+fields);			
+			return StringHelper.concatenate(strings, " ");
 		}
 		
 		/**/

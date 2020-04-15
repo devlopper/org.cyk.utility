@@ -29,6 +29,8 @@ public interface MapperClassGetter {
 		}
 		
 		protected Class<?> __get__(Class<?> klass) {
+			if(klass.equals(org.cyk.utility.__kernel__.field.Field.class) || klass.equals(org.cyk.utility.__kernel__.field.Field.Dto.class))
+				return org.cyk.utility.__kernel__.field.Field.Dto.Mapper.class;
 			if(klass.equals(Message.class) || klass.equals(Message.Dto.class))
 				return Message.Dto.Mapper.class;
 			if(klass.equals(RuntimeException.class) || klass.equals(RuntimeException.Dto.class))

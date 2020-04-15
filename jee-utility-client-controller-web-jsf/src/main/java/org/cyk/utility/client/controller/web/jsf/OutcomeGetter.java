@@ -8,7 +8,6 @@ import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.application.NavigationCase;
 import javax.faces.context.FacesContext;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.enumeration.Action;

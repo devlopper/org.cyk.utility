@@ -219,6 +219,14 @@
 		    <scope>test</scope>
 		</dependency>
 		
+		<!-- https://mvnrepository.com/artifact/org.openjdk.jol/jol-core -->
+		<dependency>
+		    <groupId>org.openjdk.jol</groupId>
+		    <artifactId>jol-core</artifactId>
+		    <version>0.10</version>
+		    <scope>test</scope>
+		</dependency>
+		
 				
 		<!-- Search -->
 		<!--

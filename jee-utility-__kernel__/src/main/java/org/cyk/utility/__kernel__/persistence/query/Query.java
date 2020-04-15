@@ -3,7 +3,12 @@ package org.cyk.utility.__kernel__.persistence.query;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.persistence.Tuple;
 
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -28,8 +33,10 @@ public class Query extends AbstractObject implements Serializable {
 	private Class<?> tupleClass;
 	private String identifier;
 	private String value;
+	private Class<?> intermediateResultClass;
 	private Class<?> resultClass;
 	private Query queryDerivedFromQuery;
+	private Map<String,Integer> tupleFieldsNamesIndexes;
 	
 	public Query setQueryDerivedFromQueryIdentifier(Object identifier){
 		setQueryDerivedFromQuery(QueryHelper.getQueries().getBySystemIdentifier(identifier, Boolean.TRUE));
@@ -72,6 +79,29 @@ public class Query extends AbstractObject implements Serializable {
 			if(query.resultClass == null || Void.class.equals(query.resultClass)) {
 				if(StringHelper.isNotBlank(query.value) && query.value.toLowerCase().startsWith("select"))
 					query.resultClass = query.tupleClass;
+			}
+			
+			if(query.tupleFieldsNamesIndexes == null && StringHelper.isNotBlank(query.value)) {
+				if(StringUtils.startsWithIgnoreCase(query.value, "select")) {
+					String stringBetweenSelectAndFrom = StringUtils.substring(query.value, "select".length(), StringUtils.indexOfIgnoreCase(query.value, "from")).strip();
+					if(!StringUtils.startsWithIgnoreCase(stringBetweenSelectAndFrom, "new")) {
+						List<String> fieldsNames = CollectionHelper.listOf(stringBetweenSelectAndFrom
+								.split(",")).stream().map(fieldName -> StringUtils.substringAfter(fieldName, ".")).collect(Collectors.toList());					
+						Integer index = 0;
+						for(String fieldName : fieldsNames) {
+							fieldName = fieldName.strip();
+							if(fieldName.isBlank())
+								continue;
+							if(query.tupleFieldsNamesIndexes == null)
+								query.tupleFieldsNamesIndexes = new HashMap<>();
+							query.tupleFieldsNamesIndexes.put(fieldName, index++);
+						}
+					}				
+				}
+			}
+			
+			if(query.intermediateResultClass == null && MapHelper.isNotEmpty(query.tupleFieldsNamesIndexes) && !Tuple.class.equals(query.resultClass)) {
+				query.intermediateResultClass = Object[].class;
 			}
 		}
 		

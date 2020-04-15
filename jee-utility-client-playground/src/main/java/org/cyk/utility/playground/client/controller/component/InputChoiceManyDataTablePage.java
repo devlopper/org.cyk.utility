@@ -19,7 +19,7 @@ import org.cyk.utility.playground.client.controller.entities.Namable;
 import lombok.Getter;
 import lombok.Setter;
 
-@Named @ViewScoped @Getter @Setter
+@Named @ViewScoped @Getter @Setter @Deprecated
 public class InputChoiceManyDataTablePage extends AbstractPageContainerManagedImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 

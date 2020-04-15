@@ -8,12 +8,16 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
+	<!-- 
+		converter="#{selectManyCheckbox.converter}" -- it is not working with this property WHY ???
+		converterMessage="#{selectManyCheckbox.converterMessage}"
+	 -->
+	
 	<p:selectManyCheckbox
 		id="#{selectManyCheckbox.identifier}"
 		value="#{selectManyCheckbox.value}"
 		columns="#{selectManyCheckbox.columns}"
-		converter="#{selectManyCheckbox.converter}"
-		converterMessage="#{selectManyCheckbox.converterMessage}"
+		
 		disabled="#{selectManyCheckbox.disabled}"
 		layout="#{selectManyCheckbox.layout}"
 		required="#{selectManyCheckbox.required}"

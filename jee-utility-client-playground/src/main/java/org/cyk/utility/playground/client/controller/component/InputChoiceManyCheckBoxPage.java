@@ -31,7 +31,7 @@ public class InputChoiceManyCheckBoxPage extends AbstractPageContainerManagedImp
 		commandButton.setListener(new CommandButton.Listener.AbstractImpl() {
 			@Override
 			public void listenAction(Object argument) {
-				MessageRenderer.getInstance().render("Value : "+selectManyCheckbox.getValue());
+				MessageRenderer.getInstance().render(selectManyCheckbox.getValue()+"");
 			}
 		});
 	}

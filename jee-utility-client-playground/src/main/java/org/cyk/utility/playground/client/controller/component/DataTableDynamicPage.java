@@ -10,8 +10,6 @@ import javax.inject.Named;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.data.structure.grid.Grid;
-import org.cyk.utility.__kernel__.data.structure.grid.Grid.Row;
-import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.user.interface_.message.MessageRenderer;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.collection.AbstractCollection;

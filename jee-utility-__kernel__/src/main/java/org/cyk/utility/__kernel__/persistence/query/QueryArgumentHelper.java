@@ -7,11 +7,24 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 
 public interface QueryArgumentHelper {
 
-	static List<String> getLikes(String string,Integer numberOfTokens) {
+	static String getLike(Object value) {
+		if(value != null && !(value instanceof String))
+			throw new RuntimeException("value must be an instance of string");
+		String string = (String) value;
+		if(StringHelper.isBlank(string))
+			return LIKE_ALL;
+		return "%"+string+"%";
+	}
+	
+	static List<String> getLikes(Object value,Integer numberOfTokens) {
+		if(value!= null && !(value instanceof String))
+			throw new RuntimeException("value must be an instance of string");
+		String string = (String) value;
 		string = ValueHelper.defaultToIfBlank(string, ConstantEmpty.STRING);
 		if(numberOfTokens == null || numberOfTokens < 0)
 			numberOfTokens = 0;

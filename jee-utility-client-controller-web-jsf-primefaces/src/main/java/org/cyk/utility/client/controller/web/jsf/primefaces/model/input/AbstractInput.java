@@ -60,6 +60,7 @@ public abstract class AbstractInput<VALUE> extends AbstractInputOutput<VALUE> im
 	public static final String FIELD_VALIDATOR = "validator";
 	public static final String FIELD_VALIDATOR_MESSAGE = "validatorMessage";
 	public static final String FIELD_PLACEHOLDER = "placeholder";
+	public static final String FIELD_CONVERTER = "converter";
 	
 	/**/
 	

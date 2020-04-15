@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
@@ -48,13 +49,25 @@ public interface QueryExecutor {
 		@Override
 		public <T> Collection<T> executeReadMany(Class<T> resultClass, QueryExecutorArguments arguments) {
 			validatePreConditions(resultClass, arguments);
-			arguments.prepare();
-			TypedQuery<T> typedQuery = __getTypedQuery__(resultClass, arguments.getQuery().getIdentifier(),arguments.getQuery().getValue()
-					,arguments.get__parameters__(),arguments.getFirstTupleIndex(),arguments.getNumberOfTuples(),arguments.get__hints__()
-					,arguments.get__entityManager__());
-			Collection<T> collection = typedQuery.getResultList();
-			if(CollectionHelper.isEmpty(collection))
+			arguments.prepare();			
+			TypedQuery<?> typedQuery = __getTypedQuery__(arguments.get__resultClass__(), arguments.getQuery(),arguments.get__parameters__(),arguments.getFirstTupleIndex()
+					,arguments.getNumberOfTuples(),arguments.get__hints__(),arguments.get__entityManager__());
+			Collection<?> result = typedQuery.getResultList();
+			Collection<T> collection;
+			if(CollectionHelper.isEmpty(result))
 				collection = null;
+			else {
+				if(resultClass.equals(arguments.get__resultClass__()))
+					collection = (Collection<T>) result;
+				else {
+					QueryResultMapper.Arguments resultMapperArguments = new QueryResultMapper.Arguments().setQuery(arguments.getQuery());
+					if(Tuple.class.equals(arguments.getQuery().getResultClass()))
+						resultMapperArguments.setTuples((Collection<Tuple>) result);
+					else
+						resultMapperArguments.setObjects((Collection<Object[]>) result);
+					collection = QueryResultMapper.getInstance().map(resultClass, resultMapperArguments);
+				}
+			}
 			arguments.set__objects__(collection);
 			arguments.finalise();
 			if(CollectionHelper.isNotEmpty(collection))
@@ -69,6 +82,11 @@ public interface QueryExecutor {
 		@Override
 		public Long executeCount(QueryExecutorArguments arguments) {
 			validatePreConditions(Long.class, arguments);
+			//we do not need pagination for count query
+			if(arguments != null) {
+				arguments.setFirstTupleIndex(null);
+				arguments.setNumberOfTuples(null);
+			}
 			Long count = executeReadOne(Long.class, arguments);
 			return count;
 		}
@@ -91,14 +109,16 @@ public interface QueryExecutor {
 				throw new RuntimeException("query is required");
 		}
 		
-		protected <T> TypedQuery<T> __getTypedQuery__(Class<T> resultClass, String queryIdentifier,String queryValue,Map<Object,Object> parameters,Integer firstTupleIndex,Integer numberOfTuples,Map<String,Object> hints,EntityManager entityManager) {
+		protected <T> TypedQuery<T> __getTypedQuery__(Class<T> resultClass, Query query,Map<Object,Object> parameters,Integer firstTupleIndex,Integer numberOfTuples,Map<String,Object> hints,EntityManager entityManager) {
 			if(resultClass == null)
 				throw new IllegalArgumentException("result class is required");
-			if(StringHelper.isBlank(queryIdentifier) && StringHelper.isBlank(queryValue))
+			if(query == null)
+				throw new IllegalArgumentException("query is required");
+			if(StringHelper.isBlank(query.getIdentifier()) && StringHelper.isBlank(query.getValue()))
 				throw new IllegalArgumentException("query identifier or query value is required");
 			if(entityManager == null)
 				entityManager = EntityManagerGetter.getInstance().get();
-			Query query = QueryGetter.getInstance().get(resultClass, queryIdentifier, queryValue);
+			//Query query = QueryGetter.getInstance().get(resultClass, queryIdentifier, queryValue);
 			TypedQuery<T> typedQuery = (TypedQuery<T>) (StringHelper.isBlank(query.getIdentifier()) ? entityManager.createQuery(query.getValue(), resultClass) 
 					: entityManager.createNamedQuery(query.getIdentifier(), resultClass));
 			if(firstTupleIndex != null && firstTupleIndex >= 0)

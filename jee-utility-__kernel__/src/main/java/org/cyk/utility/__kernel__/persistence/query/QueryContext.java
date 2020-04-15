@@ -59,7 +59,7 @@ public class QueryContext extends AbstractObject implements Serializable {
 	}
 	
 	public String getStringLike(String fieldName) {
-		Field field = getFilterFieldByKeys(fieldName);				
+		Field field = getFilterFieldByKeys(fieldName);
 		return "%"+(field == null ? ConstantEmpty.STRING : StringUtils.trimToEmpty((String) field.getValue()))+"%";
 	}
 	

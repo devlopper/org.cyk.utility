@@ -1,6 +1,7 @@
 package org.cyk.utility.__kernel__.controller;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.ws.rs.core.Response;
@@ -139,5 +140,17 @@ public class Arguments<T> extends AbstractObject implements Serializable {
 				throw MappingHelper.getDestination(runtimeExceptionDto, RuntimeException.class);				
 			}
 		}
+	}
+
+	@Override
+	public String toString() {
+		Collection<String> strings = new ArrayList<>();
+		if(controllerEntityClass != null)
+			strings.add("CEC="+controllerEntityClass);
+		if(representationEntityClass != null)
+			strings.add("REC="+representationEntityClass);
+		if(representationArguments != null)
+			strings.add("RA("+representationArguments+")");
+		return StringHelper.concatenate(strings, " ");
 	}
 }

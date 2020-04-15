@@ -18,6 +18,7 @@ import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.runnable.RunnableHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.MappingTarget;
@@ -232,6 +233,18 @@ public interface MapperSourceDestination<SOURCE,DESTINATION> extends Mapper {
 			private String mapIdentifier;
 			private ArrayList<String> fieldsNames;
 			private ArrayList<String> fieldsNamesNullable;
+			
+			@Override
+			public String toString() {
+				Collection<String> strings = new ArrayList<>();
+				if(StringHelper.isNotBlank(mapIdentifier))
+					strings.add("ID="+mapIdentifier);
+				if(CollectionHelper.isNotEmpty(fieldsNames))
+					strings.add("FN="+fieldsNames);
+				if(CollectionHelper.isNotEmpty(fieldsNamesNullable))
+					strings.add("FNN="+fieldsNamesNullable);
+				return StringHelper.concatenate(strings, " ");
+			}
 			
 			@org.mapstruct.Mapper
 			public static abstract class Mapper extends MapperSourceDestination.AbstractImpl<MapperSourceDestination.Arguments.Dto, MapperSourceDestination.Arguments>{

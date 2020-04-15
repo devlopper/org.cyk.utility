@@ -26,10 +26,9 @@ import org.cyk.utility.__kernel__.value.ValueUsageType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import lombok.experimental.Accessors;
 
-@Getter @Setter @Accessors(chain=true) @ToString(callSuper = false)
+@Getter @Setter @Accessors(chain=true)
 public class Field extends AbstractObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -44,17 +43,47 @@ public class Field extends AbstractObject implements Serializable {
 			return QueryArgumentHelper.getLikes((String) value, numberOfTokens);
 		return null;
 	}
+	
+	@Override
+	public String toString() {
+		Collection<String> strings = new ArrayList<>();
+		if(StringHelper.isNotBlank(name))
+			strings.add("Name="+name);
+		if(instance != null)
+			strings.add("Field instance="+instance);
+		if(value != null)
+			strings.add("Value="+value);
+		if(arithmeticOperator != null)
+			strings.add("AO="+arithmeticOperator);
+		if(valueUsageType != null)
+			strings.add("VUT="+valueUsageType);
+		return StringHelper.concatenate(strings, " ");
+	}
 		
 	/**/
 	
-	@XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor @ToString
+	@XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor
 	public static class Dto extends AbstractObject implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
 		private String name;
-		private org.cyk.utility.__kernel__.field.FieldDto field;
+		private org.cyk.utility.__kernel__.field.Field.Dto field;
 		private Value.Dto value;
 		private ArithmeticOperator arithmeticOperator;
+		
+		@Override
+		public String toString() {
+			Collection<String> strings = new ArrayList<>();
+			if(StringHelper.isNotBlank(name))
+				strings.add("Name="+name);
+			if(field != null)
+				strings.add("Field="+field);
+			if(value != null)
+				strings.add("Value="+value);
+			if(arithmeticOperator != null)
+				strings.add("AO="+arithmeticOperator);
+			return StringHelper.concatenate(strings, " ");
+		}
 		
 		/**/
 		
@@ -129,13 +158,13 @@ public class Field extends AbstractObject implements Serializable {
 			protected void __listenGetSourceAfter__(Field field, Dto fieldDto) {
 				super.__listenGetSourceAfter__(field, fieldDto);
 				if(field.getInstance() != null) {
-					org.cyk.utility.__kernel__.field.FieldDto instanceDto = new org.cyk.utility.__kernel__.field.FieldDto();
+					org.cyk.utility.__kernel__.field.Field.Dto instanceDto = new org.cyk.utility.__kernel__.field.Field.Dto();
 					instanceDto.setKlass(field.getInstance().getClazz().getSimpleName());
 					instanceDto.setPath(field.getInstance().getPath());
 					if(Boolean.TRUE.equals(ClassHelper.isInstanceOf((Class<?>)field.getInstance().getType(), String.class)))
-						instanceDto.setType(org.cyk.utility.__kernel__.field.FieldDto.Type.STRING);
+						instanceDto.setType(org.cyk.utility.__kernel__.field.Field.Dto.Type.STRING);
 					else if(Boolean.TRUE.equals(ClassHelper.isInstanceOf((Class<?>)field.getInstance().getType(), Collection.class)))
-						instanceDto.setType(org.cyk.utility.__kernel__.field.FieldDto.Type.COLLECTION);
+						instanceDto.setType(org.cyk.utility.__kernel__.field.Field.Dto.Type.COLLECTION);
 					fieldDto.setField(instanceDto);
 				}
 				if(fieldDto.getValue() != null) {
@@ -159,7 +188,6 @@ public class Field extends AbstractObject implements Serializable {
 					field.setValueUsageType(fieldDto.getValue().getUsageType());
 				}
 			}
-		}
-		
+		}		
 	}
 }

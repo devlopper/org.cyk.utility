@@ -18,7 +18,7 @@ import org.cyk.utility.__kernel__.mapping.MapperSourceDestination;
 import org.cyk.utility.__kernel__.mapping.MappingHelper;
 import org.cyk.utility.__kernel__.mapping.MappingSourceBuilder;
 import org.cyk.utility.__kernel__.object.AbstractObject;
-import org.cyk.utility.__kernel__.persistence.query.QueryExecutor;
+import org.cyk.utility.__kernel__.persistence.query.EntityCounter;
 import org.cyk.utility.__kernel__.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.__kernel__.persistence.query.QueryGetter;
 import org.cyk.utility.__kernel__.rest.ResponseBuilder;
@@ -67,7 +67,6 @@ public interface EntityReader {
 						mapperSourceDestinationArguments = MappingHelper.getDestination(arguments.getMappingArguments(), MapperSourceDestination.Arguments.class);				
 					Collection<?> representations =  CollectionHelper.isEmpty(persistences) ? null : MappingSourceBuilder.getInstance().build(persistences, internal.representationEntityClass
 							,mapperSourceDestinationArguments);
-					
 					Long xTotalCount = null;
 					if(Boolean.TRUE.equals(arguments.getCountable())) {			
 						String countQueryIdentifier = queryExecutorArguments.getQuery() == null ? null : queryExecutorArguments.getQuery().getIdentifier();
@@ -76,7 +75,7 @@ public interface EntityReader {
 								countQueryIdentifier = StringUtils.replaceOnce(countQueryIdentifier, ".read", ".count");
 								queryExecutorArguments.setQuery(QueryGetter.getInstance().get(countQueryIdentifier));
 								if(queryExecutorArguments.getQuery() != null) {
-									xTotalCount = QueryExecutor.getInstance().executeCount(queryExecutorArguments);
+									xTotalCount = EntityCounter.getInstance().count(internal.persistenceEntityClass,queryExecutorArguments);
 								}
 							}					
 						}

@@ -1,13 +1,15 @@
 package org.cyk.utility.__kernel__.value;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.enterprise.context.Dependent;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
+import org.cyk.utility.__kernel__.field.Field;
 import org.cyk.utility.__kernel__.field.FieldHelper;
-import org.cyk.utility.__kernel__.field.FieldInstance;
 import org.cyk.utility.__kernel__.mapping.MapperSourceDestination;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
@@ -15,17 +17,16 @@ import org.cyk.utility.__kernel__.string.StringHelper;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import lombok.experimental.Accessors;
 
-@Dependent
+@Dependent @Getter @Setter @Accessors(chain=true)
 public class Value extends AbstractObject implements  Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Getter @Setter @Accessors(chain=true) private String name;
-	@Getter @Setter @Accessors(chain=true) private Object object;
-	@Getter @Setter @Accessors(chain=true) private FieldInstance fieldInstance;
-	@Getter @Setter @Accessors(chain=true) private String configurationValueName;
+	private String name;
+	private Object object;
+	private Field field;
+	private String configurationValueName;
 	
 	private Object __value__;
 	private Boolean __isValueHashBeenSet__;
@@ -37,10 +38,10 @@ public class Value extends AbstractObject implements  Serializable {
 	}
 	
 	public Object get() {
-		if(isHasBeenSet() || (fieldInstance == null && StringHelper.isBlank(configurationValueName)))
+		if(isHasBeenSet() || (field == null && StringHelper.isBlank(configurationValueName)))
 			return __value__;
-		if(fieldInstance != null)
-			__value__ = FieldHelper.read(object, fieldInstance.getPath());
+		if(field != null)
+			__value__ = FieldHelper.read(object, field.getPath());
 		else if(StringHelper.isNotBlank(configurationValueName))
 			__value__ = ConfigurationHelper.getValue(configurationValueName, null, null,null,null);
 		return __value__;
@@ -57,10 +58,10 @@ public class Value extends AbstractObject implements  Serializable {
 	public Boolean isHasBeenSet() {
 		return Boolean.TRUE.equals(__isValueHashBeenSet__);
 	}
-
+	
 	/**/
 	
-	@XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor @ToString
+	@XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor
 	public static class Dto extends AbstractObject implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
@@ -68,6 +69,20 @@ public class Value extends AbstractObject implements  Serializable {
 		private Container container;
 		private Type type;
 		private ValueUsageType usageType;
+		
+		@Override
+		public String toString() {
+			Collection<String> strings = new ArrayList<>();
+			if(StringHelper.isNotBlank(value))
+				strings.add("Value="+value);
+			if(container != null)
+				strings.add("CONT="+container);
+			if(type != null)
+				strings.add("Type="+type);
+			if(usageType != null)
+				strings.add("UT="+usageType);
+			return StringHelper.concatenate(strings, " ");
+		}
 		
 		/**/
 		

@@ -9,6 +9,7 @@ import org.cyk.utility.device.DeviceDesktop;
 import org.cyk.utility.device.DevicePhone;
 import org.cyk.utility.device.DeviceTablet;
 
+@Deprecated
 public abstract class AbstractStyleClassBuilderWidthPrimefacesGridCssFunctionRunnableImpl extends AbstractFunctionRunnableImpl<StyleClassBuilderWidth> implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

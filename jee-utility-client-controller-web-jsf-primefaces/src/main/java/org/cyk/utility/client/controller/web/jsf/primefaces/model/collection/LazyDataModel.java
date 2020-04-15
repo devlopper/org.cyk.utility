@@ -146,7 +146,10 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 			public Arguments<T> instantiateArguments(LazyDataModel<T> lazyDataModel) {
 				Arguments<T> arguments = new Arguments<T>()
 						.setRepresentationArguments(new org.cyk.utility.__kernel__.representation.Arguments().setQueryExecutorArguments(new QueryExecutorArguments.Dto()
-								.setQueryIdentifier(lazyDataModel.readQueryIdentifier).setFirstTupleIndex(lazyDataModel.__first__).setNumberOfTuples(lazyDataModel.__pageSize__))
+								.setQueryIdentifier(lazyDataModel.readQueryIdentifier)
+								.setFirstTupleIndex(lazyDataModel.__first__)
+								.setNumberOfTuples(lazyDataModel.__pageSize__)
+								.setFilter(lazyDataModel.__filter__))
 								.setCountable(Boolean.TRUE));
 				return arguments;
 			}
@@ -168,8 +171,9 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 			
 			@Override
 			public List<T> read(LazyDataModel<T> lazyDataModel) {
-				if(Boolean.TRUE.equals(lazyDataModel.readerUsable))
+				if(Boolean.TRUE.equals(lazyDataModel.readerUsable)) {
 					return (List<T>) EntityReader.getInstance().readMany(lazyDataModel.entityClass, lazyDataModel.__readerArguments__);
+				}
 				return (List<T>) lazyDataModel.controller.read(lazyDataModel.__readProperties__);
 			}
 			

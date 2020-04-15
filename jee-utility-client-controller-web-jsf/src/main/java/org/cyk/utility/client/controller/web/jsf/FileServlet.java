@@ -18,13 +18,13 @@ public class FileServlet extends org.omnifaces.servlet.FileServlet implements Se
 	@Override
     protected File getFile(HttpServletRequest request) {
 		File file = null;
-		org.cyk.utility.file.File __file__ = null;
+		org.cyk.utility.__kernel__.file.File __file__ = null;
 		String identifier = request.getParameter("identifier");
 		String location = request.getParameter("location");
 		if("session".equals(location)) {
 			HttpSession session = request.getSession();
 	        if(session!=null)
-	        	__file__ = (org.cyk.utility.file.File) session.getAttribute(identifier);
+	        	__file__ = (org.cyk.utility.__kernel__.file.File) session.getAttribute(identifier);
 		}else if("database".equals(location)) {
 			
 		}else if("folder".equals(location)) {

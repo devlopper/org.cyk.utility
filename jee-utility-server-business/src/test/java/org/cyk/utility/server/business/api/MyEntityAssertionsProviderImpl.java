@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.assertion.AssertionHelper;
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
-import org.cyk.utility.__kernel__.field.FieldInstancesRuntime;
+import org.cyk.utility.__kernel__.field.Field;
 import org.cyk.utility.__kernel__.function.Function;
 import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.assertion.AbstractAssertionsProviderForImpl;
@@ -21,8 +21,8 @@ public class MyEntityAssertionsProviderImpl extends AbstractAssertionsProviderFo
 				if(myEntity.getLong1() != null) {
 					//assert long1 > -1
 					__add__(AssertionHelper.buildAssertionComparison(
-							__inject__(Value.class).setObject(myEntity).setFieldInstance(__inject__(FieldInstancesRuntime.class).get(MyEntity.class, "long1"))
-							, ComparisonOperator.GT, __inject__(Value.class).set(-1)));
+							new Value().setObject(myEntity).setField(Field.get(MyEntity.class, "long1"))
+							, ComparisonOperator.GT, new Value().set(-1)));
 				}
 				
 			}

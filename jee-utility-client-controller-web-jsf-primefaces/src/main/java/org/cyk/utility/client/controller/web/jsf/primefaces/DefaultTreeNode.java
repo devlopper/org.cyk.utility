@@ -1,12 +1,9 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.client.controller.data.TreeNodeListener;
-import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.primefaces.model.TreeNode;
 
 import lombok.Getter;

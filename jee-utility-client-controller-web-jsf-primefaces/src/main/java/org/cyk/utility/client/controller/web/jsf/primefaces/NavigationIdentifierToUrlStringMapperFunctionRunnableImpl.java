@@ -13,6 +13,7 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.navigation.NavigationIdentifierToUrlStringMapper;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierStringBuilder;
 
+@Deprecated
 public class NavigationIdentifierToUrlStringMapperFunctionRunnableImpl extends AbstractFunctionRunnableImpl<NavigationIdentifierToUrlStringMapper> implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

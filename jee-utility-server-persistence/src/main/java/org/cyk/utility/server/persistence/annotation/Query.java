@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 
 @Target({ TYPE, METHOD })
-@Retention(RUNTIME)
+@Retention(RUNTIME) @Deprecated
 public @interface Query {
 
 	String identifier() default ConstantEmpty.STRING;

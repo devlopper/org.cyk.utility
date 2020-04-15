@@ -15,6 +15,7 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 	public void __initialize__(Object object) {
 		__inject__(ApplicationScopeLifeCycleListenerEntities.class).initialize(null);
 		__setQualifierClassTo__(org.cyk.utility.playground.server.System.class, DataLoader.class);
+				
 	}
 	
 	@Override

@@ -21,6 +21,7 @@ import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterNam
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterValueStringBuilder;
 import org.primefaces.PrimeFaces;
 
+@Deprecated
 public class GridBuilderCommandableBuilderProcessorFunctionRunnableImpl extends AbstractGridBuilderCommandableBuilderProcessorFunctionRunnableImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

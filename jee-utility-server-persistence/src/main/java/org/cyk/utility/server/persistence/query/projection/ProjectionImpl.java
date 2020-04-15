@@ -8,7 +8,7 @@ import javax.enterprise.context.Dependent;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.__kernel__.field.FieldInstancesRuntime;
 
-@Dependent
+@Dependent @Deprecated
 public class ProjectionImpl extends AbstractObject implements Projection,Serializable {
 	private static final long serialVersionUID = 1L;
 

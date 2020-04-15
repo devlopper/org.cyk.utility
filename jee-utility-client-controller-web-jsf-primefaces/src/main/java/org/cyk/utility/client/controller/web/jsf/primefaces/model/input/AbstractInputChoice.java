@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.controller.EntityReader;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
@@ -77,10 +78,10 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 					if(input.choices == null)
 						input.choices = new ArrayList<>();
 				}
-				if(input.converter == null) {
+				/*if(input.converter == null) {
 					if(!ClassHelper.isBelongsToJavaPackages(entityClass))
 						input.converter = DependencyInjection.inject(ObjectConverter.class);
-				}
+				}*/
 				return input.choices;
 			}
 			
@@ -104,6 +105,22 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 					input.columns = 4;
 				else
 					input.columns = 0;
+			}
+			if(input.converter == null) {
+				Class<?> entityClass = null;
+				if(CollectionHelper.isEmpty(input.choices)) {
+					if(input.field != null) {
+						if(ClassHelper.isInstanceOf(input.field.getType(),Collection.class)) {
+							entityClass = ClassHelper.getParameterAt(input.field.getType(), 0);
+						}else {
+							entityClass = input.field.getType();
+						}		
+					}				
+				}else {
+					entityClass = input.choices.iterator().next().getClass();
+				}				
+				if(!ClassHelper.isBelongsToJavaPackages(entityClass))
+					input.converter = DependencyInjection.inject(ObjectConverter.class);
 			}
 		}
 	}

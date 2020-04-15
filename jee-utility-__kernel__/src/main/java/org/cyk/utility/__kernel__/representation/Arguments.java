@@ -1,6 +1,8 @@
 package org.cyk.utility.__kernel__.representation;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -14,10 +16,9 @@ import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import lombok.experimental.Accessors;
 
-@XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor @ToString(callSuper = false)
+@XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor
 public class Arguments extends AbstractObject implements Serializable {
 	
 	private String actionIdentifier;
@@ -45,6 +46,24 @@ public class Arguments extends AbstractObject implements Serializable {
 		if(queryExecutorArguments == null && Boolean.TRUE.equals(injectIfNull))
 			queryExecutorArguments = new QueryExecutorArguments.Dto();
 		return queryExecutorArguments;
+	}
+	
+	@Override
+	public String toString() {
+		Collection<String> strings = new ArrayList<>();
+		if(StringHelper.isNotBlank(actionIdentifier))
+			strings.add("AID="+actionIdentifier);
+		if(StringHelper.isNotBlank(representationEntityClassName))
+			strings.add("REC="+representationEntityClassName);
+		if(StringHelper.isNotBlank(persistenceEntityClassName))
+			strings.add("CEC="+persistenceEntityClassName);
+		if(queryExecutorArguments != null)
+			strings.add("Q.EXE("+queryExecutorArguments+")");
+		if(countable != null)
+			strings.add("Countable="+countable);
+		if(mappingArguments != null)
+			strings.add("Mapping("+mappingArguments+")");
+		return StringHelper.concatenate(strings, " ");
 	}
 	
 	/**/

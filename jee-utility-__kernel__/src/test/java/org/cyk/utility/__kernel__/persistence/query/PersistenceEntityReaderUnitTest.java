@@ -78,7 +78,7 @@ public class PersistenceEntityReaderUnitTest extends AbstractWeldUnitTest {
 	public void testedEntityParent_withoutTuple_read_bySystemIdentifier(){		
 		EntityCreator.getInstance().createManyInTransaction(new TestedEntityParent("1","1","1"),new TestedEntityParent("2","2","1"));		
 		__assertRead__(EntityReader.getInstance().readMany(TestedEntityParent.class,new QueryExecutorArguments()
-				.setQuery(new Query().setIdentifier("TestedEntityParent.readBySystemIdentifiers"))
+				.setQuery(QueryGetter.getInstance().get("TestedEntityParent.readBySystemIdentifiers"))
 				//.addParameters("identifiers",List.of("1"))
 				.addFilterField("identifiers",List.of("1"))
 				)

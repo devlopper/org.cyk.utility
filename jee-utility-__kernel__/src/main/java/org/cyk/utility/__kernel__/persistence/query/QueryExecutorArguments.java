@@ -22,7 +22,6 @@ import org.cyk.utility.__kernel__.string.StringHelper;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
@@ -49,9 +48,17 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 	private Map<String,Object> __hints__;
 	private Boolean __isEntityManagerClearable__;
 	private Boolean __isEntityManagerClosable__;
+	private Class<?> __resultClass__;
 	private Collection<?> __objects__;
 	
 	public QueryExecutorArguments prepare() {
+		if(query != null) {
+			if(query.getIntermediateResultClass() == null)
+				__resultClass__ = query.getResultClass();
+			else
+				__resultClass__ = query.getIntermediateResultClass();
+		}
+		
 		__isEntityManagerClearable__ = isEntityManagerClearable;
 		__isEntityManagerClosable__ = isEntityManagerClosable;		
 		__entityManager__ = entityManager;
@@ -179,9 +186,27 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 		return this;
 	}
 
+	@Override
+	public String toString() {
+		Collection<String> strings = new ArrayList<>();
+		if(query != null)
+			strings.add("Query="+query.getIdentifier());
+		if(firstTupleIndex != null)
+			strings.add("FTI="+firstTupleIndex);
+		if(numberOfTuples != null)
+			strings.add("NOT="+numberOfTuples);
+		if(filter != null)
+			strings.add("filter("+filter+")");
+		if(isResultCachable != null)
+			strings.add("QRC="+isResultCachable);
+		if(collectionable != null)
+			strings.add("COL="+collectionable);
+		return StringHelper.concatenate(strings, " ");
+	}
+	
 	/**/
 	
-	@XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor @ToString(callSuper = false,doNotUseGetters = true)
+	@XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor
 	public static class Dto extends AbstractObject implements Serializable {
 		private String queryIdentifier;
 		private Filter.Dto filter;
@@ -199,6 +224,24 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 		public Dto addFilterField(String fieldName, Object fieldValue) {
 			getFilter(Boolean.TRUE).addField(fieldName, fieldValue);
 			return this;
+		}
+		
+		@Override
+		public String toString() {
+			Collection<String> strings = new ArrayList<>();
+			if(StringHelper.isNotBlank(queryIdentifier))
+				strings.add("QID="+queryIdentifier);
+			if(firstTupleIndex != null)
+				strings.add("FTI="+firstTupleIndex);
+			if(numberOfTuples != null)
+				strings.add("NOT="+numberOfTuples);
+			if(filter != null)
+				strings.add("filter("+filter+")");
+			if(isResultCachable != null)
+				strings.add("QRC="+isResultCachable);
+			if(collectionable != null)
+				strings.add("COL="+collectionable);
+			return StringHelper.concatenate(strings, " ");
 		}
 		
 		/**/

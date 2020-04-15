@@ -8,6 +8,7 @@ import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.request.RequestGetter;
 import org.cyk.utility.throwable.ThrowableHelper;
 
+@Deprecated
 public class RequestGetterFunctionRunnableImpl extends AbstractFunctionRunnableImpl<RequestGetter> implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

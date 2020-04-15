@@ -208,9 +208,9 @@ public interface QueryHelper {
 					return;
 				}
 				for(Query query : queries) {
-					Class<?> resultClass = query.getResultClass();
+					Class<?> resultClass = query.getIntermediateResultClass() == null ? query.getResultClass() : query.getIntermediateResultClass();
 					javax.persistence.Query __query__ = resultClass == null ? entityManager.createQuery(query.getValue()) : entityManager.createQuery(query.getValue(), resultClass);
-					entityManager.getEntityManagerFactory().addNamedQuery((String) query.getIdentifier(), __query__);
+					entityManager.getEntityManagerFactory().addNamedQuery(query.getIdentifier(), __query__);
 				}	
 			}else {
 				LogHelper.logWarning(String.format("Queries not added to entity manager : %s", queries), QueriesImpl.class);

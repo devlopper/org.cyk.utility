@@ -5,6 +5,7 @@ import java.io.Serializable;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.__kernel__.field.FieldInstance;
 
+@Deprecated
 public class FieldImpl extends AbstractObject implements Field,Serializable {
 	private static final long serialVersionUID = 1L;
 	
