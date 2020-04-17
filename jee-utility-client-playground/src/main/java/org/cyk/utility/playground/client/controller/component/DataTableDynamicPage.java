@@ -40,8 +40,8 @@ public class DataTableDynamicPage extends AbstractPageContainerManagedImpl imple
 				,DataTable.FIELD_LISTENER,new AbstractDataTable.Listener.AbstractImpl() {
 					
 			@Override
-			public Map<Object, Object> listenAddColumnGetArguments(AbstractDataTable dataTable,String fieldName) {
-				Map<Object,Object> map = super.listenAddColumnGetArguments(dataTable, fieldName);
+			public Map<Object, Object> getColumnArguments(AbstractDataTable dataTable,String fieldName) {
+				Map<Object,Object> map = super.getColumnArguments(dataTable, fieldName);
 				if(map == null)
 					map = new HashMap<>();
 				if("aeYear".equals(fieldName)) {

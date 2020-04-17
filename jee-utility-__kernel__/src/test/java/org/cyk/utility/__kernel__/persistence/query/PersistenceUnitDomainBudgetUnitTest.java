@@ -13,9 +13,12 @@ import javax.persistence.Persistence;
 import javax.persistence.Tuple;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.__entities__.domain.budget.Action;
+import org.cyk.utility.__kernel__.__entities__.domain.budget.Activity;
 import org.cyk.utility.__kernel__.__entities__.domain.budget.AdministrativeUnit;
 import org.cyk.utility.__kernel__.__entities__.domain.budget.FunctionalClassification;
 import org.cyk.utility.__kernel__.__entities__.domain.budget.Localisation;
+import org.cyk.utility.__kernel__.__entities__.domain.budget.Program;
 import org.cyk.utility.__kernel__.__entities__.domain.budget.Section;
 import org.cyk.utility.__kernel__.__entities__.domain.budget.ServiceGroup;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
@@ -49,6 +52,19 @@ public class PersistenceUnitDomainBudgetUnitTest extends AbstractWeldUnitTest {
 				+ "LEFT JOIN t.functionalClassification functionalClassification "
 				+ "LEFT JOIN t.localisation localisation")
 				.setTupleFieldsNamesIndexes(Map.of("identifier",0,"asString",1,"sectionAsString",2,"serviceGroupAsString",3,"functionalClassificationAsString",4,"localisationAsString",5)));
+		
+		QueryHelper.QUERIES.add(Query.build(Activity.class, "read.view.01", "SELECT t.identifier,CONCAT(t.code,' ',t.name)"
+				+ ",CONCAT(action.code,' ',action.name) "
+				+ ",CONCAT(program.code,' ',program.name) "
+				+ ",CONCAT(section.code,' ',section.name) "
+				
+				+ "FROM Activity t "
+				
+				+ "LEFT JOIN t.action action "
+				+ "LEFT JOIN t.action.program program "
+				+ "LEFT JOIN t.action.program.section section "
+				)
+				.setTupleFieldsNamesIndexes(Map.of("identifier",0,"asString",1,"actionAsString",2,"programAsString",3,"sectionAsString",4)));
 	}
 	
 	@Override
@@ -68,6 +84,19 @@ public class PersistenceUnitDomainBudgetUnitTest extends AbstractWeldUnitTest {
 		assertThat(administrativeUnit.getServiceGroupAsString()).isEqualTo("SG1 Service Group 1");
 		assertThat(administrativeUnit.getFunctionalClassificationAsString()).isEqualTo("FC1 Funct. Class. 1");
 		assertThat(administrativeUnit.getLocalisationAsString()).isEqualTo("LOC1 Localisation 1");
+	}
+	
+	@Test
+	public void read_activity_view_01(){
+		persistSections(1);
+		persistActivities(1);
+		Collection<Activity> activities = EntityReader.getInstance().readMany(Activity.class, new QueryExecutorArguments()
+				.setQuery(QueryGetter.getInstance().get("Activity.read.view.01")));
+		Activity activity = activities.iterator().next();
+		assertThat(activity.getAsString()).isEqualTo("ACTIVITY.ACTION.PROG.SEC1.1.1.1 Activité 1");
+		assertThat(activity.getSectionAsString()).isEqualTo("SEC1 Section 1");
+		assertThat(activity.getProgramAsString()).isEqualTo("PROG.SEC1.1 Programme 1");
+		assertThat(activity.getActionAsString()).isEqualTo("ACTION.PROG.SEC1.1.1 Action 1");
 	}
 	
 	@Test
@@ -115,6 +144,16 @@ public class PersistenceUnitDomainBudgetUnitTest extends AbstractWeldUnitTest {
 	
 	/**/
 	
+	private void persistSections(Integer numberOfSections) {
+		System.out.println("Persisting "+(numberOfSections)+" sections...");
+		Long t = System.currentTimeMillis();
+		Collection<Object> objects = new ArrayList<>();
+		for(Integer index = 1 ; index <= numberOfSections ; index = index + 1)
+			objects.add(new Section().setIdentifier(index+"").setCode("SEC"+index).setName("Section "+index));		
+		EntityCreator.getInstance().createManyInTransaction(objects);
+		System.out.println("Persisted in "+((System.currentTimeMillis() - t))+" ms");
+	}
+	
 	private void persistAdministrativeUnits(Integer numberOfAdministrativeUnits,Integer numberOfSections) {
 		System.out.println("Persisting "+(numberOfAdministrativeUnits*numberOfSections)+" administrative units...");
 		Long t = System.currentTimeMillis();
@@ -138,6 +177,32 @@ public class PersistenceUnitDomainBudgetUnitTest extends AbstractWeldUnitTest {
 			}
 		}		
 		EntityCreator.getInstance().createManyInTransaction(objects);	
+		System.out.println("Persisted in "+((System.currentTimeMillis() - t))+" ms");
+	}
+	
+	private void persistActivities(Integer numberOfActivities) {
+		System.out.println("Persisting "+(numberOfActivities)+" activities ...");
+		Long t = System.currentTimeMillis();
+		Collection<Section> sections = EntityReader.getInstance().readMany(Section.class);
+		Integer numberOfProgramsPerSection = 1;
+		Integer numberOfActionsPerProgram = 1;
+		Integer numberOfActivitiesPerAction = 1;
+		Collection<Object> objects = new ArrayList<>();
+		for(Section section : sections) {
+			for(Integer indexProgram = 1 ; indexProgram <= numberOfProgramsPerSection ; indexProgram = indexProgram + 1) {
+				Program program = new Program().setIdentifier(section.getIdentifier()+"."+indexProgram).setCode("PROG."+section.getCode()+"."+indexProgram).setName("Programme "+indexProgram).setSection(section);
+				objects.add(program);
+				for(Integer indexAction = 1 ; indexAction <= numberOfActionsPerProgram ; indexAction = indexAction + 1) {
+					Action action = new Action().setIdentifier(program.getIdentifier()+"."+indexAction).setCode("ACTION."+program.getCode()+"."+indexAction).setName("Action "+indexAction).setProgram(program);
+					objects.add(action);
+					for(Integer indexActivity = 1 ; indexActivity <= numberOfActivitiesPerAction ; indexActivity = indexActivity + 1) {
+						Activity activity = new Activity().setIdentifier(action.getIdentifier()+"."+indexActivity).setCode("ACTIVITY."+action.getCode()+"."+indexActivity).setName("Activité "+indexActivity).setAction(action);
+						objects.add(activity);
+					}
+				}
+			}
+		}
+		EntityCreator.getInstance().createManyInTransaction(objects);		
 		System.out.println("Persisted in "+((System.currentTimeMillis() - t))+" ms");
 	}
 }

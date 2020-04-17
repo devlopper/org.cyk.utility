@@ -118,14 +118,14 @@ public class DataTableLazyPage extends AbstractPageContainerManagedImpl implemen
 		dataTable.setListener(new AbstractDataTable.Listener.AbstractImpl() {
 			
 			@Override
-			public String listenGetStyleClassByRecord(Object record,Integer recordIndex) {
+			public String getStyleClassByRecord(Object record,Integer recordIndex) {
 				if(NumberHelper.compare(recordIndex, 3, ComparisonOperator.EQ))
 					return "cyk-background-highlight";
 				return null;
 			}
 			
 			@Override
-			public String listenGetStyleClassByRecordByColumn(Object record,Integer recordIndex,Column column,Integer columnIndex) {
+			public String getStyleClassByRecordByColumn(Object record,Integer recordIndex,Column column,Integer columnIndex) {
 				if(NumberHelper.compare(recordIndex, 7, ComparisonOperator.EQ) && NumberHelper.compare(columnIndex, 1, ComparisonOperator.EQ))
 					return "cyk-background-highlight";
 				return null;

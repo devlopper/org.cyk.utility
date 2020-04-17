@@ -33,6 +33,11 @@ public class Action extends AbstractIdentifiableSystemScalarStringIdentifiableBu
 	}
 	
 	@Override
+	public Action setIdentifier(String identifier) {
+		return (Action) super.setIdentifier(identifier);
+	}
+	
+	@Override
 	public Action setCode(String code) {
 		return (Action) super.setCode(code);
 	}

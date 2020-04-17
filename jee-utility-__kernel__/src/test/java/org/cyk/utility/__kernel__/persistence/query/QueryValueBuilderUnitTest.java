@@ -41,6 +41,16 @@ public class QueryValueBuilderUnitTest extends AbstractWeldUnitTest {
 		assertThat(QueryValueBuilder.buildCountFromSelect("SELECT t.identifier,t.code FROM T t ORDER BY")).isEqualTo("SELECT COUNT(t.identifier) FROM T t");
 	}
 	
+	@Test
+	public void deriveLeftJoinsFromFieldsNames(){
+		assertThat(QueryValueBuilder.deriveLeftJoinsFromFieldsNames("t","a1","a2","a2.b1")).isEqualTo("LEFT JOIN t.a1 a1 LEFT JOIN t.a2 a2 LEFT JOIN t.a2.b1 b1");
+	}
+	
+	@Test
+	public void deriveConcatsCodeAndNameFromTuplesNames(){
+		assertThat(QueryValueBuilder.deriveConcatsCodeAndNameFromTuplesNames("t","s","f")).isEqualTo("CONCAT(t.code,' ',t.name),CONCAT(s.code,' ',s.name),CONCAT(f.code,' ',f.name)");
+	}
+	
 	/**/
 	
 	@Getter @Setter @Accessors(chain=true)

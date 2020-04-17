@@ -2,9 +2,13 @@ package org.cyk.utility.__kernel__.persistence.query;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.Helper;
+import org.cyk.utility.__kernel__.array.ArrayHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
@@ -139,4 +143,32 @@ public interface QueryValueBuilder {
 		}			
 		throw new IllegalArgumentException(String.format("we cannot build count query from following select query : %s",selectQueryValue));
 	}
+
+	static String deriveLeftJoinsFromFieldsNames(String tupleName,Collection<String> fieldsNames) {
+		if(CollectionHelper.isEmpty(fieldsNames))
+			return null;
+		return StringHelper.concatenate(fieldsNames.stream().map(fieldName ->  String.format(FORMAT_LEFT_JOIN, tupleName,fieldName
+				,fieldName.contains(".") ? StringUtils.substringAfterLast(fieldName, ".") : fieldName)).collect(Collectors.toList())," ");
+	}
+	
+	static String deriveLeftJoinsFromFieldsNames(String tupleName,String...fieldsNames) {
+		if(ArrayHelper.isEmpty(fieldsNames))
+			return null;
+		return deriveLeftJoinsFromFieldsNames(tupleName, CollectionHelper.listOf(fieldsNames));
+	}
+	
+	static String deriveConcatsCodeAndNameFromTuplesNames(Collection<String> tuplesNames) {
+		if(CollectionHelper.isEmpty(tuplesNames))
+			return null;
+		return StringHelper.concatenate(tuplesNames.stream().map(tupleName ->  String.format(FORMAT_CONCAT_CODE_NAME, tupleName)).collect(Collectors.toList()),",");
+	}
+	
+	static String deriveConcatsCodeAndNameFromTuplesNames(String...tuplesNames) {
+		if(ArrayHelper.isEmpty(tuplesNames))
+			return null;
+		return deriveConcatsCodeAndNameFromTuplesNames(CollectionHelper.listOf(tuplesNames));
+	}
+	
+	String FORMAT_LEFT_JOIN = "LEFT JOIN %s.%s %s";
+	String FORMAT_CONCAT_CODE_NAME = "CONCAT(%1$s.code,' ',%1$s.name)";
 }

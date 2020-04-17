@@ -37,6 +37,11 @@ public class Program extends AbstractIdentifiableSystemScalarStringIdentifiableB
 	}
 	
 	@Override
+	public Program setIdentifier(String identifier) {
+		return (Program) super.setIdentifier(identifier);
+	}
+	
+	@Override
 	public Program setCode(String code) {
 		return (Program) super.setCode(code);
 	}

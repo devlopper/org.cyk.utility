@@ -12,7 +12,10 @@ import lombok.experimental.Accessors;
 public abstract class AbstractIdentifiableSystemImpl<IDENTIFIER> extends AbstractObjectImpl implements IdentifiableSystem<IDENTIFIER>,Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	protected String asString;
+	
 	/**/
 	
 	public static final String FIELD_IDENTIFIER = "identifier";
+	public static final String FIELD_AS_STRING = "asString";
 }

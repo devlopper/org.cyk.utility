@@ -63,8 +63,8 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 						setValue(value = new ArrayList<>());
 					Object element = ClassHelper.instanciate(elementClass);				
 					((Collection<Object>)value).add(element);
-					if(listener != null)
-						((Listener)listener).listenAddRow(AbstractDataTable.this, element);
+					//if(listener != null)
+					//	((Listener)listener).listenAddRow(AbstractDataTable.this, element);
 				}else
 					dataGrid.addRow();
 				return "row added";
@@ -118,16 +118,10 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 				}else
 					fieldName = (String) dataGrid.formatNextColumnKey();
 				Map<Object,Object> arguments = null;
-				if(listener == null)
-					arguments = Listener.AbstractImpl.__getColumnArguments__(AbstractDataTable.this,fieldName);
-				else
-					arguments = ((Listener)listener).listenAddColumnGetArguments(AbstractDataTable.this,fieldName);
+				arguments = ((Listener)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).getColumnArguments(AbstractDataTable.this,fieldName);
 				Column column = Column.build(arguments);
 				addColumnsAfterRowIndex(column);
-				if(listener == null)
-					;
-				else
-					((Listener)listener).listenAddColumn(AbstractDataTable.this,column);
+				//((Listener)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).addColumn(AbstractDataTable.this, column);
 				if(dataGrid == null) {
 					
 				}else
@@ -234,15 +228,11 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 	}
 	
 	public String getStyleClassByRecord(Object record,Integer recordIndex) {
-		if(listener instanceof AbstractDataTable.Listener)
-			return ((AbstractDataTable.Listener)listener).listenGetStyleClassByRecord(record,recordIndex);
-		return null;
+		return ((Listener)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).getStyleClassByRecord(record, recordIndex);
 	}
 	
 	public String getStyleClassByRecordByColumn(Object record,Integer recordIndex,Column column,Integer columnIndex) {
-		if(listener instanceof AbstractDataTable.Listener)
-			return ((AbstractDataTable.Listener)listener).listenGetStyleClassByRecordByColumn(record, recordIndex,column,columnIndex);
-		return null;
+		return ((Listener)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).getStyleClassByRecordByColumn(record, recordIndex, column, columnIndex);
 	}
 	
 	@Override
@@ -336,8 +326,8 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 				if(CollectionHelper.isNotEmpty(dataTable.dataGrid.getColumnsKeys())) {
 					dataTable.dataGrid.getColumnsKeys().forEach(key -> {
 						if(key != null) {
-							Map<Object,Object> columnArguments = listener == null ? Listener.AbstractImpl.__getColumnArguments__(dataTable, key.toString())
-									: listener.listenAddColumnGetArguments(dataTable, key.toString());
+							Map<Object,Object> columnArguments = ((Listener)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener))
+									.getColumnArguments(dataTable, key.toString());
 							dataTable.addColumnsAfterRowIndex(Column.build(columnArguments));	
 						}						
 					});
@@ -349,27 +339,16 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 	/**/
 	
 	public static interface Listener extends AbstractCollection.Listener {
-		
 		Object getCellValueByRecordByColumn(Object record,Integer recordIndex,Column column,Integer columnIndex);
-		
-		String listenGetStyleClassByRecord(Object record,Integer recordIndex);
-		
-		String listenGetStyleClassByRecordByColumn(Object record,Integer recordIndex,Column column,Integer columnIndex);
-		
-		void listenAddRow(AbstractDataTable dataTable,Object element);
-		
-		void listenRemoveRow(AbstractDataTable dataTable,Object element);
-		
-		void listenAddColumn(AbstractDataTable dataTable,Column column);
-		
-		Map<Object,Object> listenAddColumnGetArguments(AbstractDataTable dataTable,String fieldName);
-		
-		void listenRemoveColumn(AbstractDataTable dataTable,Column column);
-		
+		String getStyleClassByRecord(Object record,Integer recordIndex);
+		String getStyleClassByRecordByColumn(Object record,Integer recordIndex,Column column,Integer columnIndex);
+		void addRow(AbstractDataTable dataTable,Object element);
+		void removeRow(AbstractDataTable dataTable,Object element);
+		//void addColumn(AbstractDataTable dataTable);
+		void removeColumn(AbstractDataTable dataTable,Column column);
+		Map<Object,Object> getColumnArguments(AbstractDataTable dataTable,String fieldName);
 		/**/
-		
 		public static abstract class AbstractImpl extends AbstractCollection.Listener.AbstractImpl implements Listener,Serializable {
-			
 			@Override
 			public Object getCellValueByRecordByColumn(Object record, Integer recordIndex, Column column,Integer columnIndex) {
 				if(record == null || column == null || StringHelper.isBlank(column.getFieldName()))
@@ -378,65 +357,53 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 			}
 			
 			@Override
-			public String listenGetStyleClassByRecord(Object record, Integer recordIndex) {
+			public String getStyleClassByRecord(Object record, Integer recordIndex) {
 				return null;
 			}
 			
 			@Override
-			public String listenGetStyleClassByRecordByColumn(Object record, Integer recordIndex, Column column,Integer columnIndex) {
+			public String getStyleClassByRecordByColumn(Object record, Integer recordIndex, Column column,Integer columnIndex) {
 				return null;
 			}
 			
 			@Override
-			public void listenAddRow(AbstractDataTable dataTable, Object element) {}
+			public void addRow(AbstractDataTable dataTable, Object element) {}
 			
 			@Override
-			public void listenRemoveRow(AbstractDataTable dataTable, Object element) {}
-			
+			public void removeRow(AbstractDataTable dataTable, Object element) {}
+			/*
 			@Override
-			public void listenAddColumn(AbstractDataTable dataTable, Column column) {}
-						
-			@Override
-			public Map<Object, Object> listenAddColumnGetArguments(AbstractDataTable dataTable,String fieldName) {
-				return __getColumnArguments__(dataTable,fieldName);
+			public void addColumn(AbstractDataTable dataTable) {
+				String fieldName;
+				if(dataTable.dataGrid == null) {
+					fieldName = null;
+				}else
+					fieldName = (String) dataTable.dataGrid.formatNextColumnKey();
+				Map<Object,Object> arguments = null;
+				arguments = ((Listener)(dataTable.listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : dataTable.listener)).getColumnArguments(dataTable,fieldName);
+				Column column = Column.build(arguments);
+				dataTable.addColumnsAfterRowIndex(column);
+				if(dataTable.dataGrid == null) {
+					
+				}else
+					dataTable.dataGrid.addColumn(fieldName);
 			}
+			*/
+			@Override
+			public void removeColumn(AbstractDataTable dataTable, Column column) {}
 			
 			@Override
-			public void listenRemoveColumn(AbstractDataTable dataTable, Column column) {}
-			
+			public Map<Object, Object> getColumnArguments(AbstractDataTable dataTable,String fieldName) {
+				if(StringHelper.isBlank(fieldName))
+					fieldName = String.format(dataTable.columnFieldNameFormat, CollectionHelper.getSize(dataTable.columnsAfterRowIndex));
+				return MapHelper.instantiate(Column.FIELD_HEADER_TEXT,fieldName,Column.FIELD_FIELD_NAME,fieldName
+						,Column.ConfiguratorImpl.FIELD_EDITABLE,dataTable.editable,Column.FIELD_REMOVE_COMMAND_BUTTON);
+			}
+
 			/**/
 			
 			public static class DefaultImpl extends Listener.AbstractImpl implements Serializable {
 				public static final Listener INSTANCE = new DefaultImpl();
-			}
-			
-			public static Map<Object, Object> __getColumnArguments__(AbstractDataTable dataTable,String fieldName) {
-				if(StringHelper.isBlank(fieldName))
-					fieldName = String.format(dataTable.columnFieldNameFormat, CollectionHelper.getSize(dataTable.columnsAfterRowIndex));
-				return MapHelper.instantiate(Column.FIELD_HEADER_TEXT,fieldName,Column.FIELD_FIELD_NAME,fieldName
-						,Column.ConfiguratorImpl.FIELD_EDITABLE,dataTable.editable,Column.FIELD_REMOVE_COMMAND_BUTTON
-						/*
-						,CommandButton.build(CommandButton.FIELD_TITLE,"Retirer",CommandButton.FIELD_ICON,"fa fa-minus"
-								,CommandButton.ConfiguratorImpl.FIELD_COLLECTION,dataTable
-								,CommandButton.ConfiguratorImpl.FIELD_COLLECTION_UPDATABLE,Boolean.TRUE
-								,CommandButton.ConfiguratorImpl.FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_NULLABLE,Boolean.TRUE
-								,CommandButton.FIELD_LISTENER,new AbstractAction.Listener.AbstractImpl() {
-							
-							protected Object __executeFunction__(Object argument) {
-								if(!(argument instanceof Column) || CollectionHelper.isEmpty(dataTable.columnsAfterRowIndex))
-									return null;
-								Column column = (Column) argument;
-								dataTable.columnsAfterRowIndex.remove(column);
-								if(dataTable.getDataGrid() == null) {
-									
-								}else {
-									dataTable.getDataGrid().removeColumn(column.getFieldName());
-								}
-								return "column removed";
-							}
-						}.setAction(AbstractAction.Listener.Action.EXECUTE_FUNCTION))
-						*/
-						);
 			}
 		}	
 	}
@@ -458,8 +425,8 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 					dataTable.value = new ArrayList<>();
 				Object element = ClassHelper.instanciate(dataTable.elementClass);				
 				((Collection<Object>)dataTable.value).add(element);
-				if(dataTable.listener != null)
-					((Listener)dataTable.listener).listenAddRow(dataTable, element);
+				//if(dataTable.listener != null)
+				//	((Listener)dataTable.listener).listenAddRow(dataTable, element);
 			}else
 				dataTable.dataGrid.addRow();
 			return "row added";

@@ -80,7 +80,7 @@ public class Query extends AbstractObject implements Serializable {
 					query.resultClass = query.tupleClass;
 			}
 			
-			if(query.tupleFieldsNamesIndexes == null && StringHelper.isNotBlank(query.value)) {
+			if(!Long.class.equals(query.resultClass) && query.tupleFieldsNamesIndexes == null && StringHelper.isNotBlank(query.value)) {
 				if(StringUtils.startsWithIgnoreCase(query.value, "select")) {
 					String stringBetweenSelectAndFrom = StringUtils.substring(query.value, "select".length(), StringUtils.indexOfIgnoreCase(query.value, "from")).strip();
 					if(!StringUtils.startsWithIgnoreCase(stringBetweenSelectAndFrom, "new")) {

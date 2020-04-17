@@ -15,6 +15,8 @@ import lombok.Setter;
 public abstract class AbstractDataIdentifiableSystemStringImpl extends AbstractDataImpl implements IdentifiableSystem<String>,Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	protected String asString;
+	
 	@Input @NotNull
 	private String identifier;
 	
@@ -40,4 +42,5 @@ public abstract class AbstractDataIdentifiableSystemStringImpl extends AbstractD
 	/**/
 	
 	public static final String FIELD_IDENTIFIER = "identifier";
+	public static final String FIELD_AS_STRING = "asString";
 }

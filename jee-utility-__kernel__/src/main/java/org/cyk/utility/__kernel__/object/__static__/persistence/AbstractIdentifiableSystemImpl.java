@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 
 import org.cyk.utility.__kernel__.object.marker.IdentifiableSystem;
 
@@ -16,6 +17,8 @@ import lombok.experimental.Accessors;
 @MappedSuperclass @Access(AccessType.FIELD)
 public abstract class AbstractIdentifiableSystemImpl<IDENTIFIER> extends AbstractObjectImpl implements IdentifiableSystem<IDENTIFIER>,Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	@Transient protected String asString;
 	
 	protected abstract IDENTIFIER getIdentifier();
 	
@@ -43,4 +46,5 @@ public abstract class AbstractIdentifiableSystemImpl<IDENTIFIER> extends Abstrac
 	/**/
 	
 	public static final String FIELD_IDENTIFIER = "identifier";
+	public static final String FIELD_AS_STRING = "asString";
 }

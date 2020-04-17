@@ -50,9 +50,17 @@ public class Activity extends AbstractIdentifiableSystemScalarStringIdentifiable
 	@Transient private Boolean isGestionnaire;
 	@Transient private Boolean isBeneficiaire;
 	
+	/* As String */	
+	@Transient private String asString,sectionAsString,programAsString,actionAsString,functionTypeAsString,managerAsString,beneficiaryAsString;
+	
 	public Activity(String code,String name,String actionCode) {
 		super(code,name);
 		setActionFromCode(actionCode);
+	}
+	
+	@Override
+	public Activity setIdentifier(String identifier) {
+		return (Activity) super.setIdentifier(identifier);
 	}
 	
 	@Override
