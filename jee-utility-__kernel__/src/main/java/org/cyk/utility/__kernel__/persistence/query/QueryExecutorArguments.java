@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
@@ -147,6 +148,40 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 	public QueryExecutorArguments addFilterField(String fieldName, Object fieldValue) {
 		getFilter(Boolean.TRUE).addField(fieldName, fieldValue);
 		return this;
+	}
+
+	public Object getFilterFieldValue(Collection<String> paths) {
+		if(filter == null)
+			return null;
+		return filter.getFieldValue(paths);
+	}
+	
+	public Object getFilterFieldValue(String...paths) {
+		if(filter == null)
+			return null;
+		return filter.getFieldValue(paths);
+	}
+	
+	public List<String> getFilterFieldValueLikes(String fieldName,Integer numberOfTokens) {
+		if(StringHelper.isEmpty(fieldName))
+			return null;
+		Object value = filter == null ? null : filter.getFieldValue(fieldName);
+		return QueryArgumentHelper.getLikes(value,numberOfTokens);
+	}
+	
+	public QueryExecutorArguments transformFieldValueToLike(Collection<String> paths) {
+		if(CollectionHelper.isEmpty(paths))
+			return this;
+		if(filter == null)
+			return this;
+		filter.transformFieldValueToLike(paths);
+		return this;
+	}
+	
+	public QueryExecutorArguments transformFieldValueToLike(String...paths) {
+		if(ArrayHelper.isEmpty(paths))
+			return this;
+		return transformFieldValueToLike(CollectionHelper.listOf(paths));
 	}
 	
 	public Collection<Object> getObjects(Boolean injectIfNull) {

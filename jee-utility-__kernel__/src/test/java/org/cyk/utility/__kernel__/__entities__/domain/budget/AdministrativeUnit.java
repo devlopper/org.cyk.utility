@@ -17,6 +17,7 @@ import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.instance.InstanceGetter;
 import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl;
+import org.cyk.utility.__kernel__.persistence.PersistenceHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 
 import lombok.Getter;
@@ -38,6 +39,10 @@ public class AdministrativeUnit extends AbstractIdentifiableSystemScalarStringId
 	
 	@Column(name = COLUMN_CREATION_DATE) private LocalDateTime creationDate;
 	@Column(name = COLUMN_MODIFICATION_DATE) private LocalDateTime modificationDate;
+	
+	/**/
+	@Transient private String asString,sectionAsString,serviceGroupAsString,functionalClassificationAsString,localisationAsString;
+	/**/
 	
 	@Transient private Integer numberOfActivities;
 	@Transient private Integer numberOfActivitiesBeneficiaire;
@@ -93,11 +98,27 @@ public class AdministrativeUnit extends AbstractIdentifiableSystemScalarStringId
 		return this;
 	}
 	
+	public AdministrativeUnit setSectionFromIdentifier(String identifier) {
+		if(StringHelper.isBlank(identifier))
+			this.section = null;
+		else
+			this.section = PersistenceHelper.getEntityWithItsReferenceOnly(Section.class, identifier);
+		return this;
+	}
+	
 	public AdministrativeUnit setServiceGroupFromCode(String code) {
 		if(StringHelper.isBlank(code))
 			this.serviceGroup = null;
 		else
 			this.serviceGroup = InstanceGetter.getInstance().getByBusinessIdentifier(ServiceGroup.class, code);
+		return this;
+	}
+	
+	public AdministrativeUnit setServiceGroupFromIdentifier(String identifier) {
+		if(StringHelper.isBlank(identifier))
+			this.serviceGroup = null;
+		else
+			this.serviceGroup = PersistenceHelper.getEntityWithItsReferenceOnly(ServiceGroup.class, identifier);
 		return this;
 	}
 	
@@ -109,11 +130,27 @@ public class AdministrativeUnit extends AbstractIdentifiableSystemScalarStringId
 		return this;
 	}
 	
+	public AdministrativeUnit setFunctionalClassificationFromIdentifier(String identifier) {
+		if(StringHelper.isBlank(identifier))
+			this.functionalClassification = null;
+		else
+			this.functionalClassification = PersistenceHelper.getEntityWithItsReferenceOnly(FunctionalClassification.class, identifier);
+		return this;
+	}
+	
 	public AdministrativeUnit setLocalisationFromCode(String code) {
 		if(StringHelper.isBlank(code))
 			this.localisation = null;
 		else
 			this.localisation = InstanceGetter.getInstance().getByBusinessIdentifier(Localisation.class, code);
+		return this;
+	}
+	
+	public AdministrativeUnit setLocalisationFromIdentifier(String identifier) {
+		if(StringHelper.isBlank(identifier))
+			this.localisation = null;
+		else
+			this.localisation = PersistenceHelper.getEntityWithItsReferenceOnly(Localisation.class, identifier);
 		return this;
 	}
 	

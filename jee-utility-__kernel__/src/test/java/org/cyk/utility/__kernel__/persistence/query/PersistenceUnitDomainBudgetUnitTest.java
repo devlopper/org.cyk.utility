@@ -1,5 +1,7 @@
 package org.cyk.utility.__kernel__.persistence.query;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -34,6 +36,19 @@ public class PersistenceUnitDomainBudgetUnitTest extends AbstractWeldUnitTest {
 		QueryHelper.QUERIES.add(Query.build(AdministrativeUnit.class, "read.constructor", "SELECT new org.cyk.utility.__kernel__.__entities__.domain.budget.AdministrativeUnit(t.identifier,t.code) FROM AdministrativeUnit t"));
 		QueryHelper.QUERIES.add(Query.build(AdministrativeUnit.class, "read.tuple", "SELECT t.identifier,t.code FROM AdministrativeUnit t",Tuple.class));
 		QueryHelper.QUERIES.add(Query.build(AdministrativeUnit.class, "read.array", "SELECT t.identifier,t.code FROM AdministrativeUnit t"));
+		QueryHelper.QUERIES.add(Query.build(AdministrativeUnit.class, "read.view.01", "SELECT t.identifier,CONCAT(t.code,' ',t.name)"
+				+ ",CONCAT(section.code,' ',section.name) "
+				+ ",CONCAT(serviceGroup.code,' ',serviceGroup.name) "
+				+ ",CONCAT(functionalClassification.code,' ',functionalClassification.name) "
+				+ ",CONCAT(localisation.code,' ',localisation.name) "
+				
+				+ "FROM AdministrativeUnit t "
+				
+				+ "LEFT JOIN t.section section "
+				+ "LEFT JOIN t.serviceGroup serviceGroup "
+				+ "LEFT JOIN t.functionalClassification functionalClassification "
+				+ "LEFT JOIN t.localisation localisation")
+				.setTupleFieldsNamesIndexes(Map.of("identifier",0,"asString",1,"sectionAsString",2,"serviceGroupAsString",3,"functionalClassificationAsString",4,"localisationAsString",5)));
 	}
 	
 	@Override
@@ -43,23 +58,25 @@ public class PersistenceUnitDomainBudgetUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	@Test
+	public void read_administrativeUnit_view_01(){
+		persistAdministrativeUnits(1, 1);
+		Collection<AdministrativeUnit> administrativeUnits = EntityReader.getInstance().readMany(AdministrativeUnit.class, new QueryExecutorArguments()
+				.setQuery(QueryGetter.getInstance().get("AdministrativeUnit.read.view.01")));
+		AdministrativeUnit administrativeUnit = administrativeUnits.iterator().next();
+		assertThat(administrativeUnit.getAsString()).isEqualTo("0.0 0");
+		assertThat(administrativeUnit.getSectionAsString()).isEqualTo("SEC1 Section 1");
+		assertThat(administrativeUnit.getServiceGroupAsString()).isEqualTo("SG1 Service Group 1");
+		assertThat(administrativeUnit.getFunctionalClassificationAsString()).isEqualTo("FC1 Funct. Class. 1");
+		assertThat(administrativeUnit.getLocalisationAsString()).isEqualTo("LOC1 Localisation 1");
+	}
+	
+	@Test
 	public void read_administrativeUnit(){
 		Integer numberOfAdministrativeUnits = 1000;
 		Integer numberOfSections = 50;
 		persistAdministrativeUnits(numberOfAdministrativeUnits,numberOfSections);
 		
-		printReadQueryUsageInformations(AdministrativeUnit.class, "AdministrativeUnit.read.constructor","AdministrativeUnit.read.tuple","AdministrativeUnit.read.array");
-		
-		/*
-		Collection<Object[]> objects = EntityReader.getInstance().readMany(Object[].class,new QueryExecutorArguments().setQuery(QueryGetter.getInstance().get("AdministrativeUnit.read.array")));
-		graphLayout = GraphLayout.parseInstance(objects);
-		System.out.println(graphLayout.totalCount()+" - "+(graphLayout.totalSize()/1024));
-		
-		administrativeUnits = QueryResultMapper.getInstance().map(AdministrativeUnit.class, new QueryResultMapper.Arguments()
-				.setQuery(QueryGetter.getInstance().get("AdministrativeUnit.read.array")).setObjects(objects));
-		graphLayout = GraphLayout.parseInstance(administrativeUnits);
-		System.out.println(graphLayout.totalCount()+" - "+(graphLayout.totalSize()/1024));
-		*/
+		printReadQueryUsageInformations(AdministrativeUnit.class, "AdministrativeUnit.read.constructor","AdministrativeUnit.read.tuple","AdministrativeUnit.read.array","AdministrativeUnit.read.view.01");
 	}
 	
 	public <T> void printReadQueryUsageInformations(Class<T> tupleClass,Collection<String> queriesIdentifiers) {
@@ -102,21 +119,23 @@ public class PersistenceUnitDomainBudgetUnitTest extends AbstractWeldUnitTest {
 		System.out.println("Persisting "+(numberOfAdministrativeUnits*numberOfSections)+" administrative units...");
 		Long t = System.currentTimeMillis();
 		Collection<Object> objects = new ArrayList<>();
-		for(Integer index = 0 ; index < numberOfSections ; index = index + 1) {
-			objects.add(new Section().setIdentifier(index+"").setCode(index+"").setName(index+""));	
-			objects.add(new ServiceGroup().setIdentifier(index+"").setCode(index+"").setName(index+""));	
-			objects.add(new FunctionalClassification().setIdentifier(index+"").setCode(index+"").setName(index+""));	
-			objects.add(new Localisation().setIdentifier(index+"").setCode(index+"").setName(index+""));	
+		for(Integer index = 1 ; index <= numberOfSections ; index = index + 1) {
+			objects.add(new Section().setIdentifier(index+"").setCode("SEC"+index).setName("Section "+index));	
+			objects.add(new ServiceGroup().setIdentifier(""+index).setCode("SG"+index).setName("Service Group "+index));	
+			objects.add(new FunctionalClassification().setIdentifier(index+"").setCode("FC"+index).setName("Funct. Class. "+index));	
+			objects.add(new Localisation().setIdentifier(index+"").setCode("LOC"+index).setName("Localisation "+index));	
 		}
 		EntityCreator.getInstance().createManyInTransaction(objects);
 		
 		objects = new ArrayList<>();
 		for(Integer sectionIndex = 0 ; sectionIndex < numberOfSections ; sectionIndex = sectionIndex + 1) {
-			for(Integer index = 0 ; index < numberOfAdministrativeUnits ; index = index + 1)
-				objects.add(new AdministrativeUnit().setIdentifier(sectionIndex+"."+index).setCode(sectionIndex+"."+index).setName(index+"")
+			for(Integer index = 0 ; index < numberOfAdministrativeUnits ; index = index + 1) {
+				AdministrativeUnit administrativeUnit = new AdministrativeUnit().setIdentifier(sectionIndex+"."+index).setCode(sectionIndex+"."+index).setName(index+"")
 						.setOrderNumber(RandomHelper.getNumeric(4).intValue())
-						.setSectionFromCode("1").setServiceGroupFromCode("1").setFunctionalClassificationFromCode("1").setLocalisationFromCode("1")
-						);
+						.setSectionFromIdentifier("1").setServiceGroupFromIdentifier("1").setFunctionalClassificationFromIdentifier("1").setLocalisationFromIdentifier("1")
+						;
+				objects.add(administrativeUnit);
+			}
 		}		
 		EntityCreator.getInstance().createManyInTransaction(objects);	
 		System.out.println("Persisted in "+((System.currentTimeMillis() - t))+" ms");

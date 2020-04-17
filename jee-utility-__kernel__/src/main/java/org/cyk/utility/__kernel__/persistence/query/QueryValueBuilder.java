@@ -127,7 +127,8 @@ public interface QueryValueBuilder {
 			if(fromIndex != null && fromIndex > -1) {
 				String variable = StringUtils.trimToNull(StringUtils.substring(selectQueryValue, selectIndex+6, fromIndex));
 				if(StringHelper.isNotBlank(variable)) {
-					String countQueryValue = StringUtils.replaceOnce(selectQueryValue, variable, String.format("COUNT(%s)", variable));
+					String replacement = StringUtils.split(variable,",")[0];
+					String countQueryValue = StringUtils.replaceOnce(selectQueryValue, variable, String.format("COUNT(%s)", replacement));
 					//we do not need order by
 					Integer orderByIndex = StringUtils.lastIndexOfIgnoreCase(countQueryValue, "order by");
 					if(orderByIndex != null && orderByIndex > -1)

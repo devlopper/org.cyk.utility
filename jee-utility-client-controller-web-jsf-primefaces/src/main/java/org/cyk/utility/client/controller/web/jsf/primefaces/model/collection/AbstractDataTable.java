@@ -192,9 +192,7 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 	public Object getCellValueByRecordByColumn(Object record,Integer recordIndex,Column column,Integer columnIndex) {
 		if(record == null || recordIndex == null || column == null || columnIndex == null)
 			return null;
-		if(listener == null)
-			return FieldHelper.read(record, column.getFieldName());
-		return ((Listener)listener).listenGetCellValueByRecordByColumn(record, recordIndex, column, columnIndex);
+		return ((Listener)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).getCellValueByRecordByColumn(record, recordIndex, column, columnIndex);
 	}
 	
 	public Collection<Column> getColumnsAfterRowIndex(Boolean injectIfNull) {
@@ -352,7 +350,7 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 	
 	public static interface Listener extends AbstractCollection.Listener {
 		
-		Object listenGetCellValueByRecordByColumn(Object record,Integer recordIndex,Column column,Integer columnIndex);
+		Object getCellValueByRecordByColumn(Object record,Integer recordIndex,Column column,Integer columnIndex);
 		
 		String listenGetStyleClassByRecord(Object record,Integer recordIndex);
 		
@@ -373,8 +371,10 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 		public static abstract class AbstractImpl extends AbstractCollection.Listener.AbstractImpl implements Listener,Serializable {
 			
 			@Override
-			public Object listenGetCellValueByRecordByColumn(Object record, Integer recordIndex, Column column,Integer columnIndex) {
-				return null;
+			public Object getCellValueByRecordByColumn(Object record, Integer recordIndex, Column column,Integer columnIndex) {
+				if(record == null || column == null || StringHelper.isBlank(column.getFieldName()))
+					return null;
+				return FieldHelper.read(record, column.getFieldName());
 			}
 			
 			@Override
@@ -405,6 +405,10 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 			public void listenRemoveColumn(AbstractDataTable dataTable, Column column) {}
 			
 			/**/
+			
+			public static class DefaultImpl extends Listener.AbstractImpl implements Serializable {
+				public static final Listener INSTANCE = new DefaultImpl();
+			}
 			
 			public static Map<Object, Object> __getColumnArguments__(AbstractDataTable dataTable,String fieldName) {
 				if(StringHelper.isBlank(fieldName))

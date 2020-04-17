@@ -1,6 +1,6 @@
 package org.cyk.utility.__kernel__.persistence.query;
 
-public class EntityManagerCachableUnitTest extends AbstractEntityManagerUnitTestBenchmark {
+public class EntityManagerCachableUnitTestBenchmark extends AbstractEntityManagerUnitTestBenchmark {
 	private static final long serialVersionUID = 1L;
 
 	@Override

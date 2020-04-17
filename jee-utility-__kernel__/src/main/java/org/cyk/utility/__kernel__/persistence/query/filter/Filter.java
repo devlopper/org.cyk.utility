@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.enterprise.context.Dependent;
@@ -21,6 +22,7 @@ import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.mapping.MapperSourceDestination;
 import org.cyk.utility.__kernel__.mapping.MappingHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
+import org.cyk.utility.__kernel__.persistence.query.QueryArgumentHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
@@ -149,6 +151,73 @@ public class Filter extends AbstractObject implements Serializable {
 		return addField(fieldName, fieldValue, null);
 	}
 
+	public Filter addFieldsLikesByPrefix(String prefix,List<String> strings){
+		if(StringHelper.isBlank(prefix))
+			throw new IllegalArgumentException("prefix is required");
+		if(CollectionHelper.isEmpty(strings))
+			throw new IllegalArgumentException("strings are required");
+		for(Integer index = 0 ; index < strings.size() ; index = index + 1) {
+			String name = prefix;
+			if(index > 0)
+				name += index;
+			addField(name, strings.get(index));
+		}
+		return this;
+	}
+	
+	public Filter transformFieldValueToLike(Collection<String> paths) {
+		if(CollectionHelper.isEmpty(paths))
+			return this;
+		Object value;
+		Field field = getField(paths);
+		if(field == null)
+			value = null;
+		else
+			value = field.getValue();
+		field.setValue(QueryArgumentHelper.getLike(value));
+		return this;
+	}
+	
+	public Filter transformFieldValueToLike(String...paths) {
+		if(ArrayHelper.isEmpty(paths))
+			return this;
+		return transformFieldValueToLike(CollectionHelper.listOf(paths));
+	}
+	
+	public Filter addFieldTransformedToLike(Filter filter,Collection<String> paths) {
+		if(CollectionHelper.isEmpty(paths))
+			return this;
+		Object value;
+		if(filter == null)
+			value = null;
+		else
+			value = filter.getFieldValue(paths);
+		addField(FieldHelper.join(paths), QueryArgumentHelper.getLike(value));
+		return this;
+	}
+	
+	public Filter addFieldTransformedToLike(Filter filter,String...paths) {
+		if(ArrayHelper.isEmpty(paths))
+			return this;
+		return addFieldTransformedToLike(filter, CollectionHelper.listOf(paths));
+	}
+	
+	public Filter addFieldsTransformedToLike(Filter filter,Collection<String> fieldsNames) {
+		if(CollectionHelper.isEmpty(fieldsNames))
+			return this;
+		fieldsNames.forEach(fieldName -> {
+			addFieldTransformedToLike(filter, fieldName);
+		});
+		return this;
+	}
+	
+	public Filter addFieldsTransformedToLike(Filter filter,String...fieldsNames) {
+		if(ArrayHelper.isEmpty(fieldsNames))
+			return this;
+		addFieldsTransformedToLike(filter, CollectionHelper.listOf(fieldsNames));
+		return this;
+	}
+	
 	@Override
 	public String toString() {
 		Collection<String> strings = new ArrayList<>();

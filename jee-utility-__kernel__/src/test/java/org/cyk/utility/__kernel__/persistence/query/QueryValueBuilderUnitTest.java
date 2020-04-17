@@ -36,6 +36,11 @@ public class QueryValueBuilderUnitTest extends AbstractWeldUnitTest {
 		assertThat(QueryValueBuilder.buildCountFromSelect("SELECT t FROM T t ORDER BY")).isEqualTo("SELECT COUNT(t) FROM T t");
 	}
 	
+	@Test
+	public void buildCountFromSelect02(){
+		assertThat(QueryValueBuilder.buildCountFromSelect("SELECT t.identifier,t.code FROM T t ORDER BY")).isEqualTo("SELECT COUNT(t.identifier) FROM T t");
+	}
+	
 	/**/
 	
 	@Getter @Setter @Accessors(chain=true)
