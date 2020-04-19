@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import javax.ws.rs.core.Response;
 
@@ -13,6 +14,7 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.controller.Arguments;
 import org.cyk.utility.__kernel__.controller.EntityReader;
 import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
@@ -65,6 +67,7 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ENTITY> load(int first, int pageSize, String sortField, SortOrder sortOrder,Map<String, Object> filters) {
+		long timestamp = System.currentTimeMillis();
 		__first__ = first;
 		__pageSize__ = pageSize;
 		__sortField__ = sortField;
@@ -94,6 +97,10 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 				__count__ = __listener__.getCount(this);
 		}
 		setRowCount(__count__);
+		long duration = System.currentTimeMillis() - timestamp;
+		if(Boolean.TRUE.equals(LOGGABLE)) {
+			LogHelper.log(String.format("Page(%s,%s) , duration=%s", first,pageSize,duration), LOG_LEVEL,getClass());
+		}
 		return list;
 	}
 	
@@ -196,4 +203,7 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 			}
 		}
 	}
+	
+	public static Boolean LOGGABLE = Boolean.TRUE;
+	public static Level LOG_LEVEL = Level.FINE;
 }

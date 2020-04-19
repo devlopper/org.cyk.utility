@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.validation.constraints.NotNull;
 
+import org.cyk.utility.__kernel__.object.__static__.controller.annotation.Column;
 import org.cyk.utility.__kernel__.object.__static__.controller.annotation.Input;
 import org.cyk.utility.__kernel__.string.StringHelper;
 
@@ -14,8 +15,8 @@ import lombok.Setter;
 public abstract class AbstractDataIdentifiableSystemStringIdentifiableBusinessStringNamableImpl extends AbstractDataIdentifiableSystemStringIdentifiableBusinessStringImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	@Input
-	@NotNull
+	@Input @NotNull
+	@Column
 	private String name;
 
 	@Override

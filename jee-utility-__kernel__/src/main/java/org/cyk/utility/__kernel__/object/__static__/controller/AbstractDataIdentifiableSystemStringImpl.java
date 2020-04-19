@@ -3,6 +3,7 @@ import java.io.Serializable;
 
 import javax.validation.constraints.NotNull;
 
+import org.cyk.utility.__kernel__.object.__static__.controller.annotation.Column;
 import org.cyk.utility.__kernel__.object.__static__.controller.annotation.Input;
 import org.cyk.utility.__kernel__.object.marker.IdentifiableSystem;
 import org.cyk.utility.__kernel__.string.StringHelper;
@@ -18,6 +19,7 @@ public abstract class AbstractDataIdentifiableSystemStringImpl extends AbstractD
 	protected String asString;
 	
 	@Input @NotNull
+	@Column
 	private String identifier;
 	
 	@Override

@@ -85,6 +85,8 @@ public interface InputClassBuilder {
 		private Class<?> deduceClassFromComponentAnnotation(Field field) {
 			if(field.isAnnotationPresent(org.cyk.utility.__kernel__.object.__static__.controller.annotation.InputText.class))
 				return InputText.class;
+			if(field.isAnnotationPresent(org.cyk.utility.__kernel__.object.__static__.controller.annotation.InputPass.class))
+				return Password.class;
 			if(field.isAnnotationPresent(org.cyk.utility.__kernel__.object.__static__.controller.annotation.InputChoiceManyCheck.class))
 				return SelectManyCheckbox.class;
 			if(field.isAnnotationPresent(org.cyk.utility.__kernel__.object.__static__.controller.annotation.InputChoiceOneRadio.class))

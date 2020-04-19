@@ -10,6 +10,7 @@ import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObject;
+import org.primefaces.model.menu.MenuModel;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +18,7 @@ import lombok.Setter;
 @Getter @Setter
 public abstract class AbstractMenu extends AbstractObject implements Serializable {
 
+	protected MenuModel model;
 	protected Collection<MenuItem> items;
 	
 	public Collection<MenuItem> getItems(Boolean injectIfNull) {

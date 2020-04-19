@@ -1,14 +1,11 @@
 package org.cyk.utility.playground.client.controller.impl;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import org.cyk.utility.client.controller.web.jsf.primefaces.model.collection.Column;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.collection.DataTable;
 import org.cyk.utility.client.controller.web.jsf.primefaces.page.AbstractEntityListPageContainerManagedImpl;
 import org.cyk.utility.playground.client.controller.api.PersonTypeController;
@@ -22,24 +19,11 @@ public class PersonTypeListEditPage extends AbstractEntityListPageContainerManag
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected Collection<String> __getColumnsFieldsNames__(Class<PersonType> entityClass) {
-		return List.of(PersonType.FIELD_IDENTIFIER,PersonType.FIELD_CODE,PersonType.FIELD_NAME);
-	}
-	
-	@Override
 	protected Map<Object, Object> __getDataTableArguments__() {
 		Map<Object, Object> arguments = super.__getDataTableArguments__();
 		arguments.put(DataTable.FIELD_VALUE, __inject__(PersonTypeController.class).read());
 		arguments.put(DataTable.FIELD_EDITABLE, Boolean.TRUE);
 		arguments.put(DataTable.ConfiguratorImpl.FIELD_EDITABLE_CELL, Boolean.TRUE);
 		return arguments;
-	}
-	
-	@Override
-	protected Map<Object, Object> __getColumnArguments__(String fieldName) {
-		Map<Object, Object> map = super.__getColumnArguments__(fieldName);
-		if(PersonType.FIELD_IDENTIFIER.equals(fieldName))
-			map.put(Column.ConfiguratorImpl.FIELD_EDITABLE, Boolean.FALSE);
-		return map;
 	}
 }

@@ -10,11 +10,16 @@ import java.util.Map;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.data.structure.grid.Grid;
+import org.cyk.utility.__kernel__.enumeration.Action;
 import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
+import org.cyk.utility.__kernel__.internationalization.InternationalizationKeyStringType;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.Builder;
+import org.cyk.utility.__kernel__.object.__static__.controller.AbstractDataIdentifiableSystemStringIdentifiableBusinessStringImpl;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.string.Case;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.client.controller.web.jsf.primefaces.PrimefacesHelper;
@@ -263,9 +268,13 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 			return Boolean.TRUE.equals(datatable.editable) ? "/collection/datatable/editable.xhtml" : "/collection/datatable/default.xhtml";
 		}
 		
+		@SuppressWarnings("unchecked")
 		@Override
 		public void configure(DATATABLE dataTable, Map<Object, Object> arguments) {
 			Listener listener = (Listener) MapHelper.readByKey(arguments, DataTable.FIELD_LISTENER);
+			if(listener == null)
+				listener = Listener.AbstractImpl.DefaultImpl.INSTANCE;
+			Listener __listener__ = listener;
 			if(Grid.Row.class.equals(MapHelper.readByKey(arguments, DataTable.FIELD_ELEMENT_CLASS))) {
 				dataTable.setDataGrid((Grid) MapHelper.readByKey(arguments, DataTable.FIELD_DATA_GRID));
 				if(dataTable.getDataGrid() == null)
@@ -296,15 +305,15 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 				dataTable.setOrderNumberColumn(Builder.build(Column.class,map));
 			}
 			if(dataTable.getMenuColumn() == null) {
-				Map<Object,Object> map = new HashMap<>(Map.of(Column.FIELD_HEADER_TEXT,"",Column.FIELD_WIDTH,"50",Column.ConfiguratorImpl.FIELD_FILTERABLE,Boolean.FALSE
+				Map<Object,Object> map = new HashMap<>(Map.of(Column.FIELD_HEADER_TEXT,"",Column.FIELD_WIDTH,"40",Column.ConfiguratorImpl.FIELD_FILTERABLE,Boolean.FALSE
 						,Column.FIELD_RENDERED,Boolean.FALSE));
 				dataTable.setMenuColumn(Builder.build(Column.class,map));
 			}
 			if(dataTable.areColumnsChoosable == null)
-				dataTable.areColumnsChoosable = Boolean.TRUE;
+				dataTable.areColumnsChoosable = Boolean.FALSE;
 			
 			if(dataTable.isExportable == null)
-				dataTable.isExportable = Boolean.TRUE;
+				dataTable.isExportable = Boolean.FALSE;
 			
 			if(dataTable.getRecordMenu() != null && CollectionHelper.isNotEmpty(dataTable.getRecordMenu().getItems()))
 				dataTable.menuColumn.setRendered(Boolean.TRUE);
@@ -322,18 +331,49 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 				}
 			}
 			
-			if(dataTable.getDataGrid() != null) {
+			if(dataTable.getDataGrid() == null) {				
+				Collection<String> columnsFieldsNames = (Collection<String>) MapHelper.readByKey(arguments, FIELD_COLUMNS_FIELDS_NAMES);
+				if(columnsFieldsNames == null) {
+					columnsFieldsNames = FieldHelper.getNames(FieldHelper.getByAnnotationClass(dataTable.elementClass, org.cyk.utility.__kernel__.object.__static__.controller.annotation.Column.class));
+					if(CollectionHelper.getSize(columnsFieldsNames) > 2) {
+						if(columnsFieldsNames.contains(AbstractDataIdentifiableSystemStringIdentifiableBusinessStringImpl.FIELD_IDENTIFIER)
+								&& columnsFieldsNames.contains(AbstractDataIdentifiableSystemStringIdentifiableBusinessStringImpl.FIELD_CODE))
+							columnsFieldsNames.remove(AbstractDataIdentifiableSystemStringIdentifiableBusinessStringImpl.FIELD_IDENTIFIER);
+					}
+				}
+				if(CollectionHelper.isNotEmpty(columnsFieldsNames)) {
+					columnsFieldsNames.forEach(fieldName -> {
+						Map<Object,Object> columnArguments = __listener__.getColumnArguments(dataTable, fieldName);
+						dataTable.addColumnsAfterRowIndex(Column.build(columnArguments));
+					});
+				}				
+			}else {
 				if(CollectionHelper.isNotEmpty(dataTable.dataGrid.getColumnsKeys())) {
 					dataTable.dataGrid.getColumnsKeys().forEach(key -> {
 						if(key != null) {
-							Map<Object,Object> columnArguments = ((Listener)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener))
-									.getColumnArguments(dataTable, key.toString());
+							Map<Object,Object> columnArguments = __listener__.getColumnArguments(dataTable, key.toString());
 							dataTable.addColumnsAfterRowIndex(Column.build(columnArguments));	
 						}						
 					});
 				}
 			}
+			
+			Collection<Action> actions = (Collection<Action>) MapHelper.readByKey(arguments, FIELD_ACTIONS);
+			if(CollectionHelper.isNotEmpty(actions))
+				listener.addHeaderToolbarLeftCommands(dataTable, actions);
+			
+			actions = (Collection<Action>) MapHelper.readByKey(arguments, FIELD_RECORD_ACTIONS);
+			if(CollectionHelper.isNotEmpty(actions))
+				listener.addRecordMenuItems(dataTable, actions);
+			
+			dataTable.addStyleClasses("cyk-datatable");
 		}
+		
+		/*public static interface Listener {
+			
+		}*/
+		
+		public static final String FIELD_COLUMNS_FIELDS_NAMES = "columnsFieldsNames";
 	}
 	
 	/**/
@@ -347,6 +387,10 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 		//void addColumn(AbstractDataTable dataTable);
 		void removeColumn(AbstractDataTable dataTable,Column column);
 		Map<Object,Object> getColumnArguments(AbstractDataTable dataTable,String fieldName);
+		Map<Object,Object> getHeaderToolbarLeftCommandArguments(AbstractDataTable dataTable,Action action);
+		void addHeaderToolbarLeftCommands(AbstractDataTable dataTable,Collection<Action> actions);
+		Map<Object,Object> getRecordMenuItemArguments(AbstractDataTable dataTable,Action action);
+		void addRecordMenuItems(AbstractDataTable dataTable,Collection<Action> actions);
 		/**/
 		public static abstract class AbstractImpl extends AbstractCollection.Listener.AbstractImpl implements Listener,Serializable {
 			@Override
@@ -396,10 +440,53 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 			public Map<Object, Object> getColumnArguments(AbstractDataTable dataTable,String fieldName) {
 				if(StringHelper.isBlank(fieldName))
 					fieldName = String.format(dataTable.columnFieldNameFormat, CollectionHelper.getSize(dataTable.columnsAfterRowIndex));
-				return MapHelper.instantiate(Column.FIELD_HEADER_TEXT,fieldName,Column.FIELD_FIELD_NAME,fieldName
+				String headerText = InternationalizationHelper.buildString(InternationalizationHelper.buildKey(fieldName),null,null,Case.FIRST_CHARACTER_UPPER_REMAINDER_LOWER);
+				return MapHelper.instantiate(Column.FIELD_HEADER_TEXT,headerText,Column.FIELD_FIELD_NAME,fieldName
 						,Column.ConfiguratorImpl.FIELD_EDITABLE,dataTable.editable,Column.FIELD_REMOVE_COMMAND_BUTTON);
 			}
+			
+			@Override
+			public Map<Object, Object> getHeaderToolbarLeftCommandArguments(AbstractDataTable dataTable,Action action) {
+				return null;
+			}
+			
+			@Override
+			public Map<Object, Object> getRecordMenuItemArguments(AbstractDataTable dataTable, Action action) {
+				return null;
+			}
 
+			@Override
+			public void addHeaderToolbarLeftCommands(AbstractDataTable dataTable, Collection<Action> actions) {
+				if(CollectionHelper.isEmpty(actions))
+					return;
+				actions.forEach(action -> {
+					Map<Object, Object> arguments = getHeaderToolbarLeftCommandArguments(dataTable, action);
+					if(MapHelper.isEmpty(arguments)) {
+						if(Action.CREATE.equals(action))
+							dataTable.addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialogCreate();
+					}else
+						dataTable.addHeaderToolbarLeftCommands(CommandButton.build(arguments));
+				});
+			}
+			
+			@Override
+			public void addRecordMenuItems(AbstractDataTable dataTable, Collection<Action> actions) {
+				if(CollectionHelper.isEmpty(actions))
+					return;
+				actions.forEach(action -> {
+					Map<Object, Object> arguments = getRecordMenuItemArguments(dataTable, action);
+					if(MapHelper.isEmpty(arguments)) {
+						if(Action.READ.equals(action))
+							dataTable.addRecordMenuItemByArgumentsOpenViewInDialogRead();
+						else if(Action.UPDATE.equals(action))
+							dataTable.addRecordMenuItemByArgumentsOpenViewInDialogUpdate();
+						else if(Action.DELETE.equals(action))
+							dataTable.addRecordMenuItemByArgumentsExecuteFunctionDelete();
+					}else
+						dataTable.addRecordCommands(MenuItem.build(arguments));
+				});
+			}
+			
 			/**/
 			
 			public static class DefaultImpl extends Listener.AbstractImpl implements Serializable {

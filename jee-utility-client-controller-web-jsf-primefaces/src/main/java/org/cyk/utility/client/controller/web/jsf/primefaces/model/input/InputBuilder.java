@@ -57,6 +57,8 @@ public interface InputBuilder {
 				//input = (AbstractInput<?>) MethodUtils.invokeStaticMethod(inputClass, "buildFromArray", inputArguments);
 				if(InputText.class.equals(inputClass))
 					input = InputText.build(arguments);
+				else if(Password.class.equals(inputClass))
+					input = Password.build(arguments);
 				else if(InputNumber.class.equals(inputClass))
 					input = InputNumber.build(arguments);
 				else if(AutoComplete.class.equals(inputClass))

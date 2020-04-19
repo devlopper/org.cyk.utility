@@ -32,7 +32,7 @@ public class DataLoaderImpl extends AbstractDataLoaderImpl implements Serializab
 		
 		Collection<Person> persons = new ArrayList<>();
 		String codePrefix = RandomHelper.getAlphanumeric(4);
-		for(Integer index = 0 ; index < 1000 ; index = index + 1) {
+		for(Integer index = 0 ; index < 100000 ; index = index + 1) {
 			Person person = new Person();
 			person.setCode("P_"+codePrefix+"_"+index);
 			person.setFirstName(RandomHelper.getAlphabetic(5));
@@ -55,7 +55,7 @@ public class DataLoaderImpl extends AbstractDataLoaderImpl implements Serializab
 		__inject__(NodeBusiness.class).createMany(nodes);
 		
 		Collection<Namable> namables = new ArrayList<>();
-		for(Integer index = 1 ; index <= 1000 ; index = index + 1) {
+		for(Integer index = 1 ; index <= 100000 ; index = index + 1) {
 			Namable namable = new Namable();
 			namable.setCode(index+"");
 			Collection<String> words = new ArrayList<>();

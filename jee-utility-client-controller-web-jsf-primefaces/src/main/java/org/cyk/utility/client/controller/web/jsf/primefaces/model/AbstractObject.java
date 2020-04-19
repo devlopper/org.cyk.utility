@@ -24,6 +24,7 @@ public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractOb
 	protected String style,styleClass;
 	protected MapInstance<Event, String> eventScripts;
 	protected Boolean rendered,__isLoggable__;
+	protected Object binding;
 	
 	/* Working variables */
 	

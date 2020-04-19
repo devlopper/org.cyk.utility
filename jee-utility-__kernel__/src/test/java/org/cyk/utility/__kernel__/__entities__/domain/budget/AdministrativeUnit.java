@@ -41,7 +41,7 @@ public class AdministrativeUnit extends AbstractIdentifiableSystemScalarStringId
 	@Column(name = COLUMN_MODIFICATION_DATE) private LocalDateTime modificationDate;
 	
 	/**/
-	@Transient private String asString,sectionAsString,serviceGroupAsString,functionalClassificationAsString,localisationAsString;
+	@Transient private String sectionAsString,serviceGroupAsString,functionalClassificationAsString,localisationAsString;
 	/**/
 	
 	@Transient private Integer numberOfActivities;

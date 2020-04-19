@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+
+	<ui:decorate template="/ajax/default.xhtml">
+ 		<ui:param name="ajax" value="#{dataTable.ajaxes.get('page')}"/>
+ 	</ui:decorate>
+ 	<ui:decorate template="/ajax/default.xhtml">
+ 		<ui:param name="ajax" value="#{dataTable.ajaxes.get('sort')}"/>
+ 	</ui:decorate>
+ 	<ui:decorate template="/ajax/default.xhtml">
+ 		<ui:param name="ajax" value="#{dataTable.ajaxes.get('filter')}"/>
+ 	</ui:decorate>
+ 	<ui:decorate template="/ajax/default.xhtml">
+ 		<ui:param name="ajax" value="#{dataTable.ajaxes.get('rowSelect')}"/>
+ 	</ui:decorate>
+ 	<ui:decorate template="/ajax/default.xhtml">
+ 		<ui:param name="ajax" value="#{dataTable.ajaxes.get('rowUnselect')}"/>
+ 	</ui:decorate>
+ 	<ui:decorate template="/ajax/default.xhtml">
+ 		<ui:param name="ajax" value="#{dataTable.ajaxes.get('rowSelectCheckbox')}"/>
+ 	</ui:decorate>
+ 	<ui:decorate template="/ajax/default.xhtml">
+ 		<ui:param name="ajax" value="#{dataTable.ajaxes.get('rowUnselectCheckbox')}"/>
+ 	</ui:decorate>
+ 	<ui:decorate template="/ajax/default.xhtml">
+ 		<ui:param name="ajax" value="#{dataTable.ajaxes.get('cellEdit')}"/>
+	</ui:decorate>	
+
+</ui:composition>

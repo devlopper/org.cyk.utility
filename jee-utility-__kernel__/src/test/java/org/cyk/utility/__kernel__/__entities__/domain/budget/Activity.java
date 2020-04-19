@@ -51,7 +51,7 @@ public class Activity extends AbstractIdentifiableSystemScalarStringIdentifiable
 	@Transient private Boolean isBeneficiaire;
 	
 	/* As String */	
-	@Transient private String asString,sectionAsString,programAsString,actionAsString,functionTypeAsString,managerAsString,beneficiaryAsString;
+	@Transient private String sectionAsString,programAsString,actionAsString,functionTypeAsString,managerAsString,beneficiaryAsString;
 	
 	public Activity(String code,String name,String actionCode) {
 		super(code,name);

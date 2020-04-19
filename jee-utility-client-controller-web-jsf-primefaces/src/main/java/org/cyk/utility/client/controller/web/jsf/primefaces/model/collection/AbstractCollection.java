@@ -36,6 +36,7 @@ import org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax.Ajax;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.AbstractCommand;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.AbstractMenu;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.ContextMenu;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.MenuButton;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.MenuItem;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.output.OutputText;
@@ -366,7 +367,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 			
 			if(Boolean.TRUE.equals(collection.lazy)) {
 				collection.rows = 20;
-				collection.rowsPerPageTemplate = "20,50,100,500,1000,2000";
+				collection.rowsPerPageTemplate = "20,50,100,500,1000,2000,5000,10000,20000,50000";
 				collection.paginatorTemplate = "{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}";
 				collection.currentPageReportTemplate = "Total {totalRecords} | Page {currentPage}/{totalPages}";
 				collection.paginator = Boolean.TRUE;
@@ -425,7 +426,14 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 					,Map.of(Ajax.FIELD_EVENT,"cellEdit",Ajax.ConfiguratorImpl.FIELD_LISTENER_NULLABLE,Boolean.TRUE)
 					);		
 			
-			collection.recordMenu = MenuButton.build();
+			Class<?> recordMenuClass = (Class<?>) MapHelper.readByKey(arguments, FIELD_RECORD_MENU_CLASS);
+			if(recordMenuClass == null)
+				recordMenuClass = MenuButton.class;
+			if(MenuButton.class.equals(recordMenuClass))
+				collection.recordMenu = MenuButton.build();
+			else if(ContextMenu.class.equals(recordMenuClass))
+				collection.recordMenu = ContextMenu.build();
+			
 			Collection<Map<Object,Object>> recordMenuItemsByArguments = (Collection<Map<Object, Object>>) MapHelper.readByKey(arguments, FIELD_RECORD_MENU_ITEMS_BY_ARGUMENTS);
 			if(CollectionHelper.isNotEmpty(recordMenuItemsByArguments)) {
 				for(Map<Object,Object> map : recordMenuItemsByArguments)
@@ -460,6 +468,9 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 		public static final String FIELD_LAZY_DATA_MODEL_CLASS = "lazyDataModelClass";
 		public static final String FIELD_LAZY_DATA_MODEL = "lazyDataModel";
 		public static final String FIELD_TITLE_VALUE = "titleValue";
+		public static final String FIELD_RECORD_MENU_CLASS = "recordMenuClass";
+		public static final String FIELD_RECORD_ACTIONS = "recordActions";
+		public static final String FIELD_ACTIONS = "actions";
 	}
 
 	/**/
