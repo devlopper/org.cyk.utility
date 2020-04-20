@@ -13,7 +13,6 @@ import org.cyk.utility.__kernel__.data.structure.grid.Grid;
 import org.cyk.utility.__kernel__.enumeration.Action;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
-import org.cyk.utility.__kernel__.internationalization.InternationalizationKeyStringType;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.Builder;
@@ -333,7 +332,7 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 			
 			if(dataTable.getDataGrid() == null) {				
 				Collection<String> columnsFieldsNames = (Collection<String>) MapHelper.readByKey(arguments, FIELD_COLUMNS_FIELDS_NAMES);
-				if(columnsFieldsNames == null) {
+				if(columnsFieldsNames == null && Boolean.TRUE.equals(MapHelper.readByKey(arguments, FIELD_COLUMNS_FIELDS_NAMES_COMPUTABLE))) {
 					columnsFieldsNames = FieldHelper.getNames(FieldHelper.getByAnnotationClass(dataTable.elementClass, org.cyk.utility.__kernel__.object.__static__.controller.annotation.Column.class));
 					if(CollectionHelper.getSize(columnsFieldsNames) > 2) {
 						if(columnsFieldsNames.contains(AbstractDataIdentifiableSystemStringIdentifiableBusinessStringImpl.FIELD_IDENTIFIER)
@@ -374,6 +373,7 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 		}*/
 		
 		public static final String FIELD_COLUMNS_FIELDS_NAMES = "columnsFieldsNames";
+		public static final String FIELD_COLUMNS_FIELDS_NAMES_COMPUTABLE = "columnsFieldsNamesComputable";
 	}
 	
 	/**/

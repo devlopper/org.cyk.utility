@@ -323,7 +323,7 @@ public class Filter extends AbstractObject implements Serializable {
 		
 		@Override
 		public String toString() {
-			Collection<String> strings = new ArrayList<>();
+			/*Collection<String> strings = new ArrayList<>();
 			if(StringHelper.isNotBlank(klass))
 				strings.add("Class="+klass);
 			if(StringHelper.isNotBlank(value))
@@ -331,6 +331,8 @@ public class Filter extends AbstractObject implements Serializable {
 			if(CollectionHelper.isNotEmpty(fields))
 				strings.add("Fields="+fields);			
 			return StringHelper.concatenate(strings, " ");
+			*/
+			return JsonbBuilder.create().toJson(this);
 		}
 		
 		/**/

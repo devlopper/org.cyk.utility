@@ -133,12 +133,12 @@ public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractOb
 		public void configure(OBJECT object, Map<Object, Object> arguments) {
 			super.configure(object, arguments);
 			if(StringHelper.isBlank(object.identifier) || StringHelper.isBlank(object.widgetVar)) {
-				String identifier_prefix = object.getClass().getSimpleName().toLowerCase()+"_";
+				String identifier_prefix = object.getClass().getSimpleName().toLowerCase();
 				if(StringHelper.isBlank(object.identifier)) {
-					object.identifier = identifier_prefix+RandomHelper.getAlphabetic(5);
+					object.identifier = generateIdentifier(identifier_prefix);
 				}
 				if(StringHelper.isBlank(object.widgetVar)) {
-					object.widgetVar = identifier_prefix+RandomHelper.getAlphabetic(5);
+					object.widgetVar = generateIdentifier(identifier_prefix);
 				}
 			}
 			if(object.rendered == null)
@@ -151,10 +151,22 @@ public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractOb
 		protected String __getTemplate__(OBJECT object, Map<Object, Object> arguments) {
 			return null;
 		}
+		
+		public static String generateIdentifier(Class<?> klass) {
+			if(klass == null)
+				return null;
+			return generateIdentifier(klass.getSimpleName().toLowerCase());			
+		}
+		
+		public static String generateIdentifier(String prefix) {
+			if(StringHelper.isBlank(prefix))
+				prefix = "";
+			else
+				prefix = prefix + "_";
+			return prefix+RandomHelper.getAlphabetic(5);
+		}
 	}
 	
 	/**/
-	
-	
-	
+
 }

@@ -31,6 +31,8 @@ public interface QueryHelper {
 	/* scan */
 	
 	static void scan(Collection<Package> packages) {
+		if(getQueries().getIsRegisterableToEntityManager() == null)
+			getQueries().setIsRegisterableToEntityManager(Boolean.TRUE);
 		LogHelper.logInfo(String.format("query helper scanning packages %s", packages),QueryHelper.class);
 		if(CollectionHelper.isEmpty(packages))
 			return;
