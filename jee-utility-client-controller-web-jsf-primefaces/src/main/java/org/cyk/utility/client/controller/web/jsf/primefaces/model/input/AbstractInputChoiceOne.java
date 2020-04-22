@@ -16,9 +16,9 @@ public class AbstractInputChoiceOne extends AbstractInputChoice<Object> implemen
 	
 	/**/
 	
-	public static interface Listener {
+	public static interface Listener<VALUE> extends AbstractInputChoice.Listener<VALUE>  {
 		
-		public static abstract class AbstractImpl extends org.cyk.utility.__kernel__.object.AbstractObject implements Listener,Serializable {
+		public static abstract class AbstractImpl<VALUE> extends AbstractInputChoice.Listener.AbstractImpl<VALUE> implements Listener<VALUE>,Serializable {
 			
 		}
 	}

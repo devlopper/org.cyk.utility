@@ -43,6 +43,10 @@ public class BlockUI extends AbstractObject implements Serializable {
 			return BlockUI.class;
 		}
 
+		@Override
+		protected String __getTemplate__(BlockUI object, Map<Object, Object> arguments) {
+			return "/blockui/default.xhtml";
+		}
 	}
 	
 	static {

@@ -91,6 +91,8 @@ public interface InputClassBuilder {
 				return SelectManyCheckbox.class;
 			if(field.isAnnotationPresent(org.cyk.utility.__kernel__.object.__static__.controller.annotation.InputChoiceOneRadio.class))
 				return SelectOneRadio.class;
+			if(field.isAnnotationPresent(org.cyk.utility.__kernel__.object.__static__.controller.annotation.InputChoiceOneCombo.class))
+				return SelectOneCombo.class;
 			return Void.class;
 		}
 	}

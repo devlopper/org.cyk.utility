@@ -48,6 +48,10 @@ public class OutputText extends AbstractOutput<String> implements Serializable {
 	public static OutputText build(Object...objects) {
 		return build(MapHelper.instantiate(objects));
 	}
+	
+	public static OutputText buildFromValue(String value) {
+		return OutputText.build(OutputText.FIELD_VALUE,value);
+	}
 
 	static {
 		Configurator.set(OutputText.class, new ConfiguratorImpl());

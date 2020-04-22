@@ -106,6 +106,10 @@ public class Cell extends OutputPanel implements Serializable {
 		return Builder.build(Cell.class,map);
 	}
 	
+	public static Cell build(Object...objects) {
+		return build(MapHelper.instantiate(objects));
+	}
+	
 	public static interface Listener {
 		
 		void addCell(Cell cell);

@@ -17,7 +17,7 @@ public abstract class AbstractDataIdentifiableSystemStringIdentifiableBusinessSt
 	
 	@Input @NotNull
 	@Column
-	private String name;
+	protected String name;
 
 	@Override
 	public String toString() {

@@ -9,6 +9,7 @@ import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.controller.EntityReader;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.web.jsf.converter.ObjectConverter;
 
@@ -18,6 +19,7 @@ import lombok.Setter;
 @Getter @Setter
 public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements Serializable {
 
+	protected Class<?> choiceClass;
 	protected Collection<Object> choices;
 	protected Integer columns;
 	protected Boolean disabled;
@@ -47,11 +49,12 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 	
 	@SuppressWarnings("unchecked")
 	public Collection<Object> getChoices() {
-		return ((Listener<VALUE>)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).getChoices(this);
+		return (Collection<Object>) ((Listener<VALUE>)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).getChoices(this);
 	}
 	
 	/**/
 	
+	public static final String FIELD_CHOICE_CLASS = "choiceClass";
 	public static final String FIELD_CHOICES = "choices";
 	public static final String FIELD_COLUMNS = "columns";
 	public static final String FIELD_DISBALED = "disabled";
@@ -61,20 +64,25 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 	
 	public static interface Listener<VALUE> extends AbstractInput.Listener {
 		
-		Collection<Object> getChoices(AbstractInputChoice<VALUE> input);
+		Collection<VALUE> getChoices(AbstractInputChoice<VALUE> input);
 		
 		public static abstract class AbstractImpl<VALUE> extends AbstractInput.Listener.AbstractImpl implements Listener<VALUE>,Serializable {
 			@SuppressWarnings("unchecked")
 			@Override
-			public Collection<Object> getChoices(AbstractInputChoice<VALUE> input) {
-				Class<?> entityClass = null;
+			public Collection<VALUE> getChoices(AbstractInputChoice<VALUE> input) {
 				if(input.choices == null) {
-					if(ClassHelper.isInstanceOf(input.field.getType(),Collection.class)) {
-						entityClass = ClassHelper.getParameterAt(input.field.getType(), 0);
-					}else {
-						entityClass = input.field.getType();
+					Class<?> entityClass = input.choiceClass;
+					if(entityClass == null) {
+						if(ClassHelper.isInstanceOf(input.field.getType(),Collection.class)) {
+							entityClass = ClassHelper.getParameterAt(input.field.getType(), 0);
+						}else {
+							entityClass = input.field.getType();
+						}
 					}
-					input.choices = (Collection<Object>) EntityReader.getInstance().readMany(entityClass);
+					if(entityClass == null)
+						LogHelper.logWarning("Choice class cannot be deduced.", getClass());
+					else
+						input.choices = (Collection<Object>) EntityReader.getInstance().readMany(entityClass);
 					if(input.choices == null)
 						input.choices = new ArrayList<>();
 				}
@@ -82,7 +90,7 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 					if(!ClassHelper.isBelongsToJavaPackages(entityClass))
 						input.converter = DependencyInjection.inject(ObjectConverter.class);
 				}*/
-				return input.choices;
+				return (Collection<VALUE>) input.choices;
 			}
 			
 			public static class DefaultImpl extends Listener.AbstractImpl<Object> implements Serializable {
@@ -107,17 +115,19 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 					input.columns = 0;
 			}
 			if(input.converter == null) {
-				Class<?> entityClass = null;
-				if(CollectionHelper.isEmpty(input.choices)) {
-					if(input.field != null) {
-						if(ClassHelper.isInstanceOf(input.field.getType(),Collection.class)) {
-							entityClass = ClassHelper.getParameterAt(input.field.getType(), 0);
-						}else {
-							entityClass = input.field.getType();
-						}		
-					}				
-				}else {
-					entityClass = input.choices.iterator().next().getClass();
+				Class<?> entityClass = input.choiceClass;
+				if(entityClass == null) {
+					if(CollectionHelper.isEmpty(input.choices)) {
+						if(input.field != null) {
+							if(ClassHelper.isInstanceOf(input.field.getType(),Collection.class)) {
+								entityClass = ClassHelper.getParameterAt(input.field.getType(), 0);
+							}else {
+								entityClass = input.field.getType();
+							}		
+						}				
+					}else {
+						entityClass = input.choices.iterator().next().getClass();
+					}					
 				}				
 				if(!ClassHelper.isBelongsToJavaPackages(entityClass))
 					input.converter = DependencyInjection.inject(ObjectConverter.class);

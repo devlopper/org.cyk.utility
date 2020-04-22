@@ -67,6 +67,8 @@ public interface InputBuilder {
 					input = SelectManyCheckbox.build(arguments);
 				else if(SelectOneRadio.class.equals(inputClass))
 					input = SelectOneRadio.build(arguments);
+				else if(SelectOneCombo.class.equals(inputClass))
+					input = SelectOneCombo.build(arguments);
 			} catch (Exception exception) {
 				LogHelper.log(exception, AbstractInputBuilderImpl.class);
 			}
