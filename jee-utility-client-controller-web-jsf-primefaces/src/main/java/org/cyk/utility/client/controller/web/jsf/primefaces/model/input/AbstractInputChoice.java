@@ -31,8 +31,9 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 		return choice;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Object getChoiceLabel(Object choice) {
-		return choice;
+		return ((Listener<VALUE>)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).getChoiceLabel(this, choice);
 	}
 	
 	public Object getChoiceDescription(Object choice) {
@@ -49,7 +50,9 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 	
 	@SuppressWarnings("unchecked")
 	public Collection<Object> getChoices() {
-		return (Collection<Object>) ((Listener<VALUE>)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).getChoices(this);
+		if(choices == null)
+			choices = (Collection<Object>) ((Listener<VALUE>)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).getChoices(this);
+		return choices;
 	}
 	
 	/**/
@@ -65,6 +68,8 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 	public static interface Listener<VALUE> extends AbstractInput.Listener {
 		
 		Collection<VALUE> getChoices(AbstractInputChoice<VALUE> input);
+		
+		Object getChoiceLabel(AbstractInputChoice<VALUE> input,Object choice);
 		
 		public static abstract class AbstractImpl<VALUE> extends AbstractInput.Listener.AbstractImpl implements Listener<VALUE>,Serializable {
 			@SuppressWarnings("unchecked")
@@ -91,6 +96,11 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 						input.converter = DependencyInjection.inject(ObjectConverter.class);
 				}*/
 				return (Collection<VALUE>) input.choices;
+			}
+			
+			@Override
+			public Object getChoiceLabel(AbstractInputChoice<VALUE> input, Object choice) {
+				return choice;
 			}
 			
 			public static class DefaultImpl extends Listener.AbstractImpl<Object> implements Serializable {

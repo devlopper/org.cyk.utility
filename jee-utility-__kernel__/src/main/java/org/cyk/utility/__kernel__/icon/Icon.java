@@ -27,4 +27,5 @@ public enum Icon {
 	,FOLDER_OPEN
 	,FOLDER
 	,MAIL_FORWARD
+	,BANK
 }

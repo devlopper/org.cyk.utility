@@ -28,6 +28,9 @@
 			rendered="#{commandButton.rendered}"
 			
 			onclick="#{commandButton.onClick}"
+			
+			styleClass="#{commandButton.styleClass}"
+			style="#{commandButton.style}"
 		>
 			<ui:decorate template="#{confirmTemplate}">
 	    		<ui:param name="confirm" value="#{commandButton.confirm}"/>
@@ -49,7 +52,10 @@
 			title="#{commandButton.title}"
 			rendered="#{commandButton.rendered}"
 			
-			onclick="#{commandButton.onClick}"			
+			onclick="#{commandButton.onClick}"
+			
+			styleClass="#{commandButton.styleClass}"
+			style="#{commandButton.style}"
 		>
 			<ui:decorate template="#{confirmTemplate}">
 	    		<ui:param name="confirm" value="#{commandButton.confirm}"/>

@@ -6,6 +6,7 @@ import java.util.Map;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax.Ajax;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -27,10 +28,11 @@ public class SelectOneRadio extends AbstractInputChoiceOne implements Serializab
 	
 	public static class ConfiguratorImpl extends AbstractConfiguratorImpl<SelectOneRadio> implements Serializable {
 
+		@SuppressWarnings("unchecked")
 		@Override
 		public void configure(SelectOneRadio selectOneRadio, Map<Object, Object> arguments) {
 			super.configure(selectOneRadio, arguments);
-			
+			selectOneRadio.addAjaxes(Map.of(Ajax.FIELD_EVENT,"change"));
 		}
 		
 		@Override

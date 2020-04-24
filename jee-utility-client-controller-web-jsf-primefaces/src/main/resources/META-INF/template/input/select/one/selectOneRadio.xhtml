@@ -36,8 +36,36 @@
 			>
 				<ui:include src="../__selectItems__.xhtml">
 					<ui:param name="selectItems" value="#{selectOneRadio}"/>
-				</ui:include>			
+				</ui:include>
+			
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(selectOneRadio.ajaxes.get('change'))}">
+					<ui:param name="ajax" value="#{selectOneRadio.ajaxes.get('change')}"/>
+				</ui:decorate>
+				
+				<!--
+				<ui:param name="ajax" value="#{selectOneRadio.ajaxes.get('change')}"/>
+				
+				<p:ajax event="change" listener="#{selectOneRadio.ajaxes.get('change').listen}" update="#{selectOneRadio.ajaxes.get('change').update}"/>
+				
+				<p:ajax 
+					event="#{ajax.event}" 
+					listener="#{ajax.listen}" 
+					partialSubmit="#{ajax.partialSubmit}" 		
+					disabled="#{ajax.disabled}"
+					
+					global="#{ajax.global}"
+					
+					update="#{ajax.update}"
+					
+					onstart="#{ajax.onStart}"
+					oncomplete="#{ajax.onComplete}"
+				/>
+				-->
 			</p:selectOneRadio>
+			
+			<ui:decorate template="#{primefacesHelper.getModelTemplate(selectOneRadio.blockUI)}">
+		 		<ui:param name="blockUI" value="#{selectOneRadio.blockUI}"/>
+		 	</ui:decorate>
 		</ui:define>
 	</ui:decorate>
 </ui:composition>

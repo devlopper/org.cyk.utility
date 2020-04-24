@@ -35,9 +35,18 @@ public class InputChoiceOneComboPage extends AbstractPageContainerManagedImpl im
 			public void listenAction(Object argument) {
 				Object v = FieldHelper.read(argument, "source.value");
 				System.out.println(
-						"InputChoiceOneComboPage.__listenPostConstruct__().new AbstractImpl() {...}.listenAction() : "+v+" : "+v.getClass().getSimpleName());
+						"ITEM SELECT : "+v+" : "+v.getClass().getSimpleName());
 			}
 		});
+		selectOneCombo.getAjaxes().get("valueChange").setDisabled(Boolean.FALSE).setListener(new Ajax.Listener.AbstractImpl() {
+			@Override
+			public void listenAction(Object argument) {
+				Object v = FieldHelper.read(argument, "source.value");
+				System.out.println(
+						"VALUE CHANGE : "+v+" : "+v.getClass().getSimpleName());
+			}
+		});
+		
 		commandButton = Builder.build(CommandButton.class,Map.of(CommandButton.FIELD_VALUE,"Enregistrer"));
 		commandButton.setListener(new CommandButton.Listener.AbstractImpl() {
 			@Override

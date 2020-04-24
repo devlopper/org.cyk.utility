@@ -40,83 +40,85 @@
 				<!--
 				<p:ajax listener="#{selectOneMenu.ajaxes.get('itemSelect').listen}" global="#{ajax.global}" update="#{ajax.update}"/>
 				-->
-				<p:ajax 
-					event="#{selectOneMenu.ajaxes.get('itemSelect').event}" 
-					listener="#{selectOneMenu.ajaxes.get('itemSelect').listen}" 
-					partialSubmit="#{selectOneMenu.ajaxes.get('itemSelect').partialSubmit}" 		
-					disabled="#{selectOneMenu.ajaxes.get('itemSelect').disabled}"
-					
-					global="#{selectOneMenu.ajaxes.get('itemSelect').global}"
-					
-					update="#{selectOneMenu.ajaxes.get('itemSelect').update}"
-					
-					onstart="#{selectOneMenu.ajaxes.get('itemSelect').onStart}"
-					oncomplete="#{selectOneMenu.ajaxes.get('itemSelect').onComplete}"
-				/>
-				
 				<!--
-				<ui:decorate template="#{primefacesHelper.getModelTemplate(selectItems.ajaxes.get('valueChange'))}">
-					<ui:param name="ajax" value="#{selectItems.ajaxes.get('valueChange')}"/>
+				<ui:param name="ajax" value="#{selectOneMenu.ajaxes.get('valueChange')}"/>
+				<p:ajax 
+					event="#{ajax.event}" 
+					listener="#{ajax.listen}" 
+					partialSubmit="#{ajax.partialSubmit}" 		
+					disabled="#{ajax.disabled}"
+					
+					global="#{ajax.global}"
+					
+					update="#{ajax.update}"
+					
+					onstart="#{ajax.onStart}"
+					oncomplete="#{ajax.onComplete}"
+				/>
+				-->
+				
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(selectOneMenu.ajaxes.get('valueChange'))}">
+					<ui:param name="ajax" value="#{selectOneMenu.ajaxes.get('valueChange')}"/>
+				</ui:decorate>
+				<!--
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(selectOneMenu.ajaxes.get('select'))}">
+					<ui:param name="ajax" value="#{selectOneMenu.ajaxes.get('select')}"/>
 				</ui:decorate>
 				
-				<ui:decorate template="#{primefacesHelper.getModelTemplate(selectItems.ajaxes.get('select'))}">
-					<ui:param name="ajax" value="#{selectItems.ajaxes.get('select')}"/>
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(selectOneMenu.ajaxes.get('mouseup'))}">
+					<ui:param name="ajax" value="#{selectOneMenu.ajaxes.get('mouseup')}"/>
 				</ui:decorate>
 				
-				<ui:decorate template="#{primefacesHelper.getModelTemplate(selectItems.ajaxes.get('mouseup'))}">
-					<ui:param name="ajax" value="#{selectItems.ajaxes.get('mouseup')}"/>
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(selectOneMenu.ajaxes.get('mouseover'))}">
+					<ui:param name="ajax" value="#{selectOneMenu.ajaxes.get('mouseover')}"/>
 				</ui:decorate>
 				
-				<ui:decorate template="#{primefacesHelper.getModelTemplate(selectItems.ajaxes.get('mouseover'))}">
-					<ui:param name="ajax" value="#{selectItems.ajaxes.get('mouseover')}"/>
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(selectOneMenu.ajaxes.get('mouseout'))}">
+					<ui:param name="ajax" value="#{selectOneMenu.ajaxes.get('mouseout')}"/>
 				</ui:decorate>
 				
-				<ui:decorate template="#{primefacesHelper.getModelTemplate(selectItems.ajaxes.get('mouseout'))}">
-					<ui:param name="ajax" value="#{selectItems.ajaxes.get('mouseout')}"/>
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(selectOneMenu.ajaxes.get('mousemove'))}">
+					<ui:param name="ajax" value="#{selectOneMenu.ajaxes.get('mousemove')}"/>
 				</ui:decorate>
 				
-				<ui:decorate template="#{primefacesHelper.getModelTemplate(selectItems.ajaxes.get('mousemove'))}">
-					<ui:param name="ajax" value="#{selectItems.ajaxes.get('mousemove')}"/>
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(selectOneMenu.ajaxes.get('mousedown'))}">
+					<ui:param name="ajax" value="#{selectOneMenu.ajaxes.get('mousedown')}"/>
 				</ui:decorate>
 				
-				<ui:decorate template="#{primefacesHelper.getModelTemplate(selectItems.ajaxes.get('mousedown'))}">
-					<ui:param name="ajax" value="#{selectItems.ajaxes.get('mousedown')}"/>
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(selectOneMenu.ajaxes.get('keyup'))}">
+					<ui:param name="ajax" value="#{selectOneMenu.ajaxes.get('keyup')}"/>
 				</ui:decorate>
 				
-				<ui:decorate template="#{primefacesHelper.getModelTemplate(selectItems.ajaxes.get('keyup'))}">
-					<ui:param name="ajax" value="#{selectItems.ajaxes.get('keyup')}"/>
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(selectOneMenu.ajaxes.get('keypress'))}">
+					<ui:param name="ajax" value="#{selectOneMenu.ajaxes.get('keypress')}"/>
 				</ui:decorate>
 				
-				<ui:decorate template="#{primefacesHelper.getModelTemplate(selectItems.ajaxes.get('keypress'))}">
-					<ui:param name="ajax" value="#{selectItems.ajaxes.get('keypress')}"/>
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(selectOneMenu.ajaxes.get('keydown'))}">
+					<ui:param name="ajax" value="#{selectOneMenu.ajaxes.get('keydown')}"/>
 				</ui:decorate>
 				
-				<ui:decorate template="#{primefacesHelper.getModelTemplate(selectItems.ajaxes.get('keydown'))}">
-					<ui:param name="ajax" value="#{selectItems.ajaxes.get('keydown')}"/>
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(selectOneMenu.ajaxes.get('itemSelect'))}">
+					<ui:param name="ajax" value="#{selectOneMenu.ajaxes.get('itemSelect')}"/>
 				</ui:decorate>
 				
-				<ui:decorate template="#{primefacesHelper.getModelTemplate(selectItems.ajaxes.get('itemSelect'))}">
-					<ui:param name="ajax" value="#{selectItems.ajaxes.get('itemSelect')}"/>
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(selectOneMenu.ajaxes.get('blur'))}">
+					<ui:param name="ajax" value="#{selectOneMenu.ajaxes.get('blur')}"/>
 				</ui:decorate>
 				
-				<ui:decorate template="#{primefacesHelper.getModelTemplate(selectItems.ajaxes.get('blur'))}">
-					<ui:param name="ajax" value="#{selectItems.ajaxes.get('blur')}"/>
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(selectOneMenu.ajaxes.get('change'))}">
+					<ui:param name="ajax" value="#{selectOneMenu.ajaxes.get('change')}"/>
 				</ui:decorate>
 				
-				<ui:decorate template="#{primefacesHelper.getModelTemplate(selectItems.ajaxes.get('change'))}">
-					<ui:param name="ajax" value="#{selectItems.ajaxes.get('change')}"/>
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(selectOneMenu.ajaxes.get('click'))}">
+					<ui:param name="ajax" value="#{selectOneMenu.ajaxes.get('click')}"/>
 				</ui:decorate>
 				
-				<ui:decorate template="#{primefacesHelper.getModelTemplate(selectItems.ajaxes.get('click'))}">
-					<ui:param name="ajax" value="#{selectItems.ajaxes.get('click')}"/>
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(selectOneMenu.ajaxes.get('dblclick'))}">
+					<ui:param name="ajax" value="#{selectOneMenu.ajaxes.get('dblclick')}"/>
 				</ui:decorate>
 				
-				<ui:decorate template="#{primefacesHelper.getModelTemplate(selectItems.ajaxes.get('dblclick'))}">
-					<ui:param name="ajax" value="#{selectItems.ajaxes.get('dblclick')}"/>
-				</ui:decorate>
-				
-				<ui:decorate template="#{primefacesHelper.getModelTemplate(selectItems.ajaxes.get('focus'))}">
-					<ui:param name="ajax" value="#{selectItems.ajaxes.get('focus')}"/>
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(selectOneMenu.ajaxes.get('focus'))}">
+					<ui:param name="ajax" value="#{selectOneMenu.ajaxes.get('focus')}"/>
 				</ui:decorate>
 				-->			
 			</p:selectOneMenu>

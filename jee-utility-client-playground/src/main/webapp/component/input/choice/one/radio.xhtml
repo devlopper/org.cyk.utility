@@ -13,6 +13,22 @@
     		<ui:decorate template="/input/select/one/selectOneRadio.xhtml">
     			<ui:param name="selectOneRadio" value="#{inputChoiceOneRadioPage.selectOneRadio}"/>
     		</ui:decorate>
+    		<p:separator/>
+    		<ui:decorate template="/input/select/one/selectOneRadio.xhtml">
+    			<ui:param name="selectOneRadio" value="#{inputChoiceOneRadioPage.selectOneRadioWithDefault}"/>
+    		</ui:decorate>
+    		<p:separator/>
+    		<!--
+    		<ui:param name="selectOneRadio" value="#{inputChoiceOneRadioPage.selectOneRadioWithDefault}"/>
+    		<p:selectOneRadio value="#{selectOneRadio.value}" >
+    			<f:selectItems value="#{selectOneRadio.choices}" var="choice" itemValue="#{choice}" itemLabel="#{choice}" />
+    		</p:selectOneRadio>
+    		<p:separator/>
+    		<p:selectOneRadio value="#{inputChoiceOneRadioPage.string}" >
+    			<f:selectItems value="#{inputChoiceOneRadioPage.strings}" var="choice" itemValue="#{choice}" itemLabel="#{choice}" />
+    		</p:selectOneRadio>
+    		<p:separator/>
+    		-->
     		<ui:decorate template="/command/commandbutton/default.xhtml">
     			<ui:param name="commandButton" value="#{inputChoiceOneRadioPage.commandButton}"/>
     		</ui:decorate>
