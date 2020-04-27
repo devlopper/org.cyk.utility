@@ -2,6 +2,7 @@ package org.cyk.utility.__kernel__.persistence.query;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -9,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.computation.LogicalOperator;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
@@ -144,6 +146,8 @@ public interface QueryValueBuilder {
 		throw new IllegalArgumentException(String.format("we cannot build count query from following select query : %s",selectQueryValue));
 	}
 
+	/* derive */
+	
 	static String deriveLeftJoinsFromFieldsNames(String tupleName,Collection<String> fieldsNames) {
 		if(CollectionHelper.isEmpty(fieldsNames))
 			return null;
@@ -169,6 +173,51 @@ public interface QueryValueBuilder {
 		return deriveConcatsCodeAndNameFromTuplesNames(CollectionHelper.listOf(tuplesNames));
 	}
 	
+	/* format */
+	
+	static String deriveLike(String tuple,String fieldName,String parameterName,Integer numberOfTokens,LogicalOperator operator,Boolean isCaseSensitive){
+		if(StringHelper.isBlank(tuple) || StringHelper.isBlank(fieldName) || StringHelper.isBlank(parameterName))
+			throw new RuntimeException(String.format("Illegal parameters. tuple %s , field name : %s , parameter name : %s.",tuple,fieldName,parameterName));
+		if(numberOfTokens == null || numberOfTokens <=1)
+			return String.format(Boolean.TRUE.equals(isCaseSensitive) ? FORMAT_TUPLE_FIELD_LIKE_PARAMETER_CASE_SENSITIVE : FORMAT_TUPLE_FIELD_LIKE_PARAMETER, tuple,fieldName,parameterName);
+		Collection<String> tokens = new ArrayList<>();
+		for(Integer index = 1; index <=numberOfTokens; index = index + 1)
+			tokens.add(String.format(FORMAT_TUPLE_FIELD_LIKE_PARAMETER, tuple,fieldName,parameterName+index));
+		return StringHelper.concatenate(tokens, " "+operator.name()+" ");
+	}
+	
+	static String deriveLike(String tuple,String fieldName,String parameterName,Integer numberOfTokens,LogicalOperator operator){
+		return deriveLike(tuple, fieldName, parameterName, numberOfTokens, operator, Boolean.FALSE);
+	}
+	
+	static String deriveLike(String tuple,String fieldName,Integer numberOfTokens,LogicalOperator operator){
+		return deriveLike(tuple, fieldName, fieldName, numberOfTokens, operator);
+	}
+	
+	static String deriveLike(String tuple,String fieldName,String parameterName){
+		return deriveLike(tuple, fieldName, parameterName, null, null);
+	}
+	
+	static String deriveLike(String tuple,String fieldName){
+		return deriveLike(tuple, fieldName, fieldName, null, null);
+	}
+	
+	static String deriveLikeOrTokens(String tuple,String fieldName,String parameterName,String tokens){
+		return String.format(FORMAT_TUPLE_FIELD_LIKE_PARAMETER_OR_TOKENS, tuple,fieldName,parameterName,tokens);
+	}
+	
+	static String deriveLikeOrTokens(String tuple,String fieldName,String parameterName,Integer numberOfTokens,LogicalOperator operator){
+		return deriveLikeOrTokens(tuple, fieldName, parameterName, deriveLike(tuple, fieldName, parameterName, numberOfTokens, operator));
+	}
+	
+	static String deriveLikeOrTokens(String tuple,String fieldName,Integer numberOfTokens,LogicalOperator operator){
+		return deriveLikeOrTokens(tuple, fieldName, fieldName, numberOfTokens, operator);
+	}
+	
 	String FORMAT_LEFT_JOIN = "LEFT JOIN %s.%s %s";
 	String FORMAT_CONCAT_CODE_NAME = "CONCAT(%1$s.code,' ',%1$s.name)";
+	
+	String FORMAT_TUPLE_FIELD_LIKE_PARAMETER = "LOWER(%s.%s) LIKE LOWER(:%s)";
+	String FORMAT_TUPLE_FIELD_LIKE_PARAMETER_CASE_SENSITIVE = "%s.%s LIKE :%s";
+	String FORMAT_TUPLE_FIELD_LIKE_PARAMETER_OR_TOKENS = FORMAT_TUPLE_FIELD_LIKE_PARAMETER+" OR (%s)";
 }

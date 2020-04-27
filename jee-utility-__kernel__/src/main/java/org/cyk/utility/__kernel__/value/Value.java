@@ -101,4 +101,10 @@ public class Value extends AbstractObject implements  Serializable {
 			
 		}
 	}
+
+	/**/
+	
+	public static enum Type {
+		CURRENCY
+	}
 }

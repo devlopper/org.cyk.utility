@@ -2,6 +2,7 @@ package org.cyk.utility.__kernel__.persistence.query;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.cyk.utility.__kernel__.computation.LogicalOperator;
 import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringImpl;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
@@ -49,6 +50,21 @@ public class QueryValueBuilderUnitTest extends AbstractWeldUnitTest {
 	@Test
 	public void deriveConcatsCodeAndNameFromTuplesNames(){
 		assertThat(QueryValueBuilder.deriveConcatsCodeAndNameFromTuplesNames("t","s","f")).isEqualTo("CONCAT(t.code,' ',t.name),CONCAT(s.code,' ',s.name),CONCAT(f.code,' ',f.name)");
+	}
+	
+	@Test
+	public void formatTupleFieldLike(){
+		assertThat(QueryValueBuilder.deriveLike("t", "name", "query", null, null)).isEqualTo("LOWER(t.name) LIKE LOWER(:query)");
+	}
+	
+	@Test
+	public void formatTupleFieldLike_many_and(){
+		assertThat(QueryValueBuilder.deriveLike("t", "name", "query", 2, LogicalOperator.AND)).isEqualTo("LOWER(t.name) LIKE LOWER(:query1) AND LOWER(t.name) LIKE LOWER(:query2)");
+	}
+	
+	@Test
+	public void formatTupleFieldLike_many_or(){
+		assertThat(QueryValueBuilder.deriveLike("t", "name", "query", 2, LogicalOperator.OR)).isEqualTo("LOWER(t.name) LIKE LOWER(:query1) OR LOWER(t.name) LIKE LOWER(:query2)");
 	}
 	
 	/**/

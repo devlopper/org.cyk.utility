@@ -2,22 +2,29 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.model.input;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import javax.faces.event.AjaxBehaviorEvent;
+import javax.ws.rs.core.Response;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.controller.Arguments;
+import org.cyk.utility.__kernel__.controller.EntityReader;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.klass.NamingModel;
+import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
 import org.cyk.utility.__kernel__.object.ReadListener;
 import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringImpl;
 import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl;
+import org.cyk.utility.__kernel__.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
 import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 import org.cyk.utility.__kernel__.properties.Properties;
@@ -50,7 +57,7 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 	private String readQueryIdentifier,countQueryIdentifier;
 	
 	private Integer initialNumberOfResults = INITIAL_NUMBER_OF_RESULTS;
-	private Integer numberOfResults = initialNumberOfResults;
+	private Integer maxResults = initialNumberOfResults;
 	private String queryString,targetWidgetVar;
 	private String dropdownMode = "current",emptyMessage="-- Aucun résultat --";
 	private Integer queryDelay = QUERY_DELAY;
@@ -60,35 +67,48 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 	private ReadListener readItemLabelListener;
 	private ReadListener readItemValueListener;
 	
+	private Boolean readerUsable;
+	private Boolean isCountEqualsListSize;
+	
+	private String __queryString__;
+	private Filter.Dto __filter__;
+	private Properties __readProperties__;
+	private Arguments<Object> __readerArguments__;
+	private Response __response__;
+	private Listener<Object> __listener__;
+	private Runner.Arguments __runnerArguments__;
+	private List<Object> __list__;
+	private Integer __count__;
+	
 	@SuppressWarnings("unchecked")
 	public Collection<Object> complete(String queryString) {
-		this.queryString = queryString;
-		if(listener != null || controllerEntity != null) {
-			Runner.Arguments arguments = new Runner.Arguments().assignDefaultMessageArguments().setSuccessMessageArguments(null);
-			arguments.getThrowableMessageArguments().setRenderTypes(CollectionHelper.listOf(RenderType.GROWL));
-			if(listener instanceof AutoComplete.Listener) {				
-				arguments.addRunnables(new Runnable() {				
-					@Override
-					public void run() {
-						((AutoComplete.Listener)listener).listenComplete(AutoComplete.this,arguments,new Filter.Dto(),queryString);
-					}
-				});				
-			}else if(controllerEntity != null) {
-				if(StringHelper.isBlank(readQueryIdentifier)) {
-					MessageRenderer.getInstance().render("read query identifier need to be defined to query data by "+queryString,Severity.WARNING, RenderType.GROWL);
-				}else {
-					arguments.addRunnables(new Runnable() {				
-						@Override
-						public void run() {
-							__complete__(arguments, controllerEntity, readQueryIdentifier, new Filter.Dto(), queryString);
-						}
-					});
-				}				
-			}
-			return (Collection<Object>) Runner.getInstance().run(arguments);
+		long timestamp = System.currentTimeMillis();
+		this.queryString = this.__queryString__ = queryString;
+		if(StringHelper.isBlank(__queryString__))
+			__queryString__ = null;
+		__listener__ = (Listener<Object>) listener;
+		if(__listener__ == null)
+			__listener__ = (Listener<Object>) Listener.AbstractImpl.DefaultImpl.INSTANCE;		
+		__filter__ = __listener__.instantiateFilter(this);
+		if(Boolean.TRUE.equals(readerUsable))
+			__readerArguments__ = __listener__.instantiateArguments(this);
+		else
+			__readProperties__ = __listener__.instantiateReadProperties(this);
+		__list__ = (List<Object>) __listener__.complete(this);
+		__response__ = __listener__.getResponse(this);
+		if(CollectionHelper.isEmpty(__list__))
+			__count__ = 0;
+		else {
+			if(Boolean.TRUE.equals(isCountEqualsListSize))
+				__count__ = __list__.size();
+			else
+				__count__ = __listener__.getCount(this);
 		}
-		MessageRenderer.getInstance().render("listener or controller need to be defined to query data by "+queryString,Severity.WARNING, RenderType.GROWL);
-		return null;
+		long duration = System.currentTimeMillis() - timestamp;
+		if(Boolean.TRUE.equals(LOGGABLE)) {
+			LogHelper.log(String.format("Read(%s) , duration=%s", __queryString__,duration), LOG_LEVEL,getClass());
+		}		
+		return __list__;
 	}
 	
 	public Object readItemValue(Object entity) {
@@ -116,7 +136,7 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 	public AutoComplete listenComplete(AutoComplete parent,String parentFieldName) {
 		if(parent == null || StringHelper.isBlank(parentFieldName))
 			return this;
-		setListener(new AutoComplete.Listener.AbstractImpl() {
+		setListener(new AutoComplete.Listener.AbstractImpl<Object>() {
 			@Override
 			public void listenComplete(AutoComplete autoComplete, Runner.Arguments arguments, Filter.Dto filter,String queryString) {
 				if(parent != null && parent.getValue() != null) {
@@ -158,7 +178,14 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 	
 	/**/
 	
-	public static interface Listener {
+	public static interface Listener<T> {
+		
+		Filter.Dto instantiateFilter(AutoComplete autoComplete);
+		Arguments<T> instantiateArguments(AutoComplete autoComplete);
+		Properties instantiateReadProperties(AutoComplete autoComplete);
+		Collection<T> complete(AutoComplete autoComplete);
+		Response getResponse(AutoComplete autoComplete);
+		Integer getCount(AutoComplete autoComplete);
 		
 		default void listenComplete(AutoComplete autoComplete,Runner.Arguments arguments,Filter.Dto filter,String queryString) {
 			if(autoComplete == null || autoComplete.controllerEntity == null) {
@@ -168,8 +195,102 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 			__complete__(arguments, autoComplete.controllerEntity, autoComplete.readQueryIdentifier, filter, queryString);
 		}
 		
-		public static abstract class AbstractImpl extends org.cyk.utility.__kernel__.object.AbstractObject implements Listener,Serializable {
+		public static abstract class AbstractImpl<T> extends org.cyk.utility.__kernel__.object.AbstractObject implements Listener<T>,Serializable {
 			
+			@Override
+			public Filter.Dto instantiateFilter(AutoComplete autoComplete) {
+				Filter.Dto filter = new Filter.Dto();
+				if(Boolean.TRUE.equals(autoComplete.readerUsable)) {
+					
+				}else {
+					if(StringHelper.isNotBlank(autoComplete.__queryString__))
+						filter.addField(AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringImpl.FIELD_CODE, autoComplete.__queryString__)
+						.addField(AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl.FIELD_NAME, autoComplete.__queryString__);
+				}
+				return filter;
+			}
+			
+			@Override
+			public Arguments<T> instantiateArguments(AutoComplete autoComplete) {
+				Arguments<T> arguments = new Arguments<T>()
+						.setRepresentationArguments(new org.cyk.utility.__kernel__.representation.Arguments().setQueryExecutorArguments(new QueryExecutorArguments.Dto()
+								.setQueryIdentifier(autoComplete.readQueryIdentifier)
+								.setFirstTupleIndex(0)
+								.setNumberOfTuples(autoComplete.maxResults)
+								.setFilter(autoComplete.__filter__))
+								.setCountable(Boolean.TRUE));
+				return arguments;
+			}
+			
+			@Override
+			public Properties instantiateReadProperties(AutoComplete autoComplete) {
+				Properties properties = new Properties().setQueryIdentifier(autoComplete.readQueryIdentifier).setIsPageable(Boolean.TRUE);
+				if(autoComplete.__filter__.getFields() != null && CollectionHelper.isNotEmpty(autoComplete.__filter__.getFields())) {
+					properties.setFilters(autoComplete.__filter__);
+				}
+				return properties;
+			}
+			
+			@SuppressWarnings("unchecked")
+			@Override
+			public Collection<T> complete(AutoComplete autoComplete) {
+				if(Boolean.TRUE.equals(autoComplete.readerUsable)) {
+					Runner.Arguments arguments = new Runner.Arguments().assignDefaultMessageArguments().setSuccessMessageArguments(null);
+					arguments.getThrowableMessageArguments().setRenderTypes(CollectionHelper.listOf(RenderType.GROWL));										
+					arguments.addRunnables(new Runnable() {				
+						@Override
+						public void run() {
+							arguments.setResult(EntityReader.getInstance().readMany((Class<Object>)autoComplete.entityClass, autoComplete.__readerArguments__));
+						}
+					});				
+					return (Collection<T>) Runner.getInstance().run(arguments);	
+				}else {
+					if(autoComplete.controllerEntity == null) {
+						MessageRenderer.getInstance().render("controller need to be defined to query data by "+autoComplete.__queryString__,Severity.WARNING, RenderType.GROWL);
+						return null;
+					}
+					if(StringHelper.isBlank(autoComplete.readQueryIdentifier)) {
+						MessageRenderer.getInstance().render("read query identifier need to be defined to query data by "+autoComplete.__queryString__,Severity.WARNING, RenderType.GROWL);
+						return null;
+					}
+					
+					if(autoComplete.__queryString__ != null)
+						autoComplete.__filter__.addField(AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringImpl.FIELD_CODE, autoComplete.__queryString__)
+						.addField(AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl.FIELD_NAME, autoComplete.__queryString__);
+					Properties properties = new Properties().setQueryIdentifier(autoComplete.readQueryIdentifier).setIsPageable(Boolean.TRUE);
+					if(autoComplete.__filter__.getFields() != null && CollectionHelper.isNotEmpty(autoComplete.__filter__.getFields())) {
+						properties.setFilters(autoComplete.__filter__);
+					}
+					
+					Runner.Arguments arguments = new Runner.Arguments().assignDefaultMessageArguments().setSuccessMessageArguments(null);
+					arguments.getThrowableMessageArguments().setRenderTypes(CollectionHelper.listOf(RenderType.GROWL));										
+					arguments.addRunnables(new Runnable() {				
+						@Override
+						public void run() {
+							arguments.setResult(autoComplete.controllerEntity.read(properties));
+						}
+					});				
+					return (Collection<T>) Runner.getInstance().run(arguments);	
+				}				
+			}
+			
+			@Override
+			public Response getResponse(AutoComplete autoComplete) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public Integer getCount(AutoComplete autoComplete) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			/**/
+			
+			public static class DefaultImpl extends Listener.AbstractImpl<Object> implements Serializable {
+				public static final Listener<Object> INSTANCE = new DefaultImpl();
+			}			
 		}
 	}
 
@@ -297,6 +418,9 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 	}
 	
 	/**/
+	
+	public static Boolean LOGGABLE = Boolean.TRUE;
+	public static Level LOG_LEVEL = Level.FINE;
 
 	static {
 		Configurator.set(AutoComplete.class, new ConfiguratorImpl());

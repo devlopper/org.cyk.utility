@@ -100,6 +100,8 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 			
 			@Override
 			public Object getChoiceLabel(AbstractInputChoice<VALUE> input, Object choice) {
+				if(choice == null)
+					return "-- Aucune sélection --";
 				return choice;
 			}
 			

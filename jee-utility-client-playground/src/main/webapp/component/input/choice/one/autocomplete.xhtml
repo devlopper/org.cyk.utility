@@ -11,8 +11,15 @@
     <cyk:page value="#{inputChoiceOneAutoCompletePage}">
     	<ui:define name="centerCenter">
     		<ui:decorate template="/input/select/one/autoComplete.xhtml">
-    			<ui:param name="autoComplete" value="#{inputChoiceOneAutoCompletePage.autoComplete}"/>
+    			<ui:param name="autoComplete" value="#{inputChoiceOneAutoCompletePage.autoCompleteController}"/>
     		</ui:decorate>
+    		<p:separator/>
+    		
+    		<ui:decorate template="/input/select/one/autoComplete.xhtml">
+    			<ui:param name="autoComplete" value="#{inputChoiceOneAutoCompletePage.autoCompleteReader}"/>
+    		</ui:decorate>
+    		<p:separator/>
+    		
     		<ui:decorate template="/command/commandbutton/default.xhtml">
     			<ui:param name="commandButton" value="#{inputChoiceOneAutoCompletePage.commandButton}"/>
     		</ui:decorate>

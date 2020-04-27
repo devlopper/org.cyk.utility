@@ -382,7 +382,8 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 	}
 	
 	public static void updateDataTableFooters(AbstractDataTable dataTable) {
-		Ajax.oncomplete("update_"+dataTable.getIdentifier()+"_footers();");
+		if(PrimeFaces.current().isAjaxRequest())
+			Ajax.oncomplete("update_"+dataTable.getIdentifier()+"_footers();");
 	}
 	
 	/**/

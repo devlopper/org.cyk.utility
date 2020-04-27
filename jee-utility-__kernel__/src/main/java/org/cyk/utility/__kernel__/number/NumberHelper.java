@@ -1,12 +1,15 @@
 package org.cyk.utility.__kernel__.number;
 
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
+import org.cyk.utility.__kernel__.locale.LocaleGetter;
 import org.cyk.utility.__kernel__.log.LogHelper;
 
 public interface NumberHelper {
@@ -268,5 +271,23 @@ public interface NumberHelper {
 		if(ArrayHelper.isEmpty(numbers))
 			return null;
 		return operate(Operation.DIVIDE, numbers);
+	}
+
+	static String format(Number number,String valueIfNumberIsNull,Locale locale) {
+		if(number == null)
+			return valueIfNumberIsNull;
+		if(locale == null)
+			locale = LocaleGetter.getInstance().get();
+		if(locale == null)
+			locale = Locale.FRENCH;
+		return NumberFormat.getInstance(locale).format(number);
+	}
+	
+	static String format(Number number,String valueIfNumberIsNull) {
+		return format(number, valueIfNumberIsNull,LocaleGetter.getInstance().get());
+	}
+	
+	static String format(Number number) {
+		return format(number, "0",LocaleGetter.getInstance().get());
 	}
 }

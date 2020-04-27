@@ -199,6 +199,27 @@ public class NumberHelperUnitTest extends AbstractWeldUnitTest {
 		assertThat(NumberHelper.multiply(2,3).intValue()).isEqualTo(6);
 	}
 	
+	@Test
+	public void format_null(){
+		assertThat(NumberHelper.format(null)).isEqualTo("0");
+	}
+	
+	@Test
+	public void format_0(){
+		assertThat(NumberHelper.format(0)).isEqualTo("0");
+	}
+	
+	@Test
+	public void format_1(){
+		assertThat(NumberHelper.format(1)).isEqualTo("1");
+	}
+	
+	//@Test
+	public void format_1000(){
+		String string = NumberHelper.format(1000);
+		assertThat(string).startsWith("1 000");
+	}
+	
 	//@Test
 	public void formatThousandSeparator(){
 		//DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.FRENCH);		

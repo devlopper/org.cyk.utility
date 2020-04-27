@@ -15,12 +15,14 @@ import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
+import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.__static__.controller.AbstractDataIdentifiableSystemStringIdentifiableBusinessStringImpl;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.Case;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
+import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.client.controller.web.jsf.primefaces.PrimefacesHelper;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
@@ -248,11 +250,19 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 		return this;
 	}
 	
-	public AbstractDataTable updateFooters() {
-		PrimefacesHelper.updateDataTableFooters(this);
+	public AbstractDataTable setColumnsFootersValuesFromMaster(Object master) {
+		if(CollectionHelper.isEmpty(columnsAfterRowIndex))
+			return this;
+		columnsAfterRowIndex.stream().forEach(column -> {
+			column.setFooterValueFromMaster(master);	
+		});
 		return this;
 	}
 	
+	public AbstractDataTable updateColumnsFooters() {
+		PrimefacesHelper.updateDataTableFooters(this);
+		return this;
+	}
 	
 	/**/
 	
@@ -397,7 +407,12 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 			public Object getCellValueByRecordByColumn(Object record, Integer recordIndex, Column column,Integer columnIndex) {
 				if(record == null || column == null || StringHelper.isBlank(column.getFieldName()))
 					return null;
-				return FieldHelper.read(record, column.getFieldName());
+				Object value = FieldHelper.read(record, column.getFieldName());
+				if(Value.Type.CURRENCY.equals(column.getValueType())) {
+					if(value instanceof Number)
+						value = NumberHelper.format((Number) value);
+				}
+				return value;
 			}
 			
 			@Override
@@ -407,6 +422,10 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 			
 			@Override
 			public String getStyleClassByRecordByColumn(Object record, Integer recordIndex, Column column,Integer columnIndex) {
+				if(record == null || column == null || StringHelper.isBlank(column.getFieldName()))
+					return null;
+				if(Value.Type.CURRENCY.equals(column.getValueType()))
+					return "cyk-text-align-right";
 				return null;
 			}
 			

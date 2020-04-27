@@ -9,7 +9,7 @@
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
 	<p:autoComplete
-		id="#{autoComplete == null ? userInterfaceController.randomIdentifier : autoComplete.identifier}"
+		id="#{autoComplete.identifier}"
 		value="#{autoComplete.value}" 
 		multiple="#{autoComplete.multiple}"
 		placeholder="#{autoComplete.placeholder}"
@@ -18,7 +18,7 @@
 		itemLabel="#{autoComplete.readItemLabel(item)}"
 		converter="#{autoComplete.converter}"
 		completeMethod="#{autoComplete.complete}"
-		maxResults="#{autoComplete.numberOfResults}" 
+		maxResults="#{autoComplete.maxResults}" 
 		queryDelay="#{autoComplete.queryDelay}" 
 		emptyMessage="#{autoComplete.emptyMessage}"
 		widgetVar="#{autoComplete.widgetVar}"
