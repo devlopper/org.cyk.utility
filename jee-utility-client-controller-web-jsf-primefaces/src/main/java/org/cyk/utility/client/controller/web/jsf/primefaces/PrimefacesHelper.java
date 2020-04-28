@@ -386,6 +386,8 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 			Ajax.oncomplete("update_"+dataTable.getIdentifier()+"_footers();");
 	}
 	
+	//private static final String SCRIPT_FILTER = "PF('%s').filter()";
+	
 	/**/
 	
 	

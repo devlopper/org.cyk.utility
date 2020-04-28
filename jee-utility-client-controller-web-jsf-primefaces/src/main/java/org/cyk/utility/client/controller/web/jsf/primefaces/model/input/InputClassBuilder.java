@@ -72,7 +72,11 @@ public interface InputClassBuilder {
 							choicesCount = Choices.Count.ALL;
 					}
 					if(Choices.Count.ALL.equals(choicesCount)) {
-						inputClass = SelectManyCheckbox.class;
+						if(ClassHelper.isInstanceOf(field.getType(),Collection.class)) {
+							inputClass = SelectManyCheckbox.class;
+						}else {
+							inputClass = SelectOneCombo.class;
+						}						
 					}else if(Choices.Count.AUTO_COMPLETE.equals(choicesCount))
 						inputClass = AutoComplete.class;
 					else

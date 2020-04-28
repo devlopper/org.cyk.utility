@@ -186,13 +186,18 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 			
 			@Override
 			public Response getResponse(LazyDataModel<T> lazyDataModel) {
-				if(Boolean.TRUE.equals(lazyDataModel.readerUsable))
+				if(Boolean.TRUE.equals(lazyDataModel.readerUsable)) {
+					if(lazyDataModel.__readerArguments__ == null)
+						return null;
 					return lazyDataModel.__readerArguments__.get__response__();
+				}
 				return (Response) lazyDataModel.__readProperties__.getResponse();
 			}
 			
 			@Override
 			public Integer getCount(LazyDataModel<T> lazyDataModel) {
+				if(lazyDataModel.__response__ == null)
+					return 0;
 				return NumberHelper.getInteger(ResponseHelper.getHeaderXTotalCount(lazyDataModel.__response__),0);
 			}
 			

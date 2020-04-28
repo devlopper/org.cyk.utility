@@ -6,6 +6,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 
 import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
+import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.random.RandomHelper;
 
 @Named @ApplicationScoped
@@ -31,5 +32,9 @@ public class UserInterfaceController implements Serializable {
     
     public Object getRandomIdentifier() {
     	return "random"+RandomHelper.getAlphabetic(10);
+    }
+    
+    public String formatNumber(Number number) {
+    	return NumberHelper.format(number);
     }
 }
