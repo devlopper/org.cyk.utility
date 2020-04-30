@@ -4,11 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
@@ -53,18 +49,7 @@ public class InputChoiceOneRadioPage extends AbstractPageContainerManagedImpl im
 		
 		selectOneRadioWithDefault = SelectOneRadio.build(SelectOneRadio.FIELD_CHOICES,personTypes);
 		selectOneRadioWithDefault.setValue(CollectionHelper.getFirst(selectOneRadioWithDefault.getChoices()));
-		selectOneRadioWithDefault.setConverter(new Converter<PersonType>() {
-
-			@Override
-			public PersonType getAsObject(FacesContext context, UIComponent component, String string) {
-				return CollectionHelper.getFirst(personTypes.stream().filter(personType -> personType.getIdentifier().equals(string)).collect(Collectors.toList()));
-			}
-
-			@Override
-			public String getAsString(FacesContext context, UIComponent component, PersonType personType) {
-				return personType.getIdentifier();
-			}
-		});		
+		
 		selectOneRadioWithDefault.getAjaxes().get("change").setDisabled(Boolean.FALSE).setListener(new Ajax.Listener.AbstractImpl() {
 			@Override
 			public void listenAction(Object argument) {
@@ -78,7 +63,8 @@ public class InputChoiceOneRadioPage extends AbstractPageContainerManagedImpl im
 		commandButton.setListener(new CommandButton.Listener.AbstractImpl() {
 			@Override
 			public void listenAction(Object argument) {
-				MessageRenderer.getInstance().render("Value : "+selectOneRadio.getValue());
+				MessageRenderer.getInstance().render("Value 1 : "+selectOneRadio.getValue());
+				MessageRenderer.getInstance().render(" - Value 2 : "+selectOneRadioWithDefault.getValue());
 			}
 		});
 	}

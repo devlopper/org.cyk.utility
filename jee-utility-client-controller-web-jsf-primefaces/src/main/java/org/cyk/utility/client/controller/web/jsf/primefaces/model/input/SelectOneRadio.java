@@ -32,7 +32,7 @@ public class SelectOneRadio extends AbstractInputChoiceOne implements Serializab
 		@Override
 		public void configure(SelectOneRadio selectOneRadio, Map<Object, Object> arguments) {
 			super.configure(selectOneRadio, arguments);
-			selectOneRadio.addAjaxes(Map.of(Ajax.FIELD_EVENT,"change"));
+			selectOneRadio.addAjaxes(Map.of(Ajax.FIELD_EVENT,"change",Ajax.FIELD_DISABLED,Boolean.TRUE));
 		}
 		
 		@Override

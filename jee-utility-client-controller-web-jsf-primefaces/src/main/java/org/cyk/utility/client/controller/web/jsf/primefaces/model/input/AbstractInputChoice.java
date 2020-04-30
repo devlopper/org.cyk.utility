@@ -1,17 +1,15 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces.model.input;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.controller.EntityReader;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
-import org.cyk.utility.client.controller.web.jsf.converter.ObjectConverter;
+import org.cyk.utility.client.controller.web.jsf.converter.Converter;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +19,7 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 
 	protected Class<?> choiceClass;
 	protected Collection<Object> choices;
+	protected Boolean choicesInitialized;
 	protected Integer columns;
 	protected Boolean disabled;
 	protected String layout;
@@ -50,9 +49,18 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 	
 	@SuppressWarnings("unchecked")
 	public Collection<Object> getChoices() {
-		if(choices == null)
-			choices = (Collection<Object>) ((Listener<VALUE>)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).getChoices(this);
+		if(Boolean.TRUE.equals(choicesInitialized))
+			return choices;
+		choices = (Collection<Object>) ((Listener<VALUE>)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).computeChoices(this);
+		choicesInitialized = Boolean.TRUE;
 		return choices;
+	}
+	
+	public AbstractInputChoice<VALUE> updateChoices() {
+		setChoices(null);
+		setChoicesInitialized(null);
+		getChoices();
+		return this;
 	}
 	
 	/**/
@@ -67,35 +75,31 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 	
 	public static interface Listener<VALUE> extends AbstractInput.Listener {
 		
-		Collection<VALUE> getChoices(AbstractInputChoice<VALUE> input);
+		Collection<VALUE> computeChoices(AbstractInputChoice<VALUE> input);
 		
 		Object getChoiceLabel(AbstractInputChoice<VALUE> input,Object choice);
 		
 		public static abstract class AbstractImpl<VALUE> extends AbstractInput.Listener.AbstractImpl implements Listener<VALUE>,Serializable {
-			@SuppressWarnings("unchecked")
 			@Override
-			public Collection<VALUE> getChoices(AbstractInputChoice<VALUE> input) {
-				if(input.choices == null) {
-					Class<?> entityClass = input.choiceClass;
-					if(entityClass == null) {
-						if(ClassHelper.isInstanceOf(input.field.getType(),Collection.class)) {
-							entityClass = ClassHelper.getParameterAt(input.field.getType(), 0);
-						}else {
-							entityClass = input.field.getType();
-						}
+			public Collection<VALUE> computeChoices(AbstractInputChoice<VALUE> input) {
+				Class<?> entityClass = input.choiceClass;
+				if(entityClass == null) {
+					if(ClassHelper.isInstanceOf(input.field.getType(),Collection.class)) {
+						entityClass = ClassHelper.getParameterAt(input.field.getType(), 0);
+					}else {
+						entityClass = input.field.getType();
 					}
-					if(entityClass == null)
-						LogHelper.logWarning("Choice class cannot be deduced.", getClass());
-					else
-						input.choices = (Collection<Object>) EntityReader.getInstance().readMany(entityClass);
-					if(input.choices == null)
-						input.choices = new ArrayList<>();
 				}
-				/*if(input.converter == null) {
-					if(!ClassHelper.isBelongsToJavaPackages(entityClass))
-						input.converter = DependencyInjection.inject(ObjectConverter.class);
-				}*/
-				return (Collection<VALUE>) input.choices;
+				return __computeChoices__(input, entityClass);
+			}
+			
+			@SuppressWarnings("unchecked")
+			protected Collection<VALUE> __computeChoices__(AbstractInputChoice<VALUE> input,Class<?> entityClass) {
+				if(entityClass == null) {
+					LogHelper.logWarning("Choice class cannot be deduced.", getClass());
+					return null;
+				}
+				return (Collection<VALUE>) EntityReader.getInstance().readMany(entityClass);
 			}
 			
 			@Override
@@ -142,8 +146,12 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 					}					
 				}				
 				if(!ClassHelper.isBelongsToJavaPackages(entityClass))
-					input.converter = DependencyInjection.inject(ObjectConverter.class);
+					//input.converter = DependencyInjection.inject(ObjectConverter.class);
+					input.converter = __inject__(Converter.class);	
 			}
+			if(input.choicesInitialized == null) {
+				input.choicesInitialized = input.choices != null;
+			}		
 		}
 	}
 }

@@ -39,7 +39,8 @@ public class SelectOneCombo extends AbstractInputChoiceOne implements Serializab
 				selectOneCombo.filter = Boolean.TRUE;
 			if(StringHelper.isBlank(selectOneCombo.filterMatchMode))
 				selectOneCombo.filterMatchMode = "contains";			
-			selectOneCombo.addAjaxes(Map.of(Ajax.FIELD_EVENT,"valueChange"),Map.of(Ajax.FIELD_EVENT,"itemSelect"));
+			selectOneCombo.addAjaxes(Map.of(Ajax.FIELD_EVENT,"valueChange",Ajax.FIELD_DISABLED,Boolean.TRUE)
+					,Map.of(Ajax.FIELD_EVENT,"itemSelect",Ajax.FIELD_DISABLED,Boolean.TRUE));
 		}
 		
 		@Override

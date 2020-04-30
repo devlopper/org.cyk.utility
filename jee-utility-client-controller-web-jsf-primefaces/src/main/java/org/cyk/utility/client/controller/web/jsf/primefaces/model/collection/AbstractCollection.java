@@ -366,11 +366,16 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 				collection.emptyMessage = "-- Aucun élément trouvé --";
 			
 			if(Boolean.TRUE.equals(collection.lazy)) {
-				collection.rows = 20;
-				collection.rowsPerPageTemplate = "20,50,100,500,1000,2000,5000,10000,20000,50000";
-				collection.paginatorTemplate = "{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}";
-				collection.currentPageReportTemplate = "Total {totalRecords} | Page {currentPage}/{totalPages}";
-				collection.paginator = Boolean.TRUE;
+				if(collection.rows == null)
+					collection.rows = 20;
+				if(StringHelper.isBlank(collection.rowsPerPageTemplate))
+					collection.rowsPerPageTemplate = "20,50,100,500,1000,2000,5000,10000,20000,50000";
+				if(StringHelper.isBlank(collection.paginatorTemplate))
+					collection.paginatorTemplate = "{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}";
+				if(StringHelper.isBlank(collection.currentPageReportTemplate))
+					collection.currentPageReportTemplate = "Total {totalRecords} | Page {currentPage}/{totalPages}";
+				if(collection.paginator == null)
+					collection.paginator = Boolean.TRUE;
 				if(collection.elementClass == null) {
 					
 				}else {
