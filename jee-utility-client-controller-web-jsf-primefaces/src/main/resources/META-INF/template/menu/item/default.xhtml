@@ -35,7 +35,7 @@
 	<c:if test="#{not isHasOutcome}">
 		<p:menuitem
 			id="#{menuitem == null ? userInterfaceController.randomIdentifier : menuitem.identifier}"
-			action="#{menuitem.action(actionArgument)}"
+			action="#{menuitem.act(actionArgument)}"
 			icon="#{menuitem.icon}"
 			update="#{menuitem.update}"
 			value="#{menuitem.value}"

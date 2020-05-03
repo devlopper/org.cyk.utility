@@ -9,6 +9,7 @@ import javax.inject.Named;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.user.interface_.message.MessageRenderer;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.SelectManyCheckbox;
 import org.cyk.utility.playground.client.controller.api.PersonTypeController;
@@ -30,7 +31,7 @@ public class InputChoiceManyCheckBoxPage extends AbstractPageContainerManagedImp
 		commandButton = Builder.build(CommandButton.class,Map.of(CommandButton.FIELD_VALUE,"Enregistrer"));
 		commandButton.setListener(new CommandButton.Listener.AbstractImpl() {
 			@Override
-			public void listenAction(Object argument) {
+			public void run(AbstractAction action) {
 				MessageRenderer.getInstance().render(selectManyCheckbox.getValue()+"");
 			}
 		});

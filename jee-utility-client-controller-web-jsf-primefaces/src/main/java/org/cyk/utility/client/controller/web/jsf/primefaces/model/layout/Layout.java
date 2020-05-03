@@ -11,10 +11,8 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
-import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
-import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.AbstractInput;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.layout.Cell.WidthUnit;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.panel.OutputPanel;
@@ -221,29 +219,6 @@ public class Layout extends OutputPanel implements Serializable {
 	
 	public static Layout build(Object...objects) {
 		return build(MapHelper.instantiate(objects));
-	}
-	
-	public static interface ActionListener extends AbstractAction.Listener {
-		
-		@Override
-		default void listenAction(Object argument) {
-			Layout layout = getLayout();
-			if(layout == null)
-				return;
-			layout.writeInputsValuesToObjectsFields();
-		}
-		
-		ActionListener setLayout(Layout layout);
-		Layout getLayout();
-		
-		/**/
-		
-		@Getter @Setter @Accessors(chain=true)
-		public static abstract class AbstractImpl extends AbstractObject implements ActionListener {
-			
-			private Layout layout;
-			
-		}
 	}
 	
 	static {

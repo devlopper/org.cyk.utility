@@ -22,6 +22,7 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.Case;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
+import org.cyk.utility.__kernel__.user.interface_.UserInterfaceAction;
 import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.client.controller.web.jsf.primefaces.PrimefacesHelper;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
@@ -56,12 +57,13 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 		setIsRowAddable(Boolean.TRUE);
 		if(title == null)
 			title = "Ajouter une ligne";
-		addRowCommandButton = CommandButton.build(CommandButton.FIELD_TITLE,title,CommandButton.FIELD_ICON,"fa fa-plus",CommandButton.ConfiguratorImpl.FIELD_COLLECTION,this
-				,CommandButton.ConfiguratorImpl.FIELD_COLLECTION_UPDATABLE,Boolean.TRUE
+		addRowCommandButton = CommandButton.build(CommandButton.FIELD_TITLE,title,CommandButton.FIELD_ICON,"fa fa-plus",CommandButton.FIELD___COLLECTION__,this
+				,CommandButton.ConfiguratorImpl.FIELD_COLLECTION_UPDATABLE,Boolean.TRUE,CommandButton.FIELD_USER_INTERFACE_ACTION,UserInterfaceAction.EXECUTE_FUNCTION
 				,CommandButton.ConfiguratorImpl.FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_NULLABLE,Boolean.TRUE
 				,CommandButton.FIELD_LISTENER,new AbstractAction.Listener.AbstractImpl() {
 			@SuppressWarnings("unchecked")
-			protected Object __executeFunction__(Object argument) {
+			@Override
+			protected Object __runExecuteFunction__(AbstractAction action) {
 				if(dataGrid == null) {
 					if(value != null && !(value instanceof Collection))
 						throw new RuntimeException("Cannot add instance into value of type "+value.getClass());
@@ -75,22 +77,23 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 					dataGrid.addRow();
 				return "row added";
 			}
-		}.setAction(AbstractAction.Listener.Action.EXECUTE_FUNCTION));
+		});
 		
-		removeRowCommandButton = CommandButton.build(CommandButton.FIELD_TITLE,"Retirer",CommandButton.FIELD_ICON,"fa fa-minus",CommandButton.ConfiguratorImpl.FIELD_COLLECTION,this
-				,CommandButton.ConfiguratorImpl.FIELD_COLLECTION_UPDATABLE,Boolean.TRUE
+		removeRowCommandButton = CommandButton.build(CommandButton.FIELD_TITLE,"Retirer",CommandButton.FIELD_ICON,"fa fa-minus",CommandButton.FIELD___COLLECTION__,this
+				,CommandButton.ConfiguratorImpl.FIELD_COLLECTION_UPDATABLE,Boolean.TRUE,CommandButton.FIELD_USER_INTERFACE_ACTION,UserInterfaceAction.EXECUTE_FUNCTION
 				,CommandButton.ConfiguratorImpl.FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_NULLABLE,Boolean.TRUE
 				,CommandButton.FIELD_LISTENER,new AbstractAction.Listener.AbstractImpl() {
-			protected Object __executeFunction__(Object argument) {
+			@Override
+			protected Object __runExecuteFunction__(AbstractAction action) {
 				if(dataGrid == null) {
 					
 				}else {
-					if(argument instanceof Grid.Row)
-						dataGrid.removeRow((Grid.Row) argument);
+					if(action.get__argument__() instanceof Grid.Row)
+						dataGrid.removeRow((Grid.Row) action.get__argument__());
 				}
 				return "row removed";
 			}
-		}.setAction(AbstractAction.Listener.Action.EXECUTE_FUNCTION));
+		});
 		menuColumn.setRendered(Boolean.TRUE);
 		recordMenu = null;
 		return this;
@@ -113,11 +116,12 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 		if(StringHelper.isBlank(variableFormat))
 			variableFormat = "value%s";
 		columnFieldNameFormat = variableFormat;
-		addColumnCommandButton = CommandButton.build(CommandButton.FIELD_VALUE,value,CommandButton.FIELD_ICON,icon,CommandButton.ConfiguratorImpl.FIELD_COLLECTION,this
-				,CommandButton.ConfiguratorImpl.FIELD_COLLECTION_UPDATABLE,Boolean.TRUE
+		addColumnCommandButton = CommandButton.build(CommandButton.FIELD_VALUE,value,CommandButton.FIELD_ICON,icon,CommandButton.FIELD___COLLECTION__,this
+				,CommandButton.ConfiguratorImpl.FIELD_COLLECTION_UPDATABLE,Boolean.TRUE,CommandButton.FIELD_USER_INTERFACE_ACTION,UserInterfaceAction.EXECUTE_FUNCTION
 				,CommandButton.ConfiguratorImpl.FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_NULLABLE,Boolean.TRUE
 				,CommandButton.FIELD_LISTENER,new AbstractAction.Listener.AbstractImpl() {
-			protected Object __executeFunction__(Object argument) {
+			@Override
+			protected Object __runExecuteFunction__(AbstractAction action) {
 				String fieldName;
 				if(dataGrid == null) {
 					fieldName = null;
@@ -134,7 +138,7 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 					dataGrid.addColumn(fieldName);
 				return "column added";
 			}
-		}.setAction(AbstractAction.Listener.Action.EXECUTE_FUNCTION));
+		});
 		return this;
 	}
 	
@@ -144,11 +148,12 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 			value = "Retirer la dernière colonne";
 		if(icon == null)
 			icon = "fa fa-minus";
-		removeLastColumnCommandButton = CommandButton.build(CommandButton.FIELD_VALUE,value,CommandButton.FIELD_ICON,icon,CommandButton.ConfiguratorImpl.FIELD_COLLECTION,this
-				,CommandButton.ConfiguratorImpl.FIELD_COLLECTION_UPDATABLE,Boolean.TRUE
+		removeLastColumnCommandButton = CommandButton.build(CommandButton.FIELD_VALUE,value,CommandButton.FIELD_ICON,icon,CommandButton.FIELD___COLLECTION__,this
+				,CommandButton.ConfiguratorImpl.FIELD_COLLECTION_UPDATABLE,Boolean.TRUE,CommandButton.FIELD_USER_INTERFACE_ACTION,UserInterfaceAction.EXECUTE_FUNCTION
 				,CommandButton.ConfiguratorImpl.FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_NULLABLE,Boolean.TRUE
 				,CommandButton.FIELD_LISTENER,new AbstractAction.Listener.AbstractImpl() {
-			protected Object __executeFunction__(Object argument) {
+			@Override
+			protected Object __runExecuteFunction__(AbstractAction action) {
 				if(!((List<Column>)columnsAfterRowIndex).isEmpty()) {
 					Column column = ((List<Column>)columnsAfterRowIndex).get(((List<Column>)columnsAfterRowIndex).size()-1);
 					columnsAfterRowIndex.remove(column);
@@ -159,7 +164,7 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 				}				
 				return "column removed";
 			}
-		}.setAction(AbstractAction.Listener.Action.EXECUTE_FUNCTION));
+		});
 		return this;
 	}
 	
@@ -171,9 +176,11 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 		setEditable(Boolean.TRUE);
 		setEditMode("cell");
 		getAjaxes().get("cellEdit").setDisabled(Boolean.FALSE);
+		getAjaxes().get("cellEdit").setUserInterfaceAction(UserInterfaceAction.EXECUTE_FUNCTION);
 		getAjaxes().get("cellEdit").setListener(new AbstractAction.Listener.AbstractImpl() {
-			protected Object __executeFunction__(Object argument) {
-				CellEditEvent event = (CellEditEvent) argument;
+			@Override
+			protected Object __runExecuteFunction__(AbstractAction action) {
+				CellEditEvent event = (CellEditEvent) action.get__argument__();
 				DynamicColumn dynamicColumn = (DynamicColumn) event.getColumn();
 				Object record = getValueAt(event.getRowIndex());
 				String fieldName = CollectionHelper.getElementAt(getColumnsAfterRowIndex(), dynamicColumn.getIndex()).getFieldName();
@@ -185,7 +192,7 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 					controllerEntity.update(record,new Properties().setFields(fieldName));
 				return null;
 			}
-		}.setAction(AbstractAction.Listener.Action.EXECUTE_FUNCTION));
+		});
 		return this;
 	}
 	

@@ -19,7 +19,7 @@
 			value="#{commandButton.value}"
 			
 			id="value_yes_#{identifier}"
-			action="#{commandButton.act(actionArgument)}"
+			action="#{commandButton.action(actionArgument)}"
 			update="#{commandButton.update}"
 			process="#{commandButton.process}"
 			icon="#{commandButton.icon}"
@@ -44,7 +44,7 @@
 	<c:if test="#{not isHasValue}">
 		<p:commandButton
 			id="value_no_#{identifier}"
-			action="#{commandButton.act(actionArgument)}"
+			action="#{commandButton.action(actionArgument)}"
 			update="#{commandButton.update}"
 			process="#{commandButton.process}"
 			icon="#{commandButton.icon}"

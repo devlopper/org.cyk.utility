@@ -80,6 +80,20 @@
 	    		<ui:decorate template="/command/commandbutton/default.xhtml">
 	    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonListNamableInOpenedDialog}"/>
 	    		</ui:decorate>
+	    		
+	    		<h:panelGroup>
+	    			<p:selectOneMenu value="#{commandButtonPage.userInterfaceAction}">
+	    				<f:selectItem itemLabel="-- Aucune sélection --"  />
+	    				<f:selectItems value="#{commandButtonPage.actions}" var="action" itemLabel="#{action}" itemValue="#{action}" />	    					    				
+	    			</p:selectOneMenu>
+	    			<h:outputText value="Parent Parameter"/>
+	    			<p:inputText value="#{commandButtonPage.actionParameter}" />
+	    			<p:separator/>
+	    			<ui:decorate template="/command/commandbutton/default.xhtml">
+		    			<ui:param name="commandButton" value="#{commandButtonPage.commandButtonDynamic}"/>
+		    		</ui:decorate>
+	    		</h:panelGroup>
+		    		
     		</p:panelGrid>	    
     		
     		<ui:decorate template="/dialog/default.xhtml">

@@ -25,16 +25,14 @@ public class OpenedFromCommandButtonPage extends AbstractPageContainerManagedImp
 		inputText = InputText.build();
 		
 		commandButton01 = CommandButton.build(CommandButton.FIELD_VALUE,"Do the job 01",CommandButton.ConfiguratorImpl.FIELD_OBJECT,this
-				,CommandButton.ConfiguratorImpl.FIELD_METHOD_NAME,"doTheJob01"
-				,CommandButton.ConfiguratorImpl.FIELD_LISTENER_IS_WINDOW_RENDERED_AS_DIALOG,getIsRenderTypeDialog());
+				,CommandButton.ConfiguratorImpl.FIELD_METHOD_NAME,"doTheJob01");
 		
 		commandButton02 = CommandButton.build(CommandButton.FIELD_VALUE,"Do the job 02",CommandButton.ConfiguratorImpl.FIELD_OBJECT,this
-				,CommandButton.ConfiguratorImpl.FIELD_METHOD_NAME,"doTheJob02"
-				,CommandButton.ConfiguratorImpl.FIELD_LISTENER_IS_WINDOW_RENDERED_AS_DIALOG,getIsRenderTypeDialog());
+				,CommandButton.ConfiguratorImpl.FIELD_METHOD_NAME,"doTheJob02");
 	}
 	
 	public Object doTheJob01() {
-		return "The job has been done ! "+inputText.getValue();
+		return "The job 01 has been done ! "+inputText.getValue();
 	}
 	
 	public void doTheJob02() {

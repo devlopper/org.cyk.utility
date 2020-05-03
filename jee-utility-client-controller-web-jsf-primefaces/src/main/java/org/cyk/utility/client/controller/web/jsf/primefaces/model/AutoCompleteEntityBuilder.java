@@ -21,7 +21,7 @@ public interface AutoCompleteEntityBuilder {
 			autoCompleteEntity.getEventScripts(Boolean.TRUE).write(Event.CHANGE, script);
 			autoCompleteEntity.getAjaxItemSelect().setDisabled(Boolean.FALSE);
 			autoCompleteEntity.getAjaxItemSelect().getEventScripts(Boolean.TRUE).write(Event.COMPLETE, script);
-			autoCompleteEntity.getAjaxItemSelect().setThrowNotYetImplemented(Boolean.FALSE);
+			//autoCompleteEntity.getAjaxItemSelect().setThrowNotYetImplemented(Boolean.FALSE);
 			
 			autoCompleteEntity.setReadItemValueListener(new ReadListener() {				
 				@Override

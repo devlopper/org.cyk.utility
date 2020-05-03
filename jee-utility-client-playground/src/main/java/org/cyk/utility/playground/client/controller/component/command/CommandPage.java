@@ -10,6 +10,7 @@ import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.user.interface_.message.MessageRenderer;
 import org.cyk.utility.__kernel__.user.interface_.message.RenderType;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.Command;
 
 import lombok.Getter;
@@ -31,14 +32,14 @@ public class CommandPage extends AbstractPageContainerManagedImpl implements Ser
 		super.__listenPostConstruct__();
 		commandServerOnClick = Builder.build(Command.class,Map.of(Command.FIELD_LISTENER,new Command.Listener.AbstractImpl() {
 			@Override
-			public void listenAction(Object argument) {
+			public void run(AbstractAction action) {
 				MessageRenderer.getInstance().render("You have click", RenderType.GROWL);
 			}
 		}));
 		
 		commandServerOnDoubleClick = Builder.build(Command.class,Map.of(Command.FIELD_LISTENER,new Command.Listener.AbstractImpl() {
 			@Override
-			public void listenAction(Object argument) {
+			public void run(AbstractAction action) {
 				MessageRenderer.getInstance().render("You have double click", RenderType.GROWL);
 			}
 		}));

@@ -10,6 +10,7 @@ import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.user.interface_.message.MessageRenderer;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax.Ajax;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.SelectOneCombo;
@@ -32,16 +33,16 @@ public class InputChoiceOneComboPage extends AbstractPageContainerManagedImpl im
 		
 		selectOneCombo.getAjaxes().get("itemSelect").setDisabled(Boolean.FALSE).setListener(new Ajax.Listener.AbstractImpl() {
 			@Override
-			public void listenAction(Object argument) {
-				Object v = FieldHelper.read(argument, "source.value");
+			public void run(AbstractAction action) {
+				Object v = FieldHelper.read(action.get__argument__(), "source.value");
 				System.out.println(
 						"ITEM SELECT : "+v+" : "+v.getClass().getSimpleName());
 			}
 		});
 		selectOneCombo.getAjaxes().get("valueChange").setDisabled(Boolean.FALSE).setListener(new Ajax.Listener.AbstractImpl() {
 			@Override
-			public void listenAction(Object argument) {
-				Object v = FieldHelper.read(argument, "source.value");
+			public void run(AbstractAction action) {
+				Object v = FieldHelper.read(action.get__argument__(), "source.value");
 				System.out.println(
 						"VALUE CHANGE : "+v+" : "+v.getClass().getSimpleName());
 			}
@@ -50,7 +51,7 @@ public class InputChoiceOneComboPage extends AbstractPageContainerManagedImpl im
 		commandButton = Builder.build(CommandButton.class,Map.of(CommandButton.FIELD_VALUE,"Enregistrer"));
 		commandButton.setListener(new CommandButton.Listener.AbstractImpl() {
 			@Override
-			public void listenAction(Object argument) {
+			public void run(AbstractAction action) {
 				MessageRenderer.getInstance().render("Value : "+selectOneCombo.getValue());
 			}
 		});

@@ -87,8 +87,8 @@ public class Cell extends OutputPanel implements Serializable {
 				if(commandButton != null) {
 					cell.control = commandButton;
 					commandButton.addUpdatables(cell.layout);
-					if(commandButton.getListener() instanceof Layout.ActionListener)
-						((Layout.ActionListener)commandButton.getListener()).setLayout(cell.layout);
+					//if(commandButton.getListener() instanceof Layout.ActionListener)
+					//	((Layout.ActionListener)commandButton.getListener()).setLayout(cell.layout);
 				}
 			}			
 		}

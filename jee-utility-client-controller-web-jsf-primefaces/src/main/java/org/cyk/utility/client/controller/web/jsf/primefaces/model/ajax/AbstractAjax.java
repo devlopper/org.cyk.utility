@@ -4,9 +4,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
-import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
-import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.user.interface_.message.RenderType;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
 
@@ -18,30 +16,29 @@ import lombok.experimental.Accessors;
 public class AbstractAjax<ARGUMENT> extends AbstractAction implements Serializable {
 
 	protected String event;
-	protected Boolean disabled = Boolean.TRUE,partialSubmit=Boolean.TRUE;
-	protected Boolean throwNotYetImplemented = Boolean.TRUE;
-	
+	protected Boolean disabled,partialSubmit;
+	/*
 	{
 		listener = new Listener.AbstractImpl() {
 			@Override
-			public void listenAction(Object argument) {
-				if(Boolean.TRUE.equals(throwNotYetImplemented))
-					ThrowableHelper.throwNotYetImplemented();
+			public void run(AbstractAction action,Object argument) {
+				if(Boolean.TRUE.equals(listenerIsNullable))
+					return;
+				throw new RuntimeException("Listener definition for event <<"+event+">> is required");
 			}
 		};
 	}
-	
+	*/
 	public void listen(ARGUMENT event) {
-		action(event);
+		act(event);
 	}
 	
 	/**/
 	
 	public static final String FIELD_EVENT = "event";
 	public static final String FIELD_DISABLED = "disabled";
-	public static final String FIELD_GLOBAL = "global";
 	public static final String FIELD_PARTIAL_SUBMIT = "partialSubmit";
-	public static final String FIELD_THROW_NOT_YET_IMPLEMENTED = "throwNotYetImplemented";
+	//public static final String FIELD_LISTENER_IS_NULLABLE = "listenerIsNullable";
 	
 	/**/
 	
@@ -50,14 +47,18 @@ public class AbstractAjax<ARGUMENT> extends AbstractAction implements Serializab
 		@Override
 		public void configure(AJAX ajax, Map<Object, Object> arguments) {
 			super.configure(ajax, arguments);
-			if(ajax.getRunnerArguments() != null && ajax.getRunnerArguments().getThrowableMessageArguments() != null)
-				ajax.getRunnerArguments().getThrowableMessageArguments().setRenderTypes(CollectionHelper.listOf(RenderType.GROWL));
+			if(ajax.runnerArguments != null && ajax.runnerArguments.getThrowableMessageArguments() != null)
+				ajax.runnerArguments.getThrowableMessageArguments().setRenderTypes(CollectionHelper.listOf(RenderType.GROWL));
 			
-			if(Boolean.TRUE.equals(MapHelper.readByKey(arguments, FIELD_LISTENER_NULLABLE))) {
-				ajax.throwNotYetImplemented = Boolean.FALSE;
-			}
-			if(StringHelper.isBlank(ajax.getEvent()))
-				ajax.setEvent("click");
+			if(ajax.disabled == null)
+				ajax.disabled = Boolean.TRUE;
+			if(ajax.partialSubmit == null)
+				ajax.partialSubmit = Boolean.TRUE;
+			//if(ajax.listenerIsNullable == null)
+			//	ajax.listenerIsNullable = Boolean.TRUE;
+			
+			if(StringHelper.isBlank(ajax.event))
+				ajax.event = "click";
 		}
 	}
 }

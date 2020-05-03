@@ -26,6 +26,7 @@ import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
+import org.cyk.utility.__kernel__.user.interface_.UserInterfaceAction;
 import org.cyk.utility.__kernel__.user.interface_.message.RenderType;
 import org.cyk.utility.client.controller.ControllerEntity;
 import org.cyk.utility.client.controller.ControllerLayer;
@@ -113,7 +114,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 		headerToolbarLeftCommandsArguments.forEach(new Consumer<Map<Object,Object>>() {
 			@Override
 			public void accept(Map<Object, Object> map) {
-				map.put(AbstractCommand.AbstractConfiguratorImpl.FIELD_COLLECTION, AbstractCollection.this);
+				map.put(AbstractCommand.FIELD___COLLECTION__, AbstractCollection.this);
 			}
 		});	
 		addHeaderToolbarLeftCommands(headerToolbarLeftCommandsArguments.stream().map(map -> CommandButton.build(map)).collect(Collectors.toList()));
@@ -135,11 +136,11 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	
 	public AbstractCollection addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialog(String outcome,Object...objects) {
 		if(StringHelper.isNotBlank(outcome))
-			objects = ArrayUtils.addAll(objects, AbstractCommand.AbstractConfiguratorImpl.FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER_OUTCOME,outcome
-					,CommandButton.ConfiguratorImpl.FIELD_LISTENER_ACTION,AbstractAction.Listener.Action.OPEN_VIEW_IN_DIALOG
+			objects = ArrayUtils.addAll(objects, AbstractCommand.FIELD___OUTCOME__,outcome
+					,CommandButton.FIELD_USER_INTERFACE_ACTION,UserInterfaceAction.OPEN_VIEW_IN_DIALOG
 					,CommandButton.ConfiguratorImpl.FIELD_COLLECTION_SELECTION_SESSIONABLE,Boolean.TRUE);
 		if(__parentElement__ != null) {
-			objects = ArrayUtils.addAll(objects, AbstractCommand.AbstractConfiguratorImpl.FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER_PARAMETERS
+			objects = ArrayUtils.addAll(objects, AbstractCommand.FIELD___PARAMETERS__
 					,Map.of(__parentElement__.getClass().getSimpleName().toLowerCase(),List.of(StringHelper.get(FieldHelper.readSystemIdentifier(__parentElement__))))
 					);
 		}
@@ -154,11 +155,11 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 		return addHeaderToolbarLeftCommandsByArgumentsOpenViewInDialog(OutcomeGetter.getInstance().get(elementClass, action),objects);
 		*/
 		
-		objects = ArrayUtils.addAll(objects, CommandButton.ConfiguratorImpl.FIELD_ACTION,action,CommandButton.ConfiguratorImpl.FIELD_COLLECTION,this
-				,CommandButton.ConfiguratorImpl.FIELD_LISTENER_ACTION,AbstractAction.Listener.Action.OPEN_VIEW_IN_DIALOG
+		objects = ArrayUtils.addAll(objects, CommandButton.FIELD___ACTION__,action,CommandButton.FIELD___COLLECTION__,this
+				,CommandButton.FIELD_USER_INTERFACE_ACTION,UserInterfaceAction.OPEN_VIEW_IN_DIALOG
 				,CommandButton.ConfiguratorImpl.FIELD_COLLECTION_SELECTION_SESSIONABLE,Boolean.TRUE);
 		if(__parentElement__ != null) {			
-			objects = ArrayUtils.addAll(objects, AbstractCommand.AbstractConfiguratorImpl.FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER_PARAMETERS
+			objects = ArrayUtils.addAll(objects, AbstractCommand.FIELD___PARAMETERS__
 					,Map.of(__parentElement__.getClass().getSimpleName().toLowerCase(),List.of(StringHelper.get(FieldHelper.readSystemIdentifier(__parentElement__))))
 					);
 		}
@@ -228,7 +229,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 		menuItemsArguments.forEach(new Consumer<Map<Object,Object>>() {
 			@Override
 			public void accept(Map<Object, Object> map) {
-				map.put(MenuItem.ConfiguratorImpl.FIELD_COLLECTION, AbstractCollection.this);
+				map.put(MenuItem.FIELD___COLLECTION__, AbstractCollection.this);
 			}
 		});	
 		addRecordMenuItems(menuItemsArguments.stream().map(map -> MenuItem.build(map)).collect(Collectors.toList()));
@@ -250,8 +251,8 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	
 	public AbstractCollection addRecordMenuItemByArgumentsOpenViewInDialog(String outcome,Object...objects) {
 		if(StringHelper.isNotBlank(outcome))
-			objects = ArrayUtils.addAll(objects, MenuItem.ConfiguratorImpl.FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER_OUTCOME,outcome
-					,CommandButton.ConfiguratorImpl.FIELD_LISTENER_ACTION,AbstractAction.Listener.Action.OPEN_VIEW_IN_DIALOG
+			objects = ArrayUtils.addAll(objects, MenuItem.FIELD___OUTCOME__,outcome
+					,CommandButton.FIELD_USER_INTERFACE_ACTION,UserInterfaceAction.OPEN_VIEW_IN_DIALOG
 					,CommandButton.ConfiguratorImpl.FIELD_COLLECTION_SELECTION_SESSIONABLE,Boolean.FALSE
 					,CommandButton.ConfiguratorImpl.FIELD_COLLECTIONABLE,Boolean.FALSE
 					);
@@ -260,7 +261,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	
 	public AbstractCollection addRecordMenuItemByArgumentsOpenViewInDialog(Action action,Object...objects) {
 		if(action != null)
-			objects = ArrayUtils.addAll(objects, AbstractCommand.AbstractConfiguratorImpl.FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER_PARAMETERS
+			objects = ArrayUtils.addAll(objects, AbstractCommand.FIELD___PARAMETERS__
 					,Map.of(ParameterName.ACTION_IDENTIFIER.getValue(),List.of(action.name())));
 		return addRecordMenuItemByArgumentsOpenViewInDialog(OutcomeGetter.getInstance().get(elementClass, action),objects);
 	}
@@ -275,7 +276,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	
 	public AbstractCollection addRecordMenuItemByArgumentsExecuteFunction(String value,String icon,AbstractAction.Listener listener) {
 		return addRecordMenuItemByArguments(MenuItem.FIELD_VALUE,value,MenuItem.FIELD_ICON,icon
-				,MenuItem.FIELD_LISTENER,listener.setAction(AbstractAction.Listener.Action.EXECUTE_FUNCTION)
+				,MenuItem.FIELD_LISTENER,listener,MenuItem.FIELD_USER_INTERFACE_ACTION,UserInterfaceAction.EXECUTE_FUNCTION
 				,MenuItem.ConfiguratorImpl.FIELD_CONFIRMABLE,Boolean.TRUE
 						,MenuItem.ConfiguratorImpl.FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_RENDER_TYPES,CollectionHelper.listOf(RenderType.GROWL));
 	}
@@ -284,12 +285,12 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 		if(elementClass != null) {
 			return addRecordMenuItemByArgumentsExecuteFunction("Supprimer", "fa fa-remove", new AbstractAction.Listener.AbstractImpl() {
 				@Override
-				protected Object __executeFunction__(Object argument) {
-					super.__executeFunction__(argument);
+				protected Object __runExecuteFunction__(AbstractAction action) {
+					super.__runExecuteFunction__(action);
 					if(controllerEntity == null)
 						throw new RuntimeException("Controller is required to execute delete function");
-					controllerEntity.delete(argument);
-					return argument+" has been deleted.";
+					controllerEntity.delete(action.get__argument__());
+					return action.get__argument__()+" has been deleted.";
 				}
 			});
 		}
@@ -303,8 +304,8 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 			outcome = OutcomeGetter.getInstance().get(elementClass, action);
 		if(StringHelper.isNotBlank(outcome))
 			objects = ArrayUtils.addAll(objects, MenuItem.FIELD_OUTCOME,outcome
-					,MenuItem.ConfiguratorImpl.FIELD_LISTENER_ACTION,AbstractAction.Listener.Action.NAVIGATE_TO_VIEW
-					,MenuItem.ConfiguratorImpl.FIELD_ACTION,action);
+					,MenuItem.FIELD_USER_INTERFACE_ACTION,UserInterfaceAction.NAVIGATE_TO_VIEW
+					,MenuItem.FIELD___ACTION__,action);
 		if(action != null)
 			objects = ArrayUtils.addAll(objects, MenuItem.FIELD_PARAMETERS,Map.of(ParameterName.ACTION_IDENTIFIER.getValue(),List.of(action.name())));
 		return addRecordMenuItemByArguments(objects);
@@ -316,14 +317,16 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	
 	public AbstractCollection enableCommandButtonSave() {
 		setIsSavable(Boolean.TRUE);
-		saveCommandButton = CommandButton.build(CommandButton.FIELD_VALUE,"Enregistrer",CommandButton.FIELD_ICON,"fa fa-floppy-o",CommandButton.FIELD_LISTENER,new CommandButton.Listener.AbstractImpl() {
-			protected Object __executeFunction__(Object argument) {
+		saveCommandButton = CommandButton.build(CommandButton.FIELD_VALUE,"Enregistrer",CommandButton.FIELD_ICON,"fa fa-floppy-o",CommandButton.FIELD_USER_INTERFACE_ACTION,UserInterfaceAction.EXECUTE_FUNCTION
+				,CommandButton.FIELD_LISTENER,new CommandButton.Listener.AbstractImpl() {
+			@Override
+			protected Object __runExecuteFunction__(AbstractAction action) {
 				if(listener == null)
 					return null;
 				else
 					return ((Listener)listener).listenSave(AbstractCollection.this);
 			}
-		}.setAction(org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction.Listener.Action.EXECUTE_FUNCTION));
+		});
 		return this;
 	}
 	
@@ -358,8 +361,8 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 			Boolean filterable = (Boolean) MapHelper.readByKey(arguments, FIELD_FILTERABLE);
 			if(filterable == null)
 				filterable = collection.lazy;
-			if(collection.rows == null)
-				collection.rows = 0;
+			//if(collection.rows == null)
+			//	collection.rows = 0;
 			if(collection.filterDelay == null)
 				collection.filterDelay = 2000;
 			if(StringHelper.isEmpty(collection.emptyMessage))
@@ -421,14 +424,14 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 			
 			/* Listeners */
 			
-			collection.addAjaxes(Map.of(Ajax.FIELD_EVENT,"page",Ajax.FIELD_DISABLED,Boolean.FALSE,Ajax.ConfiguratorImpl.FIELD_LISTENER_NULLABLE,Boolean.TRUE)
-					,Map.of(Ajax.FIELD_EVENT,"filter",Ajax.FIELD_DISABLED,Boolean.FALSE,Ajax.ConfiguratorImpl.FIELD_LISTENER_NULLABLE,Boolean.TRUE)
-					,Map.of(Ajax.FIELD_EVENT,"sort",Ajax.FIELD_DISABLED,Boolean.FALSE,Ajax.ConfiguratorImpl.FIELD_LISTENER_NULLABLE,Boolean.TRUE)
-					,Map.of(Ajax.FIELD_EVENT,"rowSelect",Ajax.ConfiguratorImpl.FIELD_LISTENER_NULLABLE,Boolean.TRUE)
-					,Map.of(Ajax.FIELD_EVENT,"rowUnselect",Ajax.ConfiguratorImpl.FIELD_LISTENER_NULLABLE,Boolean.TRUE)
-					,Map.of(Ajax.FIELD_EVENT,"rowSelectCheckbox",Ajax.ConfiguratorImpl.FIELD_LISTENER_NULLABLE,Boolean.TRUE)
-					,Map.of(Ajax.FIELD_EVENT,"rowUnselectCheckbox",Ajax.ConfiguratorImpl.FIELD_LISTENER_NULLABLE,Boolean.TRUE)
-					,Map.of(Ajax.FIELD_EVENT,"cellEdit",Ajax.ConfiguratorImpl.FIELD_LISTENER_NULLABLE,Boolean.TRUE)
+			collection.addAjaxes(Map.of(Ajax.FIELD_EVENT,"page",Ajax.FIELD_DISABLED,Boolean.FALSE,Ajax.FIELD___RUNNABLE__,Boolean.FALSE)
+					,Map.of(Ajax.FIELD_EVENT,"filter",Ajax.FIELD_DISABLED,Boolean.FALSE,Ajax.FIELD___RUNNABLE__,Boolean.FALSE)
+					,Map.of(Ajax.FIELD_EVENT,"sort",Ajax.FIELD_DISABLED,Boolean.FALSE,Ajax.FIELD___RUNNABLE__,Boolean.FALSE)
+					,Map.of(Ajax.FIELD_EVENT,"rowSelect",Ajax.FIELD___RUNNABLE__,Boolean.FALSE)
+					,Map.of(Ajax.FIELD_EVENT,"rowUnselect",Ajax.FIELD___RUNNABLE__,Boolean.FALSE)
+					,Map.of(Ajax.FIELD_EVENT,"rowSelectCheckbox",Ajax.FIELD___RUNNABLE__,Boolean.FALSE)
+					,Map.of(Ajax.FIELD_EVENT,"rowUnselectCheckbox",Ajax.FIELD___RUNNABLE__,Boolean.FALSE)
+					,Map.of(Ajax.FIELD_EVENT,"cellEdit",Ajax.FIELD___RUNNABLE__,Boolean.FALSE)
 					);		
 			
 			Class<?> recordMenuClass = (Class<?>) MapHelper.readByKey(arguments, FIELD_RECORD_MENU_CLASS);

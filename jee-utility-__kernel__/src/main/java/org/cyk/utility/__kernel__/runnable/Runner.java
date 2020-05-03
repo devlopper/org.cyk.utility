@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.enumeration.Action;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.user.interface_.message.Message;
@@ -92,6 +93,8 @@ public interface Runner {
 	
 	@Getter @Setter @Accessors(chain=true) @NoArgsConstructor
 	public static class Arguments implements Serializable {
+		private Action action;
+		private Class<?> actionOnClass;
 		private String name;
 		private Collection<Runnable> runnables;
 		private MessageRenderer.Arguments successMessageArguments;

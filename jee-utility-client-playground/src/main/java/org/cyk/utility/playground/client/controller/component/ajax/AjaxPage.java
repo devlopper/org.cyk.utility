@@ -10,6 +10,7 @@ import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.user.interface_.message.MessageRenderer;
 import org.cyk.utility.__kernel__.user.interface_.message.RenderType;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax.Ajax;
 
 import lombok.Getter;
@@ -31,7 +32,7 @@ public class AjaxPage extends AbstractPageContainerManagedImpl implements Serial
 		super.__listenPostConstruct__();
 		ajaxServerOnClick = Builder.build(Ajax.class,Map.of(Ajax.FIELD_LISTENER,new Ajax.Listener.AbstractImpl() {
 			@Override
-			public void listenAction(Object argument) {
+			public void run(AbstractAction action) {
 				MessageRenderer.getInstance().render("You have click", RenderType.GROWL);
 			}
 		}));
@@ -40,7 +41,7 @@ public class AjaxPage extends AbstractPageContainerManagedImpl implements Serial
 		
 		ajaxServerOnDoubleClick = Builder.build(Ajax.class,Map.of(Ajax.FIELD_EVENT,"dblclick",Ajax.FIELD_LISTENER,new Ajax.Listener.AbstractImpl() {
 			@Override
-			public void listenAction(Object argument) {
+			public void run(AbstractAction action) {
 				MessageRenderer.getInstance().render("You have double click", RenderType.GROWL);
 			}
 		}));
@@ -49,7 +50,7 @@ public class AjaxPage extends AbstractPageContainerManagedImpl implements Serial
 		
 		ajaxServerOnChange = Builder.build(Ajax.class,Map.of(Ajax.FIELD_EVENT,"change",Ajax.FIELD_LISTENER,new Ajax.Listener.AbstractImpl() {
 			@Override
-			public void listenAction(Object argument) {
+			public void run(AbstractAction action) {
 				MessageRenderer.getInstance().render("You have change", RenderType.GROWL);
 			}
 		}));
@@ -58,7 +59,7 @@ public class AjaxPage extends AbstractPageContainerManagedImpl implements Serial
 		
 		ajaxServerOnBlur = Builder.build(Ajax.class,Map.of(Ajax.FIELD_EVENT,"blur",Ajax.FIELD_LISTENER,new Ajax.Listener.AbstractImpl() {
 			@Override
-			public void listenAction(Object argument) {
+			public void run(AbstractAction action) {
 				MessageRenderer.getInstance().render("You have blur", RenderType.GROWL);
 			}
 		}));

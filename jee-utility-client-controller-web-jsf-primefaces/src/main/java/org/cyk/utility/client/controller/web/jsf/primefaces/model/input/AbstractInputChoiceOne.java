@@ -8,6 +8,7 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObject;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax.Ajax;
 
@@ -43,8 +44,8 @@ public class AbstractInputChoiceOne extends AbstractInputChoice<Object> implemen
 	public AbstractInputChoiceOne enableValueChangeListener(Collection<Object> updatables) {
 		enableAjaxListener("valueChange", new Ajax.Listener.AbstractImpl() {
 			@Override
-			public void listenAction(Object argument) {
-				select(FieldHelper.read(argument, "source.value"));
+			public void run(AbstractAction action) {
+				select(FieldHelper.read(action.get__argument__(), "source.value"));
 			}
 		},updatables);
 		return this;
@@ -53,8 +54,8 @@ public class AbstractInputChoiceOne extends AbstractInputChoice<Object> implemen
 	public AbstractInputChoiceOne enableChangeListener(Collection<Object> updatables) {
 		enableAjaxListener("change", new Ajax.Listener.AbstractImpl() {
 			@Override
-			public void listenAction(Object argument) {
-				select(FieldHelper.read(argument, "source.value"));
+			public void run(AbstractAction action) {
+				select(FieldHelper.read(action.get__argument__(), "source.value"));
 			}
 		},updatables);
 		return this;

@@ -14,6 +14,7 @@ import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.user.interface_.message.MessageRenderer;
 import org.cyk.utility.__kernel__.user.interface_.message.RenderType;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax.Ajax;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.SelectOneRadio;
@@ -40,8 +41,8 @@ public class InputChoiceOneRadioPage extends AbstractPageContainerManagedImpl im
 		selectOneRadio = SelectOneRadio.build(SelectOneRadio.FIELD_CHOICES,personTypes);
 		selectOneRadio.getAjaxes().get("change").setDisabled(Boolean.FALSE).setListener(new Ajax.Listener.AbstractImpl() {
 			@Override
-			public void listenAction(Object argument) {
-				MessageRenderer.getInstance().render("Selected 1 : "+FieldHelper.read(argument, "source.value")+" : "+FieldHelper.read(argument, "source.value").getClass()
+			public void run(AbstractAction action) {
+				MessageRenderer.getInstance().render("Selected 1 : "+FieldHelper.read(action.get__argument__(), "source.value")+" : "+FieldHelper.read(action.get__argument__(), "source.value").getClass()
 						.getSimpleName(),RenderType.GROWL);
 				//System.out.println("Radio selected : "+FieldHelper.read(argument, "source.value"));
 			}
@@ -52,8 +53,8 @@ public class InputChoiceOneRadioPage extends AbstractPageContainerManagedImpl im
 		
 		selectOneRadioWithDefault.getAjaxes().get("change").setDisabled(Boolean.FALSE).setListener(new Ajax.Listener.AbstractImpl() {
 			@Override
-			public void listenAction(Object argument) {
-				MessageRenderer.getInstance().render("Selected 2 : "+FieldHelper.read(argument, "source.value")+" : "+FieldHelper.read(argument, "source.value").getClass()
+			public void run(AbstractAction action) {
+				MessageRenderer.getInstance().render("Selected 2 : "+FieldHelper.read(action.get__argument__(), "source.value")+" : "+FieldHelper.read(action.get__argument__(), "source.value").getClass()
 						.getSimpleName(),RenderType.GROWL);
 				//System.out.println("Radio selected : "+FieldHelper.read(argument, "source.value"));
 			}
@@ -62,7 +63,7 @@ public class InputChoiceOneRadioPage extends AbstractPageContainerManagedImpl im
 		commandButton = Builder.build(CommandButton.class,Map.of(CommandButton.FIELD_VALUE,"Enregistrer"));
 		commandButton.setListener(new CommandButton.Listener.AbstractImpl() {
 			@Override
-			public void listenAction(Object argument) {
+			public void run(AbstractAction action) {
 				MessageRenderer.getInstance().render("Value 1 : "+selectOneRadio.getValue());
 				MessageRenderer.getInstance().render(" - Value 2 : "+selectOneRadioWithDefault.getValue());
 			}

@@ -7,6 +7,7 @@ import javax.inject.Named;
 
 import org.cyk.utility.__kernel__.user.interface_.message.MessageRenderer;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.AutoComplete;
 import org.cyk.utility.playground.client.controller.entities.Namable;
@@ -31,7 +32,7 @@ public class InputChoiceOneAutoCompletePage extends AbstractPageContainerManaged
 		commandButton = CommandButton.build(CommandButton.FIELD_VALUE,"Enregistrer");
 		commandButton.setListener(new CommandButton.Listener.AbstractImpl() {
 			@Override
-			public void listenAction(Object argument) {
+			public void run(AbstractAction action) {
 				MessageRenderer.getInstance().render("Value 01 : "+autoCompleteController.getValue());
 				MessageRenderer.getInstance().render(" - Value 02 : "+autoCompleteController.getValue());
 			}

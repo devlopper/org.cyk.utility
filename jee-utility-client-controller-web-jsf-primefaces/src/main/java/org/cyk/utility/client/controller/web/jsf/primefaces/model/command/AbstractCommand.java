@@ -78,7 +78,7 @@ public abstract class AbstractCommand extends AbstractAction implements Serializ
 		@Override
 		public void configure(COMMAND command, Map<Object, Object> arguments) {
 			super.configure(command, arguments);
-			Action action = (Action) MapHelper.readByKey(arguments, FIELD_ACTION);
+			Action action = (Action) command.get__action__();
 			String value = command.getValue();
 			if(StringHelper.isBlank(value)) {
 				if(action != null)

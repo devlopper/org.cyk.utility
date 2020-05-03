@@ -126,8 +126,8 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 	public AutoComplete enableAjaxItemSelect() {
 		getAjaxes().get("itemSelect").setDisabled(Boolean.FALSE).setListener(new Ajax.Listener.AbstractImpl() {
 			@Override
-			public void listenAction(Object argument) {
-				itemSelected = FieldHelper.read(argument, "source.value");
+			public void run(AbstractAction action) {
+				itemSelected = FieldHelper.read(action.get__argument__(), "source.value");
 			}
 		});
 		return this;
@@ -325,9 +325,9 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 					,Map.of(Ajax.FIELD_EVENT,"moreText",Ajax.FIELD_DISABLED,Boolean.FALSE,Ajax.FIELD_LISTENER
 					,new AbstractAction.Listener.AbstractImpl() {
 						@Override
-						public void listenAction(Object argument) {
-							if(argument instanceof AjaxBehaviorEvent) {
-								AjaxBehaviorEvent event = (AjaxBehaviorEvent) argument;
+						public void run(AbstractAction action) {
+							if(action.get__argument__() instanceof AjaxBehaviorEvent) {
+								AjaxBehaviorEvent event = (AjaxBehaviorEvent) action.get__argument__();
 								org.primefaces.component.autocomplete.AutoComplete component = (org.primefaces.component.autocomplete.AutoComplete) event.getSource();
 								component.setMaxResults(component.getMaxResults() + autoComplete.initialNumberOfResults);
 								if(StringHelper.isBlank(component.getWidgetVar())) {
@@ -335,7 +335,7 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 											.setSeverity(Severity.WARNING), RenderType.GROWL);
 								}else
 									PrimeFaces.current().executeScript(String.format(SCRIPT_SEARCH, component.getWidgetVar(),autoComplete.queryString));		
-							}					
+							}
 						}
 					})
 					,Map.of(Ajax.FIELD_EVENT,"itemSelect")
@@ -352,7 +352,7 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 					autoComplete.getEventScripts(Boolean.TRUE).write(Event.CHANGE, script);
 					itemSelect.setDisabled(Boolean.FALSE);
 					itemSelect.getEventScripts(Boolean.TRUE).write(Event.COMPLETE, script);
-					itemSelect.setThrowNotYetImplemented(Boolean.FALSE);
+					itemSelect.set__runnable__(Boolean.FALSE);
 					
 					autoComplete.setReadItemValueListener(new ReadListener() {				
 						@Override
