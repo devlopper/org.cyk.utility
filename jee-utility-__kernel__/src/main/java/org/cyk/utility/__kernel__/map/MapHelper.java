@@ -144,6 +144,14 @@ public interface MapHelper {
 		return map;
 	}
 	
+	static Map<String,Integer> instantiateStringInteger(Object...objects) {
+		if(org.cyk.utility.__kernel__.array.ArrayHelper.isEmpty(objects))
+			return null;
+		Map<String, Integer> map = new LinkedHashMap<String, Integer>();
+		set(map,objects);
+		return map;
+	}
+	
 	@SuppressWarnings("unchecked")
 	static void copyFromField(@SuppressWarnings("rawtypes") Map map,Object object,String fieldName,Boolean override) {
 		if(map == null || object == null || StringHelper.isBlank(fieldName))

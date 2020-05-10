@@ -9,29 +9,30 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
-	<p:dialog 
-		id="#{dialog.identifier}" header="#{dialog.header}" modal="#{dialog.modal}" widgetVar="#{dialog.widgetVar}" fitViewport="#{dialog.fitViewport}" 
-			styleClass="#{dialog.styleClass}" closeOnEscape="#{dialog.closeOnEscape}" draggable="#{dialog.draggable}" dynamic="#{dialog.dynamic}" resizable="#{dialog.resizable}"
-		>
-		<ui:insert name="dialogBody"><h:outputText value="Dialog Body" /></ui:insert>
-		
-		<ui:insert name="dialogSeparator">
-			<p:separator/>
-		</ui:insert>
-		
-		<ui:insert name="dialogCommands">
-			<c:forEach items="#{dialog.commandButtons}" var="commandButton">
-				<ui:decorate template="/command/commandbutton/default.xhtml">
-		 			<ui:param name="commandButton" value="#{commandButton}"/>
-		 		</ui:decorate>
-			</c:forEach>
-		</ui:insert>
-		
-		<!-- listener -->
-		<ui:decorate template="/ajax/default.xhtml">
-			<ui:param name="ajax" value="#{dialog.closeAjax}"/>
-		</ui:decorate>
-							
-	</p:dialog>
-	
+	<p:outputPanel id="#{dialog.__containerIdentifier__}">
+		<p:dialog 
+			id="#{dialog.identifier}" header="#{dialog.header}" modal="#{dialog.modal}" widgetVar="#{dialog.widgetVar}" fitViewport="#{dialog.fitViewport}" 
+				styleClass="#{dialog.styleClass}" closeOnEscape="#{dialog.closeOnEscape}" draggable="#{dialog.draggable}" dynamic="#{dialog.dynamic}" resizable="#{dialog.resizable}"
+			>
+			<ui:insert name="dialogBody"><h:outputText value="Dialog Body" /></ui:insert>
+			
+			<ui:insert name="dialogSeparator">
+				<p:separator/>
+			</ui:insert>
+			
+			<ui:insert name="dialogCommands">
+				<c:forEach items="#{dialog.commandButtons}" var="commandButton">
+					<ui:decorate template="/command/commandbutton/default.xhtml">
+			 			<ui:param name="commandButton" value="#{commandButton}"/>
+			 		</ui:decorate>
+				</c:forEach>
+			</ui:insert>
+			
+			<!-- listener -->
+			<ui:decorate template="/ajax/default.xhtml">
+				<ui:param name="ajax" value="#{dialog.closeAjax}"/>
+			</ui:decorate>
+								
+		</p:dialog>
+	</p:outputPanel>
 </ui:composition>

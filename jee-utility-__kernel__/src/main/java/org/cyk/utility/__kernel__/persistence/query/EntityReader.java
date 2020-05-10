@@ -5,8 +5,10 @@ import java.lang.reflect.Field;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.Helper;
+import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.value.Value;
 
@@ -14,10 +16,22 @@ public interface EntityReader {
 
 	<T> Collection<T> readMany(Class<T> tupleClass,QueryExecutorArguments arguments);
 	
-	default <T> Collection<T> readMany(Class<T> tupleClass) {
+	default <T> Collection<T> readMany(Class<T> tupleClass,String queryIdentifier,Object...filterFieldsValues) {
 		if(tupleClass == null)
 			throw new RuntimeException("Tuple class is required");
-		return readMany(tupleClass,null);
+		QueryExecutorArguments arguments = null;
+		if(StringHelper.isNotBlank(queryIdentifier)) {
+			arguments = new QueryExecutorArguments();
+			arguments.setQuery(QueryGetter.getInstance().get(queryIdentifier));
+			if(ArrayHelper.isNotEmpty(filterFieldsValues))
+				for(Integer index = 0 ; index < filterFieldsValues.length ; index = index + 2)
+					arguments.addFilterField((String)filterFieldsValues[index], filterFieldsValues[index+1]);	
+		}		
+		return readMany(tupleClass,arguments);
+	}
+	
+	default <T> Collection<T> readMany(Class<T> tupleClass) {
+		return readMany(tupleClass, null);
 	}
 	
 	<T> T readOne(Class<T> tupleClass,QueryExecutorArguments arguments);

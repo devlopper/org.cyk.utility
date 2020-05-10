@@ -41,9 +41,9 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 	protected Column orderNumberColumn;
 	protected Column menuColumn;
 	protected Collection<Column> columnsAfterRowIndex,selectedColumnsAfterRowIndex;
-	protected Boolean areColumnsChoosable,isRowAddable,isColumnAddable,isLastColumnRemovable;
+	protected Boolean stickyHeader,areColumnsChoosable,isRowAddable,isColumnAddable,isLastColumnRemovable;
 	protected CommandButton addRowCommandButton,removeRowCommandButton,addColumnCommandButton,removeLastColumnCommandButton;
-	protected String columnFieldNameFormat;
+	protected String stickyTopAt,columnFieldNameFormat;
 	protected Grid dataGrid;
 	
 	/**/
@@ -274,6 +274,8 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 	/**/
 	
 	public static final String FIELD_DATA_GRID = "dataGrid";
+	public static final String FIELD_STICKY_HEADER = "stickyHeader";
+	public static final String FIELD_STICKY_TOP_AT = "stickyTopAt";
 	
 	/**/
 	
@@ -383,6 +385,10 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 				listener.addRecordMenuItems(dataTable, actions);
 			
 			dataTable.addStyleClasses("cyk-datatable");
+			
+			if(StringHelper.isBlank(dataTable.stickyTopAt) && Boolean.TRUE.equals(dataTable.stickyHeader)) {
+				//dataTable.stickyTopAt = ".layout-topbar";
+			}
 		}
 		
 		/*public static interface Listener {

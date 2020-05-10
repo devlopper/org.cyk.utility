@@ -12,6 +12,7 @@ import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.string.RegularExpressionHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 
 import lombok.Getter;
@@ -58,9 +59,12 @@ public enum ParameterName {
 	public static String stringify(Object value) {
 		if(value == null)
 			return null;
-		String string = MAP.get(value);
-		if(string != null && !string.isBlank())
+		if(MAP.containsKey(value))
+			return MAP.get(value);
+		String string = null;//MAP.get(value);
+		/*if(string != null && !string.isBlank())
 			return string;
+		*/
 		if(value instanceof Class)
 			string = ((Class<?>)value).getSimpleName();
 		else if(value instanceof ParameterName)
@@ -73,7 +77,7 @@ public enum ParameterName {
 			string = (String) value;
 		}		
 		string = normalize(string);
-		if(string == null || string.isBlank())
+		if(StringHelper.isBlank(string))
 			throw new RuntimeException("Parameter name <<"+value+">> cannot be stringify");
 		MAP.put(value, string);
 		return string;

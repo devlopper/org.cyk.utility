@@ -38,6 +38,7 @@ import org.cyk.utility.client.controller.web.jsf.OutcomeGetter;
 import org.cyk.utility.client.controller.web.jsf.primefaces.PrimefacesHelper;
 import org.cyk.utility.client.controller.web.jsf.primefaces.dialog.DialogOpener;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction.Listener.OpenViewInDialogArgumentsGetter;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractActionOLD202005021055.Listener;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax.Ajax;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.collection.AbstractCollection;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.AbstractInput;
@@ -55,7 +56,7 @@ import lombok.experimental.Accessors;
 public abstract class AbstractAction extends AbstractObjectAjaxable implements Serializable {
 
 	protected String process,update;
-	protected Boolean global;
+	protected Boolean global,immediate;
 	
 	protected UserInterfaceAction userInterfaceAction;
 	protected Runner.Arguments runnerArguments;
@@ -69,6 +70,7 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 	protected Boolean __isWindowContainerRenderedAsDialog__;
 	protected Boolean __runnable__;
 	protected AbstractCollection __collection__;
+	protected Dialog __dialog__;
 	
 	public Object act(Object argument) {
 		this.__argument__ = argument;
@@ -110,6 +112,7 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 	/**/
 	
 	public static final String FIELD_PROCESS = "process";
+	public static final String FIELD_IMMEDIATE = "immediate";
 	public static final String FIELD_UPDATE = "update";
 	public static final String FIELD_GLOBAL = "global";
 	public static final String FIELD_USER_INTERFACE_ACTION = "userInterfaceAction";
@@ -123,6 +126,7 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 	public static final String FIELD___IS_WINDOW_CONTAINER_RENDERED_AS_DIALOG__ = "__isWindowContainerRenderedAsDialog__";
 	public static final String FIELD___RUNNABLE__ = "__runnable__";
 	public static final String FIELD___COLLECTION__ = "__collection__";
+	public static final String FIELD___DIALOG__ = "__dialog__";
 	
 	/**/
 	
@@ -183,7 +187,7 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 					}
 					action.runnerArguments.setRunnables(null);//free previous one
 					action.runnerArguments.addRunnables(runnable);
-					Runner.getInstance().run(action.runnerArguments);	
+					Runner.getInstance().run(action.runnerArguments);
 				}				
 				return getReturn(action);
 			}
@@ -236,12 +240,11 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 			
 			protected String getDialogWidgetVar(AbstractAction action) {
 				String widgetVar = null;
-				Dialog dialog = getDialog();
-				if(dialog == null && getCollection() != null)
-					dialog = getCollection().getDialog();
+				Dialog dialog = action.__dialog__;
+				if(dialog == null && action.__collection__ != null)
+					dialog = action.__collection__.getDialog();
 				if(dialog != null)
 					widgetVar = dialog.getWidgetVar();
-				
 				return widgetVar;
 			}
 			
@@ -454,6 +457,7 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 		@Override
 		public void configure(ACTION action, Map<Object, Object> arguments) {
 			super.configure(action, arguments);
+			Collection<RenderType> messagesRenderTypes = (Collection<RenderType>) MapHelper.readByKey(arguments, FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_RENDER_TYPES);
 			if(action.__actionOnClass__ == null && action.__collection__ != null)
 				action.__actionOnClass__ = action.__collection__.getElementClass();
 			
@@ -463,7 +467,8 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 					//action.addUpdates(":form:"+action.__collection__.getIdentifier());
 				}else {
 					//action does not impact collection so no need to notify success
-					action.runnerArguments.setSuccessMessageArguments(null);
+					if(CollectionHelper.isEmpty(messagesRenderTypes) && action.runnerArguments != null)
+						action.runnerArguments.setSuccessMessageArguments(null);
 				}
 				//collection dialog
 				if(action.__collection__.getDialogOutputPanel() == null) {
@@ -533,8 +538,12 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 				if(action.__collection__ != null) {
 					action.addUpdates(":form:"+action.__collection__.getIdentifier());
 				}
+			}else if(UserInterfaceAction.SHOW_DIALOG.equals(action.userInterfaceAction)) {
+				if(action.__dialog__ != null) {
+					action.addUpdates(":form:"+action.__dialog__.get__containerIdentifier__());
+				}
 			}
-			
+			/*		
 			if(action.listener == null) {				
 				Dialog dialog = (Dialog) MapHelper.readByKey(arguments, FIELD_DIALOG);
 				if(dialog != null) {
@@ -542,7 +551,7 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 					action.listener = new AbstractAction.Listener.AbstractImpl() {}.setDialog(dialog);
 				}				
 			}
-			
+			*/
 			//we need to update any messages after processing
 			// global
 			action.addUpdates(__inject__(ComponentHelper.class).getGlobalMessagesTargetInlineComponentClientIdentifier()
@@ -741,7 +750,7 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 		@Deprecated public static final String FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER_PARAMETERS = "openViewInDialogArgumentsGetterParameters";
 		
 		public static final String FIELD_INPUTS = "inputs";
-		public static final String FIELD_DIALOG = "dialog";
+		//public static final String FIELD_DIALOG = "dialog";
 		public static final String FIELD_COLLECTIONABLE = "collectionable";
 		//public static final String FIELD_COLLECTION = "collection";
 		public static final String FIELD_COLLECTION_UPDATABLE = "collectionUpdatable";

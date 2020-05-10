@@ -9,7 +9,8 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
-	<p:remoteCommand name="update_#{dataTable.identifier}_footers" update=":form:#{dataTable.identifier}" global="false" value="update datatable footers"/>
+	<p:remoteCommand name="update_#{dataTable.identifier}_footers" update=":form:#{dataTable.identifier}" global="false" value="update datatable footers" 
+		partialSubmit="true" process="@none" immediate="true" />
 	
 	<ui:insert name="beforeDataTable">
 		<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.title)}">
@@ -23,7 +24,9 @@
 		paginatorTemplate="#{dataTable.paginatorTemplate}" currentPageReportTemplate="#{dataTable.currentPageReportTemplate}"
 		widgetVar="#{dataTable.widgetVar}" rowIndexVar="rowIndex" filterDelay="#{dataTable.filterDelay}" selection="#{dataTable.selection}"
 		rowStyleClass="#{dataTable.getStyleClassByRecord(record,rowIndex)}" 
-		editable="#{dataTable.editable}" editMode="#{dataTable.editMode}" styleClass="#{dataTable.styleClass}"
+		editable="#{dataTable.editable}" editMode="#{dataTable.editMode}"  
+		stickyHeader="#{dataTable.stickyHeader}" stickyTopAt="#{dataTable.stickyTopAt}"
+		styleClass="#{dataTable.styleClass}"
 	>
 		<ui:include src="__header__.xhtml"/>
  		

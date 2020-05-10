@@ -67,6 +67,41 @@ public class QueryValueBuilderUnitTest extends AbstractWeldUnitTest {
 		assertThat(QueryValueBuilder.deriveLike("t", "name", "query", 2, LogicalOperator.OR)).isEqualTo("LOWER(t.name) LIKE LOWER(:query1) OR LOWER(t.name) LIKE LOWER(:query2)");
 	}
 	
+	@Test
+	public void deriveCaseZeroIfNull_one(){
+		assertThat(QueryValueBuilder.deriveCaseZeroIfNull("t", "count1")).isEqualTo("CASE WHEN t.count1 IS NULL THEN 0l ELSE t.count1 END");
+	}
+	
+	@Test
+	public void deriveCaseZeroIfNull_many(){
+		assertThat(QueryValueBuilder.deriveCaseZeroIfNull("t", "count1","count2")).isEqualTo("CASE WHEN t.count1 IS NULL THEN 0l ELSE t.count1 END,CASE WHEN t.count2 IS NULL THEN 0l ELSE t.count2 END");
+	}
+	
+	@Test
+	public void deriveCaseZeroIfNull_many_plus(){
+		assertThat(QueryValueBuilder.deriveCaseZeroIfNullWithSeparator("t","+", "count1","count2")).isEqualTo("CASE WHEN t.count1 IS NULL THEN 0l ELSE t.count1 END+CASE WHEN t.count2 IS NULL THEN 0l ELSE t.count2 END");
+	}
+	
+	@Test
+	public void deriveSum_one(){
+		assertThat(QueryValueBuilder.deriveSum("t", "count1")).isEqualTo("SUM(CASE WHEN t.count1 IS NULL THEN 0l ELSE t.count1 END)");
+	}
+	
+	@Test
+	public void deriveSum_many(){
+		assertThat(QueryValueBuilder.deriveSum("t", "count1","count2")).isEqualTo("SUM(CASE WHEN t.count1 IS NULL THEN 0l ELSE t.count1 END),SUM(CASE WHEN t.count2 IS NULL THEN 0l ELSE t.count2 END)");
+	}
+	
+	@Test
+	public void deriveSumAsOne_one(){
+		assertThat(QueryValueBuilder.deriveSumAsOne("t", "count1")).isEqualTo("SUM(CASE WHEN t.count1 IS NULL THEN 0l ELSE t.count1 END)");
+	}
+	
+	@Test
+	public void deriveSumAsOne_many(){
+		assertThat(QueryValueBuilder.deriveSumAsOne("t", "count1","count2")).isEqualTo("SUM(CASE WHEN t.count1 IS NULL THEN 0l ELSE t.count1 END+CASE WHEN t.count2 IS NULL THEN 0l ELSE t.count2 END)");
+	}
+	
 	/**/
 	
 	@Getter @Setter @Accessors(chain=true)

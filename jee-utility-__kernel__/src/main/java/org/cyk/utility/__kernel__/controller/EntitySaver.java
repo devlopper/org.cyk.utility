@@ -26,12 +26,24 @@ public interface EntitySaver {
 				throw new RuntimeException("controller entity class is required");
 			if(arguments == null)
 				throw new RuntimeException("arguments are required");
-			arguments.prepare(controllerEntityClass, org.cyk.utility.__kernel__.representation.EntitySaver.class);			
+			prepare(controllerEntityClass, arguments);
 			Collection<?> creatables = CollectionHelper.isEmpty(arguments.getCreatables()) ? null : MappingHelper.getDestinations(arguments.getCreatables(), arguments.__representationEntityClass__);
 			Collection<?> updatables = CollectionHelper.isEmpty(arguments.getUpdatables()) ? null : MappingHelper.getDestinations(arguments.getUpdatables(), arguments.__representationEntityClass__);
 			Collection<?> deletables = CollectionHelper.isEmpty(arguments.getDeletables()) ? null : MappingHelper.getDestinations(arguments.getDeletables(), arguments.__representationEntityClass__);				
-			Response response = ((org.cyk.utility.__kernel__.representation.EntitySaver<Object>)arguments.__representation__)
-					.save((Collection<Object>)creatables,(Collection<Object>)updatables,(Collection<Object>)deletables,arguments.__representationArguments__);
+			Response response = save(arguments.__representation__, creatables,updatables,deletables,arguments.__representationArguments__);
+			finalise(controllerEntityClass, arguments,response);
+		}
+		
+		protected <T> void prepare(Class<T> controllerEntityClass, Arguments<T> arguments) {
+			arguments.prepare(controllerEntityClass, org.cyk.utility.__kernel__.representation.EntitySaver.class);
+		}
+		
+		protected <T> Response save(Object representation,Collection<?> creatables,Collection<?> updatables,Collection<?> deletables,org.cyk.utility.__kernel__.representation.Arguments arguments) {
+			return ((org.cyk.utility.__kernel__.representation.EntitySaver<Object>)representation)
+					.save((Collection<Object>)creatables,(Collection<Object>)updatables,(Collection<Object>)deletables,arguments);
+		}
+		
+		protected <T> void finalise(Class<T> controllerEntityClass, Arguments<T> arguments,Response response) {
 			arguments.finalise(response);
 		}
 	}

@@ -22,7 +22,7 @@ import lombok.experimental.Accessors;
 @Getter @Setter @Accessors(chain=true)
 public class Dialog extends AbstractObject implements Serializable {
 	
-	private String header;
+	private String header,__containerIdentifier__;
 	private Boolean modal,fitViewport,closeOnEscape,draggable,dynamic,resizable;
 	private CommandButton closeCommandButton,executeCommandButton;
 	private Collection<CommandButton> commandButtons;
@@ -53,6 +53,7 @@ public class Dialog extends AbstractObject implements Serializable {
 	
 	/**/
 	
+	public static final String FIELD___CONTAINER_IDENTIFIER__ = "__containerIdentifier__";
 	public static final String FIELD_HEADER = "header";
 	public static final String FIELD_MODAL = "modal";
 	public static final String FIELD_FIT_VIEWPORT = "fitViewport";
@@ -68,6 +69,7 @@ public class Dialog extends AbstractObject implements Serializable {
 		@Override
 		public void configure(DIALOG dialog, Map<Object, Object> arguments) {
 			super.configure(dialog, arguments);
+			dialog.set__containerIdentifier__(dialog.getIdentifier()+"_container");
 			dialog.setExecuteCommandButton(CommandButton.build(CommandButton.FIELD_VALUE,"Exécuter",CommandButton.FIELD_ICON,"fa fa-check"));
 			
 			dialog.setCloseCommandButton(CommandButton.build(CommandButton.FIELD_VALUE,"Fermer",CommandButton.FIELD_ICON,"fa fa-remove"));

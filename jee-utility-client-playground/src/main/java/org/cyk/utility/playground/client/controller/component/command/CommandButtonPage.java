@@ -44,7 +44,7 @@ public class CommandButtonPage extends AbstractPageContainerManagedImpl implemen
 	private Dialog dialog;
 	private UserInterfaceAction userInterfaceAction;
 	private Collection<UserInterfaceAction> actions = CollectionHelper.listOf(UserInterfaceAction.values());
-	private String actionParameter;
+	private String actionParameter,dialogMessage;
 	
 	@Override
 	protected String __getWindowTitleValue__() {
@@ -105,7 +105,7 @@ public class CommandButtonPage extends AbstractPageContainerManagedImpl implemen
 			}
 		});
 		
-		commandButtonServerRenderMessageSuccessGrowl = CommandButton.build(CommandButton.FIELD_VALUE,"Server Render Message Success Growl"
+		commandButtonServerRenderMessageSuccessGrowl = CommandButton.build(CommandButton.FIELD_VALUE,"Server Render Message Success Growl",CommandButton.FIELD_USER_INTERFACE_ACTION,UserInterfaceAction.EXECUTE_FUNCTION
 				,CommandButton.ConfiguratorImpl.FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_RENDER_TYPES,List.of(RenderType.GROWL));
 		commandButtonServerRenderMessageSuccessGrowl.setListener(new CommandButton.Listener.AbstractImpl() {
 			@Override
@@ -151,7 +151,8 @@ public class CommandButtonPage extends AbstractPageContainerManagedImpl implemen
 		});
 		
 		dialog = Dialog.build();
-		commandButtonShowDialog = CommandButton.build(CommandButton.FIELD_VALUE,"Show Dialog",CommandButton.ConfiguratorImpl.FIELD_DIALOG,dialog);
+		commandButtonShowDialog = CommandButton.build(CommandButton.FIELD_VALUE,"Show Dialog",CommandButton.FIELD_USER_INTERFACE_ACTION,UserInterfaceAction.SHOW_DIALOG
+				,CommandButton.FIELD___DIALOG__,dialog);
 		
 		commandButtonOpenDialog = CommandButton.build(CommandButton.FIELD_VALUE,"Open Dialog",CommandButton.FIELD_USER_INTERFACE_ACTION,UserInterfaceAction.OPEN_VIEW_IN_DIALOG
 				,CommandButton.FIELD___OUTCOME__,"openedfromcommandbutton");

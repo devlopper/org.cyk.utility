@@ -27,8 +27,5 @@ public class DependenceProducerImpl implements Serializable,DependenceProducer {
 	@Override @Produces
 	public EntityManager getEntityManager() {
 		return entityManager;
-	}
-
-	
-	
+	}	
 }

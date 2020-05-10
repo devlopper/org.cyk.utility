@@ -168,6 +168,12 @@ public interface NumberHelper {
 		return compare(number, 0, ComparisonOperator.GT);
 	}
 	
+	static Boolean isGreaterThanOrEqualZero(Number number) {
+		if(number == null)
+			return Boolean.FALSE;
+		return compare(number, 0, ComparisonOperator.GTE);
+	}
+	
 	static Boolean isLessThanZero(Number number) {
 		if(number == null)
 			return Boolean.FALSE;

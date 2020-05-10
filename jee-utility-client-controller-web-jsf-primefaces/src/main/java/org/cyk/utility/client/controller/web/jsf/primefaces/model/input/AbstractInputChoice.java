@@ -30,9 +30,9 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 		return choice;
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Object getChoiceLabel(Object choice) {
-		return ((Listener<VALUE>)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).getChoiceLabel(this, choice);
+		return ((Listener)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).getChoiceLabel(this, choice);
 	}
 	
 	public Object getChoiceDescription(Object choice) {
@@ -77,7 +77,7 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 		
 		Collection<VALUE> computeChoices(AbstractInputChoice<VALUE> input);
 		
-		Object getChoiceLabel(AbstractInputChoice<VALUE> input,Object choice);
+		Object getChoiceLabel(AbstractInputChoice<VALUE> input,VALUE choice);
 		
 		public static abstract class AbstractImpl<VALUE> extends AbstractInput.Listener.AbstractImpl implements Listener<VALUE>,Serializable {
 			@Override
@@ -103,7 +103,7 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 			}
 			
 			@Override
-			public Object getChoiceLabel(AbstractInputChoice<VALUE> input, Object choice) {
+			public Object getChoiceLabel(AbstractInputChoice<VALUE> input, VALUE choice) {
 				if(choice == null)
 					return "-- Aucune sélection --";
 				return choice;

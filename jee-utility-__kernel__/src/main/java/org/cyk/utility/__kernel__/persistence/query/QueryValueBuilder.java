@@ -148,6 +148,71 @@ public interface QueryValueBuilder {
 
 	/* derive */
 	
+	static String deriveSum(String tupleName,Collection<String> fieldsNames) {
+		if(StringHelper.isBlank(tupleName))
+			return null;
+		if(CollectionHelper.isEmpty(fieldsNames))
+			return null;
+		Collection<String> numbers = fieldsNames.stream().map(fieldName -> deriveCaseZeroIfNull(tupleName, fieldName)).collect(Collectors.toList());		
+		return StringHelper.concatenate(numbers.stream().map(number -> String.format(FORMAT_SUM, number)).collect(Collectors.toList()),",");
+	}
+	
+	static String deriveSum(String tupleName,String...fieldsNames) {
+		if(StringHelper.isBlank(tupleName))
+			return null;
+		if(ArrayHelper.isEmpty(fieldsNames))
+			return null;
+		return deriveSum(tupleName, CollectionHelper.listOf(fieldsNames));
+	}
+	
+	static String deriveSumAsOne(String tupleName,Collection<String> fieldsNames) {
+		if(StringHelper.isBlank(tupleName))
+			return null;
+		if(CollectionHelper.isEmpty(fieldsNames))
+			return null;
+		String number = StringHelper.concatenate(fieldsNames.stream().map(fieldName -> deriveCaseZeroIfNull(tupleName, fieldName)).collect(Collectors.toList()),"+");		
+		return String.format(FORMAT_SUM, number);
+	}
+	
+	static String deriveSumAsOne(String tupleName,String...fieldsNames) {
+		if(StringHelper.isBlank(tupleName))
+			return null;
+		if(ArrayHelper.isEmpty(fieldsNames))
+			return null;
+		return deriveSumAsOne(tupleName, CollectionHelper.listOf(fieldsNames));
+	}
+	
+	static String deriveCaseZeroIfNull(String tupleName,Collection<String> fieldsNames,String separator) {
+		if(StringHelper.isBlank(tupleName))
+			return null;
+		if(CollectionHelper.isEmpty(fieldsNames))
+			return null;
+		if(StringHelper.isBlank(separator))
+			separator = ",";
+		return StringHelper.concatenate(fieldsNames.stream().map(fieldName -> String.format(FORMAT_CASE, tupleName+"."+fieldName,"IS NULL","0l",tupleName+"."+fieldName))
+				.collect(Collectors.toList()),separator);
+	}
+	
+	static String deriveCaseZeroIfNull(String tupleName,String...fieldsNames) {
+		if(StringHelper.isBlank(tupleName))
+			return null;
+		if(ArrayHelper.isEmpty(fieldsNames))
+			throw null;
+		return deriveCaseZeroIfNull(tupleName, CollectionHelper.listOf(fieldsNames),null);
+	}
+	
+	static String deriveCaseZeroIfNullWithSeparator(String tupleName,String separator,String...fieldsNames) {
+		if(StringHelper.isBlank(tupleName))
+			return null;
+		if(ArrayHelper.isEmpty(fieldsNames))
+			return null;
+		return deriveCaseZeroIfNull(tupleName, CollectionHelper.listOf(fieldsNames),separator);
+	}
+	
+	static String deriveCaseZeroIfNull(String tupleName,Collection<String> fieldsNames) {
+		return deriveCaseZeroIfNull(tupleName, fieldsNames,",");
+	}
+	
 	static String deriveLeftJoinsFromFieldsNames(String tupleName,Collection<String> fieldsNames) {
 		if(CollectionHelper.isEmpty(fieldsNames))
 			return null;
@@ -172,8 +237,6 @@ public interface QueryValueBuilder {
 			return null;
 		return deriveConcatsCodeAndNameFromTuplesNames(CollectionHelper.listOf(tuplesNames));
 	}
-	
-	/* format */
 	
 	static String deriveLike(String tuple,String fieldName,String parameterName,Integer numberOfTokens,LogicalOperator operator,Boolean isCaseSensitive){
 		if(StringHelper.isBlank(tuple) || StringHelper.isBlank(fieldName) || StringHelper.isBlank(parameterName))
@@ -213,6 +276,9 @@ public interface QueryValueBuilder {
 	static String deriveLikeOrTokens(String tuple,String fieldName,Integer numberOfTokens,LogicalOperator operator){
 		return deriveLikeOrTokens(tuple, fieldName, fieldName, numberOfTokens, operator);
 	}
+	
+	String FORMAT_SUM = "SUM(%s)";
+	String FORMAT_CASE = "CASE WHEN %s %s THEN %s ELSE %s END";
 	
 	String FORMAT_LEFT_JOIN = "LEFT JOIN %s.%s %s";
 	String FORMAT_CONCAT_CODE_NAME = "CONCAT(%1$s.code,' ',%1$s.name)";

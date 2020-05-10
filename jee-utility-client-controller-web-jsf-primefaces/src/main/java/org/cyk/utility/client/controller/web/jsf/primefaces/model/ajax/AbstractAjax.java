@@ -50,10 +50,15 @@ public class AbstractAjax<ARGUMENT> extends AbstractAction implements Serializab
 			if(ajax.runnerArguments != null && ajax.runnerArguments.getThrowableMessageArguments() != null)
 				ajax.runnerArguments.getThrowableMessageArguments().setRenderTypes(CollectionHelper.listOf(RenderType.GROWL));
 			
+			if(ajax.immediate == null)
+				ajax.immediate = Boolean.FALSE;
+			
 			if(ajax.disabled == null)
 				ajax.disabled = Boolean.TRUE;
 			if(ajax.partialSubmit == null)
 				ajax.partialSubmit = Boolean.TRUE;
+			if(StringHelper.isBlank(ajax.process))
+				ajax.process = "@this";
 			//if(ajax.listenerIsNullable == null)
 			//	ajax.listenerIsNullable = Boolean.TRUE;
 			

@@ -77,7 +77,7 @@ public interface QueryExecutor {
 			if(CollectionHelper.isNotEmpty(collection))
 				collection = processResult(resultClass, arguments, collection);
 			if(Boolean.TRUE.equals(LOGGABLE)) {
-				LogHelper.log(String.format("collection size = ", CollectionHelper.getSize(collection)), LOG_LEVEL,getClass());
+				LogHelper.log(String.format("collection size = %s", CollectionHelper.getSize(collection)), LOG_LEVEL,getClass());
 			}
 			return collection;
 		}
