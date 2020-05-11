@@ -10,6 +10,8 @@ import java.util.Map.Entry;
 
 import javax.json.bind.JsonbBuilder;
 
+import org.cyk.utility.__kernel__.array.ArrayHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
@@ -150,6 +152,22 @@ public interface MapHelper {
 		Map<String, Integer> map = new LinkedHashMap<String, Integer>();
 		set(map,objects);
 		return map;
+	}
+	
+	static Map<String,Integer> instantiateStringIntegerByStrings(Collection<String> strings) {
+		if(CollectionHelper.isEmpty(strings))
+			return null;
+		Map<String, Integer> map = new LinkedHashMap<String, Integer>();
+		Integer index = 0;
+		for(String string : strings)
+			map.put(string, index++);
+		return map;
+	}
+	
+	static Map<String,Integer> instantiateStringIntegerByStrings(String...strings) {
+		if(ArrayHelper.isEmpty(strings))
+			return null;
+		return instantiateStringIntegerByStrings(CollectionHelper.listOf(strings));
 	}
 	
 	@SuppressWarnings("unchecked")
