@@ -2,6 +2,7 @@ package org.cyk.utility.__kernel__.persistence.query;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
@@ -53,12 +55,20 @@ public interface QueryResultMapper {
 			return collection;
 		}
 		
-		private <T> T instantiate(Class<T> klass,Map<String,Integer> fieldsNamesIndexes,Object[] array) {
+		protected <T> T instantiate(Class<T> klass,Map<String,Integer> fieldsNamesIndexes,Object[] array) {
 			T instance = ClassHelper.instanciate(klass);
 			fieldsNamesIndexes.forEach( (fieldName,index) -> {
-				FieldHelper.write(instance, fieldName, array[index]);
+				try {
+					write(instance, fieldName, array[index]);
+				} catch (Exception exception) {
+					LogHelper.log(new RuntimeException(String.format("cannot write field %s.%s at index %s with value %s taken from values %s", instance.getClass().getName(),fieldName,index,array[index],Arrays.toString(array)), exception), getClass());
+				}
 			});
 			return instance;
+		}
+		
+		protected <T> void write(T instance,String fieldName,Object value) {
+			FieldHelper.write(instance, fieldName, value);
 		}
 	}
 	
