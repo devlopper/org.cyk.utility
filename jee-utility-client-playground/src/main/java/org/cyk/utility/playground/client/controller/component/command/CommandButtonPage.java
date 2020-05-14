@@ -150,7 +150,7 @@ public class CommandButtonPage extends AbstractPageContainerManagedImpl implemen
 			}
 		});
 		
-		dialog = Dialog.build();
+		dialog = Dialog.build(Dialog.FIELD_WIDTH,800,Dialog.FIELD_HEIGHT,300);
 		commandButtonShowDialog = CommandButton.build(CommandButton.FIELD_VALUE,"Show Dialog",CommandButton.FIELD_USER_INTERFACE_ACTION,UserInterfaceAction.SHOW_DIALOG
 				,CommandButton.FIELD___DIALOG__,dialog);
 		

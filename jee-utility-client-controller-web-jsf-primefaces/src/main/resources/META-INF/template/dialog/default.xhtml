@@ -12,12 +12,15 @@
 	<p:outputPanel id="#{dialog.__containerIdentifier__}">
 		<p:dialog 
 			id="#{dialog.identifier}" header="#{dialog.header}" modal="#{dialog.modal}" widgetVar="#{dialog.widgetVar}" fitViewport="#{dialog.fitViewport}" 
-				styleClass="#{dialog.styleClass}" closeOnEscape="#{dialog.closeOnEscape}" draggable="#{dialog.draggable}" dynamic="#{dialog.dynamic}" resizable="#{dialog.resizable}"
+				closeOnEscape="#{dialog.closeOnEscape}" draggable="#{dialog.draggable}" dynamic="#{dialog.dynamic}" 
+				resizable="#{dialog.resizable}" minHeight="#{dialog.minHeight}" minWidth="#{dialog.minWidth}"
+				width="#{dialog.width}" height="#{dialog.height}"
+				styleClass="#{dialog.styleClass}" style="#{dialog.style}"
 			>
 			<ui:insert name="dialogBody"><h:outputText value="Dialog Body" /></ui:insert>
 			
 			<ui:insert name="dialogSeparator">
-				<p:separator/>
+				<p:separator rendered="#{not empty dialog.commandButtons}"/>
 			</ui:insert>
 			
 			<ui:insert name="dialogCommands">

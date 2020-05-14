@@ -20,9 +20,27 @@
     		</ui:decorate>
     		<p:separator/>
     		
+    		<ui:decorate template="/input/select/one/autoComplete.xhtml">
+    			<ui:param name="autoComplete" value="#{inputChoiceOneAutoCompletePage.autoCompleteSelectItem}"/>
+    		</ui:decorate>
+    		<p:separator/>
+    		
+    		<ui:decorate template="/command/commandbutton/default.xhtml">
+    			<ui:param name="commandButton" value="#{inputChoiceOneAutoCompletePage.showDialogCommandButton}"/>
+    		</ui:decorate>
+    		
     		<ui:decorate template="/command/commandbutton/default.xhtml">
     			<ui:param name="commandButton" value="#{inputChoiceOneAutoCompletePage.commandButton}"/>
     		</ui:decorate>
+    		
+    		<ui:decorate template="#{primefacesHelper.getModelTemplate(inputChoiceOneAutoCompletePage.dialog)}">
+	    		<ui:param name="dialog" value="#{inputChoiceOneAutoCompletePage.dialog}"/>
+	    		<ui:define name="dialogBody">
+	    			<ui:decorate template="#{primefacesHelper.getModelTemplate(inputChoiceOneAutoCompletePage.autoCompleteSelectItemInDialog)}">
+	    				<ui:param name="autoComplete" value="#{inputChoiceOneAutoCompletePage.autoCompleteSelectItemInDialog}"/>
+	    			</ui:decorate>
+	    		</ui:define>
+	    	</ui:decorate>	
     	</ui:define>
     </cyk:page>
     

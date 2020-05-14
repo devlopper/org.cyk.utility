@@ -178,7 +178,7 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 	
 	/**/
 	
-	public static interface Listener<T> {
+	public static interface Listener<T> extends AbstractInput.Listener {
 		
 		Filter.Dto instantiateFilter(AutoComplete autoComplete);
 		Arguments<T> instantiateArguments(AutoComplete autoComplete);
@@ -195,7 +195,7 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 			__complete__(arguments, autoComplete.controllerEntity, autoComplete.readQueryIdentifier, filter, queryString);
 		}
 		
-		public static abstract class AbstractImpl<T> extends org.cyk.utility.__kernel__.object.AbstractObject implements Listener<T>,Serializable {
+		public static abstract class AbstractImpl<T> extends AbstractInput.Listener.AbstractImpl implements Listener<T>,Serializable {
 			
 			@Override
 			public Filter.Dto instantiateFilter(AutoComplete autoComplete) {
