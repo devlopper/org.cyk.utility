@@ -11,19 +11,30 @@ import java.util.Set;
 import javax.enterprise.inject.spi.CDI;
 import javax.enterprise.util.AnnotationLiteral;
 
+import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.jboss.weld.exceptions.IllegalArgumentException;
 
 public class DependencyInjection implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	public static CDI<Object> INSTANCE;
+	public static CDI<Object> getInstance() {
+		if(INSTANCE == null)
+			INSTANCE = CDI.current();
+		return INSTANCE;
+	}
+	
+	
 	public static <OBJECT> OBJECT inject(Class<OBJECT> klass,AnnotationLiteral<?>...annotationLiterals){
 		if(klass == null)
 			throw new IllegalArgumentException("class to inject is required");
-		CDI<Object> cdi = CDI.current();
+		CDI<Object> cdi = getInstance();
 		if(cdi == null)
 			throw new IllegalStateException("dependency injection context not found");
-		return annotationLiterals == null || annotationLiterals.length == 0 ? cdi.select(klass).get() : cdi.select(klass,annotationLiterals).get();
+		if(ArrayHelper.isEmpty(annotationLiterals))
+			return cdi.select(klass).get();
+		return cdi.select(klass,annotationLiterals).get();
 	}
 	
 	/*@SafeVarargs

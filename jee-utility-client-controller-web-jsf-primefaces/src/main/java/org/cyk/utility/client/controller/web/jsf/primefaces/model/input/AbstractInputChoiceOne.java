@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
@@ -63,6 +64,26 @@ public class AbstractInputChoiceOne extends AbstractInputChoice<Object> implemen
 	
 	@SuppressWarnings("unchecked")
 	public AbstractInputChoiceOne select(Object choice) {
+		if(CollectionHelper.isEmpty(choices))
+			return this;
+		((Listener<Object>)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).select(this, choice);
+		return this;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public AbstractInputChoiceOne selectBySystemIdentifier(Object systemIdentifier) {
+		if(CollectionHelper.isEmpty(choices) || systemIdentifier == null)
+			return this;
+		Object choice = null;
+		for(Object index : choices)
+			if(systemIdentifier.equals(FieldHelper.readSystemIdentifier(index))) {
+				choice = index;
+				break;
+			}
+		if(choice == null) {
+			LogHelper.logWarning("No choice with system identifier "+systemIdentifier+" found in choices", getClass());
+			return this;
+		}
 		((Listener<Object>)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).select(this, choice);
 		return this;
 	}

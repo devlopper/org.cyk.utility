@@ -50,18 +50,18 @@ public abstract class AbstractServletContextListener extends org.cyk.utility.con
 		if(ConfigurationHelper.is(VariableName.SWAGGER_ENABLED)) {
 			BeanConfig beanConfig = new BeanConfig();
 			beanConfig.setVersion(ValueHelper.defaultToIfBlank(ConfigurationHelper.getValueAsString(VariableName.SYSTEM_VERSION),"version not defined"));
-			beanConfig.setSchemes(new String[] { "http" });
+			/*beanConfig.setSchemes(new String[] { "http" });
 			String host = ValueHelper.defaultToIfBlank(ConfigurationHelper.getValueAsString(VariableName.SYSTEM_HOST),"localhost");
 			String port = ValueHelper.defaultToIfBlank(ConfigurationHelper.getValueAsString(VariableName.SYSTEM_PORT),"8080");
 			beanConfig.setHost(host+":"+port);
-			String contextPath = "/"+ValueHelper.defaultToIfBlank(ConfigurationHelper.getValueAsString(VariableName.SYSTEM_WEB_CONTEXT),ConstantEmpty.STRING)+ApplicationProgrammingInterface.PATH;
+			*/String contextPath = "/"+ValueHelper.defaultToIfBlank(ConfigurationHelper.getValueAsString(VariableName.SYSTEM_WEB_CONTEXT),ConstantEmpty.STRING)+ApplicationProgrammingInterface.PATH;
 			contextPath = RegExUtils.replaceAll(contextPath, "////", "/");
 			contextPath = RegExUtils.replaceAll(contextPath, "///", "/");
 			contextPath = RegExUtils.replaceAll(contextPath, "//", "/");				
 			beanConfig.setBasePath(contextPath);			
 			beanConfig.setResourcePackage(ConfigurationHelper.getValueAsString(VariableName.SWAGGER_BEAN_CONFIG_RESOURCE_PACKAGE));			
 			beanConfig.setTitle(ValueHelper.defaultToIfBlank(ConfigurationHelper.getValueAsString(VariableName.SYSTEM_NAME),"System name not defined")
-					+" : Application Programming Interface Documentation");
+					+" : API Documentation");
 			beanConfig.setDescription("Documentation of API using Swagger");
 			beanConfig.setScan(true);	
 		}		
@@ -77,6 +77,4 @@ public abstract class AbstractServletContextListener extends org.cyk.utility.con
 		destroy(context);	
 		//__inject__(ApplicationScopeLifeCycleListener.class).destroy(null);
 	}
-	
-
 }

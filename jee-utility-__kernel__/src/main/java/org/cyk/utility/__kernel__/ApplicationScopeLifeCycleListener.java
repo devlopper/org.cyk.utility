@@ -19,7 +19,7 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 	@Override
 	public void __initialize__(Object object) {
 		PropertyUtils.addBeanIntrospector(new FluentPropertyBeanIntrospector());
-		LocaleHelper.LOCALES.add(Locale.FRENCH);
+		LocaleHelper.addLocales(Locale.FRENCH);
 		InternationalizationHelper.addResourceBundlesFromNames(null,null, "word","phrase","throwable","assertion");
 		DependencyInjection.setQualifierClassTo(Google.class, BarCodeBuilder.class, BarCodeReader.class);
 	}

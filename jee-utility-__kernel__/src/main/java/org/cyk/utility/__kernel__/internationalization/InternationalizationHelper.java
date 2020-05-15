@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
@@ -292,27 +293,26 @@ public interface InternationalizationHelper {
 	}
 	
 	static void addResourceBundles(Collection<ResourceBundle> resourceBundles,Integer index) {
-		if(resourceBundles == null || resourceBundles.isEmpty())
+		if(CollectionHelper.isEmpty(resourceBundles))
 			return;
-		RESOURCE_BUNDLES.add(resourceBundles,index);
+		if(index == null)
+			RESOURCE_BUNDLES.addAll(resourceBundles);
+		else
+			RESOURCE_BUNDLES.addAll(index,resourceBundles);
 	}
 	
 	static void addResourceBundles(Collection<ResourceBundle> resourceBundles) {
-		if(resourceBundles == null || resourceBundles.isEmpty())
-			return;
-		RESOURCE_BUNDLES.add(resourceBundles,null);
+		addResourceBundles(resourceBundles,null);
 	}
 	
 	static void addResourceBundles(Integer index,ResourceBundle... resourceBundles) {
-		if(resourceBundles == null || resourceBundles.length == 0)
+		if(ArrayHelper.isEmpty(resourceBundles))
 			return;
-		RESOURCE_BUNDLES.add(List.of(resourceBundles),index);
+		addResourceBundles(CollectionHelper.listOf(resourceBundles),index);
 	}
 	
 	static void addResourceBundles(ResourceBundle... resourceBundles) {
-		if(resourceBundles == null || resourceBundles.length == 0)
-			return;
-		RESOURCE_BUNDLES.add(List.of(resourceBundles),null);
+		addResourceBundles(null,resourceBundles);
 	}
 	
 	static void addResourceBundles(Collection<String> baseNames, ClassLoader classLoader,Integer index) {
@@ -322,10 +322,10 @@ public interface InternationalizationHelper {
 		if(index != null) {
 			if(index < 0)
 				index = 0;
-			else if(index > RESOURCE_BUNDLES.getSize())
+			else if(index > RESOURCE_BUNDLES.size())
 				index = null;	
 		}
-		RESOURCE_BUNDLES.add(baseNames.stream().map(name -> new ResourceBundle(name,classLoaderFinal)).collect(Collectors.toList()),index);
+		addResourceBundles(baseNames.stream().map(name -> new ResourceBundle(name,classLoaderFinal)).collect(Collectors.toList()),index);
 	}
 	
 	static void addResourceBundles(ClassLoader classLoader,Integer index,String...baseNames) {
@@ -360,7 +360,7 @@ public interface InternationalizationHelper {
 	}
 	
 	static String getFromResourceBundles(String identifier,Object[] arguments,Locale locale,Case kase,Collection<ResourceBundle> resourceBundles) {
-		resourceBundles = resourceBundles == null ? RESOURCE_BUNDLES.get() : CollectionHelper.concatenate(resourceBundles,RESOURCE_BUNDLES.get());
+		resourceBundles = resourceBundles == null ? RESOURCE_BUNDLES : CollectionHelper.concatenate(resourceBundles,RESOURCE_BUNDLES);
 		if(CollectionHelper.isEmpty(resourceBundles)){
 			//TODO log a warning
 		}else{
@@ -421,5 +421,6 @@ public interface InternationalizationHelper {
 	
 	String SEPARATOR = ConstantCharacter.SPACE.toString();
 	
-	ResourceBundles RESOURCE_BUNDLES = DependencyInjection.inject(ResourceBundles.class);
+	//ResourceBundles RESOURCE_BUNDLES = DependencyInjection.inject(ResourceBundles.class);
+	List<ResourceBundle> RESOURCE_BUNDLES = new ArrayList<>();
 }

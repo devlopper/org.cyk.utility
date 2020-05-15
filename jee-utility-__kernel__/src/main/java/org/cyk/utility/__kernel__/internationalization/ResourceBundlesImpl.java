@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.cyk.utility.__kernel__.collection.AbstractCollectionInstanceImpl;
 
+@Deprecated
 public class ResourceBundlesImpl extends AbstractCollectionInstanceImpl<ResourceBundle> implements ResourceBundles,Serializable {
 	private static final long serialVersionUID = 1L;
 
