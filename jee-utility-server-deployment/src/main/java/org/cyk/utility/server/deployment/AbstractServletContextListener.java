@@ -1,5 +1,8 @@
 package org.cyk.utility.server.deployment;
 import java.io.Serializable;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -9,6 +12,7 @@ import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.context.ContextHelper;
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.__kernel__.variable.VariableName;
 import org.cyk.utility.network.protocol.ProtocolDefaults;
@@ -50,11 +54,7 @@ public abstract class AbstractServletContextListener extends org.cyk.utility.con
 		if(ConfigurationHelper.is(VariableName.SWAGGER_ENABLED)) {
 			BeanConfig beanConfig = new BeanConfig();
 			beanConfig.setVersion(ValueHelper.defaultToIfBlank(ConfigurationHelper.getValueAsString(VariableName.SYSTEM_VERSION),"version not defined"));
-			/*beanConfig.setSchemes(new String[] { "http" });
-			String host = ValueHelper.defaultToIfBlank(ConfigurationHelper.getValueAsString(VariableName.SYSTEM_HOST),"localhost");
-			String port = ValueHelper.defaultToIfBlank(ConfigurationHelper.getValueAsString(VariableName.SYSTEM_PORT),"8080");
-			beanConfig.setHost(host+":"+port);
-			*/String contextPath = "/"+ValueHelper.defaultToIfBlank(ConfigurationHelper.getValueAsString(VariableName.SYSTEM_WEB_CONTEXT),ConstantEmpty.STRING)+ApplicationProgrammingInterface.PATH;
+			String contextPath = "/"+ValueHelper.defaultToIfBlank(ConfigurationHelper.getValueAsString(VariableName.SYSTEM_WEB_CONTEXT),ConstantEmpty.STRING)+ApplicationProgrammingInterface.PATH;
 			contextPath = RegExUtils.replaceAll(contextPath, "////", "/");
 			contextPath = RegExUtils.replaceAll(contextPath, "///", "/");
 			contextPath = RegExUtils.replaceAll(contextPath, "//", "/");				
@@ -62,8 +62,19 @@ public abstract class AbstractServletContextListener extends org.cyk.utility.con
 			beanConfig.setResourcePackage(ConfigurationHelper.getValueAsString(VariableName.SWAGGER_BEAN_CONFIG_RESOURCE_PACKAGE));			
 			beanConfig.setTitle(ValueHelper.defaultToIfBlank(ConfigurationHelper.getValueAsString(VariableName.SYSTEM_NAME),"System name not defined")
 					+" : API Documentation");
-			beanConfig.setDescription("Documentation of API using Swagger");
-			beanConfig.setScan(true);	
+			String description = "Documentation of API using Swagger";
+			String timestampAsString = ConfigurationHelper.getValueAsString(VariableName.SYSTEM_TIMESTAMP_AS_STRING);
+			if(StringHelper.isBlank(timestampAsString)) {
+				Long timestamp = ConfigurationHelper.getValueAsLong(VariableName.SYSTEM_TIMESTAMP);
+				if(timestamp != null)
+					timestampAsString = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp),ZoneId.systemDefault()).toString();
+			}
+			if(StringHelper.isNotBlank(timestampAsString))
+				description = description + " - Built on "+timestampAsString;
+			beanConfig.setDescription(description);
+			beanConfig.setContact("komenanyc@yahoo.fr.com");
+			beanConfig.setExpandSuperTypes(Boolean.FALSE);
+			beanConfig.setScan(true);
 		}		
 	}
 	

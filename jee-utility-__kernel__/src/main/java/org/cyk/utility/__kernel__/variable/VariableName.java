@@ -14,6 +14,8 @@ public interface VariableName {
 	
 	String SYSTEM_IDENTIFIER = buildSystem("identifier");
 	String SYSTEM_VERSION = buildSystem("version");
+	String SYSTEM_TIMESTAMP = buildSystem("timestamp");
+	String SYSTEM_TIMESTAMP_AS_STRING = buildSystem("timestamp.as.string");
 	String SYSTEM_NAME = buildSystem("name");
 	String SYSTEM_HOST = buildSystem("host");
 	String SYSTEM_PORT = buildSystem("port");

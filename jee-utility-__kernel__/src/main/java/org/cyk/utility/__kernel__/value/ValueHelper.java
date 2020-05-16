@@ -103,6 +103,12 @@ public interface ValueHelper {
 		return convert(value, Integer.class);
 	}
 	
+	static Long convertToLong(Object value)  {
+		if(value == null)
+			return null;
+		return convert(value, Long.class);
+	}
+	
 	static Object convert(Field sourceField,Object sourceFieldValue,Field destinationField) {
 		if(sourceField == null || sourceFieldValue == null || destinationField == null)
 			return null;

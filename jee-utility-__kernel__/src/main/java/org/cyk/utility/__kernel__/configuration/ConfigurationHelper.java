@@ -102,6 +102,18 @@ public interface ConfigurationHelper {
 		return getValueAsInteger(name,null,null);
 	}
 	
+	static Long getValueAsLong(String name,Object context,Object request) {
+		return ValueHelper.convertToLong(getValue(name, context, request, Boolean.FALSE.toString()));
+	}
+	
+	static Long getValueAsLong(String name,Object context) {
+		return getValueAsLong(name,context, null);
+	}
+	
+	static Long getValueAsLong(String name) {
+		return getValueAsLong(name,null,null);
+	}
+	
 	/**/
 	
 	static String getClassUniformResourceIdentifier(Class<?> klass,Object classifier) {
