@@ -122,8 +122,9 @@ public class Arguments<T> extends AbstractObject implements Serializable {
 			}else {
 				if(ResponseHelper.isFamilySuccessful(response))
 					__responseEntity__ = response.getEntity();
-				else
+				else {
 					runtimeExceptionDto = (RuntimeException.Dto) response.getEntity();
+				}
 			}
 			//convert entity
 			if(runtimeExceptionDto == null) {

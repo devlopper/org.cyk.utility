@@ -35,7 +35,7 @@ public class CommandButtonPage extends AbstractPageContainerManagedImpl implemen
 
 	private Layout layout;
 	private CommandButton commandButtonServer,commandButtonServerArgument1,commandButtonServerArgument2,commandButtonServerDoNotNotifySuccess,commandButtonServerDoErrorJava
-		,commandButtonServerDoErrorCyk,commandButtonServerDoErrorCykMessageOne,commandButtonServerRenderMessageSuccessGrowl,commandButtonServerRenderMessageErrorGrowl
+		,commandButtonServerDoErrorCyk,commandButtonServerDoErrorCykMessageOne,commandButtonServerDoErrorCykMessageMany,commandButtonServerRenderMessageSuccessGrowl,commandButtonServerRenderMessageErrorGrowl
 		,commandButtonServerConfirmDialog,commandButtonServerConfirmDialogUpdated
 		,commandButtonIcon,commandButtonIconOnly,commandButtonShowDialog,commandButtonOpenDialog,commandButtonCreateNamableInOpenedDialog,commandButtonListNamableInOpenedDialog
 		,commandButtonDynamic;
@@ -102,6 +102,15 @@ public class CommandButtonPage extends AbstractPageContainerManagedImpl implemen
 			@Override
 			public void run(AbstractAction action) {
 				throw new org.cyk.utility.__kernel__.throwable.RuntimeException().addMessages(new Message().setSummary("Something goes wrong from controller"));
+			}
+		});
+		
+		commandButtonServerDoErrorCykMessageMany = CommandButton.build(CommandButton.FIELD_VALUE,"Server Do Error Cyk Many Messages");
+		commandButtonServerDoErrorCykMessageMany.setListener(new CommandButton.Listener.AbstractImpl() {
+			@Override
+			public void run(AbstractAction action) {
+				throw new org.cyk.utility.__kernel__.throwable.RuntimeException().addMessages(new Message().setSummary("Something goes wrong from controller 01")
+						,new Message().setSummary("Something goes wrong from controller 02"),new Message().setSummary("Something goes wrong from controller 03"));
 			}
 		});
 		

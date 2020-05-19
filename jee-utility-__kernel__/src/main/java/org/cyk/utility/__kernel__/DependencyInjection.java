@@ -17,19 +17,11 @@ import org.jboss.weld.exceptions.IllegalArgumentException;
 
 public class DependencyInjection implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	public static CDI<Object> INSTANCE;
-	public static CDI<Object> getInstance() {
-		if(INSTANCE == null)
-			INSTANCE = CDI.current();
-		return INSTANCE;
-	}
-	
 	
 	public static <OBJECT> OBJECT inject(Class<OBJECT> klass,AnnotationLiteral<?>...annotationLiterals){
 		if(klass == null)
 			throw new IllegalArgumentException("class to inject is required");
-		CDI<Object> cdi = getInstance();
+		CDI<Object> cdi = CDI.current();
 		if(cdi == null)
 			throw new IllegalStateException("dependency injection context not found");
 		if(ArrayHelper.isEmpty(annotationLiterals))

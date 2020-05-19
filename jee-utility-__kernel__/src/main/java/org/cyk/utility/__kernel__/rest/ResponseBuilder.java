@@ -45,10 +45,16 @@ public interface ResponseBuilder {
 		return build(new RuntimeException.Dto(messageIdentifier));
 	}
 	
-	default Response build(Exception exception) {
-		if(exception == null)
-			throw new IllegalArgumentException("exception is required");
-		return buildRuntimeException(null,exception.getMessage());
+	default Response build(Throwable throwable) {
+		if(throwable == null)
+			throw new IllegalArgumentException("throwable is required");
+		return buildRuntimeException(null,throwable.getMessage());
+	}
+	
+	default Response build(org.cyk.utility.__kernel__.user.interface_.message.Message message) {
+		if(message == null)
+			throw new IllegalArgumentException("message is required");
+		return buildRuntimeException(null,message.getSummary(),message.getDetails());
 	}
 	
 	/**/

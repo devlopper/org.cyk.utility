@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
-import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.user.interface_.message.Message;
 import org.cyk.utility.__kernel__.user.interface_.message.MessageRenderer;
 import org.cyk.utility.__kernel__.user.interface_.message.RenderType;
@@ -27,13 +26,14 @@ public class RunnerUnitTest extends AbstractWeldUnitTest {
 	
 	@Override
 	protected void __listenBefore__() {
-		super.__listenBefore__();
+		//Runner.INSTANCE.set(null);
+		//MessageRenderer.INSTANCE.set(null);
 		messageRenderer = new MessageRendererImpl();
 		MessageRenderer.INSTANCE.set(messageRenderer);
 	}
 	
 	@Test
-	public void run(){
+	public void run_throwableIsNull(){
 		Runner.Arguments runnerArguments = new Runner.Arguments().assignDefaultMessageArguments();
 		runnerArguments.addRunnables(new Runnable("MyJob 01",1000l * 1,null));
 		Runner.getInstance().run(runnerArguments);		
@@ -43,13 +43,46 @@ public class RunnerUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	@Test
-	public void run_throwable(){
+	public void run_throwableIsNotNull_runtimeException_java(){
 		Runner.Arguments runnerArguments = new Runner.Arguments().assignDefaultMessageArguments();
-		runnerArguments.addRunnables(new Runnable("MyJob 01",1000l * 1,new RuntimeException().addMessages(new org.cyk.utility.__kernel__.throwable.Message().setSummary("oops!"))));
+		runnerArguments.addRunnables(new Runnable("MyJob 01",1000l * 1,new RuntimeException("oops!")));
 		Runner.getInstance().run(runnerArguments);		
 		assertThat(messageRenderer.getMessages()).hasSize(1);
 		assertThat(messageRenderer.getMessages().stream().map(x->x.getSeverity()).collect(Collectors.toList())).containsExactly(Severity.ERROR);
 		assertThat(messageRenderer.getMessages().stream().map(x->x.getSummary()).collect(Collectors.toList())).containsExactly("oops!");
+	}
+	
+	@Test
+	public void run_throwableIsNotNull_runtimeException_cyk_noMessages(){
+		Runner.Arguments runnerArguments = new Runner.Arguments().assignDefaultMessageArguments();
+		runnerArguments.addRunnables(new Runnable("MyJob 01",1000l * 1,new org.cyk.utility.__kernel__.throwable.RuntimeException("oops!")));
+		Runner.getInstance().run(runnerArguments);		
+		assertThat(messageRenderer.getMessages()).hasSize(1);
+		assertThat(messageRenderer.getMessages().stream().map(x->x.getSeverity()).collect(Collectors.toList())).containsExactly(Severity.ERROR);
+		assertThat(messageRenderer.getMessages().stream().map(x->x.getSummary()).collect(Collectors.toList())).containsExactly("oops!");
+	}
+	
+	@Test
+	public void run_throwableIsNotNull_runtimeException_cyk_messages_one(){
+		Runner.Arguments runnerArguments = new Runner.Arguments().assignDefaultMessageArguments();
+		runnerArguments.addRunnables(new Runnable("MyJob 01",1000l * 1,new org.cyk.utility.__kernel__.throwable.RuntimeException().addMessages(new org.cyk.utility.__kernel__.throwable.Message().setSummary("oops!"))));
+		Runner.getInstance().run(runnerArguments);		
+		assertThat(messageRenderer.getMessages()).hasSize(1);
+		assertThat(messageRenderer.getMessages().stream().map(x->x.getSeverity()).collect(Collectors.toList())).containsExactly(Severity.ERROR);
+		assertThat(messageRenderer.getMessages().stream().map(x->x.getSummary()).collect(Collectors.toList())).containsExactly("oops!");
+	}
+	
+	@Test
+	public void run_throwableIsNotNull_runtimeException_cyk_messages_many(){
+		Runner.Arguments runnerArguments = new Runner.Arguments().assignDefaultMessageArguments();
+		runnerArguments.addRunnables(new Runnable("MyJob 01",1000l * 1,new org.cyk.utility.__kernel__.throwable.RuntimeException()
+				.addMessages(new org.cyk.utility.__kernel__.throwable.Message().setSummary("oops 01!")
+						,new org.cyk.utility.__kernel__.throwable.Message().setSummary("oops 02!")
+						,new org.cyk.utility.__kernel__.throwable.Message().setSummary("oops 03!"))));
+		Runner.getInstance().run(runnerArguments);		
+		assertThat(messageRenderer.getMessages()).hasSize(1);
+		assertThat(messageRenderer.getMessages().stream().map(x->x.getSeverity()).collect(Collectors.toList())).containsExactly(Severity.ERROR);
+		assertThat(messageRenderer.getMessages().stream().map(x->x.getSummary()).collect(Collectors.toList())).containsExactly("1 - oops 01!\r\n2 - oops 02!\r\n3 - oops 03!");
 	}
 
 	/**/
