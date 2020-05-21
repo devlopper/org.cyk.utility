@@ -197,7 +197,7 @@ public interface QueryValueBuilder {
 		if(StringHelper.isBlank(tupleName))
 			return null;
 		if(ArrayHelper.isEmpty(fieldsNames))
-			throw null;
+			return null;
 		return deriveCaseZeroIfNull(tupleName, CollectionHelper.listOf(fieldsNames),null);
 	}
 	

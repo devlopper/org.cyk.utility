@@ -43,7 +43,7 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 	protected Collection<Column> columnsAfterRowIndex,selectedColumnsAfterRowIndex;
 	protected Boolean stickyHeader,areColumnsChoosable,isRowAddable,isColumnAddable,isLastColumnRemovable;
 	protected CommandButton addRowCommandButton,removeRowCommandButton,addColumnCommandButton,removeLastColumnCommandButton;
-	protected String stickyTopAt,columnFieldNameFormat;
+	protected String stickyTopAt,columnFieldNameFormat,rowTooltipStyleClass;
 	protected Grid dataGrid;
 	
 	/**/
@@ -248,6 +248,10 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 		return ((Listener)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).getStyleClassByRecordByColumn(record, recordIndex, column, columnIndex);
 	}
 	
+	public String getTooltipByRecord(Object record,Integer recordIndex) {
+		return ((Listener)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).getTooltipByRecord(record, recordIndex);
+	}
+	
 	@Override
 	public AbstractCollection addRecordMenuItems(Collection<MenuItem> menuItems) {		
 		if(CollectionHelper.isEmpty(menuItems))
@@ -389,6 +393,10 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 			if(StringHelper.isBlank(dataTable.stickyTopAt) && Boolean.TRUE.equals(dataTable.stickyHeader)) {
 				//dataTable.stickyTopAt = ".layout-topbar";
 			}
+			
+			if(StringHelper.isBlank(dataTable.rowTooltipStyleClass))
+				dataTable.rowTooltipStyleClass = dataTable.identifier+"_row_tooltip";			
+			dataTable.addStyleClasses(dataTable.rowTooltipStyleClass);
 		}
 		
 		/*public static interface Listener {
@@ -405,6 +413,7 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 		Object getCellValueByRecordByColumn(Object record,Integer recordIndex,Column column,Integer columnIndex);
 		String getStyleClassByRecord(Object record,Integer recordIndex);
 		String getStyleClassByRecordByColumn(Object record,Integer recordIndex,Column column,Integer columnIndex);
+		String getTooltipByRecord(Object record,Integer recordIndex);
 		void addRow(AbstractDataTable dataTable,Object element);
 		void removeRow(AbstractDataTable dataTable,Object element);
 		//void addColumn(AbstractDataTable dataTable);
@@ -439,6 +448,11 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 					return null;
 				if(Value.Type.CURRENCY.equals(column.getValueType()))
 					return "cyk-text-align-right";
+				return null;
+			}
+			
+			@Override
+			public String getTooltipByRecord(Object record, Integer recordIndex) {
 				return null;
 			}
 			

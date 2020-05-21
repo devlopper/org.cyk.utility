@@ -114,7 +114,9 @@ public class Arguments<T> extends AbstractObject implements Serializable {
 						__responseEntity__ = response.readEntity(TypeHelper.instantiateGenericCollectionParameterizedTypeForJaxrs(Collection.class,__representationEntityClass__));
 					else if(ClassHelper.isInstanceOf(responseEntityClass, __controllerEntityClass__))
 						__responseEntity__ = response.readEntity(__representationEntityClass__);
-					else
+					else if(ClassHelper.isInstanceOf(responseEntityClass, String.class))
+						__responseEntity__ = response.readEntity(String.class);
+					else if(ClassHelper.isInstanceOfOne(__representationEntityClass__,org.cyk.utility.__kernel__.representation.EntityReader.class,org.cyk.utility.__kernel__.representation.EntityCounter.class))
 						throw new RuntimeException("response entity class not yet handled");
 				}else {
 					runtimeExceptionDto = response.readEntity(RuntimeException.Dto.class);

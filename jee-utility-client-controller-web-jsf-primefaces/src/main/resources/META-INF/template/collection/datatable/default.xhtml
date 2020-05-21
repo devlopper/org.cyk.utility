@@ -45,6 +45,10 @@
 		 				<div style="float: left !important;">
 			 				<h:outputText value="#{rowIndex+1}" />
 			 			</div>
+			 			<ui:insert name="rowTooltip">
+			 				<p:tooltip for="@(.#{dataTable.rowTooltipStyleClass} tr[role=row][data-ri=#{rowIndex}])" value="#{dataTable.getTooltipByRecord(record,rowIndex)}" 
+			 					position="top" rendered="#{not empty dataTable.getTooltipByRecord(record,rowIndex)}"/>
+			 			</ui:insert>
  					</ui:define>
  					
  					<ui:define name="columnFooter">
