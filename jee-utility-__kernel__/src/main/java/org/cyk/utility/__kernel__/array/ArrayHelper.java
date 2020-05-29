@@ -48,4 +48,9 @@ public interface ArrayHelper {
 		return objects.length;
 	}
 	
+	static <T> T getElementAt(T[] objects,Integer index) {
+		if(isEmpty(objects))
+			return null;
+		return objects[index];
+	}
 }

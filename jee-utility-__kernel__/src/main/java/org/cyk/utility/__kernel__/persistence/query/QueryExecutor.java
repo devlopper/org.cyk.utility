@@ -119,6 +119,8 @@ public interface QueryExecutor {
 		protected <T> TypedQuery<T> __getTypedQuery__(Class<T> resultClass, Query query,Map<Object,Object> parameters,Integer firstTupleIndex,Integer numberOfTuples,Map<String,Object> hints,EntityManager entityManager) {
 			if(Boolean.TRUE.equals(LOGGABLE)) {
 				Collection<String> strings = new ArrayList<>();
+				if(StringHelper.isNotBlank(query.getIdentifier()))
+					strings.add(query.getIdentifier());
 				if(resultClass != null)
 					strings.add(resultClass.getSimpleName());
 				if(query != null)

@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.persistence.Tuple;
 
 import org.cyk.utility.__kernel__.Helper;
+import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
@@ -42,7 +43,9 @@ public interface QueryResultMapper {
 				return null;
 			arguments.prepare();
 			Collection<T> collection = new ArrayList<>();
-			if(CollectionHelper.isNotEmpty(arguments.objects)) {				
+			if(CollectionHelper.isNotEmpty(arguments.objects)) {
+				if(Boolean.TRUE.equals(QueryExecutor.AbstractImpl.LOGGABLE))
+					LogHelper.log(String.format("Instantiating %s by setting fields names %s",resultClass,arguments.query.getTupleFieldsNamesIndexes()), QueryExecutor.AbstractImpl.LOG_LEVEL, getClass());
 				arguments.objects.forEach(array -> {
 					collection.add(instantiate(resultClass, arguments.query.getTupleFieldsNamesIndexes(), array));
 				});
@@ -56,12 +59,16 @@ public interface QueryResultMapper {
 		}
 		
 		protected <T> T instantiate(Class<T> klass,Map<String,Integer> fieldsNamesIndexes,Object[] array) {
+			if(Boolean.TRUE.equals(QueryExecutor.AbstractImpl.LOGGABLE))
+				LogHelper.log(String.format("\tvalues %s",Arrays.toString(array)), QueryExecutor.AbstractImpl.LOG_LEVEL, getClass());
 			T instance = ClassHelper.instanciate(klass);
 			fieldsNamesIndexes.forEach( (fieldName,index) -> {
 				try {
 					write(instance, fieldName, array[index]);
 				} catch (Exception exception) {
-					LogHelper.log(new RuntimeException(String.format("cannot write field %s.%s at index %s with value %s taken from values %s", instance.getClass().getName(),fieldName,index,array[index],Arrays.toString(array)), exception), getClass());
+					LogHelper.log(new RuntimeException(String.format("cannot write field %s.%s at index %s with value %s taken from values %s", instance.getClass().getName()
+							,fieldName,index,index < ArrayHelper.getSize(array) ? ArrayHelper.getElementAt(array, index) : "Bad index "+index
+									,Arrays.toString(array)), exception), getClass());
 				}
 			});
 			return instance;

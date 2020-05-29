@@ -238,6 +238,18 @@ public interface QueryValueBuilder {
 		return deriveConcatsCodeAndNameFromTuplesNames(CollectionHelper.listOf(tuplesNames));
 	}
 	
+	static String deriveConcatsIdentifierAndNameFromTuplesNames(Collection<String> tuplesNames) {
+		if(CollectionHelper.isEmpty(tuplesNames))
+			return null;
+		return StringHelper.concatenate(tuplesNames.stream().map(tupleName ->  String.format(FORMAT_CONCAT_IDENTIFIER_NAME, tupleName)).collect(Collectors.toList()),",");
+	}
+	
+	static String deriveConcatsIdentifierAndNameFromTuplesNames(String...tuplesNames) {
+		if(ArrayHelper.isEmpty(tuplesNames))
+			return null;
+		return deriveConcatsIdentifierAndNameFromTuplesNames(CollectionHelper.listOf(tuplesNames));
+	}
+	
 	static String deriveLike(String tuple,String fieldName,String parameterName,Integer numberOfTokens,LogicalOperator operator,Boolean isCaseSensitive){
 		if(StringHelper.isBlank(tuple) || StringHelper.isBlank(fieldName) || StringHelper.isBlank(parameterName))
 			throw new RuntimeException(String.format("Illegal parameters. tuple %s , field name : %s , parameter name : %s.",tuple,fieldName,parameterName));
@@ -282,6 +294,7 @@ public interface QueryValueBuilder {
 	
 	String FORMAT_LEFT_JOIN = "LEFT JOIN %s.%s %s";
 	String FORMAT_CONCAT_CODE_NAME = "CONCAT(%1$s.code,' ',%1$s.name)";
+	String FORMAT_CONCAT_IDENTIFIER_NAME = "CONCAT(%1$s.identifier,' ',%1$s.name)";
 	
 	String FORMAT_TUPLE_FIELD_LIKE_PARAMETER = "LOWER(%s.%s) LIKE LOWER(:%s)";
 	String FORMAT_TUPLE_FIELD_LIKE_PARAMETER_CASE_SENSITIVE = "%s.%s LIKE :%s";
