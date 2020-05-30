@@ -114,7 +114,7 @@ public class Column extends AbstractObject implements Serializable {
 			}
 			if(Boolean.TRUE.equals(MapHelper.readByKey(arguments, FIELD_SHOW_FOOTER))) {
 				if(Value.Type.CURRENCY.equals(column.valueType))
-					column.footerOutputText = OutputText.build(OutputText.FIELD_VALUE,"-",OutputText.FIELD_STYLE,"float:right");
+					column.footerOutputText = OutputText.build(OutputText.FIELD_VALUE,"-",OutputText.FIELD_STYLE,"float:right;font-weight: bold;");
 				else
 					column.footerOutputText = OutputText.build();
 			}

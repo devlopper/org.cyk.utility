@@ -94,6 +94,8 @@ public interface VariableName {
 	/* 		Menu*/
 	
 	String USER_INTERFACE_THEME_MENU_PATH = buildUserInterfaceTheme("menu.path");
+	String USER_INTERFACE_THEME_MENU_IDENTIFIER = buildUserInterfaceTheme("menu.identifier");
+	String USER_INTERFACE_THEME_MENU_IS_DYNAMIC = buildUserInterfaceTheme("menu.is.dynamic");
 	
 	/**/
 	
