@@ -11,6 +11,7 @@ import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
+import org.cyk.utility.__kernel__.object.marker.IdentifiableBusiness;
 import org.cyk.utility.__kernel__.object.marker.IdentifiableSystem;
 import org.cyk.utility.__kernel__.persistence.EntityManagerGetter;
 import org.cyk.utility.__kernel__.value.Value;
@@ -25,9 +26,16 @@ public interface EntityCreator {
 			entityManager = EntityManagerGetter.getInstance().get();
 		if(Boolean.TRUE.equals(arguments.getIsTransactional()))
 			entityManager.getTransaction().begin();
-		for(Object index : arguments.getObjects()) {			
+		for(Object index : arguments.getObjects()) {	
+			//if system identifier is null we compute it
 			if(index instanceof IdentifiableSystem && FieldHelper.readSystemIdentifier(index) == null) {
-				((IdentifiableSystem<String>)index).setSystemIdentifier(UUID.randomUUID().toString());
+				Object identifier;
+				//if business identifier is not null then we assign business identifier to system identifier else we generate one
+				if(index instanceof IdentifiableBusiness && FieldHelper.readBusinessIdentifier(index) != null) {
+					identifier = FieldHelper.readBusinessIdentifier(index);
+				}else
+					identifier = UUID.randomUUID().toString();
+				((IdentifiableSystem<Object>)index).setSystemIdentifier(identifier);
 			}
 			entityManager.persist(index);
 		}

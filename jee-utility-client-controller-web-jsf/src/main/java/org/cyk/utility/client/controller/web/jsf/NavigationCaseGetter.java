@@ -44,9 +44,10 @@ public interface NavigationCaseGetter {
 				for(Map.Entry<String,Set<NavigationCase>> entry : configurableNavigationHandler.getNavigationCases().entrySet()) {
 					if(CollectionHelper.isEmpty(entry.getValue()))
 						continue;
-					for(NavigationCase navigationCase : entry.getValue())
+					for(NavigationCase navigationCase : entry.getValue()) {
 						if(navigationCase.getFromOutcome().equals(outcome))
 							return navigationCase;
+					}
 				}
 			}
 			return null;
