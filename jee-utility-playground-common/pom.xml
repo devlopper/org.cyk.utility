@@ -23,4 +23,11 @@
 			<version>0.1.0</version>
 		</dependency>
 	</dependencies>
+	
+	<repositories>
+		<repository>
+			<id>cyk.repo.repsy.io</id>
+			<url>https://repo.repsy.io/mvn/kycdev/default</url>
+		</repository>
+	</repositories>
 </project>

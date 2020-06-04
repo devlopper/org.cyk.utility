@@ -31,4 +31,10 @@
 		</dependency>
 	</dependencies>
 	
+	<repositories>
+		<repository>
+			<id>cyk.repo.repsy.io</id>
+			<url>https://repo.repsy.io/mvn/kycdev/default</url>
+		</repository>
+	</repositories>
 </project>
