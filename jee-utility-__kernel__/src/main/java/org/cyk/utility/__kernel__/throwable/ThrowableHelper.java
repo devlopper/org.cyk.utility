@@ -69,6 +69,11 @@ public interface ThrowableHelper {
 			throwIllegalArgumentException(name, value);
 	}
 	
+	static void throwIllegalArgumentExceptionIfEmpty(String name, Object value) {
+		if(ValueHelper.isEmpty(value))
+			throwIllegalArgumentException(name, value);
+	}
+	
 	static void throwNotYetImplemented(String name) {
 		throw new java.lang.RuntimeException(name+" "+NOT_YET_IMPLEMENTED_MESSAGE);
 	}

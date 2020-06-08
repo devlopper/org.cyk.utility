@@ -68,6 +68,7 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 	@Override
 	public List<ENTITY> load(int first, int pageSize, String sortField, SortOrder sortOrder,Map<String, Object> filters) {
 		long timestamp = System.currentTimeMillis();
+		list = null;
 		__first__ = first;
 		__pageSize__ = pageSize;
 		__sortField__ = sortField;

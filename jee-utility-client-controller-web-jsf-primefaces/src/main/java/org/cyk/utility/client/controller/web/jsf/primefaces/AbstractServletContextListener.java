@@ -15,11 +15,7 @@ public abstract class AbstractServletContextListener extends org.cyk.utility.cli
 	@Override
 	protected void __initialize__(ServletContext context) {
 		super.__initialize__(context);
-		String primefacesTheme = ConfigurationHelper.getValueAsString(VariableName.USER_INTERFACE_THEME_PRIMEFACES);
-		if(StringHelper.isNotBlank(primefacesTheme)) {
-			context.setInitParameter("primefaces.THEME", primefacesTheme);
-		}
-		__inject__(ApplicationScopeLifeCycleListener.class).initialize(null);
+		initializeFromStatic(context,__getThemeClass__());
 	}
 	
 	@Override
@@ -29,4 +25,12 @@ public abstract class AbstractServletContextListener extends org.cyk.utility.cli
 	
 	/**/
 	
+	public static void initializeFromStatic(ServletContext context,Class<?> themeClass) {
+		org.cyk.utility.client.controller.web.jsf.AbstractServletContextListener.initializeFromStatic(context, themeClass);
+		String primefacesTheme = ConfigurationHelper.getValueAsString(VariableName.USER_INTERFACE_THEME_PRIMEFACES);
+		if(StringHelper.isNotBlank(primefacesTheme)) {
+			context.setInitParameter("primefaces.THEME", primefacesTheme);
+		}
+		__inject__(ApplicationScopeLifeCycleListener.class).initialize(null);
+	}
 }

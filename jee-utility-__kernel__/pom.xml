@@ -291,20 +291,11 @@
 			</build>
 		</profile>
 	</profiles>
-	<!--
-	<distributionManagement>
-		<repository>
-			<id>repsy</id>
-			<name>My Private Maven Repositoty on Repsy</name>
-			<url>https://repo.repsy.io/mvn/kycdev/default</url>
-		</repository>
-	</distributionManagement>
-	-->
 	
 	<repositories>
 		<repository>
-			<id>cyk.repo.repsy.io</id>
-			<url>https://repo.repsy.io/mvn/kycdev/default</url>
+			<id>repository.devkoms.com</id>
+			<url>ftp://devkoms.com/repository/</url>
 		</repository>
 	</repositories>
 </project>

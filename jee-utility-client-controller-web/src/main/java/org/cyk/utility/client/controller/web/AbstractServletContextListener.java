@@ -27,15 +27,9 @@ public abstract class AbstractServletContextListener extends AbstractSystemConte
 	
 	@Override
 	protected void __initialize__(ServletContext context) {
-		SystemNodeClient.DEPLOYMENT.setUniformResourceIdentifierPathRoot(context.getContextPath());
-		org.cyk.utility.__kernel__.identifier.resource.Component.PATH_ROOT = context.getContextPath();		
-		ContextHelper.set(context);
+		initializeFromStatic1(context);
 		super.__initialize__(context);
-		AbstractThemeClassGetterImpl.CLASS_NAME = ConfigurationHelper.getValueAsString(VariableName.USER_INTERFACE_THEME_CLASS_NAME);
-		if(StringHelper.isBlank(AbstractThemeClassGetterImpl.CLASS_NAME))
-			AbstractThemeClassGetterImpl.CLASS = __getThemeClass__();
-		else
-			AbstractThemeClassGetterImpl.CLASS = ClassHelper.getByName(AbstractThemeClassGetterImpl.CLASS_NAME);
+		initializeFromStatic2(__getThemeClass__());
 	}
 	
 	@Override
@@ -50,5 +44,25 @@ public abstract class AbstractServletContextListener extends AbstractSystemConte
 	protected abstract Class<?> __getThemeClass__();
 	
 	/**/
+	
+	public static void initializeFromStatic(ServletContext context,Class<?> themeClass) {
+		initializeFromStatic1(context);
+		AbstractSystemContextListener.initializeFromStatic();
+		initializeFromStatic2(themeClass);
+	}
+	
+	public static void initializeFromStatic1(ServletContext context) {
+		SystemNodeClient.DEPLOYMENT.setUniformResourceIdentifierPathRoot(context.getContextPath());
+		org.cyk.utility.__kernel__.identifier.resource.Component.PATH_ROOT = context.getContextPath();		
+		ContextHelper.set(context);
+	}
+	
+	public static void initializeFromStatic2(Class<?> themeClass) {
+		AbstractThemeClassGetterImpl.CLASS_NAME = ConfigurationHelper.getValueAsString(VariableName.USER_INTERFACE_THEME_CLASS_NAME);
+		if(StringHelper.isBlank(AbstractThemeClassGetterImpl.CLASS_NAME))
+			AbstractThemeClassGetterImpl.CLASS = themeClass;
+		else
+			AbstractThemeClassGetterImpl.CLASS = ClassHelper.getByName(AbstractThemeClassGetterImpl.CLASS_NAME);
+	}
 	
 }

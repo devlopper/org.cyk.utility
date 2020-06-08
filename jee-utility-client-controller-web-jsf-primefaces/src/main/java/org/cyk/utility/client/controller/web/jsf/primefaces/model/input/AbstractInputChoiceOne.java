@@ -64,7 +64,7 @@ public class AbstractInputChoiceOne extends AbstractInputChoice<Object> implemen
 	
 	@SuppressWarnings("unchecked")
 	public AbstractInputChoiceOne select(Object choice) {
-		if(CollectionHelper.isEmpty(choices))
+		if(choice != null && CollectionHelper.isEmpty(choices))
 			return this;
 		((Listener<Object>)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).select(this, choice);
 		return this;

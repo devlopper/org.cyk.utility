@@ -12,12 +12,13 @@ public abstract class AbstractSystemContextListenerImpl<CONTEXT> extends Abstrac
 	public SystemContextListener<CONTEXT> initialize(CONTEXT context) {
 		__logInfo__("Context initialization running.");
 		__initialize__(context);
-		ProxyUniformResourceIdentifierGetter.UNIFORM_RESOURCE_IDENTIFIER_STRING.initialize();
 		__logInfo__("Context initialization done.");
 		return this;
 	}
 	
-	protected void __initialize__(CONTEXT context) {}
+	protected void __initialize__(CONTEXT context) {
+		initializeFromStatic();
+	}
 	
 	@Override
 	public SystemContextListener<CONTEXT> destroy(CONTEXT context) {
@@ -29,4 +30,7 @@ public abstract class AbstractSystemContextListenerImpl<CONTEXT> extends Abstrac
 	
 	protected void __destroy__(CONTEXT context) {}
 
+	public static void initializeFromStatic() {
+		ProxyUniformResourceIdentifierGetter.UNIFORM_RESOURCE_IDENTIFIER_STRING.initialize();
+	}
 }

@@ -37,6 +37,8 @@ public interface ValueHelper {
 			return((Collection<?>)value).isEmpty();
 		if(value instanceof CollectionInstance<?>)
 			return ((CollectionInstance<?>)value).isEmpty();
+		if(value.getClass().isArray())
+			return ((Object[])value).length == 0;
 		return Boolean.FALSE;
 	}
 	
