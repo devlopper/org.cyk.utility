@@ -37,7 +37,6 @@
 		<net.sf.jasperreports.jasperreports.version>${net.sf.jasper.report.version}</net.sf.jasperreports.jasperreports.version>
 		<net.sf.jasperreports.jasperreports-fonts.version>${net.sf.jasper.report.version}</net.sf.jasperreports.jasperreports-fonts.version>
 		<net.sf.barcode4j.barcode4j.version>2.1</net.sf.barcode4j.barcode4j.version>
-		<com.jaspersoft.jrs-rest-java-client.version>7.2.0</com.jaspersoft.jrs-rest-java-client.version>
 		
 		<org.elasticsearch.version>7.6.0</org.elasticsearch.version>
 		<org.elasticsearch.elasticsearch.version>${org.elasticsearch.version}</org.elasticsearch.elasticsearch.version>
@@ -202,13 +201,7 @@
 			<version>${com.google.zxing.javase.version}</version>
 		</dependency>
 		
-		<!-- report -->
-		<dependency>
-			<groupId>com.jaspersoft</groupId>
-			<artifactId>jrs-rest-java-client</artifactId>
-			<version>${com.jaspersoft.jrs-rest-java-client.version}</version>
-			<scope>provided</scope>
-		</dependency>
+		<!-- Test -->
 
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -300,7 +293,7 @@
 			</build>
 		</profile>
 	</profiles>
-	
+	<!--
 	<repositories>
 		<repository>
 			<id>jaspersoft-clients-snapshots</id>
@@ -313,4 +306,5 @@
 			<url>ftp://devkoms.com/repository/</url>
 		</repository>
 	</repositories>
+	-->
 </project>
