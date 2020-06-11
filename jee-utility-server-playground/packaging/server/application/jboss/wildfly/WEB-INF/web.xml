@@ -30,5 +30,19 @@
 		<param-name>cyk.variable.swagger.bean.config.resource.package</param-name>
 		<param-value>org.cyk.utility.__kernel__,org.cyk.utility.server.representation,org.cyk.utility.server.representation.impl,org.cyk.utility.playground.server.representation.api</param-value>
 	</context-param>
-		
+	
+	<context-param>
+		<param-name>cyk.variable.jasper.enabled</param-name>
+		<param-value>${cyk.variable.jasper.enabled}</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>cyk.variable.jasper.server.credential.username</param-name>
+		<param-value>${cyk.variable.jasper.server.credential.username}</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>cyk.variable.jasper.server.credential.password</param-name>
+		<param-value>${cyk.variable.jasper.server.credential.password}</param-value>
+	</context-param>
 </web-app>

@@ -57,6 +57,15 @@ public interface VariableName {
 	String KEYCLOAK_CREDENTIAL_USERNAME = buildKeycloak("credential.username");
 	String KEYCLOAK_CREDENTIAL_PASSWORD = buildKeycloak("credential.password");
 	
+	/* Jasper */
+	static String buildJasper(String string) {
+		return build("jasper."+string);
+	}
+	String JASPER_ENABLED = buildJasper("enabled");
+	String JASPER_SERVER_URL = buildJasper("server.url");
+	String JASPER_SERVER_CREDENTIAL_USERNAME = buildJasper("server.credential.username");
+	String JASPER_SERVER_CREDENTIAL_PASSWORD = buildJasper("server.credential.password");
+	
 	/* Stream Distributed*/
 	
 	String STREAM_DISTRIBUTED_DELEGATE_SYSTEM_IS_ENABLE = buildSystem("stream.distributed.delegate.system.is.enable");

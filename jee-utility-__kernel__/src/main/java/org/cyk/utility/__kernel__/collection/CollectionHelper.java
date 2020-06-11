@@ -6,6 +6,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -501,6 +502,17 @@ public interface CollectionHelper {
 				throw new RuntimeException("cannot insert at index "+index+" in collection of size "+collection.size());
 		}
 		return collection;
+	}
+	
+	static Boolean contains(Enumeration<?> enumeration, Object element) {
+		if(enumeration == null)
+			return Boolean.FALSE;
+		while(enumeration.hasMoreElements()){
+			Object object = enumeration.nextElement();
+			if((object == null && element == null) || (object != null && object.equals(element)))
+				return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
 	}
 	
 	static Boolean contains(Collection<?> collection, Object element) {
