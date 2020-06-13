@@ -29,6 +29,12 @@ public interface QueryExecutor {
 		return executeReadMany(resultClass, new QueryExecutorArguments().setQuery(QueryGetter.getInstance().getBySelect(resultClass)));
 	}
 	
+	default <T> Collection<T> executeReadMany(Class<T> resultClass,String queryIdentifier,Object...filterFieldsValues) {
+		if(resultClass == null)
+			throw new RuntimeException("Result class is required");
+		return executeReadMany(resultClass, new QueryExecutorArguments().setQueryFromIdentifier(queryIdentifier).addFilterFieldsValues(filterFieldsValues));
+	}
+	
 	default <T> T executeReadOne(Class<T> resultClass,QueryExecutorArguments arguments) {
 		Collection<T> collection = executeReadMany(resultClass, arguments);
 		if(CollectionHelper.getSize(collection) > 1)

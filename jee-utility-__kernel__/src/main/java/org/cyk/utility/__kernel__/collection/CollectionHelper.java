@@ -6,6 +6,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -586,5 +588,23 @@ public interface CollectionHelper {
 		return getElementsNotIn(collection1, collection2, listOf(fieldNames));
 	}
 
-	
+	static <ELEMENT> void sortByBusinessIdentifier(List<ELEMENT> elements) {
+		Collections.sort(elements, new Comparator<ELEMENT>() {
+			@Override
+			public int compare(ELEMENT o1, ELEMENT o2) {
+				Object v1 = o1 == null ? null : FieldHelper.readBusinessIdentifier(o1);
+				Object v2 = o2 == null ? null : FieldHelper.readBusinessIdentifier(o2);
+				if(v1 == null)
+					if(v2 == null)
+						return 0;
+					else
+						return -1;
+				else
+					if(v2 == null)
+						return 1;
+					else
+						return v1.toString().compareTo(v2.toString());
+			}
+		});
+	}
 }

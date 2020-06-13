@@ -52,6 +52,14 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 	private Class<?> __resultClass__;
 	private Collection<?> __objects__;
 	
+	public QueryExecutorArguments setQueryFromIdentifier(String identifier) {
+		if(StringHelper.isBlank(identifier))
+			query = null;
+		else
+			query = QueryGetter.getInstance().get(identifier);
+		return this;
+	}
+	
 	public QueryExecutorArguments prepare(Class<?> resultClass) {
 		if(query != null) {
 			if(query.getIntermediateResultClass() == null)
@@ -149,6 +157,14 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 		getFilter(Boolean.TRUE).addField(fieldName, fieldValue);
 		return this;
 	}
+	
+	public QueryExecutorArguments addFilterFieldsValues(Object...filterFieldsValues) {
+		if(ArrayHelper.isEmpty(filterFieldsValues))
+			return this;
+		for(Integer index = 0 ; index < filterFieldsValues.length ; index = index + 2)
+			addFilterField((String)filterFieldsValues[index], filterFieldsValues[index+1]);	
+		return this;
+	}
 
 	public Object getFilterFieldValue(Collection<String> paths) {
 		if(filter == null)
@@ -241,6 +257,8 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 			strings.add("COL="+collectionable);
 		return StringHelper.concatenate(strings, " ");
 	}
+	
+	/**/
 	
 	/**/
 	
