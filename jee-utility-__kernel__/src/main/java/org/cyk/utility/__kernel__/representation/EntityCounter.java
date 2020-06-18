@@ -1,6 +1,7 @@
 package org.cyk.utility.__kernel__.representation;
 
 import java.io.Serializable;
+import java.util.logging.Level;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -10,10 +11,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.cyk.utility.__kernel__.Helper;
-import org.cyk.utility.__kernel__.log.LogHelper;
-import org.cyk.utility.__kernel__.mapping.MappingHelper;
-import org.cyk.utility.__kernel__.object.AbstractObject;
+import org.cyk.utility.__kernel__.log.LogMessages;
 import org.cyk.utility.__kernel__.persistence.query.QueryExecutorArguments;
+import org.cyk.utility.__kernel__.representation.Arguments.Internal;
 import org.cyk.utility.__kernel__.rest.ResponseBuilder;
 import org.cyk.utility.__kernel__.value.Value;
 
@@ -33,8 +33,43 @@ public interface EntityCounter {
 	
 	/**/
 	
-	public abstract static class AbstractImpl extends AbstractObject implements EntityCounter,Serializable {
+	public abstract static class AbstractImpl extends AbstractExecutionImpl implements EntityCounter,Serializable {
 		
+		@Override
+		protected Internal instantiateInternal(Arguments arguments) {
+			return new Arguments.Internal(arguments, EntityCounter.class);
+		}
+		
+		@Override
+		protected QueryExecutorArguments instantiateQueryExecutorArguments(Arguments arguments) {
+			QueryExecutorArguments queryExecutorArguments = super.instantiateQueryExecutorArguments(arguments);
+			if(queryExecutorArguments.getIsResultProcessable() == null)
+				queryExecutorArguments.setIsResultProcessable(Boolean.TRUE);
+			return queryExecutorArguments;
+		}
+		
+		@Override
+		protected void __execute__(Arguments arguments, Internal internal,QueryExecutorArguments queryExecutorArguments, LogMessages logMessages,ResponseBuilder.Arguments responseBuilderArguments) {
+			Long count = org.cyk.utility.__kernel__.persistence.query.EntityCounter.getInstance().count(internal.persistenceEntityClass,queryExecutorArguments);
+			responseBuilderArguments.setEntity(count);
+		}
+		
+		@Override
+		protected Boolean getLoggable() {
+			return LOGGABLE;
+		}
+		
+		@Override
+		protected Level getLogLevel() {
+			return LOG_LEVEL;
+		}
+		
+		@Override
+		public Response count(Arguments arguments) {
+			return execute(arguments);
+		}
+		
+		/*
 		@Override
 		public Response count(Arguments arguments) {
 			if(arguments == null)
@@ -56,6 +91,10 @@ public interface EntityCounter {
 				return ResponseBuilder.getInstance().build(exception);
 			}
 		}
+		*/
+		
+		public static Boolean LOGGABLE = Boolean.FALSE;
+		public static Level LOG_LEVEL = Level.FINEST;
 	}
 	
 	/**/

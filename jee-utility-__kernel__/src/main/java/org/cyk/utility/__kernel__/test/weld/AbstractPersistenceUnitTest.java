@@ -46,7 +46,7 @@ public abstract class AbstractPersistenceUnitTest extends AbstractWeldUnitTest {
 		if(CollectionHelper.isEmpty(classes))
 			return;
 		classes.forEach(klass -> {
-			assertThat(EntityCounter.getInstance().count(klass)).as("count "+klass.getSimpleName()).isGreaterThan(0l);
+			assertThat(EntityCounter.getInstance().count(klass)).as("count "+klass.getSimpleName()+" is greater then zero").isGreaterThan(0l);
 		});
 	}
 	
@@ -54,5 +54,19 @@ public abstract class AbstractPersistenceUnitTest extends AbstractWeldUnitTest {
 		if(ArrayHelper.isEmpty(classes))
 			return;
 		assertCountIsGreaterThanZero(CollectionHelper.listOf(classes));
+	}
+	
+	public  void assertCountIsNotNull(Collection<Class<?>> classes){
+		if(CollectionHelper.isEmpty(classes))
+			return;
+		classes.forEach(klass -> {
+			assertThat(EntityCounter.getInstance().count(klass)).as("count "+klass.getSimpleName()+" is not null").isNotNull();
+		});
+	}
+	
+	public  void assertCountIsNotNull(Class<?>...classes){
+		if(ArrayHelper.isEmpty(classes))
+			return;
+		assertCountIsNotNull(CollectionHelper.listOf(classes));
 	}
 }

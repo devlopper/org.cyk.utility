@@ -104,4 +104,7 @@ public interface ResponseHelper {
 	String HEADER_ENTITY_IDENTIFIER_SYSTEM = "entity-identifier-system";
 	String HEADER_ENTITY_IDENTIFIER_BUSINESS = "entity-identifier-business";	
 	String HEADER_X_TOTAL_COUNT = "X-Total-Count";
+	String HEADER_PROCESSING_START_TIME = "processing-start-time";
+	String HEADER_PROCESSING_END_TIME = "processing-end-time";
+	String HEADER_PROCESSING_DURATION = "processing-duration";
 }

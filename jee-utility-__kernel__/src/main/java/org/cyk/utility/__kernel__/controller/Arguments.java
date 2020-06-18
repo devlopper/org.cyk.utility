@@ -8,7 +8,9 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.cyk.utility.__kernel__.TypeHelper;
+import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.identifier.resource.ProxyGetter;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.mapping.MappingHelper;
@@ -40,6 +42,7 @@ public class Arguments<T> extends AbstractObject implements Serializable {
 	private Collection<T> existingCollection;
 	private Boolean isNotBelogingToProvidedCollectionDeletable;
 	private Boolean countable;
+	private Boolean loggableAsInfo;
 	
 	Class<T> __controllerEntityClass__;
 	Class<?> __representationEntityClass__;
@@ -49,6 +52,54 @@ public class Arguments<T> extends AbstractObject implements Serializable {
 	Response __response__;
 	Object __responseEntity__;
 	RuntimeException __runtimeException__;
+	
+	public Collection<T> getCreatables(Boolean injectIfNull) {
+		if(creatables == null && Boolean.TRUE.equals(injectIfNull))
+			creatables = new ArrayList<>();
+		return creatables;
+	}
+	
+	public Collection<T> getUpdatables(Boolean injectIfNull) {
+		if(updatables == null && Boolean.TRUE.equals(injectIfNull))
+			updatables = new ArrayList<>();
+		return updatables;
+	}
+	
+	public Collection<T> getDeletables(Boolean injectIfNull) {
+		if(deletables == null && Boolean.TRUE.equals(injectIfNull))
+			deletables = new ArrayList<>();
+		return deletables;
+	}
+	
+	public Arguments<T> addCreatablesOrUpdatables(Collection<T> collection) {
+		if(CollectionHelper.isEmpty(collection))
+			return this;
+		for(T index : collection)
+			if(FieldHelper.readSystemIdentifier(index) == null)	
+				getCreatables(Boolean.TRUE).add(index);
+			else
+				getUpdatables(Boolean.TRUE).add(index);
+		return this;
+	}
+	
+	public Arguments<T> addCreatablesOrUpdatables(T...elements) {
+		if(ArrayHelper.isEmpty(elements))
+			return this;
+		return addCreatablesOrUpdatables(CollectionHelper.listOf(elements));
+	}
+	
+	public Arguments<T> addDeletables(Collection<T> collection) {
+		if(CollectionHelper.isEmpty(collection))
+			return this;
+		getDeletables(Boolean.TRUE).addAll(collection);
+		return this;
+	}
+	
+	public Arguments<T> addDeletables(T...elements) {
+		if(ArrayHelper.isEmpty(elements))
+			return this;
+		return addDeletables(CollectionHelper.listOf(elements));
+	}
 	
 	public void prepare(Class<T> controllerEntityClass,Class<?> representationClass) {
 		if(this.controllerEntityClass == null)
@@ -99,6 +150,7 @@ public class Arguments<T> extends AbstractObject implements Serializable {
 		
 		if(StringHelper.isBlank(__representationArguments__.getRepresentationEntityClassName()))
 			__representationArguments__.setRepresentationEntityClass(__representationEntityClass__);
+		__representationArguments__.setLoggableAsInfo(loggableAsInfo);
 	}
 	
 	public <RESPONSE_ENTITY> void finalise(Response response) {

@@ -19,7 +19,10 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 
 	@Override
 	public void __initialize__(Object object) {
-		EntityManagerFactoryGetterImpl.ENTITY_MANAGER_FACTORY = DependencyInjection.inject(EntityManagerFactory.class);
+		if(EntityManagerFactoryGetterImpl.ENTITY_MANAGER_FACTORY == null) {
+			LogHelper.logInfo("Injecting Entity Manager Factory Instance", getClass());
+			EntityManagerFactoryGetterImpl.ENTITY_MANAGER_FACTORY = DependencyInjection.inject(EntityManagerFactory.class);
+		}
 		LogHelper.logInfo("Entity Manager Factory Instance is : "+EntityManagerFactoryGetterImpl.ENTITY_MANAGER_FACTORY,getClass());
 		QueryHelper.getQueries().setIsRegisterableToEntityManager(Boolean.TRUE);
 		DependencyInjection.setQualifierClassTo(Persistence.Class.class, InstanceGetter.class);

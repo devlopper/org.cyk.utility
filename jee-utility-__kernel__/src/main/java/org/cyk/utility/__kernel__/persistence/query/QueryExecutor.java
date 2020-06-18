@@ -20,6 +20,7 @@ import org.cyk.utility.__kernel__.persistence.EntityManagerGetter;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.value.Value;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 
 public interface QueryExecutor {
 
@@ -61,7 +62,7 @@ public interface QueryExecutor {
 			validatePreConditions(resultClass, arguments);
 			arguments.prepare(resultClass);
 			TypedQuery<?> typedQuery = __getTypedQuery__(arguments.get__resultClass__(), arguments.getQuery(),arguments.get__parameters__(),arguments.getFirstTupleIndex()
-					,arguments.getNumberOfTuples(),arguments.get__hints__(),arguments.get__entityManager__());
+					,arguments.getNumberOfTuples(),arguments.get__hints__(),arguments.get__entityManager__(),LOGGABLE,ValueHelper.defaultToIfNull(arguments.getLoggingLevel(),LOG_LEVEL));
 			Collection<?> result = typedQuery.getResultList();
 			Collection<T> collection;
 			if(CollectionHelper.isEmpty(result))
@@ -122,8 +123,8 @@ public interface QueryExecutor {
 				throw new RuntimeException("query is required");
 		}
 		
-		protected <T> TypedQuery<T> __getTypedQuery__(Class<T> resultClass, Query query,Map<Object,Object> parameters,Integer firstTupleIndex,Integer numberOfTuples,Map<String,Object> hints,EntityManager entityManager) {
-			if(Boolean.TRUE.equals(LOGGABLE)) {
+		protected <T> TypedQuery<T> __getTypedQuery__(Class<T> resultClass, Query query,Map<Object,Object> parameters,Integer firstTupleIndex,Integer numberOfTuples,Map<String,Object> hints,EntityManager entityManager,Boolean loggable,java.util.logging.Level loggingLevel) {
+			if(Boolean.TRUE.equals(loggable)) {
 				Collection<String> strings = new ArrayList<>();
 				if(StringHelper.isNotBlank(query.getIdentifier()))
 					strings.add(query.getIdentifier());
@@ -137,7 +138,7 @@ public interface QueryExecutor {
 					strings.add("Page("+firstTupleIndex+","+numberOfTuples+")");
 				if(MapHelper.isNotEmpty(hints))
 					strings.add(hints.toString());
-				LogHelper.log(StringHelper.concatenate(strings,">"),LOG_LEVEL,getClass());
+				LogHelper.log(StringHelper.concatenate(strings,">"),loggingLevel,getClass());
 			}
 			if(resultClass == null)
 				throw new IllegalArgumentException("result class is required");

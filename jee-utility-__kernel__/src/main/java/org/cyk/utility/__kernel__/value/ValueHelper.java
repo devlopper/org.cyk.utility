@@ -2,6 +2,7 @@ package org.cyk.utility.__kernel__.value;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.Map;
 
 import org.cyk.utility.__kernel__.collection.CollectionInstance;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
@@ -37,6 +38,8 @@ public interface ValueHelper {
 			return((Collection<?>)value).isEmpty();
 		if(value instanceof CollectionInstance<?>)
 			return ((CollectionInstance<?>)value).isEmpty();
+		if(value instanceof Map<?,?>)
+			return ((Map<?,?>)value).isEmpty();
 		if(value.getClass().isArray())
 			return ((Object[])value).length == 0;
 		return Boolean.FALSE;

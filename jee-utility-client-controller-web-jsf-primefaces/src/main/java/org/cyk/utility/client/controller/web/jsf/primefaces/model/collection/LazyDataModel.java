@@ -14,6 +14,7 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.controller.Arguments;
 import org.cyk.utility.__kernel__.controller.EntityReader;
 import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.identifier.resource.ParameterName;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
@@ -23,8 +24,10 @@ import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.rest.ResponseHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.value.ValueConverter;
 import org.cyk.utility.client.controller.ControllerEntity;
 import org.cyk.utility.client.controller.ControllerLayer;
+import org.cyk.utility.client.controller.web.WebController;
 import org.primefaces.model.SortOrder;
 
 import lombok.Getter;
@@ -45,6 +48,8 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 
 	private Boolean readerUsable;
 	private Boolean isCountEqualsListSize;
+	
+	private Boolean loggableAsInfo = ValueConverter.getInstance().convertToBoolean(WebController.getInstance().getRequestParameter(ParameterName.LOGGABLE_AS_INFO));
 	
 	private int __first__,__pageSize__;
 	private Integer __count__;
@@ -152,13 +157,15 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 			
 			@Override
 			public Arguments<T> instantiateArguments(LazyDataModel<T> lazyDataModel) {
+				//System.out.println("LazyDataModel.Listener.AbstractImpl.instantiateArguments() LOGGABLE AS INFO : "+lazyDataModel.loggableAsInfo);
 				Arguments<T> arguments = new Arguments<T>()
-						.setRepresentationArguments(new org.cyk.utility.__kernel__.representation.Arguments().setQueryExecutorArguments(new QueryExecutorArguments.Dto()
-								.setQueryIdentifier(lazyDataModel.readQueryIdentifier)
-								.setFirstTupleIndex(lazyDataModel.__first__)
-								.setNumberOfTuples(lazyDataModel.__pageSize__)
-								.setFilter(lazyDataModel.__filter__))
-								.setCountable(Boolean.TRUE));
+					.setRepresentationArguments(new org.cyk.utility.__kernel__.representation.Arguments().setQueryExecutorArguments(new QueryExecutorArguments.Dto()
+						.setQueryIdentifier(lazyDataModel.readQueryIdentifier)
+						.setFirstTupleIndex(lazyDataModel.__first__)
+						.setNumberOfTuples(lazyDataModel.__pageSize__)
+						.setFilter(lazyDataModel.__filter__))
+						.setCountable(Boolean.TRUE))
+						.setLoggableAsInfo(lazyDataModel.loggableAsInfo);
 				return arguments;
 			}
 			

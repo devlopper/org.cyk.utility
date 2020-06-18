@@ -26,6 +26,7 @@ public class Arguments extends AbstractObject implements Serializable {
 	private String persistenceEntityClassName;
 	private QueryExecutorArguments.Dto queryExecutorArguments;
 	private Boolean countable;
+	private Boolean loggableAsInfo;
 	private MapperSourceDestination.Arguments.Dto mappingArguments;
 	
 	public Arguments setRepresentationEntityClass(Class<?> entityClass) {

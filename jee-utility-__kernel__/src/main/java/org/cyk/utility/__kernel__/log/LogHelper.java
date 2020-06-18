@@ -160,5 +160,19 @@ public interface LogHelper {
 			return;
 		log(string,level,klass);
 	}
+
+	/**/
 	
+	static void log(LogMessages messages,Class<?> klass) {
+		if(messages == null || !Boolean.TRUE.equals(messages.getLoggable()))
+			return;
+		String message = messages.getMessagesAsOne();
+		if(StringHelper.isBlank(message))
+			return;
+		LogHelper.log(message,messages.getLevel() == null ? Level.WARNING : Level.INFO,klass);		
+	}
+	
+	static void log(LogMessages messages) {
+		log(messages, messages.getClass());
+	}
 }

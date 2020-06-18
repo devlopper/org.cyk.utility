@@ -13,6 +13,7 @@ import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.TypeHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.Message;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.value.Value;
@@ -66,8 +67,14 @@ public interface ResponseBuilder {
 				throw new IllegalArgumentException("arguments are required");
 			javax.ws.rs.core.Response.ResponseBuilder responseBuilder = Response.status(__buildStatus__(arguments));
 			responseBuilder.entity(__buildEntity__(arguments));
-			if(arguments.xTotalCount != null)
-				responseBuilder.header(ResponseHelper.HEADER_X_TOTAL_COUNT, arguments.xTotalCount);
+			if(arguments.processingStartTime != null && arguments.processingEndTime == null)
+				arguments.processingEndTime = System.currentTimeMillis();
+			if(arguments.processingStartTime != null && arguments.processingEndTime != null && arguments.processingDuration == null)
+				arguments.processingDuration = arguments.processingEndTime - arguments.processingStartTime;
+			addHeader(responseBuilder, ResponseHelper.HEADER_X_TOTAL_COUNT, arguments.xTotalCount);
+			addHeader(responseBuilder, ResponseHelper.HEADER_PROCESSING_START_TIME, arguments.processingStartTime);
+			addHeader(responseBuilder, ResponseHelper.HEADER_PROCESSING_END_TIME, arguments.processingEndTime);
+			addHeader(responseBuilder, ResponseHelper.HEADER_PROCESSING_DURATION, arguments.processingDuration);
 			return responseBuilder.build();
 		}
 		
@@ -109,6 +116,7 @@ public interface ResponseBuilder {
 		private Collection<Message.Dto> messageDtos;
 		private Collection<?> entities;
 		private Long xTotalCount;
+		private Long processingStartTime,processingEndTime,processingDuration;
 		
 		public Arguments(RuntimeException.Dto runtimeException,Response.Status status) {
 			this.runtimeException = runtimeException;
@@ -118,6 +126,12 @@ public interface ResponseBuilder {
 		public Arguments(RuntimeException.Dto runtimeException) {
 			this(runtimeException,Response.Status.BAD_REQUEST);
 		}
+	}
+	
+	static void addHeader(javax.ws.rs.core.Response.ResponseBuilder responseBuilder,String name,Object value) {
+		if(StringHelper.isBlank(name) || value == null)
+			return;
+		responseBuilder.header(name, value);
 	}
 	
 	/**/

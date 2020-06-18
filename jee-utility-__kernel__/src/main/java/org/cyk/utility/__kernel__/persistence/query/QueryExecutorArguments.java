@@ -52,6 +52,8 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 	private Class<?> __resultClass__;
 	private Collection<?> __objects__;
 	
+	private java.util.logging.Level loggingLevel;
+	
 	public QueryExecutorArguments setQueryFromIdentifier(String identifier) {
 		if(StringHelper.isBlank(identifier))
 			query = null;
@@ -270,6 +272,7 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 		private Integer numberOfTuples;
 		private Boolean isResultCachable;
 		private Boolean collectionable;
+		private Boolean loggableAsInfo;
 		
 		public Filter.Dto getFilter(Boolean injectIfNull) {
 			if(filter == null && Boolean.TRUE.equals(injectIfNull))
@@ -312,6 +315,8 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 					destination.setQuery(QueryGetter.getInstance().get(source.getQueryIdentifier()));
 				if(destination.getQuery() == null)
 					destination.setQuery(new Query().setIdentifier(source.getQueryIdentifier()));
+				if(Boolean.TRUE.equals(source.getLoggableAsInfo()))
+					destination.setLoggingLevel(java.util.logging.Level.INFO);
 			}
 			
 			public Filter.Dto getFilterDto(Filter filter) {

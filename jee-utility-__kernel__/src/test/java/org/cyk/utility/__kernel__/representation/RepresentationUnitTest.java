@@ -25,6 +25,8 @@ import org.cyk.utility.__kernel__.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
 import org.cyk.utility.__kernel__.rest.ResponseHelper;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.__kernel__.variable.VariableHelper;
+import org.cyk.utility.__kernel__.variable.VariableName;
 import org.junit.jupiter.api.Test;
 
 public class RepresentationUnitTest extends AbstractWeldUnitTest {
@@ -77,10 +79,17 @@ public class RepresentationUnitTest extends AbstractWeldUnitTest {
 		__assertReadMany__(EntityReader.getInstance().read(new Arguments().setRepresentationEntityClass(EmployeeDto.class)), "1","2");
 	}
 	
+	@Test
+	public void employee_withTuple_many_read_all_logged(){		
+		EntityCreator.getInstance().createManyInTransaction(new Employee("1","1","1"),new Employee("2","2","1"));		
+		__assertReadMany__(EntityReader.getInstance().read(new Arguments().setRepresentationEntityClass(EmployeeDto.class).setLoggableAsInfo(Boolean.TRUE)), "1","2");
+	}
+	
 	/* read by system identifier */
 	
 	@Test
 	public void employee_withoutTuple_read_bySystemIdentifiers(){		
+		VariableHelper.write(VariableName.SYSTEM_LOGGING_THROWABLE_PRINT_STACK_TRACE, Boolean.TRUE);
 		EntityCreator.getInstance().createManyInTransaction(new Employee("1","1","1"),new Employee("2","2","1"));
 		__assertReadMany__(EntityReader.getInstance().read(new Arguments().setRepresentationEntityClass(EmployeeDto.class)
 				.setQueryExecutorArguments(

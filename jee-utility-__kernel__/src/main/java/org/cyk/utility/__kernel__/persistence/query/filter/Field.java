@@ -143,7 +143,7 @@ public class Field extends AbstractObject implements Serializable {
 							else if(Value.Dto.Type.STRING.equals(valueDto.getType()))
 								__type__ = new ArrayList<String>(){private static final long serialVersionUID = 1L;}.getClass().getGenericSuperclass();
 							else
-								__type__ = new ArrayList<String>(){private static final long serialVersionUID = 1L;}.getClass().getGenericSuperclass();	
+								__type__ = new ArrayList<String>(){private static final long serialVersionUID = 1L;}.getClass().getGenericSuperclass();
 							collection = JsonbBuilder.create().fromJson(valueDto.getValue(), __type__);
 						}
 						value = collection;
