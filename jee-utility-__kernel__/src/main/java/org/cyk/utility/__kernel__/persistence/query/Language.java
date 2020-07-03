@@ -1,7 +1,9 @@
 package org.cyk.utility.__kernel__.persistence.query;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
+import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
 import org.cyk.utility.__kernel__.computation.LogicalOperator;
@@ -28,15 +30,62 @@ public interface Language {
 			ThrowableHelper.throwIllegalArgumentExceptionIfBlank("select", select);
 			return String.format(SELECT, select);
 		}
+		
+		static String concat(String tupleName,Collection<String> attributesNames) {
+			if(StringHelper.isBlank(tupleName) || CollectionHelper.isEmpty(attributesNames))
+				return null;
+			if(CollectionHelper.getSize(attributesNames) < 2)
+				throw new IllegalArgumentException("At least two(2) attributes names are required");
+			Collection<String> fields = attributesNames.stream().map(attributeName -> FieldHelper.join(tupleName,attributeName)).collect(Collectors.toList());
+			return String.format(CONCAT, StringHelper.concatenate(fields,",' ',"));
+		}
+		
+		static String concat(String tupleName,String...attributesNames) {
+			if(StringHelper.isBlank(tupleName) || ArrayHelper.isEmpty(attributesNames))
+				return null;
+			return concat(tupleName, CollectionHelper.listOf(attributesNames));
+		}
+		
+		static String concatCodeName(Collection<String> tuplesNames) {
+			if(CollectionHelper.isEmpty(tuplesNames))
+				return null;
+			return StringHelper.concatenate(tuplesNames.stream().map(tupleName ->  String.format(CONCATENATE_CODE_NAME, tupleName)).collect(Collectors.toList()),",");
+		}
+		
 		String SELECT = "SELECT %s";
+		String CONCAT = "CONCAT (%s)";
+		String CONCATENATE_CODE_NAME = "CONCAT(%1$s.code,' ',%1$s.name)";
 	}
 	
 	public static interface From {
-		static String of(String from) {
+		static String of(Collection<String> strings) {
+			ThrowableHelper.throwIllegalArgumentExceptionIfBlank("from", strings);
+			String from = StringHelper.concatenate(strings, " ");
 			ThrowableHelper.throwIllegalArgumentExceptionIfBlank("from", from);
 			return String.format(FROM, from);
 		}
+		
+		static String of(String...strings) {
+			ThrowableHelper.throwIllegalArgumentExceptionIfEmpty("from", strings);			
+			return of(CollectionHelper.listOf(strings));
+		}
+		
+		static String innerJoin(String tupleName,String variableName,String fieldName,String joinedVariableName,String joinedFieldName) {
+			return String.format(INNER_JOIN, tupleName,variableName,fieldName,joinedVariableName,joinedFieldName);
+		}
+		
+		static String join(String tupleName,String variableName,String fieldName,String joinedVariableName,String joinedFieldName) {
+			return innerJoin(tupleName, variableName, fieldName, joinedVariableName, joinedFieldName);
+		}
+		
+		static String leftJoin(String tupleName,String variableName,String fieldName,String joinedVariableName,String joinedFieldName) {
+			return String.format(LEFT_JOIN, tupleName,variableName,fieldName,joinedVariableName,joinedFieldName);
+		}
+		
 		String FROM = "FROM %s";
+		String JOIN = "JOIN %1$s %2$s ON %2$s.%3$s = %4$s.%5$s";
+		String INNER_JOIN = "INNER "+JOIN;
+		String LEFT_JOIN = "LEFT "+JOIN;
 	}
 	
 	public static interface Where {

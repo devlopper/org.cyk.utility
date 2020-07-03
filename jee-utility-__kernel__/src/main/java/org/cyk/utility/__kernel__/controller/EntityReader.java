@@ -7,6 +7,7 @@ import javax.ws.rs.core.Response;
 
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
+import org.cyk.utility.__kernel__.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.value.Value;
 
@@ -18,6 +19,14 @@ public interface EntityReader {
 		Arguments<ENTITY> arguments = new Arguments<ENTITY>();
 		arguments.setControllerEntityClass(controllerEntityClass);
 		return readMany(controllerEntityClass, arguments);
+	}
+	
+	default <ENTITY> Collection<ENTITY> readMany(Class<ENTITY> controllerEntityClass,String queryIdentifier,Object...filterFieldsValues) {
+		if(controllerEntityClass == null)
+			throw new RuntimeException("controller entity class is required");
+		return readMany(controllerEntityClass, new Arguments<ENTITY>().setControllerEntityClass(controllerEntityClass)
+				.setRepresentationArguments(new org.cyk.utility.__kernel__.representation.Arguments()
+				.setQueryExecutorArguments(new QueryExecutorArguments.Dto().setQueryIdentifier(queryIdentifier).addFilterFieldsValues(filterFieldsValues))));
 	}
 	
 	<ENTITY> ENTITY readOne(Class<ENTITY> controllerEntityClass,Arguments<ENTITY> arguments);

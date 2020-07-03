@@ -14,7 +14,10 @@ import javax.ws.rs.core.Response.Status;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.klass.PersistableClassesGetter;
 import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
+import org.cyk.utility.__kernel__.representation.Arguments;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
+import org.cyk.utility.__kernel__.variable.VariableHelper;
+import org.cyk.utility.__kernel__.variable.VariableName;
 import org.cyk.utility.assertion.AssertionsProviderClassMap;
 import org.cyk.utility.server.business.api.MyEntityAssertionsProvider;
 import org.cyk.utility.server.business.api.MyEntityBusiness;
@@ -28,6 +31,7 @@ import org.cyk.utility.server.persistence.entities.ParentChild;
 import org.cyk.utility.server.persistence.entities.ParentType;
 import org.cyk.utility.server.representation.api.ChildRepresentation;
 import org.cyk.utility.server.representation.api.MyEntityRepresentation;
+import org.cyk.utility.server.representation.api.MyEntitySaver;
 import org.cyk.utility.server.representation.api.NodeRepresentation;
 import org.cyk.utility.server.representation.api.ParentChildRepresentation;
 import org.cyk.utility.server.representation.api.ParentRepresentation;
@@ -135,6 +139,15 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 		assertThat(action.getMethod()).isEqualTo(Action.METHOD_DELETE);
 		assertThat(action.getUniformResourceLocator()).endsWith("/delete/identifiers?identifier="+entity.getIdentifier());
 		*/
+	}
+	
+	@Test
+	public void save_myEntity() throws Exception{
+		VariableHelper.write(VariableName.SYSTEM_LOGGING_THROWABLE_PRINT_STACK_TRACE, Boolean.TRUE);
+		MyEntitySaver myEntitySaver = __inject__(MyEntitySaver.class);
+		MyEntityDto entity = new MyEntityDto().setCode("a");
+		Response response = myEntitySaver.save(List.of(entity), null, null, new Arguments().setRepresentationEntityClass(MyEntityDto.class));
+		
 	}
 	
 	@Test

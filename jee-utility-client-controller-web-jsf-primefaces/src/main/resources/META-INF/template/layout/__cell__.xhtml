@@ -97,6 +97,20 @@
 	    </ui:decorate>
 	</c:if>
 	
+	<c:if test="#{classSimpleName eq 'Tree'}">
+		<c:set var="processed" value="true"/>
+		<ui:decorate template="#{template}">
+	    	<ui:param name="tree" value="#{cell.control}"/>
+	    </ui:decorate>
+	</c:if>
+	
+	<c:if test="#{classSimpleName eq 'TreeNode'}">
+		<c:set var="processed" value="true"/>
+		<ui:decorate template="#{template}">
+	    	<ui:param name="treeNode" value="#{cell.control}"/>
+	    </ui:decorate>
+	</c:if>
+	
 	<c:if test="#{not processed}">
 		<h:outputText value="#{cell.identifier} : #{classSimpleName} : #{cell.control.identifier}" />
 	</c:if>

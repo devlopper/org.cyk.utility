@@ -52,6 +52,24 @@ public interface EntityFinder {
 			return null;
 		return find(klass, new QueryExecutorArguments().addSystemIdentifiers(identifier));
 	}
+	
+	/*default <T> Collection<T> findMany(Class<T> klass,QueryExecutorArguments arguments) {
+		if(klass == null)
+			throw new IllegalArgumentException("class is required");
+		if(arguments == null)
+			throw new IllegalArgumentException("arguments are required");
+		if(CollectionHelper.isEmpty(arguments.getSystemIdentifiers()))
+			throw new IllegalArgumentException("system identifiers are required");
+		arguments.prepare(klass);
+		Map<String,Object> properties = arguments.getProperties() == null ? null : arguments.getProperties().deriveMap(klass, arguments.get__entityManager__());
+		T object = arguments.get__entityManager__().find(klass, CollectionHelper.getFirst(arguments.getSystemIdentifiers()),properties);
+		if(object == null)
+			arguments.set__objects__(null);
+		else
+			arguments.set__objects__(List.of(object));
+		arguments.finalise();
+		return object;
+	}*/
 	/**/
 	
 	public abstract class AbstractImpl extends AbstractObject implements EntityFinder,Serializable {

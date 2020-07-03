@@ -13,8 +13,14 @@ public interface EntityCounter {
 	
 	default <T> Long count(Class<T> tupleClass) {
 		if(tupleClass == null)
-			return null;
+			throw new RuntimeException("Tuple class is required");
 		return count(tupleClass,null);
+	}
+	
+	default <T> Long count(Class<T> tupleClass,String queryIdentifier,Object...filterFieldsValues) {
+		if(tupleClass == null)
+			throw new RuntimeException("Tuple class is required");
+		return count(tupleClass,new QueryExecutorArguments().setQueryFromIdentifier(queryIdentifier).addFilterFieldsValues(filterFieldsValues));
 	}
 	
 	/**/

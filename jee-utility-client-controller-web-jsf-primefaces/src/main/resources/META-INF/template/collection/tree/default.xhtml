@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<!-- 
+	datakey="#{tree.getDataKey(nodeData)}"
+	 -->
+	 
+	<ui:insert name="before">
+		<ui:decorate template="#{primefacesHelper.getModelTemplate(tree.titleOutputText)}">
+			<ui:param name="outputText" value="#{tree.titleOutputText}"/>
+		</ui:decorate>
+	</ui:insert>
+	<!-- 
+	filterBy="#{tree.filterBy}"
+	 -->
+	<p:tree 
+		id="#{tree.identifier}"
+		value="#{tree.value}"
+		var="nodeData"
+		nodeVar="node"
+		
+		
+		filterMatchMode="#{tree.filterMatchMode}"
+		filterMode="#{tree.filterMode}"
+		
+		propagateSelectionDown="#{tree.propagateSelectionDown}"
+		propagateSelectionUp="#{tree.propagateSelectionUp}"
+		
+		rendered="#{tree.rendered}"
+		required="#{tree.required}"
+		requiredMessage="#{tree.requiredMessage}"
+		
+		selection="#{tree.selection}"
+		selectionMode="#{tree.selectionMode}"
+		styleClass="#{tree.styleClass}"
+		style="#{tree.style}"
+	>
+		<ui:insert name="treeNode">
+			<ui:param name="treeNode" value="#{tree.treeNode}"/>
+			<p:treeNode 
+				collapsedIcon="#{treeNode.collapsedIcon}"
+				expandedIcon="#{treeNode.expandedIcon}"
+				icon="#{treeNode.icon}"
+				rendered="#{treeNode.rendered}"
+				styleClass="#{treeNode.styleClass}"
+				type="#{treeNode.type}"				
+			>
+				<ui:insert name="treeNodeBody">
+					<h:outputText value="#{treeNode.stringify(nodeData)}" />
+				</ui:insert>				
+			</p:treeNode>
+		</ui:insert>			
+	</p:tree>
+	<ui:insert name="after">
+		<ui:decorate template="#{primefacesHelper.getModelTemplate(tree.processSelectionCommandButton)}">
+			<ui:param name="commandButton" value="#{tree.processSelectionCommandButton}"/>
+		</ui:decorate>
+	</ui:insert>
+</ui:composition>

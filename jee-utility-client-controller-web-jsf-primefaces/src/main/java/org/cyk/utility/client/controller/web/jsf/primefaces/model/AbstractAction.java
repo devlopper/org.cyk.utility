@@ -68,6 +68,7 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 	protected Boolean __parametersSessionable__;
 	protected String __actionArgumentIdentifierParameterName__;
 	protected Boolean __isWindowContainerRenderedAsDialog__;
+	protected Boolean __loggableAsInfo__;
 	protected Boolean __runnable__;
 	protected AbstractCollection __collection__;
 	protected Dialog __dialog__;
@@ -118,6 +119,7 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 	public static final String FIELD_USER_INTERFACE_ACTION = "userInterfaceAction";
 	public static final String FIELD_RUNNER_ARGUMENTS = "runnerArguments";
 	public static final String FIELD_RUNNER_ARGUMENTS_ACTION_ON_CLASS = "runnerArguments.actionOnClass";
+	public static final String FIELD___ARGUMENT__ = "__argument__";
 	public static final String FIELD___OUTCOME__ = "__outcome__";
 	public static final String FIELD___PARAMETERS__ = "__parameters__";
 	public static final String FIELD___ACTION_ARGUMENT_IDENTIFIER_PARAMETER_NAME__ = "__actionArgumentIdentifierParameterName__";
@@ -127,6 +129,7 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 	public static final String FIELD___RUNNABLE__ = "__runnable__";
 	public static final String FIELD___COLLECTION__ = "__collection__";
 	public static final String FIELD___DIALOG__ = "__dialog__";
+	public static final String FIELD___LOGGABLE_AS_INFO__ = "__loggableAsInfo__";
 	
 	/**/
 	
@@ -249,10 +252,13 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 			}
 			
 			protected void runExecuteFunction(AbstractAction action) {
+				logAsInfo(action, "executing function starts");
 				Object object = __runExecuteFunction__(action);
 				if(Boolean.TRUE.equals(action.get__isWindowContainerRenderedAsDialog__())) {
 					PrimeFaces.current().dialog().closeDynamic(object);
+					logAsInfo(action, "dynamic dialog has been closed with object "+object);
 				}
+				logAsInfo(action, "function executed");
 			}
 			
 			protected Object __runExecuteFunction__(AbstractAction action) {
@@ -393,6 +399,11 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 			
 			protected String __getOutcome__(Object argument,String outcome) {
 				return outcome;
+			}
+			
+			protected void logAsInfo(AbstractAction action,String message) {
+				if(Boolean.TRUE.equals(action.__loggableAsInfo__))
+					LogHelper.logInfo(message, getClass());
 			}
 			
 			/**/

@@ -115,7 +115,7 @@ public class AbstractArchiveBuilder<ARCHIVE extends Archive<?>> extends Abstract
 				((WebArchive)archive).addPackages(Boolean.TRUE, _package);
 		}
 		
-		String[] suffixes = {"Persistence","PersistenceImpl","Business","BusinessImpl","Representation","RepresentationImpl","Impl","Dto","DtoCollection"
+		String[] suffixes = {"Persistence","PersistenceImpl","Business","BusinessImpl","Representation","RepresentationImpl","Saver","SaverImpl","Impl","Dto","DtoCollection"
 				,"Mapper","DtoMapper","MapperImpl","DtoMapperImpl"
 				,"AssertionsProvider","AssertionsProviderImpl"};
 		Set<Class<?>> classes = new HashSet<>();
@@ -145,7 +145,9 @@ public class AbstractArchiveBuilder<ARCHIVE extends Archive<?>> extends Abstract
 					__addClass__(StringUtils.replaceOnce(index, ".persistence.entities.", ".representation.entities.")+"DtoMapperImpl", classes);
 					
 					__addClass__(StringUtils.replaceOnce(index, ".persistence.entities.", ".representation.api.")+"Representation", classes);
-					__addClass__(StringUtils.replaceOnce(index, ".persistence.entities.", ".representation.impl.")+"RepresentationImpl", classes);
+					__addClass__(StringUtils.replaceOnce(index, ".persistence.entities.", ".representation.impl.")+"RepresentationImpl", classes);					
+					__addClass__(StringUtils.replaceOnce(index, ".persistence.entities.", ".representation.api.")+"Saver", classes);
+					__addClass__(StringUtils.replaceOnce(index, ".persistence.entities.", ".representation.impl.")+"SaverImpl", classes);
 				}
 				
 				try {

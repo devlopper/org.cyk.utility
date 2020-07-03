@@ -65,23 +65,30 @@ public interface EntityReader {
 			if(Boolean.TRUE.equals(queryExecutorArguments.getCollectionable())) {
 				logMessages.add("many");
 				Collection<?> persistences = org.cyk.utility.__kernel__.persistence.query.EntityReader.getInstance().readMany(internal.persistenceEntityClass,queryExecutorArguments);				
+				if(arguments.getListener() != null)
+					arguments.getListener().processPersistenceEntities(persistences);
 				MapperSourceDestination.Arguments mapperSourceDestinationArguments = null;
 				if(arguments.getMappingArguments() != null)
 					mapperSourceDestinationArguments = MappingHelper.getDestination(arguments.getMappingArguments(), MapperSourceDestination.Arguments.class);				
 				Collection<?> representations =  CollectionHelper.isEmpty(persistences) ? null : MappingSourceBuilder.getInstance().build(persistences, internal.representationEntityClass
 						,mapperSourceDestinationArguments);
+				if(arguments.getListener() != null)
+					arguments.getListener().processRepresentationEntities(representations);
 				Long xTotalCount = null;
 				Boolean countable = Boolean.TRUE.equals(arguments.getCountable()) && queryExecutorArguments.getQuery() != null;
 				if(Boolean.TRUE.equals(countable)) {
 					logMessages.add("countable");
+					String readQueryIdentifier = queryExecutorArguments.getQuery().getIdentifier();
 					String countQueryIdentifier =  QueryIdentifierBuilder.getInstance().buildCountFrom(queryExecutorArguments.getQuery().getIdentifier());
 					if(StringHelper.isNotBlank(countQueryIdentifier)) {							
 						queryExecutorArguments.setQuery(QueryGetter.getInstance().get(countQueryIdentifier));
 						if(queryExecutorArguments.getQuery() != null) {
 							xTotalCount = EntityCounter.getInstance().count(internal.persistenceEntityClass,queryExecutorArguments);	
 							logMessages.add(""+xTotalCount);
-						}
-					}
+						}else
+							logMessages.add("count query <<"+countQueryIdentifier+">> of read query <<"+readQueryIdentifier+">> not found");
+					}else
+						logMessages.add("count query identifier of <<"+queryExecutorArguments.getQuery().getIdentifier()+">> cannot be built");
 				}
 				responseBuilderArguments.setEntities(representations).setXTotalCount(xTotalCount);
 			}else {

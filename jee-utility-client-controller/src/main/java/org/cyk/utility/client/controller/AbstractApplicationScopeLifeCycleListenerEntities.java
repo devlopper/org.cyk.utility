@@ -44,6 +44,9 @@ public abstract class AbstractApplicationScopeLifeCycleListenerEntities extends 
 			,org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByStringAndCoded.class
 			,org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByStringAndCodedAndNamed.class
 			
+			,org.cyk.utility.__kernel__.object.__static__.controller.AbstractDataIdentifiableSystemStringImpl.class
+			,org.cyk.utility.__kernel__.object.__static__.controller.AbstractDataIdentifiableSystemStringIdentifiableBusinessStringImpl.class
+			,org.cyk.utility.__kernel__.object.__static__.controller.AbstractDataIdentifiableSystemStringIdentifiableBusinessStringNamableImpl.class
 			};
 	}
 	

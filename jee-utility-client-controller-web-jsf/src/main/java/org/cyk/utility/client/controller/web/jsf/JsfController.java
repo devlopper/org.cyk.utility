@@ -48,7 +48,8 @@ public class JsfController extends AbstractObject implements Serializable {
 		UniformResourceIdentifierAsFunctionParameter uniformResourceIdentifierAsFunctionParameter = new UniformResourceIdentifierAsFunctionParameter();
 		uniformResourceIdentifierAsFunctionParameter.setRequest(FacesContext.getCurrentInstance().getExternalContext().getRequest());
 		uniformResourceIdentifierAsFunctionParameter.getPath(Boolean.TRUE).setValue(path);
-		uniformResourceIdentifierAsFunctionParameter.getQuery(Boolean.TRUE).setValue(CollectionHelper.isEmpty(queries) ? null : StringHelper.concatenate(queries, "&"));		
+		if(CollectionHelper.isNotEmpty(queries))
+			uniformResourceIdentifierAsFunctionParameter.getQuery(Boolean.TRUE).setValue(StringHelper.concatenate(queries, "&"));		
 		String url = UniformResourceIdentifierHelper.build(uniformResourceIdentifierAsFunctionParameter);
 		//System.out.println("JsfController.redirect() 1 : "+url);
 		//Faces.redirect(url);
@@ -57,8 +58,10 @@ public class JsfController extends AbstractObject implements Serializable {
 		p.setRequest(FacesContext.getCurrentInstance().getExternalContext().getRequest());
 		p.setPath(new PathAsFunctionParameter());
 		p.getPath().setIdentifier(outcome);
-		p.setQuery(new QueryAsFunctionParameter());
-		p.getQuery().setValue(CollectionHelper.isEmpty(queries) ? null : StringHelper.concatenate(queries, "&"));
+		if(CollectionHelper.isNotEmpty(queries)) {
+			p.setQuery(new QueryAsFunctionParameter());
+			p.getQuery().setValue(CollectionHelper.isEmpty(queries) ? null : StringHelper.concatenate(queries, "&"));	
+		}		
 		url = UniformResourceIdentifierHelper.build(p);
 		//System.out.println("JsfController.redirect() 2 : "+url);
 		try {

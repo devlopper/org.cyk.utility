@@ -285,6 +285,14 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 			return this;
 		}
 		
+		public Dto addFilterFieldsValues(Object...filterFieldsValues) {
+			if(ArrayHelper.isEmpty(filterFieldsValues))
+				return this;
+			for(Integer index = 0 ; index < filterFieldsValues.length ; index = index + 2)
+				addFilterField((String)filterFieldsValues[index], filterFieldsValues[index+1]);	
+			return this;
+		}
+		
 		@Override
 		public String toString() {
 			Collection<String> strings = new ArrayList<>();

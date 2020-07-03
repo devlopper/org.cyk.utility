@@ -28,6 +28,7 @@ public class Arguments extends AbstractObject implements Serializable {
 	private Boolean countable;
 	private Boolean loggableAsInfo;
 	private MapperSourceDestination.Arguments.Dto mappingArguments;
+	private Listener listener;
 	
 	public Arguments setRepresentationEntityClass(Class<?> entityClass) {
 		if(entityClass == null)
@@ -89,6 +90,17 @@ public class Arguments extends AbstractObject implements Serializable {
 		
 		public Internal(Arguments arguments) {
 			this(arguments,null);
+		}
+	}
+	
+	/**/
+	
+	public static interface Listener {
+		void processPersistenceEntities(Collection<?> persistenceEntities);
+		void processRepresentationEntities(Collection<?> representationEntities);
+		public static abstract class AbstractImpl extends AbstractObject implements Listener,Serializable {
+			@Override public void processPersistenceEntities(Collection<?> persistenceEntities) {}
+			@Override public void processRepresentationEntities(Collection<?> representationEntities) {}
 		}
 	}
 }
