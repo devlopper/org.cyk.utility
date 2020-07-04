@@ -130,6 +130,10 @@ public interface MapHelper {
 		writeByKey(map, key, value, null);
 	}
 	
+	static <KEY,VALUE> void writeByKeyDoNotOverride(Map<KEY,VALUE> map,KEY key,VALUE value) {
+		writeByKey(map, key, value, Boolean.FALSE);
+	}
+	
 	@SuppressWarnings("unchecked")
 	static void set(@SuppressWarnings("rawtypes") Map map,Object...objects) {
 		if(map == null || org.cyk.utility.__kernel__.array.ArrayHelper.isEmpty(objects))

@@ -88,7 +88,7 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 				__listener__ = (Listener<ENTITY>) Listener.AbstractImpl.DefaultImpl.INSTANCE;
 		}
 		__filter__ = __listener__.instantiateFilter(this);
-		if(Boolean.TRUE.equals(readerUsable))
+		if(Boolean.TRUE.equals(__listener__.getReaderUsable(this)))
 			__readerArguments__ = __listener__.instantiateArguments(this);
 		else
 			__readProperties__ = __listener__.instantiateReadProperties(this);
@@ -135,6 +135,8 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 	/**/
 	
 	public static interface Listener<T> {
+		Boolean getReaderUsable(LazyDataModel<T> lazyDataModel);
+		String getReadQueryIdentifier(LazyDataModel<T> lazyDataModel);
 		Filter.Dto instantiateFilter(LazyDataModel<T> lazyDataModel);
 		Arguments<T> instantiateArguments(LazyDataModel<T> lazyDataModel);
 		Properties instantiateReadProperties(LazyDataModel<T> lazyDataModel);
@@ -144,6 +146,16 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 		/**/
 		
 		public static abstract class AbstractImpl<T> extends AbstractObject implements Listener<T>,Serializable{
+			@Override
+			public Boolean getReaderUsable(LazyDataModel<T> lazyDataModel) {
+				return lazyDataModel.readerUsable;
+			}
+			
+			@Override
+			public String getReadQueryIdentifier(LazyDataModel<T> lazyDataModel) {
+				return lazyDataModel.readQueryIdentifier;
+			}
+			
 			@Override
 			public Filter.Dto instantiateFilter(LazyDataModel<T> lazyDataModel) {
 				if(MapHelper.isEmpty(lazyDataModel.__filters__))
@@ -160,7 +172,7 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 				//System.out.println("LazyDataModel.Listener.AbstractImpl.instantiateArguments() LOGGABLE AS INFO : "+lazyDataModel.loggableAsInfo);
 				Arguments<T> arguments = new Arguments<T>()
 					.setRepresentationArguments(new org.cyk.utility.__kernel__.representation.Arguments().setQueryExecutorArguments(new QueryExecutorArguments.Dto()
-						.setQueryIdentifier(lazyDataModel.readQueryIdentifier)
+						.setQueryIdentifier(getReadQueryIdentifier(lazyDataModel))
 						.setFirstTupleIndex(lazyDataModel.__first__)
 						.setNumberOfTuples(lazyDataModel.__pageSize__)
 						.setFilter(lazyDataModel.__filter__))
@@ -177,7 +189,7 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 					else
 						lazyDataModel.__entityFieldsNamesAsString__ = lazyDataModel.entityFieldsNamesAsString;
 				}					
-				Properties properties = new Properties().setQueryIdentifier(lazyDataModel.readQueryIdentifier)
+				Properties properties = new Properties().setQueryIdentifier(getReadQueryIdentifier(lazyDataModel))
 						.setFields(lazyDataModel.__entityFieldsNamesAsString__)
 						.setFilters(lazyDataModel.__filter__)
 						.setIsPageable(Boolean.TRUE).setFrom(lazyDataModel.__first__).setCount(lazyDataModel.__pageSize__);
@@ -186,7 +198,7 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 			
 			@Override
 			public List<T> read(LazyDataModel<T> lazyDataModel) {
-				if(Boolean.TRUE.equals(lazyDataModel.readerUsable)) {
+				if(Boolean.TRUE.equals(getReaderUsable(lazyDataModel))) {
 					return (List<T>) EntityReader.getInstance().readMany(lazyDataModel.entityClass, lazyDataModel.__readerArguments__);
 				}
 				return (List<T>) lazyDataModel.controller.read(lazyDataModel.__readProperties__);
@@ -194,7 +206,7 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 			
 			@Override
 			public Response getResponse(LazyDataModel<T> lazyDataModel) {
-				if(Boolean.TRUE.equals(lazyDataModel.readerUsable)) {
+				if(Boolean.TRUE.equals(getReaderUsable(lazyDataModel))) {
 					if(lazyDataModel.__readerArguments__ == null)
 						return null;
 					return lazyDataModel.__readerArguments__.get__response__();

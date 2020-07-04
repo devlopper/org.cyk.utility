@@ -350,7 +350,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	
 	public static abstract class AbstractConfiguratorImpl<COLLECTION extends AbstractCollection> extends AbstractObjectAjaxable.AbstractConfiguratorImpl<COLLECTION> implements Serializable {
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override
 		public void configure(COLLECTION collection, Map<Object, Object> arguments) {
 			super.configure(collection, arguments);
@@ -411,6 +411,11 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 				}				
 			}else {
 				
+			}
+			
+			if(collection.value instanceof LazyDataModel<?>) {
+				if(((LazyDataModel<?>)collection.value).getListener() == null)
+					((LazyDataModel<?>)collection.value).setListener((LazyDataModel.Listener) MapHelper.readByKey(arguments, FIELD_LAZY_DATA_MODEL_LISTENER));
 			}
 			
 			if(StringHelper.isBlank(collection.selectionMode)) {
@@ -475,6 +480,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 		public static final String FIELD_RECORD_MENU_ITEMS_BY_ARGUMENTS = "recordMenuItemsByArguments";
 		public static final String FIELD_LAZY_DATA_MODEL_CLASS = "lazyDataModelClass";
 		public static final String FIELD_LAZY_DATA_MODEL = "lazyDataModel";
+		public static final String FIELD_LAZY_DATA_MODEL_LISTENER = "lazyDataModelListener";
 		public static final String FIELD_TITLE_VALUE = "titleValue";
 		public static final String FIELD_RECORD_MENU_CLASS = "recordMenuClass";
 		public static final String FIELD_RECORD_ACTIONS = "recordActions";

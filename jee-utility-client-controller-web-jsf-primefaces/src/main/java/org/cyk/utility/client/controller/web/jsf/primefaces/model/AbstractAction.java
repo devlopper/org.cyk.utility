@@ -292,6 +292,18 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 						parameters = new HashMap<>();
 					MapHelper.writeByKey(parameters,ParameterName.ACTION_IDENTIFIER.getValue(),List.of(action.__action__.toString()),Boolean.FALSE);
 				}
+				if(action.__argument__ != null) {
+					Object identifier = FieldHelper.readSystemIdentifier(action.__argument__);
+					if(identifier != null) {
+						String identifierAsString = identifier.toString();
+						if(StringHelper.isNotBlank(identifierAsString)) {
+							if(parameters == null)
+								parameters = new HashMap<>();
+							MapHelper.writeByKey(parameters,action.__actionArgumentIdentifierParameterName__,List.of(identifierAsString),Boolean.FALSE);
+						}
+					}
+				}
+				
 				/*
 				if(Boolean.TRUE.equals(getIsCollectionable())) {
 					if(parameters == null)
@@ -354,7 +366,10 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 					throw new RuntimeException("View outcome is required in order to navigate to");
 				UniformResourceIdentifierAsFunctionParameter parameter = new UniformResourceIdentifierAsFunctionParameter();
 				parameter.getPath(Boolean.TRUE).setIdentifier(outcome);
-				parameter.getQuery(Boolean.TRUE).setValue(ParameterName.ENTITY_IDENTIFIER.getValue()+"="+FieldHelper.readSystemIdentifier(action.__argument__));
+				Map<String,List<String>> parameters = getViewParameters(action);
+				if(MapHelper.isNotEmpty(parameters))
+					parameter.getQuery(Boolean.TRUE).setValue(parameters.entrySet().stream().map(entry -> entry.getKey()+"="+entry.getValue().get(0))
+							.collect(Collectors.joining("&")));
 				String url = UniformResourceIdentifierHelper.build(parameter);
 				if(StringHelper.isBlank(url))
 					throw new RuntimeException("Uniform resource identifier is required in order to navigate to");
