@@ -12,8 +12,8 @@ import org.cyk.utility.__kernel__.string.StringHelper;
 
 public class ClientRequestFilterImpl implements ClientRequestFilter,Serializable {
 	public static Level LOG_LEVEL = Level.FINE;
-	public static Boolean LOGGABLE = Boolean.TRUE;
-	public static Boolean BODY_LOGGABLE = Boolean.TRUE;
+	public static Boolean LOGGABLE = Boolean.FALSE;
+	public static Boolean BODY_LOGGABLE = Boolean.FALSE;
 
 	@Override
 	public void filter(ClientRequestContext requestContext) throws IOException {

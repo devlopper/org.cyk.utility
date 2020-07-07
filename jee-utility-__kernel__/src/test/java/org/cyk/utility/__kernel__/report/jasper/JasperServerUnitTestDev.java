@@ -44,4 +44,19 @@ public class JasperServerUnitTestDev extends AbstractWeldUnitTest {
 			e.printStackTrace();
 		}	
 	}
+	
+	//@Test
+	public void tEnv(){
+		VariableHelper.write(VariableName.JASPER_ENABLED, Boolean.TRUE);
+		VariableHelper.write(VariableName.JASPER_SERVER_CREDENTIAL_USERNAME, "jasperadmin");
+		VariableHelper.write(VariableName.JASPER_SERVER_CREDENTIAL_PASSWORD, "jasperadmin");
+		String uri = "/reports/enveloppe/cadrage/etat_de_cadrage";
+		Map<Object,Object> parameters = Map.of("SECTION_CODE","101");
+		try {
+			FileUtils.writeByteArrayToFile(new File("target/cad_env.pdf"), ReportGetter.getInstance().get(uri,parameters,FileType.PDF).toByteArray(), Boolean.FALSE);
+			System.out.println("Done!");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}	
+	}
 }

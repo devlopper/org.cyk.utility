@@ -171,6 +171,7 @@ public class Arguments<T> extends AbstractObject implements Serializable {
 					else if(ClassHelper.isInstanceOfOne(__representationEntityClass__,org.cyk.utility.__kernel__.representation.EntityReader.class,org.cyk.utility.__kernel__.representation.EntityCounter.class))
 						throw new RuntimeException("response entity class not yet handled");
 				}else {
+					System.out.println("Arguments.finalise() ::: "+response.getStatusInfo()+" : "+response.readEntity(String.class));
 					runtimeExceptionDto = response.readEntity(RuntimeException.Dto.class);
 				}
 			}else {

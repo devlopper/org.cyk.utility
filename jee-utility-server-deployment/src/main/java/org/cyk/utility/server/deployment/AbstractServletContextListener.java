@@ -30,6 +30,8 @@ public abstract class AbstractServletContextListener extends org.cyk.utility.con
 		ServletContext context = servletContextEvent.getServletContext();
 		initialize(context);	
 		__inject__(ApplicationScopeLifeCycleListener.class).initialize(null);
+		//if(Boolean.TRUE.equals(ConfigurationHelper.getValueAsBoolean(VariableName.SECURITY_DELEGATE_SYSTEM_IS_ENABLE)))
+		//	;
 	}
 	
 	@Override

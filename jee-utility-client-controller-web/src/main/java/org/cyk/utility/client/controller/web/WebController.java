@@ -11,6 +11,7 @@ import org.cyk.utility.__kernel__.identifier.resource.ParameterName;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.value.ValueConverter;
 import org.cyk.utility.client.controller.ControllerEntity;
 import org.cyk.utility.client.controller.ControllerLayer;
 
@@ -39,6 +40,10 @@ public class WebController extends AbstractObject implements Serializable {
 		if(StringHelper.isBlank(value))
 			return null;
 		return Action.getByNameCaseInsensitive(value);
+	}
+	
+	public Boolean getRequestParameterIsStatic() {
+		return getRequestParameterAsBoolean(ParameterName.IS_STATIC);
 	}
 	
 	public <T> T getRequestParameterEntityBySystemIdentifier(Class<T> entityClass,String parameterName,Properties properties) {
@@ -75,6 +80,16 @@ public class WebController extends AbstractObject implements Serializable {
 	
 	public <T> T getRequestParameterEntityAsParent(Class<T> entityClass) {
 		return getRequestParameterEntityAsParentBySystemIdentifier(entityClass);
+	}
+	
+	/**/
+	
+	public Boolean getRequestParameterAsBoolean(ParameterName name) {
+		return ValueConverter.getInstance().convertToBoolean(getRequestParameter(name));
+	}
+	
+	public Boolean getRequestParameterAsBoolean(String name) {
+		return ValueConverter.getInstance().convertToBoolean(getRequestParameter(name));
 	}
 	
 	/**/

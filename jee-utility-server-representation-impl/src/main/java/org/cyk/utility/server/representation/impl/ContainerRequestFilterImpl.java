@@ -19,6 +19,5 @@ public class ContainerRequestFilterImpl extends AbstractContainerFilter implemen
 		containerRequestContext.setProperty(DurationBuilder.class.getName(), __inject__(DurationBuilder.class).setBeginToNow());
 		Log log = __injectLog__(containerRequestContext,"filter","Request");
 		log.execute();
-	}
-	
+	}	
 }

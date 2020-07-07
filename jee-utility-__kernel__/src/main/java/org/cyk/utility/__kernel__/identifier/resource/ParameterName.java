@@ -32,6 +32,7 @@ public enum ParameterName {
 	,SESSION_IDENTIFIER
 	,MULTIPLE
 	,LOGGABLE_AS_INFO
+	,IS_STATIC
 	;
 	
 	@Getter @Setter private String value;
