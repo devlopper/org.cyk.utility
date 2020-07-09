@@ -17,10 +17,10 @@ import org.cyk.utility.__kernel__.log.LogMessages;
 import org.cyk.utility.__kernel__.mapping.MapperSourceDestination;
 import org.cyk.utility.__kernel__.mapping.MappingHelper;
 import org.cyk.utility.__kernel__.mapping.MappingSourceBuilder;
+import org.cyk.utility.__kernel__.persistence.query.CountQueryIdentifierGetter;
 import org.cyk.utility.__kernel__.persistence.query.EntityCounter;
 import org.cyk.utility.__kernel__.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.__kernel__.persistence.query.QueryGetter;
-import org.cyk.utility.__kernel__.persistence.query.QueryIdentifierBuilder;
 import org.cyk.utility.__kernel__.representation.Arguments.Internal;
 import org.cyk.utility.__kernel__.rest.ResponseBuilder;
 import org.cyk.utility.__kernel__.string.StringHelper;
@@ -79,7 +79,7 @@ public interface EntityReader {
 				if(Boolean.TRUE.equals(countable)) {
 					logMessages.add("countable");
 					String readQueryIdentifier = queryExecutorArguments.getQuery().getIdentifier();
-					String countQueryIdentifier =  QueryIdentifierBuilder.getInstance().buildCountFrom(queryExecutorArguments.getQuery().getIdentifier());
+					String countQueryIdentifier =  CountQueryIdentifierGetter.getInstance().get(queryExecutorArguments.getQuery().getIdentifier());
 					if(StringHelper.isNotBlank(countQueryIdentifier)) {							
 						queryExecutorArguments.setQuery(QueryGetter.getInstance().get(countQueryIdentifier));
 						if(queryExecutorArguments.getQuery() != null) {

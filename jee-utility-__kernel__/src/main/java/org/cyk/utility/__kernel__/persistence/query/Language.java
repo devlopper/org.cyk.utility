@@ -52,6 +52,12 @@ public interface Language {
 			return StringHelper.concatenate(tuplesNames.stream().map(tupleName ->  String.format(CONCATENATE_CODE_NAME, tupleName)).collect(Collectors.toList()),",");
 		}
 		
+		static String concatCodeName(String...tuplesNames) {
+			if(ArrayHelper.isEmpty(tuplesNames))
+				return null;
+			return concatCodeName(CollectionHelper.listOf(tuplesNames));
+		}
+		
 		String SELECT = "SELECT %s";
 		String CONCAT = "CONCAT (%s)";
 		String CONCATENATE_CODE_NAME = "CONCAT(%1$s.code,' ',%1$s.name)";

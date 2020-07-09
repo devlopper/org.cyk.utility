@@ -11,6 +11,7 @@ import javax.ws.rs.core.Response;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
@@ -39,6 +40,12 @@ public interface UserManager {
 	}
 	
 	Collection<User> read(Arguments arguments);
+	
+	Collection<User> readFrom(Integer firstElementIndex,Integer numberOfElements);
+	
+	Collection<User> readAll();
+	
+	Collection<String> readAllNames();
 	
 	default User readByUserName(String userName) {
 		if(StringHelper.isBlank(userName))
@@ -99,7 +106,8 @@ public interface UserManager {
 			
 			Response response;
 			try {
-				response = usersResource.create(userRepresentation);				
+				response = usersResource.create(userRepresentation);
+				LogHelper.logInfo("User has been created in keycloak. username = "+userRepresentation.getUsername(), getClass());
 			} catch (Exception exception) {
 				throw new RuntimeException("cannot create user "+user+" because "+exception.getMessage(),exception);
 			}
@@ -136,6 +144,11 @@ public interface UserManager {
 			if(userRepresentations == null && CollectionHelper.isNotEmpty(arguments.names)) {
 				userRepresentations = usersResource.search(CollectionHelper.getFirst(arguments.names));
 			}
+			if(userRepresentations == null && arguments.numberOfElements != null) {
+				Integer from = ValueHelper.defaultToIfNull(arguments.firstElementIndex, 0);
+				Integer to = from + (arguments.numberOfElements < 0 ? 0 : arguments.numberOfElements);
+				userRepresentations = usersResource.list(from,to);
+			}
 			if(userRepresentations == null) {
 				userRepresentations = usersResource.list();
 			}
@@ -163,6 +176,24 @@ public interface UserManager {
 				users.add(user);
 			}
 			return users;
+		}
+		
+		@Override
+		public Collection<User> readFrom(Integer firstElementIndex, Integer numberOfElements) {
+			return read(new Arguments().setFirstElementIndex(firstElementIndex).setNumberOfElements(numberOfElements));
+		}
+		
+		@Override
+		public Collection<User> readAll() {
+			return read(new Arguments());
+		}
+		
+		@Override
+		public Collection<String> readAllNames() {
+			Collection<User> users = readAll();
+			if(CollectionHelper.isEmpty(users))
+				return null;
+			return users.stream().map(user -> user.getName()).collect(Collectors.toSet());
 		}
 		
 		@Override
@@ -207,6 +238,7 @@ public interface UserManager {
 		private Collection<User> users;
 		private Collection<String> identifiers,names;
 		private Collection<String> electronicMailAddresses;
+		private Integer firstElementIndex,numberOfElements;
 	}
 	
 	/**/

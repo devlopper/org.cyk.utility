@@ -2,6 +2,8 @@ package org.cyk.utility.client.controller.web.jsf;
 
 import java.io.Serializable;
 
+import org.cyk.utility.__kernel__.log.LogHelper;
+import org.cyk.utility.__kernel__.session.SessionHelper;
 import org.cyk.utility.__kernel__.user.interface_.UserInterfaceEvent;
 import org.cyk.utility.client.controller.message.MessageRender;
 import org.cyk.utility.client.controller.message.MessageRenderTypeDialog;
@@ -29,6 +31,11 @@ public abstract class AbstractUserInterfaceEventListenerImpl extends org.cyk.uti
 			message = "Vous êtes de retour.";
 			severity = __inject__(NotificationSeverityInformation.class);
 			break;
+		case LOGOUT:
+			LogHelper.logInfo("Logout of user named <<"+SessionHelper.getUserName()+">>", getClass());
+	    	SessionHelper.destroy();
+	    	JsfController.getInstance().redirect("indexView");
+			return;
 		default:
 			message = "Quel évènement ?";
 			severity = __inject__(NotificationSeverityError.class);

@@ -37,4 +37,8 @@ public class UserInterfaceController implements Serializable {
     public String formatNumber(Number number) {
     	return NumberHelper.format(number);
     }
+    
+    public void logout() { 
+    	UserInterfaceEventListener.getInstance().listen(UserInterfaceEvent.LOGOUT);
+    }
 }

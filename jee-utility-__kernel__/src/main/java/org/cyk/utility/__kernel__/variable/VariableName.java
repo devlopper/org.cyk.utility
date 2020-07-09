@@ -45,6 +45,7 @@ public interface VariableName {
 	
 	/* Security */
 
+	String SECURITY_AUTHENTICATION_ENABLE = buildSystem("security.authentication.enable");
 	String SECURITY_DELEGATE_SYSTEM_IS_ENABLE = buildSystem("security.delegate.system.is.enable");
 	
 	/* Keycloak */
