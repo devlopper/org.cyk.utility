@@ -1,15 +1,24 @@
 package org.cyk.utility.__kernel__.persistence.query;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
 import org.cyk.utility.__kernel__.computation.LogicalOperator;
+import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 public interface Language {
 	
@@ -61,6 +70,17 @@ public interface Language {
 		String SELECT = "SELECT %s";
 		String CONCAT = "CONCAT (%s)";
 		String CONCATENATE_CODE_NAME = "CONCAT(%1$s.code,' ',%1$s.name)";
+		
+		/**/
+		
+		@Getter @Setter @Accessors(chain=true)
+		public static class Tuple extends AbstractObject implements Serializable {
+			String name;
+			
+			public static Tuple instantiate(String name) {
+				return new Tuple().setName(name);
+			}
+		}
 	}
 	
 	public static interface From {
@@ -148,8 +168,87 @@ public interface Language {
 			return operate(tupleName, FieldHelper.join(fieldsNames), parameterName, operator);
 		}
 		
+		static String like(String tupleName,String fieldName,String parameterName,LogicalOperator operator,Integer numberOfAdditionalParameters,LogicalOperator additionalParametersOperator,Boolean isCaseSensitive) {
+			return new Like().setTupleName(tupleName).setFieldName(fieldName).setParameterName(parameterName).setNumberOfAdditionalParameters(numberOfAdditionalParameters)
+					.setOperator(operator).setIsCaseSensitive(isCaseSensitive).setAdditionalParametersOperator(additionalParametersOperator).generate();
+		}
+		
+		static String like(String tupleName,String fieldName,String parameterName,LogicalOperator operator,Integer numberOfAdditionalParameters,LogicalOperator additionalParametersOperator) {
+			return like(tupleName, fieldName, parameterName, operator, numberOfAdditionalParameters, additionalParametersOperator, null);
+		}
+		
+		static String like(String tupleName,String fieldName,String parameterName,LogicalOperator operator,Integer numberOfAdditionalParameters) {
+			return like(tupleName, fieldName, parameterName, operator, numberOfAdditionalParameters, null);
+		}
+		
+		static String like(String tupleName,String fieldName,String parameterName,Integer numberOfAdditionalParameters) {
+			return like(tupleName, fieldName, parameterName, LogicalOperator.OR, numberOfAdditionalParameters, LogicalOperator.AND, null);
+		}
+		
+		static String like(String tupleName,String fieldName,String parameterName) {
+			return like(tupleName, fieldName, parameterName, null, null, null);
+		}
+		
+		/*
+		static String deriveLike(String tuple,String fieldName,String parameterName,Integer numberOfTokens,LogicalOperator operator,Boolean isCaseSensitive){
+			if(StringHelper.isBlank(tuple) || StringHelper.isBlank(fieldName) || StringHelper.isBlank(parameterName))
+				throw new RuntimeException(String.format("Illegal parameters. tuple %s , field name : %s , parameter name : %s.",tuple,fieldName,parameterName));
+			if(numberOfTokens == null || numberOfTokens <=1)
+				return String.format(Boolean.TRUE.equals(isCaseSensitive) ? FORMAT_TUPLE_FIELD_LIKE_PARAMETER_CASE_SENSITIVE : FORMAT_TUPLE_FIELD_LIKE_PARAMETER, tuple,fieldName,parameterName);
+			Collection<String> tokens = new ArrayList<>();
+			for(Integer index = 1; index <=numberOfTokens; index = index + 1)
+				tokens.add(String.format(FORMAT_TUPLE_FIELD_LIKE_PARAMETER, tuple,fieldName,parameterName+index));
+			return StringHelper.concatenate(tokens, " "+operator.name()+" ");
+		}
+		*/
 		String WHERE = "WHERE %s";
 		String OPERATE = "%s.%s %s :%s";
+		
+		/**/
+		
+		@Getter @Setter @Accessors(chain=true)
+		public static class Like extends AbstractObject implements Serializable {
+			private String tupleName;
+			private String fieldName;
+			private String parameterName;
+			private LogicalOperator operator;
+			private Boolean isCaseSensitive;
+			private Integer numberOfAdditionalParameters;
+			private LogicalOperator additionalParametersOperator;
+			
+			public String generate() {
+				if(StringHelper.isBlank(tupleName) || StringHelper.isBlank(fieldName) || StringHelper.isBlank(parameterName))
+					throw new RuntimeException(String.format("Illegal parameters. tuple name %s , field name : %s , parameter name : %s."
+							,tupleName,fieldName,parameterName));
+				String like = format(tupleName, fieldName, parameterName, isCaseSensitive);
+				if(numberOfAdditionalParameters == null || numberOfAdditionalParameters <= 0)
+					return like;
+				if(operator == null)
+					throw new RuntimeException("Operator is required.");
+				if(numberOfAdditionalParameters > 1 && additionalParametersOperator == null)
+					throw new RuntimeException("Operator of additional parameters is required.");	
+				Collection<String> additionalParametersNames = new ArrayList<String>();			
+				for(Integer index = 0; index < numberOfAdditionalParameters; index++)
+					additionalParametersNames.add(parameterName+index);
+				Collection<String> likes = new ArrayList<String>();
+				additionalParametersNames.forEach(parameterName -> {
+					likes.add(format(tupleName, fieldName, parameterName, isCaseSensitive));
+				});
+				String additionalParametersLike;
+				if(likes.size() == 1)
+					additionalParametersLike = likes.iterator().next();
+				else
+					additionalParametersLike = "("+StringHelper.concatenate(likes, " "+additionalParametersOperator.name()+" ")+")";				
+				return "("+like+" "+operator.name()+" "+additionalParametersLike+")";
+			}
+			
+			private static String format(String tupleName,String fieldName,String parameterName,Boolean isCaseSensitive) {
+				return String.format(Boolean.TRUE.equals(isCaseSensitive) ? FORMAT_CASE_SENSITIVE : FORMAT,tupleName, fieldName, parameterName);
+			}
+			
+			private static final String FORMAT = "LOWER(%s.%s) LIKE LOWER(:%s)";
+			private static final String FORMAT_CASE_SENSITIVE = "%s.%s LIKE :%s";
+		}
 	}
 	
 	public static interface Group {
@@ -205,5 +304,58 @@ public interface Language {
 		
 		String ORDER = "ORDER BY %s";
 		String OPERATE = "%s.%s %s";
+	}
+
+	/* Argument Generator*/
+	
+	public static interface Argument {
+		
+		public static interface Like {
+			
+			static String startsWith(Object value) {
+				String string = value == null ? ConstantEmpty.STRING : value.toString();
+				return string+"%";
+			}
+			
+			static String endsWith(Object value) {
+				String string = value == null ? ConstantEmpty.STRING : value.toString();
+				return "%"+string;
+			}
+			
+			static String contains(Object value) {
+				String string = value == null ? ConstantEmpty.STRING : value.toString();
+				return "%"+string+"%";
+			}
+			
+			static List<String> containsWords(Object value,Integer count,String defaultWord) {
+				if(count == null || count < 0)
+					return null;
+				String string = value == null ? ConstantEmpty.STRING : value.toString();
+				Collection<String> words = StringHelper.getWords(string, count, defaultWord);
+				if(CollectionHelper.isEmpty(words))
+					return null;
+				return words.stream().map(word -> contains(word)).collect(Collectors.toList());
+			}
+			
+			static List<String> containsWords(Object value,Integer count) {
+				return containsWords(value, count, ConstantEmpty.STRING);
+			}
+			
+			static List<String> containsStringOrWords(Object value,Integer count,String defaultWord) {
+				if(count == null || count < 0)
+					return null;
+				String string = value == null ? ConstantEmpty.STRING : value.toString();
+				List<String> strings = new ArrayList<>();
+				strings.add(contains(string));
+				Collection<String> words = containsWords(value, count, defaultWord);
+				if(CollectionHelper.isNotEmpty(words))
+					strings.addAll(words);
+				return strings;
+			}
+			
+			static List<String> containsStringOrWords(Object value,Integer count) {
+				return containsStringOrWords(value, count, ConstantEmpty.STRING);
+			}
+		}
 	}
 }

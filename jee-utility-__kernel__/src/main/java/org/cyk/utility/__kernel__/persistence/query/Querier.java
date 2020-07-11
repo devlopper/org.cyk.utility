@@ -7,4 +7,6 @@ public interface Querier {
 	String PARAMETER_NAME_CODE = "code";
 	String PARAMETER_NAME_CODES = "codes";
 	String PARAMETER_NAME_STRING = "string";
+	String PARAMETER_NAME_THIS = "this";
+	String PARAMETER_NAME_NAME = "name";
 }

@@ -115,4 +115,9 @@ public class StringHelperUnitTest extends AbstractWeldUnitTest {
 	public void removeFromString_notNull_notNull(){
 		assertThat(removeFromString(List.of("user.name","user.f1.f2"),"^user\\.")).containsExactlyInAnyOrder("name","f1.f2");
 	}
+	
+	@Test
+	public void getWords(){
+		assertThat(StringHelper.getWords(null, 3,"a")).containsExactly("a","a","a");
+	}
 }

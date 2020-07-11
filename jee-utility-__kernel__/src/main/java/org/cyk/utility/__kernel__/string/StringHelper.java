@@ -12,6 +12,8 @@ import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
+import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.constant.ConstantSeparator;
 
 public interface StringHelper {
@@ -81,6 +83,28 @@ public interface StringHelper {
 			return null;
 		return List.of(strings);
 	}
+	
+	static List<String> getWords(String string,Integer count,String defaultWord) {
+		if(defaultWord == null)
+			defaultWord = ConstantEmpty.STRING;
+		string = StringUtils.trimToNull(string);
+		String[] words = StringUtils.split(string, ConstantCharacter.SPACE);
+		if(count == null || count < 0)
+			return CollectionHelper.listOf(words);
+		List<String> list = new ArrayList<>();
+		if(words != null)
+			for(Integer index = 0; index < words.length && index < count; index = index + 1)
+				list.add(words[index]);
+		if(list.size() < count)
+			for(Integer index = list.size(); index < count; index = index + 1)
+				list.add(defaultWord);	
+		return list;
+	}
+	
+	static List<String> getWords(String string,Integer count) {
+		return getWords(string, count, ConstantEmpty.STRING);
+	}
+	
 	
 	static String defaultIfBlank(String string,String defaultString) {
 		return StringUtils.defaultIfBlank(string,defaultString);

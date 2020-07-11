@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
+import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.field.FieldInstance;
 import org.cyk.utility.__kernel__.field.FieldInstancesRuntime;
@@ -22,7 +23,9 @@ import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.mapping.MapperSourceDestination;
 import org.cyk.utility.__kernel__.mapping.MappingHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
+import org.cyk.utility.__kernel__.persistence.query.Language;
 import org.cyk.utility.__kernel__.persistence.query.QueryArgumentHelper;
+import org.cyk.utility.__kernel__.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
@@ -151,6 +154,34 @@ public class Filter extends AbstractObject implements Serializable {
 		return addField(fieldName, fieldValue, null);
 	}
 
+	public Filter addFieldContainsStringOrWords(String name,Integer numberOfAdditionalParameters,QueryExecutorArguments arguments) {
+		List<String> names = Language.Argument.Like.containsStringOrWords(arguments == null ? null : arguments.getFilterFieldValue(name), numberOfAdditionalParameters);
+		for(Integer index = 0; index < names.size(); index++)
+			addField(name+(index == 0 ? ConstantEmpty.STRING : index-1), names.get(index));
+		return this;
+	}
+	
+	public Filter addFieldsContains(QueryExecutorArguments arguments,Collection<String> names) {
+		if(CollectionHelper.isEmpty(names))
+			return this;
+		names.forEach(name -> {
+			addField(name, Language.Argument.Like.contains(arguments == null ? null : arguments.getFilterFieldValue(name)));
+		});		
+		return this;
+	}
+	
+	public Filter addFieldsContains(QueryExecutorArguments arguments,String...names) {
+		if(ArrayHelper.isEmpty(names))
+			return this;
+		return addFieldsContains(arguments, CollectionHelper.listOf(names));
+	}
+	
+	public Filter addFieldContains(String name,QueryExecutorArguments arguments) {
+		if(StringHelper.isBlank(name))
+			return this;
+		return addFieldsContains(arguments, name);
+	}
+	
 	public Filter addFieldsLikesByPrefix(String prefix,List<String> strings){
 		if(StringHelper.isBlank(prefix))
 			throw new IllegalArgumentException("prefix is required");
