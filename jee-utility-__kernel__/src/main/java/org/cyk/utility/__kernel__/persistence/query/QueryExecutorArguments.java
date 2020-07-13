@@ -17,6 +17,7 @@ import org.cyk.utility.__kernel__.mapping.MapperSourceDestination;
 import org.cyk.utility.__kernel__.mapping.MappingHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.persistence.EntityManagerGetter;
+import org.cyk.utility.__kernel__.persistence.query.filter.Field;
 import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 import org.cyk.utility.__kernel__.string.StringHelper;
 
@@ -178,6 +179,18 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 		if(filter == null)
 			return null;
 		return filter.getFieldValue(paths);
+	}
+	
+	public Field getFilterField(Collection<String> paths) {
+		if(filter == null)
+			return null;
+		return filter.getField(paths);
+	}
+	
+	public Field getFilterField(String...paths) {
+		if(filter == null)
+			return null;
+		return filter.getField(paths);
 	}
 	
 	public List<String> getFilterFieldValueLikes(String fieldName,Integer numberOfTokens) {

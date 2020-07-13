@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import javax.ws.rs.core.Response;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.controller.Arguments;
 import org.cyk.utility.__kernel__.controller.EntityReader;
@@ -42,6 +43,7 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 	private ControllerEntity<ENTITY> controller;
 	private String readQueryIdentifier,countQueryIdentifier,entityFieldsNamesAsString;
 	private Collection<String> entityFieldsNames;
+	private Collection<String> copiableFiltersEntriesKeysToFilterFields;
 	private Listener<ENTITY> listener;
 	
 	private List<ENTITY> list;
@@ -132,6 +134,21 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 		return map.get(identifier);
 	}
 	
+	public LazyDataModel<ENTITY> copyFiltersEntriesToFilterFields(Collection<String> names) {
+		if(CollectionHelper.isEmpty(names) || MapHelper.isEmpty(__filters__))
+			return this;
+		names.forEach(name -> {
+			__filter__.addField(name,__filters__.get(name));	
+		});
+		return this;
+	}
+	
+	public LazyDataModel<ENTITY> copyFiltersEntriesToFilterFields(String...names) {
+		if(ArrayHelper.isEmpty(names))
+			return this;
+		return copyFiltersEntriesToFilterFields(CollectionHelper.listOf(names));
+	}
+	
 	/**/
 	
 	public static interface Listener<T> {
@@ -143,6 +160,7 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 		List<T> read(LazyDataModel<T> lazyDataModel);
 		Response getResponse(LazyDataModel<T> lazyDataModel);
 		Integer getCount(LazyDataModel<T> lazyDataModel);
+		Collection<String> getCopiableFiltersEntriesKeysToFilterFields(LazyDataModel<T> lazyDataModel);
 		/**/
 		
 		public static abstract class AbstractImpl<T> extends AbstractObject implements Listener<T>,Serializable{
@@ -219,6 +237,11 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 				if(lazyDataModel.__response__ == null)
 					return 0;
 				return NumberHelper.getInteger(ResponseHelper.getHeaderXTotalCount(lazyDataModel.__response__),0);
+			}
+			
+			@Override
+			public Collection<String> getCopiableFiltersEntriesKeysToFilterFields(LazyDataModel<T> lazyDataModel) {
+				return null;
 			}
 			
 			/**/

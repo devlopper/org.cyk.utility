@@ -150,7 +150,7 @@ public interface QueryHelper {
 		if(CollectionHelper.isEmpty(queries))
 			return;
 		getQueries().add(queries);
-		LogHelper.logInfo("Queries added : "+queries.stream().map(Query::getIdentifier).collect(Collectors.toList()), QueryHelper.class);
+		LogHelper.logFine("Queries added : "+queries.stream().map(Query::getIdentifier).collect(Collectors.toList()), QueryHelper.class);
 	}
 	
 	static void addQueries(Query...queries) {

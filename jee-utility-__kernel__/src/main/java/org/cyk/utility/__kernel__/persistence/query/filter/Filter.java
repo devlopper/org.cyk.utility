@@ -127,6 +127,28 @@ public class Filter extends AbstractObject implements Serializable {
 		getFields(Boolean.TRUE).addAll(fields);
 		return this;
 	}
+	
+	public Filter addFieldsEquals(QueryExecutorArguments arguments,Collection<String> names) {
+		if(CollectionHelper.isEmpty(names))
+			return this;
+		names.forEach(name -> {
+			addField(name, arguments == null ? null : arguments.getFilterFieldValue(name));
+		});		
+		return this;
+	}
+	
+	public Filter addFieldsEquals(QueryExecutorArguments arguments,String...names) {
+		if(ArrayHelper.isEmpty(names))
+			return this;
+		return addFieldsEquals(arguments, CollectionHelper.listOf(names));
+	}
+	
+	public Filter addFieldEquals(String name,QueryExecutorArguments arguments) {
+		if(StringHelper.isBlank(name))
+			return this;
+		return addFieldsEquals(arguments, name);
+	}
+	
 
 	public Filter addFields(Field... fields) {
 		if(ArrayHelper.isEmpty(fields))
@@ -180,6 +202,27 @@ public class Filter extends AbstractObject implements Serializable {
 		if(StringHelper.isBlank(name))
 			return this;
 		return addFieldsContains(arguments, name);
+	}
+	
+	public Filter addFieldNullable(QueryExecutorArguments arguments,String name1,String name2) {
+		if(StringHelper.isBlank(name1) || StringHelper.isBlank(name2))
+			return this;		
+		return addField(name1, arguments.getFilterField(name2) == null);
+	}
+	
+	public Filter addFieldsNullable(QueryExecutorArguments arguments,Collection<String> names) {
+		if(CollectionHelper.isEmpty(names))
+			return this;
+		names.forEach(name -> {
+			addFieldNullable(arguments,name+"Nullable",name);
+		});
+		return this;
+	}
+	
+	public Filter addFieldsNullable(QueryExecutorArguments arguments,String...names) {
+		if(ArrayHelper.isEmpty(names))
+			return this;
+		return addFieldsNullable(arguments, CollectionHelper.listOf(names));
 	}
 	
 	public Filter addFieldsLikesByPrefix(String prefix,List<String> strings){
@@ -247,6 +290,19 @@ public class Filter extends AbstractObject implements Serializable {
 			return this;
 		addFieldsTransformedToLike(filter, CollectionHelper.listOf(fieldsNames));
 		return this;
+	}
+	
+	public Filter removeFields(Collection<String> names) {
+		if(CollectionHelper.isEmpty(fields) || CollectionHelper.isEmpty(names))
+			return this;
+		fields.removeIf(field -> names.contains(field.getName()));
+		return this;
+	}
+	
+	public Filter removeFields(String...names) {
+		if(CollectionHelper.isEmpty(fields) || ArrayHelper.isEmpty(names))
+			return this;
+		return removeFields(CollectionHelper.listOf(names));
 	}
 	
 	@Override
@@ -350,6 +406,19 @@ public class Filter extends AbstractObject implements Serializable {
 		
 		public Dto addField(String path,Object value) {
 			return addField(path,value,null);
+		}
+		
+		public Dto removeFields(Collection<String> names) {
+			if(CollectionHelper.isEmpty(fields) || CollectionHelper.isEmpty(names))
+				return this;
+			fields.removeIf(field -> names.contains(field.getName()));
+			return this;
+		}
+		
+		public Dto removeFields(String...names) {
+			if(CollectionHelper.isEmpty(fields) || ArrayHelper.isEmpty(names))
+				return this;
+			return removeFields(CollectionHelper.listOf(names));
 		}
 		
 		@Override
