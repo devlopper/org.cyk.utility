@@ -205,7 +205,7 @@ public class Form extends AbstractObject implements Serializable {
 					CollectionHelper.setElementAt(dialog.getCommandButtons(), 0, form.submitCommandButton);
 					dialog.setExecuteCommandButton(form.submitCommandButton);
 				}else {
-					cells.add(MapHelper.instantiate(Cell.FIELD_CONTROL,form.submitCommandButton = CommandButton.build(submitCommandArguments)));
+					cells.add(MapHelper.instantiate(Cell.FIELD_CONTROL,form.submitCommandButton = CommandButton.build(submitCommandArguments),Cell.FIELD_WIDTH,12));
 				}
 			}			
 			return cells;
@@ -265,7 +265,8 @@ public class Form extends AbstractObject implements Serializable {
 				@Override
 				public Map<Object, Object> getCommandButtonArguments(Form form,Collection<AbstractInput<?>> inputs) {
 					return MapHelper.instantiate(CommandButton.FIELD_ICON,"fa fa-floppy-o",CommandButton.ConfiguratorImpl.FIELD_OBJECT,form
-							,CommandButton.ConfiguratorImpl.FIELD_METHOD_NAME,METHOD_EXECUTE,CommandButton.ConfiguratorImpl.FIELD_INPUTS,inputs);
+							,CommandButton.ConfiguratorImpl.FIELD_METHOD_NAME,METHOD_EXECUTE,CommandButton.ConfiguratorImpl.FIELD_INPUTS,inputs
+							,CommandButton.FIELD_STYLE_CLASS,"cyk-float-right");
 				}
 				
 				@Override

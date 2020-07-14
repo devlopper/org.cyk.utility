@@ -96,6 +96,27 @@ public interface Language {
 			return of(CollectionHelper.listOf(strings));
 		}
 		
+		static String ofTuple(Class<?> tupleClass) {
+			ThrowableHelper.throwIllegalArgumentExceptionIfNull("Tuple class", tupleClass);
+			return of(tuple(tupleClass));
+		}
+		
+		static String tuple(String tuple,String name) {
+			ThrowableHelper.throwIllegalArgumentExceptionIfBlank("Tuple", tuple);
+			ThrowableHelper.throwIllegalArgumentExceptionIfBlank("Tuple name", name);
+			return tuple+" "+name;
+		}
+		
+		static String tuple(String tuple) {
+			ThrowableHelper.throwIllegalArgumentExceptionIfBlank("Tuple", tuple);
+			return tuple(tuple, "t");
+		}
+		
+		static String tuple(Class<?> tupleClass) {
+			ThrowableHelper.throwIllegalArgumentExceptionIfNull("Tuple class", tupleClass);
+			return tuple(tupleClass.getSimpleName());
+		}
+		
 		static String innerJoin(String tupleName,String variableName,String fieldName,String joinedVariableName,String joinedFieldName) {
 			return String.format(INNER_JOIN, tupleName,variableName,fieldName,joinedVariableName,joinedFieldName);
 		}

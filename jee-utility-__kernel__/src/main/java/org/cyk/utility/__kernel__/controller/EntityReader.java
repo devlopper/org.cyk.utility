@@ -31,6 +31,14 @@ public interface EntityReader {
 	
 	<ENTITY> ENTITY readOne(Class<ENTITY> controllerEntityClass,Arguments<ENTITY> arguments);
 	
+	default <ENTITY> ENTITY readOne(Class<ENTITY> controllerEntityClass,String queryIdentifier,Object...filterFieldsValues) {
+		if(controllerEntityClass == null)
+			throw new RuntimeException("controller entity class is required");
+		return readOne(controllerEntityClass, new Arguments<ENTITY>().setControllerEntityClass(controllerEntityClass)
+				.setRepresentationArguments(new org.cyk.utility.__kernel__.representation.Arguments()
+				.setQueryExecutorArguments(new QueryExecutorArguments.Dto().setQueryIdentifier(queryIdentifier).addFilterFieldsValues(filterFieldsValues))));
+	}
+	
 	/**/
 	
 	public abstract static class AbstractImpl extends AbstractObject implements EntityReader,Serializable {

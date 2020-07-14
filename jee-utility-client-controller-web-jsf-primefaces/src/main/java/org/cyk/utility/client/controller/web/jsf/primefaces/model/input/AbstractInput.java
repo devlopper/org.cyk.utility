@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.model.input;
 import java.io.Serializable;
 import java.util.Map;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
@@ -69,6 +70,20 @@ public abstract class AbstractInput<VALUE> extends AbstractInputOutput<VALUE> im
 		public static abstract class AbstractImpl extends AbstractObject implements Listener,Serializable {
 			@Override
 			public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {}
+			
+			protected void throwValidatorException(String summary,String detail) throws ValidatorException{
+				throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR,summary,detail));
+			}
+			
+			protected void throwValidatorException(String summary) throws ValidatorException{
+				throwValidatorException(summary, summary);
+			}
+			
+			protected void throwValidatorExceptionIf(Boolean condition,String summary) throws ValidatorException{
+				if(Boolean.TRUE.equals(condition))
+					throwValidatorException(summary);
+			}
+			
 			public static class DefaultImpl extends AbstractImpl implements Serializable {
 				public static final Listener INSTANCE = new DefaultImpl();
 			}

@@ -16,11 +16,6 @@
 
 	<name>Client playground</name>
 
-	<properties>
-		<web-app.security-constraint.web-resource-collection.all.url-pattern>/_d_i_s_a_b_l_e_d_/*</web-app.security-constraint.web-resource-collection.all.url-pattern>
-		<web-app.login-config.auth-method>BASIC</web-app.login-config.auth-method>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.cyk.jee.utility.client.deployment</groupId>
