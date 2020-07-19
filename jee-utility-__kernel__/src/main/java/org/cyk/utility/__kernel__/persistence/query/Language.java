@@ -67,6 +67,18 @@ public interface Language {
 			return concatCodeName(CollectionHelper.listOf(tuplesNames));
 		}
 		
+		static String fields(String tuple,Collection<String> names) {
+			ThrowableHelper.throwIllegalArgumentExceptionIfBlank("tuple name", tuple);
+			ThrowableHelper.throwIllegalArgumentExceptionIfEmpty("fields names", names);
+			return names.stream().map(name -> tuple+"."+name).collect(Collectors.joining(","));
+		}
+		
+		static String fields(String tuple,String...names) {
+			ThrowableHelper.throwIllegalArgumentExceptionIfBlank("tuple name", tuple);
+			ThrowableHelper.throwIllegalArgumentExceptionIfEmpty("fields names", names);
+			return fields(tuple, CollectionHelper.listOf(names));
+		}
+		
 		String SELECT = "SELECT %s";
 		String CONCAT = "CONCAT (%s)";
 		String CONCATENATE_CODE_NAME = "CONCAT(%1$s.code,' ',%1$s.name)";
@@ -144,13 +156,17 @@ public interface Language {
 		static String join(Collection<String> predicates,LogicalOperator operator) {
 			ThrowableHelper.throwIllegalArgumentExceptionIfEmpty("predicates", predicates);
 			ThrowableHelper.throwIllegalArgumentExceptionIfNull("operator", operator);
-			return StringHelper.concatenate(predicates, " "+operator.name()+" ");
+			return predicates.stream().filter(predicate -> StringHelper.isNotBlank(predicate)).collect(Collectors.joining(" "+operator.name()+" "));
 		}
 		
 		static String join(LogicalOperator operator,String...predicates) {
 			ThrowableHelper.throwIllegalArgumentExceptionIfNull("operator", operator);
 			ThrowableHelper.throwIllegalArgumentExceptionIfEmpty("predicates", predicates);			
 			return join(CollectionHelper.listOf(predicates),operator);
+		}
+		
+		static String and(Collection<String> predicates) {
+			return join(predicates,LogicalOperator.AND);
 		}
 		
 		static String and(String...predicates) {

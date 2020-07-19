@@ -15,6 +15,7 @@ public class LanguageUnitTest extends AbstractWeldUnitTest {
 		assertThat(Where.and("p1")).isEqualTo("p1");
 		assertThat(Where.and("p1","p2")).isEqualTo("p1 AND p2");
 		assertThat(Where.or("p1","p2")).isEqualTo("p1 OR p2");
+		assertThat(Where.or("","p1","","","p2","")).isEqualTo("p1 OR p2");
 	}
 	
 	@Test

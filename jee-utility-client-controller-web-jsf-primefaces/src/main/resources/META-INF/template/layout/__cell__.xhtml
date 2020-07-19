@@ -88,6 +88,15 @@
 	    </ui:decorate>
 	</c:if>
 	
+	<!-- menu -->
+	
+	<c:if test="#{classSimpleName eq 'TabMenu'}">
+		<c:set var="processed" value="true"/>
+		<ui:decorate template="#{template}">
+	    	<ui:param name="tabMenu" value="#{cell.control}"/>
+	    </ui:decorate>
+	</c:if>
+	
 	<!-- other -->
 	
 	<c:if test="#{classSimpleName eq 'DataTable'}">

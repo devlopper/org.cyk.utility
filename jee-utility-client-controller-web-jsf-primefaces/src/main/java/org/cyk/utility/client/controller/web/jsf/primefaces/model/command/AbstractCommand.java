@@ -1,6 +1,7 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces.model.command;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
@@ -38,6 +39,19 @@ public abstract class AbstractCommand extends AbstractAction implements Serializ
 	
 	public AbstractCommand setIcon(String icon) {
 		this.icon = icon;
+		return this;
+	}
+	
+	public Map<String,String> getParameters(Boolean injectIfNull) {
+		if(parameters == null && Boolean.TRUE.equals(injectIfNull))
+			parameters = new HashMap<>();
+		return parameters;
+	}
+	
+	public AbstractCommand addParameter(String name,String value) {
+		if(StringHelper.isBlank(name) || StringHelper.isBlank(value))
+			return this;
+		getParameters(Boolean.TRUE).put(name, value);
 		return this;
 	}
 	

@@ -17,6 +17,29 @@ public class MenuItem extends AbstractCommand implements Serializable {
 
 	/**/
 	
+	@Override
+	public MenuItem setValue(String value) {
+		return (MenuItem) super.setValue(value);
+	}
+	
+	@Override
+	public MenuItem setOutcome(String outcome) {
+		return (MenuItem) super.setOutcome(outcome);
+	}
+	
+	public MenuItem setIcon(String icon) {
+		return (MenuItem) super.setIcon(icon);
+	}
+	
+	@Override
+	public MenuItem setParameters(Map<String, String> parameters) {
+		return (MenuItem) super.setParameters(parameters);
+	}
+	
+	public MenuItem addParameter(String name, String value) {
+		return (MenuItem) super.addParameter(name, value);
+	}
+	
 	public static class ConfiguratorImpl extends AbstractConfiguratorImpl<MenuItem> implements Serializable {
 
 		@Override

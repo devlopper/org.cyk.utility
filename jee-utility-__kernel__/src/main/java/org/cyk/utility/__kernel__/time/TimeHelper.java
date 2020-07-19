@@ -3,6 +3,7 @@ package org.cyk.utility.__kernel__.time;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
@@ -38,5 +39,17 @@ public interface TimeHelper {
 		} catch (InterruptedException exception) {
 			LogHelper.log(exception, TimeHelper.class);
 		}
+	}
+	
+	static String formatLocalDateTime(LocalDateTime localDateTime,String pattern) {
+		if(localDateTime == null)
+			return null;
+		return DateTimeFormatter.ofPattern(pattern, Locale.FRENCH).format(localDateTime);
+	}
+	
+	static String formatLocalDateTime(LocalDateTime localDateTime) {
+		if(localDateTime == null)
+			return null;
+		return formatLocalDateTime(localDateTime, "dd/MM/yyyy à HH:mm");
 	}
 }
