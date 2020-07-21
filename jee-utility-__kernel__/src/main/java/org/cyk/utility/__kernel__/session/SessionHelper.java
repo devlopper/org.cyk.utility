@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.identifier.resource.RequestHelper;
+import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.security.SecurityHelper;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.representations.AccessToken;
@@ -127,8 +128,21 @@ public interface SessionHelper {
 		//TODO must environment based
 		
 		//in servlet world it consist to call logout to a request
+		HttpServletRequest httpServletRequest = DependencyInjection.inject(HttpServletRequest.class);
+		if(httpServletRequest == null) {
+			LogHelper.logInfo("No request to get session to destroy", SessionHelper.class);
+			return;
+		}
+		HttpSession httpSession = httpServletRequest.getSession();
+		if(httpSession == null) {
+			LogHelper.logInfo("No session to destroy", SessionHelper.class);
+			return;
+		}
+		httpSession.invalidate();
+		LogHelper.logInfo("Session has been invalidated", SessionHelper.class);
 		try {
-			DependencyInjection.inject(HttpServletRequest.class).logout();
+			httpServletRequest.logout();
+			LogHelper.logInfo("Request has been logged out", SessionHelper.class);
 		} catch (ServletException exception) {
 			throw new RuntimeException(exception);
 		}

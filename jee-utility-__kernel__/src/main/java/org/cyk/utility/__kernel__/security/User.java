@@ -1,14 +1,9 @@
 package org.cyk.utility.__kernel__.security;
 
 import java.io.Serializable;
-import java.security.Principal;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.map.MapHelper;
-import org.cyk.utility.__kernel__.string.StringHelper;
-import org.keycloak.KeycloakPrincipal;
-import org.keycloak.representations.AccessToken;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -24,7 +19,7 @@ public class User implements Serializable {
 	private String lastNames;
 	private String names;
 	private Map<String,Object> attributes;
-	
+	/*
 	public User(Principal principal) {
 		if(principal instanceof KeycloakPrincipal) {
 			KeycloakPrincipal<?> keycloakPrincipal = (KeycloakPrincipal<?>) principal;
@@ -47,7 +42,7 @@ public class User implements Serializable {
 		if(StringHelper.isNotBlank(firstNameLastNames))
 			names = firstNameLastNames;
 	}
-	
+	*/
 	public Object getAttributeValue(String key) {
 		if(MapHelper.isEmpty(attributes))
 			return null;

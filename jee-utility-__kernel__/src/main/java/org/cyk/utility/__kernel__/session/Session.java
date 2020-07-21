@@ -6,6 +6,7 @@ import java.security.Principal;
 import org.cyk.utility.__kernel__.object.LifeCycleListener;
 import org.cyk.utility.__kernel__.security.SecurityHelper;
 import org.cyk.utility.__kernel__.security.User;
+import org.cyk.utility.__kernel__.security.UserBuilder;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +20,7 @@ public class Session implements Serializable {
 	private UserInterface userInterface;
 	
 	public Session(Principal principal) {
-		user = new User(principal);
+		user = UserBuilder.getInstance().build(principal);
 		userInterface = new UserInterface(user);
 		LifeCycleListener.getInstance().listenConstructing(this);
 	}
@@ -30,7 +31,7 @@ public class Session implements Serializable {
 	
 	public User getUser(Boolean injectIfNull) {
 		if(user == null && Boolean.TRUE.equals(injectIfNull))
-			user = new User(null);
+			user = new User();
 		return user;
 	}
 	
