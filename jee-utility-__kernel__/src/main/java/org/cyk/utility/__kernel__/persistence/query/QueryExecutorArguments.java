@@ -271,6 +271,8 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 			strings.add("QRC="+isResultCachable);
 		if(collectionable != null)
 			strings.add("COL="+collectionable);
+		if(loggingLevel != null)
+			strings.add("LOG="+loggingLevel);
 		return StringHelper.concatenate(strings, " ");
 	}
 	
@@ -322,6 +324,8 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 				strings.add("QRC="+isResultCachable);
 			if(collectionable != null)
 				strings.add("COL="+collectionable);
+			if(loggableAsInfo != null)
+				strings.add("LOG="+loggableAsInfo);
 			return StringHelper.concatenate(strings, " ");
 		}
 		

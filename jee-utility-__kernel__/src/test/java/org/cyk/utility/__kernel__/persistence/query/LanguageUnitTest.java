@@ -3,13 +3,20 @@ package org.cyk.utility.__kernel__.persistence.query;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.cyk.utility.__kernel__.computation.LogicalOperator;
-import org.cyk.utility.__kernel__.persistence.query.Language.Order;
-import org.cyk.utility.__kernel__.persistence.query.Language.Where;
 import org.cyk.utility.__kernel__.persistence.query.Language.Argument;
+import org.cyk.utility.__kernel__.persistence.query.Language.Order;
+import org.cyk.utility.__kernel__.persistence.query.Language.Select;
+import org.cyk.utility.__kernel__.persistence.query.Language.Where;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 public class LanguageUnitTest extends AbstractWeldUnitTest {
 
+	@Test
+	public void select_of(){
+		assertThat(Select.of("p1")).isEqualTo("SELECT p1");
+		assertThat(Select.of("p1","p2")).isEqualTo("SELECT p1,p2");		
+	}
+	
 	@Test
 	public void where_join(){
 		assertThat(Where.and("p1")).isEqualTo("p1");

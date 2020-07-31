@@ -48,6 +48,5 @@ public abstract class AbstractUserInterfaceEventListenerImpl extends org.cyk.uti
 				);
 		messageRender.addTypes(__inject__(MessageRenderTypeDialog.class));
 		messageRender.execute();
-	}
-	
+	}	
 }

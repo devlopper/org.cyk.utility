@@ -1,6 +1,7 @@
 package org.cyk.utility.__kernel__.time;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -51,5 +52,17 @@ public interface TimeHelper {
 		if(localDateTime == null)
 			return null;
 		return formatLocalDateTime(localDateTime, "dd/MM/yyyy à HH:mm");
+	}
+	
+	static String formatLocalDate(LocalDate localDate,String pattern) {
+		if(localDate == null)
+			return null;
+		return DateTimeFormatter.ofPattern(pattern, Locale.FRENCH).format(localDate);
+	}
+	
+	static String formatLocalDate(LocalDate localDate) {
+		if(localDate == null)
+			return null;
+		return formatLocalDate(localDate, "dd/MM/yyyy");
 	}
 }

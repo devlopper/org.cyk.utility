@@ -61,6 +61,8 @@ public interface InputBuilder {
 					input = Password.build(arguments);
 				else if(InputNumber.class.equals(inputClass))
 					input = InputNumber.build(arguments);
+				else if(Calendar.class.equals(inputClass))
+					input = Calendar.build(arguments);
 				else if(AutoComplete.class.equals(inputClass))
 					input = AutoComplete.build(arguments);
 				else if(SelectManyCheckbox.class.equals(inputClass))

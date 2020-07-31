@@ -65,13 +65,17 @@ public class Column extends AbstractObject implements Serializable {
 			public void setFooterValueFromMaster(Column column,Object master) {
 				if(column == null || StringHelper.isBlank(column.getFieldName()) || column.getFooterOutputText() == null)
 					return;
-				Object value = master == null ? null : FieldHelper.read(master, column.getFieldName());
+				Object value = master == null ? null : readFooterValueFromMaster(master, column.getFieldName());
 				if(column.getFieldType() != null) {
 					if(ClassHelper.isInstanceOfNumber(column.getFieldType()))
 						value = NumberHelper.format((Number)value);
 				}
 				value = StringHelper.get(value);
 				column.getFooterOutputText().setValue(StringHelper.get(value));
+			}
+			
+			public Object readFooterValueFromMaster(Object master,String fieldName) {
+				return StringHelper.isBlank(fieldName) ? null : FieldHelper.read(master,fieldName);
 			}
 			
 			public static class DefaultImpl extends Listener.AbstractImpl implements Serializable {

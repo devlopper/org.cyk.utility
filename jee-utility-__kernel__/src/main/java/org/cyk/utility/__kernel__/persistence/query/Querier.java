@@ -1,5 +1,16 @@
 package org.cyk.utility.__kernel__.persistence.query;
 
+import java.io.Serializable;
+import java.util.Collection;
+
+import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.map.MapHelper;
+import org.cyk.utility.__kernel__.object.AbstractObject;
+import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl;
+import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
+import org.cyk.utility.__kernel__.string.StringHelper;
+
 public interface Querier {
 
 	String PARAMETER_NAME_IDENTIFIER = "identifier";
@@ -9,4 +20,118 @@ public interface Querier {
 	String PARAMETER_NAME_STRING = "string";
 	String PARAMETER_NAME_THIS = "this";
 	String PARAMETER_NAME_NAME = "name";
+	
+	/**/
+	
+	public static interface CodableAndNamable<T> extends Querier {
+		
+		Integer NUMBER_OF_WORDS_OF_PARAMETER_NAME_NAME = 4;
+		
+		Boolean isOwner(QueryExecutorArguments arguments);
+		
+		T readOne(QueryExecutorArguments arguments);
+		Collection<T> readMany(QueryExecutorArguments arguments);
+		Long count(QueryExecutorArguments arguments);
+		
+		/* read where code or name like order by code ascending */
+		Collection<T> readWhereCodeOrNameLike(QueryExecutorArguments arguments);
+		
+		/* count where filter */
+		Long countWhereCodeOrNameLike(QueryExecutorArguments arguments);
+		
+		static String getQueryValueWhereCodeOrNameLikeFromWhere(String tupleName) {
+			return Language.From.of(tupleName+" t")+" "+Language.Where.of(Language.Where.or(
+				Language.Where.like("t", AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl.FIELD_CODE, PARAMETER_NAME_CODE)
+				,Language.Where.like("t", AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl.FIELD_NAME, PARAMETER_NAME_NAME
+						, NUMBER_OF_WORDS_OF_PARAMETER_NAME_NAME)));
+		}
+		
+		static String getQueryValueReadWhereCodeOrNameLike(String tupleName) {
+			return Language.of(Language.Select.of("t.identifier,t.code,t.name"),getQueryValueWhereCodeOrNameLikeFromWhere(tupleName),Language.Order.of("t.code ASC"));
+		}
+		
+		
+		static String getQueryValueCountWhereCodeOrNameLike(String tupleName) {
+			return Language.of(Language.Select.of("COUNT(t.identifier)"),getQueryValueWhereCodeOrNameLikeFromWhere(tupleName));
+		}
+		
+		/**/
+		
+		public static abstract class AbstractImpl<T> extends AbstractObject implements CodableAndNamable<T>,Serializable {
+			
+			@Override
+			public Boolean isOwner(QueryExecutorArguments arguments) {
+				if(arguments == null || arguments.getQuery() == null || StringHelper.isBlank(arguments.getQuery().getIdentifier()))
+					return null;
+				return __isOwner__(arguments);
+			}
+			
+			protected Boolean __isOwner__(QueryExecutorArguments arguments) {
+				return StringUtils.startsWith(arguments.getQuery().getIdentifier(), getKlass().getSimpleName()+".");
+			}
+			
+			@Override
+			public T readOne(QueryExecutorArguments arguments) {
+				throw new RuntimeException(arguments.getQuery().getIdentifier()+" cannot be processed by this class");
+			}
+			
+			@Override
+			public Collection<T> readMany(QueryExecutorArguments arguments) {
+				if(QueryIdentifierGetter.getInstance().get(getKlass(), QueryName.READ_WHERE_CODE_OR_NAME_LIKE).equals(arguments.getQuery().getIdentifier()))
+					return (Collection<T>) readWhereCodeOrNameLike(arguments);
+				throw new RuntimeException(arguments.getQuery().getIdentifier()+" cannot be processed by this class");
+			}
+			
+			@Override
+			public Long count(QueryExecutorArguments arguments) {
+				if(QueryIdentifierGetter.getInstance().get(getKlass(), QueryName.COUNT_WHERE_CODE_OR_NAME_LIKE).equals(arguments.getQuery().getIdentifier()))
+					return countWhereCodeOrNameLike(arguments);
+				throw new RuntimeException(arguments.getQuery().getIdentifier()+" cannot be processed by this class");
+			}
+			
+			@Override
+			public Collection<T> readWhereCodeOrNameLike(QueryExecutorArguments arguments) {
+				prepareWhereFilter(arguments);
+				return QueryExecutor.getInstance().executeReadMany(getKlass(), arguments);
+			}
+			
+			@Override
+			public Long countWhereCodeOrNameLike(QueryExecutorArguments arguments) {
+				prepareWhereFilter(arguments);
+				return QueryExecutor.getInstance().executeCount(arguments);
+			}
+			
+			protected void prepareWhereFilter(QueryExecutorArguments arguments) {
+				Filter filter = new Filter();
+				filter.addFieldContains(PARAMETER_NAME_CODE, arguments);
+				filter.addFieldContainsStringOrWords(PARAMETER_NAME_NAME, NUMBER_OF_WORDS_OF_PARAMETER_NAME_NAME, arguments);
+				arguments.setFilter(filter);
+			}
+			
+			protected Class<T> getKlass() {
+				return (Class<T>) ClassHelper.getParameterAt(getClass(), 0);
+			}
+		}
+		
+		/**/
+		
+		static void initialize(Class<?> klass) {		
+			QueryHelper.addQueries(Query.build(Query.FIELD_IDENTIFIER,QueryIdentifierGetter.getInstance().get(klass, QueryName.READ_WHERE_CODE_OR_NAME_LIKE)
+					,Query.FIELD_TUPLE_CLASS,klass,Query.FIELD_RESULT_CLASS,klass
+					,Query.FIELD_VALUE,Querier.CodableAndNamable.getQueryValueReadWhereCodeOrNameLike(klass.getSimpleName())
+					).setTupleFieldsNamesIndexes(MapHelper.instantiateStringIntegerByStrings(AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl
+							.FIELD_IDENTIFIER,AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl.FIELD_CODE
+							,AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl.FIELD_NAME))
+				);		
+			QueryHelper.addQueries(Query.build(Query.FIELD_IDENTIFIER,QueryIdentifierGetter.getInstance().get(klass, QueryName.COUNT_WHERE_CODE_OR_NAME_LIKE)
+					,Query.FIELD_TUPLE_CLASS,klass,Query.FIELD_RESULT_CLASS,Long.class
+					,Query.FIELD_VALUE,Querier.CodableAndNamable.getQueryValueCountWhereCodeOrNameLike(klass.getSimpleName())
+					)
+				);		
+		}
+	}
+	
+	static String buildIdentifier(Class<?> klass,String name) {
+		return QueryIdentifierBuilder.getInstance().build(klass, name);
+	}
 }

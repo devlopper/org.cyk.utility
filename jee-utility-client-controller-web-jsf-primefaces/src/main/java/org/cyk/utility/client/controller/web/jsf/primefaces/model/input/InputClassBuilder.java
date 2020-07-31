@@ -49,6 +49,8 @@ public interface InputClassBuilder {
 							inputClass = InputText.class;
 						else if(ClassHelper.isInstanceOfNumber(fieldType))
 							inputClass = InputNumber.class;
+						else if(ClassHelper.isInstanceOfDate(fieldType))
+							inputClass = Calendar.class;
 						else if(!ClassHelper.isBelongsToJavaPackages(fieldType)) {						
 							inputClass = AutoComplete.class;				
 						}else {
@@ -91,12 +93,16 @@ public interface InputClassBuilder {
 				return InputText.class;
 			if(field.isAnnotationPresent(org.cyk.utility.__kernel__.object.__static__.controller.annotation.InputPass.class))
 				return Password.class;
+			if(field.isAnnotationPresent(org.cyk.utility.__kernel__.object.__static__.controller.annotation.InputDate.class))
+				return Calendar.class;
 			if(field.isAnnotationPresent(org.cyk.utility.__kernel__.object.__static__.controller.annotation.InputChoiceManyCheck.class))
 				return SelectManyCheckbox.class;
 			if(field.isAnnotationPresent(org.cyk.utility.__kernel__.object.__static__.controller.annotation.InputChoiceOneRadio.class))
 				return SelectOneRadio.class;
 			if(field.isAnnotationPresent(org.cyk.utility.__kernel__.object.__static__.controller.annotation.InputChoiceOneCombo.class))
 				return SelectOneCombo.class;
+			if(field.isAnnotationPresent(org.cyk.utility.__kernel__.object.__static__.controller.annotation.InputChoiceOneAutoComplete.class))
+				return AutoComplete.class;
 			return Void.class;
 		}
 	}

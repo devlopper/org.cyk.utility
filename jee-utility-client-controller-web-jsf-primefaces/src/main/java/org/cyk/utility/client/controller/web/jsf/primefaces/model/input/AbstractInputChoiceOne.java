@@ -88,6 +88,24 @@ public class AbstractInputChoiceOne extends AbstractInputChoice<Object> implemen
 		return this;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public AbstractInputChoiceOne selectByBusinessIdentifier(Object businessIdentifier) {
+		if(CollectionHelper.isEmpty(choices) || businessIdentifier == null)
+			return this;
+		Object choice = null;
+		for(Object index : choices)
+			if(businessIdentifier.equals(FieldHelper.readBusinessIdentifier(index))) {
+				choice = index;
+				break;
+			}
+		if(choice == null) {
+			LogHelper.logWarning("No choice with business identifier "+businessIdentifier+" found in choices", getClass());
+			return this;
+		}
+		((Listener<Object>)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).select(this, choice);
+		return this;
+	}
+	
 	public AbstractInputChoiceOne selectFirstChoice() {
 		select(CollectionHelper.getFirst(choices));
 		return this;

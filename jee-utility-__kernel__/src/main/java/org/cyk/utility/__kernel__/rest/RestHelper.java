@@ -27,7 +27,7 @@ import org.jboss.weld.exceptions.IllegalArgumentException;
  *
  */
 public interface RestHelper {
-
+	
 	static <RESOURCE> Collection<RESOURCE> getMany(Class<RESOURCE> resourceClass,Object classifier,URI uniformResourceIdentifier,Map<String,String> fieldsNamesMap) {
 		if(resourceClass == null)
 			throw new IllegalArgumentException("Resource class is required");

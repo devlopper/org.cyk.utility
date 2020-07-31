@@ -51,6 +51,13 @@
 	    </ui:decorate>
 	</c:if>
 
+	<c:if test="#{classSimpleName eq 'Calendar'}">
+		<c:set var="processed" value="true"/>
+		<ui:decorate template="#{template}">
+	    	<ui:param name="calendar" value="#{cell.control}"/>
+	    </ui:decorate>
+	</c:if>
+
 	<c:if test="#{classSimpleName eq 'AutoComplete'}">
 		<c:set var="processed" value="true"/>
 		<ui:decorate template="#{template}">

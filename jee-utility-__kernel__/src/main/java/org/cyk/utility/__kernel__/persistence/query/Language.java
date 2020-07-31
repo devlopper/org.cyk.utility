@@ -40,6 +40,16 @@ public interface Language {
 			return String.format(SELECT, select);
 		}
 		
+		static String of(Collection<String> strings) {
+			ThrowableHelper.throwIllegalArgumentExceptionIfEmpty("strings", strings);
+			return of(StringHelper.concatenate(strings, ","));
+		}
+		
+		static String of(String...strings) {
+			ThrowableHelper.throwIllegalArgumentExceptionIfEmpty("strings", strings);
+			return of(ArrayHelper.isEmpty(strings) ? null : CollectionHelper.listOf(strings));
+		}
+		
 		static String concat(String tupleName,Collection<String> attributesNames) {
 			if(StringHelper.isBlank(tupleName) || CollectionHelper.isEmpty(attributesNames))
 				return null;

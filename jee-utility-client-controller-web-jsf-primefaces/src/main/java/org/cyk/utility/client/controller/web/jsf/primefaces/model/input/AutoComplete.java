@@ -24,8 +24,11 @@ import org.cyk.utility.__kernel__.object.Configurator;
 import org.cyk.utility.__kernel__.object.ReadListener;
 import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringImpl;
 import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl;
+import org.cyk.utility.__kernel__.persistence.query.Querier;
 import org.cyk.utility.__kernel__.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
+import org.cyk.utility.__kernel__.persistence.query.QueryIdentifierGetter;
+import org.cyk.utility.__kernel__.persistence.query.QueryName;
 import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.runnable.Runner;
@@ -173,6 +176,7 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 	public static final String FIELD_FILTER = "filter";
 	public static final String FIELD_READ_QUERY_IDENTIFIER = "readQueryIdentifier";
 	public static final String FIELD_COUNT_QUERY_IDENTIFIER = "countQueryIdentifier";
+	public static final String FIELD_READER_USABLE = "readerUsable";
 	
 	private static final String SCRIPT_SEARCH = "PF('%s').search('%s')";
 	
@@ -201,7 +205,10 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 			public Filter.Dto instantiateFilter(AutoComplete autoComplete) {
 				Filter.Dto filter = new Filter.Dto();
 				if(Boolean.TRUE.equals(autoComplete.readerUsable)) {
-					
+					if(QueryIdentifierGetter.getInstance().get(autoComplete.entityClass, QueryName.READ_WHERE_CODE_OR_NAME_LIKE).equals(autoComplete.readQueryIdentifier)) {
+						filter.addField(Querier.PARAMETER_NAME_CODE, autoComplete.get__queryString__());
+						filter.addField(Querier.PARAMETER_NAME_NAME, autoComplete.get__queryString__());
+					}
 				}else {
 					if(StringHelper.isNotBlank(autoComplete.__queryString__))
 						filter.addField(AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringImpl.FIELD_CODE, autoComplete.__queryString__)
@@ -307,20 +314,26 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 					autoComplete.entityClass = autoComplete.field.getType();
 			}
 			
-			if(autoComplete.controllerEntity == null) {
-				if(autoComplete.entityClass != null) {
-					autoComplete.controllerEntity = __inject__(ControllerLayer.class).injectInterfaceClassFromEntityClass(autoComplete.entityClass);
-					
-					String persistenceEntityClassName = ClassHelper.buildName(autoComplete.entityClass.getPackageName(), autoComplete.entityClass.getSimpleName()
-							, new NamingModel().client().controller().entities(), new NamingModel().server().persistence().entities());						
-					Class<?> persistenceEntityClass = ClassHelper.getByName(persistenceEntityClassName);
-					if(StringHelper.isBlank(autoComplete.readQueryIdentifier))
-						autoComplete.readQueryIdentifier = QueryHelper.getIdentifierReadWhereBusinessIdentifierOrNameContains(persistenceEntityClass);
-					if(StringHelper.isBlank(autoComplete.countQueryIdentifier))
-						autoComplete.countQueryIdentifier = QueryHelper.getIdentifierCountWhereBusinessIdentifierOrNameContains(persistenceEntityClass);
+			if(Boolean.TRUE.equals(autoComplete.readerUsable)) {
+				if(StringHelper.isBlank(autoComplete.readQueryIdentifier)) {
+					autoComplete.readQueryIdentifier = QueryIdentifierGetter.getInstance().get(autoComplete.entityClass, QueryName.READ_WHERE_CODE_OR_NAME_LIKE);
 				}
+			}else {
+				if(autoComplete.controllerEntity == null) {
+					if(autoComplete.entityClass != null) {
+						autoComplete.controllerEntity = __inject__(ControllerLayer.class).injectInterfaceClassFromEntityClass(autoComplete.entityClass);
+						
+						String persistenceEntityClassName = ClassHelper.buildName(autoComplete.entityClass.getPackageName(), autoComplete.entityClass.getSimpleName()
+								, new NamingModel().client().controller().entities(), new NamingModel().server().persistence().entities());						
+						Class<?> persistenceEntityClass = ClassHelper.getByName(persistenceEntityClassName);
+						if(StringHelper.isBlank(autoComplete.readQueryIdentifier))
+							autoComplete.readQueryIdentifier = QueryHelper.getIdentifierReadWhereBusinessIdentifierOrNameContains(persistenceEntityClass);
+						if(StringHelper.isBlank(autoComplete.countQueryIdentifier))
+							autoComplete.countQueryIdentifier = QueryHelper.getIdentifierCountWhereBusinessIdentifierOrNameContains(persistenceEntityClass);
+					}
+				}	
 			}
-			
+						
 			autoComplete.addAjaxes(Map.of(Ajax.FIELD_EVENT,"query",Ajax.FIELD_DISABLED,Boolean.FALSE)
 					,Map.of(Ajax.FIELD_EVENT,"moreText",Ajax.FIELD_DISABLED,Boolean.FALSE,Ajax.FIELD_LISTENER
 					,new AbstractAction.Listener.AbstractImpl() {

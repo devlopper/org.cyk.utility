@@ -113,7 +113,9 @@ public class Form extends AbstractObject implements Serializable {
 				form.action = Action.getByNameCaseInsensitive(Faces.getRequestParameter(ParameterName.ACTION_IDENTIFIER.getValue()));
 			}
 			
-			if(form.controllerEntity == null && form.entityClass != null) {
+			Boolean controllerEntityInjectable = MapHelper.readByKey(arguments,FIELD_CONTROLLER_ENTITY_INJECTABLE) == null 
+					|| Boolean.TRUE.equals(MapHelper.readByKey(arguments,FIELD_CONTROLLER_ENTITY_INJECTABLE));
+			if(Boolean.TRUE.equals(controllerEntityInjectable) && form.controllerEntity == null && form.entityClass != null) {
 				form.controllerEntity = (ControllerEntity<Object>) __inject__(ControllerLayer.class).injectInterfaceClassFromEntityClass(form.entityClass);
 			}
 						
@@ -221,7 +223,7 @@ public class Form extends AbstractObject implements Serializable {
 		public static final String FIELD_INPUTS_FIELDS_NAMES = "inputsFieldsNames";
 		public static final String FIELD_METHOD_NAME = "methodName";
 		public static final String FIELD_LISTENER = "configurator.listener";
-	
+		public static final String FIELD_CONTROLLER_ENTITY_INJECTABLE = "controllerEntityInjectable";
 		/**/
 		
 		public static interface Listener {
@@ -341,5 +343,4 @@ public class Form extends AbstractObject implements Serializable {
 			}
 		}
 	}
-
 }

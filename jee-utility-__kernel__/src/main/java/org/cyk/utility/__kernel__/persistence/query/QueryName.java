@@ -8,6 +8,10 @@ public enum QueryName {
 	READ,COUNT
 	,READ_BY_SYSTEM_IDENTIFIERS("readBySystemIdentifiers")
 	,READ_BY_BUSINESS_IDENTIFIERS("readByBusinessIdentifiers")
+	
+	,READ_WHERE_CODE_OR_NAME_LIKE("readWhereCodeOrNameLike")
+	,COUNT_WHERE_CODE_OR_NAME_LIKE("countWhereCodeOrNameLike")
+	
 	,FILTER
 	
 	;

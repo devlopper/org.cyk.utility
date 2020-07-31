@@ -1,6 +1,7 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces.model.input;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.map.MapHelper;
@@ -18,6 +19,16 @@ public class SelectOneCombo extends AbstractInputChoiceOne implements Serializab
 	private Boolean filter;
 	private String filterMatchMode;
 	/**/
+	
+	@Override
+	public SelectOneCombo enableValueChangeListener(Collection<Object> updatables) {
+		return (SelectOneCombo) super.enableValueChangeListener(updatables);
+	}
+	
+	@Override
+	public SelectOneCombo selectFirstChoice() {
+		return (SelectOneCombo) super.selectFirstChoice();
+	}
 	
 	public static final String FIELD_FILTER = "filter";
 	public static final String FIELD_FILTER_MATCH_MODE = "filterMatchMode";

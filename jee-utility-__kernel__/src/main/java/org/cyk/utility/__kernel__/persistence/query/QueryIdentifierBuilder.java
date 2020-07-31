@@ -46,6 +46,8 @@ public interface QueryIdentifierBuilder {
 	
 	String buildCountFrom(String identifier);
 	
+	String buildReadWhereCodeOrNameLike(Class<?> klass);
+	
 	/**/
 	
 	public abstract class AbstractImpl extends AbstractObject implements QueryIdentifierBuilder,Serializable {
@@ -56,9 +58,13 @@ public interface QueryIdentifierBuilder {
 			Arguments arguments = new Arguments();
 			arguments.setIsDerivedFromQueryIdentifier(Boolean.TRUE).setDerivedFromQueryIdentifier(identifier).setIsCountInstances(Boolean.TRUE);
 			return build(arguments);
-		}		
+		}
+		
+		@Override
+		public String buildReadWhereCodeOrNameLike(Class<?> klass) {
+			return build(klass, QueryName.READ_WHERE_CODE_OR_NAME_LIKE.getValue());
+		}
 	}
-
 	
 	/**/
 	

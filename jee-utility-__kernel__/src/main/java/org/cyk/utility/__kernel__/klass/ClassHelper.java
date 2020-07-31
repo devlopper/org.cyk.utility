@@ -1,8 +1,11 @@
 package org.cyk.utility.__kernel__.klass;
 
 import java.lang.reflect.ParameterizedType;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -165,6 +168,14 @@ public interface ClassHelper {
 		if(klass == null)
 			return Boolean.FALSE;
 		return isInstanceOf(getWrapper(klass),Number.class);
+	}
+	
+	static Boolean isInstanceOfDate(Class<?> klass) {
+		if(klass == null)
+			return Boolean.FALSE;
+		if(Date.class.equals(klass) || LocalDate.class.equals(klass) || LocalDateTime.class.equals(klass))
+			return Boolean.TRUE;
+		return Boolean.FALSE;
 	}
 	
 	static Boolean isInstanceOfCharSequence(Class<?> klass) {
