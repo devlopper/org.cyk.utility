@@ -34,7 +34,7 @@ public abstract class AbstractUserInterfaceEventListenerImpl extends org.cyk.uti
 		case LOGOUT:
 			LogHelper.logInfo("Logout of user named <<"+SessionHelper.getUserName()+">>", getClass());
 	    	SessionHelper.destroy();
-	    	JsfController.getInstance().redirect("indexView");
+	    	listenLogoutRedirect();
 			return;
 		default:
 			message = "Quel évènement ?";
@@ -48,5 +48,9 @@ public abstract class AbstractUserInterfaceEventListenerImpl extends org.cyk.uti
 				);
 		messageRender.addTypes(__inject__(MessageRenderTypeDialog.class));
 		messageRender.execute();
-	}	
+	}
+	
+	protected void listenLogoutRedirect() {
+		JsfController.getInstance().redirect("indexView");
+	}
 }

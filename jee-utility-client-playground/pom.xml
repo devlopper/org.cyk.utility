@@ -28,6 +28,12 @@
 			<artifactId>jee-utility-playground-common</artifactId>
 			<version>0.1.0</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.jaspersoft</groupId>
+			<artifactId>jrs-rest-java-client</artifactId>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 	
 	<profiles>

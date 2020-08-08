@@ -26,8 +26,13 @@ public abstract class AbstractEntityEditPageContainerManagedImpl<ENTITY> extends
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
 		entityClass = (Class<ENTITY>) ClassHelper.getParameterAt(getClass(), 0);
-		action = WebController.getInstance().getRequestParameterAction();
+		if(action == null)
+			setActionFromRequestParameter();
 		form = __buildForm__();
+	}
+	
+	protected void setActionFromRequestParameter() {
+		action = WebController.getInstance().getRequestParameterAction();
 	}
 	
 	protected Form __buildForm__() {

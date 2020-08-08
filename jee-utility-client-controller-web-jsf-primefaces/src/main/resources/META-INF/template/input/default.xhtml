@@ -8,7 +8,22 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
-	<ui:insert name="message"/>
+	<ui:insert name="message">
+		<ui:fragment rendered="#{__input__.message != null}">
+			<ui:decorate template="#{primefacesHelper.getModelTemplate(__input__.message)}">
+				<ui:param name="message" value="#{__input__.message}"/>
+			</ui:decorate>
+		</ui:fragment>
+	</ui:insert>
+	
+	<ui:insert name="label">
+		<ui:fragment rendered="#{__input__.outputLabel.cardinalPointFromReference != null}">
+			<ui:decorate template="#{primefacesHelper.getModelTemplate(__input__.outputLabel)}">
+				<ui:param name="outputLabel" value="#{__input__.outputLabel}"/>
+			</ui:decorate>
+		</ui:fragment>			
+	</ui:insert>
+	
 	<ui:insert name="input">
 		<h:outputText value="INPUT" />
 	</ui:insert>

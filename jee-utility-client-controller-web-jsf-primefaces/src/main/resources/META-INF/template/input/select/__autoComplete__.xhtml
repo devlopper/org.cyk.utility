@@ -7,7 +7,12 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
-
+	
+	<!-- 
+		id has been removed in order to support multiple use of component in view
+		id="#{outputLabel.identifier}"
+	 -->
+	
 	<ui:decorate template="/input/default.xhtml">
 		<ui:define name="message">
 			<ui:decorate template="#{primefacesHelper.getModelTemplate(autoComplete.message)}">

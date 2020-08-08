@@ -118,7 +118,8 @@ public abstract class AbstractInput<VALUE> extends AbstractInputOutput<VALUE> im
 						outputLabelValue = InternationalizationHelper.buildString(InternationalizationHelper.buildKey(input.field.getName()),null,null,Case.FIRST_CHARACTER_UPPER);
 					}	
 				}				
-				input.outputLabel = OutputLabel.build(OutputLabel.FIELD_VALUE,outputLabelValue,OutputLabel.FIELD_FOR,input.getIdentifier());
+				input.outputLabel = OutputLabel.build(OutputLabel.FIELD_VALUE,outputLabelValue,OutputLabel.FIELD_FOR,input.getIdentifier()
+						,OutputLabel.FIELD_CARDINAL_POINT_FROM_REFERENCE,MapHelper.readByKey(arguments, FIELD_OUTPUT_LABEL_CARDINAL_POINT));
 			}
 			
 			if(input.placeholder == null) {
@@ -132,5 +133,6 @@ public abstract class AbstractInput<VALUE> extends AbstractInputOutput<VALUE> im
 		}
 		
 		public static final String FIELD_OUTPUT_LABEL_VALUE = "outputLabelValue";
+		public static final String FIELD_OUTPUT_LABEL_CARDINAL_POINT = "outputLabelCardinalPoint";
 	}
 }

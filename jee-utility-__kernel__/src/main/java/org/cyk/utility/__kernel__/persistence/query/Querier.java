@@ -20,7 +20,7 @@ public interface Querier {
 	String PARAMETER_NAME_STRING = "string";
 	String PARAMETER_NAME_THIS = "this";
 	String PARAMETER_NAME_NAME = "name";
-	
+
 	/**/
 	
 	public static interface CodableAndNamable<T> extends Querier {
@@ -42,8 +42,8 @@ public interface Querier {
 		static String getQueryValueWhereCodeOrNameLikeFromWhere(String tupleName) {
 			return Language.From.of(tupleName+" t")+" "+Language.Where.of(Language.Where.or(
 				Language.Where.like("t", AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl.FIELD_CODE, PARAMETER_NAME_CODE)
-				,Language.Where.like("t", AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl.FIELD_NAME, PARAMETER_NAME_NAME
-						, NUMBER_OF_WORDS_OF_PARAMETER_NAME_NAME)));
+				,Language.Where.like("t", AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl.FIELD_NAME, PARAMETER_NAME_NAME, NUMBER_OF_WORDS_OF_PARAMETER_NAME_NAME)
+				));
 		}
 		
 		static String getQueryValueReadWhereCodeOrNameLike(String tupleName) {

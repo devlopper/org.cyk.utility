@@ -31,6 +31,21 @@ public interface Language {
 		ThrowableHelper.throwIllegalArgumentExceptionIfEmpty("clauses", clauses);
 		return of(CollectionHelper.listOf(clauses));
 	}
+	
+	static String jpql(Collection<String> clauses) {
+		return of(clauses);
+	}
+	
+	static String jpql(String...clauses) {
+		return of(clauses);
+	}
+	
+	static String parenthesis(String string) {
+		ThrowableHelper.throwIllegalArgumentExceptionIfBlank("string", string);
+		return String.format(PARENTHESIS, string);
+	}
+	
+	String PARENTHESIS = "(%s)";
 
 	/**/
 	
@@ -48,6 +63,14 @@ public interface Language {
 		static String of(String...strings) {
 			ThrowableHelper.throwIllegalArgumentExceptionIfEmpty("strings", strings);
 			return of(ArrayHelper.isEmpty(strings) ? null : CollectionHelper.listOf(strings));
+		}
+		
+		static String select(Collection<String> strings) {
+			return of(strings);
+		}
+		
+		static String select(String...strings) {
+			return of(strings);
 		}
 		
 		static String concat(String tupleName,Collection<String> attributesNames) {
@@ -118,6 +141,14 @@ public interface Language {
 			return of(CollectionHelper.listOf(strings));
 		}
 		
+		static String from(Collection<String> strings) {
+			return of(strings);
+		}
+		
+		static String from(String...strings) {
+			return of(strings);
+		}
+		
 		static String ofTuple(Class<?> tupleClass) {
 			ThrowableHelper.throwIllegalArgumentExceptionIfNull("Tuple class", tupleClass);
 			return of(tuple(tupleClass));
@@ -161,6 +192,31 @@ public interface Language {
 		static String of(String where) {
 			ThrowableHelper.throwIllegalArgumentExceptionIfBlank("where", where);
 			return String.format(WHERE, where);
+		}
+		
+		static String of(Collection<String> strings) {
+			if(CollectionHelper.isEmpty(strings))
+				return ConstantEmpty.STRING;
+			return of(StringHelper.concatenate(strings, " "));
+		}
+		
+		static String of(String...strings) {
+			if(ArrayHelper.isEmpty(strings))
+				return ConstantEmpty.STRING;
+			return of(CollectionHelper.listOf(strings));
+		}
+		
+		static String where(Collection<String> strings) {
+			return of(strings);
+		}
+		
+		static String where(String...strings) {
+			return of(strings);
+		}
+		
+		static String not(String predicate) {
+			ThrowableHelper.throwIllegalArgumentExceptionIfBlank("predicate", predicate);
+			return String.format(NOT, predicate);
 		}
 		
 		static String join(Collection<String> predicates,LogicalOperator operator) {
@@ -236,6 +292,23 @@ public interface Language {
 			return like(tupleName, fieldName, parameterName, null, null, null);
 		}
 		
+		static String exists(String exists) {
+			ThrowableHelper.throwIllegalArgumentExceptionIfBlank("exists", exists);
+			return String.format(EXISTS, exists);
+		}
+		
+		static String exists(Collection<String> strings) {
+			if(CollectionHelper.isEmpty(strings))
+				return ConstantEmpty.STRING;
+			return exists(StringHelper.concatenate(strings, " "));
+		}
+		
+		static String exists(String...strings) {
+			if(ArrayHelper.isEmpty(strings))
+				return ConstantEmpty.STRING;
+			return exists(CollectionHelper.listOf(strings));
+		}
+		
 		/*
 		static String deriveLike(String tuple,String fieldName,String parameterName,Integer numberOfTokens,LogicalOperator operator,Boolean isCaseSensitive){
 			if(StringHelper.isBlank(tuple) || StringHelper.isBlank(fieldName) || StringHelper.isBlank(parameterName))
@@ -250,6 +323,8 @@ public interface Language {
 		*/
 		String WHERE = "WHERE %s";
 		String OPERATE = "%s.%s %s :%s";
+		String EXISTS = "EXISTS(%s)";
+		String NOT = "NOT (%s)";
 		
 		/**/
 		

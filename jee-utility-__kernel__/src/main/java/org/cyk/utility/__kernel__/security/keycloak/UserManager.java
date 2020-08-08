@@ -11,12 +11,14 @@ import javax.ws.rs.core.Response;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.__kernel__.value.ValueHelper;
+import org.cyk.utility.__kernel__.variable.VariableName;
 import org.jboss.weld.exceptions.IllegalArgumentException;
 import org.keycloak.admin.client.resource.RolesResource;
 import org.keycloak.admin.client.resource.UserResource;
@@ -84,7 +86,7 @@ public interface UserManager {
 	
 	public static abstract class AbstractImpl extends AbstractObject implements UserManager,Serializable {
 		
-		public static String ADMINISTRATOR_USERNAME = "admin";
+		public static String ADMINISTRATOR_USERNAME = ConfigurationHelper.getValueAsString(VariableName.KEYCLOAK_CREDENTIAL_USERNAME);
 		
 		@Override
 		public UserManager create(Collection<User> users) {

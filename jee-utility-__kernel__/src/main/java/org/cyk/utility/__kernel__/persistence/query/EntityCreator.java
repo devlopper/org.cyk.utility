@@ -11,103 +11,167 @@ import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
-import org.cyk.utility.__kernel__.object.marker.IdentifiableBusiness;
 import org.cyk.utility.__kernel__.object.marker.IdentifiableSystem;
+import org.cyk.utility.__kernel__.object.marker.Namable;
 import org.cyk.utility.__kernel__.persistence.EntityManagerGetter;
 import org.cyk.utility.__kernel__.value.Value;
 
 public interface EntityCreator {
 
-	default void createMany(QueryExecutorArguments arguments) {
-		if(arguments == null || CollectionHelper.isEmpty(arguments.getObjects()))
-			return;
-		EntityManager entityManager = arguments.getEntityManager();
-		if(entityManager == null)
-			entityManager = EntityManagerGetter.getInstance().get();
-		if(Boolean.TRUE.equals(arguments.getIsTransactional()))
-			entityManager.getTransaction().begin();
-		for(Object index : arguments.getObjects()) {	
-			//if system identifier is null we compute it
-			if(index instanceof IdentifiableSystem && FieldHelper.readSystemIdentifier(index) == null) {
-				Object identifier;
-				//if business identifier is not null then we assign business identifier to system identifier else we generate one
-				if(index instanceof IdentifiableBusiness && FieldHelper.readBusinessIdentifier(index) != null) {
-					identifier = FieldHelper.readBusinessIdentifier(index);
-				}else
-					identifier = UUID.randomUUID().toString();
-				((IdentifiableSystem<Object>)index).setSystemIdentifier(identifier);
-			}
-			entityManager.persist(index);
-		}
-		if(Boolean.TRUE.equals(arguments.getIsTransactional()))
-			entityManager.getTransaction().commit();
-	}
+	void createMany(QueryExecutorArguments arguments);
 	
-	default void createMany(Collection<Object> objects,EntityManager entityManager) {
-		if(entityManager == null || CollectionHelper.isEmpty(objects))
-			return;
-		createMany(new QueryExecutorArguments().setObjects(objects).setEntityManager(entityManager));
-	}
+	void createMany(Collection<Object> objects,EntityManager entityManager);
 	
-	default void createMany(Collection<Object> objects) {
-		if(CollectionHelper.isEmpty(objects))
-			return;
-		createMany(objects, EntityManagerGetter.getInstance().get());
-	}
+	void createMany(Collection<Object> objects);
 	
-	default void createMany(EntityManager entityManager,Object...objects) {
-		if(entityManager == null || ArrayHelper.isEmpty(objects))
-			return;
-		createMany(CollectionHelper.listOf(objects),entityManager);
-	}
+	void createMany(EntityManager entityManager,Object...objects);
 	
-	default void createMany(Object...objects) {
-		if(ArrayHelper.isEmpty(objects))
-			return;
-		createMany(CollectionHelper.listOf(objects));
-	}
+	void createMany(Object...objects);
 	
-	default void createManyInTransaction(Collection<Object> objects) {
-		if(CollectionHelper.isEmpty(objects))
-			return;
-		createMany(new QueryExecutorArguments().addObjects(objects).setIsTransactional(Boolean.TRUE));
-	}
+	void createManyInTransaction(Collection<Object> objects);
 	
-	default void createManyInTransaction(Object...objects) {
-		if(ArrayHelper.isEmpty(objects))
-			return;
-		createMany(new QueryExecutorArguments().addObjects(CollectionHelper.listOf(objects)).setIsTransactional(Boolean.TRUE));
-	}
+	void createManyInTransaction(Object...objects);
 	
-	default void createOne(Object object,EntityManager entityManager) {
-		if(object == null || entityManager == null)
-			return;
-		createMany(CollectionHelper.listOf(object),entityManager);
-	}
+	void createOne(Object object,EntityManager entityManager);
 	
-	default void createOne(Object object) {
-		if(object == null)
-			return;
-		createMany(new QueryExecutorArguments().addObjects(object));
-	}
+	void createOne(Object object);
 	
-	default void createOne(Object object,Boolean isTransactional) {
-		if(object == null)
-			return;
-		createMany(new QueryExecutorArguments().addObjects(object).setIsTransactional(isTransactional));
-	}
+	void createOne(Object object,Boolean isTransactional);
 	
-	default void createOneInTransaction(Object object) {
-		if(object == null)
-			return;
-		createOne(object,Boolean.TRUE);
-	}
+	void createOneInTransaction(Object object);
 	
 	/**/
 	
 	public abstract class AbstractImpl extends AbstractObject implements EntityCreator,Serializable {
 		private static final long serialVersionUID = 1L;
 	
+		@Override
+		public void createMany(QueryExecutorArguments arguments) {
+			if(arguments == null || CollectionHelper.isEmpty(arguments.getObjects()))
+				return;
+			EntityManager entityManager = arguments.getEntityManager();
+			if(entityManager == null)
+				entityManager = EntityManagerGetter.getInstance().get();
+			if(Boolean.TRUE.equals(arguments.getIsTransactional()))
+				entityManager.getTransaction().begin();
+			for(Object index : arguments.getObjects()) {	
+				__setSystemIdentifierIfNull__(index);
+				__setNameIfNull__(index);
+				/*
+				//if system identifier is null we compute it
+				if(index instanceof IdentifiableSystem && FieldHelper.readSystemIdentifier(index) == null) {
+					Object identifier;
+					//if business identifier is not null then we assign business identifier to system identifier else we generate one
+					if(index instanceof IdentifiableBusiness && FieldHelper.readBusinessIdentifier(index) != null) {
+						identifier = FieldHelper.readBusinessIdentifier(index);
+					}else
+						identifier = UUID.randomUUID().toString();
+					((IdentifiableSystem<Object>)index).setSystemIdentifier(identifier);
+				}
+				*/
+				entityManager.persist(index);
+			}
+			if(Boolean.TRUE.equals(arguments.getIsTransactional()))
+				entityManager.getTransaction().commit();
+		}
+		
+		@Override
+		public void createMany(Collection<Object> objects,EntityManager entityManager) {
+			if(entityManager == null || CollectionHelper.isEmpty(objects))
+				return;
+			createMany(new QueryExecutorArguments().setObjects(objects).setEntityManager(entityManager));
+		}
+		
+		@Override
+		public void createMany(Collection<Object> objects) {
+			if(CollectionHelper.isEmpty(objects))
+				return;
+			createMany(objects, EntityManagerGetter.getInstance().get());
+		}
+		
+		@Override
+		public void createMany(EntityManager entityManager,Object...objects) {
+			if(entityManager == null || ArrayHelper.isEmpty(objects))
+				return;
+			createMany(CollectionHelper.listOf(objects),entityManager);
+		}
+		
+		@Override
+		public void createMany(Object...objects) {
+			if(ArrayHelper.isEmpty(objects))
+				return;
+			createMany(CollectionHelper.listOf(objects));
+		}
+		
+		@Override
+		public void createManyInTransaction(Collection<Object> objects) {
+			if(CollectionHelper.isEmpty(objects))
+				return;
+			createMany(new QueryExecutorArguments().addObjects(objects).setIsTransactional(Boolean.TRUE));
+		}
+		
+		@Override
+		public void createManyInTransaction(Object...objects) {
+			if(ArrayHelper.isEmpty(objects))
+				return;
+			createMany(new QueryExecutorArguments().addObjects(CollectionHelper.listOf(objects)).setIsTransactional(Boolean.TRUE));
+		}
+		
+		@Override
+		public void createOne(Object object,EntityManager entityManager) {
+			if(object == null || entityManager == null)
+				return;
+			createMany(CollectionHelper.listOf(object),entityManager);
+		}
+		
+		@Override
+		public void createOne(Object object) {
+			if(object == null)
+				return;
+			createMany(new QueryExecutorArguments().addObjects(object));
+		}
+		
+		@Override
+		public void createOne(Object object,Boolean isTransactional) {
+			if(object == null)
+				return;
+			createMany(new QueryExecutorArguments().addObjects(object).setIsTransactional(isTransactional));
+		}
+		
+		@Override
+		public void createOneInTransaction(Object object) {
+			if(object == null)
+				return;
+			createOne(object,Boolean.TRUE);
+		}
+		
+		/**/
+		
+		protected void __setSystemIdentifierIfNull__(Object object) {
+			if(!(object instanceof IdentifiableSystem))
+				return;
+			Object identifier = FieldHelper.readSystemIdentifier(object);
+			if(identifier != null)
+				return;			
+			//if business identifier is not null then we assign business identifier to system identifier else we generate one			
+			identifier = FieldHelper.readBusinessIdentifier(object);
+			if(identifier == null)
+				identifier = UUID.randomUUID().toString();			
+			((IdentifiableSystem<Object>)object).setSystemIdentifier(identifier);				
+		}
+		
+		protected void __setNameIfNull__(Object object) {
+			if(!(object instanceof Namable)) 
+				return;			
+			Object name = ((Namable)object).getName();
+			if(name != null)
+				return;			
+			//if business identifier is not null then we assign business identifier to name			
+			name = FieldHelper.readBusinessIdentifier(object);
+			if(name == null)
+				return;
+			((Namable)object).setName(name.toString());										
+		}
 	}
 	
 	/**/
@@ -116,6 +180,5 @@ public interface EntityCreator {
 		return Helper.getInstance(EntityCreator.class, INSTANCE);
 	}
 	
-	Value INSTANCE = new Value();
-	
+	Value INSTANCE = new Value();	
 }

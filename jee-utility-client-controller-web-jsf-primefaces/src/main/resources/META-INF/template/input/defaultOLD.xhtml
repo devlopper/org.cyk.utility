@@ -8,17 +8,9 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
-	<!-- 
-		id has been removed in order to support multiple use of component in view
-		id="#{outputLabel.identifier}"
-	 -->
-	
-	<p:outputLabel		
-		value="#{outputLabel.value}"
-		rendered="#{outputLabel.rendered}"
-		widgetVar="#{outputLabel.widgetVar}"
-		for="#{outputLabel.for_}"
-	>
-	
-	</p:outputLabel>
+	<ui:insert name="message"/>
+	<ui:insert name="input">
+		<h:outputText value="INPUT" />
+	</ui:insert>
+		
 </ui:composition>

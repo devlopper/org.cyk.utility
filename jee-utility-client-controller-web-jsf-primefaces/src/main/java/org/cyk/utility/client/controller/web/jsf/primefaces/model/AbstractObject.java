@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
 
+import org.cyk.utility.__kernel__.CardinalPoint;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
@@ -25,6 +26,7 @@ public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractOb
 	protected MapInstance<Event, String> eventScripts;
 	protected Boolean rendered,__isLoggable__;
 	protected Object binding;
+	protected CardinalPoint cardinalPointFromReference;
 	
 	/* Working variables */
 	
@@ -59,6 +61,7 @@ public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractOb
 	public static final String FIELD_EVENT_SCRIPTS = "eventScripts";
 	public static final String FIELD___TEMPLATE__ = "__template__";
 	public static final String FIELD_LISTENER = "listener";
+	public static final String FIELD_CARDINAL_POINT_FROM_REFERENCE = "cardinalPointFromReference";
 	
 	/* Events */
 	

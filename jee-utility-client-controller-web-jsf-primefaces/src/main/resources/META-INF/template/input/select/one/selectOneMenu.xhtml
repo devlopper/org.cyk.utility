@@ -9,11 +9,14 @@
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
 	<ui:decorate template="/input/default.xhtml">
+		<!--
 		<ui:define name="message">
 			<ui:decorate template="#{primefacesHelper.getModelTemplate(selectOneMenu.message)}">
 				<ui:param name="message" value="#{selectOneMenu.message}"/>
 			</ui:decorate>
-		</ui:define>		
+		</ui:define>
+		-->
+		<ui:param name="__input__" value="#{selectOneMenu}"/>	
 		<ui:define name="input">
 			
 			<p:selectOneMenu
