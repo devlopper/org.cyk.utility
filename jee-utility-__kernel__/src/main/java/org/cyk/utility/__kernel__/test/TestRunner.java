@@ -1,6 +1,6 @@
 package org.cyk.utility.__kernel__.test;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.Value;
@@ -34,12 +34,7 @@ public interface TestRunner {
 	/**/
 	
 	static TestRunner getInstance() {
-		TestRunner instance = (TestRunner) INSTANCE.get();
-		if(instance != null)
-			return instance;
-		INSTANCE.set(instance = DependencyInjection.inject(TestRunner.class));
-		LogHelper.logInfo("instance has been set. <<"+instance.getClass()+">>", TestRunner.class);
-		return instance;
+		return Helper.getInstance(TestRunner.class, INSTANCE);
 	}
 	
 	Value INSTANCE = new Value();

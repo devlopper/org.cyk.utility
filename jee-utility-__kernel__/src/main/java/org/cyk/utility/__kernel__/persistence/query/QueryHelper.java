@@ -33,7 +33,8 @@ public interface QueryHelper {
 	static void scan(Collection<Package> packages) {
 		if(getQueries().getIsRegisterableToEntityManager() == null)
 			getQueries().setIsRegisterableToEntityManager(Boolean.TRUE);
-		LogHelper.logInfo(String.format("query helper scanning packages %s", packages),QueryHelper.class);
+		LogHelper.logFine(String.format("query helper scanning packages %s.Registerable to entity manager=%s"
+				, packages,getQueries().getIsRegisterableToEntityManager()),QueryHelper.class);
 		if(CollectionHelper.isEmpty(packages))
 			return;
 		Collection<java.lang.Class<?>> classes = filter(packages, List.of(ByDimensionOneSystemIdentifierQuerier.class,ByDimensionOneBusinessIdentifierQuerier.class,ByDimensionTwoQuerier.class,Querier.class),Boolean.TRUE);
@@ -61,7 +62,7 @@ public interface QueryHelper {
 			}
 		}
 		addQueries(queries);
-		LogHelper.logInfo(String.format("query helper scanned packages %s", packages),QueryHelper.class);
+		LogHelper.logFine(String.format("query helper scanned packages %s", packages),QueryHelper.class);
 	}
 	
 	/* get */

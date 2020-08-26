@@ -3,8 +3,7 @@ package org.cyk.utility.__kernel__.persistence.query;
 import java.io.Serializable;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.__kernel__.log.LogHelper;
+import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.Value;
@@ -69,12 +68,7 @@ public interface QueryIdentifierBuilder {
 	/**/
 	
 	static QueryIdentifierBuilder getInstance() {
-		QueryIdentifierBuilder instance = (QueryIdentifierBuilder) INSTANCE.get();
-		if(instance != null)
-			return instance;
-		INSTANCE.set(instance = DependencyInjection.inject(QueryIdentifierBuilder.class));
-		LogHelper.logInfo("instance has been set. <<"+instance.getClass()+">>", QueryIdentifierBuilder.class);
-		return instance;
+		return Helper.getInstance(QueryIdentifierBuilder.class, INSTANCE);
 	}
 	
 	Value INSTANCE = new Value();

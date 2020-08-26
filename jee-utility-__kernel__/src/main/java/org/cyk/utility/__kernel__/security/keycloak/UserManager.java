@@ -20,6 +20,7 @@ import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.__kernel__.variable.VariableName;
 import org.jboss.weld.exceptions.IllegalArgumentException;
+import org.keycloak.admin.client.resource.RoleResource;
 import org.keycloak.admin.client.resource.RolesResource;
 import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.admin.client.resource.UsersResource;
@@ -55,6 +56,8 @@ public interface UserManager {
 		return CollectionHelper.getFirst(read(new Arguments().setNames(List.of(userName))));
 	}
 	
+	UserManager update(User user);
+	
 	UserManager update(Collection<User> users,Collection<Property> properties);
 	
 	default UserManager update(Collection<Property> properties,User...users) {
@@ -74,6 +77,12 @@ public interface UserManager {
 			return null;
 		return update(CollectionHelper.listOf(users),List.of(Property.ROLES));
 	}
+	
+	UserManager addRolesByNames(Collection<User> users,Collection<String> rolesNames);
+	UserManager addRolesByNames(Collection<User> users,String...rolesNames);
+	
+	UserManager deleteRolesByNames(Collection<User> users,Collection<String> rolesNames);
+	UserManager deleteRolesByNames(Collection<User> users,String...rolesNames);
 	
 	UserManager delete(Collection<String> usersNames);
 	
@@ -105,6 +114,7 @@ public interface UserManager {
 			userRepresentation.setFirstName(user.getFirstName());
 			userRepresentation.setLastName(user.getLastNames());
 			userRepresentation.setEmail(user.getElectronicMailAddress());
+			userRepresentation.setRequiredActions((List<String>) user.getRequiredActions());
 			
 			Response response;
 			try {
@@ -187,7 +197,7 @@ public interface UserManager {
 		
 		@Override
 		public Collection<User> readAll() {
-			return read(new Arguments());
+			return read(new Arguments().setFirstElementIndex(0).setNumberOfElements(Integer.MAX_VALUE));
 		}
 		
 		@Override
@@ -196,6 +206,16 @@ public interface UserManager {
 			if(CollectionHelper.isEmpty(users))
 				return null;
 			return users.stream().map(user -> user.getName()).collect(Collectors.toSet());
+		}
+		
+		@Override
+		public UserManager update(User user) {
+			/*UserResource userResource = KeycloakHelper.getUsersResource().get(user.getIdentifier());
+			UserRepresentation userRepresentation = userResource.toRepresentation();
+			userRepresentation.setRequiredActions(requiredActions);
+			userResource.update(userRepresentation);
+			*/
+			return this;
 		}
 		
 		@Override
@@ -217,6 +237,85 @@ public interface UserManager {
 				});
 			}			
 			return this;
+		}
+		
+		@Override
+		public UserManager addRolesByNames(Collection<User> users, Collection<String> rolesNames) {
+			if(CollectionHelper.isEmpty(users) || CollectionHelper.isEmpty(rolesNames))
+				return this;
+			for(User user : users)
+				addRolesByNames(user, rolesNames);
+			return this;
+		}
+		
+		@Override
+		public UserManager addRolesByNames(Collection<User> users, String... rolesNames) {
+			if(CollectionHelper.isEmpty(users) || ArrayHelper.isEmpty(rolesNames))
+				return this;
+			addRolesByNames(users, CollectionHelper.listOf(rolesNames));
+			return this;
+		}
+		
+		private void addRolesByNames(User user, Collection<String> rolesNames) {
+			if(user == null || CollectionHelper.isEmpty(rolesNames))
+				return;
+			Collection<Role> roles = RoleManager.getInstance().readByNames(rolesNames);
+			if(CollectionHelper.isEmpty(roles)) {
+				LogHelper.logWarning("No roles found for names "+rolesNames, getClass());
+				return;
+			}
+			String identifier = StringHelper.isBlank(user.getIdentifier()) ? readByUserName(user.getName()).getIdentifier() : user.getIdentifier();
+			UserResource userResource = KeycloakHelper.getUsersResource().get(identifier);			
+			
+			List<RoleRepresentation> roleRepresentations = null;
+			for(Role role : roles) {
+				RoleResource roleResource =  KeycloakHelper.getRolesResource().get(role.getName());
+				if(roleResource == null)
+					continue;
+				RoleRepresentation roleRepresentation = roleResource.toRepresentation();
+				if(roleRepresentation == null)
+					continue;
+				if(roleRepresentations == null)
+					roleRepresentations = new ArrayList<>();
+				roleRepresentations.add(roleRepresentation);	
+			}
+			if(CollectionHelper.isEmpty(roleRepresentations))
+				return;
+			userResource.roles().realmLevel().add(roleRepresentations);	
+		}
+		
+		@Override
+		public UserManager deleteRolesByNames(Collection<User> users, Collection<String> rolesNames) {
+			if(CollectionHelper.isEmpty(users) || CollectionHelper.isEmpty(rolesNames))
+				return this;
+			for(User user : users)
+				deleteRolesByNames(user, rolesNames);
+			return this;
+		}
+		
+		@Override
+		public UserManager deleteRolesByNames(Collection<User> users, String... rolesNames) {
+			if(CollectionHelper.isEmpty(users) || ArrayHelper.isEmpty(rolesNames))
+				return this;
+			deleteRolesByNames(users, CollectionHelper.listOf(rolesNames));
+			return this;
+		}
+		
+		private void deleteRolesByNames(User user, Collection<String> rolesNames) {
+			if(user == null || CollectionHelper.isEmpty(rolesNames))
+				return;
+			Collection<Role> roles = RoleManager.getInstance().readByNames(rolesNames);
+			if(CollectionHelper.isEmpty(roles)) {
+				LogHelper.logWarning("No roles found for names "+rolesNames, getClass());
+				return;
+			}
+			String identifier = StringHelper.isBlank(user.getIdentifier()) ? readByUserName(user.getName()).getIdentifier() : user.getIdentifier();
+			UserResource userResource = KeycloakHelper.getUsersResource().get(identifier);			
+			
+			List<RoleRepresentation> roleRepresentations = new ArrayList<>();
+			for(Role role : roles)
+				roleRepresentations.add(KeycloakHelper.getRolesResource().get(role.getName()).toRepresentation());			
+			userResource.roles().realmLevel().remove(roleRepresentations);	
 		}
 			
 		@Override

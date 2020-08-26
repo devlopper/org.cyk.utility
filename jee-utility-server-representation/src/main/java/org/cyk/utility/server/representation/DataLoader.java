@@ -2,8 +2,7 @@ package org.cyk.utility.server.representation;
 
 import javax.ws.rs.core.Response;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.__kernel__.log.LogHelper;
+import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.value.Value;
 
 public interface DataLoader {
@@ -13,12 +12,7 @@ public interface DataLoader {
 	/**/
 	
 	static DataLoader getInstance() {
-		DataLoader instance = (DataLoader) INSTANCE.get();
-		if(instance != null)
-			return instance;
-		INSTANCE.set(instance = DependencyInjection.inject(DataLoader.class));
-		LogHelper.logInfo("instance has been set. <<"+instance.getClass()+">>", DataLoader.class);
-		return instance;
+		return Helper.getInstance(DataLoader.class, INSTANCE);
 	}
 	
 	Value INSTANCE = new Value();

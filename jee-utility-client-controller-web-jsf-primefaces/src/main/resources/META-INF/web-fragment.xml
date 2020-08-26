@@ -8,4 +8,9 @@
         <param-value>true</param-value>
     </context-param>
 	
+	<error-page>
+		<error-code>403</error-code>
+		<location>/error/403.jsf</location>
+	</error-page>
+	
 </web-fragment>

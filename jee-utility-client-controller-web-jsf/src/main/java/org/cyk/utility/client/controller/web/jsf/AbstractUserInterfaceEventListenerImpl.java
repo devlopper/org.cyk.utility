@@ -2,9 +2,12 @@ package org.cyk.utility.client.controller.web.jsf;
 
 import java.io.Serializable;
 
+import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.session.SessionHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.user.interface_.UserInterfaceEvent;
+import org.cyk.utility.__kernel__.variable.VariableName;
 import org.cyk.utility.client.controller.message.MessageRender;
 import org.cyk.utility.client.controller.message.MessageRenderTypeDialog;
 import org.cyk.utility.notification.NotificationBuilder;
@@ -32,9 +35,10 @@ public abstract class AbstractUserInterfaceEventListenerImpl extends org.cyk.uti
 			severity = __inject__(NotificationSeverityInformation.class);
 			break;
 		case LOGOUT:
-			LogHelper.logInfo("Logout of user named <<"+SessionHelper.getUserName()+">>", getClass());
+			String username = SessionHelper.getUserName();
+			LogHelper.logInfo("Logout of user named <<"+username+">>", getClass());
 	    	SessionHelper.destroy();
-	    	listenLogoutRedirect();
+	    	listenLogoutRedirect(username);
 			return;
 		default:
 			message = "Quel évènement ?";
@@ -50,7 +54,14 @@ public abstract class AbstractUserInterfaceEventListenerImpl extends org.cyk.uti
 		messageRender.execute();
 	}
 	
-	protected void listenLogoutRedirect() {
-		JsfController.getInstance().redirect("indexView");
+	protected void listenLogoutRedirect(String username) {
+		String url = ConfigurationHelper.getValueAsString(VariableName.SYSTEM_WEB_HOME_URL);
+		if(StringHelper.isBlank(url)) {
+			LogHelper.logInfo("Redirecting logout user <<"+username+">> to index view", getClass());
+			JsfController.getInstance().redirect("indexView");			
+		}else {
+			LogHelper.logInfo("Redirecting logout user <<"+username+">> to "+url, getClass());
+			Redirector.getInstance().redirect(url);		
+		}
 	}
 }

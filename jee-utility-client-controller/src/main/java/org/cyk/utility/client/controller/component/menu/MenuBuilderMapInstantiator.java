@@ -1,7 +1,6 @@
 package org.cyk.utility.client.controller.component.menu;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.__kernel__.log.LogHelper;
+import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.Value;
 
@@ -18,12 +17,7 @@ public interface MenuBuilderMapInstantiator {
 	/**/
 	
 	static MenuBuilderMapInstantiator getInstance() {
-		MenuBuilderMapInstantiator instance = (MenuBuilderMapInstantiator) INSTANCE.get();
-		if(instance != null)
-			return instance;
-		INSTANCE.set(instance = DependencyInjection.inject(MenuBuilderMapInstantiator.class));
-		LogHelper.logInfo("instance has been set. <<"+instance.getClass()+">>", MenuBuilderMapInstantiator.class);
-		return instance;
+		return Helper.getInstance(MenuBuilderMapInstantiator.class, INSTANCE);
 	}
 	
 	Value INSTANCE = new Value();

@@ -51,6 +51,11 @@ public class Query extends AbstractObject implements Serializable {
 		return identifier!=null && (identifier.equals(value) || isQueryDerivedFromQueryIdentifierEqualsTo(value));
 	}
 	
+	public Query setTupleFieldsNamesIndexesFromFieldsNames(String...fieldsNames) {
+		setTupleFieldsNamesIndexes(MapHelper.instantiateStringIntegerByStrings(fieldsNames));
+		return this;
+	}
+	
 	@Override
 	public String toString() {
 		return String.format(TO_STRING_FORMAT, Query.class.getSimpleName(),getIdentifier(),getValue(),getTupleClass(),getResultClass());
@@ -168,6 +173,15 @@ public class Query extends AbstractObject implements Serializable {
 	
 	/* Select */
 	
+	public static Query buildSelect(Class<?> tupleClass,String identifier,String value,Map<String,Integer> tupleFieldsNamesIndexes) {
+		return Query.build(Query.FIELD_IDENTIFIER,identifier,Query.FIELD_TUPLE_CLASS,tupleClass,Query.FIELD_RESULT_CLASS,tupleClass,Query.FIELD_VALUE,value)
+				.setTupleFieldsNamesIndexes(tupleFieldsNamesIndexes);
+	}
+	
+	public static Query buildSelect(Class<?> tupleClass,String identifier,String value) {
+		return buildSelect(tupleClass, identifier, value, null);
+	}
+	
 	public static Query buildSelect(Class<?> tupleClass,String value) {
 		return build(tupleClass, QueryName.READ.getValue(), value, null);
 	}
@@ -181,6 +195,10 @@ public class Query extends AbstractObject implements Serializable {
 	}
 	
 	/* Count */
+	
+	public static Query buildCount(String identifier,String value) {
+		return Query.build(Query.FIELD_IDENTIFIER,identifier,Query.FIELD_RESULT_CLASS,Long.class,Query.FIELD_VALUE,value);			
+	}
 	
 	public static Query buildCount(Class<?> tupleClass,String name,String value) {
 		return build(tupleClass, name, value, Long.class);

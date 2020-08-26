@@ -2,8 +2,7 @@ package org.cyk.utility.__kernel__.identifier.resource;
 
 import java.net.URI;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.__kernel__.log.LogHelper;
+import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.__kernel__.variable.VariableName;
@@ -27,12 +26,7 @@ public interface ProxyUniformResourceIdentifierGetter {
 	/**/
 	
 	static ProxyUniformResourceIdentifierGetter getInstance() {
-		ProxyUniformResourceIdentifierGetter instance = (ProxyUniformResourceIdentifierGetter) INSTANCE.get();
-		if(instance != null)
-			return instance;
-		INSTANCE.set(instance = DependencyInjection.inject(ProxyUniformResourceIdentifierGetter.class));
-		LogHelper.logInfo("instance has been set. <<"+instance.getClass()+">>", ProxyUniformResourceIdentifierGetter.class);
-		return instance;
+		return Helper.getInstance(ProxyUniformResourceIdentifierGetter.class, INSTANCE);
 	}
 	
 	Value INSTANCE = new Value();

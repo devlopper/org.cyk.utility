@@ -2,8 +2,7 @@ package org.cyk.utility.__kernel__.mapping;
 
 import java.io.Serializable;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.__kernel__.log.LogHelper;
+import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.Value;
@@ -32,12 +31,7 @@ public interface MapperClassNameGetter {
 	/**/
 	
 	static MapperClassNameGetter getInstance() {
-		MapperClassNameGetter instance = (MapperClassNameGetter) INSTANCE.get();
-		if(instance != null)
-			return instance;
-		INSTANCE.set(instance = DependencyInjection.inject(MapperClassNameGetter.class));
-		LogHelper.logInfo("instance has been set. <<"+instance.getClass()+">>", MapperClassNameGetter.class);
-		return instance;
+		return Helper.getInstance(MapperClassNameGetter.class, INSTANCE);
 	}
 	
 	Value INSTANCE = new Value();

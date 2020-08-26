@@ -71,7 +71,6 @@ public interface Helper {
 		return isHaveModifiers(encodedModifiers, List.of(modifiers),modifiers.length);
 	}
 
-	@SuppressWarnings("unchecked")
 	static <T extends Enum<?>> T getEnumByName(Class<T> klass,String name,Boolean isCaseSensitive) {
 		if(klass == null || !klass.isEnum())
 			return null;
@@ -90,12 +89,11 @@ public interface Helper {
 	static <T> T getInstance(Class<T> klass,Value INSTANCE) {
 		ThrowableHelper.throwIllegalArgumentExceptionIfNull("class", klass);
 		ThrowableHelper.throwIllegalArgumentExceptionIfNull("instance", INSTANCE);
-		@SuppressWarnings("unchecked")
 		T instance = (T) INSTANCE.get();
 		if(instance != null)
 			return instance;
 		INSTANCE.set(instance = DependencyInjection.inject(klass));
-		LogHelper.logInfo("instance has been set. <<"+instance.getClass()+">>", klass);
+		LogHelper.logFine("instance has been set. <<"+instance.getClass()+">>", klass);
 		return instance;
 	}
 }

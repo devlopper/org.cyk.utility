@@ -1,7 +1,6 @@
 package org.cyk.utility.__kernel__.object;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.__kernel__.log.LogHelper;
+import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.value.Value;
 
 public interface LifeCycleListener {
@@ -23,12 +22,7 @@ public interface LifeCycleListener {
 	/**/
 	
 	static LifeCycleListener getInstance() {
-		LifeCycleListener instance = (LifeCycleListener) INSTANCE.get();
-		if(instance != null)
-			return instance;
-		INSTANCE.set(instance = DependencyInjection.inject(LifeCycleListener.class));
-		LogHelper.logInfo("instance has been set. <<"+instance.getClass()+">>", LifeCycleListener.class);
-		return instance;
+		return Helper.getInstance(LifeCycleListener.class, INSTANCE);
 	}
 	
 	Value INSTANCE = new Value();

@@ -405,6 +405,8 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 		
 		public static final String FIELD_COLUMNS_FIELDS_NAMES = "columnsFieldsNames";
 		public static final String FIELD_COLUMNS_FIELDS_NAMES_COMPUTABLE = "columnsFieldsNamesComputable";
+		
+		public static final String FIELD_USABLE_AS_SELECTION_ONLY = "usableAsSelectionOnly";
 	}
 	
 	/**/

@@ -283,4 +283,74 @@
 			-->
 		</properties>
 	</persistence-unit>
+
+	<!-- SIGOBE -->
+	
+	<!-- *********************************** Production ***************************************** -->
+	
+	<persistence-unit name="sigobe_prod" transaction-type="RESOURCE_LOCAL">
+		<class>org.cyk.utility.__kernel__.security.keycloak.sigobe.Section</class>
+		<class>org.cyk.utility.__kernel__.security.keycloak.sigobe.BudgetSpecializationUnit</class>
+		<class>org.cyk.utility.__kernel__.security.keycloak.sigobe.Actor</class>
+		<class>org.cyk.utility.__kernel__.security.keycloak.sigobe.Scope</class>
+		<class>org.cyk.utility.__kernel__.security.keycloak.sigobe.ScopeType</class>
+		<class>org.cyk.utility.__kernel__.security.keycloak.sigobe.ActorScope</class> 	
+    	<exclude-unlisted-classes>true</exclude-unlisted-classes>
+		
+		<properties>
+			<property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver" />
+		    <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@10.3.4.21:1521:SIB" />
+		   	<property name="javax.persistence.jdbc.user" value="acteur" />
+		  	<property name="javax.persistence.jdbc.password" value="acteur" />  
+		  	<property name="hibernate.hbm2ddl.auto" value="validate" />
+		  	<property name ="hibernate.show_sql" value = "false" />
+			<property name="hibernate.format_sql" value="false" />
+			<property name="hibernate.use_sql_comments" value="false"/>
+		</properties>
+	</persistence-unit>
+	
+	<!-- *********************************** Test ***************************************** -->
+	
+	<persistence-unit name="sigobe_test" transaction-type="RESOURCE_LOCAL">
+		<class>org.cyk.utility.__kernel__.security.keycloak.sigobe.Section</class>
+		<class>org.cyk.utility.__kernel__.security.keycloak.sigobe.BudgetSpecializationUnit</class>
+		<class>org.cyk.utility.__kernel__.security.keycloak.sigobe.Actor</class>
+		<class>org.cyk.utility.__kernel__.security.keycloak.sigobe.Scope</class>
+		<class>org.cyk.utility.__kernel__.security.keycloak.sigobe.ScopeType</class>
+		<class>org.cyk.utility.__kernel__.security.keycloak.sigobe.ActorScope</class> 	
+    	<exclude-unlisted-classes>true</exclude-unlisted-classes>
+		
+		<properties>
+			<property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver" />
+		    <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@10.3.4.22:1521:SIB" />
+		   	<property name="javax.persistence.jdbc.user" value="acteur" />
+		  	<property name="javax.persistence.jdbc.password" value="acteur" />  
+		  	<property name="hibernate.hbm2ddl.auto" value="validate" />
+		  	<property name ="hibernate.show_sql" value = "false" />
+			<property name="hibernate.format_sql" value="false" />
+			<property name="hibernate.use_sql_comments" value="false"/>
+		</properties>
+	</persistence-unit>
+	
+	<persistence-unit name="sigobe_dev" transaction-type="RESOURCE_LOCAL">
+		<class>org.cyk.utility.__kernel__.security.keycloak.sigobe.Section</class>
+		<class>org.cyk.utility.__kernel__.security.keycloak.sigobe.BudgetSpecializationUnit</class>
+		<class>org.cyk.utility.__kernel__.security.keycloak.sigobe.Actor</class>
+		<class>org.cyk.utility.__kernel__.security.keycloak.sigobe.Scope</class>
+		<class>org.cyk.utility.__kernel__.security.keycloak.sigobe.ScopeType</class>
+		<class>org.cyk.utility.__kernel__.security.keycloak.sigobe.ActorScope</class> 	
+    	<exclude-unlisted-classes>true</exclude-unlisted-classes>
+		
+		<properties>
+			<property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver" />
+		    <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1521:xe" />
+		   	<property name="javax.persistence.jdbc.user" value="SIIBC_Actor" />
+		  	<property name="javax.persistence.jdbc.password" value="actor" />  
+		  	<property name="hibernate.hbm2ddl.auto" value="validate" />
+		  	<property name ="hibernate.show_sql" value = "false" />
+			<property name="hibernate.format_sql" value="false" />
+			<property name="hibernate.use_sql_comments" value="false"/>
+		</properties>
+	</persistence-unit>
+	
 </persistence>

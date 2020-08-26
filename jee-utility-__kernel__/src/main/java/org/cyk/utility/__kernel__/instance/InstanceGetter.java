@@ -4,9 +4,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
-import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
@@ -83,14 +82,8 @@ public interface InstanceGetter {
 	/**/
 	
 	static InstanceGetter getInstance() {
-		InstanceGetter instance = (InstanceGetter) INSTANCE.get();
-		if(instance != null)
-			return instance;
-		INSTANCE.set(instance = DependencyInjection.inject(InstanceGetter.class));
-		LogHelper.logInfo("instance has been set. <<"+instance.getClass()+">>", InstanceGetter.class);
-		return instance;
+		return Helper.getInstance(InstanceGetter.class, INSTANCE);
 	}
 	
-	Value INSTANCE = new Value();
-	
+	Value INSTANCE = new Value();	
 }

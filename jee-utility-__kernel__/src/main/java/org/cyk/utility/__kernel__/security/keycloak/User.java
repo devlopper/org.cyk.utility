@@ -1,6 +1,7 @@
 package org.cyk.utility.__kernel__.security.keycloak;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -26,6 +27,7 @@ public class User implements Serializable {
 	private String pass;
 	private Collection<Role> roles;
 	private Map<String,List<String>> attributes;
+	private Collection<String> requiredActions;
 	
 	public Collection<Role> getRoles(Boolean injectIfNull) {
 		if(roles == null && Boolean.TRUE.equals(injectIfNull))
@@ -44,6 +46,25 @@ public class User implements Serializable {
 		if(ArrayHelper.isEmpty(roles))
 			return this;
 		return addRoles(CollectionHelper.listOf(roles));
+	}
+	
+	public Collection<String> getRequiredActions(Boolean injectIfNull) {
+		if(requiredActions == null && Boolean.TRUE.equals(injectIfNull))
+			requiredActions = new ArrayList<>();
+		return requiredActions;
+	}
+	
+	public User addRequiredActions(Collection<String> requiredActions) {
+		if(CollectionHelper.isEmpty(requiredActions))
+			return this;
+		getRequiredActions(Boolean.TRUE).addAll(requiredActions);
+		return this;
+	}
+	
+	public User addRequiredActions(String...requiredActions) {
+		if(ArrayHelper.isEmpty(requiredActions))
+			return this;
+		return addRequiredActions(CollectionHelper.listOf(requiredActions));
 	}
 	
 	@Override

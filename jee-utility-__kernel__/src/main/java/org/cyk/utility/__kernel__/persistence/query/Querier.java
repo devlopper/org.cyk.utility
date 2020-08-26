@@ -72,21 +72,21 @@ public interface Querier {
 			
 			@Override
 			public T readOne(QueryExecutorArguments arguments) {
-				throw new RuntimeException(arguments.getQuery().getIdentifier()+" cannot be processed by this class");
+				throw new RuntimeException(arguments.getQuery().getIdentifier()+" cannot be processed by "+getClass());
 			}
 			
 			@Override
 			public Collection<T> readMany(QueryExecutorArguments arguments) {
 				if(QueryIdentifierGetter.getInstance().get(getKlass(), QueryName.READ_WHERE_CODE_OR_NAME_LIKE).equals(arguments.getQuery().getIdentifier()))
 					return (Collection<T>) readWhereCodeOrNameLike(arguments);
-				throw new RuntimeException(arguments.getQuery().getIdentifier()+" cannot be processed by this class");
+				throw new RuntimeException(arguments.getQuery().getIdentifier()+" cannot be processed by "+getClass());
 			}
 			
 			@Override
 			public Long count(QueryExecutorArguments arguments) {
 				if(QueryIdentifierGetter.getInstance().get(getKlass(), QueryName.COUNT_WHERE_CODE_OR_NAME_LIKE).equals(arguments.getQuery().getIdentifier()))
 					return countWhereCodeOrNameLike(arguments);
-				throw new RuntimeException(arguments.getQuery().getIdentifier()+" cannot be processed by this class");
+				throw new RuntimeException(arguments.getQuery().getIdentifier()+" cannot be processed by "+getClass());
 			}
 			
 			@Override

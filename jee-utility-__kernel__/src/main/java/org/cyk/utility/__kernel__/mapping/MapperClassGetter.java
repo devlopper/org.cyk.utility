@@ -3,8 +3,7 @@ package org.cyk.utility.__kernel__.mapping;
 import java.io.Serializable;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.__kernel__.log.LogHelper;
+import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
@@ -55,12 +54,7 @@ public interface MapperClassGetter {
 	/**/
 	
 	static MapperClassGetter getInstance() {
-		MapperClassGetter instance = (MapperClassGetter) INSTANCE.get();
-		if(instance != null)
-			return instance;
-		INSTANCE.set(instance = DependencyInjection.inject(MapperClassGetter.class));
-		LogHelper.logInfo("instance has been set. <<"+instance.getClass()+">>", MapperClassGetter.class);
-		return instance;
+		return Helper.getInstance(MapperClassGetter.class, INSTANCE);
 	}
 	
 	Value INSTANCE = new Value();

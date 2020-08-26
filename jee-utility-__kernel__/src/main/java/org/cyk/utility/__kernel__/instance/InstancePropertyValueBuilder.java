@@ -1,8 +1,7 @@
 package org.cyk.utility.__kernel__.instance;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
-import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.Value;
 
@@ -35,12 +34,7 @@ public interface InstancePropertyValueBuilder {
 	/**/
 	
 	static InstancePropertyValueBuilder getInstance() {
-		InstancePropertyValueBuilder instance = (InstancePropertyValueBuilder) INSTANCE.get();
-		if(instance != null)
-			return instance;
-		INSTANCE.set(instance = DependencyInjection.inject(InstancePropertyValueBuilder.class));
-		LogHelper.logInfo("instance has been set. <<"+instance.getClass()+">>", InstancePropertyValueBuilder.class);
-		return instance;
+		return Helper.getInstance(InstancePropertyValueBuilder.class, INSTANCE);
 	}
 	
 	Value INSTANCE = new Value();

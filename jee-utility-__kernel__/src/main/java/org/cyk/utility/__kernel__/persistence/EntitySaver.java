@@ -40,6 +40,13 @@ public interface EntitySaver {
 				entityManager = EntityManagerGetter.getInstance().get();
 			if(Boolean.TRUE.equals(arguments.isTransactional))
 				entityManager.getTransaction().begin();
+			if(CollectionHelper.isNotEmpty(arguments.__creatables__))
+				create(tupleClass,arguments.__creatables__, arguments.listener, entityManager);
+			if(CollectionHelper.isNotEmpty(arguments.__updatables__))
+				update(tupleClass,arguments.__updatables__, arguments.listener, entityManager);
+			if(CollectionHelper.isNotEmpty(arguments.__deletables__))
+				delete(tupleClass,arguments.__deletables__, arguments.listener, entityManager);
+			/*
 			if(arguments.listener == null) {
 				if(CollectionHelper.isNotEmpty(arguments.__creatables__))
 					Listener.AbstractImpl.__create__(arguments.__creatables__, entityManager);
@@ -55,11 +62,35 @@ public interface EntitySaver {
 				if(CollectionHelper.isNotEmpty(arguments.__deletables__))
 					arguments.listener.delete(arguments.__deletables__,entityManager);
 			}
+			*/
 			if(Boolean.TRUE.equals(arguments.isTransactional))
 				entityManager.getTransaction().commit();
 		}
 		
 		/**/
+		
+		protected <T> void create(Class<T> tupleClass,Collection<T> collection,Listener<T> listener,EntityManager entityManager) {
+			if(CollectionHelper.isEmpty(collection))
+				return;
+			if(listener == null)
+				Listener.AbstractImpl.__create__(collection, entityManager);
+			else
+				listener.create(collection,entityManager);			
+		}
+		
+		protected <T> void update(Class<T> tupleClass,Collection<T> collection,Listener<T> listener,EntityManager entityManager) {
+			if(listener == null)
+				Listener.AbstractImpl.__update__(collection, entityManager);
+			else
+				listener.update(collection,entityManager);			
+		}
+		
+		protected <T> void delete(Class<T> tupleClass,Collection<T> collection,Listener<T> listener,EntityManager entityManager) {
+			if(listener == null)
+				Listener.AbstractImpl.__delete__(collection, entityManager);
+			else
+				listener.delete(collection,entityManager);			
+		}
 		
 		protected <T> void validatePreConditions(Class<T> tupleClass,Arguments<T> arguments) {
 			if(tupleClass == null)
@@ -67,7 +98,6 @@ public interface EntitySaver {
 			if(arguments == null)
 				throw new RuntimeException("arguments are required");
 		}
-		
 		
 	}
 	

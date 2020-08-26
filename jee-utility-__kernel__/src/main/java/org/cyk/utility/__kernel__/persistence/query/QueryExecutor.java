@@ -49,6 +49,10 @@ public interface QueryExecutor {
 		return executeCount(new QueryExecutorArguments().setQuery(QueryGetter.getInstance().getByCount(tupleClass)));
 	}
 	
+	default Long executeCount(String queryIdentifier,Object...filterFieldsValues) {
+		return executeCount(new QueryExecutorArguments().setQueryFromIdentifier(queryIdentifier).addFilterFieldsValues(filterFieldsValues));
+	}
+	
 	Integer executeUpdateOrDelete(QueryExecutorArguments arguments);
 	
 	/**/

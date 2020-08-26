@@ -24,9 +24,11 @@ public class UserManagerUnitTestIntegration extends AbstractWeldUnitTest {
 	private void init() {
 		VariableHelper.write(VariableName.KEYCLOAK_ENABLED, Boolean.TRUE);
 		VariableHelper.write(VariableName.KEYCLOAK_SERVER_URL, "http://localhost:8230/auth");
-		VariableHelper.write(VariableName.KEYCLOAK_REALM_NAME, "test01");
+		VariableHelper.write(VariableName.KEYCLOAK_REALM_NAME, "SIIB");
+		VariableHelper.write(VariableName.KEYCLOAK_REALM_NAME, "Playground");
 		VariableHelper.write(VariableName.KEYCLOAK_CLIENT_IDENTIFIER, "admin-cli");
-		VariableHelper.write(VariableName.KEYCLOAK_CLIENT_SECRET, "a8576f2d-762c-47ad-a973-26fac75e40ab");
+		VariableHelper.write(VariableName.KEYCLOAK_CLIENT_SECRET, "913c69e7-e82d-41d7-a197-d97b5c761548");
+		VariableHelper.write(VariableName.KEYCLOAK_CLIENT_SECRET, "71459049-f9a8-45a3-a026-ad07c48c3071");
 		VariableHelper.write(VariableName.KEYCLOAK_CREDENTIAL_USERNAME, "admin");
 		VariableHelper.write(VariableName.KEYCLOAK_CREDENTIAL_PASSWORD, "admin");
 	}
@@ -50,7 +52,7 @@ public class UserManagerUnitTestIntegration extends AbstractWeldUnitTest {
 		init();
 		UserManager.getInstance().delete("user01","user02");
 		UserManager.getInstance().create(new User().setName("user01"));
-		assertThat(UserManager.getInstance().read(new Arguments()).stream().map(User::getName).collect(Collectors.toList())).contains("user01");
+		assertThat(UserManager.getInstance().read(new Arguments().setNumberOfElements(Integer.MAX_VALUE)).stream().map(User::getName).collect(Collectors.toList())).contains("user01");
 		UserManager.getInstance().delete("user01","user02");
 	}
 	
@@ -91,5 +93,57 @@ public class UserManagerUnitTestIntegration extends AbstractWeldUnitTest {
 				,"GESTIONNAIRE_REPONSE","REQUERANT","RESPONSABLE");
 		
 		UserManager.getInstance().delete("user01");
+	}
+	
+	@Test
+	public void addAndDeleteRolesByNames(){
+		init();
+		RoleManager.getInstance().deleteByNames("role01","role02");
+		RoleManager.getInstance().createByNames("role01","role02");		
+		UserManager.getInstance().delete("user01");
+		
+		UserManager.getInstance().create(new User().setName("user01").setElectronicMailAddress("test@mail.com").setFirstName("komenan").setLastNames("yao christian"));
+		User user = UserManager.getInstance().readByUserName("user01");
+		assertThat(user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList())).doesNotContain("role01","role02");
+		
+		UserManager.getInstance().deleteRolesByNames(List.of(UserManager.getInstance().readByUserName("user01")), "role01","role02");
+		
+		UserManager.getInstance().addRolesByNames(List.of(UserManager.getInstance().readByUserName("user01")), "role01");
+		user = UserManager.getInstance().readByUserName("user01");
+		assertThat(user.getRoles()).isNotNull();
+		assertThat(user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList())).contains("role01");
+		assertThat(user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList())).doesNotContain("role02");
+		
+		UserManager.getInstance().addRolesByNames(List.of(UserManager.getInstance().readByUserName("user01")), "role01");
+		user = UserManager.getInstance().readByUserName("user01");
+		assertThat(user.getRoles()).isNotNull();
+		assertThat(user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList())).contains("role01");
+		assertThat(user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList())).doesNotContain("role02");
+		
+		UserManager.getInstance().addRolesByNames(List.of(UserManager.getInstance().readByUserName("user01")), "role02");
+		user = UserManager.getInstance().readByUserName("user01");
+		assertThat(user.getRoles()).isNotNull();
+		assertThat(user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList())).contains("role01","role02");
+		
+		UserManager.getInstance().deleteRolesByNames(List.of(UserManager.getInstance().readByUserName("user01")), "role01");
+		
+		user = UserManager.getInstance().readByUserName("user01");
+		assertThat(user.getRoles()).isNotNull();
+		assertThat(user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList())).contains("role02");
+		
+		UserManager.getInstance().deleteRolesByNames(List.of(UserManager.getInstance().readByUserName("user01")), "role02");
+		
+		user = UserManager.getInstance().readByUserName("user01");
+		assertThat(user.getRoles()).isNotNull();
+		assertThat(user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList())).isEmpty();
+		
+		UserManager.getInstance().deleteRolesByNames(List.of(UserManager.getInstance().readByUserName("user01")), "role02");
+		
+		user = UserManager.getInstance().readByUserName("user01");
+		assertThat(user.getRoles()).isNotNull();
+		assertThat(user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList())).isEmpty();
+		
+		UserManager.getInstance().delete("user01");
+		RoleManager.getInstance().deleteByNames("role01","role02");
 	}
 }

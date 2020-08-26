@@ -101,7 +101,7 @@ public abstract class AbstractInput<VALUE> extends AbstractInputOutput<VALUE> im
 				if(input.field != null)
 					input.required = input.field.isAnnotationPresent(NotNull.class);
 			}
-			if(Boolean.TRUE.equals(input.required)) {
+			if(Boolean.TRUE.equals(MapHelper.readByKey(arguments, FIELD_MESSAGABLE)) || Boolean.TRUE.equals(input.required)) {
 				if(input.message == null)
 					input.message = Message.build(Map.of(Message.ConfiguratorImpl.FIELD_INPUT,input));
 				if(StringHelper.isBlank(input.requiredMessage)) {
@@ -134,5 +134,6 @@ public abstract class AbstractInput<VALUE> extends AbstractInputOutput<VALUE> im
 		
 		public static final String FIELD_OUTPUT_LABEL_VALUE = "outputLabelValue";
 		public static final String FIELD_OUTPUT_LABEL_CARDINAL_POINT = "outputLabelCardinalPoint";
+		public static final String FIELD_MESSAGABLE = "configurator.messagable";
 	}
 }

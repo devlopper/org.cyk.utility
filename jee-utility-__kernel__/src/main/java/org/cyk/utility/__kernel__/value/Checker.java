@@ -1,7 +1,6 @@
 package org.cyk.utility.__kernel__.value;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.__kernel__.log.LogHelper;
+import org.cyk.utility.__kernel__.Helper;
 
 public interface Checker {
 
@@ -14,12 +13,7 @@ public interface Checker {
 	/**/
 	
 	static Checker getInstance() {
-		Checker instance = (Checker) INSTANCE.get();
-		if(instance != null)
-			return instance;
-		INSTANCE.set(instance = DependencyInjection.inject(Checker.class));
-		LogHelper.logInfo("instance has been set. <<"+instance.getClass()+">>", Checker.class);
-		return instance;
+		return Helper.getInstance(Checker.class, INSTANCE);
 	}
 	
 	Value INSTANCE = new Value();

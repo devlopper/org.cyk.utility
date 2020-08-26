@@ -30,6 +30,13 @@ public interface KeycloakClientGetter {
 	public abstract class AbstractImpl extends AbstractObject implements KeycloakClientGetter,Serializable {
 		private static final long serialVersionUID = 1L;
 
+		public static String VARIABLE_NAME_KEYCLOAK_SERVER_URL = VariableName.KEYCLOAK_SERVER_URL;
+		public static String VARIABLE_NAME_KEYCLOAK_REALM_NAME = VariableName.KEYCLOAK_REALM_NAME;
+		public static String VARIABLE_NAME_KEYCLOAK_CLIENT_IDENTIFIER = VariableName.KEYCLOAK_CLIENT_IDENTIFIER;
+		public static String VARIABLE_NAME_KEYCLOAK_CLIENT_SECRET = VariableName.KEYCLOAK_CLIENT_SECRET;
+		public static String VARIABLE_NAME_KEYCLOAK_CREDENTIAL_USERNAME = VariableName.KEYCLOAK_CREDENTIAL_USERNAME;
+		public static String VARIABLE_NAME_KEYCLOAK_CREDENTIAL_PASSWORD = VariableName.KEYCLOAK_CREDENTIAL_PASSWORD;
+		
 		public Keycloak get() {
 			if(CLIENT.isHasBeenSet())
 				return (Keycloak) CLIENT.get();
@@ -48,12 +55,12 @@ public interface KeycloakClientGetter {
 			ResteasyClient resteasyClient = resteasyClientBuilder.build();
 			
 			CLIENT.set(KeycloakBuilder.builder().grantType(OAuth2Constants.PASSWORD).resteasyClient(resteasyClient)
-					.serverUrl(ValueHelper.returnOrThrowIfBlank("keycloak server url",ConfigurationHelper.getValueAsString(VariableName.KEYCLOAK_SERVER_URL)))
-					.realm(ValueHelper.returnOrThrowIfBlank("keycloak realm name",ConfigurationHelper.getValueAsString(VariableName.KEYCLOAK_REALM_NAME)))
-					.clientId(ValueHelper.returnOrThrowIfBlank("keycloak client identifier",ConfigurationHelper.getValueAsString(VariableName.KEYCLOAK_CLIENT_IDENTIFIER)))
-					.clientSecret(ValueHelper.returnOrThrowIfBlank("keycloak client secret",ConfigurationHelper.getValueAsString(VariableName.KEYCLOAK_CLIENT_SECRET)))
-					.username(ValueHelper.returnOrThrowIfBlank("keycloak credentials username",ConfigurationHelper.getValueAsString(VariableName.KEYCLOAK_CREDENTIAL_USERNAME)))
-					.password(ValueHelper.returnOrThrowIfBlank("keycloak credentials password",ConfigurationHelper.getValueAsString(VariableName.KEYCLOAK_CREDENTIAL_PASSWORD)))				
+					.serverUrl(ValueHelper.returnOrThrowIfBlank("keycloak server url",ConfigurationHelper.getValueAsString(VARIABLE_NAME_KEYCLOAK_SERVER_URL)))
+					.realm(ValueHelper.returnOrThrowIfBlank("keycloak realm name",ConfigurationHelper.getValueAsString(VARIABLE_NAME_KEYCLOAK_REALM_NAME)))
+					.clientId(ValueHelper.returnOrThrowIfBlank("keycloak client identifier",ConfigurationHelper.getValueAsString(VARIABLE_NAME_KEYCLOAK_CLIENT_IDENTIFIER)))
+					.clientSecret(ValueHelper.returnOrThrowIfBlank("keycloak client secret",ConfigurationHelper.getValueAsString(VARIABLE_NAME_KEYCLOAK_CLIENT_SECRET)))
+					.username(ValueHelper.returnOrThrowIfBlank("keycloak credentials username",ConfigurationHelper.getValueAsString(VARIABLE_NAME_KEYCLOAK_CREDENTIAL_USERNAME)))
+					.password(ValueHelper.returnOrThrowIfBlank("keycloak credentials password",ConfigurationHelper.getValueAsString(VARIABLE_NAME_KEYCLOAK_CREDENTIAL_PASSWORD)))				
 					.build()
 					);
 			Keycloak keycloak = (Keycloak) CLIENT.get();

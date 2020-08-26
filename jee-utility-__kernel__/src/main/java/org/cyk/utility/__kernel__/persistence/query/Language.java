@@ -255,6 +255,10 @@ public interface Language {
 			return operate(tupleName, fieldName, parameterName, ArithmeticOperator.EQ.getSymbol());
 		}
 		
+		static String equals(String tupleName,String fieldName) {
+			return equals(tupleName, fieldName, fieldName);
+		}
+		
 		static String equalsJoinFieldsNames(String tupleName,String parameterName,String...fieldsNames) {
 			return equals(tupleName, FieldHelper.join(fieldsNames), parameterName);
 		}
@@ -389,6 +393,10 @@ public interface Language {
 		static String of(String order) {
 			ThrowableHelper.throwIllegalArgumentExceptionIfBlank("order", order);
 			return String.format(ORDER, order);
+		}
+		
+		static String order(String order) {
+			return of(order);
 		}
 		
 		static String ascending(String tupleName,String fieldName) {

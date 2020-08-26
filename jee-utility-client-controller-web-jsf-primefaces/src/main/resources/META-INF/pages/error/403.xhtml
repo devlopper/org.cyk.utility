@@ -8,19 +8,9 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
-	<!--
-	<h:body>
-		<h:form>
-			<p:remoteCommand autoRun="true" action="#{logoutPage.logout}" />
-		</h:form>		
-		<h1><h:outputText value="Deconnexion en cours..." /></h1>
-	</h:body>
-	-->
-	
-    <cyk:page value="#{logoutPage}">
+    <cyk:page value="#{__403__Page}">
     	<ui:define name="centerCenter">
-    		<p:remoteCommand autoRun="true" action="#{logoutPage.logout}" oncomplete="window.location = '#{logoutPage.url}'"/>
+    		<h1><h:outputText value="Accès Interdit" /></h1>
     	</ui:define>
     </cyk:page>
-   
 </html>

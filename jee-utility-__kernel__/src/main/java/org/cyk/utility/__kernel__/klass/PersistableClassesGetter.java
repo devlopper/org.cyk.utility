@@ -8,14 +8,13 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.metamodel.EntityType;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
-import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.persistence.PersistenceHelper;
 import org.cyk.utility.__kernel__.value.Value;
 
 public interface PersistableClassesGetter {
 
-	@SuppressWarnings("unchecked")
 	default Collection<Class<?>> get() {
 		if(COLLECTION.isHasBeenSet())
 			return (Collection<Class<?>>) COLLECTION.get();
@@ -33,12 +32,7 @@ public interface PersistableClassesGetter {
 	/**/
 	
 	static PersistableClassesGetter getInstance() {
-		PersistableClassesGetter instance = (PersistableClassesGetter) INSTANCE.get();
-		if(instance != null)
-			return instance;
-		INSTANCE.set(instance = DependencyInjection.inject(PersistableClassesGetter.class));
-		LogHelper.logInfo("instance has been set. <<"+instance.getClass()+">>", PersistableClassesGetter.class);
-		return instance;
+		return Helper.getInstance(PersistableClassesGetter.class, INSTANCE);
 	}
 	
 	Value INSTANCE = new Value();

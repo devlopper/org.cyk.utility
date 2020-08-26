@@ -4,10 +4,9 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
-import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.Value;
@@ -60,12 +59,7 @@ public interface InstanceCopier {
 	/**/
 	
 	static InstanceCopier getInstance() {
-		InstanceCopier instance = (InstanceCopier) INSTANCE.get();
-		if(instance != null)
-			return instance;
-		INSTANCE.set(instance = DependencyInjection.inject(InstanceCopier.class));
-		LogHelper.logInfo("instance has been set. <<"+instance.getClass()+">>", InstanceCopier.class);
-		return instance;
+		return Helper.getInstance(InstanceCopier.class, INSTANCE);
 	}
 	
 	Value INSTANCE = new Value();

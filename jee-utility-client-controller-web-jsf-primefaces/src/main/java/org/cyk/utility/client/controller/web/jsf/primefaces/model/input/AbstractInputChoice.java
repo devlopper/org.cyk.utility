@@ -120,6 +120,8 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 	
 	public static abstract class AbstractConfiguratorImpl<INPUT extends AbstractInputChoice<VALUE>,VALUE> extends AbstractInput.AbstractConfiguratorImpl<INPUT> implements Serializable {
 
+		public static Integer COLUMNS = 4;
+		
 		@Override
 		public void configure(INPUT input, Map<Object, Object> arguments) {
 			super.configure(input, arguments);
@@ -127,7 +129,7 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 				input.layout = "responsive";
 			if(input.columns == null) {
 				if("responsive".equals(input.layout))
-					input.columns = 4;
+					input.columns = COLUMNS;
 				else
 					input.columns = 0;
 			}
