@@ -37,7 +37,7 @@ public abstract class AbstractUserInterfaceEventListenerImpl extends org.cyk.uti
 		case LOGOUT:
 			String username = SessionHelper.getUserName();
 			LogHelper.logInfo("Logout of user named <<"+username+">>", getClass());
-	    	SessionHelper.destroy();
+	    	SessionHelper.destroy(username);
 	    	listenLogoutRedirect(username);
 			return;
 		default:

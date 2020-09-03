@@ -26,12 +26,16 @@ public interface FreeMarkerHelper {
 		return (Configuration) CONFIGURATION.get();
 	}
 	
-	static Template getTemplate(String name) {
+	static Template getTemplate(Configuration configuration,String name) {
 		try {
-			return getConfiguration().getTemplate(name);
+			return configuration.getTemplate(name);
 		} catch (Exception exception) {
 			throw new RuntimeException(exception);
 		}
+	}
+	
+	static Template getTemplate(String name) {
+		return getTemplate(getConfiguration(), name);
 	}
 	
 	static Template createTemplateFromString(String name,String string) {

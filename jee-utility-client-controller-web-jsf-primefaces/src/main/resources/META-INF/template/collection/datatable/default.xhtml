@@ -48,7 +48,7 @@
 			 			</div>
 			 			<ui:insert name="rowTooltip">
 			 				<p:tooltip for="@(.#{dataTable.rowTooltipStyleClass} tr[role=row][data-ri=#{rowIndex}])" value="#{dataTable.getTooltipByRecord(record,rowIndex)}" 
-			 					position="top" rendered="#{not empty dataTable.getTooltipByRecord(record,rowIndex)}"/>
+			 					position="top" rendered="#{not empty dataTable.getTooltipByRecord(record,rowIndex)}" escape="false"/>
 			 			</ui:insert>
  					</ui:define>
  					

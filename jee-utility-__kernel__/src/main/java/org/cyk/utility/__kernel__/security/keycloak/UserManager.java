@@ -16,6 +16,7 @@ import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.__kernel__.variable.VariableName;
@@ -91,6 +92,14 @@ public interface UserManager {
 			return this;
 		delete(CollectionHelper.listOf(usersNames));
 		return this;
+	}
+	
+	void logout(Collection<String> usersNames);
+	
+	default void logout(String...usersNames) {
+		if(ArrayHelper.isEmpty(usersNames))
+			return;
+		logout(CollectionHelper.listOf(usersNames));
 	}
 	
 	public static abstract class AbstractImpl extends AbstractObject implements UserManager,Serializable {
@@ -329,6 +338,22 @@ public interface UserManager {
 					usersResource.delete(userRepresentation.getId());
 			});
 			return this;
+		}
+	
+		/**/
+		
+		public void logout(Collection<String> usersNames) {
+			ThrowableHelper.throwIllegalArgumentExceptionIfEmpty("usersNames", usersNames);
+			UsersResource usersResource = KeycloakHelper.getUsersResource();
+			for(String userName : usersNames) {
+				User user = readByUserName(userName);
+				if(user == null) {
+					LogHelper.logWarning("cannot logout user <<"+userName+">>", getClass());
+					continue;
+				}
+				usersResource.get(user.getIdentifier()).logout();
+				LogHelper.logInfo("user <<"+userName+">> has been logout from keycloak", getClass());
+			}
 		}
 	}
 	

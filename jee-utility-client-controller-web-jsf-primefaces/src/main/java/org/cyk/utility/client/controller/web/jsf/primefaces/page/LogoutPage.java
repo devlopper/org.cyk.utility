@@ -26,7 +26,7 @@ public class LogoutPage extends AbstractPageContainerManagedImpl implements Seri
 	}
 	
 	public void logout() {
-		SessionHelper.destroy();
+		SessionHelper.destroy(SessionHelper.getUserName());
 	}
 	
 	@Override

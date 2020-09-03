@@ -57,7 +57,7 @@ public interface Language {
 		
 		static String of(Collection<String> strings) {
 			ThrowableHelper.throwIllegalArgumentExceptionIfEmpty("strings", strings);
-			return of(StringHelper.concatenate(strings, ","));
+			return of(StringHelper.concatenate(strings.stream().filter(s -> StringHelper.isNotBlank(s)).collect(Collectors.toList()), ","));
 		}
 		
 		static String of(String...strings) {

@@ -5,6 +5,13 @@ import java.io.Serializable;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PostLoad;
+import javax.persistence.PostPersist;
+import javax.persistence.PostRemove;
+import javax.persistence.PostUpdate;
+import javax.persistence.PrePersist;
+import javax.persistence.PreRemove;
+import javax.persistence.PreUpdate;
 import javax.persistence.Transient;
 
 import org.cyk.utility.__kernel__.object.marker.IdentifiableSystem;
@@ -41,6 +48,43 @@ public abstract class AbstractIdentifiableSystemImpl<IDENTIFIER> extends Abstrac
 		if(identifier == null)
 			return super.toString();
 		return identifier.toString();
+	}
+	
+	/**/
+	
+	@PrePersist
+	public void __listenBeforeCreation__() {
+		EntityLifeCycleListener.getInstance().listen(this, EntityLifeCycleListener.Event.CREATE, EntityLifeCycleListener.When.BEFORE);
+	}
+	
+	@PostPersist
+	public void __listenAfterCreation__() {
+		EntityLifeCycleListener.getInstance().listen(this, EntityLifeCycleListener.Event.CREATE, EntityLifeCycleListener.When.AFTER);
+	}
+	
+	@PostLoad
+	public void __listenAfterRead__() {
+		EntityLifeCycleListener.getInstance().listen(this, EntityLifeCycleListener.Event.READ, EntityLifeCycleListener.When.AFTER);
+	}
+	
+	@PreUpdate
+	public void __listenBeforeUpdate__() {
+		EntityLifeCycleListener.getInstance().listen(this, EntityLifeCycleListener.Event.UPDATE, EntityLifeCycleListener.When.BEFORE);
+	}
+	
+	@PostUpdate
+	public void __listenAfterUpdate__() {
+		EntityLifeCycleListener.getInstance().listen(this, EntityLifeCycleListener.Event.UPDATE, EntityLifeCycleListener.When.AFTER);
+	}
+	
+	@PreRemove
+	public void __listenBeforeDeletion__() {
+		EntityLifeCycleListener.getInstance().listen(this, EntityLifeCycleListener.Event.DELETE, EntityLifeCycleListener.When.BEFORE);
+	}
+	
+	@PostRemove
+	public void __listenAfterDeletion__() {
+		EntityLifeCycleListener.getInstance().listen(this, EntityLifeCycleListener.Event.DELETE, EntityLifeCycleListener.When.AFTER);
 	}
 	
 	/**/

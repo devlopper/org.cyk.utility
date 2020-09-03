@@ -30,8 +30,7 @@
 
 		<org.apache.poi.poi.version>3.17</org.apache.poi.poi.version>
 		<org.apache.poi.poi-ooxml.version>3.17</org.apache.poi.poi-ooxml.version>
-		<org.freemarker.freemarker.version>2.3.29</org.freemarker.freemarker.version>
-
+		
 		<net.sf.jasper.report.version>6.11.0</net.sf.jasper.report.version>
 		<net.sf.jasperreports.jasperreports.version>${net.sf.jasper.report.version}</net.sf.jasperreports.jasperreports.version>
 		<net.sf.jasperreports.jasperreports-fonts.version>${net.sf.jasper.report.version}</net.sf.jasperreports.jasperreports-fonts.version>
@@ -168,7 +167,6 @@
 		<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
-			<version>${org.freemarker.freemarker.version}</version>
 		</dependency>
 
 		<dependency>

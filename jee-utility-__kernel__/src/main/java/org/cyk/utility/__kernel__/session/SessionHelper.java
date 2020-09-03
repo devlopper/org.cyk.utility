@@ -10,6 +10,8 @@ import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.identifier.resource.RequestHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.security.SecurityHelper;
+import org.cyk.utility.__kernel__.security.keycloak.UserManager;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.representations.AccessToken;
 
@@ -124,7 +126,7 @@ public interface SessionHelper {
 		return getUserName(SecurityHelper.getPrincipal());
 	}
 	
-	static void destroy() {
+	static void destroy(String username) {
 		//TODO must environment based
 		
 		//in servlet world it consist to call logout to a request
@@ -140,11 +142,19 @@ public interface SessionHelper {
 		}
 		httpSession.invalidate();
 		LogHelper.logInfo("Session has been invalidated", SessionHelper.class);
-		try {
-			httpServletRequest.logout();
-			LogHelper.logInfo("Request has been logged out", SessionHelper.class);
-		} catch (ServletException exception) {
-			throw new RuntimeException(exception);
-		}
+				
+		if(StringHelper.isBlank(username)) {
+			
+		}else {
+			try {
+				httpServletRequest.logout();
+				LogHelper.logInfo("Request has been logged out", SessionHelper.class);
+			} catch (ServletException exception) {
+				throw new RuntimeException(exception);
+			}
+			
+			//keycloak
+			UserManager.getInstance().logout(username);
+		}			
 	}
 }
