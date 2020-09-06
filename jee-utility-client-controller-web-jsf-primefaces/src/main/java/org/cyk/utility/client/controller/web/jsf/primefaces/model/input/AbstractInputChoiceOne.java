@@ -42,6 +42,11 @@ public class AbstractInputChoiceOne extends AbstractInputChoice<Object> implemen
 		return this;
 	}
 	
+	public AbstractInputChoiceOne enableValueChangeListener(Ajax.Listener listener,Collection<Object> updatables) {
+		enableAjaxListener("valueChange", listener,updatables);
+		return this;
+	}
+	
 	public AbstractInputChoiceOne enableValueChangeListener(Collection<Object> updatables) {
 		enableAjaxListener("valueChange", new Ajax.Listener.AbstractImpl() {
 			@Override
@@ -160,5 +165,14 @@ public class AbstractInputChoiceOne extends AbstractInputChoice<Object> implemen
 		}
 		
 		public static final String FIELD_IS_FIRST_CHOICE_SELECTABLE = "isFirstChoiceSelectable";
+	}
+	
+	public static abstract class ValueChangeListener extends Ajax.Listener.AbstractImpl implements Serializable {
+		@Override
+		public void run(AbstractAction action) {
+			select(action,FieldHelper.read(action.get__argument__(), "source.value"));
+		}
+		
+		protected abstract void select(AbstractAction action,Object value);
 	}
 }

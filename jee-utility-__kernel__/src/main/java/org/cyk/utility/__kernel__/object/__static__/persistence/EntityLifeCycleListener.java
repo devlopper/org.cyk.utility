@@ -10,12 +10,17 @@ import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 public interface EntityLifeCycleListener {
 
 	void listen(java.lang.Object object,Event event,When when);
 	
 	public static abstract class AbstractImpl implements EntityLifeCycleListener,Serializable {
-		public static String DEFAULT_USER_NAME = "system";
+		public static String DEFAULT_USER_NAME = "ANONYMOUS";
+		public static String DEFAULT_FUNCTIONALITY = "ANONYMOUS";
+		
 		@Override
 		public void listen(java.lang.Object object,Event event, When when) {
 			ThrowableHelper.throwIllegalArgumentExceptionIfNull("object", object);
@@ -85,7 +90,7 @@ public interface EntityLifeCycleListener {
 			if(!(object instanceof AuditableWhoDoneWhatWhen))
 				return;
 			((AuditableWhoDoneWhatWhen)object).set__auditWho__(ValueHelper.defaultToIfBlank(SessionHelper.getUserName(),DEFAULT_USER_NAME));
-			((AuditableWhoDoneWhatWhen)object).set__auditWhat__(event.name());
+			((AuditableWhoDoneWhatWhen)object).set__auditWhat__(ValueHelper.defaultToIfBlank(event.getValue(),event.getValue()));
 			((AuditableWhoDoneWhatWhen)object).set__auditWhen__(LocalDateTime.now());
 		}
 	}
@@ -99,7 +104,21 @@ public interface EntityLifeCycleListener {
 	Value INSTANCE = new Value();
 	
 	/**/
-	
-	public static enum Event {CREATE,READ,UPDATE,DELETE}
+	@Getter @AllArgsConstructor
+	public static enum Event {
+		CREATE("CREATE")
+		,READ("READ")
+		,UPDATE("UPDATE")
+		,DELETE("DELETE")
+		
+		;
+		
+		private String value;
+		
+		public Event setValue(String value) {
+			this.value = value;
+			return this;
+		}
+	}
 	public static enum When {BEFORE,AFTER}
 }

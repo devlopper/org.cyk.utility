@@ -26,6 +26,14 @@ public abstract class AbstractIdentifiableSystemScalarStringIdentifiableBusiness
 	@Column(name="audit_event_what")
 	protected String __auditWhat__;
 	
+	@Column(name="audit_event_functionality")
+	protected String __auditFunctionality__;
+	
 	@Column(name="audit_event_when")
 	protected LocalDateTime __auditWhen__;
+	
+	public static final String FIELD___AUDIT_WHO__ = "__auditWho__";
+	public static final String FIELD___AUDIT_WHAT__ = "__auditWhat__";
+	public static final String FIELD___AUDIT_FUNCTIONALITY__ = "__auditFunctionality__";
+	public static final String FIELD___AUDIT_WHEN__ = "__auditWhen__";
 }

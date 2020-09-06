@@ -6,6 +6,7 @@ import javax.ws.rs.core.Response;
 
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
+import org.cyk.utility.__kernel__.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.value.Value;
 
@@ -17,6 +18,14 @@ public interface EntityCounter {
 		Arguments<ENTITY> arguments = new Arguments<ENTITY>();
 		arguments.setControllerEntityClass(controllerEntityClass);
 		return count(controllerEntityClass, arguments);
+	}
+	
+	default <ENTITY> Long count(Class<ENTITY> controllerEntityClass,String queryIdentifier,Object...filterFieldsValues) {
+		if(controllerEntityClass == null)
+			throw new RuntimeException("controller entity class is required");
+		return count(controllerEntityClass, new Arguments<ENTITY>().setControllerEntityClass(controllerEntityClass)
+				.setRepresentationArguments(new org.cyk.utility.__kernel__.representation.Arguments()
+				.setQueryExecutorArguments(new QueryExecutorArguments.Dto().setQueryIdentifier(queryIdentifier).addFilterFieldsValues(filterFieldsValues))));
 	}
 	
 	/**/

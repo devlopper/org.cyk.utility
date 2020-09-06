@@ -10,6 +10,9 @@ public interface AuditableWhoDoneWhatWhen {
 	String get__auditWhat__();
 	AuditableWhoDoneWhatWhen set__auditWhat__(String what);
 	
+	String get__auditFunctionality__();
+	AuditableWhoDoneWhatWhen set__auditFunctionality__(String functionality);
+	
 	LocalDateTime get__auditWhen__();
 	AuditableWhoDoneWhatWhen set__auditWhen__(LocalDateTime when);
 	
