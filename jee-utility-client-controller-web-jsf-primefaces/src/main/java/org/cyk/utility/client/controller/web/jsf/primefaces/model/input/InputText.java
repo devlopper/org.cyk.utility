@@ -13,7 +13,6 @@ import lombok.Setter;
 @Getter @Setter
 public class InputText extends AbstractInput<String> implements Serializable {
 
-	
 	/**/
 	
 	/**/

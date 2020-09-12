@@ -67,6 +67,10 @@ public interface Querier {
 			}
 			
 			protected Boolean __isOwner__(QueryExecutorArguments arguments) {
+				if(arguments == null || arguments.getQuery() == null)
+					return Boolean.FALSE;
+				if(getKlass() == null)
+					throw new RuntimeException("querier namable class is required");
 				return StringUtils.startsWith(arguments.getQuery().getIdentifier(), getKlass().getSimpleName()+".");
 			}
 			

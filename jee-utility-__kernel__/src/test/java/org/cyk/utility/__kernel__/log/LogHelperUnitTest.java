@@ -3,6 +3,7 @@ package org.cyk.utility.__kernel__.log;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Collection;
+import java.util.logging.Level;
 
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,11 @@ import org.junit.jupiter.api.Test;
 public class LogHelperUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
+	@Test
+	public void log(){
+		LogHelper.log(new LogHelper.Arguments().setClassName("C1").setLevel(Level.INFO).setMessage("Hello").setMethodName("M1"));
+	}
+	
 	@Test
 	public void concatenateMessageTemplateArgument_null_null(){
 		assertThat(LogHelper.concatenateMessageTemplateWithArgument((String)null, null)).isNull();

@@ -12,7 +12,7 @@ public enum Action {
 	,EDIT
 	
 	,LIST
-	
+	,TREAT
 	;
 	
 	public static Action getByName(String name,Boolean isNameCaseSensitive) {

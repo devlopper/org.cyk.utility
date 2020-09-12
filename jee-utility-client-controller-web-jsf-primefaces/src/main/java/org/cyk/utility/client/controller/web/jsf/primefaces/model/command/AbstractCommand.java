@@ -116,6 +116,7 @@ public abstract class AbstractCommand extends AbstractAction implements Serializ
 					case DELETE:icon = "fa fa-remove";break;
 					case EDIT:icon = "fa fa-edit";break;
 					case LIST:icon = "fa fa-list";break;
+					default: icon = "";
 					}
 				}
 				if(StringHelper.isNotBlank(icon))

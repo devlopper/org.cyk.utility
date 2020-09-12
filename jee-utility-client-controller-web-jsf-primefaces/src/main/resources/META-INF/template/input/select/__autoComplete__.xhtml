@@ -41,6 +41,9 @@
 				dropdownMode="#{autoComplete.dropdownMode}"
 				
 				onchange="#{autoComplete.onChange}"
+				
+				disabled="#{autoComplete.disabled}"
+				readonly="#{autoComplete.readOnly}"
 			>			
 				<ui:decorate template="/ajax/default.xhtml">
 					<ui:param name="ajax" value="#{autoComplete.ajaxes.get('query')}"/>

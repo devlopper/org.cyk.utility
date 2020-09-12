@@ -12,10 +12,17 @@
 	<ui:insert name="columnsAfterRowIndexFiltersFacet">
 		<f:facet name="filter">
 			<ui:insert name="columnsAfterRowIndexFiltersFacetControl">
-				<p:inputText id="columnsAfterRowIndexFiltersFacetControl" placeholder="Rechercher..." rendered="#{not empty column.filterBy}">									
+				<p:inputText id="columnsAfterRowIndexFiltersFacetControlInputText" placeholder="Rechercher..." rendered="#{not empty column.filterBy and column.isFilterInputTypeInputText()}">									
 					<p:ajax delay="#{dataTable.filterDelay}" event="keyup" oncomplete="if(event.keyCode != 13) PF('#{dataTable.widgetVar}').filter();" partialSubmit="true" global="false"/>									
 					<p:ajax event="keypress" oncomplete="if(event.keyCode == 13) PF('#{dataTable.widgetVar}').filter();" partialSubmit="true" global="false"/>
-				</p:inputText>															
+				</p:inputText>
+				
+				<!--
+				<p:selectOneMenu id="columnsAfterRowIndexFiltersFacetControlSelectOneMenu" placeholder="Rechercher..." rendered="#{not empty column.filterBy and column.isFilterInputTypeSelectOneMenu()}">
+                    <p:ajax delay="#{dataTable.filterDelay}" event="change" oncomplete="PF('#{dataTable.widgetVar}').filter();" partialSubmit="true" global="false"/>									
+					<f:selectItems value="#{column.filterInputSelectItems}" />
+                </p:selectOneMenu>
+                -->
 			</ui:insert>
 		</f:facet>
 	</ui:insert>

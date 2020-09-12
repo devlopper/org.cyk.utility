@@ -1,7 +1,10 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces.model.collection;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Map;
+
+import javax.faces.model.SelectItem;
 
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
@@ -25,6 +28,8 @@ public class Column extends AbstractObject implements Serializable {
 
 	private Class<?> fieldType;
 	private Value.Type valueType;
+	private FilterInputType filterInputType;
+	private Collection<SelectItem> filterInputSelectItems;
 	private String headerText,footerText,footerStyle,footerStyleClass,selectionMode,width,filterBy,fieldName,field;
 	private Boolean visible = Boolean.TRUE;
 	private Object filterValue;
@@ -39,6 +44,8 @@ public class Column extends AbstractObject implements Serializable {
 	
 	/**/
 	
+	public static final String FIELD_FILTER_INPUT_SELECT_ITEMS = "filterInputSelectItems";
+	public static final String FIELD_FILTER_INPUT_TYPE = "filterInputType";
 	public static final String FIELD_INDEX = "index";
 	public static final String FIELD_HEADER_TEXT = "headerText";
 	public static final String FIELD_FOOTER_TEXT = "footerText";
@@ -54,6 +61,16 @@ public class Column extends AbstractObject implements Serializable {
 	public static final String FIELD_VISIBLE = "visible";
 	public static final String FIELD_VALUE_TYPE = "valueType";
 	public static final String FIELD_REMOVE_COMMAND_BUTTON = "removeCommandButton";
+	
+	/**/
+	
+	public Boolean isFilterInputTypeInputText() {
+		return filterInputType == null || FilterInputType.INPUT_TEXT.equals(filterInputType);
+	}
+	
+	public Boolean isFilterInputTypeSelectOneMenu() {
+		return FilterInputType.SELECT_ONE_MENU.equals(filterInputType);
+	}
 	
 	/**/
 	
@@ -122,6 +139,9 @@ public class Column extends AbstractObject implements Serializable {
 				else
 					column.footerOutputText = OutputText.build();
 			}
+			
+			if(column.filterInputType == null && column.filterInputSelectItems != null)
+				column.filterInputType = FilterInputType.SELECT_ONE_MENU;
 		}
 		
 		@Override
@@ -166,5 +186,9 @@ public class Column extends AbstractObject implements Serializable {
 	
 	static {
 		Configurator.set(Column.class, new ConfiguratorImpl());
+	}
+	
+	public static enum FilterInputType{
+		INPUT_TEXT,SELECT_ONE_MENU
 	}
 }

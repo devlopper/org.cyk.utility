@@ -1,5 +1,6 @@
 package org.cyk.utility.__kernel__.log;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.logging.Level;
 
@@ -9,6 +10,10 @@ import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.variable.VariableName;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 public interface LogHelper {
 
@@ -62,6 +67,16 @@ public interface LogHelper {
 		if(message == null)
 			return null;
 		return buildMessage(message.getTemplate(), message.getArguments());
+	}
+	
+	static void log(Arguments arguments) {
+		if(StringHelper.isBlank(arguments.message))
+			return;
+		if(arguments.level == null)
+			arguments.level = Level.INFO;
+		if(StringHelper.isBlank(arguments.className))
+			arguments.className = LogHelper.class.getName();
+		java.util.logging.Logger.getLogger(arguments.className).logp(arguments.level, arguments.className, arguments.methodName, arguments.message);
 	}
 	
 	static void log(String message,Level level,Class<?> klass) {
@@ -174,5 +189,15 @@ public interface LogHelper {
 	
 	static void log(LogMessages messages) {
 		log(messages, messages.getClass());
+	}
+	
+	/**/
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class Arguments implements Serializable {
+		private String message;
+		private String className;
+		private String methodName;
+		private Level level;
 	}
 }

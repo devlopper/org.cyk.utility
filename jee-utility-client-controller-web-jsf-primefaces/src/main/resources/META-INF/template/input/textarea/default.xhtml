@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<ui:decorate template="/input/default.xhtml">
+		<ui:param name="__input__" value="#{inputTextarea}"/>		
+		<ui:define name="input">
+			<p:inputTextarea
+				id="#{inputTextarea.identifier}"
+				value="#{inputTextarea.value}"
+				required="#{inputTextarea.required}"
+				requiredMessage="#{inputTextarea.requiredMessage}"
+				rendered="#{inputTextarea.rendered}"
+				widgetVar="#{inputTextarea.widgetVar}"
+				placeholder="#{inputTextarea.placeholder}"
+				validator="#{inputTextarea.validate}"
+				readonly="#{inputTextarea.readOnly}"
+				disabled="#{inputTextarea.disabled}"
+				
+			>
+			
+			</p:inputTextarea>
+		</ui:define>
+	</ui:decorate>
+</ui:composition>

@@ -277,6 +277,7 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 	
 	/**/
 	
+	public static final String FIELD_ARE_COLUMNS_CHOOSABLE = "areColumnsChoosable";
 	public static final String FIELD_DATA_GRID = "dataGrid";
 	public static final String FIELD_STICKY_HEADER = "stickyHeader";
 	public static final String FIELD_STICKY_TOP_AT = "stickyTopAt";

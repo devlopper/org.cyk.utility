@@ -21,7 +21,7 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 	protected Collection<Object> choices;
 	protected Boolean choicesInitialized;
 	protected Integer columns;
-	protected Boolean disabled,nullable;
+	protected Boolean nullable;
 	protected String layout;
 	
 	/**/

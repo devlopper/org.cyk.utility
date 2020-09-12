@@ -31,6 +31,7 @@ import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.system.action.SystemActionList;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.user.interface_.message.RenderType;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.client.controller.ControllerEntity;
 import org.cyk.utility.client.controller.ControllerLayer;
 import org.cyk.utility.client.controller.web.WebController;
@@ -81,6 +82,10 @@ public class Form extends AbstractObject implements Serializable {
 		if(klass == null || StringHelper.isBlank(fieldName) || MapHelper.isEmpty(inputs))
 			return null;
 		return (T) inputs.get(fieldName);
+	}
+	
+	public Boolean isSubmitButtonShowable() {
+		return ((Listener)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).isSubmitButtonShowable(this);
 	}
 	
 	/**/
@@ -140,7 +145,8 @@ public class Form extends AbstractObject implements Serializable {
 				form.title = internationalizationPhrase.getValue();
 			}
 			
-			if(form.layout == null && CollectionHelper.isNotEmpty(form.entityFieldsNames)) {
+			Boolean layoutBuildable = ValueHelper.defaultToIfNull((Boolean) MapHelper.readByKey(arguments, FIELD_LAYOUT_BUILDABLE),Boolean.TRUE);
+			if(form.layout == null && layoutBuildable && CollectionHelper.isNotEmpty(form.entityFieldsNames)) {
 				Collection<String> inputsFieldsNames = (Collection<String>) MapHelper.readByKey(arguments, FIELD_INPUTS_FIELDS_NAMES);
 				if(CollectionHelper.isEmpty(inputsFieldsNames)) {
 					inputsFieldsNames = form.entityFieldsNames;
@@ -196,9 +202,9 @@ public class Form extends AbstractObject implements Serializable {
 					cells.add(MapHelper.instantiate(Cell.FIELD_CONTROL,input.getOutputLabel()));
 					cells.add(MapHelper.instantiate(Cell.FIELD_CONTROL,input));
 					form.inputs.put(input.getField().getName(), input);//TODO nested wont work. use path instead
-				}			
+				}
 			});
-			if(Action.CREATE.equals(form.action) || Action.UPDATE.equals(form.action) || Action.DELETE.equals(form.action) || Action.EDIT.equals(form.action)) {
+			if(Boolean.TRUE.equals(form.isSubmitButtonShowable())) {
 				Map<Object,Object> submitCommandArguments = listener.getCommandButtonArguments(form, inputs);
 				if(form.container instanceof Dialog) {
 					Dialog dialog = (Dialog) form.container;
@@ -223,6 +229,7 @@ public class Form extends AbstractObject implements Serializable {
 		public static final String FIELD_INPUTS_FIELDS_NAMES = "inputsFieldsNames";
 		public static final String FIELD_METHOD_NAME = "methodName";
 		public static final String FIELD_LISTENER = "configurator.listener";
+		public static final String FIELD_LAYOUT_BUILDABLE = "configurator.layout.buildable";
 		public static final String FIELD_CONTROLLER_ENTITY_INJECTABLE = "controllerEntityInjectable";
 		/**/
 		
@@ -233,6 +240,7 @@ public class Form extends AbstractObject implements Serializable {
 			Map<Object,Object> getInputArguments(Form form,String fieldName);
 			Map<Object,Object> getCommandButtonArguments(Form form,Collection<AbstractInput<?>> inputs);
 			Map<Object,Object> getLayoutArguments(Form form,Collection<Map<Object,Object>> cellsArguments);
+			//Layout instantiateLayout(Form form);
 			
 			public static abstract class AbstractImpl extends AbstractObject implements Listener,Serializable {
 				@Override
@@ -261,6 +269,7 @@ public class Form extends AbstractObject implements Serializable {
 					Map<Object,Object> arguments = new HashMap<>();
 					arguments.put(AbstractInput.FIELD_OBJECT, form.entity);
 					arguments.put(AbstractInput.FIELD_FIELD, FieldHelper.getByName(form.entityClass, fieldName));
+					arguments.put(AbstractInput.AbstractConfiguratorImpl.FIELD_ACTION, form.getAction());
 					return arguments;
 				}
 				
@@ -306,6 +315,7 @@ public class Form extends AbstractObject implements Serializable {
 		void act(Form form);
 		void listenAfterExecute(Form form);
 		void redirect(Form form,Object request);
+		Boolean isSubmitButtonShowable(Form form);
 		
 		/**/
 		
@@ -335,6 +345,11 @@ public class Form extends AbstractObject implements Serializable {
 			
 			@Override
 			public void listenAfterExecute(Form form) {}
+			
+			@Override
+			public Boolean isSubmitButtonShowable(Form form) {
+				return Action.CREATE.equals(form.action) || Action.UPDATE.equals(form.action) || Action.DELETE.equals(form.action) || Action.EDIT.equals(form.action);
+			}
 			
 			/**/
 			

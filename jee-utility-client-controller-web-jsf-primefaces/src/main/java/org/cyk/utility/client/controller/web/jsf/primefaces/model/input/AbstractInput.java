@@ -9,6 +9,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 import javax.validation.constraints.NotNull;
 
+import org.cyk.utility.__kernel__.enumeration.Action;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.internationalization.InternationalizationHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
@@ -26,6 +27,7 @@ import lombok.Setter;
 @Getter @Setter
 public abstract class AbstractInput<VALUE> extends AbstractInputOutput<VALUE> implements Serializable {
 
+	protected Boolean disabled,readOnly;
 	protected Boolean required;
 	protected String requiredMessage,converterMessage,validatorMessage;
 	protected String placeholder;
@@ -97,6 +99,13 @@ public abstract class AbstractInput<VALUE> extends AbstractInputOutput<VALUE> im
 		@Override
 		public void configure(INPUT input, Map<Object, Object> arguments) {
 			super.configure(input, arguments);
+			Action action = (Action) MapHelper.readByKey(arguments, FIELD_ACTION);
+			Boolean edtitable = action == null ? Boolean.TRUE : (Action.CREATE.equals(action) || Action.UPDATE.equals(action) || Action.EDIT.equals(action));
+			if(input.readOnly == null)
+				input.readOnly = !Boolean.TRUE.equals(edtitable);
+			if(input.disabled == null)
+				input.disabled = Boolean.FALSE;
+			
 			if(input.required == null) {
 				if(input.field != null)
 					input.required = input.field.isAnnotationPresent(NotNull.class);
@@ -132,6 +141,7 @@ public abstract class AbstractInput<VALUE> extends AbstractInputOutput<VALUE> im
 			return "Input Text Label";
 		}
 		
+		public static final String FIELD_ACTION = "configurator.action";
 		public static final String FIELD_OUTPUT_LABEL_VALUE = "outputLabelValue";
 		public static final String FIELD_OUTPUT_LABEL_CARDINAL_POINT = "outputLabelCardinalPoint";
 		public static final String FIELD_MESSAGABLE = "configurator.messagable";

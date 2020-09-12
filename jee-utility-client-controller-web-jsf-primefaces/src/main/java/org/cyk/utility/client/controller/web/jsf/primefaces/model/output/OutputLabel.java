@@ -52,6 +52,10 @@ public class OutputLabel extends AbstractOutput<String> implements Serializable 
 	public static OutputLabel build(Object...objects) {
 		return build(MapHelper.instantiate(objects));
 	}
+	
+	public static OutputLabel buildFromValueFor(String value,String for_) {
+		return OutputLabel.build(OutputLabel.FIELD_VALUE,value,OutputLabel.FIELD_FOR,for_);
+	}
 
 	static {
 		Configurator.set(OutputLabel.class, new ConfiguratorImpl());
