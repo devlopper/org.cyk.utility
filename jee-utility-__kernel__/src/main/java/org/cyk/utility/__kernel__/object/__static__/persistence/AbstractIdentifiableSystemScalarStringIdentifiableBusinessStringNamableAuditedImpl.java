@@ -7,6 +7,7 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 
 import org.cyk.utility.__kernel__.object.marker.AuditableWhoDoneWhatWhen;
 
@@ -32,8 +33,15 @@ public abstract class AbstractIdentifiableSystemScalarStringIdentifiableBusiness
 	@Column(name="audit_event_when")
 	protected LocalDateTime __auditWhen__;
 	
+	@Transient
+	protected Long __auditWhenAsTimestamp__;
+	@Transient
+	protected String __auditWhenAsString__;
+	
 	public static final String FIELD___AUDIT_WHO__ = "__auditWho__";
 	public static final String FIELD___AUDIT_WHAT__ = "__auditWhat__";
 	public static final String FIELD___AUDIT_FUNCTIONALITY__ = "__auditFunctionality__";
 	public static final String FIELD___AUDIT_WHEN__ = "__auditWhen__";
+	public static final String FIELD___AUDIT_WHEN_AS_TIMESTAMP__ = "__auditWhenAsTimestamp__";
+	public static final String FIELD___AUDIT_WHEN_AS_STRING__ = "__auditWhenAsString__";
 }

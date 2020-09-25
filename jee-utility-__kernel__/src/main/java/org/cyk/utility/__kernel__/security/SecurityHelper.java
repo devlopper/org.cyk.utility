@@ -4,7 +4,7 @@ import java.security.Principal;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.identifier.resource.RequestGetter;
 import org.cyk.utility.__kernel__.value.Value;
 
 public interface SecurityHelper {
@@ -25,7 +25,7 @@ public interface SecurityHelper {
 	
 	static Principal getPrincipal() {
 		if(PRINCIPALABLE.get() == null || Boolean.TRUE.equals(PRINCIPALABLE.get()))
-			return getPrincipal(DependencyInjection.inject(HttpServletRequest.class));
+			return getPrincipal(RequestGetter.getInstance().get());
 		return null;
 	}
 	

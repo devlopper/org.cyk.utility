@@ -45,8 +45,21 @@ public interface Language {
 		return String.format(PARENTHESIS, string);
 	}
 	
+	static String formatParameterOrVariable(String name,Boolean isVariable) {
+		return String.format(PARAMETER_OR_VARIABLE,Boolean.TRUE.equals(isVariable) ? ConstantEmpty.STRING : COLON ,name);
+	}
+	
+	static String formatParameter(String name) {
+		return formatParameterOrVariable(name, Boolean.FALSE);
+	}
+	
+	static String formatVariable(String name) {
+		return formatParameterOrVariable(name, Boolean.TRUE);
+	}
+	
 	String PARENTHESIS = "(%s)";
-
+	String PARAMETER_OR_VARIABLE = "%s%s";
+	String COLON = ":";
 	/**/
 	
 	public static interface Select {

@@ -8,10 +8,10 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
-    <cyk:page value="#{personTypeListPage}">
+    <cyk:page value="#{personTypeSelectManyPage}">
     	<ui:define name="centerCenter">
-    		<ui:decorate template="/collection/datatable/default.xhtml">
-    			<ui:param name="dataTable" value="#{personTypeListPage.dataTable}"/>
+    		<ui:decorate template="#{primefacesHelper.getModelTemplate(personTypeSelectManyPage.layout)}">
+    			<ui:param name="layout" value="#{personTypeSelectManyPage.layout}"/>
     		</ui:decorate>
     	</ui:define>
     </cyk:page>

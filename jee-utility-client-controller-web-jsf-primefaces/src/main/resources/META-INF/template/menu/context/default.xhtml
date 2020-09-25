@@ -9,20 +9,23 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
-	<p:contextMenu
-		id="#{contextMenu.identifier}"
+	<!-- 
 		beforeShow="#{contextMenu.beforeShow}"
 		event="#{contextMenu.event}"
-		for="#{contextMenu.for_}"
-		model="#{contextMenu.model}"
+		model="#{contextMenu.model}"	
+		
 		nodeType="#{contextMenu.nodeType}"
 		rendered="#{contextMenu.rendered}"
 		selectionMode="#{contextMenu.selectionMode}"
 		targetFilter="#{contextMenu.targetFilter}"
 		widgetVar="#{contextMenu.widgetVar}"
-		binding="#{contextMenu.binding}"
 		styleClass="#{contextMenu.styleClass}"
 		style="#{contextMenu.style}"
+	 -->
+	
+	<p:contextMenu
+		id="#{contextMenu == null ? userInterfaceController.randomIdentifier : contextMenu.identifier}"		
+		for="#{contextMenu.for_}"	
 	>
 		<c:forEach var="menuitem" items="#{contextMenu.items}">
 			<ui:decorate template="../item/default.xhtml">

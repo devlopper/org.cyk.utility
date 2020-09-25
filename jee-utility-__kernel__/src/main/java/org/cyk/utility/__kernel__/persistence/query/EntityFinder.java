@@ -1,6 +1,8 @@
 package org.cyk.utility.__kernel__.persistence.query;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -53,6 +55,8 @@ public interface EntityFinder {
 		return find(klass, new QueryExecutorArguments().addSystemIdentifiers(identifier));
 	}
 	
+	<T> Collection<T> findMany(Class<T> klass,Collection<String> strings);
+	
 	/*default <T> Collection<T> findMany(Class<T> klass,QueryExecutorArguments arguments) {
 		if(klass == null)
 			throw new IllegalArgumentException("class is required");
@@ -75,6 +79,22 @@ public interface EntityFinder {
 	public abstract class AbstractImpl extends AbstractObject implements EntityFinder,Serializable {
 		private static final long serialVersionUID = 1L;
 
+		@Override
+		public <T> Collection<T> findMany(Class<T> klass, Collection<String> identifiers) {
+			if(CollectionHelper.isEmpty(identifiers))
+				return null;
+			Collection<T> collection = null;
+			for(String identifier : identifiers) {
+				T t = find(klass, identifier);
+				if(t == null)
+					continue;
+				if(collection == null)
+					collection = new ArrayList<T>();
+				collection.add(t);
+			}
+			return collection;
+		}
+		
 	}
 	
 	/**/

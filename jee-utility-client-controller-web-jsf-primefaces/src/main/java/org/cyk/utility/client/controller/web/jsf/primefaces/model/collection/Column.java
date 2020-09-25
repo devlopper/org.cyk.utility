@@ -149,6 +149,11 @@ public class Column extends AbstractObject implements Serializable {
 			return Column.class;
 		}
 		
+		@Override
+		protected String __getTemplate__(Column column, Map<Object, Object> arguments) {
+			return "/collection/datatable/column/default.xhtml";
+		}
+		
 		public static final String FIELD_FILTERABLE = "filterable";
 		public static final String FIELD_EDITABLE = "editable";
 		public static final String FIELD_SHOW_FOOTER = "showFooter";

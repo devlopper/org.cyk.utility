@@ -39,6 +39,18 @@
 		</navigation-case>
 		
 		<navigation-case>
+			<from-outcome>personTypeSelectManyView</from-outcome>
+			<to-view-id>/private/persontype/selectmany.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>personTypeSelectOneView</from-outcome>
+			<to-view-id>/private/persontype/selectone.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
 			<from-outcome>personEditView</from-outcome>
 			<to-view-id>/private/person/edit.jsf</to-view-id>
 			<redirect />

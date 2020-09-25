@@ -27,7 +27,6 @@ import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.user.interface_.UserInterfaceAction;
-import org.cyk.utility.__kernel__.user.interface_.message.RenderType;
 import org.cyk.utility.client.controller.ControllerEntity;
 import org.cyk.utility.client.controller.ControllerLayer;
 import org.cyk.utility.client.controller.web.jsf.OutcomeGetter;
@@ -50,6 +49,7 @@ import lombok.Setter;
 @Getter @Setter
 public abstract class AbstractCollection extends AbstractObjectAjaxable implements Serializable {
 
+	protected RenderType renderType;
 	protected Class<?> elementClass;
 	protected Object __parentElement__;
 	protected OutputText title;
@@ -58,7 +58,8 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	protected String rowStyleClass,editMode;
 	protected Boolean lazy,paginator,paginatorAlwaysVisible,isExportable,isSelectionShowableInDialog,editable,isSavable;
 	protected Integer rows,filterDelay;
-	protected List<?> selection;
+	protected Object selection;
+	protected List<?> selectionAsCollection;
 	protected Map<String,Object> map = new HashMap<>();
 	protected OutputPanel dialogOutputPanel;
 	protected Dialog dialog;
@@ -69,6 +70,15 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	protected CommandButton saveCommandButton;
 	
 	/**/
+	
+	/*@SuppressWarnings("unchecked")
+	public <T> List<T> getSelectionAsList(Class<T> clazz) {
+		return (List<T>) selection;
+	}
+	
+	public List<?> getSelectionAsList() {
+		return (List<?>) selection;
+	}*/
 	
 	public AbstractCollection useQueryIdentifiersFiltersLike() {
 		if(value instanceof LazyDataModel<?>) {
@@ -205,8 +215,8 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	}
 	
 	public AbstractMenu getRecordMenu(Boolean injectIfNull) {
-		if(recordMenu == null && Boolean.TRUE.equals(injectIfNull))
-			recordMenu = MenuButton.build();
+		if(recordMenu == null && Boolean.TRUE.equals(injectIfNull))			
+			recordMenu = ((Listener)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).buildRecordMenu(this);
 		return recordMenu;
 	}
 	
@@ -278,7 +288,8 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 		return addRecordMenuItemByArguments(MenuItem.FIELD_VALUE,value,MenuItem.FIELD_ICON,icon
 				,MenuItem.FIELD_LISTENER,listener,MenuItem.FIELD_USER_INTERFACE_ACTION,UserInterfaceAction.EXECUTE_FUNCTION
 				,MenuItem.ConfiguratorImpl.FIELD_CONFIRMABLE,Boolean.TRUE
-						,MenuItem.ConfiguratorImpl.FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_RENDER_TYPES,CollectionHelper.listOf(RenderType.GROWL));
+						,MenuItem.ConfiguratorImpl.FIELD_RUNNER_ARGUMENTS_SUCCESS_MESSAGE_ARGUMENTS_RENDER_TYPES
+						,CollectionHelper.listOf(org.cyk.utility.__kernel__.user.interface_.message.RenderType.GROWL));
 	}
 	
 	public AbstractCollection addRecordMenuItemByArgumentsExecuteFunctionDelete() {
@@ -289,9 +300,12 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 					super.__runExecuteFunction__(action);
 					if(controllerEntity == null)
 						throw new RuntimeException("Controller is required to execute delete function");
-					controllerEntity.delete(action.get__argument__());
-					return action.get__argument__()+" has been deleted.";
-				}
+					Object argument = action.readArgument();
+					if(argument == null)
+						throw new RuntimeException("Argument is required to execute delete function");
+					controllerEntity.delete(argument);
+					return argument.getClass().getSimpleName()+" with system identifier <<"+FieldHelper.readSystemIdentifier(argument)+">>" +" has been deleted.";
+				} 
 			});
 		}
 		return this;
@@ -345,6 +359,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	public static final String FIELD_SELECTION_MODE = "selectionMode";
 	public static final String FIELD_EDITABLE = "editable";
 	public static final String FIELD_EDIT_MODE = "editMode";
+	public static final String FIELD_RENDER_TYPE = "renderType";
 	
 	/**/
 	
@@ -354,6 +369,8 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 		@Override
 		public void configure(COLLECTION collection, Map<Object, Object> arguments) {
 			super.configure(collection, arguments);
+			setRenderType(collection,arguments);
+			
 			if(collection.controllerEntity == null) {
 				if(collection.elementClass != null && !Grid.Row.class.equals(collection.elementClass))
 					collection.controllerEntity = (ControllerEntity<Object>) __inject__(ControllerLayer.class).injectInterfaceClassFromEntityClass(collection.elementClass);
@@ -439,6 +456,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 					,Map.of(Ajax.FIELD_EVENT,"cellEdit",Ajax.FIELD___RUNNABLE__,Boolean.FALSE)
 					);		
 			
+			/*
 			Class<?> recordMenuClass = (Class<?>) MapHelper.readByKey(arguments, FIELD_RECORD_MENU_CLASS);
 			if(recordMenuClass == null)
 				recordMenuClass = MenuButton.class;
@@ -446,13 +464,13 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 				collection.recordMenu = MenuButton.build();
 			else if(ContextMenu.class.equals(recordMenuClass))
 				collection.recordMenu = ContextMenu.build();
-			
+			*/
 			Collection<Map<Object,Object>> recordMenuItemsByArguments = (Collection<Map<Object, Object>>) MapHelper.readByKey(arguments, FIELD_RECORD_MENU_ITEMS_BY_ARGUMENTS);
 			if(CollectionHelper.isNotEmpty(recordMenuItemsByArguments)) {
 				for(Map<Object,Object> map : recordMenuItemsByArguments)
 					MapHelper.writeByKey(map, MenuItem.ConfiguratorImpl.FIELD_UPDATABLES, CollectionHelper.listOf(collection), Boolean.FALSE);
 			}			
-			collection.recordMenu.addItemsByArguments(recordMenuItemsByArguments);
+			collection.getRecordMenu(Boolean.TRUE).addItemsByArguments(recordMenuItemsByArguments);
 			
 			if(collection.title == null) {
 				if(StringHelper.isNotBlank((String) MapHelper.readByKey(arguments, FIELD_TITLE_VALUE)))
@@ -471,7 +489,12 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 			if(Boolean.TRUE.equals(collection.editable)) {
 				collection.isExportable = Boolean.FALSE;
 				collection.isSavable = Boolean.TRUE;
-			}	
+			}			
+		}
+		
+		protected void setRenderType(COLLECTION collection, Map<Object, Object> arguments) {
+			if(collection.renderType == null)
+				collection.renderType = RenderType.OUTPUT;
 		}
 		
 		public static final String FIELD_ENTITY_FIELDS_NAMES = "entityFieldsNames";
@@ -490,13 +513,44 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	/**/
 	
 	public static interface Listener {
-		Object listenSave(AbstractCollection dataTable);
+		Class<? extends AbstractMenu> getRecordMenuClass(AbstractCollection collection);
+		AbstractMenu buildRecordMenu(AbstractCollection collection);
+		
+		Object listenSave(AbstractCollection collection);
 		/**/
 		public static abstract class AbstractImpl extends AbstractObject implements Listener,Serializable {
 			@Override
-			public Object listenSave(AbstractCollection dataTable) {
+			public Object listenSave(AbstractCollection collection) {
 				return null;
 			}
+			
+			@Override
+			public Class<? extends AbstractMenu> getRecordMenuClass(AbstractCollection collection) {
+				return MenuButton.class;
+			}
+			
+			@Override
+			public AbstractMenu buildRecordMenu(AbstractCollection collection) {
+				Class<? extends AbstractMenu> clazz = getRecordMenuClass(collection);
+				if(clazz == null)
+					clazz = ContextMenu.class;
+				if(MenuButton.class.equals(clazz))
+					return MenuButton.build();
+				if(ContextMenu.class.equals(clazz))
+					return ContextMenu.build(ContextMenu.FIELD_FOR_,collection.identifier);
+				throw new java.lang.RuntimeException("Build record menu using class <<"+clazz+">> not yet handled");
+			}
+			
+			public static class DefaultImpl extends AbstractImpl implements Serializable {
+				public static final DefaultImpl INSTANCE = new DefaultImpl();
+				
+			}
 		}
+	}
+	
+	/**/
+	
+	public static enum RenderType {
+		OUTPUT,INPUT,SELECTION
 	}
 }

@@ -10,8 +10,15 @@
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
 	<ui:insert name="beforeDataTable">
-		<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.title)}">
-	 		<ui:param name="outputText" value="#{dataTable.title}"/>
-	 	</ui:decorate>
+		<ui:insert name="beforeDataTable_footersUpdator">
+			<p:remoteCommand name="update_#{dataTable.identifier}_footers" update=":form:#{dataTable.identifier}" global="false" value="update datatable footers" 
+				partialSubmit="true" process="@none" immediate="true" />
+		</ui:insert>
+		
+		<ui:insert name="beforeDataTable_title">
+			<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.title)}">
+	 			<ui:param name="outputText" value="#{dataTable.title}"/>
+	 		</ui:decorate>
+		</ui:insert>		
 	</ui:insert>
 </ui:composition>

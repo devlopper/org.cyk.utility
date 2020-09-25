@@ -5,10 +5,9 @@ import java.time.LocalDateTime;
 
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.object.marker.AuditableWhoDoneWhatWhen;
-import org.cyk.utility.__kernel__.session.SessionHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.Value;
-import org.cyk.utility.__kernel__.value.ValueHelper;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,8 +17,9 @@ public interface EntityLifeCycleListener {
 	void listen(java.lang.Object object,Event event,When when);
 	
 	public static abstract class AbstractImpl implements EntityLifeCycleListener,Serializable {
-		public static String DEFAULT_USER_NAME = "ANONYMOUS";
-		public static String DEFAULT_FUNCTIONALITY = "ANONYMOUS";
+		public static String DEFAULT_USER_NAME = "UNKNOWN";
+		public static String DEFAULT_ACTION = "UNKNOWN";
+		public static String DEFAULT_FUNCTIONALITY = "UNKNOWN";
 		
 		@Override
 		public void listen(java.lang.Object object,Event event, When when) {
@@ -89,9 +89,48 @@ public interface EntityLifeCycleListener {
 		protected void setAuditableWhoDoneWhatWhen(java.lang.Object object,Event event) {
 			if(!(object instanceof AuditableWhoDoneWhatWhen))
 				return;
-			((AuditableWhoDoneWhatWhen)object).set__auditWho__(ValueHelper.defaultToIfBlank(SessionHelper.getUserName(),DEFAULT_USER_NAME));
-			((AuditableWhoDoneWhatWhen)object).set__auditWhat__(ValueHelper.defaultToIfBlank(event.getValue(),event.getValue()));
-			((AuditableWhoDoneWhatWhen)object).set__auditWhen__(LocalDateTime.now());
+			AuditableWhoDoneWhatWhen instance = (AuditableWhoDoneWhatWhen) object;
+			setAuditableWhoDoneWhatWhenIfBlank(
+					instance
+					, instance.get__auditWho__() //instance.set__auditWho__(ValueHelper.defaultToIfBlank(SessionHelper.getUserName(),DEFAULT_USER_NAME)); //TODO how to get principal in back end ?
+					, instance.get__auditFunctionality__()
+					, event.getValue()
+					, LocalDateTime.now()
+				);
+		}
+		
+		public static void setAuditableWhoDoneWhatWhenIfBlank(java.lang.Object object,String who,String functionality,String what,LocalDateTime when) {
+			if(!(object instanceof AuditableWhoDoneWhatWhen))
+				return;
+			AuditableWhoDoneWhatWhen instance = (AuditableWhoDoneWhatWhen) object;
+			//instance.set__auditWho__(ValueHelper.defaultToIfBlank(SessionHelper.getUserName(),DEFAULT_USER_NAME)); //TODO how to get principal in back end ?			
+			if(StringHelper.isBlank(instance.get__auditWho__())) {
+				if(StringHelper.isBlank(who))
+					who = DEFAULT_USER_NAME;
+				instance.set__auditWho__(who);
+			}
+			
+			/*
+			if(StringHelper.isBlank(instance.get__auditWhat__())) {
+				if(StringHelper.isBlank(what))
+					what = DEFAULT_ACTION;
+				instance.set__auditWhat__(what);
+			}
+			*/
+					
+			instance.set__auditWhat__(what);
+			
+			if(StringHelper.isBlank(instance.get__auditFunctionality__())) {
+				if(StringHelper.isBlank(functionality))
+					functionality = DEFAULT_FUNCTIONALITY;
+				instance.set__auditFunctionality__(functionality);
+			}
+			
+			if(instance.get__auditWhen__() == null) {
+				if(when == null)
+					when = LocalDateTime.now();
+				instance.set__auditWhen__(when);
+			}
 		}
 	}
 	

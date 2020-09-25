@@ -27,6 +27,8 @@ import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.client.controller.web.jsf.primefaces.PrimefacesHelper;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.ContextMenu;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.MenuButton;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.MenuItem;
 import org.primefaces.component.api.DynamicColumn;
 import org.primefaces.event.CellEditEvent;
@@ -45,7 +47,7 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 	protected CommandButton addRowCommandButton,removeRowCommandButton,addColumnCommandButton,removeLastColumnCommandButton;
 	protected String stickyTopAt,columnFieldNameFormat,rowTooltipStyleClass;
 	protected Grid dataGrid;
-	
+	protected RowToggler rowToggler;
 	/**/
 	
 	public AbstractDataTable enableCommandButtonAddRow() {
@@ -240,6 +242,10 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 		return addSelectedColumnsAfterRowIndex(CollectionHelper.listOf(selectedColumnsAfterRowIndex));
 	}
 	
+	public Object getRowKeyByRecord(Object record,Integer recordIndex) {
+		return ((Listener)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).getRowKeyByRecord(record, recordIndex);
+	}
+	
 	public String getStyleClassByRecord(Object record,Integer recordIndex) {
 		return ((Listener)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).getStyleClassByRecord(record, recordIndex);
 	}
@@ -257,7 +263,8 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 		if(CollectionHelper.isEmpty(menuItems))
 			return this;
 		super.addRecordMenuItems(menuItems);
-		menuColumn.setRendered(Boolean.TRUE);
+		if(!(recordMenu instanceof ContextMenu))
+			menuColumn.setRendered(Boolean.TRUE);
 		return this;
 	}
 	
@@ -327,7 +334,7 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 				}
 				dataTable.setOrderNumberColumn(Builder.build(Column.class,map));
 			}
-			if(dataTable.getMenuColumn() == null) {
+			if(dataTable.getMenuColumn() == null && !(dataTable.recordMenu instanceof ContextMenu)) {
 				Map<Object,Object> map = new HashMap<>(Map.of(Column.FIELD_HEADER_TEXT,"",Column.FIELD_WIDTH,"40",Column.ConfiguratorImpl.FIELD_FILTERABLE,Boolean.FALSE
 						,Column.FIELD_RENDERED,Boolean.FALSE));
 				dataTable.setMenuColumn(Builder.build(Column.class,map));
@@ -338,7 +345,7 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 			if(dataTable.isExportable == null)
 				dataTable.isExportable = Boolean.FALSE;
 			
-			if(dataTable.getRecordMenu() != null && CollectionHelper.isNotEmpty(dataTable.getRecordMenu().getItems()))
+			if(dataTable.recordMenu instanceof MenuButton && CollectionHelper.isNotEmpty(dataTable.recordMenu.getItems()))
 				dataTable.menuColumn.setRendered(Boolean.TRUE);
 			
 			if(Boolean.TRUE.equals(MapHelper.readByKey(arguments, FIELD_EDITABLE_CELL))) {
@@ -398,6 +405,19 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 			if(StringHelper.isBlank(dataTable.rowTooltipStyleClass))
 				dataTable.rowTooltipStyleClass = dataTable.identifier+"_row_tooltip";			
 			dataTable.addStyleClasses(dataTable.rowTooltipStyleClass);
+			
+			if(StringHelper.isBlank(dataTable.selectionMode) && RenderType.OUTPUT.equals(dataTable.renderType) /*&& dataTable.recordMenu instanceof ContextMenu*/) {			
+				dataTable.selectionMode = "single";
+			}
+		}
+		
+		@Override
+		protected void setRenderType(DATATABLE dataTable, Map<Object, Object> arguments) {
+			if(dataTable.renderType == null && StringHelper.isNotBlank(dataTable.selectionMode)) {
+				dataTable.renderType = RenderType.SELECTION;
+				return;
+			}
+			super.setRenderType(dataTable, arguments);
 		}
 		
 		/*public static interface Listener {
@@ -406,14 +426,13 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 		
 		public static final String FIELD_COLUMNS_FIELDS_NAMES = "columnsFieldsNames";
 		public static final String FIELD_COLUMNS_FIELDS_NAMES_COMPUTABLE = "columnsFieldsNamesComputable";
-		
-		public static final String FIELD_USABLE_AS_SELECTION_ONLY = "usableAsSelectionOnly";
 	}
 	
 	/**/
 	
 	public static interface Listener extends AbstractCollection.Listener {
 		Object getCellValueByRecordByColumn(Object record,Integer recordIndex,Column column,Integer columnIndex);
+		Object getRowKeyByRecord(Object record,Integer recordIndex);
 		String getStyleClassByRecord(Object record,Integer recordIndex);
 		String getStyleClassByRecordByColumn(Object record,Integer recordIndex,Column column,Integer columnIndex);
 		String getTooltipByRecord(Object record,Integer recordIndex);
@@ -438,6 +457,11 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 						value = NumberHelper.format((Number) value);
 				}
 				return value;
+			}
+			
+			@Override
+			public Object getRowKeyByRecord(Object record, Integer recordIndex) {
+				return FieldHelper.readSystemIdentifier(record);
 			}
 			
 			@Override

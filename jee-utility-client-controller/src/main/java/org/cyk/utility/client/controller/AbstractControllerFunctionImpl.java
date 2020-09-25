@@ -11,6 +11,9 @@ import org.cyk.utility.__kernel__.internationalization.InternationalizationHelpe
 import org.cyk.utility.__kernel__.internationalization.InternationalizationKeyStringType;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.log.LogLevel;
+import org.cyk.utility.__kernel__.mapping.MappingHelper;
+import org.cyk.utility.__kernel__.object.__static__.persistence.EntityLifeCycleListener;
+import org.cyk.utility.__kernel__.session.SessionHelper;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.__kernel__.throwable.Message;
 import org.cyk.utility.__kernel__.throwable.RemoteRuntimeException;
@@ -21,7 +24,6 @@ import org.cyk.utility.client.controller.data.DataRepresentationClassGetter;
 import org.cyk.utility.client.controller.data.DataTransferObjectClassGetter;
 import org.cyk.utility.client.controller.message.MessageRender;
 import org.cyk.utility.client.controller.message.MessageRenderTypeDialog;
-import org.cyk.utility.__kernel__.mapping.MappingHelper;
 import org.cyk.utility.notification.NotificationBuilder;
 import org.cyk.utility.notification.NotificationSeverityInformation;
 import org.cyk.utility.notification.NotificationSeverityWarning;
@@ -71,6 +73,13 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 				//__representationEntities__ = (Collection<Object>) __injectInstanceHelper__().buildMany(__representationEntityClass__, __action__.getEntities().get());
 				if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(__entities__)))
 					__representationEntities__ = (Collection<Object>) MappingHelper.getDestinations(__entities__, __representationEntityClass__);
+				
+				String username = SessionHelper.getUserName();
+				if(Boolean.TRUE.equals(CollectionHelper.isNotEmpty(__representationEntities__))) {
+					__representationEntities__.forEach(x -> {
+						EntityLifeCycleListener.AbstractImpl.setAuditableWhoDoneWhatWhenIfBlank(x, username, null, null, null);
+					});					
+				}
 				__execute__(__action__, __representationEntityClass__,__representationClass__,__representationEntities__);
 			}else
 				throw new RuntimeException("Data Representation Class of type "+__representationClass__+" is not an instanceof RepresentationEntity");

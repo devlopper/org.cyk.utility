@@ -27,6 +27,7 @@ public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractOb
 	protected Boolean rendered,__isLoggable__;
 	protected Object binding;
 	protected CardinalPoint cardinalPointFromReference;
+	protected Integer tabIndex;
 	
 	/* Working variables */
 	
@@ -149,6 +150,9 @@ public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractOb
 			
 			if(StringHelper.isBlank(object.__template__))
 				object.__template__ = __getTemplate__(object,arguments);
+			
+			if(object.tabIndex == null)
+				object.tabIndex = 0;
 		}
 		
 		protected String __getTemplate__(OBJECT object, Map<Object, Object> arguments) {

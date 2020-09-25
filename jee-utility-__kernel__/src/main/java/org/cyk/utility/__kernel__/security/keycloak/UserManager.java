@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
@@ -231,9 +232,9 @@ public interface UserManager {
 		public UserManager update(Collection<User> users,Collection<Property> properties) {
 			if(CollectionHelper.isEmpty(users) || CollectionHelper.isEmpty(properties))
 				return this;
-			if(properties.contains(Property.ROLES)) {
-				RolesResource rolesResource = KeycloakHelper.getRolesResource();
-				UsersResource usersResource = KeycloakHelper.getUsersResource();			
+			RolesResource rolesResource = KeycloakHelper.getRolesResource();
+			UsersResource usersResource = KeycloakHelper.getUsersResource();	
+			if(properties.contains(Property.ROLES)) {						
 				users.forEach(user -> {
 					UserResource userResource = usersResource.get(readByUserName(user.getName()).getIdentifier());
 					//remove existing
@@ -244,7 +245,30 @@ public interface UserManager {
 					if(CollectionHelper.isNotEmpty(user.getRoles()))
 						__addRoles__(userResource, rolesResource, user);
 				});
-			}			
+			}
+			Integer count = 0;
+			for(User user : users) {
+				UserResource userResource = usersResource.get(readByUserName(user.getName()).getIdentifier());
+				UserRepresentation userRepresentation = userResource.toRepresentation();
+				Boolean updatable = null;
+				if(properties.contains(Property.ELECTRONIC_MAIL_ADDRESS) && !StringUtils.equals(user.getElectronicMailAddress(), userRepresentation.getEmail())) {
+					userRepresentation.setEmail(user.getElectronicMailAddress());
+					updatable = Boolean.TRUE;
+				}
+				if(properties.contains(Property.FIRST_NAME) && !StringUtils.equals(user.getFirstName(), userRepresentation.getFirstName())) {
+					userRepresentation.setFirstName(user.getFirstName());
+					updatable = Boolean.TRUE;
+				}
+				if(properties.contains(Property.LAST_NAMES) && !StringUtils.equals(user.getLastNames(), userRepresentation.getLastName())) {
+					userRepresentation.setLastName(user.getLastNames());
+					updatable = Boolean.TRUE;
+				}
+				if(Boolean.TRUE.equals(updatable)) {
+					userResource.update(userRepresentation);
+					count++;
+				}
+			}
+			LogHelper.logInfo(String.format("%s user(s) has been updated", count), getClass());	
 			return this;
 		}
 		
@@ -376,6 +400,9 @@ public interface UserManager {
 	Value INSTANCE = new Value();
 	
 	public static enum Property {
-		ROLES
+		ELECTRONIC_MAIL_ADDRESS
+		,FIRST_NAME
+		,LAST_NAMES
+		,ROLES
 	}
 }

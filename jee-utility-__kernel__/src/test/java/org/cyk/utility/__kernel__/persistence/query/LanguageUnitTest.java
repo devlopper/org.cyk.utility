@@ -12,6 +12,16 @@ import org.junit.jupiter.api.Test;
 public class LanguageUnitTest extends AbstractWeldUnitTest {
 
 	@Test
+	public void formatVariable(){
+		assertThat(Language.formatVariable("p")).isEqualTo("p");
+	}
+	
+	@Test
+	public void formatParameter(){
+		assertThat(Language.formatParameter("p")).isEqualTo(":p");
+	}
+	
+	@Test
 	public void select_of(){
 		assertThat(Select.of("p1")).isEqualTo("SELECT p1");
 		assertThat(Select.of("p1","p2")).isEqualTo("SELECT p1,p2");		

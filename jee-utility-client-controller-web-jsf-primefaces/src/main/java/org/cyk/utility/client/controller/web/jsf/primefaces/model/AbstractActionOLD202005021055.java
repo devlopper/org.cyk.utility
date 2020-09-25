@@ -267,7 +267,7 @@ public abstract class AbstractActionOLD202005021055 extends AbstractObjectAjaxab
 				if(minimumSelectionSize == null && maximumSelectionSize == null)
 					return Boolean.TRUE;
 				if(minimumSelectionSize != null && collection != null)
-					return CollectionHelper.getSize(collection.getSelection()) >= minimumSelectionSize;
+					return CollectionHelper.getSize(collection.getSelectionAsCollection()) >= minimumSelectionSize;
 				return Boolean.TRUE;
 			}
 			
@@ -510,10 +510,10 @@ public abstract class AbstractActionOLD202005021055 extends AbstractObjectAjaxab
 							if(Boolean.TRUE.equals(getIsCollectionSessionable())) {
 								Collection<Object> sessionCollectionSelection = null;
 								AbstractCollection collection = getCollection();
-								if(collection != null && CollectionHelper.isNotEmpty(collection.getSelection())) {
+								if(collection != null && CollectionHelper.isNotEmpty(collection.getSelectionAsCollection())) {
 									if(sessionCollectionSelection == null)
 										sessionCollectionSelection = new ArrayList<>();
-									for(Object object : collection.getSelection())
+									for(Object object : collection.getSelectionAsCollection())
 										sessionCollectionSelection.add(object);		
 								}				
 								

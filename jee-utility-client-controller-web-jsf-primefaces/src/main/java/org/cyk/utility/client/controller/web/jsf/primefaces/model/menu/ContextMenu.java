@@ -18,7 +18,7 @@ public class ContextMenu extends AbstractMenu implements Serializable {
 	
 	/**/
 	
-	public static final String FIELD_VALUE = "value";
+	public static final String FIELD_FOR_ = "for_";
 	
 	/**/
 	

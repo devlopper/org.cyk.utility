@@ -9,6 +9,62 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
-	<ui:insert name="afterDataTable"/>
+	<ui:insert name="afterDataTable">
+		<ui:insert name="afterDataTable_contextMenu">
+			<!-- Commands in context menu in order to render in less time -->
+			<ui:fragment rendered="#{dataTable.recordMenu.class.simpleName eq 'ContextMenu'}">
+		 		<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.recordMenu)}">
+		    		<ui:param name="contextMenu" value="#{dataTable.recordMenu}"/>
+		    	</ui:decorate>
+		 	</ui:fragment>	
+		</ui:insert>
+		
+		<ui:insert name="afterDataTable_blockUI">
+			<ui:decorate template="/blockui/default.xhtml">
+		 		<ui:param name="blockUI" value="#{dataTable.blockUI}"/>
+		 	</ui:decorate>
+		</ui:insert>
+		
+		<ui:insert name="afterDataTable_dialog">
+			<ui:decorate template="/panel/output/default.xhtml">
+		 		<ui:param name="outputPanel" value="#{dataTable.dialogOutputPanel}"/>
+		 		<ui:define name="outputPanelBody">
+		 			<ui:decorate template="/dialog/default.xhtml">
+		 				<ui:param name="dialog" value="#{dataTable.dialog}"/>
+		 				<ui:define name="dialogBody">
+		 					<ui:insert name="dataTableDialogBody">
+		 						<ui:insert name="dataTableDialogBodyDataTableBefore"/>
+		 						<ui:insert name="dataTableDialogBodyDataTable">
+		 							<p:dataTable value="#{dataTable.selection}" var="selected" rowIndexVar="selectedRowIndex" rendered="#{dataTable.isSelectionShowableInDialog}">
+		 								<ui:insert name="dataTableDialogBodyDataTableColumnRowIndex">
+		 									<p:column headerText="#" width="40"><h:outputText value="#{selectedRowIndex+1}"/></p:column>
+		 								</ui:insert>
+				 						<ui:insert name="dataTableDialogBodyDataTableColumnsAfterRowIndex">
+		 									<p:columns value="#{dataTable.selectedColumnsAfterRowIndex == null ? dataTable.columnsAfterRowIndex : dataTable.selectedColumnsAfterRowIndex}" 
+		 										var="column" columnIndexVar="columnIndex" width="#{column.width}">
+								 				<f:facet name="header">
+													<ui:insert name="dataTableDialogBodyDataTableColumnsAfterRowIndexHeaders">
+														<h:outputText value="#{column.headerText}" />
+													</ui:insert>
+												</f:facet>
+												
+												<ui:insert name="dataTableDialogBodyDataTableColumnsAfterRowIndexBodies">
+													<h:outputText value="#{selected[column.fieldName]}" />
+												</ui:insert>
+												
+												<ui:insert name="footer"/>										
+								 			</p:columns>
+		 								</ui:insert>	
+				 					</p:dataTable>
+		 						</ui:insert>
+		 						<ui:insert name="dataTableDialogBodyDataTableAfter"/>
+		 					</ui:insert>
+		    			</ui:define> 				
+				 	</ui:decorate>
+		 		</ui:define>
+		 	</ui:decorate>
+		</ui:insert>
+		
+	</ui:insert>
 	
 </ui:composition>

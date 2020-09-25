@@ -817,6 +817,10 @@ public interface FieldHelper {
 		return identifiers;
 	}
 	
+	static Collection<String> readSystemIdentifiersAsStrings(Collection<?> objects) {
+		return CollectionHelper.cast(String.class, readSystemIdentifiers(objects));
+	}
+	
 	static Collection<Object> readBusinessIdentifiers(Collection<?> objects) {
 		if(objects == null || objects.isEmpty())
 			return null;
@@ -824,6 +828,10 @@ public interface FieldHelper {
 		for(Object index : objects)
 			identifiers.add(readBusinessIdentifier(index));
 		return identifiers;
+	}
+	
+	static Collection<String> readBusinessIdentifiersAsStrings(Collection<?> objects) {
+		return CollectionHelper.cast(String.class, readBusinessIdentifiers(objects));
 	}
 	
 	static Collection<Identifier> readIdentifiers(Collection<?> objects) {

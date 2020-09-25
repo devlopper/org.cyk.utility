@@ -73,6 +73,13 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 	protected AbstractCollection __collection__;
 	protected Dialog __dialog__;
 	
+	public Object readArgument() {
+		Object argument = __argument__;
+		if(argument == null && __collection__ != null && "single".equals(__collection__.getSelectionMode()) && !(__collection__.getSelection() instanceof Collection))
+			argument = __collection__.getSelection();
+		return argument;
+	}
+	
 	public Object act(Object argument) {
 		this.__argument__ = argument;
 		return ((Listener)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).act(this);
@@ -292,18 +299,23 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 						parameters = new HashMap<>();
 					MapHelper.writeByKey(parameters,ParameterName.ACTION_IDENTIFIER.getValue(),List.of(action.__action__.toString()),Boolean.FALSE);
 				}
-				if(action.__argument__ != null) {
-					Object identifier = FieldHelper.readSystemIdentifier(action.__argument__);
-					if(identifier != null) {
-						String identifierAsString = identifier.toString();
-						if(StringHelper.isNotBlank(identifierAsString)) {
-							if(parameters == null)
-								parameters = new HashMap<>();
-							MapHelper.writeByKey(parameters,action.__actionArgumentIdentifierParameterName__,List.of(identifierAsString),Boolean.FALSE);
+				
+				Object argument = action.readArgument();
+				
+				if(StringHelper.isNotBlank(action.__actionArgumentIdentifierParameterName__)) {					
+					if(argument != null) {
+						Object identifier = FieldHelper.readSystemIdentifier(argument);
+						if(identifier != null) {
+							String identifierAsString = identifier.toString();
+							if(StringHelper.isNotBlank(identifierAsString)) {
+								if(parameters == null)
+									parameters = new HashMap<>();
+								MapHelper.writeByKey(parameters,action.__actionArgumentIdentifierParameterName__,List.of(identifierAsString),Boolean.FALSE);
+							}
 						}
 					}
 				}
-				
+								
 				/*
 				if(Boolean.TRUE.equals(getIsCollectionable())) {
 					if(parameters == null)
@@ -337,17 +349,19 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 						}
 					}	*/			
 				}else {
-					Object identifier = FieldHelper.readSystemIdentifier(action.__argument__);
-					if(identifier != null) {
-						String identifierAsString = identifier.toString();
-						if(StringHelper.isBlank(identifierAsString))
-							return parameters;
-						if(parameters == null)
-							parameters = new HashMap<>();
-						//if(MapHelper.isNotEmpty(__parameters__))
-						//	parameters.putAll(__parameters__);
-						MapHelper.writeByKey(parameters,action.__actionArgumentIdentifierParameterName__,List.of(identifierAsString),Boolean.FALSE);
-					}
+					Object identifier = FieldHelper.readSystemIdentifier(argument);
+					if(StringHelper.isNotBlank(action.__actionArgumentIdentifierParameterName__)) {	
+						if(identifier != null) {
+							String identifierAsString = identifier.toString();
+							if(StringHelper.isBlank(identifierAsString))
+								return parameters;
+							if(parameters == null)
+								parameters = new HashMap<>();
+							//if(MapHelper.isNotEmpty(__parameters__))
+							//	parameters.putAll(__parameters__);
+							MapHelper.writeByKey(parameters,action.__actionArgumentIdentifierParameterName__,List.of(identifierAsString),Boolean.FALSE);
+						}
+					}				
 				}
 				return parameters;
 			}
@@ -382,7 +396,7 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 					PrimefacesHelper.updateOnComplete(":form:"+collection.getIdentifier());
 				}*/
 				//Notifications
-				Object argument = action.__argument__;
+				Object argument = action.readArgument();
 				MessageRenderer.getInstance().clear();
 				MessageRenderer.getInstance().render("Opération bien éffectuée",RenderType.GROWL);
 				if(argument instanceof SelectEvent) {
@@ -400,7 +414,7 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 				if(minimumSelectionSize == null && maximumSelectionSize == null)
 					return Boolean.TRUE;
 				if(minimumSelectionSize != null && collection != null)
-					return CollectionHelper.getSize(collection.getSelection()) >= minimumSelectionSize;
+					return CollectionHelper.getSize(collection.getSelectionAsCollection()) >= minimumSelectionSize;
 				return Boolean.TRUE;
 			}
 			
@@ -687,10 +701,10 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 							if(Boolean.TRUE.equals(getIsCollectionSessionable())) {
 								Collection<Object> sessionCollectionSelection = null;
 								AbstractCollection collection = getCollection();
-								if(collection != null && CollectionHelper.isNotEmpty(collection.getSelection())) {
+								if(collection != null && CollectionHelper.isNotEmpty(collection.getSelectionAsCollection())) {
 									if(sessionCollectionSelection == null)
 										sessionCollectionSelection = new ArrayList<>();
-									for(Object object : collection.getSelection())
+									for(Object object : collection.getSelectionAsCollection())
 										sessionCollectionSelection.add(object);		
 								}				
 								

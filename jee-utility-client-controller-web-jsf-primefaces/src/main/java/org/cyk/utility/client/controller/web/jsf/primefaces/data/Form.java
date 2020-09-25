@@ -12,6 +12,8 @@ import java.util.function.Consumer;
 import javax.servlet.http.HttpServletRequest;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.controller.Arguments;
+import org.cyk.utility.__kernel__.controller.EntitySaver;
 import org.cyk.utility.__kernel__.enumeration.Action;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.identifier.resource.ParameterName;
@@ -55,6 +57,7 @@ public class Form extends AbstractObject implements Serializable {
 	private Action action;
 	private Class<?> entityClass;
 	private Object entity;
+	private Boolean saverUsable;
 	private ControllerEntity<Object> controllerEntity;
 	private Object request;
 	private Layout layout;
@@ -97,6 +100,7 @@ public class Form extends AbstractObject implements Serializable {
 	public static final String FIELD_ACTION = "action";
 	public static final String FIELD_ENTITY_CLASS = "entityClass";
 	public static final String FIELD_ENTITY = "entity";
+	public static final String FIELD_SAVER_USABLE = "saverUsable";
 	public static final String FIELD_CONTROLLER_ENTITY = "controllerEntity";
 	public static final String FIELD_LAYOUT = "layout";
 	public static final String FIELD_ENTITY_FIELDS_NAMES = "entityFieldsNames";
@@ -323,9 +327,14 @@ public class Form extends AbstractObject implements Serializable {
 			
 			@Override
 			public void act(Form form) {
-				if(Action.CREATE.equals(form.action))
-					form.controllerEntity.create(form.entity);
-				else if(Action.UPDATE.equals(form.action)) {			 
+				if(Action.CREATE.equals(form.action)) {
+					if(Boolean.TRUE.equals(form.saverUsable)) {
+						@SuppressWarnings("unchecked")
+						Class<Object> clazz = (Class<Object>) form.entityClass;
+						EntitySaver.getInstance().save(clazz, new Arguments<Object>().addCreatablesOrUpdatables(form.entity));
+					}else
+						form.controllerEntity.create(form.entity);
+				}else if(Action.UPDATE.equals(form.action)) {			 
 					if(CollectionHelper.isEmpty(form.updatableEntityFieldsNames))
 						throw new RuntimeException("No fields names have been defined for update");			
 					form.controllerEntity.update(form.entity,new Properties().setFields(StringHelper.concatenate(form.updatableEntityFieldsNames, ",")));

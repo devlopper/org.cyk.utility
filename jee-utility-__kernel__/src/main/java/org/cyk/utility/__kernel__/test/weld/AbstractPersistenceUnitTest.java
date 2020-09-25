@@ -11,6 +11,7 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.persistence.EntityManagerFactoryGetterImpl;
 import org.cyk.utility.__kernel__.persistence.query.EntityCounter;
 import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
+import org.cyk.utility.__kernel__.security.SecurityHelper;
 
 public abstract class AbstractPersistenceUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
@@ -18,6 +19,7 @@ public abstract class AbstractPersistenceUnitTest extends AbstractWeldUnitTest {
 	@Override
 	protected void __listenBefore__() {
 		super.__listenBefore__();
+		SecurityHelper.PRINCIPALABLE.set(Boolean.FALSE);
 		initializeEntityManagerFactory(getPersistenceUnitName());
 		createData();
 	}

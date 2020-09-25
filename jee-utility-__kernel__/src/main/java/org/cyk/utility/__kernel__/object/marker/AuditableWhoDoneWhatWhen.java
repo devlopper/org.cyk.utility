@@ -16,4 +16,9 @@ public interface AuditableWhoDoneWhatWhen {
 	LocalDateTime get__auditWhen__();
 	AuditableWhoDoneWhatWhen set__auditWhen__(LocalDateTime when);
 	
+	Long get__auditWhenAsTimestamp__();
+	AuditableWhoDoneWhatWhen set__auditWhenAsTimestamp__(Long whenAsTimestamp);
+	
+	String get__auditWhenAsString__();
+	AuditableWhoDoneWhatWhen set__auditWhenAsString__(String whenAsString);
 }

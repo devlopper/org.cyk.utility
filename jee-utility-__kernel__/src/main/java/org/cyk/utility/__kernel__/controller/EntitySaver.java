@@ -9,6 +9,8 @@ import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.mapping.MappingHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
+import org.cyk.utility.__kernel__.object.__static__.persistence.EntityLifeCycleListener;
+import org.cyk.utility.__kernel__.session.SessionHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.value.Value;
 
@@ -30,8 +32,25 @@ public interface EntitySaver {
 			Collection<?> creatables = CollectionHelper.isEmpty(arguments.getCreatables()) ? null : MappingHelper.getDestinations(arguments.getCreatables(), arguments.__representationEntityClass__);
 			Collection<?> updatables = CollectionHelper.isEmpty(arguments.getUpdatables()) ? null : MappingHelper.getDestinations(arguments.getUpdatables(), arguments.__representationEntityClass__);
 			Collection<?> deletables = CollectionHelper.isEmpty(arguments.getDeletables()) ? null : MappingHelper.getDestinations(arguments.getDeletables(), arguments.__representationEntityClass__);				
+			
+			String actionIdentifier = arguments.getRepresentationArguments() == null ? null : arguments.getRepresentationArguments().getActionIdentifier();
+			setAuditableWhoDoneWhatWhen(creatables, actionIdentifier);
+			setAuditableWhoDoneWhatWhen(updatables, actionIdentifier);
+			setAuditableWhoDoneWhatWhen(deletables, actionIdentifier);
+			
 			Response response = save(arguments.__representation__, creatables,updatables,deletables,arguments.__representationArguments__);
 			finalise(controllerEntityClass, arguments,response);
+		}
+		
+		protected void setAuditableWhoDoneWhatWhen(Collection<?> collection,String functionality) {
+			if(CollectionHelper.isEmpty(collection))
+				return;
+			String username = SessionHelper.getUserName();
+			for(Object object : collection) {
+				if(object == null)
+					continue;
+				EntityLifeCycleListener.AbstractImpl.setAuditableWhoDoneWhatWhenIfBlank(object, username, functionality, null, null);
+			}
 		}
 		
 		protected <T> void prepare(Class<T> controllerEntityClass, Arguments<T> arguments) {

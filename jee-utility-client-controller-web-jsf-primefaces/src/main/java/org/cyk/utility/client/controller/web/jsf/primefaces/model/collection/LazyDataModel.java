@@ -109,6 +109,7 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 		if(Boolean.TRUE.equals(LOGGABLE)) {
 			LogHelper.log(String.format("Page(%s,%s) , duration=%s", first,pageSize,duration), LOG_LEVEL,getClass());
 		}
+		map = null;
 		return list;
 	}
 	

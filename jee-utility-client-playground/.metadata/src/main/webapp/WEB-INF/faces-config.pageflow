@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf15665000862070" configfile="/jee-utility-client-playground/src/main/webapp/WEB-INF/faces-config.xml">
-  <nodes xsi:type="pageflow:PFPage" name="*" id="pf15698607343260" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf15698607343271 pf15698610075119 pf15820123611020 pf15828066902130 pf15837457478540 pf15842005170640 pf15842005170641 pf15843993498770 pf15843993498771" path="*"/>
-  <nodes xsi:type="pageflow:PFPage" name="http://www.google.com" id="pf15698607343273" referenceLink="//@navigationRule.0/@navigationCase.5/@toViewId|" inlinks="pf15698607343271" path="http://www.google.com"/>
-  <nodes xsi:type="pageflow:PFPage" name="outcome.jsf" id="pf156986100751110" referenceLink="//@navigationRule.0/@navigationCase.6/@toViewId|" inlinks="pf15698610075119" path="/outcome.jsf"/>
+  <nodes xsi:type="pageflow:PFPage" name="*" id="pf15698607343260" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf15698607343271 pf15698610075119 pf15820123611020 pf15828066902130 pf15837457478540 pf15842005170640 pf15842005170641 pf15843993498770 pf15843993498771 pf16010212146170 pf16010212146171" path="*"/>
+  <nodes xsi:type="pageflow:PFPage" name="http://www.google.com" id="pf15698607343273" referenceLink="//@navigationRule.0/@navigationCase.9/@toViewId|" inlinks="pf15698607343271" path="http://www.google.com"/>
+  <nodes xsi:type="pageflow:PFPage" name="outcome.jsf" id="pf156986100751110" referenceLink="//@navigationRule.0/@navigationCase.10/@toViewId|" inlinks="pf15698610075119" path="/outcome.jsf"/>
   <nodes xsi:type="pageflow:PFPage" name="private/namable/edit.jsf" id="pf15820123611061" referenceLink="//@navigationRule.0/@navigationCase.1/@toViewId|" inlinks="pf15820123611020" path="/private/namable/edit.jsf"/>
   <nodes xsi:type="pageflow:PFPage" name="private/namable/list.jsf" id="pf15828066902131" referenceLink="//@navigationRule.0/@navigationCase.2/@toViewId|" inlinks="pf15828066902130" path="/private/namable/list.jsf"/>
   <nodes xsi:type="pageflow:PFPage" name="component/command/commandbutton/openedfromcommandbutton.jsf" id="pf15837457478561" referenceLink="//@navigationRule.0/@navigationCase.0/@toViewId|" inlinks="pf15837457478540" path="/component/command/commandbutton/openedfromcommandbutton.jsf"/>
-  <nodes xsi:type="pageflow:PFPage" name="private/persontype/edit.jsf" id="pf15842005170642" referenceLink="//@navigationRule.0/@navigationCase.5/@toViewId|" inlinks="pf15842005170640" path="/private/persontype/edit.jsf"/>
-  <nodes xsi:type="pageflow:PFPage" name="private/persontype/list.jsf" id="pf15842005170643" referenceLink="//@navigationRule.0/@navigationCase.6/@toViewId|" inlinks="pf15842005170641" path="/private/persontype/list.jsf"/>
-  <nodes xsi:type="pageflow:PFPage" name="private/person/edit.jsf" id="pf15843993498792" referenceLink="//@navigationRule.0/@navigationCase.5/@toViewId|" inlinks="pf15843993498770" path="/private/person/edit.jsf"/>
-  <nodes xsi:type="pageflow:PFPage" name="private/person/list.jsf" id="pf15843993498793" referenceLink="//@navigationRule.0/@navigationCase.6/@toViewId|" inlinks="pf15843993498771" path="/private/person/list.jsf"/>
+  <nodes xsi:type="pageflow:PFPage" name="private/persontype/edit.jsf" id="pf15842005170642" referenceLink="//@navigationRule.0/@navigationCase.3/@toViewId|" inlinks="pf15842005170640" path="/private/persontype/edit.jsf"/>
+  <nodes xsi:type="pageflow:PFPage" name="private/persontype/list.jsf" id="pf15842005170643" referenceLink="//@navigationRule.0/@navigationCase.4/@toViewId|" inlinks="pf15842005170641" path="/private/persontype/list.jsf"/>
+  <nodes xsi:type="pageflow:PFPage" name="private/person/edit.jsf" id="pf15843993498792" referenceLink="//@navigationRule.0/@navigationCase.7/@toViewId|" inlinks="pf15843993498770" path="/private/person/edit.jsf"/>
+  <nodes xsi:type="pageflow:PFPage" name="private/person/list.jsf" id="pf15843993498793" referenceLink="//@navigationRule.0/@navigationCase.8/@toViewId|" inlinks="pf15843993498771" path="/private/person/list.jsf"/>
+  <nodes xsi:type="pageflow:PFPage" name="private/persontype/selectone.jsf" id="pf16010212146182" referenceLink="//@navigationRule.0/@navigationCase.5/@toViewId|" inlinks="pf16010212146170" path="/private/persontype/selectmany.jsf"/>
+  <nodes xsi:type="pageflow:PFPage" name="private/persontype/selectmany.jsf" id="pf16010212146183" referenceLink="//@navigationRule.0/@navigationCase.6/@toViewId|" inlinks="pf16010212146171" path="/private/persontype/selectone.jsf"/>
   <links id="pf15698607343271" target="pf15698607343273" source="pf15698607343260" outcome="google" redirect="true"/>
   <links id="pf15698610075119" target="pf156986100751110" source="pf15698607343260" outcome="outcome" redirect="true"/>
   <links id="pf15820123611020" target="pf15820123611061" source="pf15698607343260" outcome="namableEditView" redirect="true"/>
@@ -19,4 +21,6 @@
   <links id="pf15842005170641" target="pf15842005170643" source="pf15698607343260" outcome="personTypeListView" redirect="true"/>
   <links id="pf15843993498770" target="pf15843993498792" source="pf15698607343260" outcome="personEditView" redirect="true"/>
   <links id="pf15843993498771" target="pf15843993498793" source="pf15698607343260" outcome="personListView" redirect="true"/>
+  <links id="pf16010212146170" target="pf16010212146182" source="pf15698607343260" outcome="personTypeSelectManyView" redirect="true"/>
+  <links id="pf16010212146171" target="pf16010212146183" source="pf15698607343260" outcome="personTypeSelectOneView" redirect="true"/>
 </pageflow:Pageflow>
