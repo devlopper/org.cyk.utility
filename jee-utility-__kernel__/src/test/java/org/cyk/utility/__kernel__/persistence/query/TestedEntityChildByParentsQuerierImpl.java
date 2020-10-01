@@ -5,9 +5,8 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.__entities__.TestedEntityChild;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
-import org.cyk.utility.__kernel__.object.AbstractObject;
 
-public class TestedEntityChildByParentsQuerierImpl extends AbstractObject implements TestedEntityChildByParentsQuerier,Serializable {
+public class TestedEntityChildByParentsQuerierImpl extends Querier.AbstractImpl implements TestedEntityChildByParentsQuerier,Serializable {
 
 	@Override
 	public Collection<TestedEntityChild> readByIdentifiers(Collection<String> businessIdentifiers,QueryExecutorArguments arguments) {

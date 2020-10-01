@@ -43,6 +43,10 @@ public interface RoleManager {
 	Collection<Role> readByNames(Collection<String> names);
 	Collection<Role> readByNames(String...names);
 	
+	Role readByIdentifier(String identifier);
+	Collection<Role> readByIdentifiers(Collection<String> identifiers);
+	Collection<Role> readByIdentifiers(String...identifiers);
+	
 	Collection<Role> map(Collection<RoleRepresentation> roleRepresentations);
 	Role map(RoleRepresentation roleRepresentation);
 	
@@ -203,6 +207,43 @@ public interface RoleManager {
 			if(ArrayHelper.isEmpty(names))
 				return null;
 			return readByNames(CollectionHelper.listOf(names));
+		}
+		
+		@Override
+		public Role readByIdentifier(String identifier) {
+			if(StringHelper.isBlank(identifier))
+				return null;
+			RolesResource rolesResource = KeycloakHelper.getRolesResource();
+			if(rolesResource == null)
+				throw new RuntimeException("keycloak roles resource not found");
+			Collection<RoleRepresentation> roleRepresentations = rolesResource.list();
+			if(CollectionHelper.isEmpty(roleRepresentations))
+				return null;			
+			RoleRepresentation roleRepresentation = CollectionHelper.getFirst(roleRepresentations.stream().filter(x -> x.getId().equals(identifier)).collect(Collectors.toList()));
+			if(roleRepresentation == null)
+				return null;
+			return map(roleRepresentation);
+		}
+		
+		@Override
+		public Collection<Role> readByIdentifiers(Collection<String> identifiers) {
+			if(CollectionHelper.isEmpty(identifiers))
+				return null;
+			Collection<Role> roles = new ArrayList<>();
+			for(String identifier : identifiers) {
+				Role role = readByIdentifier(identifier);
+				if(role == null)
+					continue;
+				roles.add(role);
+			}
+			return roles;
+		}
+		
+		@Override
+		public Collection<Role> readByIdentifiers(String... identifiers) {
+			if(ArrayHelper.isEmpty(identifiers))
+				return null;
+			return readByIdentifiers(CollectionHelper.listOf(identifiers));
 		}
 		
 		@Override

@@ -12,6 +12,7 @@ import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.variable.VariableName;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.admin.client.Keycloak;
+import org.keycloak.admin.client.resource.ClientsResource;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.RolesResource;
 import org.keycloak.admin.client.resource.UserResource;
@@ -47,6 +48,10 @@ public interface KeycloakHelper {
 	
 	static UsersResource getUsersResource() {
 		return getRealmResource(Boolean.TRUE).users();
+	}
+	
+	static ClientsResource getClientsResource() {
+		return getRealmResource(Boolean.TRUE).clients();
 	}
 	
 	static AccessToken getAccessToken(Principal principal) {

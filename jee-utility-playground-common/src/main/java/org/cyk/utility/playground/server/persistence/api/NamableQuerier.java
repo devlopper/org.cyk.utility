@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.computation.LogicalOperator;
-import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.persistence.query.Querier;
 import org.cyk.utility.__kernel__.persistence.query.QueryArgumentHelper;
 import org.cyk.utility.__kernel__.persistence.query.QueryExecutor;
@@ -24,7 +23,7 @@ public interface NamableQuerier extends Querier {
 	
 	/**/
 	
-	public static abstract class AbstractImpl extends AbstractObject implements NamableQuerier,Serializable {
+	public static abstract class AbstractImpl extends Querier.AbstractImpl implements NamableQuerier,Serializable {
 		@Override
 		public Collection<Namable> readMany(QueryExecutorArguments arguments) {
 			if(arguments != null && arguments.getQuery() != null && QUERY_IDENTIFIER_READ_VIEW_01.equals(arguments.getQuery().getIdentifier())) {

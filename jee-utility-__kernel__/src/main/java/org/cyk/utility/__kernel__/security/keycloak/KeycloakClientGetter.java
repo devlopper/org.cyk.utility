@@ -7,6 +7,7 @@ import javax.ws.rs.ProcessingException;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
+import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.value.Value;
@@ -37,6 +38,8 @@ public interface KeycloakClientGetter {
 		public static String VARIABLE_NAME_KEYCLOAK_CREDENTIAL_USERNAME = VariableName.KEYCLOAK_CREDENTIAL_USERNAME;
 		public static String VARIABLE_NAME_KEYCLOAK_CREDENTIAL_PASSWORD = VariableName.KEYCLOAK_CREDENTIAL_PASSWORD;
 		
+		public static Integer CONNECTION_POOL_SIZE = null;
+		
 		public Keycloak get() {
 			if(CLIENT.isHasBeenSet())
 				return (Keycloak) CLIENT.get();
@@ -46,7 +49,9 @@ public interface KeycloakClientGetter {
 				return null;
 			}
 			CustomJacksonProvider customJacksonProvider = new CustomJacksonProvider();
-			ResteasyClientBuilder resteasyClientBuilder = new ResteasyClientBuilder().connectionPoolSize(10).register(customJacksonProvider);
+			ResteasyClientBuilder resteasyClientBuilder = new ResteasyClientBuilder()/*.connectionPoolSize(10)*/.register(customJacksonProvider);
+			if(NumberHelper.isGreaterThanZero(CONNECTION_POOL_SIZE))
+				resteasyClientBuilder.connectionPoolSize(CONNECTION_POOL_SIZE);
 			
 			ObjectMapper objectMapper = new ObjectMapper();
 			objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, Boolean.FALSE);

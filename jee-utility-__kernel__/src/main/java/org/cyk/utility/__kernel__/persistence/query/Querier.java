@@ -10,6 +10,7 @@ import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl;
 import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 
 public interface Querier {
 
@@ -22,6 +23,49 @@ public interface Querier {
 	String PARAMETER_NAME_NAME = "name";
 
 	/**/
+	
+	<T,I> Collection<T> readBySystemIdentifiers(Class<T> resultClass,Class<I> identifierClass,Collection<I> identifiers);
+	<T> Collection<T> readBySystemIdentifiers(Class<T> resultClass,Collection<String> identifiers);
+	
+	<T,I> Collection<T> readByBusinessIdentifiers(Class<T> resultClass,Class<I> identifierClass,Collection<I> identifiers);
+	<T> Collection<T> readByBusinessIdentifiers(Class<T> resultClass,Collection<String> identifiers);
+	
+	/**/
+	
+	public static abstract class AbstractImpl extends AbstractObject implements Querier,Serializable {
+		
+		private static void validateIdentifiers(Class<?> resultClass, Class<?> identifierClass,Collection<?> identifiers) {
+			ThrowableHelper.throwIllegalArgumentExceptionIfNull("result class", resultClass);
+			ThrowableHelper.throwIllegalArgumentExceptionIfNull("identifier class", identifierClass);
+			ThrowableHelper.throwIllegalArgumentExceptionIfEmpty("identifiers", identifiers);
+		}
+		
+		@Override
+		public <T, I> Collection<T> readBySystemIdentifiers(Class<T> resultClass, Class<I> identifierClass,Collection<I> identifiers) {
+			validateIdentifiers(resultClass, identifierClass, identifiers);
+			String queryIdentifier = QueryIdentifierGetter.getInstance().get(resultClass, QueryName.READ_BY_SYSTEM_IDENTIFIERS);
+			ThrowableHelper.throwIllegalArgumentExceptionIfBlank("read by system identifiers query identifier of "+resultClass, queryIdentifier);
+			return QueryExecutor.getInstance().executeReadMany(resultClass, queryIdentifier, PARAMETER_NAME_IDENTIFIERS,identifiers);
+		}
+		
+		@Override
+		public <T> Collection<T> readBySystemIdentifiers(Class<T> resultClass, Collection<String> identifiers) {
+			return readBySystemIdentifiers(resultClass,String.class, identifiers);
+		}
+		
+		@Override
+		public <T, I> Collection<T> readByBusinessIdentifiers(Class<T> resultClass, Class<I> identifierClass,Collection<I> identifiers) {
+			validateIdentifiers(resultClass, identifierClass, identifiers);
+			String queryIdentifier = QueryIdentifierGetter.getInstance().get(resultClass, QueryName.READ_BY_BUSINESS_IDENTIFIERS);
+			ThrowableHelper.throwIllegalArgumentExceptionIfBlank("read by business identifiers query identifier of "+resultClass, queryIdentifier);
+			return QueryExecutor.getInstance().executeReadMany(resultClass, queryIdentifier, PARAMETER_NAME_IDENTIFIERS,identifiers);
+		}
+		
+		@Override
+		public <T> Collection<T> readByBusinessIdentifiers(Class<T> resultClass, Collection<String> identifiers) {
+			return readByBusinessIdentifiers(resultClass,String.class, identifiers);
+		}
+	}
 	
 	public static interface CodableAndNamable<T> extends Querier {
 		
@@ -57,7 +101,7 @@ public interface Querier {
 		
 		/**/
 		
-		public static abstract class AbstractImpl<T> extends AbstractObject implements CodableAndNamable<T>,Serializable {
+		public static abstract class AbstractImpl<T> extends Querier.AbstractImpl implements CodableAndNamable<T>,Serializable {
 			
 			@Override
 			public Boolean isOwner(QueryExecutorArguments arguments) {
