@@ -23,6 +23,7 @@ import org.keycloak.admin.client.resource.ResourcePermissionsResource;
 import org.keycloak.admin.client.resource.ResourcesResource;
 import org.keycloak.admin.client.resource.RolePoliciesResource;
 import org.keycloak.representations.idm.ClientRepresentation;
+import org.keycloak.representations.idm.authorization.DecisionStrategy;
 import org.keycloak.representations.idm.authorization.PolicyRepresentation;
 import org.keycloak.representations.idm.authorization.ResourcePermissionRepresentation;
 import org.keycloak.representations.idm.authorization.ResourceRepresentation;
@@ -325,7 +326,41 @@ public interface ClientManager {
 				if(clientResource == null)
 					continue;
 				ResourcePermissionsResource resourcePermissionsResource = clientResource.authorization().permissions().resource();
-				for(String roleName : rolesNames) {
+				for(String resourceName : resourcesNames) {
+					String name = String.format(PERMISSION_NAME_OF_RESOURCE_NAME_FORMAT, resourceName);
+					ResourcePermissionRepresentation resourcePermissionRepresentation = resourcePermissionsResource.findByName(name);
+					if(resourcePermissionRepresentation != null) {
+						LogHelper.log(String.format("Permission named <<%s>> has not been overriden.",name), LOGGING_LEVEL, getClass());
+						continue;
+					}
+					Resource resource = client.getResourceByName(resourceName);
+					if(resource == null) {
+						LogHelper.logWarning(String.format("Resource named <<%s>> has not been found", resourceName), getClass());
+						continue;
+					}
+					resourcePermissionRepresentation = null;
+					for(String roleName : rolesNames) {
+						Policy policy = client.getPolicyByRoleName(roleName);
+						if(policy == null) {
+							LogHelper.logWarning(String.format("Policy for role <<%s>> has not been found", roleName), getClass());
+							continue;
+						}
+						if(resourcePermissionRepresentation == null) {
+							resourcePermissionRepresentation = new ResourcePermissionRepresentation();
+							resourcePermissionRepresentation.setName(name);
+							resourcePermissionRepresentation.addResource(resource.getIdentifier());
+							resourcePermissionRepresentation.setDecisionStrategy(DecisionStrategy.AFFIRMATIVE);
+						}
+						resourcePermissionRepresentation.addPolicy(policy.getIdentifier());	
+					}				
+					if(resourcePermissionRepresentation == null)
+						continue;
+					if(resourcePermissionRepresentations == null)
+						resourcePermissionRepresentations = new ArrayList<>();
+					resourcePermissionRepresentations.add(resourcePermissionRepresentation);			
+				}
+				
+				/*for(String roleName : rolesNames) {
 					for(String resourceName : resourcesNames) {
 						String name = String.format(PERMISSION_NAME_OF_RESOURCE_NAME_FORMAT, resourceName,roleName);
 						ResourcePermissionRepresentation resourcePermissionRepresentation = resourcePermissionsResource.findByName(name);
@@ -352,7 +387,7 @@ public interface ClientManager {
 							resourcePermissionRepresentations = new ArrayList<>();
 						resourcePermissionRepresentations.add(resourcePermissionRepresentation);						
 					}
-				}
+				}*/
 				if(CollectionHelper.isEmpty(resourcePermissionRepresentations))
 					continue;
 				count = count + CollectionHelper.getSize(resourcePermissionRepresentations);
@@ -371,14 +406,14 @@ public interface ClientManager {
 		
 		public static void useFrenchValues() {
 			POLICY_NAME_HAS_ROLE_FORMAT = "Etre %s";
-			PERMISSION_NAME_OF_RESOURCE_NAME_FORMAT = "%s par %s";
+			PERMISSION_NAME_OF_RESOURCE_NAME_FORMAT = "Accès à %s";
 		}
 		
 		public static String POLICY_NAME_HAS_ROLE_FORMAT = "Be %s";
 		private static final String POLICY_TYPE_ROLE = "role";
 		private static final String POLICY_ROLES = "roles";
 		
-		public static String PERMISSION_NAME_OF_RESOURCE_NAME_FORMAT = "%s by %s";
+		public static String PERMISSION_NAME_OF_RESOURCE_NAME_FORMAT = "Access to %s";
 		private static final String PERMISSION_TYPE_RESOURCE = "resource";
 		
 		public static String RESOURCE_NAME_FORMAT = "%s";
