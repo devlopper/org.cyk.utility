@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.NotFoundException;
@@ -12,6 +13,7 @@ import javax.ws.rs.NotFoundException;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.object.__static__.identifiable.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.Value;
@@ -53,7 +55,7 @@ public interface RoleManager {
 	/**/
 	
 	public static abstract class AbstractImpl extends AbstractObject implements RoleManager,Serializable{
-		
+		public static Level LOGGING_LEVEL = Level.FINE;
 		@Override
 		public void create(Collection<Role> roles) {
 			if(CollectionHelper.isEmpty(roles))
@@ -62,6 +64,7 @@ public interface RoleManager {
 				RoleRepresentation roleRepresentation = new RoleRepresentation();
 				roleRepresentation.setName(role.getName());
 				KeycloakHelper.getRolesResource().create(roleRepresentation);
+				LogHelper.log(String.format("Role named <<%s>> has been created.",roleRepresentation.getName()), LOGGING_LEVEL, getClass());
 			}		
 		}
 		
@@ -135,6 +138,7 @@ public interface RoleManager {
 			for(Role role : roles)
 				try {
 					KeycloakHelper.getRolesResource().deleteRole(role.getName());
+					LogHelper.log(String.format("Role named <<%s>> has been deleted.",role.getName()), LOGGING_LEVEL, getClass());
 				} catch (NotFoundException exception) {}
 		}
 		

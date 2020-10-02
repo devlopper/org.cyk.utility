@@ -38,27 +38,28 @@ public interface ClientManager {
 	Collection<Client> getByIdentifiers(Collection<String> identifiers);
 	Collection<Client> getByIdentifiers(String...identifiers);
 	
-	void createAuthorizationPoliciesFromRolesNames(Collection<String> identifiers,Collection<String> rolesNames);
-	void createAuthorizationPoliciesFromRolesNames(Collection<String> identifiers,String...rolesNames);
+	Integer createAuthorizationPoliciesFromRolesNames(Collection<String> identifiers,Collection<String> rolesNames);
+	Integer createAuthorizationPoliciesFromRolesNames(Collection<String> identifiers,String...rolesNames);
 	
-	void deleteAuthorizationPoliciesByRolesNames(Collection<String> identifiers,Collection<String> rolesNames);
-	void deleteAuthorizationPoliciesByRolesNames(Collection<String> identifiers,String...rolesNames);
+	Integer deleteAuthorizationPoliciesByRolesNames(Collection<String> identifiers,Collection<String> rolesNames);
+	Integer deleteAuthorizationPoliciesByRolesNames(Collection<String> identifiers,String...rolesNames);
 	
-	void deleteAllAuthorizationPolicies(Collection<String> identifiers);
-	void deleteAllAuthorizationPolicies(String...identifiers);
+	Integer deleteAllAuthorizationPolicies(Collection<String> identifiers);
+	Integer deleteAllAuthorizationPolicies(String...identifiers);
 	
-	void createAuthorizationResources(Collection<String> identifiers,Collection<Resource> resources);
-	void createAuthorizationResources(Collection<String> identifiers,Resource...resources);
+	Integer createAuthorizationResources(Collection<String> identifiers,Collection<Resource> resources);
+	Integer createAuthorizationResources(Collection<String> identifiers,Resource...resources);
 	
-	void deleteAllAuthorizationResources(Collection<String> identifiers);
-	void deleteAllAuthorizationResources(String...identifiers);
+	Integer deleteAllAuthorizationResources(Collection<String> identifiers);
+	Integer deleteAllAuthorizationResources(String...identifiers);
 	
-	void createAuthorizationPermissionFromRolesNamesAndResourcesNames(Collection<String> identifiers,Collection<String> rolesNames,Collection<String> resourcesNames);
-	
+	Integer createAuthorizationPermissionFromRolesNamesAndResourcesNames(Collection<String> identifiers,Collection<String> rolesNames,Collection<String> resourcesNames,Boolean rolesNamesCreatableIfNotFound);
+	Integer createAuthorizationPermissionFromRolesNamesAndResourcesNames(Collection<String> identifiers,Collection<String> rolesNames,Collection<String> resourcesNames);
 	/**/
 	
 	public static abstract class AbstractImpl extends AbstractObject implements ClientManager,Serializable{
-		public static Level LOGGING_LEVEL = Level.INFO;
+		public static Level LOGGING_LEVEL = Level.FINE;
+		
 		@Override
 		public Collection<Client> map(Collection<ClientRepresentation> clientRepresentations) {
 			if(CollectionHelper.isEmpty(clientRepresentations))
@@ -136,12 +137,13 @@ public interface ClientManager {
 			return getByIdentifiers(CollectionHelper.listOf(identifiers));
 		}
 		
-		private void deleteAuthorizationPoliciesByRolesNames(Collection<String> identifiers,Boolean all,Collection<String> rolesNames) {
+		private Integer deleteAuthorizationPoliciesByRolesNames(Collection<String> identifiers,Boolean all,Collection<String> rolesNames) {
 			if(CollectionHelper.isEmpty(identifiers) || (!Boolean.TRUE.equals(all) && CollectionHelper.isEmpty(rolesNames)))
-				return;
+				return null;
 			Collection<Client> clients = getByIdentifiers(identifiers);
 			if(CollectionHelper.isEmpty(clients))
-				return;
+				return null;
+			Integer count = 0;
 			for(Client client : clients) {
 				Collection<Policy> policies = client.getPolicies();
 				if(CollectionHelper.isEmpty(policies))
@@ -156,48 +158,51 @@ public interface ClientManager {
 					for(Role role : policy.getRoles()) {
 						if(Boolean.TRUE.equals(all) || rolesNames.contains(role.getName())) {
 							policiesResource.policy(policy.getIdentifier()).remove();
+							count++;
 							break;
 						}
 					}
 				}
 			}
+			return count;
 		}
 		
 		@Override
-		public void deleteAuthorizationPoliciesByRolesNames(Collection<String> identifiers,Collection<String> rolesNames) {
+		public Integer deleteAuthorizationPoliciesByRolesNames(Collection<String> identifiers,Collection<String> rolesNames) {
 			if(CollectionHelper.isEmpty(identifiers) || CollectionHelper.isEmpty(rolesNames))
-				return;
-			deleteAuthorizationPoliciesByRolesNames(identifiers, null, rolesNames);
+				return null;
+			return deleteAuthorizationPoliciesByRolesNames(identifiers, null, rolesNames);
 		}
 		
 		@Override
-		public void deleteAuthorizationPoliciesByRolesNames(Collection<String> identifiers,String...rolesNames) {
+		public Integer deleteAuthorizationPoliciesByRolesNames(Collection<String> identifiers,String...rolesNames) {
 			if(CollectionHelper.isEmpty(identifiers) || ArrayHelper.isEmpty(rolesNames))
-				return;
-			deleteAuthorizationPoliciesByRolesNames(identifiers, CollectionHelper.listOf(rolesNames));
+				return null;
+			return deleteAuthorizationPoliciesByRolesNames(identifiers, CollectionHelper.listOf(rolesNames));
 		}
 		
 		@Override
-		public void deleteAllAuthorizationPolicies(Collection<String> identifiers) {
+		public Integer deleteAllAuthorizationPolicies(Collection<String> identifiers) {
 			if(CollectionHelper.isEmpty(identifiers))
-				return;
-			deleteAuthorizationPoliciesByRolesNames(identifiers, Boolean.TRUE, null);
+				return null;
+			return deleteAuthorizationPoliciesByRolesNames(identifiers, Boolean.TRUE, null);
 		}
 		
 		@Override
-		public void deleteAllAuthorizationPolicies(String... identifiers) {
+		public Integer deleteAllAuthorizationPolicies(String... identifiers) {
 			if(ArrayHelper.isEmpty(identifiers))
-				return;
-			deleteAllAuthorizationPolicies(CollectionHelper.listOf(identifiers));
+				return null;
+			return deleteAllAuthorizationPolicies(CollectionHelper.listOf(identifiers));
 		}
 		
 		@Override
-		public void createAuthorizationPoliciesFromRolesNames(Collection<String> identifiers,Collection<String> rolesNames) {
+		public Integer createAuthorizationPoliciesFromRolesNames(Collection<String> identifiers,Collection<String> rolesNames) {
 			if(CollectionHelper.isEmpty(identifiers) || CollectionHelper.isEmpty(rolesNames))
-				return;
+				return null;
 			Collection<Client> clients = getByIdentifiers(identifiers);
 			if(CollectionHelper.isEmpty(clients))
-				return;		
+				return null;
+			Integer count = 0;
 			for(Client client : clients) {
 				ClientResource clientResource = KeycloakHelper.getClientsResource().get(client.get__identifier__());
 				if(clientResource == null)
@@ -207,7 +212,7 @@ public interface ClientManager {
 					String name = String.format(POLICY_NAME_HAS_ROLE_FORMAT, roleName);					
 					RolePolicyRepresentation rolePolicyRepresentation = rolePoliciesResource.findByName(name);
 					if(rolePolicyRepresentation != null) {
-						LogHelper.log(String.format("Policy named <<%s>> NOT OVERRIDEN for role <<%s>>.",rolePolicyRepresentation.getName(),roleName), LOGGING_LEVEL, getClass());
+						LogHelper.log(String.format("Policy named <<%s>> has not been overriden for role <<%s>>.",rolePolicyRepresentation.getName(),roleName), LOGGING_LEVEL, getClass());
 						continue;
 					}
 					rolePolicyRepresentation = new RolePolicyRepresentation();
@@ -215,25 +220,28 @@ public interface ClientManager {
 					rolePolicyRepresentation.setName(String.format(POLICY_NAME_HAS_ROLE_FORMAT, roleName));
 					rolePolicyRepresentation.addRole(roleName);
 					rolePoliciesResource.create(rolePolicyRepresentation);
-					LogHelper.log(String.format("Policy named <<%s>> created for role <<%s>>.",rolePolicyRepresentation.getName(),roleName), LOGGING_LEVEL, getClass());
+					count++;
+					LogHelper.log(String.format("Policy named <<%s>> has been created for role <<%s>>.",rolePolicyRepresentation.getName(),roleName), LOGGING_LEVEL, getClass());
 				}
 			}
+			return count;
 		}
 		
 		@Override
-		public void createAuthorizationPoliciesFromRolesNames(Collection<String> identifiers,String...rolesNames) {
+		public Integer createAuthorizationPoliciesFromRolesNames(Collection<String> identifiers,String...rolesNames) {
 			if(CollectionHelper.isEmpty(identifiers) || ArrayHelper.isEmpty(rolesNames))
-				return;
-			createAuthorizationPoliciesFromRolesNames(identifiers,CollectionHelper.listOf(rolesNames));
+				return null;
+			return createAuthorizationPoliciesFromRolesNames(identifiers,CollectionHelper.listOf(rolesNames));
 		}
 		
 		@Override
-		public void createAuthorizationResources(Collection<String> identifiers,Collection<Resource> resources) {
+		public Integer createAuthorizationResources(Collection<String> identifiers,Collection<Resource> resources) {
 			if(CollectionHelper.isEmpty(identifiers) || CollectionHelper.isEmpty(resources))
-				return;
+				return null;
 			Collection<Client> clients = getByIdentifiers(identifiers);
 			if(CollectionHelper.isEmpty(clients))
-				return;		
+				return null;
+			Integer count = 0;
 			for(Client client : clients) {
 				ClientResource clientResource = KeycloakHelper.getClientsResource().get(client.get__identifier__());
 				if(clientResource == null)
@@ -245,7 +253,7 @@ public interface ClientManager {
 					String name = String.format(RESOURCE_NAME_FORMAT, resource.getName());
 					ResourceRepresentation resourceRepresentation = CollectionHelper.getFirst(resourcesResource.findByName(name));
 					if(resourceRepresentation != null) {
-						LogHelper.log(String.format("Resource named <<%s>> NOT OVERRIDEN.",resourceRepresentation.getName()), LOGGING_LEVEL, getClass());
+						LogHelper.log(String.format("Resource named <<%s>> has not been overriden.",resourceRepresentation.getName()), LOGGING_LEVEL, getClass());
 						continue;
 					}
 					resourceRepresentation = new ResourceRepresentation();
@@ -253,25 +261,28 @@ public interface ClientManager {
 					resourceRepresentation.setDisplayName(resource.getName());
 					resourceRepresentation.setUris(new LinkedHashSet<>(resource.getUniformResourceIdentifiers()));					
 					resourcesResource.create(resourceRepresentation);
-					LogHelper.log(String.format("Resource named <<%s>> created.",resourceRepresentation.getName()), LOGGING_LEVEL, getClass());
+					count++;
+					LogHelper.log(String.format("Resource named <<%s>> has been created.",resourceRepresentation.getName()), LOGGING_LEVEL, getClass());
 				}
 			}
+			return count;
 		}
 		
 		@Override
-		public void createAuthorizationResources(Collection<String> identifiers,Resource... resources) {
+		public Integer createAuthorizationResources(Collection<String> identifiers,Resource... resources) {
 			if(CollectionHelper.isEmpty(identifiers) || ArrayHelper.isEmpty(resources))
-				return;
-			createAuthorizationResources(identifiers, CollectionHelper.listOf(resources));
+				return null;
+			return createAuthorizationResources(identifiers, CollectionHelper.listOf(resources));
 		}
 		
 		@Override
-		public void deleteAllAuthorizationResources(Collection<String> identifiers) {
+		public Integer deleteAllAuthorizationResources(Collection<String> identifiers) {
 			if(CollectionHelper.isEmpty(identifiers))
-				return;
+				return null;
 			Collection<Client> clients = getByIdentifiers(identifiers);
 			if(CollectionHelper.isEmpty(clients))
-				return;
+				return null;
+			Integer count = 0;
 			for(Client client : clients) {
 				Collection<Resource> resources = client.getResources();
 				if(CollectionHelper.isEmpty(resources))
@@ -280,25 +291,31 @@ public interface ClientManager {
 				if(clientResource == null)
 					continue;
 				ResourcesResource resourcesResource = clientResource.authorization().resources();
-				for(Resource resource : resources)	
+				for(Resource resource : resources) {
 					resourcesResource.resource(resource.getIdentifier()).remove();
+					count++;
+				}
 			}
+			return count;
 		}
 		
 		@Override
-		public void deleteAllAuthorizationResources(String... identifiers) {
+		public Integer deleteAllAuthorizationResources(String... identifiers) {
 			if(ArrayHelper.isEmpty(identifiers))
-				return;
-			deleteAllAuthorizationResources(CollectionHelper.listOf(identifiers));
+				return null;
+			return deleteAllAuthorizationResources(CollectionHelper.listOf(identifiers));
 		}
 		
 		@Override
-		public void createAuthorizationPermissionFromRolesNamesAndResourcesNames(Collection<String> identifiers,Collection<String> rolesNames, Collection<String> resourcesNames) {
+		public Integer createAuthorizationPermissionFromRolesNamesAndResourcesNames(Collection<String> identifiers,Collection<String> rolesNames, Collection<String> resourcesNames,Boolean rolesNamesCreatableIfNotFound) {
 			if(CollectionHelper.isEmpty(identifiers) || CollectionHelper.isEmpty(rolesNames) || CollectionHelper.isEmpty(resourcesNames))
-				return;
+				return null;
+			if(Boolean.TRUE.equals(rolesNamesCreatableIfNotFound))
+				RoleManager.getInstance().saveByNames(rolesNames);			
 			Collection<Client> clients = getByIdentifiers(identifiers);
 			if(CollectionHelper.isEmpty(clients))
-				return;
+				return null;
+			Integer count = 0;
 			for(Client client : clients) {
 				Collection<ResourcePermissionRepresentation> resourcePermissionRepresentations = null;
 				Collection<Policy> policies = client.getPolicies();
@@ -310,20 +327,20 @@ public interface ClientManager {
 				ResourcePermissionsResource resourcePermissionsResource = clientResource.authorization().permissions().resource();
 				for(String roleName : rolesNames) {
 					for(String resourceName : resourcesNames) {
-						String name = String.format(PERMISSION_NAME_OF_RESOURCE_NAME_FORMAT, resourceName);
+						String name = String.format(PERMISSION_NAME_OF_RESOURCE_NAME_FORMAT, resourceName,roleName);
 						ResourcePermissionRepresentation resourcePermissionRepresentation = resourcePermissionsResource.findByName(name);
 						if(resourcePermissionRepresentation != null) {
-							LogHelper.log(String.format("Permission named <<%s>> NOT OVERRIDEN for role <<%s>> on resource <<%s>>.",name,roleName,resourceName), LOGGING_LEVEL, getClass());
+							LogHelper.log(String.format("Permission named <<%s>> has not been overriden.",name,roleName,resourceName), LOGGING_LEVEL, getClass());
 							continue;
 						}
 						Resource resource = client.getResourceByName(resourceName);
 						if(resource == null) {
-							LogHelper.logWarning(String.format("resource named <<%s>> not found", resourceName), getClass());
+							LogHelper.logWarning(String.format("Resource named <<%s>> has not been found", resourceName), getClass());
 							continue;
 						}
 						Policy policy = client.getPolicyByRoleName(roleName);
 						if(policy == null) {
-							LogHelper.logWarning(String.format("policy for role <<%s>> not found", roleName), getClass());
+							LogHelper.logWarning(String.format("Policy for role <<%s>> has not been found", roleName), getClass());
 							continue;
 						}
 						resourcePermissionRepresentation = new ResourcePermissionRepresentation();
@@ -333,22 +350,35 @@ public interface ClientManager {
 						
 						if(resourcePermissionRepresentations == null)
 							resourcePermissionRepresentations = new ArrayList<>();
-						resourcePermissionRepresentations.add(resourcePermissionRepresentation);
+						resourcePermissionRepresentations.add(resourcePermissionRepresentation);						
 					}
 				}
 				if(CollectionHelper.isEmpty(resourcePermissionRepresentations))
 					continue;
+				count = count + CollectionHelper.getSize(resourcePermissionRepresentations);
 				resourcePermissionRepresentations.forEach(resourcePermissionRepresentation -> {
 					resourcePermissionsResource.create(resourcePermissionRepresentation);
+					LogHelper.log(String.format("Permission named <<%s>> has been created.",resourcePermissionRepresentation.getName()), LOGGING_LEVEL, getClass());
 				});
 			}
+			return count;
 		}
 		
-		public static String POLICY_NAME_HAS_ROLE_FORMAT = "Has role %s policy";
+		@Override
+		public Integer createAuthorizationPermissionFromRolesNamesAndResourcesNames(Collection<String> identifiers,Collection<String> rolesNames, Collection<String> resourcesNames) {
+			return createAuthorizationPermissionFromRolesNamesAndResourcesNames(identifiers, rolesNames, resourcesNames, Boolean.TRUE);
+		}
+		
+		public static void useFrenchValues() {
+			POLICY_NAME_HAS_ROLE_FORMAT = "Etre %s";
+			PERMISSION_NAME_OF_RESOURCE_NAME_FORMAT = "%s par %s";
+		}
+		
+		public static String POLICY_NAME_HAS_ROLE_FORMAT = "Be %s";
 		private static final String POLICY_TYPE_ROLE = "role";
 		private static final String POLICY_ROLES = "roles";
 		
-		public static String PERMISSION_NAME_OF_RESOURCE_NAME_FORMAT = "View resource %s permission";
+		public static String PERMISSION_NAME_OF_RESOURCE_NAME_FORMAT = "%s by %s";
 		private static final String PERMISSION_TYPE_RESOURCE = "resource";
 		
 		public static String RESOURCE_NAME_FORMAT = "%s";
