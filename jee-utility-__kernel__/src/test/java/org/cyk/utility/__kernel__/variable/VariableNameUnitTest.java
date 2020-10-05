@@ -62,6 +62,11 @@ public class VariableNameUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	@Test
+	public void protocolSimpleMailTransferEnable(){
+		assertThat(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_ENABLE).isEqualTo("cyk.variable.protocol.simple.mail.transfer.enabled");
+	}
+	
+	@Test
 	public void buildClassUniformResourceIdentifier(){
 		assertThat(VariableName.buildClassUniformResourceIdentifier(Integer.class, null)).isEqualTo("cyk.variable.java.lang.Integer-uri");
 	}

@@ -117,6 +117,8 @@ public interface ClientManager {
 				return null;
 			Collection<ClientRepresentation> clientRepresentations = null;
 			for(String identifier : identifiers) {
+				if(IDENTIFIERS_EXCLUDABLE.contains(identifier))
+					continue;
 				ClientRepresentation clientRepresentation = CollectionHelper.getFirst(KeycloakHelper.getClientsResource().findByClientId(identifier));
 				if(clientRepresentation == null) {
 					LogHelper.log(String.format("Client with client-id %s not found", identifier),LOGGING_LEVEL, getClass());
@@ -359,35 +361,6 @@ public interface ClientManager {
 						resourcePermissionRepresentations = new ArrayList<>();
 					resourcePermissionRepresentations.add(resourcePermissionRepresentation);			
 				}
-				
-				/*for(String roleName : rolesNames) {
-					for(String resourceName : resourcesNames) {
-						String name = String.format(PERMISSION_NAME_OF_RESOURCE_NAME_FORMAT, resourceName,roleName);
-						ResourcePermissionRepresentation resourcePermissionRepresentation = resourcePermissionsResource.findByName(name);
-						if(resourcePermissionRepresentation != null) {
-							LogHelper.log(String.format("Permission named <<%s>> has not been overriden.",name,roleName,resourceName), LOGGING_LEVEL, getClass());
-							continue;
-						}
-						Resource resource = client.getResourceByName(resourceName);
-						if(resource == null) {
-							LogHelper.logWarning(String.format("Resource named <<%s>> has not been found", resourceName), getClass());
-							continue;
-						}
-						Policy policy = client.getPolicyByRoleName(roleName);
-						if(policy == null) {
-							LogHelper.logWarning(String.format("Policy for role <<%s>> has not been found", roleName), getClass());
-							continue;
-						}
-						resourcePermissionRepresentation = new ResourcePermissionRepresentation();
-						resourcePermissionRepresentation.setName(name);
-						resourcePermissionRepresentation.addResource(resource.getIdentifier());
-						resourcePermissionRepresentation.addPolicy(policy.getIdentifier());
-						
-						if(resourcePermissionRepresentations == null)
-							resourcePermissionRepresentations = new ArrayList<>();
-						resourcePermissionRepresentations.add(resourcePermissionRepresentation);						
-					}
-				}*/
 				if(CollectionHelper.isEmpty(resourcePermissionRepresentations))
 					continue;
 				count = count + CollectionHelper.getSize(resourcePermissionRepresentations);
@@ -428,5 +401,7 @@ public interface ClientManager {
 		return Helper.getInstance(ClientManager.class, INSTANCE);
 	}
 	
-	Value INSTANCE = new Value();	
+	Value INSTANCE = new Value();
+	
+	Collection<String> IDENTIFIERS_EXCLUDABLE = new ArrayList<>();
 }

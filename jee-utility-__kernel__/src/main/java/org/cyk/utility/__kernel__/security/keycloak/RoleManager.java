@@ -275,4 +275,5 @@ public interface RoleManager {
 	Value INSTANCE = new Value();
 	
 	Collection<String> HIDDEN = new HashSet<>(List.of("offline_access","uma_authorization"));
+	Collection<String> DEFAULT = new ArrayList<>();
 }
