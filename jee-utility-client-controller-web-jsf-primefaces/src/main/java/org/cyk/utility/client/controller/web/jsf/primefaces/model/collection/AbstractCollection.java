@@ -30,6 +30,7 @@ import org.cyk.utility.__kernel__.user.interface_.UserInterfaceAction;
 import org.cyk.utility.client.controller.ControllerEntity;
 import org.cyk.utility.client.controller.ControllerLayer;
 import org.cyk.utility.client.controller.web.jsf.OutcomeGetter;
+import org.cyk.utility.client.controller.web.jsf.Redirector;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObjectAjaxable;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax.Ajax;
@@ -317,11 +318,29 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 		if(StringHelper.isBlank(outcome))
 			outcome = OutcomeGetter.getInstance().get(elementClass, action);
 		if(StringHelper.isNotBlank(outcome))
-			objects = ArrayUtils.addAll(objects, MenuItem.FIELD_OUTCOME,outcome
+			objects = ArrayUtils.addAll(objects, MenuItem.FIELD_OUTCOME,outcome, MenuItem.FIELD___OUTCOME__,outcome
 					,MenuItem.FIELD_USER_INTERFACE_ACTION,UserInterfaceAction.NAVIGATE_TO_VIEW
 					,MenuItem.FIELD___ACTION__,action);
 		if(action != null)
 			objects = ArrayUtils.addAll(objects, MenuItem.FIELD_PARAMETERS,Map.of(ParameterName.ACTION_IDENTIFIER.getValue(),List.of(action.name())));
+		if(recordMenu instanceof ContextMenu) {
+			//TODO is it the best way ?
+			String vOutcome = outcome;
+			Map<Object,Object> map = MapHelper.instantiate(objects);
+			addRecordMenuItemByArgumentsExecuteFunction((String)map.get(MenuItem.FIELD_VALUE), (String)map.get(MenuItem.FIELD_ICON), new MenuItem.Listener.AbstractImpl() {
+				@Override
+				protected Object __runExecuteFunction__(AbstractAction action) {
+					Map<String,List<String>> parameters = new HashMap<>();
+					parameters.put(ParameterName.ENTITY_IDENTIFIER.getValue(),List.of((String)FieldHelper.readSystemIdentifier(action.readArgument())));
+					if(MapHelper.isNotEmpty(action.get__parameters__()))
+						parameters.putAll(action.get__parameters__());
+					Redirector.getInstance().redirect(vOutcome, parameters);			
+					return null;
+				}
+			});
+			CollectionHelper.getLast(recordMenu.getItems()).setConfirm(null);
+			return this;
+		}
 		return addRecordMenuItemByArguments(objects);
 	}
 	
