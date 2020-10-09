@@ -30,6 +30,9 @@ public interface Querier {
 	<T,I> Collection<T> readByBusinessIdentifiers(Class<T> resultClass,Class<I> identifierClass,Collection<I> identifiers);
 	<T> Collection<T> readByBusinessIdentifiers(Class<T> resultClass,Collection<String> identifiers);
 	
+	<T> Collection<T> read(Class<T> resultClass,QueryExecutorArguments arguments);
+	<T> Long count(Class<T> resultClass,QueryExecutorArguments arguments);
+	
 	/**/
 	
 	public static abstract class AbstractImpl extends AbstractObject implements Querier,Serializable {
@@ -65,17 +68,41 @@ public interface Querier {
 		public <T> Collection<T> readByBusinessIdentifiers(Class<T> resultClass, Collection<String> identifiers) {
 			return readByBusinessIdentifiers(resultClass,String.class, identifiers);
 		}
+	
+		@Override
+		public <T> Collection<T> read(Class<T> resultClass, QueryExecutorArguments arguments) {
+			if(resultClass == null)
+				return null;
+			if(arguments == null)
+				arguments = QueryExecutorArguments.instantiate(resultClass, QueryName.READ);
+			return QueryExecutor.getInstance().executeReadMany(resultClass, arguments);
+		}
+		
+		@Override
+		public <T> Long count(Class<T> resultClass,QueryExecutorArguments arguments) {
+			if(resultClass == null)
+				return null;
+			if(arguments == null)
+				arguments = QueryExecutorArguments.instantiate(resultClass, QueryName.COUNT);
+			return QueryExecutor.getInstance().executeCount(arguments);
+		}
 	}
 	
 	public static interface CodableAndNamable<T> extends Querier {
 		
 		Integer NUMBER_OF_WORDS_OF_PARAMETER_NAME_NAME = 4;
 		
+		/* read code order by ascending */
+		Collection<String> readCodes(QueryExecutorArguments arguments);
+		Collection<String> readCodes();
+		
 		Boolean isOwner(QueryExecutorArguments arguments);
 		
 		T readOne(QueryExecutorArguments arguments);
 		Collection<T> readMany(QueryExecutorArguments arguments);
 		Long count(QueryExecutorArguments arguments);
+		
+		Collection<T> read();
 		
 		/* read where code or name like order by code ascending */
 		Collection<T> readWhereCodeOrNameLike(QueryExecutorArguments arguments);
@@ -97,6 +124,14 @@ public interface Querier {
 		
 		static String getQueryValueCountWhereCodeOrNameLike(String tupleName) {
 			return Language.of(Language.Select.of("COUNT(t.identifier)"),getQueryValueWhereCodeOrNameLikeFromWhere(tupleName));
+		}
+		
+		static String getQueryValueReadCodesFromWhere(String tupleName) {
+			return Language.From.of(tupleName+" t");
+		}
+		
+		static String getQueryValueReadCodes(String tupleName) {
+			return Language.of(Language.Select.of("t.code"),getQueryValueReadCodesFromWhere(tupleName),Language.Order.of("t.code ASC"));
 		}
 		
 		/**/
@@ -156,6 +191,23 @@ public interface Querier {
 				arguments.setFilter(filter);
 			}
 			
+			@Override
+			public Collection<String> readCodes(QueryExecutorArguments arguments) {
+				if(arguments == null)
+					arguments = QueryExecutorArguments.instantiate(getKlass(), QueryName.READ_CODES);
+				return QueryExecutor.getInstance().executeReadMany(String.class, arguments);
+			}
+			
+			@Override
+			public Collection<String> readCodes() {
+				return readCodes(QueryExecutorArguments.instantiate(getKlass(), QueryName.READ_CODES));
+			}
+			
+			@Override
+			public Collection<T> read() {
+				return super.read(getKlass(), QueryExecutorArguments.instantiate(getKlass(), QueryName.READ));
+			}
+			
 			protected Class<T> getKlass() {
 				return (Class<T>) ClassHelper.getParameterAt(getClass(), 0);
 			}
@@ -175,7 +227,13 @@ public interface Querier {
 					,Query.FIELD_TUPLE_CLASS,klass,Query.FIELD_RESULT_CLASS,Long.class
 					,Query.FIELD_VALUE,Querier.CodableAndNamable.getQueryValueCountWhereCodeOrNameLike(klass.getSimpleName())
 					)
-				);		
+				);
+			
+			QueryHelper.addQueries(Query.build(Query.FIELD_IDENTIFIER,QueryIdentifierGetter.getInstance().get(klass, QueryName.READ_CODES)
+					,Query.FIELD_TUPLE_CLASS,klass,Query.FIELD_RESULT_CLASS,Object[].class
+					,Query.FIELD_VALUE,Querier.CodableAndNamable.getQueryValueReadCodes(klass.getSimpleName())
+					)
+				);
 		}
 	}
 	

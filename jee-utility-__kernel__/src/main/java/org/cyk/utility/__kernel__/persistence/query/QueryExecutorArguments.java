@@ -21,6 +21,7 @@ import org.cyk.utility.__kernel__.persistence.EntityManagerGetter;
 import org.cyk.utility.__kernel__.persistence.query.filter.Field;
 import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -277,6 +278,17 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 	}
 	
 	/**/
+	
+	public static QueryExecutorArguments instantiate(Class<?> resultClass,QueryName queryName) {
+		ThrowableHelper.throwIllegalArgumentExceptionIfNull("result class", resultClass);
+		ThrowableHelper.throwIllegalArgumentExceptionIfNull("query name", queryName);		
+		String queryIdentifier = QueryIdentifierGetter.getInstance().get(resultClass, queryName);
+		Query query = QueryGetter.getInstance().get(queryIdentifier);
+		if(query == null)
+			throw new RuntimeException("query not found under identifier <<"+queryIdentifier+">>");
+		QueryExecutorArguments arguments = new QueryExecutorArguments().setQuery(query);			
+		return arguments;
+	}
 	
 	/**/
 	

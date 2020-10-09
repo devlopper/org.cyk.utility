@@ -177,6 +177,8 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 	public static final String FIELD_READ_QUERY_IDENTIFIER = "readQueryIdentifier";
 	public static final String FIELD_COUNT_QUERY_IDENTIFIER = "countQueryIdentifier";
 	public static final String FIELD_READER_USABLE = "readerUsable";
+	public static final String FIELD_INITIAL_NUMBER_OF_RESULTS = "initialNumberOfResults";
+	public static final String FIELD_MAX_RESULTS = "maxResults";
 	
 	private static final String SCRIPT_SEARCH = "PF('%s').search('%s')";
 	

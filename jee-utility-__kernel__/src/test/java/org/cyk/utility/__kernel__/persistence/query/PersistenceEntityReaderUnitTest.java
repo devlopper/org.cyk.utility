@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 
+import org.cyk.utility.__kernel__.__entities__.CodeAndName;
 import org.cyk.utility.__kernel__.__entities__.TestedEntityParent;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
@@ -29,12 +30,24 @@ public class PersistenceEntityReaderUnitTest extends AbstractWeldUnitTest {
 		QueryHelper.getQueries().setIsRegisterableToEntityManager(Boolean.TRUE);
 		QueryHelper.scan(List.of(getClass().getPackage()));	
 		QueryHelper.addQueries(Query.buildSelectBySystemIdentifiers(TestedEntityParent.class, "SELECT t FROM TestedEntityParent t WHERE t.identifier IN :identifiers"));
+		CodeAndNameQuerier.initialize();
 	}
 	
 	@Override
 	protected void __listenAfter__() {
 		super.__listenAfter__();
 		QueryHelper.clear();
+	}
+	
+	@Test
+	public void codeNadName_readCodes(){
+		assertThat(CodeAndNameQuerier.getInstance().readCodes()).isNull();
+		EntityCreator.getInstance().createManyInTransaction(new CodeAndName().setCode("c01"));
+		assertThat(CodeAndNameQuerier.getInstance().readCodes()).containsExactly("c01");
+		EntityCreator.getInstance().createManyInTransaction(new CodeAndName().setCode("c02"));
+		assertThat(CodeAndNameQuerier.getInstance().readCodes()).containsExactly("c01","c02");
+		EntityCreator.getInstance().createManyInTransaction(new CodeAndName().setCode("c00"));
+		assertThat(CodeAndNameQuerier.getInstance().readCodes()).containsExactly("c00","c01","c02");
 	}
 	
 	/* read all*/
