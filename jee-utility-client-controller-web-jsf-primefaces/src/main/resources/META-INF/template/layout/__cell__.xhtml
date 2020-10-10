@@ -93,6 +93,20 @@
 	    </ui:decorate>
 	</c:if>
 	
+	<c:if test="#{classSimpleName eq 'SelectBooleanCheckbox'}">
+		<c:set var="processed" value="true"/>
+		<ui:decorate template="#{template}">
+	    	<ui:param name="selectBooleanCheckbox" value="#{cell.control}"/>
+	    </ui:decorate>
+	</c:if>
+	
+	<c:if test="#{classSimpleName eq 'SelectBooleanButton'}">
+		<c:set var="processed" value="true"/>
+		<ui:decorate template="#{template}">
+	    	<ui:param name="selectBooleanButton" value="#{cell.control}"/>
+	    </ui:decorate>
+	</c:if>
+	
 	<!-- action -->
 	
 	<c:if test="#{classSimpleName eq 'CommandButton'}">

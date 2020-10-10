@@ -22,7 +22,7 @@ public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractOb
 
 	protected String identifier;
 	protected String widgetVar;
-	protected String style,styleClass;
+	protected String style,styleClass,styleClassAsIdentifier;
 	protected MapInstance<Event, String> eventScripts;
 	protected Boolean rendered,__isLoggable__;
 	protected Object binding;
@@ -143,6 +143,14 @@ public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractOb
 				}
 				if(StringHelper.isBlank(object.widgetVar)) {
 					object.widgetVar = generateIdentifier(identifier_prefix);
+				}
+				if(StringHelper.isBlank(object.styleClassAsIdentifier)) {
+					if(StringHelper.isNotBlank(object.identifier))
+						object.styleClassAsIdentifier = object.identifier;
+					else
+						object.styleClassAsIdentifier = generateIdentifier(identifier_prefix);
+					
+					object.addStyleClasses(object.styleClassAsIdentifier);
 				}
 			}
 			if(object.rendered == null)

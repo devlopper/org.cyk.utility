@@ -2,12 +2,16 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.model.input;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+
+import javax.faces.model.SelectItem;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.controller.EntityReader;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
+import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.web.jsf.converter.Converter;
 
@@ -26,8 +30,9 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 	
 	/**/
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Object getChoiceValue(Object choice) {
-		return choice;
+		return ((Listener)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).getChoiceValue(this, choice);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -79,6 +84,7 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 		Collection<VALUE> computeChoices(AbstractInputChoice<VALUE> input);
 		
 		Object getChoiceLabel(AbstractInputChoice<VALUE> input,VALUE choice);
+		Object getChoiceValue(AbstractInputChoice<VALUE> input,VALUE choice);
 		
 		public static abstract class AbstractImpl<VALUE> extends AbstractInput.Listener.AbstractImpl implements Listener<VALUE>,Serializable {
 			@Override
@@ -107,6 +113,15 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 			public Object getChoiceLabel(AbstractInputChoice<VALUE> input, VALUE choice) {
 				if(choice == null)
 					return "-- Aucune sélection --";
+				if(choice instanceof SelectItem)
+					return((SelectItem)choice).getLabel();
+				return choice;
+			}
+			
+			@Override
+			public Object getChoiceValue(AbstractInputChoice<VALUE> input, VALUE choice) {
+				if(choice instanceof SelectItem)
+					return((SelectItem)choice).getValue();
 				return choice;
 			}
 			
@@ -152,12 +167,24 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 					//input.converter = DependencyInjection.inject(ObjectConverter.class);
 					input.converter = __inject__(Converter.class);	
 			}
+						
+			if(input.nullable == null)
+				input.nullable = Boolean.FALSE;
+			
+			if(input.choices == null && Boolean.TRUE.equals(MapHelper.readByKey(arguments, FIELD_CHOICES_ARE_YES_NO_ONLY))) {
+				input.choices = CHOICES_YES_NO;
+			}
+			if(input.choices == null && Boolean.TRUE.equals(ClassHelper.isInstanceOf(input.field.getType(),Boolean.class))) {
+				input.choices = CHOICES_YES_NO;
+			}
+			
 			if(input.choicesInitialized == null) {
 				input.choicesInitialized = input.choices != null;
 			}
-			
-			if(input.nullable == null)
-				input.nullable = Boolean.FALSE;
 		}
+		
+		public static final String FIELD_CHOICES_ARE_YES_NO_ONLY = "choicesAreYesOrNoOnly";
 	}
+	
+	private static final Collection<Object> CHOICES_YES_NO = List.of(new SelectItem(Boolean.TRUE, "Oui"),new SelectItem(Boolean.FALSE, "Non"));
 }

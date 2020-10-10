@@ -117,6 +117,21 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 		return addUpdatables(CollectionHelper.listOf(updatables));
 	}
 	
+	public AbstractAction addUpdatablesUsingStyleClass(Collection<AbstractObject> updatables) {
+		if(CollectionHelper.isEmpty(updatables))
+			return this;
+		Collection<String> updates = updatables.stream().map(x -> "@(."+x.getStyleClassAsIdentifier()+")").collect(Collectors.toSet());
+		if(CollectionHelper.isEmpty(updates))
+			return this;
+		return addUpdates(updates);
+	}
+	
+	public AbstractAction addUpdatablesUsingStyleClass(AbstractObject...updatables) {
+		if(ArrayHelper.isEmpty(updatables))
+			return this;
+		return addUpdatablesUsingStyleClass(CollectionHelper.listOf(updatables));
+	}
+	
 	/**/
 	
 	public static final String FIELD_PROCESS = "process";

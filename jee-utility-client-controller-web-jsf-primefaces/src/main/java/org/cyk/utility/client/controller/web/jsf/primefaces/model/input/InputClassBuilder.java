@@ -105,6 +105,10 @@ public interface InputClassBuilder {
 				return SelectOneCombo.class;
 			if(field.isAnnotationPresent(org.cyk.utility.__kernel__.object.__static__.controller.annotation.InputChoiceOneAutoComplete.class))
 				return AutoComplete.class;
+			if(field.isAnnotationPresent(org.cyk.utility.__kernel__.object.__static__.controller.annotation.InputBooleanCheckbox.class))
+				return SelectBooleanCheckbox.class;
+			if(field.isAnnotationPresent(org.cyk.utility.__kernel__.object.__static__.controller.annotation.InputBooleanButton.class))
+				return SelectBooleanButton.class;
 			return Void.class;
 		}
 	}

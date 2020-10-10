@@ -42,11 +42,14 @@ public abstract class AbstractInput<VALUE> extends AbstractInputOutput<VALUE> im
 		((Listener)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).validate(context, component, value);
 	}
 	
+	//@SuppressWarnings("unchecked")
 	public AbstractInput<VALUE> writeValueToObjectField() {
 		if(object == null || field == null) {
 			LogHelper.logWarning("value has not been written because object or field might be null", getClass());
 			return this;
 		}
+		//if(value != null && ClassHelper.isInstanceOf(field.getType(), Boolean.class) && value instanceof String)
+		//	value = (VALUE) ValueConverter.getInstance().convertToBoolean(value);
 		FieldHelper.write(object, field, value);
 		return this;
 	}
