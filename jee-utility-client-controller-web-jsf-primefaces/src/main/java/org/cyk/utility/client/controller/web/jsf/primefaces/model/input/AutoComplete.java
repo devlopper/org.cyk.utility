@@ -40,8 +40,10 @@ import org.cyk.utility.__kernel__.user.interface_.message.RenderType;
 import org.cyk.utility.__kernel__.user.interface_.message.Severity;
 import org.cyk.utility.client.controller.ControllerEntity;
 import org.cyk.utility.client.controller.ControllerLayer;
+import org.cyk.utility.client.controller.web.jsf.JavaServerFacesHelper;
 import org.cyk.utility.client.controller.web.jsf.converter.ObjectConverter;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObject;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.Event;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax.Ajax;
 import org.primefaces.PrimeFaces;
@@ -165,10 +167,43 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 		return this;
 	}
 	
+	@Override
+	public Object deriveBinding(String beanPath) {
+		org.primefaces.component.autocomplete.AutoComplete component = new org.primefaces.component.autocomplete.AutoComplete();
+		component.setVar("item");
+		for(Object[] array : new Object[][] {
+				new Object[] {FIELD_PLACEHOLDER,null,String.class}
+				,new Object[] {FIELD_CONVERTER,null,Object.class}
+				,new Object[] {FIELD_MAX_RESULTS,null,Integer.class}
+				,new Object[] {FIELD_QUERY_DELAY,null,Integer.class}
+				,new Object[] {FIELD_DROPDOWN,null,Boolean.class}
+				,new Object[] {FIELD_DROPDOWN_MODE,null,String.class}
+				,new Object[] {FIELD_EMPTY_MESSAGE,null,String.class}
+				,new Object[] {FIELD_ON_CHANGE,"onchange",String.class}
+				,new Object[] {FIELD_RENDERED,null,Boolean.class}
+			}) {
+			String property = array[1] == null ? (String) array[0] : (String) array[1];
+			Class<?> klass = array[2] == null ? String.class : (Class<?>) array[2];
+			__inject__(JavaServerFacesHelper.class).setValueExpression(component, property, JavaServerFacesHelper.buildValueExpression(String.format("#{%s.%s}",beanPath,array[0]), klass));
+		}
+		__inject__(JavaServerFacesHelper.class).setValueExpression(component, "itemValue", JavaServerFacesHelper.buildValueExpression("#{"+beanPath+".readItemValue(item)}", Object.class));
+		__inject__(JavaServerFacesHelper.class).setValueExpression(component, "itemLabel", JavaServerFacesHelper.buildValueExpression("#{"+beanPath+".readItemLabel(item)}", String.class));		
+		component.setCompleteMethod(__inject__(JavaServerFacesHelper.class).buildMethodExpression(beanPath+".complete", List.class, new Class<?>[] {String.class}));		
+		return component;
+	}
+	
+	public AbstractObject setBindingByDerivation(String beanPath,String valuePath) {
+		setBindingByDerivation(beanPath);
+		org.primefaces.component.autocomplete.AutoComplete component = (org.primefaces.component.autocomplete.AutoComplete) binding;
+		__inject__(JavaServerFacesHelper.class).setValueExpression(component, "value", JavaServerFacesHelper.buildValueExpression("#{"+valuePath+"}", Object.class));
+		return this;
+	}
+	
 	/**/
 	
 	public static final String FIELD_CONTROLLER_ENTITY = "controllerEntity";
 	public static final String FIELD_DROPDOWN = "dropdown";
+	public static final String FIELD_DROPDOWN_MODE = "dropdownMode";
 	public static final String FIELD_MULTIPLE = "multiple";
 	public static final String FIELD_ENTITY_CLASS = "entityClass";
 	public static final String FIELD_ENTITY_CONTROLLER = "entityController";
@@ -179,6 +214,9 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 	public static final String FIELD_READER_USABLE = "readerUsable";
 	public static final String FIELD_INITIAL_NUMBER_OF_RESULTS = "initialNumberOfResults";
 	public static final String FIELD_MAX_RESULTS = "maxResults";
+	public static final String FIELD_QUERY_DELAY = "queryDelay";
+	public static final String FIELD_EMPTY_MESSAGE = "emptyMessage";
+	public static final String FIELD_ON_CHANGE = "onChange";
 	
 	private static final String SCRIPT_SEARCH = "PF('%s').search('%s')";
 	

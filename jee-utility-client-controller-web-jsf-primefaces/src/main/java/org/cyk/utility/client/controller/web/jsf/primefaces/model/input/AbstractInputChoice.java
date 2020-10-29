@@ -174,7 +174,7 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 			if(input.choices == null && Boolean.TRUE.equals(MapHelper.readByKey(arguments, FIELD_CHOICES_ARE_YES_NO_ONLY))) {
 				input.choices = CHOICES_YES_NO;
 			}
-			if(input.choices == null && Boolean.TRUE.equals(ClassHelper.isInstanceOf(input.field.getType(),Boolean.class))) {
+			if(input.choices == null && input.field != null && Boolean.TRUE.equals(ClassHelper.isInstanceOf(input.field.getType(),Boolean.class))) {
 				input.choices = CHOICES_YES_NO;
 			}
 			

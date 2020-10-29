@@ -7,6 +7,8 @@ import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.client.controller.web.jsf.JavaServerFacesHelper;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObject;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +17,32 @@ import lombok.Setter;
 public class SelectBooleanButton extends AbstractInput<Boolean> implements Serializable {
 
 	private String offLabel,onLabel,offIcon,onIcon;
+	
+	/**/
+	
+	@Override
+	public Object deriveBinding(String beanPath) {
+		org.primefaces.component.selectbooleanbutton.SelectBooleanButton component = new org.primefaces.component.selectbooleanbutton.SelectBooleanButton();
+		for(Object[] array : new Object[][] {
+				new Object[] {FIELD_OFF_LABEL,null,String.class}
+				,new Object[] {FIELD_ON_LABEL,null,String.class}
+				,new Object[] {FIELD_OFF_ICON,null,String.class}
+				,new Object[] {FIELD_ON_ICON,null,String.class}
+				,new Object[] {FIELD_RENDERED,null,Boolean.class}
+			}) {
+			String property = array[1] == null ? (String) array[0] : (String) array[1];
+			Class<?> klass = array[2] == null ? String.class : (Class<?>) array[2];
+			__inject__(JavaServerFacesHelper.class).setValueExpression(component, property, JavaServerFacesHelper.buildValueExpression(String.format("#{%s.%s}",beanPath,array[0]), klass));
+		}
+		return component;
+	}
+	
+	public AbstractObject setBindingByDerivation(String beanPath,String valuePath) {
+		setBindingByDerivation(beanPath);
+		org.primefaces.component.selectbooleanbutton.SelectBooleanButton component = (org.primefaces.component.selectbooleanbutton.SelectBooleanButton) binding;
+		__inject__(JavaServerFacesHelper.class).setValueExpression(component, "value", JavaServerFacesHelper.buildValueExpression("#{"+valuePath+"}", Object.class));
+		return this;
+	}
 	
 	/**/
 	

@@ -204,6 +204,12 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 		return ((Listener)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).getCellValueByRecordByColumn(record, recordIndex, column, columnIndex);
 	}
 	
+	public Object getCellBindingKeyByRecordByColumn(Object record,Integer recordIndex,Column column,Integer columnIndex) {
+		if(record == null || recordIndex == null || column == null || columnIndex == null)
+			return null;
+		return ((Listener)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).getCellBindingKeyByRecordByColumn(record, recordIndex, column, columnIndex);
+	}
+	
 	public Collection<Column> getColumnsAfterRowIndex(Boolean injectIfNull) {
 		if(columnsAfterRowIndex == null && Boolean.TRUE.equals(injectIfNull))
 			columnsAfterRowIndex = new ArrayList<>();
@@ -406,6 +412,10 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 				dataTable.rowTooltipStyleClass = dataTable.identifier+"_row_tooltip";			
 			dataTable.addStyleClasses(dataTable.rowTooltipStyleClass);
 			
+			if(StringHelper.isBlank(dataTable.selectionMode) && dataTable.selectionAsCollection != null) {			
+				dataTable.selectionMode = "multiple";
+			}
+			
 			if(StringHelper.isBlank(dataTable.selectionMode) && RenderType.OUTPUT.equals(dataTable.renderType) /*&& dataTable.recordMenu instanceof ContextMenu*/) {			
 				dataTable.selectionMode = "single";
 			}
@@ -432,6 +442,7 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 	
 	public static interface Listener extends AbstractCollection.Listener {
 		Object getCellValueByRecordByColumn(Object record,Integer recordIndex,Column column,Integer columnIndex);
+		Object getCellBindingKeyByRecordByColumn(Object record,Integer recordIndex,Column column,Integer columnIndex);
 		Object getRowKeyByRecord(Object record,Integer recordIndex);
 		String getStyleClassByRecord(Object record,Integer recordIndex);
 		String getStyleClassByRecordByColumn(Object record,Integer recordIndex,Column column,Integer columnIndex);
@@ -457,6 +468,13 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 						value = NumberHelper.format((Number) value);
 				}
 				return value;
+			}
+			
+			@Override
+			public Object getCellBindingKeyByRecordByColumn(Object record, Integer recordIndex, Column column,Integer columnIndex) {
+				if(record == null || column == null || StringHelper.isBlank(column.getFieldName()))
+					return null;
+				return recordIndex+"_"+columnIndex;
 			}
 			
 			@Override

@@ -15,7 +15,7 @@ import org.cyk.utility.__kernel__.value.ValueHelper;
 
 public interface RunnableHelper {
 	
-	static ExecutorService instanciateExecutorService(Integer corePoolSize,Integer maximumPoolSize,Long keepAliveTime,TimeUnit keepAliveTimeUnit
+	static ExecutorService instantiateExecutorService(Integer corePoolSize,Integer maximumPoolSize,Long keepAliveTime,TimeUnit keepAliveTimeUnit
 			,BlockingQueue<Runnable> queue,Integer queueSize,ThreadFactory threadFactory,RejectedExecutionHandler rejectedExecutionHandler) {
 		corePoolSize = ValueHelper.defaultToIfBlank(corePoolSize, 2);
 		maximumPoolSize = ValueHelper.defaultToIfBlank(maximumPoolSize, corePoolSize * 3);
@@ -32,12 +32,12 @@ public interface RunnableHelper {
 		return new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, keepAliveTimeUnit, queue, threadFactory, rejectedExecutionHandler);
 	}
 	
-	static ExecutorService instanciateExecutorService(Integer corePoolSize) {
-		return instanciateExecutorService(corePoolSize, null, null, null, null, null, null, null);
+	static ExecutorService instantiateExecutorService(Integer corePoolSize) {
+		return instantiateExecutorService(corePoolSize, null, null, null, null, null, null, null);
 	}
 	
-	static ExecutorService instanciateExecutorService() {
-		return instanciateExecutorService(3, null, null, null, null, null, null, null);
+	static ExecutorService instantiateExecutorService() {
+		return instantiateExecutorService(3, null, null, null, null, null, null, null);
 	}
 	
 	static void run(Collection<Runnable> runnables,String name,ExecutorService executorService,Long timeOut,TimeUnit timeOutUnit) {
@@ -45,7 +45,7 @@ public interface RunnableHelper {
 			return;
 		ValueHelper.throwIfBlank("runnables name", name);
 		if(executorService == null)
-			executorService = instanciateExecutorService(runnables.size() / 4 + 1);
+			executorService = instantiateExecutorService(runnables.size() / 4 + 1);
 		for(Runnable index : runnables)
 			executorService.submit(index);
 		executorService.shutdown();

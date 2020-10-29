@@ -65,4 +65,10 @@ public interface TimeHelper {
 			return null;
 		return formatLocalDate(localDate, "dd/MM/yyyy");
 	}
+	
+	static String formatDuration(Long numberOfMilliseconds) {
+		String string = Duration.ofMillis(numberOfMilliseconds).toString();
+		string = string.substring(2);
+		return string;
+	}
 }

@@ -153,7 +153,7 @@ public interface MapperSourceDestination<SOURCE,DESTINATION> extends Mapper {
 						}
 					});
 				}
-				RunnableHelper.run(runnables, "mapper get sources", RunnableHelper.instanciateExecutorService(executorCorePoolSize));
+				RunnableHelper.run(runnables, "mapper get sources", RunnableHelper.instantiateExecutorService(executorCorePoolSize));
 			}else {
 				//Serial processing
 				for(DESTINATION destination : destinations) {

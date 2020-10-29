@@ -2,6 +2,7 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.model.menu;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
@@ -9,10 +10,13 @@ import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.client.controller.web.WebController;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
@@ -82,5 +86,46 @@ public class TabMenu extends AbstractMenu implements Serializable {
 	
 	static {
 		Configurator.set(TabMenu.class, new ConfiguratorImpl());
+	}
+	
+	/**/
+	
+	@Getter @Setter @Accessors(chain=true) @NoArgsConstructor @AllArgsConstructor
+	public static class Tab implements Serializable {
+		private String name;
+		private String parameterValue;
+		
+		/**/
+		public static String PARAMETER_NAME = "tab";
+		/**/
+		
+		public static Tab getByParameterValue(Collection<Tab> tabs,String value) {
+			if(CollectionHelper.isEmpty(tabs) || StringHelper.isBlank(value))
+				return null;
+			for(Tab tab : tabs)
+				if(value.equals(tab.parameterValue))
+					return tab;
+			return null;
+		}
+		
+		public static Tab getSelectedByRequestParameter(Collection<Tab> tabs,String name,Integer indexIfNull) {
+			if(CollectionHelper.isEmpty(tabs) || StringHelper.isBlank(name))
+				return null;
+			String value = WebController.getInstance().getRequestParameter(name);
+			Tab tab = getByParameterValue(tabs,value);
+			if(tab == null)
+				tab = CollectionHelper.getElementAt(tabs, indexIfNull);
+			return tab;
+		}
+		
+		public static Tab getSelectedByRequestParameter(Collection<Tab> tabs) {
+			return getSelectedByRequestParameter(tabs, PARAMETER_NAME, 0);
+		}
+		
+		public static Integer getIndexOf(List<Tab> tabs,Tab tab) {
+			if(CollectionHelper.isEmpty(tabs) || tab == null)
+				return null;
+			return tabs.indexOf(tab);
+		}
 	}
 }

@@ -3,17 +3,27 @@ package org.cyk.utility.__kernel__.persistence;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.EntityManager;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.jboss.weld.exceptions.IllegalArgumentException;
 
 public interface PersistenceHelper {
@@ -109,7 +119,97 @@ public interface PersistenceHelper {
 		return sort(Boolean.TRUE,classes);
 	}
 
+	static String getTableName(Class<?> klass) {
+		if(klass == null)
+			return null;
+		if(CLASS_TABLE_NAME.containsKey(klass))
+			return CLASS_TABLE_NAME.get(klass);
+		String name = null;
+		Table table = klass.getAnnotation(Table.class);
+		if(table != null)
+			name = table.name();
+		if(StringHelper.isBlank(name))
+			name = klass.getSimpleName().toUpperCase();
+		CLASS_TABLE_NAME.put(klass, name);
+		return name;
+	}
+	
+	static Set<String> getColumnsNames(Class<?> klass) {
+		if(klass == null)
+			return null;
+		if(CLASS_COLUMNS_NAMES.containsKey(klass))
+			return CLASS_COLUMNS_NAMES.get(klass);
+		Set<String> names = null;
+		Collection<Field> fields = FieldHelper.get(klass);
+		if(CollectionHelper.isEmpty(fields)) {
+			CLASS_COLUMNS_NAMES.put(klass, null);
+			return null;
+		}
+		Map<String,Field> map = COLUMN_NAME_FIELD.get(klass);
+		if(map == null)
+			COLUMN_NAME_FIELD.put(klass, map = new HashMap<>());
+		/*EntityManagerFactory entityManagerFactory = EntityManagerFactoryGetter.getInstance().get();
+		if(entityManagerFactory != null) {
+			Set attributes = entityManagerFactory.getMetamodel().entity(klass).getAttributes();
+			if(CollectionHelper.isEmpty(attributes)) {
+				CLASS_COLUMNS_NAMES.put(klass, null);
+				return null;
+			}
+			for(Object object : attributes) {
+				Attribute<?,?> attribute = (Attribute<?, ?>) object;
+				attribute.
+			}
+		}
+		*/
+		for(Field field : fields) {
+			String name = null;
+			Column column = field.getAnnotation(Column.class);
+			if(column == null) {
+				JoinColumn joinColumn = field.getAnnotation(JoinColumn.class);
+				if(joinColumn == null) {
+					
+				}else {
+					name = joinColumn.name();
+				}
+			}else {
+				name = column.name();
+			}
+				
+			if(StringHelper.isBlank(name))
+				continue;
+			if(names == null)
+				names = new LinkedHashSet<>();		
+			map.put(name,field);
+			names.add(name);
+		}	
+		CLASS_COLUMNS_NAMES.put(klass, names);
+		return names;
+	}
+	
+	static Collection<Object> getColumnsValues(Object object) {
+		if(object == null)
+			return null;
+		Collection<String> names = getColumnsNames(object.getClass());
+		if(CollectionHelper.isEmpty(names))
+			return null;
+		Collection<Object> values = new ArrayList<>();
+		for(String name : names) {
+			Field field = COLUMN_NAME_FIELD.get(object.getClass()).get(name);
+			Object value = FieldHelper.read(object, field);
+			if(value != null) {
+				if(!ClassHelper.isBelongsToJavaPackages(value.getClass()))
+					value = FieldHelper.readSystemIdentifier(value);
+				if(String.class.equals(value.getClass()))
+					value = "'"+value+"'";	
+			}				
+			values.add(value);
+		}
+		return values;
+	}
+	
 	/**/
 	
-	
+	Map<Class<?>,String> CLASS_TABLE_NAME = new HashMap<>();
+	Map<Class<?>,Set<String>> CLASS_COLUMNS_NAMES = new HashMap<>();
+	Map<Class<?>,Map<String,Field>> COLUMN_NAME_FIELD = new HashMap<>();
 }

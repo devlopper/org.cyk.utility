@@ -14,6 +14,7 @@ import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.object.marker.IdentifiableSystem;
 import org.cyk.utility.__kernel__.object.marker.Namable;
 import org.cyk.utility.__kernel__.persistence.EntityManagerGetter;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.Value;
 
 public interface EntityCreator {
@@ -40,6 +41,10 @@ public interface EntityCreator {
 	
 	void createOneInTransaction(Object object);
 	
+	void createByNativesQueriesStrings(Collection<String> queriesStrings);
+	
+	void createByNativesQueriesStrings(String...queriesStrings);
+	
 	/**/
 	
 	public abstract class AbstractImpl extends AbstractObject implements EntityCreator,Serializable {
@@ -57,20 +62,17 @@ public interface EntityCreator {
 			for(Object index : arguments.getObjects()) {	
 				__setSystemIdentifierIfNull__(index);
 				__setNameIfNull__(index);
-				/*
-				//if system identifier is null we compute it
-				if(index instanceof IdentifiableSystem && FieldHelper.readSystemIdentifier(index) == null) {
-					Object identifier;
-					//if business identifier is not null then we assign business identifier to system identifier else we generate one
-					if(index instanceof IdentifiableBusiness && FieldHelper.readBusinessIdentifier(index) != null) {
-						identifier = FieldHelper.readBusinessIdentifier(index);
-					}else
-						identifier = UUID.randomUUID().toString();
-					((IdentifiableSystem<Object>)index).setSystemIdentifier(identifier);
-				}
-				*/
-				entityManager.persist(index);
 			}
+			if(Boolean.TRUE.equals(arguments.getIsNative())) {
+				Class<Object> klass = (Class<Object>) arguments.get__resultClass__();
+				if(klass == null)
+					klass = (Class<Object>) CollectionHelper.getFirst(arguments.getObjects()).getClass();
+				String queryString = __inject__(NativeQueryStringBuilder.class).buildInsertMany(klass, (Collection<Object>)arguments.getObjects());
+				entityManager.createNativeQuery(queryString).executeUpdate();
+			}else {
+				for(Object index : arguments.getObjects())
+					entityManager.persist(index);
+			}	
 			if(Boolean.TRUE.equals(arguments.getIsTransactional()))
 				entityManager.getTransaction().commit();
 		}
@@ -143,6 +145,23 @@ public interface EntityCreator {
 			if(object == null)
 				return;
 			createOne(object,Boolean.TRUE);
+		}
+
+		@Override
+		public void createByNativesQueriesStrings(Collection<String> queriesStrings) {
+			if(CollectionHelper.isEmpty(queriesStrings))
+				return;
+			EntityManager entityManager = EntityManagerGetter.getInstance().get();
+			queriesStrings.stream().filter(queryString -> StringHelper.isNotBlank(queryString)).forEach(queryString -> {
+				entityManager.createNativeQuery(queryString).executeUpdate();
+			});
+		}
+		
+		@Override
+		public void createByNativesQueriesStrings(String... queriesStrings) {
+			if(ArrayHelper.isEmpty(queriesStrings))
+				return;
+			createByNativesQueriesStrings(CollectionHelper.listOf(queriesStrings));
 		}
 		
 		/**/

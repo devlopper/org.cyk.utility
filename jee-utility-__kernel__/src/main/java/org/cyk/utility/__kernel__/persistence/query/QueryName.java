@@ -6,8 +6,14 @@ import lombok.Getter;
 public enum QueryName {
 
 	READ,COUNT
-	,READ_CODES("readCodes"),COUNT_CODES("countCodes")
+	
+	,READ_CODES("readCodes")
+	,COUNT_CODES("countCodes")
+	
 	,READ_BY_SYSTEM_IDENTIFIERS("readBySystemIdentifiers")
+	,READ_BY_SYSTEM_IDENTIFIERS_WITH_ALL("readBySystemIdentifiersWithAll")
+	,READ_BY_SYSTEM_IDENTIFIER_WITH_ALL("readBySystemIdentifierWithAll")
+	
 	,READ_BY_BUSINESS_IDENTIFIERS("readByBusinessIdentifiers")
 	
 	,READ_WHERE_CODE_OR_NAME_LIKE("readWhereCodeOrNameLike")
@@ -15,6 +21,8 @@ public enum QueryName {
 	
 	,READ_WHERE_FILTER("readWhereFilter")
 	,COUNT_WHERE_FILTER("countWhereFilter")
+	,UPDATE_WHERE_FILTER("updateWhereFilter")
+	,DELETE_WHERE_FILTER("deleteWhereFilter")
 	
 	,FILTER
 	

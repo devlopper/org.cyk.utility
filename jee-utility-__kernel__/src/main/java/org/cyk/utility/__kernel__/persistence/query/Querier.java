@@ -2,9 +2,12 @@ package org.cyk.utility.__kernel__.persistence.query;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl;
@@ -26,6 +29,13 @@ public interface Querier {
 	
 	<T,I> Collection<T> readBySystemIdentifiers(Class<T> resultClass,Class<I> identifierClass,Collection<I> identifiers);
 	<T> Collection<T> readBySystemIdentifiers(Class<T> resultClass,Collection<String> identifiers);
+	<T,I> T readBySystemIdentifier(Class<T> resultClass,Class<I> identifierClass,I identifier);
+	<T> T readBySystemIdentifier(Class<T> resultClass,String identifier);
+	
+	<T,I> Collection<T> readBySystemIdentifiersWithAll(Class<T> resultClass,Class<I> identifierClass,Collection<I> identifiers);
+	<T> Collection<T> readBySystemIdentifiersWithAll(Class<T> resultClass,Collection<String> identifiers);	
+	<T,I> T readBySystemIdentifierWithAll(Class<T> resultClass,Class<I> identifierClass,I identifier);
+	<T> T readBySystemIdentifierWithAll(Class<T> resultClass,String identifier);
 	
 	<T,I> Collection<T> readByBusinessIdentifiers(Class<T> resultClass,Class<I> identifierClass,Collection<I> identifiers);
 	<T> Collection<T> readByBusinessIdentifiers(Class<T> resultClass,Collection<String> identifiers);
@@ -46,9 +56,8 @@ public interface Querier {
 		@Override
 		public <T, I> Collection<T> readBySystemIdentifiers(Class<T> resultClass, Class<I> identifierClass,Collection<I> identifiers) {
 			validateIdentifiers(resultClass, identifierClass, identifiers);
-			String queryIdentifier = QueryIdentifierGetter.getInstance().get(resultClass, QueryName.READ_BY_SYSTEM_IDENTIFIERS);
-			ThrowableHelper.throwIllegalArgumentExceptionIfBlank("read by system identifiers query identifier of "+resultClass, queryIdentifier);
-			return QueryExecutor.getInstance().executeReadMany(resultClass, queryIdentifier, PARAMETER_NAME_IDENTIFIERS,identifiers);
+			return QueryExecutor.getInstance().executeReadMany(resultClass, QueryExecutorArguments.instantiate(resultClass, QueryName.READ_BY_SYSTEM_IDENTIFIERS)
+					.addFilterFieldsValues(PARAMETER_NAME_IDENTIFIERS,identifiers));
 		}
 		
 		@Override
@@ -57,18 +66,64 @@ public interface Querier {
 		}
 		
 		@Override
+		public <T, I> T readBySystemIdentifier(Class<T> resultClass, Class<I> identifierClass, I identifier) {
+			Collection<T> collection = readBySystemIdentifiers(resultClass, identifierClass, List.of(identifier));
+			if(CollectionHelper.getSize(collection) > 1)
+				throw new RuntimeException("too much result found");
+			T instance = CollectionHelper.getFirst(collection);			
+			return instance;
+		}
+		
+		@Override
+		public <T> T readBySystemIdentifier(Class<T> resultClass, String identifier) {
+			return readBySystemIdentifier(resultClass, String.class, identifier);
+		}
+		
+		@Override
+		public <T, I> Collection<T> readBySystemIdentifiersWithAll(Class<T> resultClass, Class<I> identifierClass,Collection<I> identifiers) {
+			Collection<T> collection = readBySystemIdentifiers(resultClass, identifierClass, identifiers);
+			if(CollectionHelper.isEmpty(collection))
+				return null;
+			____setAll____(collection);
+			return collection;
+		}
+		
+		protected void ____setAll____(Collection<?> collection) {
+			LogHelper.logWarning("Set all not yet implemented", getClass());
+		}
+		
+		@Override
+		public <T> Collection<T> readBySystemIdentifiersWithAll(Class<T> resultClass, Collection<String> identifiers) {
+			return readBySystemIdentifiersWithAll(resultClass,String.class, identifiers);
+		}
+		
+		@Override
+		public <T, I> T readBySystemIdentifierWithAll(Class<T> resultClass, Class<I> identifierClass, I identifier) {
+			T instance = readBySystemIdentifier(resultClass, identifierClass, identifier);
+			if(instance == null)
+				return null;
+			____setAll____(List.of(instance));
+			return instance;
+		}
+		
+		@Override
+		public <T> T readBySystemIdentifierWithAll(Class<T> resultClass, String identifier) {
+			return readBySystemIdentifierWithAll(resultClass, String.class, identifier);
+		}
+		
+		@Override
 		public <T, I> Collection<T> readByBusinessIdentifiers(Class<T> resultClass, Class<I> identifierClass,Collection<I> identifiers) {
 			validateIdentifiers(resultClass, identifierClass, identifiers);
-			String queryIdentifier = QueryIdentifierGetter.getInstance().get(resultClass, QueryName.READ_BY_BUSINESS_IDENTIFIERS);
-			ThrowableHelper.throwIllegalArgumentExceptionIfBlank("read by business identifiers query identifier of "+resultClass, queryIdentifier);
-			return QueryExecutor.getInstance().executeReadMany(resultClass, queryIdentifier, PARAMETER_NAME_IDENTIFIERS,identifiers);
+			return QueryExecutor.getInstance().executeReadMany(resultClass
+					, QueryExecutorArguments.instantiate(resultClass, QueryName.READ_BY_BUSINESS_IDENTIFIERS).addFilterFieldsValues(PARAMETER_NAME_IDENTIFIERS,identifiers));
 		}
 		
 		@Override
 		public <T> Collection<T> readByBusinessIdentifiers(Class<T> resultClass, Collection<String> identifiers) {
 			return readByBusinessIdentifiers(resultClass,String.class, identifiers);
 		}
-	
+
+		
 		@Override
 		public <T> Collection<T> read(Class<T> resultClass, QueryExecutorArguments arguments) {
 			if(resultClass == null)
@@ -101,6 +156,7 @@ public interface Querier {
 		T readOne(QueryExecutorArguments arguments);
 		Collection<T> readMany(QueryExecutorArguments arguments);
 		Long count(QueryExecutorArguments arguments);
+		Long count();
 		
 		Collection<T> read();
 		
@@ -162,6 +218,8 @@ public interface Querier {
 			public Collection<T> readMany(QueryExecutorArguments arguments) {
 				if(QueryIdentifierGetter.getInstance().get(getKlass(), QueryName.READ_WHERE_CODE_OR_NAME_LIKE).equals(arguments.getQuery().getIdentifier()))
 					return (Collection<T>) readWhereCodeOrNameLike(arguments);
+				if(QueryIdentifierGetter.getInstance().get(getKlass(), QueryName.READ).equals(arguments.getQuery().getIdentifier()))
+					return QueryExecutor.getInstance().executeReadMany(getKlass(), arguments);
 				throw new RuntimeException(arguments.getQuery().getIdentifier()+" cannot be processed by "+getClass());
 			}
 			
@@ -169,22 +227,29 @@ public interface Querier {
 			public Long count(QueryExecutorArguments arguments) {
 				if(QueryIdentifierGetter.getInstance().get(getKlass(), QueryName.COUNT_WHERE_CODE_OR_NAME_LIKE).equals(arguments.getQuery().getIdentifier()))
 					return countWhereCodeOrNameLike(arguments);
+				if(QueryIdentifierGetter.getInstance().get(getKlass(), QueryName.COUNT).equals(arguments.getQuery().getIdentifier()))
+					return QueryExecutor.getInstance().executeCount(arguments);
 				throw new RuntimeException(arguments.getQuery().getIdentifier()+" cannot be processed by "+getClass());
 			}
 			
 			@Override
+			public Long count() {
+				return count(QueryExecutorArguments.instantiate(getKlass(), QueryName.COUNT));
+			}
+			
+			@Override
 			public Collection<T> readWhereCodeOrNameLike(QueryExecutorArguments arguments) {
-				prepareWhereFilter(arguments);
+				prepareWhereCodeOrNameLike(arguments);
 				return QueryExecutor.getInstance().executeReadMany(getKlass(), arguments);
 			}
 			
 			@Override
 			public Long countWhereCodeOrNameLike(QueryExecutorArguments arguments) {
-				prepareWhereFilter(arguments);
+				prepareWhereCodeOrNameLike(arguments);
 				return QueryExecutor.getInstance().executeCount(arguments);
 			}
 			
-			protected void prepareWhereFilter(QueryExecutorArguments arguments) {
+			protected void prepareWhereCodeOrNameLike(QueryExecutorArguments arguments) {
 				Filter filter = new Filter();
 				filter.addFieldContains(PARAMETER_NAME_CODE, arguments);
 				filter.addFieldContainsStringOrWords(PARAMETER_NAME_NAME, NUMBER_OF_WORDS_OF_PARAMETER_NAME_NAME, arguments);

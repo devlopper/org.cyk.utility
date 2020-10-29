@@ -54,7 +54,9 @@
 				<ui:define name="columnsBody">		 				
 					<ui:decorate template="__columns__header.xhtml" />				
 					<ui:decorate template="__columns__filter.xhtml" />
-					<ui:decorate template="__columns__bodies.xhtml" />
+					<ui:insert name="collectionColumnsAfterRowIndexBodies">
+						<ui:decorate template="__columns__bodies.xhtml" />
+					</ui:insert>
 					<ui:decorate template="__columns__footer.xhtml" />
 				</ui:define>
 	 		</ui:decorate>

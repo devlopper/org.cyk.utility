@@ -31,7 +31,7 @@ public class Column extends AbstractObject implements Serializable {
 	private FilterInputType filterInputType;
 	private Collection<SelectItem> filterInputSelectItems;
 	private String headerText,footerText,footerStyle,footerStyleClass,selectionMode,width,filterBy,fieldName,field;
-	private Boolean visible = Boolean.TRUE;
+	private Boolean visible = Boolean.TRUE,inputable;
 	private Object filterValue;
 	private Integer index;
 	private OutputText footerOutputText;
@@ -61,6 +61,7 @@ public class Column extends AbstractObject implements Serializable {
 	public static final String FIELD_VISIBLE = "visible";
 	public static final String FIELD_VALUE_TYPE = "valueType";
 	public static final String FIELD_REMOVE_COMMAND_BUTTON = "removeCommandButton";
+	public static final String FIELD_INPUTABLE = "inputable";
 	
 	/**/
 	

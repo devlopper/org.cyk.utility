@@ -18,6 +18,10 @@ import org.cyk.utility.__kernel__.constant.ConstantSeparator;
 
 public interface StringHelper {
 
+	static String getFirstWord(String strnig) {
+		return StringUtils.substringBefore(strnig, " ");
+	}
+	
 	static Boolean isEmpty(String string) {
 		return string == null || string.isEmpty();
 	}

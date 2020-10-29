@@ -8,6 +8,7 @@ import org.cyk.utility.__kernel__.CardinalPoint;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
+import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.map.MapInstance;
 import org.cyk.utility.__kernel__.object.Configurator;
 import org.cyk.utility.__kernel__.random.RandomHelper;
@@ -50,6 +51,18 @@ public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractOb
 	public AbstractObject hideOnComplete() {
 		PrimefacesHelper.executeOnComplete(PrimefacesHelper.formatScriptHide(widgetVar));
 		return this;
+	}
+	
+	public AbstractObject setBindingByDerivation(String beanPath) {
+		Object binding = deriveBinding(beanPath);
+		if(binding == null)
+			LogHelper.logWarning(String.format("Derivation of binding of %s under bean path %s is null.", getClass(),beanPath), getClass());
+		setBinding(binding);
+		return this;
+	}
+	
+	public Object deriveBinding(String beanPath) {
+		throw new RuntimeException(String.format("Derivation of binding of %s under bean path %s not yet implemented.",getClass(),beanPath));
 	}
 	
 	/**/

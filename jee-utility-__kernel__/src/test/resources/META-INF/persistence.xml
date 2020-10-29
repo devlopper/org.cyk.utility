@@ -189,6 +189,41 @@
 		</properties>
 	</persistence-unit>
 	
+	<persistence-unit name="jpa_em_unittest" transaction-type="RESOURCE_LOCAL">
+		<class>org.cyk.utility.__kernel__.__entities__.JpaEntity</class>
+		<class>org.cyk.utility.__kernel__.__entities__.JpaEntityVersion</class>
+		<exclude-unlisted-classes>true</exclude-unlisted-classes>
+		<properties>
+			<property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />
+		    <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:test" />
+		   	<property name="javax.persistence.jdbc.user" value="sa" />
+		  	<property name="javax.persistence.jdbc.password" value="" />  
+		  	<property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+		  	<property name="hibernate.hbm2ddl.auto" value="create-drop" />
+		  	<property name ="hibernate.show_sql" value = "true" />
+			<property name="hibernate.format_sql" value="true" />
+			<property name="hibernate.use_sql_comments" value="false"/>
+		</properties>
+	</persistence-unit>
+	
+	<persistence-unit name="jpa_em_unittest_oracle" transaction-type="RESOURCE_LOCAL">
+		<class>org.cyk.utility.__kernel__.__entities__.JpaEntity</class>
+		<class>org.cyk.utility.__kernel__.__entities__.JpaEntityVersion</class>
+		<class>org.cyk.utility.__kernel__.__entities__.JpaEntityCompositeId</class>
+		<class>org.cyk.utility.__kernel__.__entities__.JpaEntityCompositeIdClass</class>
+		<exclude-unlisted-classes>true</exclude-unlisted-classes>
+		<properties>
+			<property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver" />
+		    <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1521:XE" />
+		   	<property name="javax.persistence.jdbc.user" value="playground" />
+		  	<property name="javax.persistence.jdbc.password" value="playground" />  
+		  	<property name="hibernate.hbm2ddl.auto" value="validate" />
+		  	<property name ="hibernate.show_sql" value = "true" />
+			<property name="hibernate.format_sql" value="true" />
+			<property name="hibernate.use_sql_comments" value="false"/>
+		</properties>
+	</persistence-unit>
+	
 	<persistence-unit name="pu" transaction-type="RESOURCE_LOCAL">
 		<class>org.cyk.utility.__kernel__.__entities__.CodeAndName</class>
 		<class>org.cyk.utility.__kernel__.__entities__.TestedEntityParent</class>
@@ -251,8 +286,6 @@
 		  	<property name ="hibernate.show_sql" value = "true" />
 			<property name="hibernate.format_sql" value="true" />
 			<property name="hibernate.use_sql_comments" value="false"/>
-			
-			
 		</properties>
 	</persistence-unit>
 

@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import javax.faces.component.UIComponent;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
@@ -69,6 +71,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	protected AbstractMenu recordMenu;
 	protected ControllerEntity<Object> controllerEntity;
 	protected CommandButton saveCommandButton;
+	protected Map<String,UIComponent> cellsBindings;
 	
 	/**/
 	
@@ -363,6 +366,10 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 		return this;
 	}
 	
+	public Boolean hasRecordMenuItems() {
+		return recordMenu != null && CollectionHelper.isNotEmpty(recordMenu.getItems());
+	}
+	
 	/**/
 	
 	public static final String FIELD_ELEMENT_CLASS = "elementClass";
@@ -379,6 +386,8 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	public static final String FIELD_EDITABLE = "editable";
 	public static final String FIELD_EDIT_MODE = "editMode";
 	public static final String FIELD_RENDER_TYPE = "renderType";
+	public static final String FIELD_SELECTION = "selection";
+	public static final String FIELD_SELECTION_AS_COLLECTION = "selectionAsCollection";
 	
 	/**/
 	
@@ -484,13 +493,15 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 			else if(ContextMenu.class.equals(recordMenuClass))
 				collection.recordMenu = ContextMenu.build();
 			*/
-			Collection<Map<Object,Object>> recordMenuItemsByArguments = (Collection<Map<Object, Object>>) MapHelper.readByKey(arguments, FIELD_RECORD_MENU_ITEMS_BY_ARGUMENTS);
-			if(CollectionHelper.isNotEmpty(recordMenuItemsByArguments)) {
-				for(Map<Object,Object> map : recordMenuItemsByArguments)
-					MapHelper.writeByKey(map, MenuItem.ConfiguratorImpl.FIELD_UPDATABLES, CollectionHelper.listOf(collection), Boolean.FALSE);
-			}			
-			collection.getRecordMenu(Boolean.TRUE).addItemsByArguments(recordMenuItemsByArguments);
-			
+			if(!Boolean.TRUE.equals(MapHelper.readByKey(arguments, FIELD_RECORD_MENU_NULLABLE))) {
+				Collection<Map<Object,Object>> recordMenuItemsByArguments = (Collection<Map<Object, Object>>) MapHelper.readByKey(arguments, FIELD_RECORD_MENU_ITEMS_BY_ARGUMENTS);
+				if(CollectionHelper.isNotEmpty(recordMenuItemsByArguments)) {
+					for(Map<Object,Object> map : recordMenuItemsByArguments)
+						MapHelper.writeByKey(map, MenuItem.ConfiguratorImpl.FIELD_UPDATABLES, CollectionHelper.listOf(collection), Boolean.FALSE);
+				}
+				if(CollectionHelper.isNotEmpty(recordMenuItemsByArguments))
+					collection.getRecordMenu(Boolean.TRUE).addItemsByArguments(recordMenuItemsByArguments);
+			}		
 			if(collection.title == null) {
 				if(StringHelper.isNotBlank((String) MapHelper.readByKey(arguments, FIELD_TITLE_VALUE)))
 					collection.title = OutputText.build(OutputText.FIELD_VALUE,MapHelper.readByKey(arguments, FIELD_TITLE_VALUE));
@@ -527,6 +538,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 		public static final String FIELD_RECORD_MENU_CLASS = "recordMenuClass";
 		public static final String FIELD_RECORD_ACTIONS = "recordActions";
 		public static final String FIELD_ACTIONS = "actions";
+		public static final String FIELD_RECORD_MENU_NULLABLE = "recordMenuNullable";
 	}
 
 	/**/

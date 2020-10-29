@@ -12,8 +12,8 @@
 	<ui:insert name="afterDataTable">
 		<ui:insert name="afterDataTable_contextMenu">
 			<!-- Commands in context menu in order to render in less time -->
-			<ui:fragment rendered="#{dataTable.recordMenu.class.simpleName eq 'ContextMenu' and not dataTable.recordMenu.items.isEmpty()}">
-		 		<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.recordMenu)}">
+			<ui:fragment rendered="#{dataTable.recordMenu.class.simpleName eq 'ContextMenu' and dataTable.hasRecordMenuItems()}">
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.recordMenu)}">
 		    		<ui:param name="contextMenu" value="#{dataTable.recordMenu}"/>
 		    	</ui:decorate>
 		 	</ui:fragment>	
