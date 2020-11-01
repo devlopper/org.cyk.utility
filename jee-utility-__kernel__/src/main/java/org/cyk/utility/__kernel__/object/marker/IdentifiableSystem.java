@@ -36,7 +36,11 @@ public interface IdentifiableSystem<IDENTIFIER> extends Identifiable<IDENTIFIER>
 		//if business identifier is not null then we assign business identifier to system identifier else we generate one			
 		identifier = FieldHelper.readBusinessIdentifier(object);
 		if(identifier == null)
-			identifier = UUID.randomUUID().toString();			
+			identifier = generateRandomly();			
 		((IdentifiableSystem<Object>)object).setSystemIdentifier(identifier);				
+	}
+	
+	static String generateRandomly() {
+		return UUID.randomUUID().toString();					
 	}
 }

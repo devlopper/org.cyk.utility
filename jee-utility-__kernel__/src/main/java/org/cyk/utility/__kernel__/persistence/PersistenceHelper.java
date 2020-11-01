@@ -6,6 +6,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.EntityManager;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -180,36 +182,64 @@ public interface PersistenceHelper {
 			if(names == null)
 				names = new LinkedHashSet<>();		
 			map.put(name,field);
+			Id id = field.getAnnotation(Id.class);
+			if(id != null)
+				CLASS_PRIMARY_KEY_COLUMN_NAME.put(klass, name);
 			names.add(name);
 		}	
 		CLASS_COLUMNS_NAMES.put(klass, names);
 		return names;
 	}
 	
-	static Collection<Object> getColumnsValues(Object object) {
+	static Collection<String> getColumnsValues(Object object) {
 		if(object == null)
 			return null;
 		Collection<String> names = getColumnsNames(object.getClass());
 		if(CollectionHelper.isEmpty(names))
 			return null;
-		Collection<Object> values = new ArrayList<>();
+		Collection<String> values = new ArrayList<>();
 		for(String name : names) {
 			Field field = COLUMN_NAME_FIELD.get(object.getClass()).get(name);
-			Object value = FieldHelper.read(object, field);
-			if(value != null) {
-				if(!ClassHelper.isBelongsToJavaPackages(value.getClass()))
-					value = FieldHelper.readSystemIdentifier(value);
-				if(String.class.equals(value.getClass()))
-					value = "'"+value+"'";	
-			}				
+			String value = stringifyColumnValue(FieldHelper.read(object, field));	
 			values.add(value);
 		}
 		return values;
 	}
 	
+	static String stringifyColumnValue(Object value) {
+		if(value == null)
+			return null;	
+		if(!ClassHelper.isBelongsToJavaPackages(value.getClass()))
+			value = FieldHelper.readSystemIdentifier(value);
+		if(String.class.equals(value.getClass()))
+			value = "'"+value+"'";		
+		return value.toString();
+	}
+	
+	static Map<String,String> getColumnsValuesAsMap(Object object) {
+		if(object == null)
+			return null;
+		Collection<String> names = getColumnsNames(object.getClass());
+		if(CollectionHelper.isEmpty(names))
+			return null;
+		Map<String,String> map = new LinkedHashMap<>();
+		for(String name : names) {
+			Field field = COLUMN_NAME_FIELD.get(object.getClass()).get(name);
+			String value =stringifyColumnValue(FieldHelper.read(object, field));
+			map.put(name,value);
+		}
+		return map;
+	}
+	
+	static String getPrimaryKeyColumnName(Class<?> klass) {
+		getColumnsNames(klass);
+		return CLASS_PRIMARY_KEY_COLUMN_NAME.get(klass);
+	}
+	
 	/**/
 	
 	Map<Class<?>,String> CLASS_TABLE_NAME = new HashMap<>();
+	Map<Class<?>,String> CLASS_PRIMARY_KEY_COLUMN_NAME = new HashMap<>();
 	Map<Class<?>,Set<String>> CLASS_COLUMNS_NAMES = new HashMap<>();
 	Map<Class<?>,Map<String,Field>> COLUMN_NAME_FIELD = new HashMap<>();
 }

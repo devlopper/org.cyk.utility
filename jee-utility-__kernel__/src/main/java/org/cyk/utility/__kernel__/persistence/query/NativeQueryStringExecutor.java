@@ -33,8 +33,14 @@ public interface NativeQueryStringExecutor {
 	
 		@Override
 		public void execute(Arguments arguments) {
-			if(arguments == null || CollectionHelper.isEmpty(arguments.queriesStrings))
+			if(arguments == null) {
+				LogHelper.logWarning("No arguments provided", getClass());
 				return;
+			}
+			if(CollectionHelper.isEmpty(arguments.queriesStrings)) {
+				LogHelper.logWarning("No queries strings provided", getClass());
+				return;
+			}
 			Long t0 = System.currentTimeMillis();
 			Collection<String> executablesQueriesStrings = arguments.queriesStrings.stream().filter(queryString -> StringHelper.isNotBlank(queryString)).collect(Collectors.toList());
 			LogHelper.log(String.format("#Q=%s , #EQ=%s", arguments.queriesStrings.size(),executablesQueriesStrings.size()), arguments.logLevel, getClass());
