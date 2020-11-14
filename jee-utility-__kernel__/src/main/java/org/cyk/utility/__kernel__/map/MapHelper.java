@@ -150,6 +150,14 @@ public interface MapHelper {
 		return map;
 	}
 	
+	static Map<String,Object> instantiateStringObject(Object...objects) {
+		if(org.cyk.utility.__kernel__.array.ArrayHelper.isEmpty(objects))
+			return null;
+		Map<String, Object> map = new LinkedHashMap<String, Object>();
+		set(map,objects);
+		return map;
+	}
+	
 	static Map<String,Integer> instantiateStringInteger(Object...objects) {
 		if(org.cyk.utility.__kernel__.array.ArrayHelper.isEmpty(objects))
 			return null;

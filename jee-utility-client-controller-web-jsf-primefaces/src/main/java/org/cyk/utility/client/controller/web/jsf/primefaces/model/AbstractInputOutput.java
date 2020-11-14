@@ -8,9 +8,12 @@ import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 import java.util.Map;
 
+import javax.faces.component.UIComponent;
+
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.client.controller.web.jsf.JavaServerFacesHelper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -29,6 +32,13 @@ public abstract class AbstractInputOutput<VALUE> extends AbstractObjectAjaxable 
 	public AbstractInputOutput<VALUE> readValueFromField() {
 		if(object != null && field != null)
 			value = (VALUE) FieldHelper.read(object, field);
+		return this;
+	}
+	
+	public AbstractObject setBindingByDerivation(String beanPath,String valuePath) {
+		setBindingByDerivation(beanPath);
+		UIComponent component = (UIComponent) binding;
+		__inject__(JavaServerFacesHelper.class).setValueExpression(component, "value", JavaServerFacesHelper.buildValueExpression("#{"+valuePath+"}", Object.class));
 		return this;
 	}
 	

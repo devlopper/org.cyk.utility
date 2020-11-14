@@ -8,7 +8,6 @@ import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.web.jsf.JavaServerFacesHelper;
-import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObject;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -35,13 +34,6 @@ public class SelectBooleanButton extends AbstractInput<Boolean> implements Seria
 			__inject__(JavaServerFacesHelper.class).setValueExpression(component, property, JavaServerFacesHelper.buildValueExpression(String.format("#{%s.%s}",beanPath,array[0]), klass));
 		}
 		return component;
-	}
-	
-	public AbstractObject setBindingByDerivation(String beanPath,String valuePath) {
-		setBindingByDerivation(beanPath);
-		org.primefaces.component.selectbooleanbutton.SelectBooleanButton component = (org.primefaces.component.selectbooleanbutton.SelectBooleanButton) binding;
-		__inject__(JavaServerFacesHelper.class).setValueExpression(component, "value", JavaServerFacesHelper.buildValueExpression("#{"+valuePath+"}", Object.class));
-		return this;
 	}
 	
 	/**/

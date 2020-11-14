@@ -38,14 +38,14 @@ public abstract class AbstractWeldUnitTestBenchmark extends AbstractWeldUnitTest
 			if(jobs.jobHavingHighestNumberOfMillisecond == null || index.numberOfMillisecond > jobs.jobHavingHighestNumberOfMillisecond.numberOfMillisecond)
 				jobs.jobHavingHighestNumberOfMillisecond = index;
 		}
-		//System.out.println(String.format("----    BEST CHOICE IS : %s    ----",jobs.jobHavingLowestNumberOfMillisecond.name));
+		System.out.println(String.format("----    BEST CHOICE IS : %s    ----",jobs.jobHavingLowestNumberOfMillisecond.name));
 		jobs.sort();
-		//System.out.println("          ----    ORDER    ----");
+		System.out.println("          ----    ORDER    ----");
 		for(Integer index = 0 ; index < jobs.collection.size() ; index = index + 1) {
 			Job job = jobs.collection.get(index);
 			System.out.println(String.format("          ----    %s - %s - %s - %s    ----",index+1,job.name,job.numberOfMillisecond,job.rate));
 		}
-		//System.out.println(String.format("****    Field benchmark <<%s>> is done.    ****",jobs.name));
+		System.out.println(String.format("****    Field benchmark <<%s>> is done.    ****",jobs.name));
 	}
 	
 	/**/

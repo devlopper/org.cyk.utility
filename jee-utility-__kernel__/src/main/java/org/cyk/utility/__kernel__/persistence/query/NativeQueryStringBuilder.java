@@ -4,14 +4,17 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.persistence.PersistenceHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 
 public interface NativeQueryStringBuilder {
@@ -27,6 +30,10 @@ public interface NativeQueryStringBuilder {
 	
 	String buildDeleteManyByIdentifiers(Class<?> klass,Collection<Object> identifiers);
 	<T> String buildDeleteMany(Class<T> klass,Collection<Object> objects);
+	
+	Collection<String> buildDeleteManyByIdentifiersByBatches(Class<?> klass,List<Object> identifiers,Integer batchSize);
+	<T> Collection<String> buildDeleteManyByBatches(Class<T> klass,List<Object> objects,Integer batchSize);
+	
 	/**/
 	
 	public static abstract class AbstractImpl extends AbstractObject implements NativeQueryStringBuilder,Serializable {
@@ -107,6 +114,38 @@ public interface NativeQueryStringBuilder {
 			String identifierName = getPrimaryKeyColumnName(klass);
 			return String.format(DELETE_BY_IDENTIFIERS_FORMAT, tableName,identifierName,identifiers.stream()
 					.map(identifier -> PersistenceHelper.stringifyColumnValue(identifier)).collect(Collectors.joining(",")));
+		}
+		
+		@Override
+		public <T> Collection<String> buildDeleteManyByBatches(Class<T> klass, List<Object> objects,Integer batchSize) {
+			ThrowableHelper.throwIllegalArgumentExceptionIfNull("klass", klass);
+			ThrowableHelper.throwIllegalArgumentExceptionIfEmpty("objects", objects);
+			Collection<String> queries = null;
+			for(List<Object> batch : CollectionHelper.getBatches(objects, batchSize)) {
+				String query = buildDeleteMany(klass, batch);
+				if(StringHelper.isBlank(query))
+					continue;
+				if(queries == null)
+					queries = new ArrayList<>();
+				queries.add(query);
+			}
+			return queries;
+		}
+		
+		@Override
+		public Collection<String> buildDeleteManyByIdentifiersByBatches(Class<?> klass, List<Object> identifiers,Integer batchSize) {
+			ThrowableHelper.throwIllegalArgumentExceptionIfNull("klass", klass);
+			ThrowableHelper.throwIllegalArgumentExceptionIfEmpty("identifiers", identifiers);
+			Collection<String> queries = null;
+			for(List<Object> batch : CollectionHelper.getBatches(identifiers, batchSize)) {
+				String query = buildDeleteManyByIdentifiers(klass, batch);
+				if(StringHelper.isBlank(query))
+					continue;
+				if(queries == null)
+					queries = new ArrayList<>();
+				queries.add(query);
+			}
+			return queries;
 		}
 		
 		/**/

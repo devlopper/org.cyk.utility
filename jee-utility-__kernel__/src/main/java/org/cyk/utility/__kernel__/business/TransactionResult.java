@@ -7,6 +7,7 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
+import org.cyk.utility.__kernel__.time.TimeHelper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +16,7 @@ import lombok.experimental.Accessors;
 @Getter @Setter @Accessors(chain=true)
 public class TransactionResult implements Serializable {
 	
+	private String name;
 	private Long startingTime = System.currentTimeMillis(),stoppingTime;
 	private Long numberOfCreation;
 	private Long numberOfUpdate;
@@ -51,6 +53,8 @@ public class TransactionResult implements Serializable {
 	/**/
 	
 	public TransactionResult add(TransactionResult result) {
+		if(result == null)
+			return this;
 		numberOfCreation = NumberHelper.getLong(NumberHelper.add(numberOfCreation,result.numberOfCreation));
 		numberOfUpdate = NumberHelper.getLong(NumberHelper.add(numberOfUpdate,result.numberOfUpdate));
 		numberOfDeletion = NumberHelper.getLong(NumberHelper.add(numberOfDeletion,result.numberOfDeletion));
@@ -60,8 +64,8 @@ public class TransactionResult implements Serializable {
 	/**/
 	
 	public TransactionResult log(Class<?> klass,Long duration) {
-		LogHelper.logInfo(String.format("%s , %s et %s enregistrement(s) respectivement créé(s) , mis à jour et supprimé(s) en %s", numberOfCreation,numberOfUpdate,numberOfDeletion
-				,duration), klass);
+		LogHelper.logInfo(String.format("%s exécuté(e) en %s. %s => %s(C) %s(U) %s(D)."
+				, name,TimeHelper.formatDuration(duration),tupleName,numberOfCreation,numberOfUpdate,numberOfDeletion), klass);
 		return this;
 	}
 	

@@ -408,8 +408,20 @@ public interface Language {
 			return String.format(ORDER, order);
 		}
 		
-		static String order(String order) {
-			return of(order);
+		static String of(Collection<String> strings) {
+			if(CollectionHelper.isEmpty(strings))
+				return ConstantEmpty.STRING;
+			return of(StringHelper.concatenate(strings, ","));
+		}
+		
+		static String order(Collection<String> strings) {
+			return of(strings);
+		}
+		
+		static String order(String...strings) {
+			if(ArrayHelper.isEmpty(strings))
+				return ConstantEmpty.STRING;
+			return order(CollectionHelper.listOf(strings));
 		}
 		
 		static String ascending(String tupleName,String fieldName) {
