@@ -5,9 +5,11 @@ import java.util.Collection;
 import java.util.logging.Level;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -34,11 +36,26 @@ import io.swagger.annotations.ApiOperation;
 public interface EntityReader {
 
 	@POST
-	@Path(PATH_READ)
+	@Path(PATH_READ_BY_POST)
 	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
 	@Produces({ MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML })
-	@ApiOperation(value = "read",tags = {"read"})
+	@ApiOperation(value = "Read using post method",tags = {TAG})
 	Response read(Arguments arguments);
+	
+	@GET
+	@Path(PATH_READ_BY_GET)
+	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+	@Produces({ MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML })
+	@ApiOperation(value = "Read using get method",tags = {TAG})
+	Response read(
+			@QueryParam(PARAMETER_NAME_REPRESENTATION_ENTITY_CLASS_NAME)String representationEntityClassName
+			,@QueryParam(PARAMETER_NAME_QUERY_IDENTIFIER) String queryIdentifier
+			,@QueryParam(PARAMETER_NAME_FILTER_AS_JSON)String filterAsJson
+			,@QueryParam(PARAMETER_NAME_FIRST_TUPLE_INDEX)Integer firstTupleIndex
+			,@QueryParam(PARAMETER_NAME_NUMBER_OF_TUPLES)Integer numberOfTuples
+			,@QueryParam(PARAMETER_NAME_COLLECTIONABLE)Boolean collectionable
+			,@QueryParam(PARAMETER_NAME_QUERY_COUNTABLE)Boolean countable
+		);
 	
 	/**/
 	
@@ -116,6 +133,17 @@ public interface EntityReader {
 		@Override
 		public Response read(Arguments arguments) {
 			return execute(arguments);
+		}
+		
+		@Override
+		public Response read(String representationEntityClassName,String queryIdentifier, String filterAsJson, Integer firstTupleIndex,Integer numberOfTuples
+				, Boolean collectionable,Boolean countable) {
+			Arguments arguments = new Arguments();
+			arguments.setRepresentationEntityClassName(representationEntityClassName);
+			arguments.setCountable(countable);
+			arguments.setQueryExecutorArguments(new QueryExecutorArguments.Dto().setQueryIdentifier(queryIdentifier).setFirstTupleIndex(firstTupleIndex)
+					.setNumberOfTuples(numberOfTuples).setCollectionable(collectionable));
+			return read(arguments);
 		}
 		
 		/*
@@ -200,5 +228,16 @@ public interface EntityReader {
 	Value INSTANCE = new Value();
 	
 	String PATH = "/cyk/entity/reader";
-	String PATH_READ = "read";
+	String PATH_READ_BY_POST = "post";
+	String PATH_READ_BY_GET = "get";
+	
+	String TAG = "Generic Read Interface";
+	
+	String PARAMETER_NAME_REPRESENTATION_ENTITY_CLASS_NAME = "representationEntityClassName";
+	String PARAMETER_NAME_QUERY_IDENTIFIER = "queryIdentifier";
+	String PARAMETER_NAME_FILTER_AS_JSON = "filterAsJson";
+	String PARAMETER_NAME_FIRST_TUPLE_INDEX = "firstTupleIndex";
+	String PARAMETER_NAME_NUMBER_OF_TUPLES = "numberOfTuples";
+	String PARAMETER_NAME_COLLECTIONABLE = "collectionable";
+	String PARAMETER_NAME_QUERY_COUNTABLE = "countable";
 }

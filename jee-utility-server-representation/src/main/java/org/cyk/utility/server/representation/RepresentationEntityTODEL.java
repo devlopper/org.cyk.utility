@@ -17,7 +17,6 @@ import javax.ws.rs.core.Response;
 
 import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 /**
@@ -25,7 +24,6 @@ import io.swagger.annotations.ApiOperation;
  * @author Christian
  *
  */
-@Api
 public interface RepresentationEntityTODEL<PERSISTENCE_ENTITY,ENTITY,ENTITY_COLLECTION> extends RepresentationServiceProvider {
 
 	/* Create */

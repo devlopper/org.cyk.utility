@@ -51,6 +51,7 @@ public interface Representation extends RepresentationServiceProvider {
 	
 	@DELETE
 	@Path(PATH_DELETE_ALL)
+	@ApiOperation(value = TAG_DELETE,tags = {TAG_DELETE},hidden = true)
 	Response deleteAll();
 	
 	/**/
@@ -58,7 +59,7 @@ public interface Representation extends RepresentationServiceProvider {
 	@POST
 	@Path("data/load")
 	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-	@ApiOperation(value = TAG_LOAD,tags = {TAG_LOAD})
+	@ApiOperation(value = TAG_LOAD,tags = {TAG_LOAD},hidden = true)
 	Response loadData();
 	
 	/**/

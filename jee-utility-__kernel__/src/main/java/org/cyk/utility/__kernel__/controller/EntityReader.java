@@ -67,9 +67,13 @@ public interface EntityReader {
 				arguments.setResponseEntityClass(controllerEntityClass);
 			arguments.prepare(controllerEntityClass, org.cyk.utility.__kernel__.representation.EntityReader.class);
 			arguments.__representationArguments__.getQueryExecutorArguments(Boolean.TRUE).setCollectionable(Boolean.FALSE);
-			Response response = ((org.cyk.utility.__kernel__.representation.EntityReader)arguments.__representation__).read(arguments.__representationArguments__);
+			Response response = __readOne__(controllerEntityClass, arguments);
 			arguments.finalise(response);
 			return (ENTITY) arguments.__responseEntity__;	
+		}
+		
+		protected <ENTITY> Response __readOne__(Class<ENTITY> controllerEntityClass, Arguments<ENTITY> arguments) {
+			return ((org.cyk.utility.__kernel__.representation.EntityReader)arguments.__representation__).read(arguments.__representationArguments__);
 		}
 	}
 	

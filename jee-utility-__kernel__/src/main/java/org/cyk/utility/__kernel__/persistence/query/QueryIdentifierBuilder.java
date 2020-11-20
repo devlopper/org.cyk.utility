@@ -71,6 +71,18 @@ public interface QueryIdentifierBuilder {
 		return Helper.getInstance(QueryIdentifierBuilder.class, INSTANCE);
 	}
 	
+	static Boolean builtFrom(String identifier,Class<?> klass) {
+		if(StringHelper.isBlank(identifier) || klass == null)
+			return null;
+		return StringUtils.startsWith(identifier,klass.getSimpleName()+".");
+	}
+	
+	static Boolean builtFrom(QueryExecutorArguments arguments,Class<?> klass) {
+		if(arguments == null || arguments.getQuery() == null)
+			return null;
+		return builtFrom(arguments.getQuery().getIdentifier(), klass);
+	}
+	
 	Value INSTANCE = new Value();
 	String FORMAT = "%s.%s";
 	
