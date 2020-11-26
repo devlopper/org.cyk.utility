@@ -29,15 +29,19 @@ public class ThrowableUnitTest extends AbstractWeldUnitTest {
 	
 	@Test
 	public void mapRuntimeExceptionToDto(){
-		RuntimeException runtimeException = new RuntimeException("something happens");
+		RuntimeException runtimeException = new RuntimeException("something happens").addMessages(new Message().setSummary("e01"));
 		RuntimeException.Dto dto = MappingHelper.getSource(runtimeException, RuntimeException.Dto.class);
 		assertThat(dto).isNotNull();
+		assertThat(dto.getMessages()).hasSize(1);
+		assertThat(dto.getMessages().iterator().next().getSummary()).isEqualTo("e01");
 	}
 	
 	@Test
 	public void mapDtoToRuntimeException(){
-		RuntimeException.Dto dto = new RuntimeException.Dto();
+		RuntimeException.Dto dto = new RuntimeException.Dto().addMessages(new Message.Dto().setSummary("e01"));
 		RuntimeException runtimeException = MappingHelper.getDestination(dto, RuntimeException.class);
 		assertThat(runtimeException).isNotNull();
+		assertThat(runtimeException.getMessages()).hasSize(1);
+		assertThat(runtimeException.getMessages().iterator().next().getSummary()).isEqualTo("e01");
 	}
 }

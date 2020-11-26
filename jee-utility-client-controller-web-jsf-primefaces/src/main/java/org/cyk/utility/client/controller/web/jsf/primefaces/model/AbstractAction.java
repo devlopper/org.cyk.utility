@@ -27,6 +27,7 @@ import org.cyk.utility.__kernel__.runnable.Runner;
 import org.cyk.utility.__kernel__.session.SessionHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.user.interface_.UserInterfaceAction;
 import org.cyk.utility.__kernel__.user.interface_.message.MessageRenderer;
 import org.cyk.utility.__kernel__.user.interface_.message.RenderType;
@@ -583,7 +584,15 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 									try {
 										return method.invoke(object);
 									} catch (Exception exception) {
-										throw new RuntimeException(exception);
+										Throwable cause = ThrowableHelper.getInstanceOf(exception, RuntimeException.class);
+										if(cause == null)
+											cause = exception;
+										java.lang.RuntimeException runtimeException = null;
+										if(cause instanceof RuntimeException)
+											runtimeException = new java.lang.RuntimeException(((RuntimeException)cause).computeMessage());
+										else
+											runtimeException = new java.lang.RuntimeException(exception);
+										throw runtimeException;
 									}
 								}
 							};							

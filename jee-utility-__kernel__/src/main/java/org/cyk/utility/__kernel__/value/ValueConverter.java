@@ -26,6 +26,8 @@ public interface ValueConverter {
 	default <T> T convert(Object value,Class<T> klass) {
 		if(value == null)
 			return null;
+		if(value.getClass().equals(klass))
+			return (T) value;
 		if(String.class.equals(klass)) {
 			if(value instanceof String)
 				return (T) value;

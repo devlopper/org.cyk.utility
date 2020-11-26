@@ -32,7 +32,7 @@ public abstract class AbstractEntityEditPageContainerManagedImpl<ENTITY> extends
 	}
 	
 	protected void setActionFromRequestParameter() {
-		action = WebController.getInstance().getRequestParameterAction();
+		action = WebController.getInstance().computeActionFromRequestParameter();
 	}
 	
 	protected Form __buildForm__() {

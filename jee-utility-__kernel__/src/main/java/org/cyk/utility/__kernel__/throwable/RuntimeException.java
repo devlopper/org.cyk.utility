@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.mapping.MapperSourceDestination;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 
@@ -56,6 +58,18 @@ public class RuntimeException extends java.lang.RuntimeException implements Seri
 		if(ArrayHelper.isEmpty(messages))
 			return this;
 		return addMessages(CollectionHelper.listOf(messages));
+	}
+	
+	public String computeMessage() {
+		if(CollectionHelper.isEmpty(messages))
+			return getMessage();
+		Integer index = 1;
+		Collection<String> strings = new ArrayList<>();
+		for(Message message : messages) {
+			strings.add((messages.size() == 1 ? ConstantEmpty.STRING : (index+" - "))+message.getSummary());
+			index = index + 1;
+		}
+		return StringUtils.join(strings,"\n\r");
 	}
 	
 	@Override
@@ -118,7 +132,7 @@ public class RuntimeException extends java.lang.RuntimeException implements Seri
 			protected void __listenGetSourceAfter__(RuntimeException destination, Dto source) {
 				super.__listenGetSourceAfter__(destination, source);
 				source.setMessage(destination.getMessage());
-			}			
+			}
 		}
 	}
 }

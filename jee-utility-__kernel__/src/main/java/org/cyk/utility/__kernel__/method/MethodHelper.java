@@ -9,6 +9,7 @@ import java.util.Collection;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 
 public interface MethodHelper {
 
@@ -56,4 +57,14 @@ public interface MethodHelper {
 		return collection;
 	}
 	
+	static Object executeStatic(Class<?> klass,String name) {
+		ThrowableHelper.throwIllegalArgumentExceptionIfNull("class", klass);
+		ThrowableHelper.throwIllegalArgumentExceptionIfBlank("name", name);
+		try {
+			return MethodUtils.invokeExactStaticMethod(klass, name);
+		} catch (Exception exception) {
+			exception.printStackTrace();
+			throw new RuntimeException(exception);
+		}
+	}
 }

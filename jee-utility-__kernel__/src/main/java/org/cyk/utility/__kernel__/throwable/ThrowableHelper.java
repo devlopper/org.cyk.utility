@@ -50,6 +50,18 @@ public interface ThrowableHelper {
 		return cause;
 	}
 
+	static java.lang.Throwable getCause(java.lang.Throwable throwable) {
+		if(throwable == null)
+			return null;
+		Throwable cause = getInstanceOf(throwable, org.cyk.utility.__kernel__.throwable.RuntimeException.class);
+		if(cause == null) {
+			cause = getFirstCause(throwable);
+			if(cause == null)
+				cause = throwable;
+		}
+		return cause;
+	}
+	
 	static void throwRuntimeExceptionIfTrue(Boolean condition, String message) {
 		if(Boolean.TRUE.equals(condition))
 			throw new java.lang.RuntimeException(message);

@@ -79,48 +79,48 @@ public interface Runner {
 				}			
 			} catch (Exception exception) {
 				LogHelper.log(exception, getClass());
-				if(arguments.throwableMessageArguments == null) {
-					throw new RuntimeException(exception);
+				Throwable cause = ThrowableHelper.getCause(exception);
+				arguments.throwable = cause;
+				if(Boolean.TRUE.equals(arguments.throwableCatchableOnly)) {
+					
 				}else {
-					Throwable throwable = ThrowableHelper.getInstanceOf(exception, org.cyk.utility.__kernel__.throwable.RuntimeException.class);
-					arguments.message = new Message().setSeverity(arguments.throwableMessageArguments.getSeverity());
-					if(throwable instanceof org.cyk.utility.__kernel__.throwable.RuntimeException) {
-						org.cyk.utility.__kernel__.throwable.RuntimeException runtimeException = (org.cyk.utility.__kernel__.throwable.RuntimeException) throwable;
-						if(CollectionHelper.isEmpty(runtimeException.getMessages())) {
-							arguments.message.setSummary(runtimeException.getMessage());
-							arguments.message.setDetails(runtimeException.getMessage());
-						}else {
-							Collection<String> summaries = new ArrayList<>();
-							Collection<String> details = new ArrayList<>();
-							Integer count = 1;
-							for(org.cyk.utility.__kernel__.throwable.Message index : runtimeException.getMessages()) {
-								String summary = index.getSummary();
-								String detail = index.getDetails();
-								if(CollectionHelper.getSize(runtimeException.getMessages())> 1) {
-									summary = count+ " - " + summary;
-									detail = count+ " - " + detail;
-								}
-								summaries.add(summary);
-								details.add(detail);
-								count++;
-							}
-							arguments.message.setSummary(StringHelper.concatenate(summaries, "\r\n"));
-							arguments.message.setDetails(StringHelper.concatenate(details, "\r\n"));	
-						}					
+					if(arguments.throwableMessageArguments == null) {
+						throw cause instanceof RuntimeException ? (RuntimeException)cause : new RuntimeException(exception);
 					}else {
-						throwable = ThrowableHelper.getFirstCause(exception);
-						if(throwable == null)
-							throwable = exception;
-						arguments.message.setSummary(throwable.getMessage());
+						arguments.message = new Message().setSeverity(arguments.throwableMessageArguments.getSeverity());
+						if(cause instanceof org.cyk.utility.__kernel__.throwable.RuntimeException) {
+							org.cyk.utility.__kernel__.throwable.RuntimeException runtimeException = (org.cyk.utility.__kernel__.throwable.RuntimeException) cause;
+							if(CollectionHelper.isEmpty(runtimeException.getMessages())) {
+								arguments.message.setSummary(runtimeException.getMessage());
+								arguments.message.setDetails(runtimeException.getMessage());
+							}else {
+								Collection<String> summaries = new ArrayList<>();
+								Collection<String> details = new ArrayList<>();
+								Integer count = 1;
+								for(org.cyk.utility.__kernel__.throwable.Message index : runtimeException.getMessages()) {
+									String summary = index.getSummary();
+									String detail = index.getDetails();
+									if(CollectionHelper.getSize(runtimeException.getMessages())> 1) {
+										summary = count+ " - " + summary;
+										detail = count+ " - " + detail;
+									}
+									summaries.add(summary);
+									details.add(detail);
+									count++;
+								}
+								arguments.message.setSummary(StringHelper.concatenate(summaries, "\r\n"));
+								arguments.message.setDetails(StringHelper.concatenate(details, "\r\n"));	
+							}					
+						}else {
+							arguments.message.setSummary(cause.getMessage());
+						}
+						if(Boolean.TRUE.equals(ValueHelper.defaultToIfNull(arguments.messageRenderable, Boolean.TRUE)))
+							MessageRenderer.getInstance().render(arguments.message, arguments.throwableMessageArguments.getRenderTypes());
 					}
-					arguments.throwable = throwable;
-					if(Boolean.TRUE.equals(ValueHelper.defaultToIfNull(arguments.messageRenderable, Boolean.TRUE)))
-						MessageRenderer.getInstance().render(arguments.message, arguments.throwableMessageArguments.getRenderTypes());
-				}
+				}				
 			}
 			return arguments.getResult();
 		}
-		
 	}
 
 	
@@ -134,6 +134,7 @@ public interface Runner {
 		private Collection<Runnable> runnables;
 		private MessageRenderer.Arguments successMessageArguments;
 		private MessageRenderer.Arguments throwableMessageArguments;
+		private Boolean throwableCatchableOnly;
 		private Boolean messageRenderable;
 		private ExecutorService executorService;
 		private Long timeOut;

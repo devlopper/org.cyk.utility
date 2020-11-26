@@ -13,7 +13,7 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.persistence.EntityManagerGetter;
 import org.cyk.utility.__kernel__.value.Value;
-import org.jboss.weld.exceptions.IllegalArgumentException;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 
 public interface EntityFinder {
 
@@ -26,9 +26,14 @@ public interface EntityFinder {
 			throw new IllegalArgumentException("system identifier is required");
 		if(CollectionHelper.getSize(arguments.getSystemIdentifiers()) > 1)
 			throw new IllegalArgumentException("only one system identifier is required");
+		Object identifier = CollectionHelper.getFirst(arguments.getSystemIdentifiers());
+		if(ValueHelper.isBlank(identifier) && Boolean.TRUE.equals(arguments.getIsThrowExceptionIfIdentifierIsBlank()))
+			throw new IllegalArgumentException("identifier is required");
 		arguments.prepare(klass);
 		Map<String,Object> properties = arguments.getProperties() == null ? null : arguments.getProperties().deriveMap(klass, arguments.get__entityManager__());
-		T object = arguments.get__entityManager__().find(klass, CollectionHelper.getFirst(arguments.getSystemIdentifiers()),properties);
+		T object = arguments.get__entityManager__().find(klass, identifier,properties);
+		if(ValueHelper.isBlank(object) && Boolean.TRUE.equals(arguments.getIsThrowExceptionIfResultIsBlank()))
+			throw new IllegalArgumentException(String.format("%s identified by <<%s>> not found",klass.getSimpleName(),identifier));
 		if(object == null)
 			arguments.set__objects__(null);
 		else

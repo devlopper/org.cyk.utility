@@ -35,11 +35,13 @@ public interface RequestProcessor {
 				runnerArguments.addRunnables(runnable);
 			}
 			
+			if(runnerArguments.getThrowableCatchableOnly() == null)
+				runnerArguments.setThrowableCatchableOnly(Boolean.TRUE);
+			
 			request.execute(runnerArguments);
 			
 			if(runnerArguments.getThrowable() == null)
 				return request.getResponseWhenThrowableIsNull(runnerArguments);
-			
 			return ResponseBuilder.getInstance().build(runnerArguments.getThrowable());
 		}
 	}
@@ -63,7 +65,12 @@ public interface RequestProcessor {
 			
 			@Override
 			public void execute(Runner.Arguments arguments) {
-				Runner.getInstance().run(arguments);
+				try {
+					Runner.getInstance().run(arguments);
+				} catch (Exception exception) {
+					System.out.println("RequestProcessor.Request.AbstractImpl.execute() ::: "+exception.toString());
+					arguments.setThrowable(exception);
+				}
 			}
 			
 			protected String getResponseWhenThrowableIsNullAsString(Arguments runnerArguments) {

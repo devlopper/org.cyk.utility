@@ -61,6 +61,8 @@ public abstract class AbstractInput<VALUE> extends AbstractInputOutput<VALUE> im
 	
 	/**/
 	
+	public static final String FIELD_DISABLED = "disabled";
+	public static final String FIELD_READ_ONLY = "readOnly";
 	public static final String FIELD_REQUIRED = "required";
 	public static final String FIELD_REQUIRED_MESSAGE = "requiredMessage";
 	public static final String FIELD_VALIDATOR = "validator";

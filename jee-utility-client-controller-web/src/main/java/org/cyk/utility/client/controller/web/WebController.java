@@ -94,6 +94,21 @@ public class WebController extends AbstractObject implements Serializable {
 	
 	/**/
 	
+	public Action computeActionFromRequestParameter() {
+		Action action = getRequestParameterAction();
+		if(action == null) {			
+			String identifier = WebController.getInstance().getRequestParameter(ParameterName.ENTITY_IDENTIFIER.getValue());
+			if(StringHelper.isBlank(identifier)) {
+				
+			}else {
+				action = Action.READ;
+			}			
+		}
+		return action;
+	}
+	
+	/**/
+	
 	public static WebController getInstance() {
 		return DependencyInjection.inject(WebController.class);
 	}

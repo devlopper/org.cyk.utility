@@ -14,19 +14,37 @@ import lombok.Setter;
 @Getter @Setter
 public class Calendar extends AbstractInput<Date> implements Serializable {
 
+	private String mode,showOn;
+	private Boolean readOnlyInput;
 	
 	/**/
 	
-	/**/
+	public static final String FIELD_MODE = "mode";
+	public static final String FIELD_SHOW_ON = "showOn";
+	public static final String FIELD_READ_ONLY_INPUT = "readOnlyInput";
 	
 	/**/
 	
 	public static class ConfiguratorImpl extends AbstractConfiguratorImpl<Calendar> implements Serializable {
 
 		@Override
-		public void configure(Calendar inputDate, Map<Object, Object> arguments) {
-			super.configure(inputDate, arguments);
+		public void configure(Calendar calendar, Map<Object, Object> arguments) {
+			super.configure(calendar, arguments);
+			if(calendar.readOnlyInput == null)
+				calendar.readOnlyInput = calendar.readOnly;
+			/*if(calendar.mode == null) {
+				if(Boolean.TRUE.equals(calendar.readOnly))
+					calendar.mode = "popup";					
+			}*/
+			if(calendar.mode == null)
+				calendar.mode = "popup";
 			
+			if(calendar.showOn == null) {
+				if(Boolean.TRUE.equals(calendar.readOnly))
+					calendar.showOn = "";
+				else
+					calendar.showOn = "focus";
+			}
 		}
 		
 		@Override

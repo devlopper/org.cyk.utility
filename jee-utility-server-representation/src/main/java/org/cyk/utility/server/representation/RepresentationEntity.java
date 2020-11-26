@@ -121,4 +121,10 @@ public interface RepresentationEntity<ENTITY> extends RepresentationServiceProvi
 	@Produces({ MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML })
 	@ApiOperation(value = TAG_IMPORT,tags = {TAG_IMPORT},hidden = true)
 	Response import_(@QueryParam(PARAMETER_UNIFORM_RESOURCE_IDENTIFIER) List<String> uniformResourceIdentifiers,Boolean ignoreKnownUniformResourceIdentifiers);
+
+	/**/
+	
+	String QUERY_PARAMETER_NAME_IDENTIFIER = "identifiant";
+	String QUERY_PARAMETER_NAME_CODE = "code";
+	String QUERY_PARAMETER_NAME_NAME = "libelle";
 }

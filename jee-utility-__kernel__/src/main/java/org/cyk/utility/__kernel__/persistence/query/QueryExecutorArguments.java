@@ -47,6 +47,8 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 	private Boolean isEntityManagerClearable;
 	private Boolean isEntityManagerClosable;
 	private Boolean isNative;
+	private Boolean isThrowExceptionIfIdentifierIsBlank;
+	private Boolean isThrowExceptionIfResultIsBlank;
 	
 	private EntityManager __entityManager__;
 	private Map<Object,Object> __parameters__;

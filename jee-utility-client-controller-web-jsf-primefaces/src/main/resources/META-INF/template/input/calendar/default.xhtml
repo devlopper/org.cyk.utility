@@ -8,12 +8,12 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
+	<!-- 
+	
+	 -->
+	
 	<ui:decorate template="/input/default.xhtml">
-		<ui:define name="message">
-			<ui:decorate template="#{calendar == null or calendar.message == null ? '/__dummy__.xhtml' : '/message/default.xhtml'}">
-				<ui:param name="message" value="#{calendar.message}"/>
-			</ui:decorate>
-		</ui:define>		
+		<ui:param name="__input__" value="#{calendar}"/>	
 		<ui:define name="input">
 			<p:calendar
 				id="#{calendar.identifier}"
@@ -24,7 +24,11 @@
 				widgetVar="#{calendar.widgetVar}"
 				placeholder="#{calendar.placeholder}"
 				converter="#{calendar.converter}"
-				
+				readonly="#{calendar.readOnly}"
+				disabled="#{calendar.disabled}"
+				mode="#{calendar.mode}"
+				readonlyInput="#{calendar.readOnlyInput}"
+				showOn="#{calendar.showOn}"
 			>
 			
 			</p:calendar>
