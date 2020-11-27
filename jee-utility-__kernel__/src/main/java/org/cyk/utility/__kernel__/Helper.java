@@ -4,7 +4,11 @@ import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.log.LogHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.Value;
 
@@ -82,6 +86,16 @@ public interface Helper {
 	
 	static <T extends Enum<?>> T getEnumByName(Class<T> klass,String name) {
 		return getEnumByName(klass, name,Boolean.FALSE);
+	}
+
+	static String getUrl(HttpServletRequest request) {
+		if(request == null)
+			return null;
+		return request.getRequestURL().toString()+(StringHelper.isBlank(request.getQueryString()) ? ConstantEmpty.STRING : "?"+request.getQueryString());
+	}
+	
+	static String getRequestedUrl() {
+		return getUrl(DependencyInjection.inject(HttpServletRequest.class));
 	}
 	
 	/**/

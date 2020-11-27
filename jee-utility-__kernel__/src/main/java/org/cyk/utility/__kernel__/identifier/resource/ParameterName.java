@@ -33,6 +33,7 @@ public enum ParameterName {
 	,MULTIPLE
 	,LOGGABLE_AS_INFO
 	,IS_STATIC
+	,URL
 	;
 	
 	@Getter @Setter private String value;

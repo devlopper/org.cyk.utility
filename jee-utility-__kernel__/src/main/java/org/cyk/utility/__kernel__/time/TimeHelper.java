@@ -3,6 +3,7 @@ package org.cyk.utility.__kernel__.time;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
@@ -70,5 +71,11 @@ public interface TimeHelper {
 		String string = Duration.ofMillis(numberOfMilliseconds).toString();
 		string = string.substring(2);
 		return string;
+	}
+
+	static Long toMillisecond(LocalDate date) {
+		if(date == null)
+			return null;
+		return date.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli();
 	}
 }

@@ -37,6 +37,7 @@ import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.client.controller.ControllerEntity;
 import org.cyk.utility.client.controller.ControllerLayer;
 import org.cyk.utility.client.controller.web.WebController;
+import org.cyk.utility.client.controller.web.jsf.Redirector;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.AbstractInput;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.InputBuilder;
@@ -67,6 +68,7 @@ public class Form extends AbstractObject implements Serializable {
 	private Object container;
 	private Form.Listener listener;
 	private Map<String,AbstractInput<?>> inputs;
+	private String redirectionUrl;
 	
 	public void execute() {
 		Listener listener = this.listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : this.listener;
@@ -105,6 +107,7 @@ public class Form extends AbstractObject implements Serializable {
 	public static final String FIELD_LAYOUT = "layout";
 	public static final String FIELD_ENTITY_FIELDS_NAMES = "entityFieldsNames";
 	public static final String FIELD_LISTENER = "listener";
+	public static final String FIELD_REDIRECTION_URL = "redirectionUrl";
 	public static final String METHOD_EXECUTE = "execute";
 	
 	/**/
@@ -193,6 +196,9 @@ public class Form extends AbstractObject implements Serializable {
 						form.updatableEntityFieldsNames.add(systemIdentifierField.getName());
 				}
 			}
+			
+			if(form.redirectionUrl == null)
+				form.redirectionUrl = WebController.getInstance().getRequestParameter(ParameterName.URL);
 		}
 		
 		protected Collection<Map<Object,Object>> __getLayoutCellsArgumentsMaps__(Form form,Collection<AbstractInput<?>> inputs,Listener listener) {
@@ -346,7 +352,13 @@ public class Form extends AbstractObject implements Serializable {
 			
 			@Override
 			public void redirect(Form form,Object request) {
-				Faces.redirect(UniformResourceIdentifierHelper.build(request, SystemActionList.class, null, form.entityClass, null, null, null, null));
+				String url = WebController.getInstance().getRequestParameter(ParameterName.URL);
+				if(StringHelper.isBlank(url))
+					url = form.redirectionUrl;
+				if(StringHelper.isBlank(url))
+					Faces.redirect(UniformResourceIdentifierHelper.build(request, SystemActionList.class, null, form.entityClass, null, null, null, null));
+				else
+					Redirector.getInstance().redirect(url);
 			}
 			
 			@Override
