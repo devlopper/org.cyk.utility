@@ -17,6 +17,7 @@ import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
+import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.persistence.EntityManagerGetter;
 import org.cyk.utility.__kernel__.persistence.PersistenceHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
@@ -158,6 +159,19 @@ public interface QueryHelper {
 		if(ArrayHelper.isEmpty(queries))
 			return;
 		addQueries(CollectionHelper.listOf(queries));
+	}
+	
+	static void addQueries(Class<?> klass,Map<QueryName,String> values) {
+		if(MapHelper.isNotEmpty(values)) {
+			for(Map.Entry<QueryName,String> entry : values.entrySet()) {
+				Query query;
+				if(entry.getKey().name().startsWith("READ_"))
+					query = Query.buildSelect(klass, QueryIdentifierGetter.getInstance().get(klass, entry.getKey()), entry.getValue());
+				else
+					query = Query.buildCount(QueryIdentifierGetter.getInstance().get(klass, entry.getKey()), entry.getValue());
+				QueryHelper.addQueries(query);
+			}
+		}
 	}
 	
 	/**/

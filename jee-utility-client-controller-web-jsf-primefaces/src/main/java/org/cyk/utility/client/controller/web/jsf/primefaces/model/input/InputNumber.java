@@ -8,6 +8,7 @@ import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.client.controller.web.jsf.JavaServerFacesHelper;
 import org.cyk.utility.client.controller.web.jsf.converter.NumberConverter;
 
 import lombok.Getter;
@@ -21,6 +22,42 @@ public class InputNumber extends AbstractInput<Number> implements Serializable {
 	private Number minValue,maxValue;
 	
 	/**/
+	
+	@Override
+	public Object deriveBinding(String beanPath) {
+		org.primefaces.component.inputnumber.InputNumber component = new org.primefaces.component.inputnumber.InputNumber();
+		if(decimalPlaces != null)
+			component.setDecimalPlaces(decimalPlaces.toString());
+		if(minValue != null)
+			component.setMinValue(minValue.toString());
+		if(maxValue != null)
+			component.setMaxValue(maxValue.toString());
+		if(StringHelper.isNotBlank(decimalSeparator))
+			component.setDecimalSeparator(decimalSeparator);
+		if(StringHelper.isNotBlank(thousandSeparator))
+			component.setThousandSeparator(thousandSeparator);
+		for(Object[] array : new Object[][] {
+				/*new Object[] {FIELD_DECIMAL_PLACES,null,String.class}
+				,new Object[] {FIELD_DECIMAL_SEPARATOR,null,String.class}
+				,new Object[] {FIELD_THOUSAND_SEPARATOR,null,String.class}
+				,new Object[] {FIELD_MIN_VALUE,null,String.class}
+				,new Object[] {FIELD_MAX_VALUE,null,String.class}
+				,*/new Object[] {FIELD_RENDERED,null,Boolean.class}
+			}) {
+			String property = array[1] == null ? (String) array[0] : (String) array[1];
+			Class<?> klass = array[2] == null ? String.class : (Class<?>) array[2];
+			__inject__(JavaServerFacesHelper.class).setValueExpression(component, property, JavaServerFacesHelper.buildValueExpression(String.format("#{%s.%s}",beanPath,array[0]), klass));
+		}
+		return component;
+	}
+	
+	/**/
+	
+	public static final String FIELD_DECIMAL_PLACES = "decimalPlaces";
+	public static final String FIELD_DECIMAL_SEPARATOR = "decimalSeparator";
+	public static final String FIELD_THOUSAND_SEPARATOR = "thousandSeparator";
+	public static final String FIELD_MIN_VALUE = "minValue";
+	public static final String FIELD_MAX_VALUE = "maxValue";
 	
 	/**/
 	

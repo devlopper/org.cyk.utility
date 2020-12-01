@@ -293,6 +293,18 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 		return arguments;
 	}
 	
+	public static QueryExecutorArguments setQueryIfNull(QueryExecutorArguments arguments,Class<?> klass,String queryName) {
+		if(arguments == null)
+			arguments = new QueryExecutorArguments();
+		if(arguments.getQuery() == null)
+			arguments.setQueryFromIdentifier(QueryIdentifierGetter.getInstance().get(klass, queryName));
+		return arguments;
+	}
+	
+	public static QueryExecutorArguments setQueryIfNull(QueryExecutorArguments arguments,Class<?> klass,QueryName queryName) {
+		return setQueryIfNull(arguments, klass, queryName.getValue());
+	}
+	
 	/**/
 	
 	@XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor

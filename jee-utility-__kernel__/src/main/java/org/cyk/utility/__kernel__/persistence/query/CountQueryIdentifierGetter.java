@@ -30,8 +30,6 @@ public interface CountQueryIdentifierGetter {
 		protected String __get__(String readQueryIdentifier) {
 			return QueryIdentifierBuilder.getInstance().buildCountFrom(readQueryIdentifier);
 		}
-		
-		private static final Map<String,String> MAP = new HashMap<>();
 	}
 	
 	/**/
@@ -40,5 +38,6 @@ public interface CountQueryIdentifierGetter {
 		return Helper.getInstance(CountQueryIdentifierGetter.class, INSTANCE);
 	}
 	
-	Value INSTANCE = new Value();		
+	Value INSTANCE = new Value();
+	Map<String,String> MAP = new HashMap<>();
 }

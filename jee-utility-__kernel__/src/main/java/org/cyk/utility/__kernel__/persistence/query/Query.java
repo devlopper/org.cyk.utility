@@ -36,6 +36,7 @@ public class Query extends AbstractObject implements Serializable {
 	private Class<?> resultClass;
 	private Query queryDerivedFromQuery;
 	private Map<String,Integer> tupleFieldsNamesIndexes;
+	private QueryType type;
 	
 	public Query setQueryDerivedFromQueryIdentifier(Object identifier){
 		setQueryDerivedFromQuery(QueryHelper.getQueries().getBySystemIdentifier(identifier, Boolean.TRUE));
@@ -58,7 +59,7 @@ public class Query extends AbstractObject implements Serializable {
 	
 	@Override
 	public String toString() {
-		return String.format(TO_STRING_FORMAT, Query.class.getSimpleName(),getIdentifier(),getValue(),getTupleClass(),getResultClass());
+		return String.format(TO_STRING_FORMAT, type == null ? Query.class.getSimpleName() : type.name(),getIdentifier(),getValue(),getTupleClass(),getResultClass());
 	}
 	
 	/**/
@@ -67,6 +68,7 @@ public class Query extends AbstractObject implements Serializable {
 	public static final String FIELD_IDENTIFIER = "identifier";
 	public static final String FIELD_VALUE = "value";
 	public static final String FIELD_RESULT_CLASS = "resultClass";
+	public static final String FIELD_TYPE = "type";
 	
 	/**/
 	
@@ -106,6 +108,13 @@ public class Query extends AbstractObject implements Serializable {
 			
 			if(query.intermediateResultClass == null && MapHelper.isNotEmpty(query.tupleFieldsNamesIndexes) && !Tuple.class.equals(query.resultClass)) {
 				query.intermediateResultClass = Object[].class;
+			}
+			
+			if(query.type == null) {
+				if(StringHelper.isNotBlank(query.identifier)) {
+					String name = StringUtils.substringAfter(query.identifier, ".");
+					query.type = QueryType.getOneOfPrefixesStarts(name);
+				}
 			}
 		}
 		

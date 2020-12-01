@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -121,6 +122,21 @@ public interface PersistenceHelper {
 		return sort(Boolean.TRUE,classes);
 	}
 
+	static String getEntityName(Class<?> klass) {
+		if(klass == null)
+			return null;
+		if(CLASS_ENTITY_NAME.containsKey(klass))
+			return CLASS_ENTITY_NAME.get(klass);
+		String name = null;
+		Entity entity = klass.getAnnotation(Entity.class);
+		if(entity != null)
+			name = entity.name();
+		if(StringHelper.isBlank(name))
+			name = klass.getSimpleName();
+		CLASS_ENTITY_NAME.put(klass, name);
+		return name;
+	}
+	
 	static String getTableName(Class<?> klass) {
 		if(klass == null)
 			return null;
@@ -237,7 +253,7 @@ public interface PersistenceHelper {
 	}
 	
 	/**/
-	
+	Map<Class<?>,String> CLASS_ENTITY_NAME = new HashMap<>();
 	Map<Class<?>,String> CLASS_TABLE_NAME = new HashMap<>();
 	Map<Class<?>,String> CLASS_PRIMARY_KEY_COLUMN_NAME = new HashMap<>();
 	Map<Class<?>,Set<String>> CLASS_COLUMNS_NAMES = new HashMap<>();

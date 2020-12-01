@@ -12,6 +12,11 @@ import org.junit.jupiter.api.Test;
 public class LanguageUnitTest extends AbstractWeldUnitTest {
 
 	@Test
+	public void whenEqual(){
+		assertThat(Language.Select.whenEqual("t", "f", "'IT'", "'Info Tech'")).isEqualTo("WHEN t.f = 'IT' THEN 'Info Tech'");
+	}
+	
+	@Test
 	public void formatVariable(){
 		assertThat(Language.formatVariable("p")).isEqualTo("p");
 	}

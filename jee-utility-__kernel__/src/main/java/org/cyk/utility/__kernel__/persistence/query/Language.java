@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
@@ -125,10 +126,35 @@ public interface Language {
 			return fields(tuple, CollectionHelper.listOf(names));
 		}
 		
+		static String kase(String whens,String else_) {
+			return String.format(CASE, whens,else_);
+		}
+		
+		static String when(String condition,String result) {
+			return String.format(CASE_WHEN, condition,result);
+		}
+		
+		static String whens(Collection<String> conditionsResults) {
+			if(CollectionHelper.isEmpty(conditionsResults))
+				return null;
+			return StringUtils.join(conditionsResults," ");
+		}
+		
+		static String whens(String...conditionsResults) {
+			if(ArrayHelper.isEmpty(conditionsResults))
+				return null;
+			return whens(CollectionHelper.listOf(conditionsResults));
+		}
+		
+		static String whenEqual(String variableName,String fieldName,String value,String result) {
+			return when(String.format("%s.%s = %s",variableName,fieldName,value),result);
+		}
+		
 		String SELECT = "SELECT %s";
 		String CONCAT = "CONCAT (%s)";
 		String CONCATENATE_CODE_NAME = "CONCAT(%1$s.code,' ',%1$s.name)";
-		
+		String CASE = "CASE %s ELSE %s END";
+		String CASE_WHEN = "WHEN %s THEN %s";
 		/**/
 		
 		@Getter @Setter @Accessors(chain=true)
@@ -138,6 +164,11 @@ public interface Language {
 			public static Tuple instantiate(String name) {
 				return new Tuple().setName(name);
 			}
+		}
+	
+		@Getter @Setter @Accessors(chain=true)
+		public static class Case {
+			
 		}
 	}
 	
