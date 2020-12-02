@@ -209,8 +209,9 @@ public class Form extends AbstractObject implements Serializable {
 			inputs.forEach(new Consumer<AbstractInput<?>>() {
 				@Override
 				public void accept(AbstractInput<?> input) {
-					cells.add(MapHelper.instantiate(Cell.FIELD_CONTROL,input.getOutputLabel()));
-					cells.add(MapHelper.instantiate(Cell.FIELD_CONTROL,input));
+					if(input.getOutputLabel() != null)
+						cells.add(MapHelper.instantiate(Cell.FIELD_CONTROL,input.getOutputLabel()));
+					cells.add(listener.getInputCellArguments(form, input));
 					form.inputs.put(input.getField().getName(), input);//TODO nested wont work. use path instead
 				}
 			});
@@ -225,7 +226,7 @@ public class Form extends AbstractObject implements Serializable {
 				}else {
 					cells.add(MapHelper.instantiate(Cell.FIELD_CONTROL,form.submitCommandButton = CommandButton.build(submitCommandArguments),Cell.FIELD_WIDTH,12));
 				}
-			}			
+			}
 			return cells;
 		}	
 		
@@ -248,6 +249,7 @@ public class Form extends AbstractObject implements Serializable {
 			AbstractInput<?> buildInput(Form form,String fieldName);		
 			Class<?> getInputClass(Form form,String fieldName);
 			Map<Object,Object> getInputArguments(Form form,String fieldName);
+			Map<Object,Object> getInputCellArguments(Form form,AbstractInput<?> input);
 			Map<Object,Object> getCommandButtonArguments(Form form,Collection<AbstractInput<?>> inputs);
 			Map<Object,Object> getLayoutArguments(Form form,Collection<Map<Object,Object>> cellsArguments);
 			//Layout instantiateLayout(Form form);
@@ -284,6 +286,13 @@ public class Form extends AbstractObject implements Serializable {
 				}
 				
 				@Override
+				public Map<Object,Object> getInputCellArguments(Form form,AbstractInput<?> input) {
+					Map<Object,Object> arguments = new HashMap<>();
+					arguments.put(Cell.FIELD_CONTROL,input);
+					return arguments;
+				}
+				
+				@Override
 				public Map<Object, Object> getCommandButtonArguments(Form form,Collection<AbstractInput<?>> inputs) {
 					return MapHelper.instantiate(CommandButton.FIELD_ICON,"fa fa-floppy-o",CommandButton.ConfiguratorImpl.FIELD_OBJECT,form
 							,CommandButton.ConfiguratorImpl.FIELD_METHOD_NAME,METHOD_EXECUTE,CommandButton.ConfiguratorImpl.FIELD_INPUTS,inputs
@@ -293,7 +302,7 @@ public class Form extends AbstractObject implements Serializable {
 				@Override
 				public Map<Object, Object> getLayoutArguments(Form form,Collection<Map<Object,Object>> cellsArguments) {
 					return MapHelper.instantiate(Layout.FIELD_CELL_WIDTH_UNIT,Cell.WidthUnit.UI_G,Layout.FIELD_NUMBER_OF_COLUMNS,2
-								,Layout.FIELD_ROW_CELL_MODEL,Map.of(0,new Cell().setWidth(3),1,new Cell().setWidth(9))
+								,Layout.FIELD_ROW_CELL_MODEL,Map.of(0,new Cell().setWidth(2),1,new Cell().setWidth(9))
 								,Layout.ConfiguratorImpl.FIELD_CELLS_MAPS,cellsArguments);
 				}
 				

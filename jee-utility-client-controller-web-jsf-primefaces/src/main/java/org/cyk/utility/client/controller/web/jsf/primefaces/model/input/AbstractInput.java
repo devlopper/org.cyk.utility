@@ -124,16 +124,21 @@ public abstract class AbstractInput<VALUE> extends AbstractInputOutput<VALUE> im
 			}
 			
 			if(input.outputLabel == null) {
-				String outputLabelValue = (String) MapHelper.readByKey(arguments, FIELD_OUTPUT_LABEL_VALUE);
-				if(StringHelper.isBlank(outputLabelValue)) {
-					if(input.field == null) {
-						outputLabelValue = __getDefaultOutputLabelValue__(input);
-					}else {
-						outputLabelValue = InternationalizationHelper.buildString(InternationalizationHelper.buildKey(input.field.getName()),null,null,Case.FIRST_CHARACTER_UPPER);
-					}	
+				Boolean outputLabelBuildable = (Boolean) MapHelper.readByKey(arguments, FIELD_OUTPUT_LABEL_BUILDABLE);
+				if(outputLabelBuildable == null)
+					outputLabelBuildable = Boolean.TRUE;
+				if(Boolean.TRUE.equals(outputLabelBuildable)) {
+					String outputLabelValue = (String) MapHelper.readByKey(arguments, FIELD_OUTPUT_LABEL_VALUE);
+					if(StringHelper.isBlank(outputLabelValue)) {
+						if(input.field == null) {
+							outputLabelValue = __getDefaultOutputLabelValue__(input);
+						}else {
+							outputLabelValue = InternationalizationHelper.buildString(InternationalizationHelper.buildKey(input.field.getName()),null,null,Case.FIRST_CHARACTER_UPPER);
+						}	
+					}				
+					input.outputLabel = OutputLabel.build(OutputLabel.FIELD_VALUE,outputLabelValue,OutputLabel.FIELD_FOR,input.getIdentifier()
+							,OutputLabel.FIELD_CARDINAL_POINT_FROM_REFERENCE,MapHelper.readByKey(arguments, FIELD_OUTPUT_LABEL_CARDINAL_POINT));
 				}				
-				input.outputLabel = OutputLabel.build(OutputLabel.FIELD_VALUE,outputLabelValue,OutputLabel.FIELD_FOR,input.getIdentifier()
-						,OutputLabel.FIELD_CARDINAL_POINT_FROM_REFERENCE,MapHelper.readByKey(arguments, FIELD_OUTPUT_LABEL_CARDINAL_POINT));
 			}
 			
 			if(input.placeholder == null) {
@@ -149,6 +154,7 @@ public abstract class AbstractInput<VALUE> extends AbstractInputOutput<VALUE> im
 		public static final String FIELD_ACTION = "configurator.action";
 		public static final String FIELD_OUTPUT_LABEL_VALUE = "outputLabelValue";
 		public static final String FIELD_OUTPUT_LABEL_CARDINAL_POINT = "outputLabelCardinalPoint";
+		public static final String FIELD_OUTPUT_LABEL_BUILDABLE = "outputLabelBuildable";
 		public static final String FIELD_MESSAGABLE = "configurator.messagable";
 	}
 }

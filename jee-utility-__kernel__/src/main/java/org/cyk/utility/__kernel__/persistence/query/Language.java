@@ -130,6 +130,14 @@ public interface Language {
 			return String.format(CASE, whens,else_);
 		}
 		
+		static String kaseBoolean(String variableName,String fieldName,String trueResult,String falseResult,String nullResult) {
+			return kase(whens(whenTrue(variableName, fieldName, trueResult),whenFalse(variableName, fieldName, falseResult)), nullResult);
+		}
+		
+		static String kaseBooleanYesNo(String variableName,String fieldName,String nullResult) {
+			return kaseBoolean(variableName, fieldName, "'Oui'", "'Non'", nullResult);
+		}
+		
 		static String when(String condition,String result) {
 			return String.format(CASE_WHEN, condition,result);
 		}
@@ -146,8 +154,30 @@ public interface Language {
 			return whens(CollectionHelper.listOf(conditionsResults));
 		}
 		
-		static String whenEqual(String variableName,String fieldName,String value,String result) {
-			return when(String.format("%s.%s = %s",variableName,fieldName,value),result);
+		static String whenEqual(String variableName,String fieldName,Object value,String result) {
+			return when(String.format("%s.%s = %s",variableName,fieldName,value == null ? "NULL" : value.toString()),result);
+		}
+		
+		static String whenTrue(String variableName,String fieldName,String result) {
+			return whenEqual(variableName, fieldName, Boolean.TRUE, result);
+		}
+		
+		static String whenTrueThenYes(String variableName,String fieldName) {
+			return whenTrue(variableName, fieldName,"'Oui'");
+		}
+		
+		static String whenFalse(String variableName,String fieldName,String result) {
+			return whenEqual(variableName, fieldName, Boolean.FALSE, result);
+		}
+		
+		static String whenFalseThenNo(String variableName,String fieldName) {
+			return whenFalse(variableName, fieldName,"'Non'");
+		}
+		
+		static String whenTrueThenYesWhenFalseThenNo(String variableName,String fieldName) {
+			return whens(
+					whenTrueThenYes(variableName, fieldName),whenFalseThenNo(variableName, fieldName)
+			);
 		}
 		
 		String SELECT = "SELECT %s";
