@@ -27,26 +27,25 @@ import org.cyk.utility.__kernel__.representation.Arguments.Internal;
 import org.cyk.utility.__kernel__.rest.ResponseBuilder;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.Value;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 @Path(EntityReader.PATH)
-@Api
+@Tag(name = EntityReader.TAG)
 public interface EntityReader {
 
 	@POST
 	@Path(PATH_READ_BY_POST)
 	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
 	@Produces({ MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML })
-	@ApiOperation(value = "Read using post method",tags = {TAG})
+	@Operation(description = "Read using post method")
 	Response read(Arguments arguments);
 	
 	@GET
 	@Path(PATH_READ_BY_GET)
 	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
 	@Produces({ MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML })
-	@ApiOperation(value = "Read using get method",tags = {TAG})
+	@Operation(description = "Read using get method")
 	Response read(
 			@QueryParam(PARAMETER_NAME_REPRESENTATION_ENTITY_CLASS_NAME)String representationEntityClassName
 			,@QueryParam(PARAMETER_NAME_QUERY_IDENTIFIER) String queryIdentifier

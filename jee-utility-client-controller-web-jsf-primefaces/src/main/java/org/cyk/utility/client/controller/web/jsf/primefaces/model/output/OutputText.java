@@ -13,18 +13,27 @@ import lombok.Setter;
 @Getter @Setter
 public class OutputText extends AbstractOutput<String> implements Serializable {
 
+	private Boolean escape;
+	private String title;
+	
 	/**/
 	
 	/**/
+	
+	public static final String FIELD_ESCAPE = "escape";
+	public static final String FIELD_TITLE = "title";
 	
 	/**/
 	
 	public static class ConfiguratorImpl extends AbstractConfiguratorImpl<OutputText> implements Serializable {
 
 		@Override
-		public void configure(OutputText outputLabel, Map<Object, Object> arguments) {
-			super.configure(outputLabel, arguments);
-			
+		public void configure(OutputText outputText, Map<Object, Object> arguments) {
+			super.configure(outputText, arguments);
+			if(outputText.title == null)
+				outputText.title = outputText.value;
+			if(outputText.escape == null)
+				outputText.escape = Boolean.TRUE;
 		}
 		
 		@Override

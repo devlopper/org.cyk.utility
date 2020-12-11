@@ -20,24 +20,21 @@ import org.cyk.utility.__kernel__.object.__static__.representation.AbstractIdent
 import org.cyk.utility.__kernel__.rest.ResponseBuilder;
 import org.cyk.utility.__kernel__.string.StringHelper;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
-@Api
+//@Tag
 public interface EntitySaver<T> {
 
 	@POST
 	@Path(PATH_SAVE_CREATABLES_UPDATABLES_DELETABLES)
 	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
 	@Produces({ MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML })
-	@ApiOperation(value = "save",tags = {"save"})
+	//@Operation(description = "save")
 	Response save(Collection<T> creatables,Collection<T> updatables,Collection<T> deletables,Arguments arguments);
 	
 	@POST
 	@Path(PATH_SAVE_REPRESENTATIONS)
 	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
 	@Produces({ MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML })
-	@ApiOperation(value = "save",tags = {"save"})
+	//@Operation(description = "save")
 	Response save(Collection<T> representations,Arguments arguments);
 	
 	/**/

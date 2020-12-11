@@ -17,18 +17,15 @@ import org.cyk.utility.__kernel__.representation.Arguments.Internal;
 import org.cyk.utility.__kernel__.rest.ResponseBuilder;
 import org.cyk.utility.__kernel__.value.Value;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
 @Path(EntityCounter.PATH)
-@Api
+//@Tag(name = EntityCounter.TAG)
 public interface EntityCounter {
 
 	@POST
 	@Path(PATH_READ)
 	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
 	@Produces({ MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML })
-	@ApiOperation(value = "count",tags = {"count"})
+	//@Operation(description = "count")
 	Response count(Arguments arguments);
 	
 	/**/
@@ -104,6 +101,8 @@ public interface EntityCounter {
 	}
 	
 	Value INSTANCE = new Value();
+	
+	String TAG = "Generic Count Interface";
 	
 	String PATH = "/cyk/entity/counter";
 	String PATH_READ = "count";

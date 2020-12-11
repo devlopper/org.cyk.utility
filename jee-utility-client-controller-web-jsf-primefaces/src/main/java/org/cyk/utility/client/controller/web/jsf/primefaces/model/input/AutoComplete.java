@@ -245,10 +245,10 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 			public Filter.Dto instantiateFilter(AutoComplete autoComplete) {
 				Filter.Dto filter = new Filter.Dto();
 				if(Boolean.TRUE.equals(autoComplete.readerUsable)) {
-					if(QueryIdentifierGetter.getInstance().get(autoComplete.entityClass, QueryName.READ_WHERE_CODE_OR_NAME_LIKE).equals(autoComplete.readQueryIdentifier)) {
-						filter.addField(Querier.PARAMETER_NAME_CODE, autoComplete.get__queryString__());
-						filter.addField(Querier.PARAMETER_NAME_NAME, autoComplete.get__queryString__());
-					}
+					//String queryIdentifier = ValueHelper.defaultToIfBlank(autoComplete.readQueryIdentifier
+					//		, QueryIdentifierGetter.getInstance().get(autoComplete.entityClass, QueryName.READ_WHERE_CODE_OR_NAME_LIKE));					
+					filter.addField(Querier.PARAMETER_NAME_CODE, autoComplete.get__queryString__());
+					filter.addField(Querier.PARAMETER_NAME_NAME, autoComplete.get__queryString__());					
 				}else {
 					if(StringHelper.isNotBlank(autoComplete.__queryString__))
 						filter.addField(AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringImpl.FIELD_CODE, autoComplete.__queryString__)

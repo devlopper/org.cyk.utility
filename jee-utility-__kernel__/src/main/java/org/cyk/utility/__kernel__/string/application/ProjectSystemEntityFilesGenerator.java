@@ -30,7 +30,7 @@ public class ProjectSystemEntityFilesGenerator {
 		
 		//String defaultIde = "Eclipse";
 		//String defaultProjectsWorkspaceFolder = "E:/Workspaces/"+defaultIde+"/201903";
-		String defaultProjectsWorkspaceFolder = "E:/Repositories/source code/git";
+		String defaultProjectsWorkspaceFolder = "E:/Repositories/source/git";
 		String defaultProjectsSystemFolder = "ci/gouv/dgbf/system";
 		//String defaultProjectsSystemFolder = "org/cyk/system";
 		

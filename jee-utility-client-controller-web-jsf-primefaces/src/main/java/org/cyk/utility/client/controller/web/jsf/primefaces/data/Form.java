@@ -302,8 +302,12 @@ public class Form extends AbstractObject implements Serializable {
 				@Override
 				public Map<Object, Object> getLayoutArguments(Form form,Collection<Map<Object,Object>> cellsArguments) {
 					return MapHelper.instantiate(Layout.FIELD_CELL_WIDTH_UNIT,Cell.WidthUnit.UI_G,Layout.FIELD_NUMBER_OF_COLUMNS,2
-								,Layout.FIELD_ROW_CELL_MODEL,Map.of(0,new Cell().setWidth(2),1,new Cell().setWidth(9))
+								,Layout.FIELD_ROW_CELL_MODEL,getLayoutArgumentsRowCellModel(form)
 								,Layout.ConfiguratorImpl.FIELD_CELLS_MAPS,cellsArguments);
+				}
+				
+				protected Map<Integer,Cell> getLayoutArgumentsRowCellModel(Form form) {
+					return Map.of(0,new Cell().setWidth(2),1,new Cell().setWidth(10));
 				}
 				
 				/**/

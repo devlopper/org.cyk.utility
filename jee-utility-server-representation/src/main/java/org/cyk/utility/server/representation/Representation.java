@@ -12,16 +12,13 @@ import javax.ws.rs.core.Response;
 import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
 /**
  * 
  * @author Christian
  *
  */
 @Path(Representation.PATH)
-@Api
+//@Tag
 public interface Representation extends RepresentationServiceProvider {
 
 	/* Create */
@@ -51,7 +48,7 @@ public interface Representation extends RepresentationServiceProvider {
 	
 	@DELETE
 	@Path(PATH_DELETE_ALL)
-	@ApiOperation(value = TAG_DELETE,tags = {TAG_DELETE},hidden = true)
+	//@Operation(description = TAG_DELETE,hidden = true)
 	Response deleteAll();
 	
 	/**/
@@ -59,7 +56,7 @@ public interface Representation extends RepresentationServiceProvider {
 	@POST
 	@Path("data/load")
 	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-	@ApiOperation(value = TAG_LOAD,tags = {TAG_LOAD},hidden = true)
+	//@Operation(description = TAG_LOAD,hidden = true)
 	Response loadData();
 	
 	/**/

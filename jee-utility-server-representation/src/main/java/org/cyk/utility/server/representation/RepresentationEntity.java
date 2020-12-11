@@ -17,15 +17,13 @@ import javax.ws.rs.core.Response;
 
 import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
 /**
  * 
  * @author Christian
  *
  */
-@Api
+//@Api
+//@Tag
 public interface RepresentationEntity<ENTITY> extends RepresentationServiceProvider {
 
 	/* Create */
@@ -33,13 +31,13 @@ public interface RepresentationEntity<ENTITY> extends RepresentationServiceProvi
 	@POST
 	@Path(PATH_CREATE_ONE)
 	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-	@ApiOperation(value = TAG_CREATE+" "+TAG_ONE,tags = {TAG_CREATE,TAG_ONE},hidden = true)
+	//@Operation(description = TAG_CREATE+" "+TAG_ONE,hidden = true)
 	Response createOne(ENTITY entity);
 	
 	@POST
 	@Path(PATH_CREATE_MANY)
 	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-	@ApiOperation(value = TAG_CREATE+" "+TAG_MANY,tags = {TAG_CREATE,TAG_MANY},hidden = true)
+	//@Operation(description = TAG_CREATE+" "+TAG_MANY,hidden = true)
 	Response createMany(Collection<ENTITY> entities,@QueryParam(PARAMETER_PROPERTIES) String properties);
 
 	/* Read */ 
@@ -47,14 +45,14 @@ public interface RepresentationEntity<ENTITY> extends RepresentationServiceProvi
 	@GET
 	@Path(PATH_GET_ONE)
 	@Produces({ MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML })
-	@ApiOperation(value = TAG_READ+" "+TAG_ONE,tags = {TAG_READ,TAG_ONE})
+	//@Operation(description = TAG_READ+" "+TAG_ONE)
 	Response getOne(@PathParam(PARAMETER_IDENTIFIER) String identifier,@QueryParam(PARAMETER_TYPE) String type,@QueryParam(PARAMETER_FIELDS) String fields);
 	
 	@GET
 	@Path(PATH_GET_MANY)
 	@Produces({ MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML })
 	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-	@ApiOperation(value = TAG_READ+" "+TAG_MANY,tags = {TAG_READ,TAG_MANY})
+	//@Operation(description = TAG_READ+" "+TAG_MANY)
 	Response getMany(@QueryParam(PARAMETER_QUERY_IDENTIFIER) String queryIdentifier,@QueryParam(PARAMETER_IS_PAGEABLE) Boolean isPageable,@QueryParam(PARAMETER_FROM) Long from,@QueryParam(PARAMETER_COUNT) Long count,@QueryParam(PARAMETER_FIELDS) String fields
 			,@QueryParam(PARAMETER_FILTER) Filter.Dto filter);
 	
@@ -65,14 +63,14 @@ public interface RepresentationEntity<ENTITY> extends RepresentationServiceProvi
 	@PUT
 	@Path(PATH_UPDATE_ONE)
 	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-	@ApiOperation(value = TAG_UPDATE+" "+TAG_ONE,tags = {TAG_UPDATE,TAG_ONE},hidden = true)
+	//@Operation(description = TAG_UPDATE+" "+TAG_ONE,hidden = true)
 	Response updateOne(ENTITY entity,@QueryParam(PARAMETER_FIELDS) String fields);
 	
 	//@PATCH FIXME Not working so we will use PUT for the moment
 	@PUT
 	@Path(PATH_UPDATE_MANY)
 	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-	@ApiOperation(value = TAG_UPDATE+" "+TAG_MANY,tags = {TAG_UPDATE,TAG_MANY},hidden = true)
+	//@Operation(description = TAG_UPDATE+" "+TAG_MANY,hidden = true)
 	Response updateMany(Collection<ENTITY> entities,@QueryParam(PARAMETER_FIELDS) String fields);
 	
 	/* Delete */
@@ -80,29 +78,29 @@ public interface RepresentationEntity<ENTITY> extends RepresentationServiceProvi
 	@DELETE
 	@Path(PATH_DELETE_ONE)
 	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-	@ApiOperation(value = TAG_DELETE+" "+TAG_ONE,tags = {TAG_DELETE,TAG_ONE},hidden = true)
+	//@Operation(description = TAG_DELETE+" "+TAG_ONE,hidden = true)
 	Response deleteOne(ENTITY entity);
 	
 	@DELETE
 	@Path(PATH_DELETE_MANY)
-	@ApiOperation(value = TAG_DELETE+" "+TAG_MANY,tags = {TAG_DELETE,TAG_MANY},hidden = true)
+	//@Operation(description = TAG_DELETE+" "+TAG_MANY,hidden = true)
 	Response deleteMany();
 	
 	@DELETE
 	@Path(PATH_DELETE_IDENTIFIERS)
-	@ApiOperation(value = TAG_DELETE+" "+TAG_BY_IDENTIFIERS,tags = {TAG_DELETE,TAG_BY_IDENTIFIERS},hidden = true)
+	//@Operation(description = TAG_DELETE+" "+TAG_BY_IDENTIFIERS,hidden = true)
 	Response deleteByIdentifiers(@QueryParam(PARAMETER_IDENTIFIER) List<String> identifiers,@QueryParam(PARAMETER_TYPE) String type);
 	
 	@DELETE
 	@Path(PATH_DELETE_ALL)
-	@ApiOperation(value = TAG_DELETE+" "+TAG_ALL,tags = {TAG_DELETE,TAG_ALL},hidden = true)
+	//@Operation(description = TAG_DELETE+" "+TAG_ALL,hidden = true)
 	Response deleteAll();
 	
 	/* Save */
 	
 	@POST
 	@Path(PATH_SAVE_FROM_FILE_EXCEL_SHEET)
-	@ApiOperation(value = TAG_SAVE+" "+TAG_EXCEL,tags = {TAG_SAVE,TAG_EXCEL},hidden = true)
+	//@Operation(description = TAG_SAVE+" "+TAG_EXCEL,hidden = true)
 	Response saveFromFileExcelSheet(@QueryParam(PARAMETER_WORKBOOK_NAME) String workbookName,@QueryParam(PARAMETER_SHEET_NAME) String sheetName
 			,@QueryParam(PARAMETER_COLUMN_INDEX_FIELD_NAME) List<String> columnIndexFieldNames);
 	
@@ -110,7 +108,7 @@ public interface RepresentationEntity<ENTITY> extends RepresentationServiceProvi
 	
 	@GET
 	@Path(PATH_GET_COUNT)
-	@ApiOperation(value = TAG_COUNT,tags = {TAG_COUNT})
+	//@Operation(description = TAG_COUNT)
 	Response count(@QueryParam(PARAMETER_QUERY_IDENTIFIER) String queryIdentifier,@QueryParam(PARAMETER_FILTER) Filter.Dto filter);
 	
 	/* Import */
@@ -119,7 +117,7 @@ public interface RepresentationEntity<ENTITY> extends RepresentationServiceProvi
 	@Path(PATH_IMPORT)
 	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
 	@Produces({ MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML })
-	@ApiOperation(value = TAG_IMPORT,tags = {TAG_IMPORT},hidden = true)
+	//@Operation(description = TAG_IMPORT,hidden = true)
 	Response import_(@QueryParam(PARAMETER_UNIFORM_RESOURCE_IDENTIFIER) List<String> uniformResourceIdentifiers,Boolean ignoreKnownUniformResourceIdentifiers);
 
 	/**/

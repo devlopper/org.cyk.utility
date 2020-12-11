@@ -20,7 +20,6 @@ import org.cyk.utility.security.Credentials;
 import org.cyk.utility.server.representation.impl.ApplicationProgrammingInterface;
 import org.cyk.utility.server.representation.impl.ApplicationScopeLifeCycleListener;
 
-import io.swagger.jaxrs.config.BeanConfig;
 
 public abstract class AbstractServletContextListener extends org.cyk.utility.context.AbstractSystemContextListenerImpl<ServletContext> implements javax.servlet.ServletContextListener,Objectable,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -53,7 +52,7 @@ public abstract class AbstractServletContextListener extends org.cyk.utility.con
 		if(ConfigurationHelper.is(VariableName.DATA_IS_LOADABLE))
 			__saveData__();	
 		
-		if(ConfigurationHelper.is(VariableName.SWAGGER_ENABLED)) {
+		/*if(ConfigurationHelper.is(VariableName.SWAGGER_ENABLED)) {
 			BeanConfig beanConfig = new BeanConfig();
 			beanConfig.setVersion(ValueHelper.defaultToIfBlank(ConfigurationHelper.getValueAsString(VariableName.SYSTEM_VERSION),"version not defined"));
 			String contextPath = "/"+ValueHelper.defaultToIfBlank(ConfigurationHelper.getValueAsString(VariableName.SYSTEM_WEB_CONTEXT),ConstantEmpty.STRING)+ApplicationProgrammingInterface.PATH;
@@ -77,7 +76,7 @@ public abstract class AbstractServletContextListener extends org.cyk.utility.con
 			beanConfig.setContact("komenanyc@yahoo.fr.com");
 			beanConfig.setExpandSuperTypes(Boolean.FALSE);
 			beanConfig.setScan(true);
-		}		
+		}*/
 	}
 	
 	protected void __saveData__() {

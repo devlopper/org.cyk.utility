@@ -11,11 +11,8 @@ import javax.ws.rs.Produces;
 import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
 import org.cyk.utility.__kernel__.variable.VariableName;
 
-import io.swagger.annotations.Api;
-
 @ApplicationPath(ApplicationProgrammingInterface.PATH) @Path("/")
 @ApplicationScoped
-@Api
 public class ApplicationProgrammingInterface extends javax.ws.rs.core.Application implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

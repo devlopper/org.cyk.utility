@@ -10,9 +10,12 @@ import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.identifier.resource.RequestHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.security.SecurityHelper;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.keycloak.KeycloakPrincipal;
+import org.keycloak.KeycloakSecurityContext;
+import org.keycloak.adapters.RefreshableKeycloakSecurityContext;
 import org.keycloak.representations.AccessToken;
 
 public interface SessionHelper {
@@ -141,22 +144,23 @@ public interface SessionHelper {
 		LogHelper.logInfo(String.format("Session of <<%s>> has been invalidated",username), SessionHelper.class);
 		
 		//clears the identity information in the request but doesn't affect the session
-		try {
-			request.logout();
-			LogHelper.logInfo(String.format("Request of <<%s>> has been logged out",username), SessionHelper.class);
-		} catch (ServletException exception) {
-			throw new RuntimeException(exception);
+		if(StringHelper.isNotBlank(request.getRemoteUser())) {
+			try {
+				request.logout();
+				LogHelper.logInfo(String.format("Request of <<%s>> has been logged out",username), SessionHelper.class);
+			} catch (ServletException exception) {
+				LogHelper.log(exception, SessionHelper.class);
+			}
 		}
 		
 		//keycloak
-		//UserManager.getInstance().logout(username);
-		/*Principal principal = request.getUserPrincipal();
-		if(principal instanceof KeycloakPrincipal) {
-			//KeycloakPrincipal<?> keycloakPrincipal = (KeycloakPrincipal<?>) principal;
-			//RefreshableKeycloakSecurityContext context =  (RefreshableKeycloakSecurityContext)request.getAttribute("org.keycloak.KeycloakSecurityContext");
-			//context.logout(context.getDeployment());
-		}*/
 		
+		if (request.getAttribute(KeycloakSecurityContext.class.getName()) instanceof RefreshableKeycloakSecurityContext) {
+			RefreshableKeycloakSecurityContext keycloakSecurityContext = (RefreshableKeycloakSecurityContext)request.getAttribute(KeycloakSecurityContext.class.getName());
+			keycloakSecurityContext.logout(keycloakSecurityContext.getDeployment());
+			request.removeAttribute(KeycloakSecurityContext.class.getName());
+			LogHelper.logInfo(String.format("Keycloak Security Context of <<%s>> has been logged out and removed",username), SessionHelper.class);
+		}
 		LogHelper.logInfo(String.format("Session of <<%s>> destroyed", username) , SessionHelper.class);
 	}
 	

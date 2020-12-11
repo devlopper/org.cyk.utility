@@ -124,6 +124,12 @@
 			<artifactId>keycloak-admin-client</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		
+		<dependency>
+		    <groupId>org.keycloak</groupId>
+		    <artifactId>keycloak-servlet-filter-adapter</artifactId>
+		    <scope>provided</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>

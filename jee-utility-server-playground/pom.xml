@@ -64,5 +64,72 @@
 				<deployment.standalone.port.offset>1</deployment.standalone.port.offset>
 			</properties>
 		</profile>
+		
+		<profile>
+			<id>wildfly.jar.maven.plugin.prod</id>
+			<properties>
+				<project.build.file.name>ROOT</project.build.file.name>
+			</properties>
+			<build>
+				<finalName>${project.build.file.name}</finalName>
+				<plugins>
+		            <plugin>
+		                <groupId>org.wildfly.plugins</groupId>
+		                <artifactId>wildfly-jar-maven-plugin</artifactId>
+		                <version>${org.wildfly.plugins.wildfly-jar-maven-plugin.version}</version>
+		                <configuration>
+		                	<feature-packs>
+		                		<feature-pack>
+		                			<location>wildfly@maven(org.jboss.universe:community-universe)</location>
+		                		</feature-pack>
+		                		<feature-pack>
+		                            <groupId>org.wildfly</groupId>
+		                            <artifactId>wildfly-datasources-galleon-pack</artifactId>
+		                            <version>${org.wildfly.wildfly-datasources-galleon-pack.version}</version>
+		                        </feature-pack>
+		                	</feature-packs>
+		                	<hollow-jar>true</hollow-jar>
+		                	<layers>
+		                    	<layer>cloud-server</layer>
+		                    	<layer>microprofile-openapi</layer>
+		                    	<layer>oracle-datasource</layer>
+		                    </layers>
+		                    <excluded-layers>
+		                        <layer>deployment-scanner</layer>
+		                    </excluded-layers>
+		                    <plugin-options>
+		                    	<jboss-fork-embedded>true</jboss-fork-embedded>
+		                    </plugin-options>
+		                </configuration>
+		                <executions>
+		                    <execution>
+		                        <goals>
+		                            <goal>package</goal>
+		                        </goals>
+		                    </execution>
+		                </executions>
+		            </plugin>
+		            <!--
+		            <plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<version>2.0.2</version>
+						<configuration>
+							<webResources>
+								<resource>
+									<directory>${basedir}/${packaging_profile_identifier}/WEB-INF</directory>
+									<filtering>true</filtering>
+									<targetPath>WEB-INF</targetPath>
+									<includes>
+										<include>**/*.*</include>
+									</includes>
+								</resource>
+							</webResources>
+						</configuration>
+					</plugin>
+		            -->
+		        </plugins>
+			</build>
+		</profile>
 	</profiles>
 </project>

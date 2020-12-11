@@ -26,17 +26,14 @@ import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
 @Path(ReportRepresentation.PATH)
-@Api
+//@Tag(name = "Report")
 public interface ReportRepresentation extends org.cyk.utility.__kernel__.representation.Representation {
 
 	@GET
 	@Path(PATH_GET)
 	@Produces({MediaType.APPLICATION_OCTET_STREAM})
-	@ApiOperation(value = "report",tags = {"report"})
+	//@Operation(description = "Get report")
 	Response get(@QueryParam(PARAMETER_IDENTIFIER) String identifier,@QueryParam(PARAMETER_PARAMETERS_NAMES) String parametersNames
 			,@QueryParam(PARAMETER_FILE_TYPE) String fileType,@QueryParam(PARAMETER_IS_INLINE) String isInline);
 
