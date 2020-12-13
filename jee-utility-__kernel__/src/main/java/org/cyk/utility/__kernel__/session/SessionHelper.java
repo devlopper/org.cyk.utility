@@ -2,21 +2,11 @@ package org.cyk.utility.__kernel__.session;
 
 import java.security.Principal;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.identifier.resource.RequestHelper;
-import org.cyk.utility.__kernel__.log.LogHelper;
-import org.cyk.utility.__kernel__.security.SecurityHelper;
-import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
-import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
-import org.keycloak.KeycloakPrincipal;
-import org.keycloak.KeycloakSecurityContext;
-import org.keycloak.adapters.RefreshableKeycloakSecurityContext;
-import org.keycloak.representations.AccessToken;
 
 public interface SessionHelper {
 
@@ -115,56 +105,18 @@ public interface SessionHelper {
 	}
 
 	static String getUserName(Principal principal) {
-		if(principal == null)
-			return null;
-		if(principal instanceof KeycloakPrincipal) {
-			KeycloakPrincipal<?> keycloakPrincipal = (KeycloakPrincipal<?>) principal;
-			AccessToken accessToken = keycloakPrincipal.getKeycloakSecurityContext().getToken();
-			return accessToken.getPreferredUsername();
-		}
-		return principal.getName();
+		return SessionManager.getInstance().getUserName(principal);
 	}
 	
 	static String getUserName() {
-		return getUserName(SecurityHelper.getPrincipal());
+		return SessionManager.getInstance().getUserName();
 	}
 	
 	static void destroy(HttpServletRequest request,String username) {
-		ThrowableHelper.throwIllegalArgumentExceptionIfNull("logged in user request", request);
-		ThrowableHelper.throwIllegalArgumentExceptionIfBlank("logged in user session name", username);
-		LogHelper.logInfo(String.format("Destroying session of <<%s>>", username) , SessionHelper.class);
-		//TODO must environment based
-		
-		// Servlet
-		
-		//invalidates the session but doesn't affect the identity information in the request
-		HttpSession httpSession = request.getSession();
-		ThrowableHelper.throwIllegalArgumentExceptionIfNull("logged in user session", httpSession);
-		httpSession.invalidate();		
-		LogHelper.logInfo(String.format("Session of <<%s>> has been invalidated",username), SessionHelper.class);
-		
-		//clears the identity information in the request but doesn't affect the session
-		if(StringHelper.isNotBlank(request.getRemoteUser())) {
-			try {
-				request.logout();
-				LogHelper.logInfo(String.format("Request of <<%s>> has been logged out",username), SessionHelper.class);
-			} catch (ServletException exception) {
-				LogHelper.log(exception, SessionHelper.class);
-			}
-		}
-		
-		//keycloak
-		
-		if (request.getAttribute(KeycloakSecurityContext.class.getName()) instanceof RefreshableKeycloakSecurityContext) {
-			RefreshableKeycloakSecurityContext keycloakSecurityContext = (RefreshableKeycloakSecurityContext)request.getAttribute(KeycloakSecurityContext.class.getName());
-			keycloakSecurityContext.logout(keycloakSecurityContext.getDeployment());
-			request.removeAttribute(KeycloakSecurityContext.class.getName());
-			LogHelper.logInfo(String.format("Keycloak Security Context of <<%s>> has been logged out and removed",username), SessionHelper.class);
-		}
-		LogHelper.logInfo(String.format("Session of <<%s>> destroyed", username) , SessionHelper.class);
+		SessionManager.getInstance().destroy(username,request);
 	}
 	
 	static void destroy(String username) {
-		destroy(DependencyInjection.inject(HttpServletRequest.class), username);
+		SessionManager.getInstance().destroy(username);
 	}
 }

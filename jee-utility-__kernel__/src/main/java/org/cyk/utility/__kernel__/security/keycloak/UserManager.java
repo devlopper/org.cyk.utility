@@ -21,7 +21,6 @@ import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.__kernel__.variable.VariableName;
-import org.jboss.weld.exceptions.IllegalArgumentException;
 import org.keycloak.admin.client.resource.RoleResource;
 import org.keycloak.admin.client.resource.RolesResource;
 import org.keycloak.admin.client.resource.UserResource;
