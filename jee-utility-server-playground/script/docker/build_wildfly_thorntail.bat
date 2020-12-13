@@ -1,0 +1,1 @@
+docker build --file ../../Dockerfile.wildfly.thorntail --tag "mic-acteur-api:latest" ../../

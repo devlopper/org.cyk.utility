@@ -1,0 +1,76 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.cyk.pom.jee.utility.security.keycloak.server</groupId>
+		<artifactId>pom-jee-utility-security-keycloak-server</artifactId>
+		<version>pom.jee.utility.security.keycloak.server.0.1.0</version>
+	</parent>
+
+	<groupId>org.cyk.jee.utility.security.keycloak.server</groupId>
+	<artifactId>jee-utility-security-keycloak-server</artifactId>
+	<version>0.1.0</version>
+	<packaging>jar</packaging>
+
+	<name>jee-utility-security-keycloak-server</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<org.keycloak.version>4.8.3.Final</org.keycloak.version>
+		<org.keycloak.keycloak-admin-client.version>${org.keycloak.version}</org.keycloak.keycloak-admin-client.version>
+		<org.keycloak.keycloak-servlet-filter-adapter.version>${org.keycloak.version}</org.keycloak.keycloak-servlet-filter-adapter.version>
+		<org.keycloak.keycloak-authz-client.version>${org.keycloak.version}</org.keycloak.keycloak-authz-client.version>
+		
+		<org.jboss.resteasy.resteasy-bom.version>3.5.1.Final</org.jboss.resteasy.resteasy-bom.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.cyk.jee.utility.security</groupId>
+			<artifactId>jee-utility-security</artifactId>
+			<version>0.1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.keycloak</groupId>
+			<artifactId>keycloak-admin-client</artifactId>
+			<version>${org.keycloak.keycloak-admin-client.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.keycloak</groupId>
+			<artifactId>keycloak-servlet-filter-adapter</artifactId>
+			<version>${org.keycloak.keycloak-servlet-filter-adapter.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.keycloak</groupId>
+			<artifactId>keycloak-authz-client</artifactId>
+			<version>${org.keycloak.keycloak-authz-client.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jackson2-provider</artifactId>
+			<version>${org.jboss.resteasy.resteasy-bom.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-client</artifactId>
+			<version>${org.jboss.resteasy.resteasy-bom.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jaxb-provider</artifactId>
+			<version>${org.jboss.resteasy.resteasy-bom.version}</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+</project>

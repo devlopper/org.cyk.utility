@@ -1,0 +1,1 @@
+docker build --tag "mic-acteur-api:latest" ../../

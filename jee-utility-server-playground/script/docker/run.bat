@@ -1,0 +1,1 @@
+docker run -e "SIIB_DB_HOST=192.168.43.105" -e "SIIB_DB_PORT=1521" -e "SIIB_DB_SID=XE" -e "SIIB_DB_USER=SIIBC_Actor" -e "SIIB_DB_PASSWORD=actor" -p 8080:8080 mic-acteur-api:latest

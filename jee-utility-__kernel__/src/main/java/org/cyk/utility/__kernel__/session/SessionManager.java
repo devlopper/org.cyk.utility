@@ -14,10 +14,6 @@ import org.cyk.utility.__kernel__.security.SecurityHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.Value;
-import org.keycloak.KeycloakPrincipal;
-import org.keycloak.KeycloakSecurityContext;
-import org.keycloak.adapters.RefreshableKeycloakSecurityContext;
-import org.keycloak.representations.AccessToken;
 
 public interface SessionManager {
 
@@ -32,11 +28,6 @@ public interface SessionManager {
 		public String getUserName(Principal principal) {
 			if(principal == null)
 				return null;
-			if(principal instanceof KeycloakPrincipal) {
-				KeycloakPrincipal<?> keycloakPrincipal = (KeycloakPrincipal<?>) principal;
-				AccessToken accessToken = keycloakPrincipal.getKeycloakSecurityContext().getToken();
-				return accessToken.getPreferredUsername();
-			}
 			return principal.getName();
 		}
 		
@@ -73,15 +64,6 @@ public interface SessionManager {
 				} catch (ServletException exception) {
 					LogHelper.log(exception, SessionHelper.class);
 				}
-			}
-			
-			//keycloak
-			
-			if (request.getAttribute(KeycloakSecurityContext.class.getName()) instanceof RefreshableKeycloakSecurityContext) {
-				RefreshableKeycloakSecurityContext keycloakSecurityContext = (RefreshableKeycloakSecurityContext)request.getAttribute(KeycloakSecurityContext.class.getName());
-				keycloakSecurityContext.logout(keycloakSecurityContext.getDeployment());
-				request.removeAttribute(KeycloakSecurityContext.class.getName());
-				LogHelper.logInfo(String.format("Keycloak Security Context of <<%s>> has been logged out and removed",username), SessionHelper.class);
 			}
 		}
 		
