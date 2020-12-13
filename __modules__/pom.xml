@@ -22,6 +22,8 @@
 		<module>../jee-utility-report-jasper</module>
 		<module>../jee-utility-security</module>
 		<module>../jee-utility-security-keycloak</module>
+		<module>../jee-utility-security-keycloak-server</module>
+		<module>../jee-utility-security-keycloak-client</module>
 		<module>../jee-utility</module>
 		<module>../jee-utility-server-persistence</module>
 		<module>../jee-utility-server-persistence-impl</module>
