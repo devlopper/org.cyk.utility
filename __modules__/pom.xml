@@ -18,6 +18,8 @@
 
 	<modules>
 		<module>../jee-utility-__kernel__</module>
+		<module>../jee-utility-report</module>
+		<module>../jee-utility-report-jasper</module>
 		<module>../jee-utility</module>
 		<module>../jee-utility-server-persistence</module>
 		<module>../jee-utility-server-persistence-impl</module>

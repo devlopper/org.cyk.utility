@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.ByteArrayOutputStream;
 
-import org.cyk.utility.__kernel__.report.ReportBuilder;
-import org.cyk.utility.__kernel__.report.Template;
+import org.cyk.utility.report.ReportBuilder;
+import org.cyk.utility.report.Template;
 import org.cyk.utility.__kernel__.test.arquillian.archive.builder.WebArchiveBuilder;
 import org.cyk.utility.server.business.test.arquillian.AbstractBusinessArquillianIntegrationTest;
 import org.jboss.shrinkwrap.api.spec.WebArchive;

@@ -3,8 +3,8 @@ package org.cyk.utility.report.jasper;
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 
-import org.cyk.utility.__kernel__.report.AbstractReportBuilderImpl;
-import org.cyk.utility.__kernel__.report.Template;
+import org.cyk.utility.report.AbstractReportBuilderImpl;
+import org.cyk.utility.report.Template;
 
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JREmptyDataSource;

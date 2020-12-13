@@ -6,8 +6,8 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.cyk.utility.__kernel__.report.ReportBuilder;
-import org.cyk.utility.__kernel__.report.Template;
+import org.cyk.utility.report.ReportBuilder;
+import org.cyk.utility.report.Template;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 

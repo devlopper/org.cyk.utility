@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
@@ -14,21 +15,28 @@
 	<packaging>jar</packaging>
 
 	<name>JEE utility server business</name>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.cyk.jee.utility.server.persistence</groupId>
 			<artifactId>jee-utility-server-persistence</artifactId>
 			<version>0.1.0</version>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>org.cyk.jee.utility.report.jasper</groupId>
+			<artifactId>jee-utility-report-jasper</artifactId>
+			<version>0.1.0</version>
+			<scope>test</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
 			<version>6.11.0</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports-fonts</artifactId>
@@ -53,7 +61,7 @@
 					<artifactId>h2</artifactId>
 					<version>1.4.197</version>
 				</dependency>
-		
+
 				<dependency>
 					<groupId>org.cyk.jee.utility.server.persistence.impl</groupId>
 					<artifactId>jee-utility-server-persistence-impl</artifactId>

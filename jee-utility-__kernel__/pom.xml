@@ -31,9 +31,6 @@
 		<org.apache.poi.poi.version>3.17</org.apache.poi.poi.version>
 		<org.apache.poi.poi-ooxml.version>3.17</org.apache.poi.poi-ooxml.version>
 		
-		<net.sf.jasper.report.version>6.11.0</net.sf.jasper.report.version>
-		<net.sf.jasperreports.jasperreports.version>${net.sf.jasper.report.version}</net.sf.jasperreports.jasperreports.version>
-		<net.sf.jasperreports.jasperreports-fonts.version>${net.sf.jasper.report.version}</net.sf.jasperreports.jasperreports-fonts.version>
 		<net.sf.barcode4j.barcode4j.version>2.1</net.sf.barcode4j.barcode4j.version>
 		
 		<org.elasticsearch.version>7.6.0</org.elasticsearch.version>
@@ -62,24 +59,6 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>net.sf.jasperreports</groupId>
-				<artifactId>jasperreports</artifactId>
-				<version>${net.sf.jasperreports.jasperreports.version}</version>
-				<scope>provided</scope>
-			</dependency>
-
-			<dependency>
-				<groupId>net.sf.jasperreports</groupId>
-				<artifactId>jasperreports-fonts</artifactId>
-				<version>${net.sf.jasperreports.jasperreports-fonts.version}</version>
-				<scope>provided</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
 
 	<dependencies>
 
@@ -176,19 +155,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>net.sf.jasperreports</groupId>
-			<artifactId>jasperreports</artifactId>
-		</dependency>
-
-		<dependency>
 			<groupId>net.sf.barcode4j</groupId>
 			<artifactId>barcode4j</artifactId>
 			<version>${net.sf.barcode4j.barcode4j.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>net.sf.jasperreports</groupId>
-			<artifactId>jasperreports-fonts</artifactId>
 		</dependency>
 
 		<dependency>

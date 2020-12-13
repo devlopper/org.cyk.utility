@@ -1,4 +1,4 @@
-package org.cyk.utility.__kernel__.report.jasper;
+package org.cyk.utility.report.jasper;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.cyk.utility.__kernel__.file.FileType;
-import org.cyk.utility.__kernel__.report.ReportGetter;
+import org.cyk.utility.report.ReportGetter;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.__kernel__.variable.VariableHelper;
 import org.cyk.utility.__kernel__.variable.VariableName;
