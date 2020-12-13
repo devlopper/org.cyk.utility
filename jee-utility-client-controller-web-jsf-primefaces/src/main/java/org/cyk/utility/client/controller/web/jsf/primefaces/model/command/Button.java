@@ -22,7 +22,12 @@ public class Button extends AbstractCommand implements Serializable {
 		@Override
 		protected Class<Button> __getClass__() {
 			return Button.class;
-		}	
+		}
+		
+		@Override
+		protected String __getTemplate__(Button button, Map<Object, Object> arguments) {
+			return "/command/button/default.xhtml";
+		}
 	}
 
 	public static Button build(Map<Object,Object> arguments) {
