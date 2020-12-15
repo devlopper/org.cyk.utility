@@ -18,6 +18,7 @@ public class SelectOneCombo extends AbstractInputChoiceOne implements Serializab
 
 	private Boolean filter;
 	private String filterMatchMode;
+	
 	/**/
 	
 	@Override
@@ -28,6 +29,12 @@ public class SelectOneCombo extends AbstractInputChoiceOne implements Serializab
 	@Override
 	public SelectOneCombo selectFirstChoice() {
 		return (SelectOneCombo) super.selectFirstChoice();
+	}
+	
+	@Override
+	public void setReadOnly(Boolean readOnly) {
+		super.setReadOnly(readOnly);
+		setDisabled(readOnly);
 	}
 	
 	public static final String FIELD_FILTER = "filter";

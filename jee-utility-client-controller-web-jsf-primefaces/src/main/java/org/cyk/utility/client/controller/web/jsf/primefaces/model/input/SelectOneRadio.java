@@ -18,9 +18,15 @@ public class SelectOneRadio extends AbstractInputChoiceOne implements Serializab
 	
 	/**/
 	
-	public static final String FIELD_UNSELECTABLE = "unselectable";
+	@Override
+	public void setReadOnly(Boolean readOnly) {
+		super.setReadOnly(readOnly);
+		setDisabled(readOnly);
+	}
 	
 	/**/
+	
+	public static final String FIELD_UNSELECTABLE = "unselectable";
 	
 	/**/
 

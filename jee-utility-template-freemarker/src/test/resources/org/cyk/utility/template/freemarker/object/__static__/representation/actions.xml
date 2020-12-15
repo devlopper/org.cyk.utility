@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<links>
+	<link rel="update" href="http://localhost:8080/file/01" method="PUT"/>
+	<link rel="delete" href="http://localhost:8080/file/01" method="DELETE"/>
+	<link rel="download" href="http://localhost:8080/file/01/download?isinline=true" method="GET"/>
+</links>

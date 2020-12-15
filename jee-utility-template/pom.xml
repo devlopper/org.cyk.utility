@@ -16,5 +16,13 @@
 
 	<name>jee-utility-template</name>
 	<url>http://maven.apache.org</url>
+	
+	<dependencies>
+		<dependency>
+			<groupId>org.cyk.jee.utility.__kernel__</groupId>
+			<artifactId>jee-utility-__kernel__</artifactId>
+			<version>0.1.0</version>
+		</dependency>
+	</dependencies>
 
 </project>

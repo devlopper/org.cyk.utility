@@ -91,6 +91,11 @@ public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractOb
 		return eventScripts.read(event);
 	}
 	
+	public AbstractObject setEventScript(Event event,String script) {
+		getEventScripts(Boolean.TRUE).write(event, script);
+		return this;
+	}
+	
 	public String getOnStart() {
 		return getEventScript(Event.START);
 	}

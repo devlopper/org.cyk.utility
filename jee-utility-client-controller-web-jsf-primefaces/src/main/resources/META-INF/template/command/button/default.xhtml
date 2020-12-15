@@ -9,18 +9,36 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
-	<p:button
-		id="#{button.identifier}"
-		value="#{button.value}"
-		outcome="#{button.outcome}"
-		icon="#{button.icon}"
-		title="#{button.title}"
-		rendered="#{button.rendered}"
-	>
-		<c:forEach items="#{button.parameters}" var="parameter">
-			<f:param name="#{parameter.key}" value="#{parameter.value}"/>
-		</c:forEach>
-		
-	</p:button>
+	<c:if test="#{empty button.outcome}">
+		<p:button
+			id="#{button.identifier}"
+			value="#{button.value}"
+			icon="#{button.icon}"
+			title="#{button.title}"
+			rendered="#{button.rendered}"
+			
+			disabled="#{button.disabled}"
+			href="#"
+			onclick="#{button.onClick}"
+		/>
+	</c:if>
 	
+	<c:if test="#{not empty button.outcome}">
+		<p:button
+			id="#{button.identifier}"
+			value="#{button.value}"
+			outcome="#{button.outcome}"
+			icon="#{button.icon}"
+			title="#{button.title}"
+			rendered="#{button.rendered}"
+			
+			disabled="#{button.disabled}"
+			onclick="#{button.onClick}"
+		>
+			<c:forEach items="#{button.parameters}" var="parameter">
+				<f:param name="#{parameter.key}" value="#{parameter.value}"/>
+			</c:forEach>
+			
+		</p:button>
+	</c:if>
 </ui:composition>

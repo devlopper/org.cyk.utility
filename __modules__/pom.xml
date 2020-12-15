@@ -18,8 +18,11 @@
 
 	<modules>
 		<module>../jee-utility-__kernel__</module>
+		<module>../jee-utility-template</module>
+		<module>../jee-utility-template-freemarker</module>
 		<module>../jee-utility-report</module>
 		<module>../jee-utility-report-jasper</module>
+		<module>../jee-utility-report-jasper-server</module>
 		<module>../jee-utility-security</module>
 		<module>../jee-utility-security-keycloak</module>
 		<module>../jee-utility-security-keycloak-server</module>

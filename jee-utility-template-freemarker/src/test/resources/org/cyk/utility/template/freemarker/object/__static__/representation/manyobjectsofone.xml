@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<many>
+    <element>
+        <f1>v1</f1>
+        <f2>v2</f2>
+    </element>
+    <element xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="one">
+        <f1>va1</f1>
+        <f2>va2</f2>
+    </element>
+</many>

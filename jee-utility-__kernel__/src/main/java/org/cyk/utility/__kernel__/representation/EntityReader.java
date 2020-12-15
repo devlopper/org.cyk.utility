@@ -106,6 +106,8 @@ public interface EntityReader {
 					}else
 						logMessages.add("count query identifier of <<"+queryExecutorArguments.getQuery().getIdentifier()+">> cannot be built");
 				}
+				if(CollectionHelper.isNotEmpty(representations))
+					DataTransferObjectProcessor.getInstance().processRead((Class<Object>) internal.representationEntityClass,arguments, (Collection<Object>)representations);
 				responseBuilderArguments.setEntities(representations).setXTotalCount(xTotalCount);
 			}else {
 				logMessages.add("one");
@@ -115,6 +117,8 @@ public interface EntityReader {
 					mapperSourceDestinationArguments = MappingHelper.getDestination(arguments.getMappingArguments(), MapperSourceDestination.Arguments.class);				
 				Object representation =  persistence == null ? null : MappingSourceBuilder.getInstance().build(persistence, internal.representationEntityClass
 						,mapperSourceDestinationArguments);
+				if(representation != null)
+					DataTransferObjectProcessor.getInstance().processRead((Class<Object>) internal.representationEntityClass,arguments, representation);
 				responseBuilderArguments.setEntity(representation);
 			}
 		}
@@ -145,75 +149,6 @@ public interface EntityReader {
 			return read(arguments);
 		}
 		
-		/*
-		@Override
-		public Response read(Arguments arguments) {
-			if(arguments == null)
-				return ResponseBuilder.getInstance().buildRuntimeException(null,"arguments are required");
-			Arguments.Internal internal;
-			LogMessages logMessages = new LogMessages().setKlass(getClass());
-			if(Boolean.TRUE.equals(arguments.getLoggableAsInfo()))
-				logMessages.setLoggable(Boolean.TRUE).setLevel(Level.INFO);
-			try {
-				ResponseBuilder.Arguments responseBuilderArguments = new ResponseBuilder.Arguments().setProcessingStartTime(System.currentTimeMillis());
-				internal = new Arguments.Internal(arguments, EntityReader.class);
-				QueryExecutorArguments queryExecutorArguments = null;
-				if(arguments.getQueryExecutorArguments() == null)
-					queryExecutorArguments = new QueryExecutorArguments();
-				else
-					queryExecutorArguments = MappingHelper.getDestination(arguments.getQueryExecutorArguments(), QueryExecutorArguments.class);
-				if(queryExecutorArguments.getIsResultProcessable() == null)
-					queryExecutorArguments.setIsResultProcessable(Boolean.TRUE);
-				if(queryExecutorArguments.getCollectionable() == null)
-					queryExecutorArguments.setCollectionable(Boolean.TRUE);
-				
-				logMessages.add("get","collection ? "+queryExecutorArguments.getCollectionable());
-				if(Boolean.TRUE.equals(queryExecutorArguments.getCollectionable())) {
-					Collection<?> persistences = org.cyk.utility.__kernel__.persistence.query.EntityReader.getInstance().readMany(internal.persistenceEntityClass,queryExecutorArguments);				
-					MapperSourceDestination.Arguments mapperSourceDestinationArguments = null;
-					if(arguments.getMappingArguments() != null)
-						mapperSourceDestinationArguments = MappingHelper.getDestination(arguments.getMappingArguments(), MapperSourceDestination.Arguments.class);				
-					Collection<?> representations =  CollectionHelper.isEmpty(persistences) ? null : MappingSourceBuilder.getInstance().build(persistences, internal.representationEntityClass
-							,mapperSourceDestinationArguments);
-					Long xTotalCount = null;
-					Boolean countable = Boolean.TRUE.equals(arguments.getCountable()) && queryExecutorArguments.getQuery() != null;
-					logMessages.add("countable ? "+countable);
-					if(Boolean.TRUE.equals(countable)) {						
-						String countQueryIdentifier =  QueryIdentifierBuilder.getInstance().buildCountFrom(queryExecutorArguments.getQuery().getIdentifier());
-						if(StringHelper.isNotBlank(countQueryIdentifier)) {							
-							queryExecutorArguments.setQuery(QueryGetter.getInstance().get(countQueryIdentifier));
-							if(queryExecutorArguments.getQuery() != null) {
-								xTotalCount = EntityCounter.getInstance().count(internal.persistenceEntityClass,queryExecutorArguments);	
-								logMessages.add("count = "+xTotalCount);
-							}
-						}
-					}
-					responseBuilderArguments.setEntities(representations).setXTotalCount(xTotalCount);
-				}else {
-					Object persistence = org.cyk.utility.__kernel__.persistence.query.EntityReader.getInstance().readOne(internal.persistenceEntityClass,queryExecutorArguments);
-					MapperSourceDestination.Arguments mapperSourceDestinationArguments = null;
-					if(arguments.getMappingArguments() != null)
-						mapperSourceDestinationArguments = MappingHelper.getDestination(arguments.getMappingArguments(), MapperSourceDestination.Arguments.class);				
-					Object representation =  persistence == null ? null : MappingSourceBuilder.getInstance().build(persistence, internal.representationEntityClass
-							,mapperSourceDestinationArguments);
-					responseBuilderArguments.setEntity(representation);
-				}
-				Response response = ResponseBuilder.getInstance().build(responseBuilderArguments);
-				logMessages.add("SUCCESS");
-				return response;
-			} catch (Exception exception) {
-				logMessages.add("ERROR!!!");
-				LogHelper.log(exception, getClass());
-				return ResponseBuilder.getInstance().build(exception);
-			} finally {
-				if(logMessages.getLoggable() == null)
-					logMessages.setLoggable(LOGGABLE);
-				if(logMessages.getLevel() == null)
-					logMessages.setLevel(LOG_LEVEL);
-				LogHelper.log(logMessages);
-			}
-		}
-		*/
 		public static Boolean LOGGABLE = Boolean.FALSE;
 		public static Level LOG_LEVEL = Level.FINEST;
 	}

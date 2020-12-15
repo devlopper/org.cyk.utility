@@ -2,6 +2,7 @@ package org.cyk.utility.report;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,15 +26,22 @@ import org.cyk.utility.__kernel__.file.FileType;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 @Path(ReportRepresentation.PATH)
-//@Tag(name = "Report")
+@Tag(name = "Report")
 public interface ReportRepresentation extends org.cyk.utility.__kernel__.representation.Representation {
 
 	@GET
 	@Path(PATH_GET)
 	@Produces({MediaType.APPLICATION_OCTET_STREAM})
-	//@Operation(description = "Get report")
+	@Operation(description = "Get report")
+	@APIResponses(value = {
+		@APIResponse(responseCode = "200")	
+	})
 	Response get(@QueryParam(PARAMETER_IDENTIFIER) String identifier,@QueryParam(PARAMETER_PARAMETERS_NAMES) String parametersNames
 			,@QueryParam(PARAMETER_FILE_TYPE) String fileType,@QueryParam(PARAMETER_IS_INLINE) String isInline);
 
@@ -77,4 +85,11 @@ public interface ReportRepresentation extends org.cyk.utility.__kernel__.represe
 	
 	String PATH = "/report";
 	String PATH_GET = __SLASH__+"get";
+	
+	String PATH_GET_URL_FORMAT = "%s://%s:%s/api"+PATH+PATH_GET+"?"+PARAMETER_IDENTIFIER+"=%s";
+	static String formatPathGetUrl(String identifier) {
+		HttpServletRequest httpServletRequest = DependencyInjection.inject(HttpServletRequest.class);
+		URI uri = URI.create(httpServletRequest.getRequestURI());
+		return String.format(PATH_GET_URL_FORMAT,uri.getScheme(),uri.getHost(),uri.getPort(),identifier);
+	}
 }

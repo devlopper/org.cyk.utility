@@ -25,6 +25,7 @@ public abstract class AbstractCommand extends AbstractAction implements Serializ
 
 	protected Confirm confirm;
 	protected String value,title,icon;
+	protected Boolean disabled;
 	
 	protected String outcome;
 	protected Map<String,String> parameters;
@@ -81,6 +82,7 @@ public abstract class AbstractCommand extends AbstractAction implements Serializ
 	public static final String FIELD_VALUE = "value";
 	public static final String FIELD_TITLE = "title";
 	public static final String FIELD_ICON = "icon";
+	public static final String FIELD_DISABLED = "disabled";
 	
 	public static final String FIELD_OUTCOME = "outcome";
 	public static final String FIELD_PARAMETERS = "parameters";
@@ -126,6 +128,9 @@ public abstract class AbstractCommand extends AbstractAction implements Serializ
 			if(command.confirm == null && Boolean.TRUE.equals(MapHelper.readByKey(arguments, FIELD_CONFIRMABLE))) {
 				command.confirm = Confirm.build();
 			}
+			
+			if(command.disabled == null)
+				command.disabled = Boolean.FALSE;
 		}
 		
 		public static final String FIELD_CONFIRMABLE = "confirmable";
