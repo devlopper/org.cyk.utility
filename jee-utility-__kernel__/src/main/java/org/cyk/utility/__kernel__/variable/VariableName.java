@@ -17,8 +17,12 @@ public interface VariableName {
 	String SYSTEM_TIMESTAMP = buildSystem("timestamp");
 	String SYSTEM_TIMESTAMP_AS_STRING = buildSystem("timestamp.as.string");
 	String SYSTEM_NAME = buildSystem("name");
-	String SYSTEM_HOST = buildSystem("host");
-	String SYSTEM_PORT = buildSystem("port");
+	
+	String SYSTEM_UNIFORM_RESOURCE_IDENTIFIER_SCHEME = buildSystem("uri.scheme");
+	String SYSTEM_UNIFORM_RESOURCE_IDENTIFIER_HOST = buildSystem("uri.host");
+	String SYSTEM_UNIFORM_RESOURCE_IDENTIFIER_PORT = buildSystem("uri.port");
+	String SYSTEM_UNIFORM_RESOURCE_IDENTIFIER_CONTEXT = buildSystem("uri.context");
+	
 	String SYSTEM_WEB_CONTEXT = buildSystem("web.context");
 	String SYSTEM_WEB_HOME_URL = buildSystem("web.home.url");
 	String SYSTEM_LOGGING_ENABLED = buildSystem("logging.enabled");

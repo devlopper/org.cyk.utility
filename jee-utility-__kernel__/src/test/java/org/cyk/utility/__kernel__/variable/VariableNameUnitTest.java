@@ -48,12 +48,12 @@ public class VariableNameUnitTest extends AbstractWeldUnitTest {
 	
 	@Test
 	public void systemHost(){
-		assertThat(VariableName.SYSTEM_HOST).isEqualTo("cyk.variable.system.host");
+		assertThat(VariableName.SYSTEM_UNIFORM_RESOURCE_IDENTIFIER_HOST).isEqualTo("cyk.variable.system.host");
 	}
 	
 	@Test
 	public void systemPort(){
-		assertThat(VariableName.SYSTEM_PORT).isEqualTo("cyk.variable.system.port");
+		assertThat(VariableName.SYSTEM_UNIFORM_RESOURCE_IDENTIFIER_PORT).isEqualTo("cyk.variable.system.port");
 	}
 	 
 	@Test

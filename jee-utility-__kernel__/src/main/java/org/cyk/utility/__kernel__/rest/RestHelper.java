@@ -18,7 +18,10 @@ import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.protocol.http.HttpHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.value.Value;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.__kernel__.variable.VariableHelper;
+import org.cyk.utility.__kernel__.variable.VariableName;
 import org.jboss.weld.exceptions.IllegalArgumentException;
 
 /**
@@ -88,5 +91,25 @@ public interface RestHelper {
 	static <RESOURCE> Collection<RESOURCE> getMany(Class<RESOURCE> resourceClass) {
 		return getMany(resourceClass, null, null, null);
 	}
+
+	public static String buildResourcePath(String resourceContainerPath,String relativeResourcePath) {
+		return String.format(RESOURCE_PATH_FORMAT					
+				,StringHelper.addToBeginIfDoesNotStartWith(resourceContainerPath, "/")
+				,StringHelper.addToBeginIfDoesNotStartWith(relativeResourcePath,"/")
+			);
+	}
 	
+	public static String buildResourceIdentifier(String resourceContainerPath,String relativeResourcePath) {
+		return String.format(RESOURCE_IDENTIFIER_FORMAT
+				,ValueHelper.defaultToIfBlank(ConfigurationHelper.getValueAsString(VariableName.SYSTEM_UNIFORM_RESOURCE_IDENTIFIER_SCHEME),"http")
+				,ValueHelper.defaultToIfBlank(ConfigurationHelper.getValueAsString(VariableName.SYSTEM_UNIFORM_RESOURCE_IDENTIFIER_HOST),"localhost")
+				,ValueHelper.defaultToIfBlank(ConfigurationHelper.getValueAsString(VariableName.SYSTEM_UNIFORM_RESOURCE_IDENTIFIER_PORT),"80")
+				,ValueHelper.defaultToIfBlank(ConfigurationHelper.getValueAsString(VariableName.SYSTEM_UNIFORM_RESOURCE_IDENTIFIER_CONTEXT),"/api")
+				,buildResourcePath(resourceContainerPath, relativeResourcePath));
+	}
+	
+	public static final String RESOURCE_PATH_FORMAT = "%s%s";
+	public static final String RESOURCE_IDENTIFIER_FORMAT = "%s://%s:%s%s%s";
+	
+	Value APPLICATION_PATH = new Value().set("/api");
 }

@@ -17,6 +17,11 @@ import org.keycloak.adapters.RefreshableKeycloakSecurityContext;
 public class SessionManagerImpl extends SessionManager.AbstractImpl implements Serializable {
 
 	@Override
+	protected Boolean __isUserLogged__(HttpServletRequest request) {
+		return request.getAttribute(KeycloakSecurityContext.class.getName()) instanceof RefreshableKeycloakSecurityContext;
+	}
+	
+	@Override
 	public String getUserName(Principal principal) {
 		return KeycloakHelper.getUserName(principal);
 	}

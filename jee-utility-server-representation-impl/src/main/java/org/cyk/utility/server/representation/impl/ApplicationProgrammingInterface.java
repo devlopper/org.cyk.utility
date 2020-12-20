@@ -13,6 +13,7 @@ import javax.ws.rs.Produces;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
+import org.cyk.utility.__kernel__.rest.RestHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.variable.VariableName;
 
@@ -20,6 +21,10 @@ import org.cyk.utility.__kernel__.variable.VariableName;
 @ApplicationScoped
 public class ApplicationProgrammingInterface extends javax.ws.rs.core.Application implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	public ApplicationProgrammingInterface() {
+		RestHelper.APPLICATION_PATH.set(PATH);
+	}
 	
 	@GET
 	@Path("/")
@@ -39,7 +44,7 @@ public class ApplicationProgrammingInterface extends javax.ws.rs.core.Applicatio
 		HttpServletRequest httpServletRequest = DependencyInjection.inject(HttpServletRequest.class);
 		URI uri = URI.create(httpServletRequest.getRequestURL().toString());
 		String context = StringUtils.substringBefore(httpServletRequest.getRequestURI(), PATH);
-		return String.format(RESOURCE_IDENTIFIER_FORMAT, uri.getScheme(),uri.getHost(),uri.getPort(),context,buildResourcePath(resourceContainerPath, resourcePath));
+		return String.format(RESOURCE_IDENTIFIER_FORMAT, uri.getScheme(),uri.getHost(),uri.getPort() == -1 ? 80 : uri.getPort(),context,buildResourcePath(resourceContainerPath, resourcePath));
 	}
 	
 	/**/

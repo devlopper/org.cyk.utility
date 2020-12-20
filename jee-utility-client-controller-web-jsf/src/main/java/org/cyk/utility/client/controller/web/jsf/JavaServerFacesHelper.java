@@ -1,6 +1,7 @@
 package org.cyk.utility.client.controller.web.jsf;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import javax.el.MethodExpression;
 import javax.el.ValueExpression;
@@ -10,7 +11,13 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.identifier.resource.PathAsFunctionParameter;
+import org.cyk.utility.__kernel__.identifier.resource.QueryAsFunctionParameter;
+import org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierAsFunctionParameter;
+import org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.client.controller.AbstractObject;
 import org.cyk.utility.client.controller.component.Component;
 
@@ -79,5 +86,20 @@ public class JavaServerFacesHelper extends AbstractObject implements Serializabl
 		return FacesContext.getCurrentInstance().getMessages(clientId).hasNext();
 	}
 	
+	public static String buildUrlFromOutcome(String outcome,Collection<String> queries) {
+		ThrowableHelper.throwIllegalArgumentExceptionIfBlank("outcome", outcome);
+		UniformResourceIdentifierAsFunctionParameter p = new UniformResourceIdentifierAsFunctionParameter();
+		p.setRequest(FacesContext.getCurrentInstance().getExternalContext().getRequest());
+		p.setPath(new PathAsFunctionParameter());
+		p.getPath().setIdentifier(outcome);
+		if(CollectionHelper.isNotEmpty(queries)) {
+			p.setQuery(new QueryAsFunctionParameter());
+			p.getQuery().setValue(CollectionHelper.isEmpty(queries) ? null : StringHelper.concatenate(queries, "&"));	
+		}		
+		return UniformResourceIdentifierHelper.build(p);
+	}
 	
+	public static String buildUrlFromOutcome(String outcome) {
+		return buildUrlFromOutcome(outcome, null);
+	}
 }

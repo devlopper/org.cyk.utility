@@ -13,6 +13,7 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.identifier.resource.ProxyGetter;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.mapping.MappingHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.rest.ResponseHelper;
@@ -173,7 +174,13 @@ public class Arguments<T> extends AbstractObject implements Serializable {
 					else if(ClassHelper.isInstanceOfOne(__representationEntityClass__,org.cyk.utility.__kernel__.representation.EntityReader.class,org.cyk.utility.__kernel__.representation.EntityCounter.class))
 						throw new RuntimeException("response entity class not yet handled");
 				}else {
-					runtimeExceptionDto = response.readEntity(RuntimeException.Dto.class);				
+					LogHelper.logWarning(String.format("NOT SUCCESS - %s", response.getStatusInfo()), getClass());
+					try {
+						runtimeExceptionDto = response.readEntity(RuntimeException.Dto.class);
+					} catch (Exception exception) {
+						//LogHelper.logSevere(response.readEntity(String.class), getClass());
+						throw new RuntimeException(exception);
+					}
 				}
 			}else {
 				if(ResponseHelper.isFamilySuccessful(response))

@@ -20,6 +20,7 @@ public class ClientRequestFilterImpl implements ClientRequestFilter,Serializable
 		if (Boolean.TRUE.equals(LOGGABLE)) {
 			StringBuilder stringBuilder = new StringBuilder();
 			stringBuilder.append(requestContext.getMethod() + " " + requestContext.getUri().getPath());
+			//stringBuilder.append(requestContext.getMethod() + " " + requestContext.getUri());
 			if (StringHelper.isNotBlank(requestContext.getUri().getQuery()))
 				stringBuilder.append("?" + requestContext.getUri().getQuery());
 			if (Boolean.TRUE.equals(BODY_LOGGABLE)) {

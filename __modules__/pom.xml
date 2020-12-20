@@ -23,6 +23,7 @@
 		<module>../jee-utility-report</module>
 		<module>../jee-utility-report-jasper</module>
 		<module>../jee-utility-report-jasper-server</module>
+		<module>../jee-utility-report-jasper-client</module>
 		<module>../jee-utility-security</module>
 		<module>../jee-utility-security-keycloak</module>
 		<module>../jee-utility-security-keycloak-server</module>

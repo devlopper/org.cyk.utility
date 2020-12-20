@@ -17,6 +17,8 @@ import org.cyk.utility.__kernel__.value.Value;
 
 public interface SessionManager {
 
+	Boolean isUserLogged(HttpServletRequest request);
+	
 	String getUserName(Principal principal);
 	String getUserName();
 	
@@ -24,6 +26,17 @@ public interface SessionManager {
 	void destroy(String username);
 	
 	public static abstract class AbstractImpl extends AbstractObject implements SessionManager,Serializable {
+		
+		@Override
+		public Boolean isUserLogged(HttpServletRequest request) {
+			if(request == null)
+				return Boolean.FALSE;
+			return Boolean.TRUE.equals(__isUserLogged__(request));
+		}
+		
+		protected Boolean __isUserLogged__(HttpServletRequest request) {
+			return request.getUserPrincipal() != null;
+		}
 		
 		public String getUserName(Principal principal) {
 			if(principal == null)

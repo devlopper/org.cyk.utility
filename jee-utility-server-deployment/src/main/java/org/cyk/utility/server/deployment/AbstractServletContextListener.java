@@ -1,23 +1,15 @@
 package org.cyk.utility.server.deployment;
 import java.io.Serializable;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 
-import org.apache.commons.lang3.RegExUtils;
 import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
-import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.context.ContextHelper;
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
-import org.cyk.utility.__kernel__.string.StringHelper;
-import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.__kernel__.variable.VariableName;
 import org.cyk.utility.network.protocol.ProtocolDefaults;
 import org.cyk.utility.security.Credentials;
-import org.cyk.utility.server.representation.impl.ApplicationProgrammingInterface;
 import org.cyk.utility.server.representation.impl.ApplicationScopeLifeCycleListener;
 
 
@@ -37,6 +29,11 @@ public abstract class AbstractServletContextListener extends org.cyk.utility.con
 	public void __initialize__(ServletContext context) {
 		ContextHelper.set(context);
 		super.__initialize__(context);
+		/*
+		VariableHelper.write(VariableName.SYSTEM_UNIFORM_RESOURCE_IDENTIFIER_SCHEME, "http");
+		VariableHelper.write(VariableName.SYSTEM_UNIFORM_RESOURCE_IDENTIFIER_PORT, "80");
+		VariableHelper.write(VariableName.SYSTEM_UNIFORM_RESOURCE_IDENTIFIER_CONTEXT, "/api");
+		*/
 		if(ConfigurationHelper.is(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_ENABLE)) {
 			__inject__(ProtocolDefaults.class)
 			.getSimpleMailTransfer()

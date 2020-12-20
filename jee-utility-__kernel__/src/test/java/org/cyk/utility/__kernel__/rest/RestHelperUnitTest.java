@@ -12,6 +12,7 @@ import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
 import org.cyk.utility.__kernel__.protocol.http.HttpClientGetter;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.__kernel__.variable.VariableHelper;
 import org.cyk.utility.__kernel__.variable.VariableName;
 import org.junit.jupiter.api.Test;
 import org.mockserver.client.MockServerClient;
@@ -69,7 +70,24 @@ public class RestHelperUnitTest extends AbstractWeldUnitTest {
 		assertThat(persons.stream().map(Person::getFirstName)).contains("yao");
 		assertThat(persons.stream().map(Person::getLastNames)).contains("jean luc");
 	}
+	
+	@Test
+	public void buildResourcePath(){
+		assertThat(RestHelper.buildResourcePath("a", "b")).isEqualTo("/a/b");
+		assertThat(RestHelper.buildResourcePath("/a", "b")).isEqualTo("/a/b");
+		assertThat(RestHelper.buildResourcePath("a", "/b")).isEqualTo("/a/b");
+		assertThat(RestHelper.buildResourcePath("/a", "/b")).isEqualTo("/a/b");
+	}
 
+	@Test
+	public void buildResourceIdentifier(){
+		VariableHelper.write(VariableName.SYSTEM_UNIFORM_RESOURCE_IDENTIFIER_SCHEME, "http");
+		VariableHelper.write(VariableName.SYSTEM_UNIFORM_RESOURCE_IDENTIFIER_HOST, "myhost");
+		VariableHelper.write(VariableName.SYSTEM_UNIFORM_RESOURCE_IDENTIFIER_PORT, "8081");
+		VariableHelper.write(VariableName.SYSTEM_UNIFORM_RESOURCE_IDENTIFIER_CONTEXT, "/api");
+		assertThat(RestHelper.buildResourceIdentifier("a", "b")).isEqualTo("http://myhost:8081/api/a/b");
+	}
+	
 	/**/
 	
 	@Getter @Setter @Accessors(chain=true)
