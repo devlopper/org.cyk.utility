@@ -109,6 +109,8 @@ public interface InputClassBuilder {
 				return SelectBooleanCheckbox.class;
 			if(field.isAnnotationPresent(org.cyk.utility.__kernel__.object.__static__.controller.annotation.InputBooleanButton.class))
 				return SelectBooleanButton.class;
+			if(field.isAnnotationPresent(org.cyk.utility.__kernel__.object.__static__.controller.annotation.InputFile.class))
+				return FileUpload.class;
 			return Void.class;
 		}
 	}

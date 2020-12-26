@@ -1,11 +1,19 @@
 package org.cyk.utility.__kernel__;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.Closeable;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.cyk.utility.__kernel__.array.ArrayHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
@@ -14,6 +22,8 @@ import org.cyk.utility.__kernel__.value.Value;
 
 public interface Helper {
 
+	Integer DEFAULT_BUFFER_SIZE = 1024 * 1; // 1KB.
+	
 	static Boolean isHaveModifiers(Integer encodedModifiers,Collection<Integer> modifiers,Integer numberOfMatch) {
 		if(encodedModifiers == null)
 			return Boolean.FALSE;
@@ -96,6 +106,44 @@ public interface Helper {
 	
 	static String getRequestedUrl() {
 		return getUrl(DependencyInjection.inject(HttpServletRequest.class));
+	}
+
+	static void write(byte[] bytes,OutputStream outputStream) throws IOException {
+		if(bytes == null || outputStream == null)
+			return;
+		BufferedInputStream input = null;
+		BufferedOutputStream output = null;
+		try {
+			input = new BufferedInputStream(new ByteArrayInputStream(bytes), DEFAULT_BUFFER_SIZE);
+			output = new BufferedOutputStream(outputStream, DEFAULT_BUFFER_SIZE);
+			byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
+			int length;
+			while ((length = input.read(buffer)) > 0) {
+				output.write(buffer, 0, length);
+			}
+		} finally {
+			close(output, input);
+		}
+	}
+	
+	static void close(Collection<Closeable> closeables) {
+		if(CollectionHelper.isEmpty(closeables))
+			return;
+		for(Closeable closeable : closeables) {
+			if(closeable == null)
+				continue;
+			try {
+				closeable.close();
+			} catch (IOException exception) {
+				exception.printStackTrace();
+			}
+		}
+	}
+	
+	static void close(Closeable...closeables) {
+		if(ArrayHelper.isEmpty(closeables))
+			return;
+		close(CollectionHelper.listOf(closeables));
 	}
 	
 	/**/

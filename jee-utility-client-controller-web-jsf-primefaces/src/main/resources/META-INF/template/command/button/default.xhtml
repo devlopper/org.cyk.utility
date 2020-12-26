@@ -10,17 +10,31 @@
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
 	<c:if test="#{empty button.outcome}">
-		<p:button
-			id="#{button.identifier}"
-			value="#{button.value}"
-			icon="#{button.icon}"
-			title="#{button.title}"
-			rendered="#{button.rendered}"
+		<c:if test="#{empty button.value}">
+			<p:button
+				id="#{button.identifier}"
+				icon="#{button.icon}"
+				title="#{button.title}"
+				rendered="#{button.rendered}"			
+				disabled="#{button.disabled}"
+				href="#"
+				onclick="#{button.onClick}"
+			/>
+		</c:if>
+		<c:if test="#{not empty button.value}">
+			<p:button
+				value="#{button.value}"
+				
+				id="#{button.identifier}"				
+				icon="#{button.icon}"
+				title="#{button.title}"
+				rendered="#{button.rendered}"				
+				disabled="#{button.disabled}"
+				href="#"
+				onclick="#{button.onClick}"
+			/>
+		</c:if>
 			
-			disabled="#{button.disabled}"
-			href="#"
-			onclick="#{button.onClick}"
-		/>
 	</c:if>
 	
 	<c:if test="#{not empty button.outcome}">

@@ -107,13 +107,23 @@ public class WebController extends AbstractObject implements Serializable {
 		return action;
 	}
 	
+	public String getRequestedURI(HttpServletRequest httpServletRequest) {
+		StringBuilder stringBuilder = new StringBuilder(httpServletRequest.getRequestURL().toString());
+		if(StringHelper.isNotBlank(httpServletRequest.getQueryString()))
+			stringBuilder.append("?"+httpServletRequest.getQueryString());
+		return stringBuilder.toString();
+	}
+	
+	public String getRequestedURI() {
+		return getRequestedURI(DependencyInjection.inject(HttpServletRequest.class));
+	}
+	
 	/**/
 	
 	public static WebController getInstance() {
 		return DependencyInjection.inject(WebController.class);
 	}
 	
-	public static final String REQUEST_PARAMETER_NAME_WINDOW_RENDER_TYPE = "windowrendertype";
-	
+	public static final String REQUEST_PARAMETER_NAME_WINDOW_RENDER_TYPE = "windowrendertype";	
 	public static final String REQUEST_PARAMETER_VALUE_WINDOW_RENDER_TYPE_DIALOG = "windowrendertypedialog";
 }

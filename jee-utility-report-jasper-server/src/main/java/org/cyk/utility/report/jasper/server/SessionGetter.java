@@ -22,7 +22,7 @@ public interface SessionGetter {
 	
 	public static abstract class AbstractImpl extends AbstractObject implements SessionGetter,Serializable {
 		
-		private static Session SESSION;
+		public static Session SESSION;
 		
 		@Override
 		public Session get(String username, String password) {

@@ -71,6 +71,7 @@ public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractOb
 	public static final String FIELD_WIDGET_VAR = "widgetVar";
 	public static final String FIELD_STYLE = "style";
 	public static final String FIELD_STYLE_CLASS = "styleClass";
+	public static final String FIELD_STYLE_CLASS_AS_IDENTIFIER = "styleClassAsIdentifier";
 	public static final String FIELD_RENDERED = "rendered";
 	public static final String FIELD_EVENT_SCRIPTS = "eventScripts";
 	public static final String FIELD___TEMPLATE__ = "__template__";
@@ -167,9 +168,10 @@ public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractOb
 						object.styleClassAsIdentifier = object.identifier;
 					else
 						object.styleClassAsIdentifier = generateIdentifier(identifier_prefix);
-					
-					object.addStyleClasses(object.styleClassAsIdentifier);
 				}
+				
+				if(StringHelper.isNotBlank(object.styleClassAsIdentifier))
+					object.addStyleClasses(object.styleClassAsIdentifier);
 			}
 			if(object.rendered == null)
 				object.rendered = Boolean.TRUE;

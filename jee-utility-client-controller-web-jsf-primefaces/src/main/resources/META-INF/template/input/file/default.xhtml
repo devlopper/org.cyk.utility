@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<ui:decorate template="/input/default.xhtml">
+		<ui:param name="__input__" value="#{fileUpload}"/>			
+		<ui:define name="input">
+			<p:fileUpload
+				id="#{fileUpload.identifier}"
+				fileUploadListener="#{fileUpload.listenUpload}" 
+		    	label="#{fileUpload.label}" 
+		    	multiple="#{fileUpload.multiple}" 
+		    	mode="#{fileUpload.mode}" 
+		    	allowTypes="#{fileUpload.allowTypes}"   				
+		    	sizeLimit="#{fileUpload.sizeLimit}" 
+		    	invalidSizeMessage="#{fileUpload.invalidSizeMessage}" 
+		    	fileLimit="#{fileUpload.fileLimit}" 
+		    	fileLimitMessage="#{fileUpload.fileLimitMessage}"
+		    	oncomplete="#{fileUpload.ajaxes.onComplete}"
+		    	uploadLabel="#{fileUpload.uploadLabel}" 
+		    	cancelLabel="#{fileUpload.cancelLabel}" 
+		    	update="#{fileUpload.update}"				
+			>
+			
+			</p:fileUpload>
+		</ui:define>
+	</ui:decorate>
+			
+</ui:composition>

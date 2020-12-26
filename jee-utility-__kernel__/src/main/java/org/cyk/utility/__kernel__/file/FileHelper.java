@@ -1,6 +1,7 @@
 package org.cyk.utility.__kernel__.file;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -30,6 +31,7 @@ import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantSeparator;
 import org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierHelper;
+import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.number.ByteHelper;
 import org.cyk.utility.__kernel__.number.Intervals;
 import org.cyk.utility.__kernel__.runnable.RunnableHelper;
@@ -68,6 +70,17 @@ public interface FileHelper {
 		if(StringHelper.isBlank(string))
 			return null;
 		return StringUtils.defaultIfBlank(FilenameUtils.getExtension(string),null);
+	}
+	
+	static String getExtension(byte[] bytes) {
+		if(bytes == null || bytes.length == 0)
+			return null;
+		try {
+			return URLConnection.guessContentTypeFromStream(new ByteArrayInputStream(bytes));
+		} catch (IOException exception) {
+			LogHelper.log(exception, FileHelper.class);
+			return null;
+		}
 	}
 	
 	static String getMimeTypeByExtension(String extension) {

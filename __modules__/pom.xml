@@ -18,6 +18,7 @@
 
 	<modules>
 		<module>../jee-utility-__kernel__</module>
+		<module>../jee-utility-javascript</module>
 		<module>../jee-utility-template</module>
 		<module>../jee-utility-template-freemarker</module>
 		<module>../jee-utility-report</module>

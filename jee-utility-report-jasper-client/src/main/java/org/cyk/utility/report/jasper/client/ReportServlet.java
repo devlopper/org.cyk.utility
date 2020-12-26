@@ -3,7 +3,6 @@ package org.cyk.utility.report.jasper.client;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
-import java.io.Closeable;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -14,11 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 
+import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.identifier.resource.ProxyGetter;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.report.ReportRepresentation;
 
-@WebServlet(name = "Report File Servlet",urlPatterns = {ReportServlet.PATH})
+@WebServlet(name = "Report File Servlet",urlPatterns = {ReportServlet.PATH_PATTERN})
 public class ReportServlet extends HttpServlet {
 
 	private static final int DEFAULT_BUFFER_SIZE = 10240; // 10KB.
@@ -55,20 +55,9 @@ public class ReportServlet extends HttpServlet {
 				output.write(buffer, 0, length);
 			}
          } finally {
-             close(output);
-             close(input);
+        	 Helper.close(output,input);
          }		
 	}
-	
-	 private static void close(Closeable closeable) {
-		 if(closeable == null)
-			 return;  
-         try {
-        	 closeable.close();
-         } catch (IOException exception) {
-        	 exception.printStackTrace();
-         }  
-     }
 	 
 	 /**/
 	 

@@ -77,6 +77,8 @@ public interface InputBuilder {
 					input = SelectBooleanCheckbox.build(arguments);
 				else if(SelectBooleanButton.class.equals(inputClass))
 					input = SelectBooleanButton.build(arguments);
+				else if(FileUpload.class.equals(inputClass))
+					input = FileUpload.build(arguments);
 			} catch (Exception exception) {
 				LogHelper.log(exception, AbstractInputBuilderImpl.class);
 			}
