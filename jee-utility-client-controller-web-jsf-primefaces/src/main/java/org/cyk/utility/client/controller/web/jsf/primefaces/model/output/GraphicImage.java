@@ -1,6 +1,7 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces.model.output;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.map.MapHelper;
@@ -38,10 +39,30 @@ public class GraphicImage extends AbstractFile implements Serializable {
 
 		@Override
 		public void configure(GraphicImage image, Map<Object, Object> arguments) {
+			if(arguments == null)
+				arguments = new HashMap<>();
+			if(!arguments.containsKey(FIELD_IS_IMAGE))
+				arguments.put(FIELD_IS_IMAGE, Boolean.TRUE);
 			super.configure(image, arguments);
+			if(Boolean.TRUE.equals(MapHelper.readByKey(arguments, FIELD_IS_IMAGE))) {
+				if(image.readButton == null) {
+					if(image.library == null)
+						image.library = "image";
+					if(image.name == null)
+						image.name = image.readButton == null ? "icon/file_not_found.png" : "icon/text.png";
+				}
+			}else {
+				if(image.library == null)
+					image.library = "image";
+				if(image.name == null)
+					image.name = image.readButton == null ? "icon/file_not_found.png" : "icon/text.png";
+			}
+			
 			if(image.url == null && StringHelper.isBlank(image.library) && image.value == null)
 				image.url = StringHelper.get(MapHelper.readByKey(arguments, FIELD_READ_URI));
 			
+			if(image.title == null && image.labelOutputText != null)
+				image.title = image.labelOutputText.getValue();
 			if(image.title == null)
 				image.title = "Image";
 			if(image.alt == null)

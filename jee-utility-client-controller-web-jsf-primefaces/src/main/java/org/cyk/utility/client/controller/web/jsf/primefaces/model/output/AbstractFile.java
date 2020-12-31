@@ -1,6 +1,8 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces.model.output;
 
 import java.io.Serializable;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +26,7 @@ import lombok.Setter;
 public class AbstractFile extends AbstractOutput<Object> implements Serializable {
 
 	protected CommandButton /*createCommandButton,*/readCommandButton,updateCommandButton,deleteCommandButton;
-	protected Button readButton;
+	protected Button readButton,updateButton;
 	protected OutputText labelOutputText;
 	
 	/**/
@@ -46,6 +48,12 @@ public class AbstractFile extends AbstractOutput<Object> implements Serializable
 		public void configure(FILE file, Map<Object, Object> arguments) {
 			super.configure(file, arguments);
 			String uri = StringHelper.get(MapHelper.readByKey(arguments, FIELD_READ_URI));
+			
+			if(Boolean.TRUE.equals(MapHelper.readByKey(arguments, FIELD_IS_IMAGE))) {
+				
+			}else {
+				
+			}
 			
 			if(file.readButton == null && StringHelper.isNotBlank(uri)) {
 				file.readButton = Button.build(Button.FIELD_TITLE,"Afficher",Button.FIELD_ICON,"fa fa-eye");
@@ -73,7 +81,9 @@ public class AbstractFile extends AbstractOutput<Object> implements Serializable
 			
 			if(file.updateCommandButton == null && StringHelper.isNotBlank((String) MapHelper.readByKey(arguments, FIELD_UPDATE_OUTCOME))) {
 				String updateOutcome = (String) MapHelper.readByKey(arguments, FIELD_UPDATE_OUTCOME);
-				file.updateCommandButton = CommandButton.build(CommandButton.FIELD_TITLE,"Modifier",CommandButton.FIELD_ICON,"fa fa-edit",CommandButton.FIELD_USER_INTERFACE_ACTION,UserInterfaceAction.NAVIGATE_TO_VIEW
+				file.updateCommandButton = CommandButton.build(CommandButton.FIELD_TITLE,"Modifier",CommandButton.FIELD_ICON,"fa fa-edit"
+						,CommandButton.FIELD_USER_INTERFACE_ACTION,UserInterfaceAction.NAVIGATE_TO_VIEW
+						,CommandButton.FIELD_IMMEDIATE,Boolean.TRUE
 						,CommandButton.FIELD_LISTENER,new AbstractAction.Listener.AbstractImpl() {
 						protected String getOutcome(AbstractAction action) {
 							return updateOutcome;
@@ -83,17 +93,28 @@ public class AbstractFile extends AbstractOutput<Object> implements Serializable
 							Map<String,List<String>> map = super.getViewParameters(action);
 							if(map == null)
 								map = new HashMap<>();
-							map.put(ParameterName.ENTITY_IDENTIFIER.getValue(), List.of((String)MapHelper.readByKey(arguments, FIELD_ENTITY_IDENTIFIER)));
-							map.put(ParameterName.URL.getValue(), List.of(WebController.getInstance().getRequestedURI()));
+							String identifier = (String)MapHelper.readByKey(arguments, FIELD_ENTITY_IDENTIFIER);
+							if(StringHelper.isBlank(identifier))
+								identifier = (String)MapHelper.readByKey(arguments, FIELD_MASTER_IDENTIFIER);
+							map.put(ParameterName.ENTITY_IDENTIFIER.getValue(), List.of(identifier));
+							String uri = WebController.getInstance().getRequestedURI().toString();
+							uri = URLEncoder.encode(uri, Charset.defaultCharset());
+							map.put(ParameterName.URL.getValue(), List.of(uri));
 							return map;
 						}
 					}
 				);
 			}
 			
-			if(file.deleteCommandButton == null && Boolean.TRUE.equals(MapHelper.readByKey(arguments, FIELD_DELETABLE))) {
+			Boolean deletable = (Boolean) MapHelper.readByKey(arguments, FIELD_DELETABLE);
+			if(deletable == null)
+				deletable = MapHelper.readByKey(arguments, FIELD_UPDATE_OUTCOME) != null && MapHelper.readByKey(arguments, FIELD_ENTITY_IDENTIFIER) != null;
+			//if(deletable == null)
+			//	deletable = MapHelper.readByKey(arguments, FIELD_ENTITY_IDENTIFIER) != null;
+			if(file.deleteCommandButton == null && Boolean.TRUE.equals(deletable)) {
 				file.deleteCommandButton = CommandButton.build(CommandButton.FIELD_TITLE,"Supprimer",CommandButton.FIELD_ICON,"fa fa-remove"
 						,CommandButton.FIELD_USER_INTERFACE_ACTION,UserInterfaceAction.EXECUTE_FUNCTION
+						,CommandButton.FIELD_IMMEDIATE,Boolean.TRUE
 						,CommandButton.ConfiguratorImpl.FIELD_CONFIRMABLE,Boolean.TRUE
 						,CommandButton.FIELD_LISTENER,new AbstractAction.Listener.AbstractImpl() {
 						@SuppressWarnings("unchecked")
@@ -108,17 +129,20 @@ public class AbstractFile extends AbstractOutput<Object> implements Serializable
 			
 			if(file.labelOutputText == null && StringHelper.isNotBlank((String) MapHelper.readByKey(arguments, FIELD_LABEL_OUTPUT_TEXT_VALUE))) {
 				file.labelOutputText = OutputText.buildFromValue((String) MapHelper.readByKey(arguments, FIELD_LABEL_OUTPUT_TEXT_VALUE));
+				file.labelOutputText.addStyleClasses("cyk-bold");
 			}
 		}
 		
 		/**/
 		
 		public static final String FIELD_LABEL_OUTPUT_TEXT_VALUE = "labelOutputTextValue";
+		public static final String FIELD_MASTER_IDENTIFIER = "configurator.masteridentifier";
 		public static final String FIELD_ENTITY_IDENTIFIER = "configurator.entityidentifier";
 		public static final String FIELD_READ_URI = "configurator.readURI";
 		public static final String FIELD_READ_OUTCOME = "configurator.readOutcome";
 		public static final String FIELD_UPDATE_OUTCOME = "configurator.updateOutcome";
 		public static final String FIELD_DELETABLE = "configurator.deletable";
+		public static final String FIELD_IS_IMAGE = "configurator.isimage";
 	}
 	
 	/**/

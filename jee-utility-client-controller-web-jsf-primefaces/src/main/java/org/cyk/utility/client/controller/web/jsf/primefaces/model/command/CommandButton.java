@@ -33,7 +33,8 @@ public class CommandButton extends AbstractCommand implements Serializable {
 		@Override
 		public void configure(CommandButton commandButton, Map<Object, Object> arguments) {
 			super.configure(commandButton, arguments);
-			
+			if(commandButton.immediate == null)
+				commandButton.immediate = Boolean.FALSE;
 		}
 		
 		@Override

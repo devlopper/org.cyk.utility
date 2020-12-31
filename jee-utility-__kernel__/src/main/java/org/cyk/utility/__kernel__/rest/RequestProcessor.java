@@ -7,6 +7,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.runnable.Runner;
 import org.cyk.utility.__kernel__.runnable.Runner.Arguments;
@@ -50,6 +51,7 @@ public interface RequestProcessor {
 		Runner.Arguments getRunnerArguments();
 		Runnable getRunnable();
 		void execute(Runner.Arguments arguments);
+		Response.ResponseBuilder getResponseBuilderWhenThrowableIsNull(Runner.Arguments runnerArguments);
 		Response getResponseWhenThrowableIsNull(Runner.Arguments runnerArguments);
 		
 		public static abstract class AbstractImpl implements Request {
@@ -59,8 +61,13 @@ public interface RequestProcessor {
 			}
 			
 			@Override
+			public Response.ResponseBuilder getResponseBuilderWhenThrowableIsNull(Arguments runnerArguments) {
+				return Response.ok(getResponseWhenThrowableIsNullAsString(runnerArguments));
+			}
+			
+			@Override
 			public Response getResponseWhenThrowableIsNull(Arguments runnerArguments) {
-				return Response.ok(getResponseWhenThrowableIsNullAsString(runnerArguments)).build();
+				return getResponseBuilderWhenThrowableIsNull(runnerArguments).build();
 			}
 			
 			@Override
@@ -68,7 +75,7 @@ public interface RequestProcessor {
 				try {
 					Runner.getInstance().run(arguments);
 				} catch (Exception exception) {
-					System.out.println("RequestProcessor.Request.AbstractImpl.execute() ::: "+exception.toString());
+					LogHelper.log(exception, getClass());
 					arguments.setThrowable(exception);
 				}
 			}

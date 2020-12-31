@@ -9,8 +9,9 @@ import org.cyk.utility.__kernel__.object.Configurator;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
-@Getter @Setter
+@Getter @Setter @Accessors(chain=true)
 public class OutputText extends AbstractOutput<String> implements Serializable {
 
 	private Boolean escape;

@@ -28,6 +28,7 @@ public class Cell extends OutputPanel implements Serializable {
 	private WidthUnit widthUnit;
 	private Boolean isWidthFixed;
 	private Object control;
+	private String controlTemplate;// this is used to support custom content
 	
 	/**/
 	
@@ -38,6 +39,7 @@ public class Cell extends OutputPanel implements Serializable {
 	public static final String FIELD_WIDTH_UNIT = "widthUnit";
 	public static final String FIELD_IS_WIDTH_FIXED = "isWidthFixed";
 	public static final String FIELD_CONTROL = "control";
+	public static final String FIELD_CONTROL_TEMPLATE = "controlTemplate";
 	
 	/**/
 	

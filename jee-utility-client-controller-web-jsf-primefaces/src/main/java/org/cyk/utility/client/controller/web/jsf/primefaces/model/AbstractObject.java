@@ -9,6 +9,7 @@ import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.log.LogHelper;
+import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.map.MapInstance;
 import org.cyk.utility.__kernel__.object.Configurator;
 import org.cyk.utility.__kernel__.random.RandomHelper;
@@ -181,6 +182,10 @@ public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractOb
 			
 			if(object.tabIndex == null)
 				object.tabIndex = 0;
+			
+			if(Boolean.TRUE.equals(MapHelper.readByKey(arguments, FIELD_PADDING_0))) {
+				object.addStyleClasses("cyk-padding-0");
+			}
 		}
 		
 		protected String __getTemplate__(OBJECT object, Map<Object, Object> arguments) {
@@ -200,6 +205,10 @@ public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractOb
 				prefix = prefix + "_";
 			return prefix+RandomHelper.getAlphabetic(5);
 		}
+	
+		/**/
+		
+		public static final String FIELD_PADDING_0 = "padding0";
 	}
 	
 	/**/

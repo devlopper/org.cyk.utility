@@ -44,6 +44,7 @@ import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.InputBui
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.InputClassGetter;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.layout.Cell;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.layout.Layout;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.output.OutputLabel;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.panel.Dialog;
 import org.omnifaces.util.Faces;
 
@@ -210,7 +211,7 @@ public class Form extends AbstractObject implements Serializable {
 				@Override
 				public void accept(AbstractInput<?> input) {
 					if(input.getOutputLabel() != null)
-						cells.add(MapHelper.instantiate(Cell.FIELD_CONTROL,input.getOutputLabel()));
+						cells.add(listener.getInputLabelCellArguments(form, input, input.getOutputLabel()));
 					cells.add(listener.getInputCellArguments(form, input));
 					form.inputs.put(input.getField().getName(), input);//TODO nested wont work. use path instead
 				}
@@ -250,6 +251,7 @@ public class Form extends AbstractObject implements Serializable {
 			Class<?> getInputClass(Form form,String fieldName);
 			Map<Object,Object> getInputArguments(Form form,String fieldName);
 			Map<Object,Object> getInputCellArguments(Form form,AbstractInput<?> input);
+			Map<Object,Object> getInputLabelCellArguments(Form form,AbstractInput<?> input,OutputLabel label);
 			Map<Object,Object> getCommandButtonArguments(Form form,Collection<AbstractInput<?>> inputs);
 			Map<Object,Object> getLayoutArguments(Form form,Collection<Map<Object,Object>> cellsArguments);
 			//Layout instantiateLayout(Form form);
@@ -289,6 +291,13 @@ public class Form extends AbstractObject implements Serializable {
 				public Map<Object,Object> getInputCellArguments(Form form,AbstractInput<?> input) {
 					Map<Object,Object> arguments = new HashMap<>();
 					arguments.put(Cell.FIELD_CONTROL,input);
+					return arguments;
+				}
+				
+				@Override
+				public Map<Object, Object> getInputLabelCellArguments(Form form,AbstractInput<?> input, OutputLabel label) {
+					Map<Object,Object> arguments = new HashMap<>();
+					arguments.put(Cell.FIELD_CONTROL,label);
 					return arguments;
 				}
 				

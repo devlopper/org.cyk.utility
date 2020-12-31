@@ -10,8 +10,8 @@
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
 	<!-- based on uniform resource identifier -->
-	<div class="p-col">
-		<div class="p-col-12">	
+	<div class="p-grid">
+		<div class="p-col-12 cyk-font-weight-bold">	
 			<c:if test="#{graphicImage.labelOutputText != null}">
 				<ui:decorate template="#{primefacesHelper.getModelTemplate(graphicImage.labelOutputText)}">
 			    	<ui:param name="outputText" value="#{graphicImage.labelOutputText}"/>   			
@@ -20,7 +20,7 @@
 		</div>
 		
 		<!-- Image -->
-		<div class="p-col-12 cyk-image-window">
+		<div class="p-col-12 cyk-padding-2 cyk-image-window">
 			<c:if test="#{not empty graphicImage.url}">
 				<p:graphicImage
 					url="#{graphicImage.url}"
@@ -79,7 +79,7 @@
 		</div>
 		
 		<!-- Commands -->
-		<div class="p-col-12">
+		<div class="p-col-12 cyk-padding-0">
 			<!--
 			<c:if test="#{graphicImage.createCommandButton != null}">
 				<ui:decorate template="#{primefacesHelper.getModelTemplate(graphicImage.createCommandButton)}">

@@ -23,6 +23,11 @@
 			<artifactId>jee-utility-report-jasper</artifactId>
 			<version>0.1.0</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.cyk.jee.utility.client.controller.web.jsf</groupId>
+			<artifactId>jee-utility-client-controller-web-jsf</artifactId>
+			<version>0.1.0</version>
+		</dependency>
 	</dependencies>
-
 </project>

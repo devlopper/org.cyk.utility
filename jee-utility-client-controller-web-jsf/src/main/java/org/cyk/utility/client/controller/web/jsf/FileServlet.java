@@ -129,7 +129,7 @@ public class FileServlet extends org.omnifaces.servlet.FileServlet implements Se
 			public long getExpireTime(HttpServletRequest request, File file) {
 				return -1;
 			}
-			
+
 			/**/
 			
 			public static class DefaultImpl extends AbstractImpl implements Serializable {

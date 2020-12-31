@@ -149,6 +149,15 @@ public class Layout extends OutputPanel implements Serializable {
 		
 		@Override
 		public void configure(Layout layout, Map<Object, Object> arguments) {
+			if(Boolean.TRUE.equals(MapHelper.readByKey(arguments, FIELD_LABEL_VALUE)) && MapHelper.readByKey(arguments, FIELD_ROW_CELL_MODEL) == null) {
+				if(arguments == null)
+					arguments = new HashMap<>();
+				arguments.put(FIELD_ROW_CELL_MODEL,Map.of(
+						0,new Cell().setWidth(4).addStyleClasses("cyk-layout-labelvalue cyk-layout-labelvalue-label")
+						,1,new Cell().setWidth(8).addStyleClasses("cyk-layout-labelvalue cyk-layout-labelvalue-value")));
+				arguments.put(Layout.FIELD_NUMBER_OF_COLUMNS,2);
+			}
+			
 			super.configure(layout, arguments);
 			
 			WidthUnit widthUnit = layout.cellWidthUnit;
@@ -186,9 +195,12 @@ public class Layout extends OutputPanel implements Serializable {
 					Cell model = MapHelper.readByKey(layout.rowCellModel, columnIndex);
 					map.put(Cell.FIELD_LAYOUT, layout);
 					map.put(Cell.FIELD_COLUMN_INDEX, columnIndex++);
-					map.put(Cell.FIELD_ROW_INDEX, rowIndex);
+					map.put(Cell.FIELD_ROW_INDEX, rowIndex);					
+					map.put(Cell.ConfiguratorImpl.FIELD_PADDING_0,MapHelper.readByKey(arguments, FIELD_CELLS_PADDING_0));
 					MapHelper.copyFromField(map, model, Cell.FIELD_WIDTH, Boolean.FALSE);
+					MapHelper.copyFromField(map, model, Cell.FIELD_STYLE_CLASS, Boolean.FALSE);
 				}
+				
 				layout.addCellsByMaps(cellsMaps);
 			}
 
@@ -211,6 +223,8 @@ public class Layout extends OutputPanel implements Serializable {
 		/**/
 		
 		public static final String FIELD_CELLS_MAPS = "cellsMaps";
+		public static final String FIELD_CELLS_PADDING_0 = "cellspadding0";
+		public static final String FIELD_LABEL_VALUE = "labelvalue";
 	}
 
 	public static Layout build(Map<Object,Object> arguments) {
