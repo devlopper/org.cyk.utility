@@ -17,10 +17,10 @@ import org.cyk.utility.__kernel__.value.Value;
 public interface EntityCreator {
 
 	@Transactional
-	void createMany(Collection<Object> objects);
+	void create(QueryExecutorArguments arguments);
 	
 	@Transactional
-	void createMany(QueryExecutorArguments arguments);
+	void createMany(Collection<Object> objects);
 	
 	@Transactional
 	default void createMany(Object...objects) {
@@ -37,7 +37,7 @@ public interface EntityCreator {
 		public static Boolean IS_CONTAINER_MANAGED_TRANSACTION = Boolean.TRUE;
 		
 		@Override @Transactional
-		public void createMany(QueryExecutorArguments queryExecutorArguments) {
+		public void create(QueryExecutorArguments queryExecutorArguments) {
 			if(queryExecutorArguments == null)
 				return;
 			queryExecutorArguments.setIsTransactional(!Boolean.TRUE.equals(IS_CONTAINER_MANAGED_TRANSACTION));
@@ -51,7 +51,7 @@ public interface EntityCreator {
 				return;
 			QueryExecutorArguments queryExecutorArguments = new QueryExecutorArguments();
 			queryExecutorArguments.setObjects(objects);
-			createMany(queryExecutorArguments);
+			create(queryExecutorArguments);
 		}
 		
 		protected void __createMany__(QueryExecutorArguments queryExecutorArguments) {

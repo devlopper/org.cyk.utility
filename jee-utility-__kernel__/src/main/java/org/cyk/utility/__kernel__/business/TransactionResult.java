@@ -8,6 +8,7 @@ import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.time.TimeHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -65,7 +66,8 @@ public class TransactionResult implements Serializable {
 	
 	public TransactionResult log(Class<?> klass,Long duration) {
 		LogHelper.logInfo(String.format("%s exécuté(e) en %s. %s => %s(C) %s(U) %s(D)."
-				, name,TimeHelper.formatDuration(duration),tupleName,numberOfCreation,numberOfUpdate,numberOfDeletion), klass);
+				, name,TimeHelper.formatDuration(duration),tupleName,ValueHelper.defaultToIfNull(numberOfCreation,0),ValueHelper.defaultToIfNull(numberOfUpdate,0)
+				,ValueHelper.defaultToIfNull(numberOfDeletion,0)), klass);
 		return this;
 	}
 	

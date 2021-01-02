@@ -15,6 +15,9 @@ import org.cyk.utility.__kernel__.value.Value;
 public interface EntityUpdater {
 
 	@Transactional
+	void update(QueryExecutorArguments queryExecutorArguments);
+	
+	@Transactional
 	<T> void updateMany(Collection<Object> objects);
 	
 	@Transactional
@@ -31,16 +34,25 @@ public interface EntityUpdater {
 		
 		@Transactional
 		@Override
+		public void update(QueryExecutorArguments queryExecutorArguments) {
+			if(queryExecutorArguments == null)
+				return;
+			queryExecutorArguments.setIsTransactional(!Boolean.TRUE.equals(IS_CONTAINER_MANAGED_TRANSACTION));
+			__update__(queryExecutorArguments);
+		}
+		
+		@Transactional
+		@Override
 		public <T> void updateMany(Collection<Object> objects) {
 			if(CollectionHelper.isEmpty(objects))
 				return;
 			QueryExecutorArguments queryExecutorArguments = new QueryExecutorArguments();
 			queryExecutorArguments.setObjects(objects);
 			queryExecutorArguments.setIsTransactional(!Boolean.TRUE.equals(IS_CONTAINER_MANAGED_TRANSACTION));
-			__updateMany__(queryExecutorArguments);
+			__update__(queryExecutorArguments);
 		}
 		
-		protected void __updateMany__(QueryExecutorArguments queryExecutorArguments) {
+		protected void __update__(QueryExecutorArguments queryExecutorArguments) {
 			org.cyk.utility.__kernel__.persistence.query.EntityUpdater.getInstance().updateMany(queryExecutorArguments);
 		}
 	}

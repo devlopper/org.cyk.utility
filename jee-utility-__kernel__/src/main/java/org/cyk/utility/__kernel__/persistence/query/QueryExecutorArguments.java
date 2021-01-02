@@ -44,6 +44,7 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 	private Collection<Object> systemIdentifiers;
 	private Boolean isTransactional;
 	private EntityManager entityManager;
+	private Boolean isEntityManagerFlushable;
 	private Boolean isEntityManagerClearable;
 	private Boolean isEntityManagerClosable;
 	private Boolean isNative;
@@ -53,6 +54,7 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 	private EntityManager __entityManager__;
 	private Map<Object,Object> __parameters__;
 	private Map<String,Object> __hints__;
+	private Boolean __isEntityManagerFlushable__;
 	private Boolean __isEntityManagerClearable__;
 	private Boolean __isEntityManagerClosable__;
 	private Class<?> __resultClass__;
@@ -79,11 +81,14 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 		if(__resultClass__ == null)
 			__resultClass__ = resultClass;
 		
+		__isEntityManagerFlushable__ = isEntityManagerFlushable;
 		__isEntityManagerClearable__ = isEntityManagerClearable;
 		__isEntityManagerClosable__ = isEntityManagerClosable;		
 		__entityManager__ = entityManager;
 		if(__entityManager__ == null) {
 			__entityManager__ = EntityManagerGetter.getInstance().get();
+			if(__isEntityManagerFlushable__ == null)
+				__isEntityManagerFlushable__ = Boolean.TRUE;
 			if(__isEntityManagerClearable__ == null)
 				__isEntityManagerClearable__ = Boolean.TRUE;
 			if(__isEntityManagerClosable__ == null)
@@ -130,6 +135,8 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 	public QueryExecutorArguments finalise() {
 		if(__entityManager__ == null)
 			return this;
+		//if(Boolean.TRUE.equals(__isEntityManagerFlushable__))
+		//	__entityManager__.flush();
 		if(Boolean.TRUE.equals(__isEntityManagerClearable__))
 			__entityManager__.clear();
 		if(Boolean.TRUE.equals(__isEntityManagerClosable__))

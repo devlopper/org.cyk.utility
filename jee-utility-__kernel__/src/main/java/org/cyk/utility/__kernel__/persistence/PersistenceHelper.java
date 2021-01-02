@@ -196,7 +196,7 @@ public interface PersistenceHelper {
 			if(StringHelper.isBlank(name))
 				continue;
 			if(names == null)
-				names = new LinkedHashSet<>();		
+				names = new LinkedHashSet<>();
 			map.put(name,field);
 			Id id = field.getAnnotation(Id.class);
 			if(id != null)
@@ -216,10 +216,17 @@ public interface PersistenceHelper {
 		Collection<String> values = new ArrayList<>();
 		for(String name : names) {
 			Field field = COLUMN_NAME_FIELD.get(object.getClass()).get(name);
-			String value = stringifyColumnValue(FieldHelper.read(object, field));	
-			values.add(value);
+			values.add(readFieldValueAsString(object, field));
 		}
 		return values;
+	}
+	
+	static String readFieldValueAsString(Object object,Field field) {
+		Object fieldValue = FieldHelper.read(object, field);
+		if(fieldValue == null)
+			return "NULL";
+		else
+			return stringifyColumnValue(fieldValue);
 	}
 	
 	static String stringifyColumnValue(Object value) {
@@ -241,8 +248,7 @@ public interface PersistenceHelper {
 		Map<String,String> map = new LinkedHashMap<>();
 		for(String name : names) {
 			Field field = COLUMN_NAME_FIELD.get(object.getClass()).get(name);
-			String value =stringifyColumnValue(FieldHelper.read(object, field));
-			map.put(name,value);
+			map.put(name,readFieldValueAsString(object, field));
 		}
 		return map;
 	}
