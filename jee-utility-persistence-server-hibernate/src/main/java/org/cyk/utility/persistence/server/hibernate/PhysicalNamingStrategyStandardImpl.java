@@ -1,4 +1,4 @@
-package org.cyk.utility.__kernel__.object.__static__.persistence.hibernate;
+package org.cyk.utility.persistence.server.hibernate;
 
 import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringAuditedImpl;
 import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl;

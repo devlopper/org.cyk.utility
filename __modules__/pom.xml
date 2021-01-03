@@ -21,14 +21,22 @@
 		<module>../jee-utility-javascript</module>
 		<module>../jee-utility-template</module>
 		<module>../jee-utility-template-freemarker</module>
+		
 		<module>../jee-utility-report</module>
 		<module>../jee-utility-report-jasper</module>
 		<module>../jee-utility-report-jasper-server</module>
 		<module>../jee-utility-report-jasper-client</module>
+		
 		<module>../jee-utility-security</module>
 		<module>../jee-utility-security-keycloak</module>
 		<module>../jee-utility-security-keycloak-server</module>
 		<module>../jee-utility-security-keycloak-client</module>
+		
+		<module>../jee-utility-persistence</module>
+		<module>../jee-utility-persistence-server</module>
+		<module>../jee-utility-persistence-server-hibernate</module>
+		<module>../jee-utility-persistence-client</module>
+		
 		<module>../jee-utility</module>
 		<module>../jee-utility-server-persistence</module>
 		<module>../jee-utility-server-persistence-impl</module>
