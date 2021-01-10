@@ -19,6 +19,7 @@ public class Message extends AbstractObject implements Serializable {
 
 	private String subject;
 	private String body;
+	private Attachment attachment;
 	private Collection<Object> receivers;
 	
 	public Collection<Object> getReceivers(Boolean injectIfNull) {
@@ -46,5 +47,15 @@ public class Message extends AbstractObject implements Serializable {
 			return this;
 		addReceiversFromStrings(CollectionHelper.listOf(receivers));
 		return this;
+	}
+	
+	/**/
+	
+	@Getter @Setter @Accessors(chain=true) @NoArgsConstructor
+	public static class Attachment implements Serializable {
+		private byte[] bytes;
+		private String name;
+		private String extension;
+		private String mimeType;
 	}
 }

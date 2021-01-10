@@ -3,6 +3,7 @@ package org.cyk.utility.__kernel__.protocol.smtp;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.Helper;
+import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.value.Value;
 
@@ -29,7 +30,7 @@ public interface MailSender {
 	}
 	
 	default void ping(String...receivers) {
-		ping(CollectionHelper.listOf(receivers));
+		ping(ArrayHelper.isEmpty(receivers) ? null : CollectionHelper.listOf(receivers));
 	}
 	
 	/**/

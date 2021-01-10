@@ -1,14 +1,21 @@
 package org.cyk.utility.__kernel__.protocol.smtp;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.mail.BodyPart;
+import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
+import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
@@ -36,7 +43,29 @@ public class MailSenderImpl extends AbstractMailSenderImpl implements Serializab
 			LogHelper.logWarning("Session is NULL", getClass());
 		MimeMessage mimeMessage = new MimeMessage(session);		
 		mimeMessage.setSubject(ValueHelper.returnOrThrowIfBlank("mail subject", message.getSubject()));
-		mimeMessage.setContent(ValueHelper.returnOrThrowIfBlank("mail body", message.getBody()), "text/html");
+		
+		Multipart multipart = new MimeMultipart();
+		mimeMessage.setContent(multipart);
+		
+		if(StringHelper.isNotBlank(message.getBody())) {
+			BodyPart messageBodyPart = new MimeBodyPart(); 
+			messageBodyPart.setText(ValueHelper.returnOrThrowIfBlank("mail body", message.getBody()));		
+			//mimeMessage.setContent(ValueHelper.returnOrThrowIfBlank("mail body", message.getBody()), "text/html");
+			multipart.addBodyPart(messageBodyPart);
+		}
+		
+		if(message.getAttachment() != null) {
+			MimeBodyPart attachmentPart = new MimeBodyPart();
+			File attachmentFile = File.createTempFile(message.getAttachment().getName(), StringHelper.isBlank(message.getAttachment().getExtension()) ? null 
+					: "."+message.getAttachment().getExtension());
+			attachmentFile.deleteOnExit();
+			FileOutputStream attachmentFileOutputStream = new FileOutputStream(attachmentFile);
+			attachmentFileOutputStream.write(message.getAttachment().getBytes());
+			Helper.close(attachmentFileOutputStream);
+			attachmentPart.attachFile(attachmentFile);
+			multipart.addBodyPart(attachmentPart);
+		}
+		
 		Collection<InternetAddress> internetAddresses = null;
 		for (Object index : ValueHelper.returnOrThrowIfBlank("mail receivers", message.getReceivers())) {
 			InternetAddress internetAddress = null;
