@@ -1,4 +1,4 @@
-package org.cyk.utility.__kernel__.protocol.smtp;
+package org.cyk.utility.mail;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

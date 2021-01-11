@@ -1,17 +1,13 @@
-package org.cyk.utility.__kernel__.protocol.smtp;
-
-import java.io.IOException;
-import java.util.List;
+package org.cyk.utility.mail;
 
 import javax.mail.MessagingException;
 
-import org.apache.commons.io.IOUtils;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.__kernel__.variable.VariableHelper;
 import org.cyk.utility.__kernel__.variable.VariableName;
 import org.junit.jupiter.api.Test;
 
-public class MailSenderUnitTestPingGMail extends AbstractWeldUnitTest {
+public class MailSenderUnitTestPingGMailSigobeAdmin extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 	
 	@Override
@@ -22,8 +18,8 @@ public class MailSenderUnitTestPingGMail extends AbstractWeldUnitTest {
 		VariableHelper.write(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_PORT, 587);
 		VariableHelper.write(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_REQUIRED, Boolean.TRUE);
 		VariableHelper.write(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_SECURED_CONNECTION_REQUIRED, Boolean.TRUE);
-		VariableHelper.write(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_CREDENTIALS_USER_IDENTIFIER, "kycdev@gmail.com");
-		VariableHelper.write(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_CREDENTIALS_USER_SECRET, "P@sSw0rd@2O18");
+		VariableHelper.write(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_CREDENTIALS_USER_IDENTIFIER, "sigobe.dgbf@gmail.com");
+		VariableHelper.write(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_CREDENTIALS_USER_SECRET, "budget@2020");
 		
 		//VariableHelper.write(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_PROXY_HOST, "10.3.4.5");
 		//VariableHelper.write(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_PROXY_PORT, 3128);
@@ -31,10 +27,8 @@ public class MailSenderUnitTestPingGMail extends AbstractWeldUnitTest {
 	}
 	
 	@Test
-	public void ping() throws MessagingException, IOException{
-		byte[] bytes = IOUtils.toByteArray(MailSender.class.getResourceAsStream("attachment/pdf.pdf"));
-		MailSender.getInstance().send(new Message().setSubject("Ping").setBody("This is a ping with attachment").setReceivers(List.of("kycdev@gmail.com"))
-				.setAttachment(new Message.Attachment().setBytes(bytes).setName("votre_fichier").setExtension("pdf") ));
+	public void ping() throws MessagingException{
+		MailSender.getInstance().ping("sigobe.dgbf@gmail.com");
 	}
 	
 }

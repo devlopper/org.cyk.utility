@@ -1,13 +1,17 @@
-package org.cyk.utility.__kernel__.protocol.smtp;
+package org.cyk.utility.mail;
+
+import java.io.IOException;
+import java.util.List;
 
 import javax.mail.MessagingException;
 
+import org.apache.commons.io.IOUtils;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.__kernel__.variable.VariableHelper;
 import org.cyk.utility.__kernel__.variable.VariableName;
 import org.junit.jupiter.api.Test;
 
-public class MailSenderUnitTestPingWithAttachmentGMail extends AbstractWeldUnitTest {
+public class MailSenderUnitTestPingGMail extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 	
 	@Override
@@ -27,8 +31,10 @@ public class MailSenderUnitTestPingWithAttachmentGMail extends AbstractWeldUnitT
 	}
 	
 	@Test
-	public void ping() throws MessagingException{
-		MailSender.getInstance().ping("kycdev@gmail.com");
+	public void ping() throws MessagingException, IOException{
+		byte[] bytes = IOUtils.toByteArray(MailSender.class.getResourceAsStream("attachment/pdf.pdf"));
+		MailSender.getInstance().send(new Message().setSubject("Ping").setBody("This is a ping with attachment").setReceivers(List.of("kycdev@gmail.com"))
+				.setAttachment(new Message.Attachment().setBytes(bytes).setName("votre_fichier").setExtension("pdf") ));
 	}
 	
 }

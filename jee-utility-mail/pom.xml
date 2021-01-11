@@ -16,5 +16,30 @@
 
 	<name>jee-utility-mail</name>
 	<url>http://maven.apache.org</url>
-
+	
+	<properties>
+		<javax.mail.mail.version>1.5.0-b01</javax.mail.mail.version>
+	</properties>
+	
+	<dependencies>
+		<dependency>
+			<groupId>org.cyk.jee.utility.__kernel__</groupId>
+			<artifactId>jee-utility-__kernel__</artifactId>
+			<version>0.1.0</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>${javax.mail.mail.version}</version>
+		</dependency>
+		
+		<dependency>
+		  	<groupId>com.mailjet</groupId>
+		    <artifactId>mailjet-client</artifactId>
+		    <version>4.2.0</version>
+		    <scope>test</scope>
+		</dependency>
+	</dependencies>
+	
 </project>

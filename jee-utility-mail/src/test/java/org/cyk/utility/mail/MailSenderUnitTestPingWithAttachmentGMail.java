@@ -1,4 +1,4 @@
-package org.cyk.utility.__kernel__.protocol.smtp;
+package org.cyk.utility.mail;
 
 import javax.mail.MessagingException;
 
@@ -7,7 +7,7 @@ import org.cyk.utility.__kernel__.variable.VariableHelper;
 import org.cyk.utility.__kernel__.variable.VariableName;
 import org.junit.jupiter.api.Test;
 
-public class MailSenderUnitTestPingGMailSigobeAdmin extends AbstractWeldUnitTest {
+public class MailSenderUnitTestPingWithAttachmentGMail extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 	
 	@Override
@@ -18,8 +18,8 @@ public class MailSenderUnitTestPingGMailSigobeAdmin extends AbstractWeldUnitTest
 		VariableHelper.write(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_PORT, 587);
 		VariableHelper.write(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_REQUIRED, Boolean.TRUE);
 		VariableHelper.write(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_SECURED_CONNECTION_REQUIRED, Boolean.TRUE);
-		VariableHelper.write(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_CREDENTIALS_USER_IDENTIFIER, "sigobe.dgbf@gmail.com");
-		VariableHelper.write(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_CREDENTIALS_USER_SECRET, "budget@2020");
+		VariableHelper.write(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_CREDENTIALS_USER_IDENTIFIER, "kycdev@gmail.com");
+		VariableHelper.write(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_CREDENTIALS_USER_SECRET, "P@sSw0rd@2O18");
 		
 		//VariableHelper.write(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_PROXY_HOST, "10.3.4.5");
 		//VariableHelper.write(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_PROXY_PORT, 3128);
@@ -28,7 +28,7 @@ public class MailSenderUnitTestPingGMailSigobeAdmin extends AbstractWeldUnitTest
 	
 	@Test
 	public void ping() throws MessagingException{
-		MailSender.getInstance().ping("sigobe.dgbf@gmail.com");
+		MailSender.getInstance().ping("kycdev@gmail.com");
 	}
 	
 }

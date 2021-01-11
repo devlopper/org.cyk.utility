@@ -1,4 +1,4 @@
-package org.cyk.utility.__kernel__.protocol.smtp;
+package org.cyk.utility.mail;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -49,8 +49,7 @@ public class MailSenderImpl extends AbstractMailSenderImpl implements Serializab
 		
 		if(StringHelper.isNotBlank(message.getBody())) {
 			BodyPart messageBodyPart = new MimeBodyPart(); 
-			messageBodyPart.setText(ValueHelper.returnOrThrowIfBlank("mail body", message.getBody()));		
-			//mimeMessage.setContent(ValueHelper.returnOrThrowIfBlank("mail body", message.getBody()), "text/html");
+			messageBodyPart.setContent(message.getBody(), "text/html");
 			multipart.addBodyPart(messageBodyPart);
 		}
 		
