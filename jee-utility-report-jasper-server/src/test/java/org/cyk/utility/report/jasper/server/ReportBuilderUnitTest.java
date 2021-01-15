@@ -14,13 +14,13 @@ import org.junit.jupiter.api.Test;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRTextExporter;
 
-public class ReportBuilderJasperUnitTest extends AbstractWeldUnitTest {
+public class ReportBuilderUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test
 	public void text_without_datasource(){
 		ByteArrayOutputStream outputStream = (ByteArrayOutputStream) ReportBuilder.getInstance().build(new Template().setInputStream(this.getClass()
-				.getResourceAsStream("text_without_datasource.jrxml")), null, JRTextExporter.class);
+				.getResourceAsStream("text_without_datasource.jrxml")), null,null, JRTextExporter.class);
 		String string = new String(outputStream.toByteArray());
 		assertThat(string).contains("This is a text");
 	}
@@ -38,7 +38,7 @@ public class ReportBuilderJasperUnitTest extends AbstractWeldUnitTest {
 		beans.add(bean);
 		JRBeanCollectionDataSource jrBeanCollectionDataSource = new JRBeanCollectionDataSource(beans);
 		ByteArrayOutputStream outputStream = (ByteArrayOutputStream) ReportBuilder.getInstance().build(new Template().setInputStream(this.getClass()
-				.getResourceAsStream("text_with_datasource_bean_collection.jrxml")), jrBeanCollectionDataSource, JRTextExporter.class);
+				.getResourceAsStream("text_with_datasource_bean_collection.jrxml")), null,jrBeanCollectionDataSource, JRTextExporter.class);
 		String string = new String(outputStream.toByteArray());
 		assertThat(string).contains("helloooo","1","worlddddd","2");
 	}

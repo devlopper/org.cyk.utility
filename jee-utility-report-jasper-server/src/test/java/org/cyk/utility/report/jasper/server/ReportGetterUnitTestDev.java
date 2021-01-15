@@ -11,7 +11,7 @@ import org.cyk.utility.__kernel__.variable.VariableHelper;
 import org.cyk.utility.report.ReportGetter;
 import org.junit.jupiter.api.Test;
 
-public class JasperServerUnitTestDev extends AbstractWeldUnitTest {
+public class ReportGetterUnitTestDev extends AbstractWeldUnitTest {
 
 	@Test
 	public void t(){

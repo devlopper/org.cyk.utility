@@ -13,6 +13,7 @@ import org.cyk.utility.__kernel__.file.FileExtensionGetter;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.value.ValueConverter;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 
 @WebServlet(name = "File Jsf Servlet", urlPatterns = { FileServlet.PATH_PATTERN })
@@ -88,6 +89,12 @@ public class FileServlet extends org.omnifaces.servlet.FileServlet implements Se
 		return buildRelativeURI(instance.getClass().getSimpleName(), StringHelper.get(FieldHelper.readSystemIdentifier(instance)), type);
 	}
     
+	public static void log(HttpServletRequest httpServletRequest,Class<?> klass,String message) {
+		if(Boolean.TRUE.equals(ValueConverter.getInstance().convertToBoolean(httpServletRequest.getParameter("loggable"))))
+			LogHelper.logInfo(message, klass);
+		
+	}
+	
 	public static final String PATH = "/cyk/utility/controller/web/jsf/file/";
 	public static final String PATH_PATTERN = PATH + "*";
 	

@@ -52,6 +52,18 @@ public abstract class AbstractIdentifiableSystemScalarStringIdentifiableBusiness
 		return this;
 	}
 	
+	@XmlTransient
+	@JsonbTransient
+	public LocalDateTime get__auditWhen__() {
+		return null;
+	}
+	
+	@XmlTransient
+	@JsonbTransient
+	public AuditableWhoDoneWhatWhen set__auditWhen__(LocalDateTime when) {
+		return this;
+	}
+	
 	@Override
 	public String toString() {
 		String string = getCode();

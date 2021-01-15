@@ -34,7 +34,7 @@
 		
 		<org.elasticsearch.version>7.6.0</org.elasticsearch.version>
 		<org.elasticsearch.elasticsearch.version>${org.elasticsearch.version}</org.elasticsearch.elasticsearch.version>
-		<org.elasticsearch.test.framework.version>${org.elasticsearch.version}</org.elasticsearch.test.framework.version>		
+		<org.elasticsearch.test.framework.version>${org.elasticsearch.version}</org.elasticsearch.test.framework.version>
 	</properties>
 
 	<build>

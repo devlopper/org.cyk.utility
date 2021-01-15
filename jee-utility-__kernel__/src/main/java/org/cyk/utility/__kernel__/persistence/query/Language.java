@@ -313,6 +313,10 @@ public interface Language {
 			return join(LogicalOperator.AND, predicates);
 		}
 		
+		static String or(Collection<String> predicates) {
+			return join(predicates,LogicalOperator.OR);
+		}
+		
 		static String or(String...predicates) {
 			return join(LogicalOperator.OR, predicates);
 		}
@@ -387,6 +391,62 @@ public interface Language {
 			return exists(CollectionHelper.listOf(strings));
 		}
 		
+		static String isNull(String variable,String fieldName) {
+			return String.format(IS_NULL, variable,fieldName);
+		}
+		
+		static String isNotNull(String variable,String fieldName) {
+			return String.format(IS_NOT_NULL, variable,fieldName);
+		}
+		
+		static String oneNull(String variable,Collection<String> fieldsNames) {
+			if(CollectionHelper.isEmpty(fieldsNames))
+				return ConstantEmpty.STRING;
+			return parenthesis(or(fieldsNames.stream().map(fieldName -> isNull(variable, fieldName)).collect(Collectors.toList())));
+		}
+		
+		static String oneNull(String variable,String...fieldsNames) {
+			if(ArrayHelper.isEmpty(fieldsNames))
+				return ConstantEmpty.STRING;
+			return oneNull(variable,CollectionHelper.listOf(fieldsNames));
+		}
+		
+		static String oneNotNull(String variable,Collection<String> fieldsNames) {
+			if(CollectionHelper.isEmpty(fieldsNames))
+				return ConstantEmpty.STRING;
+			return parenthesis(or(fieldsNames.stream().map(fieldName -> isNotNull(variable, fieldName)).collect(Collectors.toList())));
+		}
+		
+		static String oneNotNull(String variable,String...fieldsNames) {
+			if(ArrayHelper.isEmpty(fieldsNames))
+				return ConstantEmpty.STRING;
+			return oneNotNull(variable,CollectionHelper.listOf(fieldsNames));
+		}
+		
+		static String allNull(String variable,Collection<String> fieldsNames) {
+			if(CollectionHelper.isEmpty(fieldsNames))
+				return ConstantEmpty.STRING;
+			return parenthesis(and(fieldsNames.stream().map(fieldName -> isNull(variable, fieldName)).collect(Collectors.toList())));
+		}
+		
+		static String allNull(String variable,String...fieldsNames) {
+			if(ArrayHelper.isEmpty(fieldsNames))
+				return ConstantEmpty.STRING;
+			return allNull(variable,CollectionHelper.listOf(fieldsNames));
+		}
+		
+		static String allNotNull(String variable,Collection<String> fieldsNames) {
+			if(CollectionHelper.isEmpty(fieldsNames))
+				return ConstantEmpty.STRING;
+			return parenthesis(and(fieldsNames.stream().map(fieldName -> isNotNull(variable, fieldName)).collect(Collectors.toList())));
+		}
+		
+		static String allNotNull(String variable,String...fieldsNames) {
+			if(ArrayHelper.isEmpty(fieldsNames))
+				return ConstantEmpty.STRING;
+			return allNotNull(variable,CollectionHelper.listOf(fieldsNames));
+		}
+		
 		/*
 		static String deriveLike(String tuple,String fieldName,String parameterName,Integer numberOfTokens,LogicalOperator operator,Boolean isCaseSensitive){
 			if(StringHelper.isBlank(tuple) || StringHelper.isBlank(fieldName) || StringHelper.isBlank(parameterName))
@@ -403,6 +463,8 @@ public interface Language {
 		String OPERATE = "%s.%s %s :%s";
 		String EXISTS = "EXISTS(%s)";
 		String NOT = "NOT (%s)";
+		String IS_NULL = "%s.%s IS NULL";
+		String IS_NOT_NULL = "%s.%s IS NOT NULL";
 		
 		/**/
 		

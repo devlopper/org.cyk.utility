@@ -16,6 +16,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import org.cyk.utility.__kernel__.Helper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
@@ -53,16 +54,18 @@ public class MailSenderImpl extends AbstractMailSenderImpl implements Serializab
 			multipart.addBodyPart(messageBodyPart);
 		}
 		
-		if(message.getAttachment() != null) {
-			MimeBodyPart attachmentPart = new MimeBodyPart();
-			File attachmentFile = File.createTempFile(message.getAttachment().getName(), StringHelper.isBlank(message.getAttachment().getExtension()) ? null 
-					: "."+message.getAttachment().getExtension());
-			attachmentFile.deleteOnExit();
-			FileOutputStream attachmentFileOutputStream = new FileOutputStream(attachmentFile);
-			attachmentFileOutputStream.write(message.getAttachment().getBytes());
-			Helper.close(attachmentFileOutputStream);
-			attachmentPart.attachFile(attachmentFile);
-			multipart.addBodyPart(attachmentPart);
+		if(CollectionHelper.isNotEmpty(message.getAttachments())) {
+			for(Message.Attachment attachment : message.getAttachments()) {
+				MimeBodyPart attachmentPart = new MimeBodyPart();
+				File attachmentFile = File.createTempFile(attachment.getName(), StringHelper.isBlank(attachment.getExtension()) ? null 
+						: "."+attachment.getExtension());
+				attachmentFile.deleteOnExit();
+				FileOutputStream attachmentFileOutputStream = new FileOutputStream(attachmentFile);
+				attachmentFileOutputStream.write(attachment.getBytes());
+				Helper.close(attachmentFileOutputStream);
+				attachmentPart.attachFile(attachmentFile);
+				multipart.addBodyPart(attachmentPart);
+			}		
 		}
 		
 		Collection<InternetAddress> internetAddresses = null;

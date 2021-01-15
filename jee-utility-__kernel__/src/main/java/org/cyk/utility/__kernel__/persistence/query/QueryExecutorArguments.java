@@ -292,7 +292,12 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 	public static QueryExecutorArguments instantiate(Class<?> resultClass,QueryName queryName) {
 		ThrowableHelper.throwIllegalArgumentExceptionIfNull("result class", resultClass);
 		ThrowableHelper.throwIllegalArgumentExceptionIfNull("query name", queryName);		
-		String queryIdentifier = QueryIdentifierGetter.getInstance().get(resultClass, queryName);
+		return instantiate(resultClass, QueryIdentifierGetter.getInstance().get(resultClass, queryName));
+	}
+	
+	public static QueryExecutorArguments instantiate(Class<?> resultClass,String queryIdentifier) {
+		ThrowableHelper.throwIllegalArgumentExceptionIfNull("result class", resultClass);
+		ThrowableHelper.throwIllegalArgumentExceptionIfNull("query identifier", queryIdentifier);		
 		Query query = QueryGetter.getInstance().get(queryIdentifier);
 		if(query == null)
 			throw new RuntimeException("query not found under identifier <<"+queryIdentifier+">>");

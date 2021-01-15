@@ -3,7 +3,7 @@ package org.cyk.utility.report.jasper.server;
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 
-import org.cyk.utility.report.AbstractReportBuilderImpl;
+import org.cyk.utility.report.ReportBuilder;
 import org.cyk.utility.report.Template;
 
 import net.sf.jasperreports.engine.JRDataSource;
@@ -22,16 +22,65 @@ import net.sf.jasperreports.export.SimpleTextReportConfiguration;
 import net.sf.jasperreports.export.SimpleWriterExporterOutput;
 import net.sf.jasperreports.export.TextReportConfiguration;
 
-public class ReportBuilderImpl extends AbstractReportBuilderImpl implements Serializable {
+public class ReportBuilderImpl extends ReportBuilder.AbstractImpl implements Serializable {
 
 	@Override
-	public ByteArrayOutputStream build(Template template,Object dataSource,Object exporter) {
+	protected ByteArrayOutputStream __buildFromConnection__(Template template, Object connection, Object exporter) {
+		try {
+             JasperDesign jasperDesign = JRXmlLoader.load(template.getInputStream());
+             JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);            
+             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, template.getArguments(),(java.sql.Connection) connection);
+             
+             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+             if(exporter == null) {
+            	 exporter = new JRPdfExporter(); 
+             }
+                          
+        	 if((exporter instanceof JRPdfExporter) || (exporter instanceof Class && JRPdfExporter.class.equals(exporter))) {
+        		 JRPdfExporter jrPdfExporter = null;
+        		 if(exporter instanceof Class)
+        			 jrPdfExporter = new JRPdfExporter();
+        		 else
+        			 jrPdfExporter = (JRPdfExporter) exporter;
+        		 jrPdfExporter.setExporterInput(new SimpleExporterInput(jasperPrint));             
+        		 jrPdfExporter.setExporterOutput(new SimpleOutputStreamExporterOutput(byteArrayOutputStream));
+        		 jrPdfExporter.exportReport();
+        	 }else if((exporter instanceof JRTextExporter) || (exporter instanceof Class && JRTextExporter.class.equals(exporter))) {
+        		 JRTextExporter jrTextExporter = null;
+        		 if(exporter instanceof Class)
+        			 jrTextExporter = new JRTextExporter();
+        		 else
+        			 jrTextExporter = (JRTextExporter) exporter;
+        		 TextReportConfiguration textReportConfiguration = new SimpleTextReportConfiguration() {
+        			 @Override
+        			public Float getCharHeight() {
+        				return 13.9f;
+        			}
+        			 
+        			 @Override
+        			public Float getCharWidth() {
+        				return 7f;
+        			}
+        		 };
+        		 jrTextExporter.setConfiguration(textReportConfiguration);       		 
+        		 jrTextExporter.setExporterInput(new SimpleExporterInput(jasperPrint));             
+        		 jrTextExporter.setExporterOutput(new SimpleWriterExporterOutput(byteArrayOutputStream));
+        		 jrTextExporter.exportReport();
+        	 }            	                       
+             return byteArrayOutputStream;
+         } catch (Exception exception) {
+             throw new RuntimeException(exception);
+         }
+	}
+	
+	@Override
+	protected ByteArrayOutputStream __buildFromDataSource__(Template template, Object dataSource, Object exporter) {
 		if(template == null)
 			return null;
 		if(dataSource == null)
 			dataSource = new JREmptyDataSource();
 		if(dataSource!=null && !(dataSource instanceof JRDataSource))
-			return null;			
+			return null;
 		JRDataSource jrDataSource = (JRDataSource) dataSource;
 		try {
              JasperDesign jasperDesign = JRXmlLoader.load(template.getInputStream());
@@ -79,5 +128,4 @@ public class ReportBuilderImpl extends AbstractReportBuilderImpl implements Seri
              throw new RuntimeException(exception);
          }
 	}
-
 }

@@ -32,14 +32,12 @@ public abstract class AbstractIdentifiableSystemScalarStringAuditedImpl extends 
 		setIdentifier(identifier);
 	}
 	
-	@Override
 	@XmlTransient
 	@JsonbTransient
 	public String getSystemIdentifier() {
 		return getIdentifier();
 	}
 	
-	@Override
 	@XmlTransient
 	@JsonbTransient
 	public AbstractIdentifiableSystemScalarStringAuditedImpl setSystemIdentifier(String identifier) {
@@ -47,14 +45,12 @@ public abstract class AbstractIdentifiableSystemScalarStringAuditedImpl extends 
 		return this;
 	}
 	
-	@Override
 	@XmlTransient
 	@JsonbTransient
 	public LocalDateTime get__auditWhen__() {
 		return null;
 	}
 	
-	@Override
 	@XmlTransient
 	@JsonbTransient
 	public AuditableWhoDoneWhatWhen set__auditWhen__(LocalDateTime when) {

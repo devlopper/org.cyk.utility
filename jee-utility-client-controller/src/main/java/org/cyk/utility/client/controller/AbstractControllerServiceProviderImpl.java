@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.controller.EntitySaver;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.system.AbstractSystemServiceProviderImpl;
@@ -22,6 +23,7 @@ public abstract class AbstractControllerServiceProviderImpl<OBJECT> extends Abst
 		if(properties == null)
 			properties = new Properties();
 		ControllerFunctionCreator function = ____inject____(ControllerFunctionCreator.class);
+		EntitySaver.AbstractImpl.setAuditableWhoDoneWhatWhen(objects, null);
 		function.setEntities(objects);
 		//function.getAction().getEntities(Boolean.TRUE).add(object);
 		function.copyProperty(Properties.REQUEST,properties);
@@ -56,6 +58,7 @@ public abstract class AbstractControllerServiceProviderImpl<OBJECT> extends Abst
 	public ControllerServiceProvider<OBJECT> updateMany(Collection<OBJECT> objects, Properties properties) {
 		if(properties == null)
 			properties = new Properties();
+		EntitySaver.AbstractImpl.setAuditableWhoDoneWhatWhen(objects, null);
 		ControllerFunctionModifier function = ____inject____(ControllerFunctionModifier.class);
 		function.setEntities(objects);
 		function.copyProperty(Properties.REQUEST,properties);
@@ -92,6 +95,7 @@ public abstract class AbstractControllerServiceProviderImpl<OBJECT> extends Abst
 	public ControllerServiceProvider<OBJECT> deleteMany(Collection<OBJECT> objects, Properties properties) {
 		if(properties == null)
 			properties = new Properties();
+		EntitySaver.AbstractImpl.setAuditableWhoDoneWhatWhen(objects, null);
 		ControllerFunctionRemover function = ____inject____(ControllerFunctionRemover.class);
 		function.setEntities(objects);
 		function.copyProperty(Properties.REQUEST,properties);

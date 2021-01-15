@@ -19,7 +19,7 @@ public class BusinessIntegrationTestReport extends AbstractBusinessArquillianInt
 	@Test
 	public void report() throws Exception{
 		ByteArrayOutputStream outputStream = (ByteArrayOutputStream) ReportBuilder.getInstance().build(new Template().setInputStream(this.getClass()
-				.getResourceAsStream("report/jasper/text_without_datasource.jrxml")), null, JRTextExporter.class);
+				.getResourceAsStream("report/jasper/text_without_datasource.jrxml")), null,null, JRTextExporter.class);
 		String string = new String(outputStream.toByteArray());
 		assertThat(string).contains("This is a text");
 	}

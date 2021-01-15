@@ -19,8 +19,27 @@ public class Message extends AbstractObject implements Serializable {
 
 	private String subject;
 	private String body;
-	private Attachment attachment;
+	private Collection<Attachment> attachments;
 	private Collection<Object> receivers;
+	
+	public Collection<Attachment> getAttachments(Boolean injectIfNull) {
+		if(attachments == null && Boolean.TRUE.equals(injectIfNull))
+			attachments = new ArrayList<>();
+		return attachments;
+	}
+	
+	public Message addAttachments(Collection<Attachment> attachments) {
+		if(CollectionHelper.isEmpty(attachments))
+			return this;
+		getAttachments(Boolean.TRUE).addAll(attachments);
+		return this;
+	}
+	
+	public Message addAttachments(Attachment...attachments) {
+		if(ArrayHelper.isEmpty(attachments))
+			return this;
+		return addAttachments(CollectionHelper.listOf(attachments));
+	}
 	
 	public Collection<Object> getReceivers(Boolean injectIfNull) {
 		if(receivers == null && Boolean.TRUE.equals(injectIfNull))

@@ -42,7 +42,7 @@ public interface EntitySaver {
 			finalise(controllerEntityClass, arguments,response);
 		}
 		
-		protected void setAuditableWhoDoneWhatWhen(Collection<?> collection,String functionality) {
+		public static void setAuditableWhoDoneWhatWhen(Collection<?> collection,String functionality) {
 			if(CollectionHelper.isEmpty(collection))
 				return;
 			String username = SessionHelper.getUserName();

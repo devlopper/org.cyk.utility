@@ -104,11 +104,11 @@ public interface EntityLifeCycleListener {
 				return;
 			AuditableWhoDoneWhatWhen instance = (AuditableWhoDoneWhatWhen) object;
 			//instance.set__auditWho__(ValueHelper.defaultToIfBlank(SessionHelper.getUserName(),DEFAULT_USER_NAME)); //TODO how to get principal in back end ?			
-			if(StringHelper.isBlank(instance.get__auditWho__())) {
+			//if(StringHelper.isBlank(instance.get__auditWho__())) {
 				if(StringHelper.isBlank(who))
 					who = DEFAULT_USER_NAME;
 				instance.set__auditWho__(who);
-			}
+			//}
 			
 			/*
 			if(StringHelper.isBlank(instance.get__auditWhat__())) {
@@ -119,18 +119,17 @@ public interface EntityLifeCycleListener {
 			*/
 					
 			instance.set__auditWhat__(what);
-			
-			if(StringHelper.isBlank(instance.get__auditFunctionality__())) {
+			//if(StringHelper.isBlank(instance.get__auditFunctionality__())) {
 				if(StringHelper.isBlank(functionality))
 					functionality = DEFAULT_FUNCTIONALITY;
 				instance.set__auditFunctionality__(functionality);
-			}
+			//}
 			
-			if(instance.get__auditWhen__() == null) {
+			//if(instance.get__auditWhen__() == null) {
 				if(when == null)
 					when = LocalDateTime.now();
 				instance.set__auditWhen__(when);
-			}
+			//}
 		}
 	}
 	
