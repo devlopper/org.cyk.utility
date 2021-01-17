@@ -127,6 +127,24 @@ public class Layout extends OutputPanel implements Serializable {
 		return this;
 	}
 	
+	public Layout setCellsRenderedByIndexes(Boolean rendered,Collection<Integer> indexes) {
+		if(CollectionHelper.isEmpty(indexes))
+			return this;
+		indexes.forEach(index -> {
+			Cell cell = CollectionHelper.getElementAt(cells,index);
+			if(cell == null)
+				return;
+			cell.setRendered(rendered);
+		});
+		return this;
+	}
+	
+	public Layout setCellsRenderedByIndexes(Boolean rendered,Integer...indexes) {
+		if(ArrayHelper.isEmpty(indexes))
+			return this;
+		return setCellsRenderedByIndexes(rendered, CollectionHelper.listOf(indexes));
+	}
+	
 	/**/
 	
 	public static final String FIELD_CELLS = "cells";

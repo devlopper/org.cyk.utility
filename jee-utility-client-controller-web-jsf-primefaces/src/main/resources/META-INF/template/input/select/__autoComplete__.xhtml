@@ -14,11 +14,14 @@
 	 -->
 	
 	<ui:decorate template="/input/default.xhtml">
+		<!--
 		<ui:define name="message">
 			<ui:decorate template="#{primefacesHelper.getModelTemplate(autoComplete.message)}">
 				<ui:param name="message" value="#{autoComplete.message}"/>
 			</ui:decorate>
-		</ui:define>		
+		</ui:define>
+		-->
+		<ui:param name="__input__" value="#{autoComplete}"/>
 		<ui:define name="input">
 			<p:autoComplete
 				id="#{autoComplete.identifier}"

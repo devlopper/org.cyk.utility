@@ -24,6 +24,14 @@
 		</ui:fragment>			
 	</ui:insert>
 	
+	<ui:insert name="description">
+		<ui:fragment rendered="#{__input__.descriptionOutputText != null}">
+			<ui:decorate template="#{primefacesHelper.getModelTemplate(__input__.descriptionOutputText)}">
+				<ui:param name="outputText" value="#{__input__.descriptionOutputText}"/>
+			</ui:decorate>
+		</ui:fragment>			
+	</ui:insert>
+	
 	<ui:insert name="input">
 		<h:outputText value="INPUT" />
 	</ui:insert>

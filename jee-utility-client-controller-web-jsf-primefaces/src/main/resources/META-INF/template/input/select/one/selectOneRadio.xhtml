@@ -9,11 +9,14 @@
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
 	<ui:decorate template="/input/default.xhtml">
+		<!--
 		<ui:define name="message">
 			<ui:decorate template="#{primefacesHelper.getModelTemplate(selectOneRadio.message)}">
 				<ui:param name="message" value="#{selectOneRadio.message}"/>
 			</ui:decorate>
-		</ui:define>		
+		</ui:define>
+		-->
+		<ui:param name="__input__" value="#{selectOneRadio}"/>
 		<ui:define name="input">
 			<p:selectOneRadio
 				id="#{selectOneRadio.identifier}"

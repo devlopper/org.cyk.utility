@@ -20,6 +20,7 @@ import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractInputOutput;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.message.Message;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.output.OutputLabel;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.output.OutputText;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -32,6 +33,7 @@ public abstract class AbstractInput<VALUE> extends AbstractInputOutput<VALUE> im
 	protected String requiredMessage,converterMessage,validatorMessage;
 	protected String placeholder;
 	
+	protected OutputText descriptionOutputText;
 	protected OutputLabel outputLabel;
 	protected Message message;
 	protected Object converter;
@@ -69,6 +71,7 @@ public abstract class AbstractInput<VALUE> extends AbstractInputOutput<VALUE> im
 	public static final String FIELD_VALIDATOR_MESSAGE = "validatorMessage";
 	public static final String FIELD_PLACEHOLDER = "placeholder";
 	public static final String FIELD_CONVERTER = "converter";
+	public static final String FIELD_DESCRIPTION_OUTPUT_TEXT = "descriptionOutputText";
 	
 	/**/
 	
@@ -141,6 +144,14 @@ public abstract class AbstractInput<VALUE> extends AbstractInputOutput<VALUE> im
 				}				
 			}
 			
+			if(input.descriptionOutputText == null) {				
+				String descriptionOutputTextValue = (String) MapHelper.readByKey(arguments, FIELD_DESCRIPTION_OUTPUT_TEXT_VALUE);
+				if(StringHelper.isNotBlank(descriptionOutputTextValue)) {
+					input.descriptionOutputText = OutputText.buildFromValue(descriptionOutputTextValue);
+					input.descriptionOutputText.addStyleClasses("cyk-input-description");
+				}
+			}
+			
 			if(input.placeholder == null) {
 				if(input.outputLabel != null)
 					input.placeholder = input.outputLabel.getValue();
@@ -156,5 +167,6 @@ public abstract class AbstractInput<VALUE> extends AbstractInputOutput<VALUE> im
 		public static final String FIELD_OUTPUT_LABEL_CARDINAL_POINT = "outputLabelCardinalPoint";
 		public static final String FIELD_OUTPUT_LABEL_BUILDABLE = "outputLabelBuildable";
 		public static final String FIELD_MESSAGABLE = "configurator.messagable";
+		public static final String FIELD_DESCRIPTION_OUTPUT_TEXT_VALUE = "configurator.descriptionOutputTextValue";
 	}
 }

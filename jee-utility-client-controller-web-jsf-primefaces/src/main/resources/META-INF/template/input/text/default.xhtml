@@ -9,13 +9,6 @@
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
 	<ui:decorate template="/input/default.xhtml">
-		<!--
-		<ui:define name="message">
-			<ui:decorate template="#{primefacesHelper.getModelTemplate(inputText.message)}">
-				<ui:param name="message" value="#{inputText.message}"/>
-			</ui:decorate>
-		</ui:define>
-		-->
 		<ui:param name="__input__" value="#{inputText}"/>		
 		<ui:define name="input">
 			<p:inputText

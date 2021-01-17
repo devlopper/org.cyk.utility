@@ -145,7 +145,7 @@ public interface Querier {
 	
 	public static interface CodableAndNamable<T> extends Querier {
 		
-		Integer NUMBER_OF_WORDS_OF_PARAMETER_NAME_NAME = 4;
+		Integer NUMBER_OF_WORDS_OF_PARAMETER_NAME_NAME = 8;
 		
 		/* read code order by ascending */
 		Collection<String> readCodes(QueryExecutorArguments arguments);

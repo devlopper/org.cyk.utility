@@ -11,6 +11,7 @@
 	
 	<p:outputPanel
 		id="#{outputPanel == null ? userInterfaceController.randomIdentifier : outputPanel.identifier}"
+		rendered="#{outputPanel.rendered}"
 		styleClass="#{outputPanel.styleClass}"
 		style="#{outputPanel.style}"
 	>
