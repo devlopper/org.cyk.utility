@@ -3,11 +3,16 @@ package org.cyk.utility.security.keycloak;
 import java.security.Principal;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
 import org.cyk.utility.__kernel__.security.SecurityHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.variable.VariableName;
 import org.keycloak.KeycloakPrincipal;
+import org.keycloak.KeycloakSecurityContext;
+import org.keycloak.adapters.RefreshableKeycloakSecurityContext;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.ClientsResource;
 import org.keycloak.admin.client.resource.RealmResource;
@@ -55,6 +60,18 @@ public interface KeycloakHelper {
 		if(principal instanceof KeycloakPrincipal)
 			return ((KeycloakPrincipal<?>) principal).getKeycloakSecurityContext().getToken();
 		throw new RuntimeException("cannot get access token from principal type "+principal.getClass());
+	}
+	
+	static AccessToken getAccessToken(HttpServletRequest request) {
+		if(request == null)
+			return null;
+		if (request.getAttribute(KeycloakSecurityContext.class.getName()) instanceof RefreshableKeycloakSecurityContext)
+			return ((RefreshableKeycloakSecurityContext)request.getAttribute(KeycloakSecurityContext.class.getName())).getToken();
+		return null;
+	}
+	
+	static Boolean isUserHasRole(String role,HttpServletRequest request) {
+		return CollectionHelper.contains(getAccessToken(request).getRealmAccess().getRoles(), role);
 	}
 	
 	static String getUserName(Principal principal) {

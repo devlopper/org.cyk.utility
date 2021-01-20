@@ -22,6 +22,9 @@ public interface SessionManager {
 	String getUserName(Principal principal);
 	String getUserName();
 	
+	Boolean isUserHasRole(String role,HttpServletRequest request);
+	Boolean isUserHasRole(String role);
+	
 	void destroy(String username,HttpServletRequest request);
 	void destroy(String username);
 	
@@ -47,6 +50,22 @@ public interface SessionManager {
 		@Override
 		public String getUserName() {
 			return getUserName(SecurityHelper.getPrincipal());
+		}
+		
+		@Override
+		public Boolean isUserHasRole(String role,HttpServletRequest request) {
+			if(StringHelper.isBlank(role) || request == null)
+				return null;
+			return __isUserHasRole__(role,request);
+		}
+		
+		@Override
+		public Boolean isUserHasRole(String role) {
+			return isUserHasRole(role, __inject__(HttpServletRequest.class));
+		}
+		
+		protected Boolean __isUserHasRole__(String role,HttpServletRequest request) {
+			return request.isUserInRole(role);
 		}
 		
 		@Override

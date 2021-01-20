@@ -1,6 +1,8 @@
 package org.cyk.utility.__kernel__.persistence.procedure;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.cyk.utility.__kernel__.object.AbstractObject;
 
@@ -14,5 +16,5 @@ public class ProcedureExecutorArguments extends AbstractObject implements Serial
 	private Class<?> klass;
 	private ProcedureName procedureName;
 	private String name;
-	
+	private Map<String,Object> parameters = new HashMap<>();
 }
