@@ -1,12 +1,9 @@
 package org.cyk.utility.__kernel__.object.__static__.representation;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 import javax.json.bind.annotation.JsonbTransient;
 import javax.xml.bind.annotation.XmlTransient;
-
-import org.cyk.utility.__kernel__.object.marker.AuditableWhoDoneWhatWhen;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -24,7 +21,6 @@ public abstract class AbstractIdentifiableSystemScalarStringAuditedImpl extends 
 	protected String __auditWho__;	
 	protected String __auditWhat__;	
 	protected String __auditFunctionality__;
-	protected LocalDateTime __auditWhen__;
 	protected Long __auditWhenAsTimestamp__;
 	protected String __auditWhenAsString__;
 	
@@ -44,19 +40,7 @@ public abstract class AbstractIdentifiableSystemScalarStringAuditedImpl extends 
 		setIdentifier(identifier);
 		return this;
 	}
-	
-	@XmlTransient
-	@JsonbTransient
-	public LocalDateTime get__auditWhen__() {
-		return null;
-	}
-	
-	@XmlTransient
-	@JsonbTransient
-	public AuditableWhoDoneWhatWhen set__auditWhen__(LocalDateTime when) {
-		return this;
-	}
-	
+		
 	@Override
 	public String toString() {
 		String identifier = getIdentifier();

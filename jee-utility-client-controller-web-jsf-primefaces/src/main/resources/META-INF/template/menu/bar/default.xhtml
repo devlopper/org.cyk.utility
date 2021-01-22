@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<c:if test="#{menuBar.model == null}">
+		<p:menubar
+			id="#{menuBar == null ? userInterfaceController.randomIdentifier : menuBar.identifier}"
+			rendered="#{menuBar.rendered}" toggleEvent="#{menuBar.toggleEvent}" widgetVar="#{menuBar.widgetVar}" autoDisplay="#{menuBar.autoDisplay}"
+			styleClass="#{menuBar.styleClass}" style="#{menuBar.style}"
+		>
+			<c:forEach var="menuitem" items="#{menuBar.items}">
+				<ui:decorate template="../item/default.xhtml">
+					<ui:param name="menuitem" value="#{menuitem}"/>
+				</ui:decorate>
+			</c:forEach>
+		</p:menubar>
+	</c:if>
+	
+	<c:if test="#{menuBar.model != null}">
+		<p:menubar
+			id="#{menuBar == null ? userInterfaceController.randomIdentifier : menuBar.identifier}"
+			rendered="#{menuBar.rendered}" toggleEvent="#{menuBar.toggleEvent}" widgetVar="#{menuBar.widgetVar}" autoDisplay="#{menuBar.autoDisplay}"
+			styleClass="#{menuBar.styleClass}" style="#{menuBar.style}"
+			model="#{menuBar.model}"
+		>
+
+		</p:menubar>
+	</c:if>	
+</ui:composition>

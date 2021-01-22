@@ -125,4 +125,5 @@ public interface RepresentationEntity<ENTITY> extends RepresentationServiceProvi
 	String QUERY_PARAMETER_NAME_IDENTIFIER = "identifiant";
 	String QUERY_PARAMETER_NAME_CODE = "code";
 	String QUERY_PARAMETER_NAME_NAME = "libelle";
+	String QUERY_PARAMETER_NAME_ACTOR = "acteur";
 }

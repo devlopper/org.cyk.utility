@@ -18,6 +18,7 @@ import org.cyk.utility.__kernel__.value.Value;
 public interface SessionManager {
 
 	Boolean isUserLogged(HttpServletRequest request);
+	Boolean isUserLogged();
 	
 	String getUserName(Principal principal);
 	String getUserName();
@@ -35,6 +36,11 @@ public interface SessionManager {
 			if(request == null)
 				return Boolean.FALSE;
 			return Boolean.TRUE.equals(__isUserLogged__(request));
+		}
+		
+		@Override
+		public Boolean isUserLogged() {
+			return isUserLogged(__inject__(HttpServletRequest.class));
 		}
 		
 		protected Boolean __isUserLogged__(HttpServletRequest request) {

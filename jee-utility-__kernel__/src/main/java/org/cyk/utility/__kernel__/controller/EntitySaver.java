@@ -9,7 +9,7 @@ import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.mapping.MappingHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
-import org.cyk.utility.__kernel__.object.__static__.persistence.EntityLifeCycleListener;
+import org.cyk.utility.__kernel__.object.__static__.representation.AuditableWhoDoneWhatWhen;
 import org.cyk.utility.__kernel__.session.SessionHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.value.Value;
@@ -49,7 +49,8 @@ public interface EntitySaver {
 			for(Object object : collection) {
 				if(object == null)
 					continue;
-				EntityLifeCycleListener.AbstractImpl.setAuditableWhoDoneWhatWhenIfBlank(object, username, functionality, null, null);
+				AuditableWhoDoneWhatWhen.set(object, username, functionality, null);
+				//EntityLifeCycleListener.AbstractImpl.setAuditableWhoDoneWhatWhenIfBlank(object, username, functionality, null, null);
 			}
 		}
 		

@@ -5,7 +5,6 @@ import java.security.Principal;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.session.SessionHelper;
 import org.cyk.utility.__kernel__.session.SessionManager;
@@ -29,7 +28,7 @@ public class SessionManagerImpl extends SessionManager.AbstractImpl implements S
 	
 	@Override
 	protected Boolean __isUserHasRole__(String role,HttpServletRequest request) {
-		return CollectionHelper.contains(KeycloakHelper.getAccessToken(request).getRealmAccess().getRoles(), role);
+		return KeycloakHelper.isUserHasRole(role, request);
 	}
 	
 	@Override

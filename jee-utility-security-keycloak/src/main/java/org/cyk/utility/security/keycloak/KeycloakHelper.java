@@ -71,7 +71,12 @@ public interface KeycloakHelper {
 	}
 	
 	static Boolean isUserHasRole(String role,HttpServletRequest request) {
-		return CollectionHelper.contains(getAccessToken(request).getRealmAccess().getRoles(), role);
+		if(request == null)
+			return null;
+		AccessToken accessToken = getAccessToken(request);
+		if(accessToken == null || accessToken.getRealmAccess() == null)
+			return null;
+		return CollectionHelper.contains(accessToken.getRealmAccess().getRoles(), role);
 	}
 	
 	static String getUserName(Principal principal) {

@@ -62,6 +62,10 @@ public abstract class AbstractMenu extends AbstractObject implements Serializabl
 	
 	/**/
 	
+	public static final String FIELD_MODEL = "model";
+	
+	/**/
+	
 	public static abstract class AbstractConfiguratorImpl<MENU extends AbstractMenu> extends org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObject.AbstractConfiguratorImpl<MENU> implements Serializable {
 
 	}
