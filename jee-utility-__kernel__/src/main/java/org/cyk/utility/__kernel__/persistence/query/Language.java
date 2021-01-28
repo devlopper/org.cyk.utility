@@ -391,6 +391,10 @@ public interface Language {
 			return exists(CollectionHelper.listOf(strings));
 		}
 		
+		static String isNullable(String parameterName) {
+			return String.format(IS_NULLABLE,parameterName);
+		}
+		
 		static String isNull(String variable,String fieldName) {
 			return String.format(IS_NULL, variable,fieldName);
 		}
@@ -447,6 +451,14 @@ public interface Language {
 			return allNotNull(variable,CollectionHelper.listOf(fieldsNames));
 		}
 		
+		static String isNullableOrIsNull(String variable,String fieldName,String parameterName) {
+			return parenthesis(or(isNullable(parameterName),isNull(variable, fieldName)));
+		}
+		
+		static String isNullableOrIsNull(String variable,String fieldName) {
+			return isNullableOrIsNull(variable, fieldName, fieldName+"Nullable");
+		}
+		
 		/*
 		static String deriveLike(String tuple,String fieldName,String parameterName,Integer numberOfTokens,LogicalOperator operator,Boolean isCaseSensitive){
 			if(StringHelper.isBlank(tuple) || StringHelper.isBlank(fieldName) || StringHelper.isBlank(parameterName))
@@ -465,6 +477,7 @@ public interface Language {
 		String NOT = "NOT (%s)";
 		String IS_NULL = "%s.%s IS NULL";
 		String IS_NOT_NULL = "%s.%s IS NOT NULL";
+		String IS_NULLABLE = ":%s = true";
 		
 		/**/
 		

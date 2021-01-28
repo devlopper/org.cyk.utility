@@ -437,6 +437,17 @@ public class Filter extends AbstractObject implements Serializable {
 		
 		/**/
 		
+		public static Dto addFieldIfValueNotNull(String name,Object value,Dto filter) {
+			if(value != null) {
+				if(filter == null)
+					filter = new Dto();
+				filter.addField(name, value);
+			}
+			return filter;
+		}
+		
+		/**/
+		
 		public static final String FIELD_FIELDS = "fields";
 		
 		/**/

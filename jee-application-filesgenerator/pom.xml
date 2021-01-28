@@ -1,0 +1,38 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.cyk.pom.jee</groupId>
+		<artifactId>pom-jee</artifactId>
+		<version>pom.jee.0.1.0</version>
+	</parent>
+
+	<groupId>org.cyk.jee.application.filesgenerator</groupId>
+	<artifactId>jee-application-filesgenerator</artifactId>
+	<version>0.1.0</version>
+	<packaging>jar</packaging>
+
+	<name>jee-application-filesgenerator</name>
+	<url>http://maven.apache.org</url>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.jboss.weld.se</groupId>
+				<artifactId>weld-se</artifactId>
+				<version>${org.jboss.weld.se.weld-se.version}</version>
+				<scope>compile</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.cyk.jee.utility.__kernel__</groupId>
+			<artifactId>jee-utility-__kernel__</artifactId>
+			<version>0.1.0</version>
+		</dependency>
+	</dependencies>
+</project>

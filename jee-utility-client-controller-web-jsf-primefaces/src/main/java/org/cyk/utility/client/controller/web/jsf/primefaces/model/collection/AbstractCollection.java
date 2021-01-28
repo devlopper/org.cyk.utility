@@ -326,14 +326,18 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 					,MenuItem.FIELD___ACTION__,action);
 		if(action != null)
 			objects = ArrayUtils.addAll(objects, MenuItem.FIELD_PARAMETERS,Map.of(ParameterName.ACTION_IDENTIFIER.getValue(),List.of(action.name())));
-		if(recordMenu instanceof ContextMenu) {
+		Class<? extends AbstractMenu> recordMenuClass = recordMenu == null ? ((Listener)listener).getRecordMenuClass(this) : recordMenu.getClass();
+		if(ContextMenu.class.equals(recordMenuClass)) {
 			//TODO is it the best way ?
 			String vOutcome = outcome;
 			Map<Object,Object> map = MapHelper.instantiate(objects);
+			final Action actionFinal = action;
 			addRecordMenuItemByArgumentsExecuteFunction((String)map.get(MenuItem.FIELD_VALUE), (String)map.get(MenuItem.FIELD_ICON), new MenuItem.Listener.AbstractImpl() {
 				@Override
 				protected Object __runExecuteFunction__(AbstractAction action) {
 					Map<String,List<String>> parameters = new HashMap<>();
+					if(actionFinal != null)
+						parameters.put(ParameterName.ACTION_IDENTIFIER.getValue(),List.of(actionFinal.name()));
 					parameters.put(ParameterName.ENTITY_IDENTIFIER.getValue(),List.of((String)FieldHelper.readSystemIdentifier(action.readArgument())));
 					if(MapHelper.isNotEmpty(action.get__parameters__()))
 						parameters.putAll(action.get__parameters__());
@@ -348,7 +352,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	}
 	
 	public AbstractCollection addRecordMenuItemByArgumentsNavigateToViewRead(Object...objects) {
-		return addRecordMenuItemByArgumentsNavigateToView(Action.READ,ConstantEmpty.STRING);
+		return addRecordMenuItemByArgumentsNavigateToView(Action.READ,ConstantEmpty.STRING,objects);
 	}
 	
 	public AbstractCollection enableCommandButtonSave() {

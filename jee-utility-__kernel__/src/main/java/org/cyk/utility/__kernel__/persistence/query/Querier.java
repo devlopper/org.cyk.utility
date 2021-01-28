@@ -24,7 +24,10 @@ public interface Querier {
 	String PARAMETER_NAME_STRING = "string";
 	String PARAMETER_NAME_THIS = "this";
 	String PARAMETER_NAME_NAME = "name";
-
+	
+	String PARAMETER_NAME_EXCLUDED_IDENTIFIERS = "excludedIdentifiers";
+	String PARAMETER_NAME_EXCLUDED_CODES = "excludedCodes";
+	
 	/**/
 	
 	<T,I> Collection<T> readBySystemIdentifiers(Class<T> resultClass,Class<I> identifierClass,Collection<I> identifiers);
