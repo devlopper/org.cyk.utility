@@ -3,6 +3,8 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.model.panel;
 import java.io.Serializable;
 import java.util.Map;
 
+import org.cyk.utility.__kernel__.map.MapHelper;
+import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObject;
 
@@ -15,6 +17,11 @@ public class OutputPanel extends AbstractObject implements Serializable {
 
 	protected Boolean deferred;
 	protected String deferredMode;
+	
+	/**/
+	
+	public static final String FIELD_DEFERRED = "deferred";
+	public static final String FIELD_DEFERRED_MODE = "deferredMode";
 	
 	/**/
 	
@@ -40,5 +47,13 @@ public class OutputPanel extends AbstractObject implements Serializable {
 	
 	static {
 		Configurator.set(OutputPanel.class, new ConfiguratorImpl());
+	}
+	
+	public static OutputPanel build(Map<Object, Object> arguments) {
+		return Builder.build(OutputPanel.class,arguments);
+	}
+	
+	public static OutputPanel build(Object...objects) {
+		return build(MapHelper.instantiate(objects));
 	}
 }

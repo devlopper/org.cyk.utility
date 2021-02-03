@@ -18,7 +18,7 @@ public class MailSenderUnitTestPingGMailSigobeAdmin extends AbstractWeldUnitTest
 		VariableHelper.write(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_PORT, 587);
 		VariableHelper.write(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_REQUIRED, Boolean.TRUE);
 		VariableHelper.write(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_SECURED_CONNECTION_REQUIRED, Boolean.TRUE);
-		VariableHelper.write(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_CREDENTIALS_USER_IDENTIFIER, "sigobe.dgbf@gmail.com");
+		VariableHelper.write(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_CREDENTIALS_USER_IDENTIFIER, "a.sigobe.dgbf@gmail.com");
 		VariableHelper.write(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_CREDENTIALS_USER_SECRET, "budget@2020");
 		
 		//VariableHelper.write(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_PROXY_HOST, "10.3.4.5");
@@ -28,7 +28,7 @@ public class MailSenderUnitTestPingGMailSigobeAdmin extends AbstractWeldUnitTest
 	
 	@Test
 	public void ping() throws MessagingException{
-		MailSender.getInstance().ping("sigobe.dgbf@gmail.com");
+		MailSender.getInstance().ping("a.sigobe.dgbf@gmail.com");
 	}
 	
 }

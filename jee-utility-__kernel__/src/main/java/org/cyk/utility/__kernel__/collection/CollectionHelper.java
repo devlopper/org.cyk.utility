@@ -33,6 +33,11 @@ import one.util.streamex.StreamEx;
 
 public interface CollectionHelper {
 
+	static <T> void addNullAtFirstIfSizeGreaterThanOne(Collection<T> collection) {
+		if(getSize(collection) > 1)
+			addElementAt(collection, 0, null);
+	}
+	
 	static <T> Collection<T> instantiate(Class<?> klass,Boolean ignoreNullElement,@SuppressWarnings("unchecked") T...elements) {
 		if(klass == null || elements == null || elements.length == 0)
 			return null;

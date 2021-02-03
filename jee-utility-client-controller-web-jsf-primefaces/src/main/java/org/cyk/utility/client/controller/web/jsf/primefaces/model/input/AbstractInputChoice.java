@@ -76,6 +76,7 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 	public static final String FIELD_DISBALED = "disabled";
 	public static final String FIELD_NULLABLE = "nullable";
 	public static final String FIELD_LAYOUT = "layout";
+	public static final String FIELD_CHOICES_INITIALIZED = "choicesInitialized";
 	
 	/**/
 	

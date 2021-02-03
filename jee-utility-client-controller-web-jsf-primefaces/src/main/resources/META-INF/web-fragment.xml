@@ -8,9 +8,23 @@
         <param-value>true</param-value>
     </context-param>
 	
+	<!-- Throwable -->
+	
+	<error-page>
+    	<exception-type>javax.faces.application.ViewExpiredException</exception-type>
+    	<location>/error/throwable/viewexpired.xhtml</location>
+	</error-page>
+	
+	<!-- Code -->
+	
 	<error-page>
 		<error-code>403</error-code>
-		<location>/error/403.jsf</location>
+		<location>/error/code/403.jsf</location>
+	</error-page>
+	
+	<error-page>
+		<error-code>500</error-code>
+		<location>/error/code/500.jsf</location>
 	</error-page>
 	
 </web-fragment>

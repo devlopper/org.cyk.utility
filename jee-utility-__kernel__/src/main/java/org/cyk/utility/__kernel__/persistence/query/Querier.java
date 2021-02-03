@@ -176,10 +176,13 @@ public interface Querier {
 				));
 		}
 		
-		static String getQueryValueReadWhereCodeOrNameLike(String tupleName) {
-			return Language.of(Language.Select.of("t.identifier,t.code,t.name"),getQueryValueWhereCodeOrNameLikeFromWhere(tupleName),Language.Order.of("t.code ASC"));
+		static String getQueryValueReadWhereCodeOrNameLike(String tupleName,String select) {
+			return Language.of(Language.Select.of(select),getQueryValueWhereCodeOrNameLikeFromWhere(tupleName),Language.Order.of("t.code ASC"));
 		}
 		
+		static String getQueryValueReadWhereCodeOrNameLike(String tupleName) {
+			return getQueryValueReadWhereCodeOrNameLike(tupleName, "t.identifier,t.code,t.name");
+		}
 		
 		static String getQueryValueCountWhereCodeOrNameLike(String tupleName) {
 			return Language.of(Language.Select.of("COUNT(t.identifier)"),getQueryValueWhereCodeOrNameLikeFromWhere(tupleName));
@@ -283,14 +286,17 @@ public interface Querier {
 		
 		/**/
 		
-		static void initialize(Class<?> klass) {		
-			QueryHelper.addQueries(Query.build(Query.FIELD_IDENTIFIER,QueryIdentifierGetter.getInstance().get(klass, QueryName.READ_WHERE_CODE_OR_NAME_LIKE)
+		static void initialize(Class<?> klass) {
+			initialize(klass, Query.build(Query.FIELD_IDENTIFIER,QueryIdentifierGetter.getInstance().get(klass, QueryName.READ_WHERE_CODE_OR_NAME_LIKE)
 					,Query.FIELD_TUPLE_CLASS,klass,Query.FIELD_RESULT_CLASS,klass
 					,Query.FIELD_VALUE,Querier.CodableAndNamable.getQueryValueReadWhereCodeOrNameLike(klass.getSimpleName())
 					).setTupleFieldsNamesIndexes(MapHelper.instantiateStringIntegerByStrings(AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl
 							.FIELD_IDENTIFIER,AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl.FIELD_CODE
-							,AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl.FIELD_NAME))
-				);		
+							,AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl.FIELD_NAME)));
+		}
+		
+		static void initialize(Class<?> klass,Query readWhereCodeOrNameLike) {
+			QueryHelper.addQueries(readWhereCodeOrNameLike);		
 			QueryHelper.addQueries(Query.build(Query.FIELD_IDENTIFIER,QueryIdentifierGetter.getInstance().get(klass, QueryName.COUNT_WHERE_CODE_OR_NAME_LIKE)
 					,Query.FIELD_TUPLE_CLASS,klass,Query.FIELD_RESULT_CLASS,Long.class
 					,Query.FIELD_VALUE,Querier.CodableAndNamable.getQueryValueCountWhereCodeOrNameLike(klass.getSimpleName())

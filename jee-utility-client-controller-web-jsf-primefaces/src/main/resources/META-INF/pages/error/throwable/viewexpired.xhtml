@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"      
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org"
+      xmlns:of="http://omnifaces.org/functions"
+      xmlns:pe="http://primefaces.org/ui/extensions">
+	
+	<h:head>
+		
+	</h:head>
+	
+	<h:body>
+		<p:panel header="Message">
+			<p:staticMessage severity="warn" summary="Désolé! La page à expirée."/>
+			<br/>
+			<p:button value="Cliquer ici pour actualiser la page." href="#{requestScope['javax.servlet.error.request_uri']}?#{request.queryString}" />
+			<p:separator/>
+			<p:panel header="Details" collapsed="true" toggleable="true">
+				<ul>
+				    <li>Date/time: #{of:formatDate(now, 'yyyy-MM-dd HH:mm:ss')}</li>
+				    <li>User agent: #{header['user-agent']}</li>
+				    <li>User IP: #{request.remoteAddr}</li>
+				    <li>Request URI: #{requestScope['javax.servlet.error.request_uri']}</li>
+				    <li>Ajax request: #{facesContext.partialViewContext.ajaxRequest ? 'Yes' : 'No'}</li>
+				    <li>Status code: #{requestScope['javax.servlet.error.status_code']}</li>
+				    <li>Exception type: #{requestScope['javax.servlet.error.exception_type']}</li>
+				    <li>Exception message: #{requestScope['javax.servlet.error.message']}</li>
+				    <li>Exception UUID: #{requestScope['org.omnifaces.exception_uuid']}</li>
+				    <li>Stack trace:
+		        		<pre>#{of:printStackTrace(requestScope['javax.servlet.error.exception'])}</pre>
+		    		</li>
+				</ul>
+			</p:panel>
+		</p:panel>			
+	</h:body>
+</html>

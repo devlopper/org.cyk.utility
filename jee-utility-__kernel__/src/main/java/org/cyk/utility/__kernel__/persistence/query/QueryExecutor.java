@@ -19,6 +19,7 @@ import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.persistence.EntityManagerGetter;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
+import org.cyk.utility.__kernel__.time.TimeHelper;
 import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 
@@ -67,7 +68,9 @@ public interface QueryExecutor {
 			arguments.prepare(resultClass);
 			TypedQuery<?> typedQuery = __getTypedQuery__(arguments.get__resultClass__(), arguments.getQuery(),arguments.get__parameters__(),arguments.getFirstTupleIndex()
 					,arguments.getNumberOfTuples(),arguments.get__hints__(),arguments.get__entityManager__(),LOGGABLE,ValueHelper.defaultToIfNull(arguments.getLoggingLevel(),LOG_LEVEL));
+			Long t = System.currentTimeMillis();
 			Collection<?> result = typedQuery.getResultList();
+			Long duration = System.currentTimeMillis() - t;
 			Collection<T> collection;
 			if(CollectionHelper.isEmpty(result))
 				collection = null;
@@ -88,7 +91,7 @@ public interface QueryExecutor {
 			if(CollectionHelper.isNotEmpty(collection))
 				collection = processResult(resultClass, arguments, collection);
 			if(Boolean.TRUE.equals(LOGGABLE)) {
-				LogHelper.log(String.format("collection size = %s", CollectionHelper.getSize(collection)), LOG_LEVEL,getClass());
+				LogHelper.log(String.format("collection size = %s , duration = %s", CollectionHelper.getSize(collection),TimeHelper.formatDuration(duration)), LOG_LEVEL,getClass());
 			}
 			return collection;
 		}

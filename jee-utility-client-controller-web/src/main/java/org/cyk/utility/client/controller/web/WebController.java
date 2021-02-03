@@ -1,12 +1,15 @@
 package org.cyk.utility.client.controller.web;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.servlet.http.HttpServletRequest;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.enumeration.Action;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.identifier.resource.ParameterName;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.properties.Properties;
@@ -18,6 +21,8 @@ import org.cyk.utility.client.controller.ControllerLayer;
 @ApplicationScoped
 public class WebController extends AbstractObject implements Serializable {
 
+	/**/
+	
 	public String getRequestParameter(String name) {
 		if(StringHelper.isBlank(name))
 			return null;
@@ -65,6 +70,23 @@ public class WebController extends AbstractObject implements Serializable {
 	public <T> T getRequestParameterEntityBySystemIdentifier(Class<T> entityClass) {
 		return getRequestParameterEntityBySystemIdentifier(entityClass,ParameterName.ENTITY_IDENTIFIER.getValue());
 	}
+
+	public <T> T getRequestParameterEntityBySystemIdentifier(Class<T> klass,Collection<T> collection,T instance) {
+		if(instance != null)
+			return instance;
+		String identifier = WebController.getInstance().getRequestParameter(ParameterName.stringify(klass));
+		if(StringHelper.isBlank(identifier))
+			instance = CollectionHelper.getFirst(collection);
+		else {
+			if(CollectionHelper.isEmpty(collection))
+				instance = __inject__(ControllerLayer.class).injectInterfaceClassFromEntityClass(klass).readBySystemIdentifier(identifier);
+			else
+				for(T index : collection)
+					if(identifier.equals(FieldHelper.readSystemIdentifier(index)))
+						return index;
+		}
+		return instance;
+	}
 	
 	public <T> T getRequestParameterEntity(Class<T> entityClass,String parameterName) {
 		return getRequestParameterEntityBySystemIdentifier(entityClass,parameterName);
@@ -76,6 +98,20 @@ public class WebController extends AbstractObject implements Serializable {
 	
 	public <T> T getRequestParameterEntityAsParentBySystemIdentifier(Class<T> entityClass) {
 		return getRequestParameterEntityBySystemIdentifier(entityClass,ParameterName.stringify(entityClass));
+	}
+	
+	public <T> T getRequestParameterEntityAsParentBySystemIdentifier(Class<T> entityClass,Collection<T> collection) {
+		String identifier = getRequestParameter(ParameterName.stringify(entityClass));
+		if(CollectionHelper.isEmpty(collection)) {
+			return getRequestParameterEntityAsParentBySystemIdentifier(entityClass);
+		}else {
+			if(StringHelper.isNotBlank(identifier))
+				for(T index : collection) {
+					if(identifier.equals(FieldHelper.readSystemIdentifier(index)))
+						return index;
+				}
+		}
+		return null;
 	}
 	
 	public <T> T getRequestParameterEntityAsParent(Class<T> entityClass) {

@@ -597,6 +597,10 @@ public interface Language {
 		String OPERATE = "%s.%s %s";
 	}
 
+	/**/
+	
+	
+	
 	/* Argument Generator*/
 	
 	public static interface Argument {

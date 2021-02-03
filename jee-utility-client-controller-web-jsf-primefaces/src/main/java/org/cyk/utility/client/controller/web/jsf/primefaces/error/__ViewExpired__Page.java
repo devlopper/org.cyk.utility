@@ -11,10 +11,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Named @RequestScoped @Getter @Setter
-public class __403__Page extends AbstractPageContainerManagedImpl implements Serializable {
+public class __ViewExpired__Page extends AbstractPageContainerManagedImpl implements Serializable {
 
 	@Override
 	protected String __getWindowTitleValue__() {
-		return "Sécurité";
+		return "Vue expirée";
 	}	
 }

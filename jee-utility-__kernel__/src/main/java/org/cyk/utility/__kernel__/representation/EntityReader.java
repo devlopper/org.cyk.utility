@@ -26,6 +26,7 @@ import org.cyk.utility.__kernel__.persistence.query.QueryGetter;
 import org.cyk.utility.__kernel__.representation.Arguments.Internal;
 import org.cyk.utility.__kernel__.rest.ResponseBuilder;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.time.TimeHelper;
 import org.cyk.utility.__kernel__.value.Value;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
@@ -80,14 +81,18 @@ public interface EntityReader {
 			logMessages.add("get");
 			if(Boolean.TRUE.equals(queryExecutorArguments.getCollectionable())) {
 				logMessages.add("many");
+				Long t = System.currentTimeMillis();
 				Collection<?> persistences = org.cyk.utility.__kernel__.persistence.query.EntityReader.getInstance().readMany(internal.persistenceEntityClass,queryExecutorArguments);				
+				logMessages.add("persistence.read.duration:"+TimeHelper.formatDuration(System.currentTimeMillis()-t));
 				if(arguments.getListener() != null)
 					arguments.getListener().processPersistenceEntities(persistences);
 				MapperSourceDestination.Arguments mapperSourceDestinationArguments = null;
 				if(arguments.getMappingArguments() != null)
 					mapperSourceDestinationArguments = MappingHelper.getDestination(arguments.getMappingArguments(), MapperSourceDestination.Arguments.class);				
+				t = System.currentTimeMillis();
 				Collection<?> representations =  CollectionHelper.isEmpty(persistences) ? null : MappingSourceBuilder.getInstance().build(persistences, internal.representationEntityClass
 						,mapperSourceDestinationArguments);
+				logMessages.add("persistences.mapping.duration:"+TimeHelper.formatDuration(System.currentTimeMillis()-t));
 				if(arguments.getListener() != null)
 					arguments.getListener().processRepresentationEntities(representations);
 				Long xTotalCount = null;
@@ -99,8 +104,10 @@ public interface EntityReader {
 					if(StringHelper.isNotBlank(countQueryIdentifier)) {							
 						queryExecutorArguments.setQuery(QueryGetter.getInstance().get(countQueryIdentifier));
 						if(queryExecutorArguments.getQuery() != null) {
+							t = System.currentTimeMillis();
 							xTotalCount = EntityCounter.getInstance().count(internal.persistenceEntityClass,queryExecutorArguments);	
-							logMessages.add(""+xTotalCount);
+							logMessages.add(StringHelper.get(xTotalCount));
+							logMessages.add("persistences.count.duration:"+TimeHelper.formatDuration(System.currentTimeMillis()-t));							
 						}else
 							logMessages.add("count query <<"+countQueryIdentifier+">> of read query <<"+readQueryIdentifier+">> not found");
 					}else
