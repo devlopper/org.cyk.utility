@@ -31,7 +31,7 @@ public class MailSenderUnitTestPingGMail extends AbstractWeldUnitTest {
 	
 	@Test
 	public void ping() throws MessagingException, IOException{
-		MailSender.getInstance().send(new Message().setSubject("Ping").setBody("This is a ping with attachment").setReceivers(List.of("kycdev@gmail.com")));
+		MailSender.getInstance().send(new Message().setSubject("Ping").setBody("This is a ping without attachment").setReceivers(List.of("kycdev@gmail.com")));
 	}
 	
 }

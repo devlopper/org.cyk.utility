@@ -33,6 +33,7 @@ public interface VariableName {
 	String PROTOCOL_SIMPLE_MAIL_TRANSFER_ENABLE = buildProtocolSimpleMailTransfer("enabled");
 	String PROTOCOL_SIMPLE_MAIL_TRANSFER_HOST = buildProtocolSimpleMailTransfer("host");
 	String PROTOCOL_SIMPLE_MAIL_TRANSFER_PORT = buildProtocolSimpleMailTransfer("port");
+	String PROTOCOL_SIMPLE_MAIL_TRANSFER_FROM = buildProtocolSimpleMailTransfer("from");
 	String PROTOCOL_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_REQUIRED = buildProtocolSimpleMailTransfer("authentication.required");
 	String PROTOCOL_SIMPLE_MAIL_TRANSFER_SECURED_CONNECTION_REQUIRED = buildProtocolSimpleMailTransfer("secured.connection.required");
 	String PROTOCOL_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_CREDENTIALS_USER_IDENTIFIER = buildProtocolSimpleMailTransfer("authentication.credentials.user.identifier");

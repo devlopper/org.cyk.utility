@@ -23,6 +23,7 @@ public class Properties extends AbstractProperties implements Serializable {
 	public static final String AUTHENTICATION = "mail.smtp.auth";
 	public static final String STARTTLS_ENABLE = "mail.smtp.starttls.enable";
 	public static final String SSL_ENABLE = "mail.smtp.ssl.enable";
+	public static final String SSL_TRUST = "mail.smtp.ssl.trust";
 	
 	public static final String FROM = "mail.smtp.from";
 	public static final String USER = "mail.smtp.user";
@@ -45,9 +46,10 @@ public class Properties extends AbstractProperties implements Serializable {
 		.setAuthenticationCredentials(new Credentials()
 				.setIdentifier(ConfigurationHelper.getValueAsString(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_CREDENTIALS_USER_IDENTIFIER))
 				.setSecret(ConfigurationHelper.getValueAsString(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_CREDENTIALS_USER_SECRET)))
+		.setFrom(ConfigurationHelper.getValueAsString(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_FROM))
 		//Proxy
-		.setProxyHost(ConfigurationHelper.getValueAsString(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_PROXY_HOST))
-		.setProxyPort(ConfigurationHelper.getValueAsInteger(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_PROXY_PORT))
+		//.setProxyHost(ConfigurationHelper.getValueAsString(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_PROXY_HOST))
+		//.setProxyPort(ConfigurationHelper.getValueAsInteger(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_PROXY_PORT))
 		//.setProxyAuthenticationCredentials(new Credentials()
 		//		.setIdentifier(ConfigurationHelper.getValueAsString(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_PROXY_AUTHENTICATION_CREDENTIALS_USER_IDENTIFIER))
 		//		.setSecret(ConfigurationHelper.getValueAsString(VariableName.PROTOCOL_SIMPLE_MAIL_TRANSFER_PROXY_AUTHENTICATION_CREDENTIALS_USER_SECRET)))
