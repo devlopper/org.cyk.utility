@@ -11,71 +11,73 @@
 	
 	<ui:include src="__before__.xhtml"/>
 	
-	<!-- Selection : User input by selecting radio button or check box -->
-	<c:if test="#{dataTable.renderType.name() eq 'SELECTION'}">
-		<p:dataTable
-			id="#{dataTable.identifier}" value="#{dataTable.value}" var="record" emptyMessage="#{dataTable.emptyMessage}"
-	   		lazy="#{dataTable.lazy}" 
-	   		rows="#{dataTable.rows}"
-	   		paginator="#{dataTable.paginator}" rowsPerPageTemplate="#{dataTable.rowsPerPageTemplate}" 
-	   		paginatorAlwaysVisible="#{dataTable.paginatorAlwaysVisible}"
-			paginatorTemplate="#{dataTable.paginatorTemplate}" currentPageReportTemplate="#{dataTable.currentPageReportTemplate}"
-			widgetVar="#{dataTable.widgetVar}" rowIndexVar="rowIndex" filterDelay="#{dataTable.filterDelay}" 
-			selection="#{dataTable[dataTable.selectionMode eq 'multiple' ? 'selectionAsCollection' : 'selection']}"
-			rowStyleClass="#{dataTable.getStyleClassByRecord(record,rowIndex)}" 
-			editable="#{dataTable.editable}" editMode="#{dataTable.editMode}"  
-			stickyHeader="#{dataTable.stickyHeader}" stickyTopAt="#{dataTable.stickyTopAt}"
-			styleClass="#{dataTable.styleClass}"
-			style="#{dataTable.style}"
-		>
-			<ui:include src="__body__.xhtml"/>
-	 	</p:dataTable>	 		
-		<ui:param name="hasBeenRendered" value="true"/>
-	</c:if>
- 	
- 	<!-- Data is render with cell having inputs. No selection is enabled here -->
- 	<c:if test="#{dataTable.renderType.name() eq 'INPUT'}">
-		<p:dataTable
-			id="#{dataTable.identifier}" value="#{dataTable.value}" var="record" emptyMessage="#{dataTable.emptyMessage}"
-	   		lazy="#{dataTable.lazy}" 
-	   		rows="#{dataTable.rows}"
-	   		paginator="#{dataTable.paginator}" rowsPerPageTemplate="#{dataTable.rowsPerPageTemplate}" 
-	   		paginatorAlwaysVisible="#{dataTable.paginatorAlwaysVisible}"
-			paginatorTemplate="#{dataTable.paginatorTemplate}" currentPageReportTemplate="#{dataTable.currentPageReportTemplate}"
-			widgetVar="#{dataTable.widgetVar}" rowIndexVar="rowIndex" filterDelay="#{dataTable.filterDelay}" 
-			rowStyleClass="#{dataTable.getStyleClassByRecord(record,rowIndex)}" 
-			editable="#{dataTable.editable}" editMode="#{dataTable.editMode}"  
-			stickyHeader="#{dataTable.stickyHeader}" stickyTopAt="#{dataTable.stickyTopAt}"
-			styleClass="#{dataTable.styleClass}"
-			style="#{dataTable.style}"
-		>
-			<ui:include src="__body__.xhtml"/>
-	 	</p:dataTable>	 		
-		<ui:param name="hasBeenRendered" value="true"/>
-	</c:if>
- 	
- 	<!-- Selection : User interaction with rows by event like context menu and so on -->
- 	<c:if test="#{not hasBeenRendered}">
- 		
-		<p:dataTable
-			id="#{dataTable.identifier}" value="#{dataTable.value}" var="record" emptyMessage="#{dataTable.emptyMessage}"
-	   		lazy="#{dataTable.lazy}" 
-	   		rows="#{dataTable.rows}"
-	   		paginator="#{dataTable.paginator}" rowsPerPageTemplate="#{dataTable.rowsPerPageTemplate}" 
-	   		paginatorAlwaysVisible="#{dataTable.paginatorAlwaysVisible}"
-			paginatorTemplate="#{dataTable.paginatorTemplate}" currentPageReportTemplate="#{dataTable.currentPageReportTemplate}"
-			widgetVar="#{dataTable.widgetVar}" rowIndexVar="rowIndex" filterDelay="#{dataTable.filterDelay}" 
-			selection="#{dataTable[dataTable.selectionMode eq 'multiple' ? 'selectionAsCollection' : 'selection']}" selectionMode="#{dataTable.selectionMode}"
-			rowStyleClass="#{dataTable.getStyleClassByRecord(record,rowIndex)}" 
-			editable="#{dataTable.editable}" editMode="#{dataTable.editMode}"  
-			stickyHeader="#{dataTable.stickyHeader}" stickyTopAt="#{dataTable.stickyTopAt}"
-			styleClass="#{dataTable.styleClass}"
-			style="#{dataTable.style}"
-		>
-			<ui:include src="__body__.xhtml"/>
-	 	</p:dataTable>	 		
-		<ui:param name="hasBeenRendered" value="true"/>
-	</c:if>
- 	
+	<p:outputPanel deferred="#{dataTable.contentOutputPanel.deferred}" deferredMode="#{dataTable.contentOutputPanel.deferredMode}">
+		<!-- Selection : User input by selecting radio button or check box -->
+		<c:if test="#{dataTable.renderType.name() eq 'SELECTION'}">
+			<p:dataTable
+				id="#{dataTable.identifier}" value="#{dataTable.value}" var="record" emptyMessage="#{dataTable.emptyMessage}"
+		   		lazy="#{dataTable.lazy}" 
+		   		rows="#{dataTable.rows}"
+		   		paginator="#{dataTable.paginator}" rowsPerPageTemplate="#{dataTable.rowsPerPageTemplate}" 
+		   		paginatorAlwaysVisible="#{dataTable.paginatorAlwaysVisible}"
+				paginatorTemplate="#{dataTable.paginatorTemplate}" currentPageReportTemplate="#{dataTable.currentPageReportTemplate}"
+				widgetVar="#{dataTable.widgetVar}" rowIndexVar="rowIndex" filterDelay="#{dataTable.filterDelay}" 
+				selection="#{dataTable[dataTable.selectionMode eq 'multiple' ? 'selectionAsCollection' : 'selection']}"
+				rowStyleClass="#{dataTable.getStyleClassByRecord(record,rowIndex)}" 
+				editable="#{dataTable.editable}" editMode="#{dataTable.editMode}"  
+				stickyHeader="#{dataTable.stickyHeader}" stickyTopAt="#{dataTable.stickyTopAt}"
+				styleClass="#{dataTable.styleClass}"
+				style="#{dataTable.style}"
+			>
+				<ui:include src="__body__.xhtml"/>
+		 	</p:dataTable>	 		
+			<ui:param name="hasBeenRendered" value="true"/>
+		</c:if>
+	 	
+	 	<!-- Data is render with cell having inputs. No selection is enabled here -->
+	 	<c:if test="#{dataTable.renderType.name() eq 'INPUT'}">
+			<p:dataTable
+				id="#{dataTable.identifier}" value="#{dataTable.value}" var="record" emptyMessage="#{dataTable.emptyMessage}"
+		   		lazy="#{dataTable.lazy}" 
+		   		rows="#{dataTable.rows}"
+		   		paginator="#{dataTable.paginator}" rowsPerPageTemplate="#{dataTable.rowsPerPageTemplate}" 
+		   		paginatorAlwaysVisible="#{dataTable.paginatorAlwaysVisible}"
+				paginatorTemplate="#{dataTable.paginatorTemplate}" currentPageReportTemplate="#{dataTable.currentPageReportTemplate}"
+				widgetVar="#{dataTable.widgetVar}" rowIndexVar="rowIndex" filterDelay="#{dataTable.filterDelay}" 
+				rowStyleClass="#{dataTable.getStyleClassByRecord(record,rowIndex)}" 
+				editable="#{dataTable.editable}" editMode="#{dataTable.editMode}"  
+				stickyHeader="#{dataTable.stickyHeader}" stickyTopAt="#{dataTable.stickyTopAt}"
+				styleClass="#{dataTable.styleClass}"
+				style="#{dataTable.style}"
+			>
+				<ui:include src="__body__.xhtml"/>
+		 	</p:dataTable>	 		
+			<ui:param name="hasBeenRendered" value="true"/>
+		</c:if>
+	 	
+	 	<!-- Selection : User interaction with rows by event like context menu and so on -->
+	 	<c:if test="#{not hasBeenRendered}">
+	 		
+			<p:dataTable
+				id="#{dataTable.identifier}" value="#{dataTable.value}" var="record" emptyMessage="#{dataTable.emptyMessage}"
+		   		lazy="#{dataTable.lazy}" 
+		   		rows="#{dataTable.rows}"
+		   		paginator="#{dataTable.paginator}" rowsPerPageTemplate="#{dataTable.rowsPerPageTemplate}" 
+		   		paginatorAlwaysVisible="#{dataTable.paginatorAlwaysVisible}"
+				paginatorTemplate="#{dataTable.paginatorTemplate}" currentPageReportTemplate="#{dataTable.currentPageReportTemplate}"
+				widgetVar="#{dataTable.widgetVar}" rowIndexVar="rowIndex" filterDelay="#{dataTable.filterDelay}" 
+				selection="#{dataTable[dataTable.selectionMode eq 'multiple' ? 'selectionAsCollection' : 'selection']}" selectionMode="#{dataTable.selectionMode}"
+				rowStyleClass="#{dataTable.getStyleClassByRecord(record,rowIndex)}" 
+				editable="#{dataTable.editable}" editMode="#{dataTable.editMode}"  
+				stickyHeader="#{dataTable.stickyHeader}" stickyTopAt="#{dataTable.stickyTopAt}"
+				styleClass="#{dataTable.styleClass}"
+				style="#{dataTable.style}"
+			>
+				<ui:include src="__body__.xhtml"/>
+		 	</p:dataTable>	 		
+			<ui:param name="hasBeenRendered" value="true"/>
+		</c:if>
+	</p:outputPanel>
+	
 	<ui:include src="__after__.xhtml"/>
 </ui:composition>

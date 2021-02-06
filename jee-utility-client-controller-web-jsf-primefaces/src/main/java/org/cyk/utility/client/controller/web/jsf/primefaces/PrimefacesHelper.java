@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
+import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.file.File;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
@@ -46,6 +47,8 @@ import org.primefaces.model.TreeNode;
 public class PrimefacesHelper extends AbstractObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private static final String GLOBAL_AJAX_STATUS_DIALOG_WIDGET_VAR = "statusDialog";
+	
 	public String getModelTemplate(org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObject model) {
 		if(model == null)
 			return "/__dummy__.xhtml";
@@ -53,7 +56,7 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 	}
 	
 	public String getScriptInstructionHide(String widgetVar) {
-		return String.format(SCRIPT_INSTRUCTION_COMPONENT_METHOD_CALL_FORMAT, widgetVar,"hide");
+		return String.format(SCRIPT_INSTRUCTION_WIDGET_METHOD_CALL_FORMAT, widgetVar,"hide","");
 	}
 
 	public String computeAttributeUpdate(Objects updatables,Strings strings) {
@@ -344,16 +347,36 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 	
 	/**/
 	
+	public static String formatScriptWidgetMethodCall(String widgetVar,String methodName,Object...arguments) {
+		if(StringHelper.isBlank(widgetVar) || StringHelper.isBlank(methodName))
+			return null;
+		return String.format(SCRIPT_INSTRUCTION_WIDGET_METHOD_CALL_FORMAT, widgetVar,methodName,ConstantEmpty.STRING);
+	}
+	
 	public static String formatScript(String widgetVar,String methodName,Object...arguments) {
 		if(StringHelper.isBlank(widgetVar) || StringHelper.isBlank(methodName))
 			return null;
-		return String.format(SCRIPT_INSTRUCTION_COMPONENT_METHOD_CALL_FORMAT, widgetVar,methodName);
+		return String.format(SCRIPT_INSTRUCTION_WIDGET_METHOD_CALL_FORMAT, widgetVar,methodName,ConstantEmpty.STRING);
+	}
+	
+	public static String formatScriptWidgetShow(String widgetVar) {
+		if(StringHelper.isBlank(widgetVar))
+			return null;
+		return formatScriptWidgetMethodCall(widgetVar, "show");
+	}
+	
+	public static String formatScriptShowDialogStatus() {
+		return formatScriptWidgetShow(GLOBAL_AJAX_STATUS_DIALOG_WIDGET_VAR);
 	}
 	
 	public static String formatScriptHide(String widgetVar) {
 		if(StringHelper.isBlank(widgetVar))
 			return null;
-		return formatScript(widgetVar, "hide");
+		return formatScriptWidgetMethodCall(widgetVar, "hide");
+	}
+	
+	public static String formatScriptHideDialogStatus() {
+		return formatScriptHide(GLOBAL_AJAX_STATUS_DIALOG_WIDGET_VAR);
 	}
 	
 	public static void executeOnComplete(Collection<String> scripts) {
@@ -394,5 +417,5 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 	
 	/**/
 	
-	private static final String SCRIPT_INSTRUCTION_COMPONENT_METHOD_CALL_FORMAT = "PF('%s').%s();";
+	private static final String SCRIPT_INSTRUCTION_WIDGET_METHOD_CALL_FORMAT = "PF('%s').%s(%s);";
 }

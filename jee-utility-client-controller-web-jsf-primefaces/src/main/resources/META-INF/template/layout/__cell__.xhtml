@@ -54,6 +54,13 @@
 		    </ui:decorate>
 		</c:if>
 		
+		<c:if test="#{classSimpleName eq 'InputMask'}">
+			<c:set var="processed" value="true"/>
+			<ui:decorate template="#{template}">
+		    	<ui:param name="inputMask" value="#{cell.control}"/>
+		    </ui:decorate>
+		</c:if>
+		
 		<c:if test="#{classSimpleName eq 'InputTextarea'}">
 			<c:set var="processed" value="true"/>
 			<ui:decorate template="#{template}">

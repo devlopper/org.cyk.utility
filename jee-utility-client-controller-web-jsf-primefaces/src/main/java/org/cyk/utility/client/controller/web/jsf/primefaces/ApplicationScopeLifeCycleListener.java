@@ -19,6 +19,7 @@ import org.cyk.utility.client.controller.event.EventBuilder;
 import org.cyk.utility.client.controller.message.MessageRenderImpl;
 import org.cyk.utility.client.controller.navigation.NavigationIdentifierToUrlStringMapperImpl;
 import org.cyk.utility.client.controller.navigation.NavigationRedirectorImpl;
+import org.cyk.utility.client.controller.web.jsf.Redirector;
 import org.cyk.utility.client.controller.web.jsf.primefaces.annotation.Primefaces;
 import org.cyk.utility.css.StyleClassBuilderWidthImpl;
 import org.cyk.utility.request.RequestParameterValueGetterImpl;
@@ -44,7 +45,7 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 		__inject__(org.cyk.utility.client.controller.web.jsf.ApplicationScopeLifeCycleListener.class).initialize(null);
 		
 		__setQualifierClassTo__(Primefaces.class,ObjectLifeCycleListener.class, CommandFunction.class,EventBuilder.class,ComponentTargetModelBuilder.class
-				,PropertyValueGetter.class,ThemeColorGetter.class);
+				,PropertyValueGetter.class,ThemeColorGetter.class,Redirector.class);
 	}
 	
 	@Override

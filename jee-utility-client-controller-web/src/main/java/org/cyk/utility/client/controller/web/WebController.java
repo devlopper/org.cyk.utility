@@ -8,10 +8,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.controller.EntityReader;
 import org.cyk.utility.__kernel__.enumeration.Action;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.identifier.resource.ParameterName;
 import org.cyk.utility.__kernel__.object.AbstractObject;
+import org.cyk.utility.__kernel__.persistence.query.Querier;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.ValueConverter;
@@ -49,6 +51,24 @@ public class WebController extends AbstractObject implements Serializable {
 	
 	public Boolean getRequestParameterIsStatic() {
 		return getRequestParameterAsBoolean(ParameterName.IS_STATIC);
+	}
+	
+	public <T> T getUsingRequestParameterAsSystemIdentifierByQueryIdentifierByParameterName(Class<T> entityClass,String queryIdentifier,String parameterName) {
+		if(entityClass == null || StringHelper.isBlank(queryIdentifier) || StringHelper.isBlank(parameterName))
+			return null;
+		String identifier = getRequestParameter(parameterName);
+		if(StringHelper.isBlank(identifier))
+			return null;
+		T instance = EntityReader.getInstance().readOne(entityClass, queryIdentifier, Querier.PARAMETER_NAME_IDENTIFIER,identifier);
+		return instance;
+	}
+	
+	public <T> T getUsingRequestParameterAsSystemIdentifierByQueryIdentifier(Class<T> entityClass,String queryIdentifier) {
+		return getUsingRequestParameterAsSystemIdentifierByQueryIdentifierByParameterName(entityClass, queryIdentifier, ParameterName.ENTITY_IDENTIFIER.getValue());
+	}
+	
+	public <T> T getUsingRequestParameterParentAsSystemIdentifierByQueryIdentifier(Class<T> entityClass,String queryIdentifier) {
+		return getUsingRequestParameterAsSystemIdentifierByQueryIdentifierByParameterName(entityClass, queryIdentifier, ParameterName.stringify(entityClass));
 	}
 	
 	public <T> T getRequestParameterEntityBySystemIdentifier(Class<T> entityClass,String parameterName,Properties properties) {

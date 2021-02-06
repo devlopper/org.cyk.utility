@@ -21,7 +21,6 @@ import org.cyk.utility.__kernel__.string.StringTemplateGetter;
 import org.cyk.utility.__kernel__.string.StringTemplateIdentifierGetter;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.__kernel__.value.ValueHelper;
-import org.jboss.weld.environment.se.Weld;
 import org.junit.jupiter.api.Test;
 
 public class ProjectSystemEntityFilesGenerator extends AbstractWeldUnitTest {

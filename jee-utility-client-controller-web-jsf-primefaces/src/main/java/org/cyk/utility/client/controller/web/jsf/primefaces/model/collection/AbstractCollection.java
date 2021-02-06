@@ -52,6 +52,7 @@ import lombok.Setter;
 @Getter @Setter
 public abstract class AbstractCollection extends AbstractObjectAjaxable implements Serializable {
 
+	protected OutputPanel contentOutputPanel = OutputPanel.build(OutputPanel.FIELD_DEFERRED,Boolean.FALSE);
 	protected RenderType renderType;
 	protected Class<?> elementClass;
 	protected Object __parentElement__;
@@ -418,6 +419,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 				collection.emptyMessage = "-- Aucun élément trouvé --";
 			
 			if(Boolean.TRUE.equals(collection.lazy)) {
+				collection.contentOutputPanel.setDeferred(Boolean.TRUE);
 				if(collection.rows == null)
 					collection.rows = 20;
 				if(StringHelper.isBlank(collection.rowsPerPageTemplate))
@@ -523,7 +525,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 			if(Boolean.TRUE.equals(collection.editable)) {
 				collection.isExportable = Boolean.FALSE;
 				collection.isSavable = Boolean.TRUE;
-			}			
+			}
 		}
 		
 		protected void setRenderType(COLLECTION collection, Map<Object, Object> arguments) {

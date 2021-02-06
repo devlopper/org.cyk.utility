@@ -91,6 +91,8 @@ public interface InputClassBuilder {
 		private Class<?> deduceClassFromComponentAnnotation(Field field) {
 			if(field.isAnnotationPresent(org.cyk.utility.__kernel__.object.__static__.controller.annotation.InputText.class))
 				return InputText.class;
+			if(field.isAnnotationPresent(org.cyk.utility.__kernel__.object.__static__.controller.annotation.InputMask.class))
+				return InputMask.class;
 			if(field.isAnnotationPresent(org.cyk.utility.__kernel__.object.__static__.controller.annotation.InputTextarea.class))
 				return InputTextarea.class;
 			if(field.isAnnotationPresent(org.cyk.utility.__kernel__.object.__static__.controller.annotation.InputPass.class))

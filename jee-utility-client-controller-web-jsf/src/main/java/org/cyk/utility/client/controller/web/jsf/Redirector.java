@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,7 +44,13 @@ public interface Redirector {
 			String url = arguments.url;
 			if(StringHelper.isBlank(url))
 				url = getUrl(arguments.outcome, arguments.parameters);
+			if(arguments.processingShowable == null || Boolean.TRUE.equals(arguments.processingShowable))
+				showProcessing();
 			__redirect__(url);
+		}
+		
+		protected void showProcessing() {
+			
 		}
 		
 		@Override
@@ -107,6 +114,45 @@ public interface Redirector {
 		private Map<String,List<String>> parameters;
 		
 		private String url;
+		private Boolean processingShowable;
+		
+		private Listener listener;
+		
+		/**/
+		
+		public Map<String,List<String>> getParameters(Boolean injectIfNull) {
+			if(parameters == null && Boolean.TRUE.equals(injectIfNull))
+				parameters = new LinkedHashMap<>();
+			return parameters;
+		}
+		
+		public Arguments outcome(String outcome) {
+			setOutcome(outcome);
+			return this;
+		}
+		
+		public Arguments parameters(Map<String,List<String>> parameters) {
+			setParameters(parameters);
+			return this;
+		}
+		
+		public Arguments addParameters(Map<String,List<String>> parameters) {
+			if(MapHelper.isEmpty(parameters))
+				return this;
+			getParameters(Boolean.TRUE).putAll(parameters);
+			return this;
+		}
+		
+		public Arguments addParameter(String name,String value) {
+			if(StringHelper.isBlank(name) || StringHelper.isBlank(value))
+				return this;
+			addParameters(Map.of(name,List.of(value)));
+			return this;
+		}
+	}
+	
+	public static interface Listener {
+		void redirect(Arguments arguments);
 	}
 	
 	/**/
