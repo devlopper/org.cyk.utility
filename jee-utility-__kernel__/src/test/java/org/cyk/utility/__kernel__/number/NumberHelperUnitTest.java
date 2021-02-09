@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.cyk.utility.__kernel__.number.NumberHelper.compare;
 import static org.cyk.utility.__kernel__.number.NumberHelper.get;
 import static org.cyk.utility.__kernel__.number.NumberHelper.isEqualToZero;
-import static org.cyk.utility.__kernel__.number.NumberHelper.isLessThanZero;
 import static org.cyk.utility.__kernel__.number.NumberHelper.isGreaterThanZero;
+import static org.cyk.utility.__kernel__.number.NumberHelper.isLessThanZero;
 import static org.cyk.utility.__kernel__.number.NumberHelper.operate;
 
 import java.math.BigDecimal;
@@ -18,6 +18,18 @@ import org.junit.jupiter.api.Test;
 public class NumberHelperUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
+	/**/
+	
+	@Test
+	public void percentage_6_by_103_is_6(){
+		assertThat(NumberHelper.computePercentageAsInteger(6, 103).intValue()).isEqualTo(6);
+	}
+	
+	@Test
+	public void percentage_97_by_103_is_94(){
+		assertThat(NumberHelper.computePercentageAsInteger(97, 103).intValue()).isEqualTo(94);
+	}
+	
 	/* get */
 	
 	@Test

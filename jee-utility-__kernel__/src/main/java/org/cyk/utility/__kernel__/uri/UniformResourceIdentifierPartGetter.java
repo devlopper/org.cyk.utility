@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
 
 public interface UniformResourceIdentifierPartGetter {
 
-	String get(Arguments arguments);	
+	String get(Arguments arguments);
 	String getSchemeFromRequest(Object request);
 	String getHostFromRequest(Object request);
 	Integer getPortFromRequest(Object request);

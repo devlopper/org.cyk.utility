@@ -395,6 +395,10 @@ public interface Language {
 			return String.format(IS_NULLABLE,parameterName);
 		}
 		
+		static String isNullableFromFieldName(String fieldName) {
+			return isNullable(fieldName+"Nullable");
+		}
+		
 		static String isNull(String variable,String fieldName) {
 			return String.format(IS_NULL, variable,fieldName);
 		}

@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
-import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractSingleton;
 import org.cyk.utility.__kernel__.properties.Properties;
@@ -13,8 +12,6 @@ import org.cyk.utility.enumeration.EnumCollectionGetter;
 import org.cyk.utility.enumeration.EnumGetter;
 import org.cyk.utility.enumeration.EnumerationHelper;
 import org.cyk.utility.log.Log;
-import org.cyk.utility.network.MailHelper;
-import org.cyk.utility.stream.distributed.Topic;
 import org.cyk.utility.system.SystemFunction;
 import org.cyk.utility.type.TypeHelper;
 
@@ -61,27 +58,7 @@ public abstract class AbstractServiceProviderImpl extends AbstractSingleton impl
 		return __inject__(EnumCollectionGetter.class);
 	}
 	
-	protected MailHelper __injectMailHelper__(){
-		return __inject__(MailHelper.class);
-	}
-	
 	/**/
-	
-	protected void __sendMail__(String title,String body,Collection<Object> receiversIdentifiers,Boolean isExecuteAsynchronously) {
-		__injectMailHelper__().send(title, body, receiversIdentifiers, isExecuteAsynchronously);
-	}
-	
-	protected void __produceMail__(String title,String body,Collection<String> receiversIdentifiers) {
-		if(Boolean.TRUE.equals(Topic.MAIL.getIsConsumerStarted()))
-			__injectMailHelper__().produce(title, body, receiversIdentifiers);
-		else {
-			try {
-				__sendMail__(title, body, CollectionHelper.cast(Object.class, receiversIdentifiers), Boolean.FALSE);
-			} catch (Exception exception) {
-				exception.printStackTrace();
-			}
-		}
-	}
 	
 	/**/
 	

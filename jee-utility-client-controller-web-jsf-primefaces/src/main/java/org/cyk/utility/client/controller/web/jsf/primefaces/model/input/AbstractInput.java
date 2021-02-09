@@ -75,6 +75,14 @@ public abstract class AbstractInput<VALUE> extends AbstractInputOutput<VALUE> im
 	
 	/**/
 	
+	public static Object getValue(AbstractInput<?> input) {
+		if(input == null)
+			return null;
+		return input.getValue();
+	}
+	
+	/**/
+	
 	public static interface Listener {
 		void validate(FacesContext context, UIComponent component,Object value) throws ValidatorException;
 		public static abstract class AbstractImpl extends AbstractObject implements Listener,Serializable {

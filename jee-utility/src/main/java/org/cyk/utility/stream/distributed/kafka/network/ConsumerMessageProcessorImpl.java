@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import javax.enterprise.context.Dependent;
 
-import org.cyk.utility.network.message.sender.SenderMail;
 import org.cyk.utility.stream.distributed.AbstractConsumerMessageProcessorImpl;
 
 @Dependent
@@ -13,7 +12,7 @@ public class ConsumerMessageProcessorImpl extends AbstractConsumerMessageProcess
 
 	@Override
 	protected void __process__(org.cyk.utility.stream.distributed.Message message) {
-		__inject__(SenderMail.class).setMessage((org.cyk.utility.network.message.Message) message.getValue()).execute();	
+			
 	}
 	
 }

@@ -1,6 +1,7 @@
 package org.cyk.utility.__kernel__.number;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,6 +15,18 @@ import org.cyk.utility.__kernel__.log.LogHelper;
 
 public interface NumberHelper {
 
+	static Integer computePercentageAsInteger(Object number,Object total) {
+		if(number == null || total == null)
+			return null;
+		BigDecimal n = getBigDecimal(number);
+		if(n == null)
+			return null;
+		BigDecimal t = getBigDecimal(total);
+		if(isEqualToZero(t))
+			return null;
+		return n.divide(t, 2, RoundingMode.HALF_UP).multiply(BIG_DECIMAL_100).intValue();
+	}
+	
 	/* get */
 	
 	@SuppressWarnings("unchecked")
@@ -296,4 +309,8 @@ public interface NumberHelper {
 	static String format(Number number) {
 		return format(number, "0",LocaleGetter.getInstance().get());
 	}
+
+	/**/
+	
+	BigDecimal BIG_DECIMAL_100 = new BigDecimal(100);
 }

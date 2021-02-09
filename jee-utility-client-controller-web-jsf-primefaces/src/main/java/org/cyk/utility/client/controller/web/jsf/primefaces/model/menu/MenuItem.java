@@ -3,6 +3,8 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.model.menu;
 import java.io.Serializable;
 import java.util.Map;
 
+import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.identifier.resource.ParameterName;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
@@ -38,6 +40,21 @@ public class MenuItem extends AbstractCommand implements Serializable {
 	
 	public MenuItem addParameter(String name, String value) {
 		return (MenuItem) super.addParameter(name, value);
+	}
+	
+	public MenuItem addParameterFromInstance(Object instance) {
+		if(instance == null)
+			return this;
+		Object identifier = FieldHelper.readSystemIdentifier(instance);
+		if(identifier == null)
+			return this;
+		return addParameter(ParameterName.stringify(instance.getClass()), StringHelper.get(identifier));
+	}
+	
+	public MenuItem addParameterFromInstanceIfConditionIsTrue(Object instance,Boolean condition) {
+		if(Boolean.TRUE.equals(condition))
+			addParameterFromInstance(instance);
+		return this;
 	}
 	
 	public static class ConfiguratorImpl extends AbstractConfiguratorImpl<MenuItem> implements Serializable {

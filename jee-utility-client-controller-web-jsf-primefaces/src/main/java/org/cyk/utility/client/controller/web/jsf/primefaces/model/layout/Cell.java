@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
@@ -64,8 +65,13 @@ public class Cell extends OutputPanel implements Serializable {
 				else
 					//cell.addStyleClasses("ui-g-"+cell.width+" ui-sm-12 ui-g-nopad");
 					cell.addStyleClasses("ui-g-"+cell.width+" ui-sm-12");
-			} else if(WidthUnit.FLEX.equals(widthUnit)) {
-				cell.addStyleClasses("p-col-"+cell.width);
+			}else if(WidthUnit.FLEX.equals(widthUnit)) {
+				if(Boolean.TRUE.equals(cell.isWidthFixed)) {
+					cell.addStyleClasses("p-col-fixed");
+					cell.addStyle(String.format("width:%spx",cell.width));
+				}else {
+					cell.addStyleClasses("p-col"+(cell.width == null ? ConstantEmpty.STRING : "-"+cell.width));
+				}
 			}else {
 				
 			}
@@ -126,6 +132,5 @@ public class Cell extends OutputPanel implements Serializable {
 	
 	static {
 		Configurator.set(Cell.class, new ConfiguratorImpl());
-	}
-	
+	}	
 }

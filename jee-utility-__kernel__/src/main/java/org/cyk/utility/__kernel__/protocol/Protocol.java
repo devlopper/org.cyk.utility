@@ -8,6 +8,7 @@ import lombok.Setter;
 public enum Protocol {
 
 	HTTP(80)
+	,HTTPS(80)
 	;
 	
 	@Getter @Setter private String scheme;
