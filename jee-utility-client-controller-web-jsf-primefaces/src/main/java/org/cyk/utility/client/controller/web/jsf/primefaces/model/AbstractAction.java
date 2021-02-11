@@ -228,7 +228,7 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 			}
 			
 			protected void run(AbstractAction action) {
-				LogHelper.logInfo(String.format("User interface action=%s", action.userInterfaceAction), getClass());
+				//LogHelper.logInfo(String.format("User interface action=%s", action.userInterfaceAction), getClass());
 				if(action.userInterfaceAction == null)
 					throw new RuntimeException("One of the following user interface action must be defined : "+Arrays.toString(UserInterfaceAction.values()));
 				if(UserInterfaceAction.SHOW_DIALOG.equals(action.userInterfaceAction))

@@ -254,7 +254,7 @@ public interface UniformResourceIdentifierHelper {
 	}
 
 	/**/
-	
+	 @Deprecated
 	static String build(String scheme,String user,String password,String host,Integer port,String path,String query,String fragment,String model) {	
 		String uniformResourceIdentifier = ConstantEmpty.STRING;
 		//scheme
@@ -329,6 +329,7 @@ public interface UniformResourceIdentifierHelper {
 				, systemAction);
 	}
 	
+	@Deprecated
 	static String build(UniformResourceIdentifierAsFunctionParameter parameter) {
 		if(parameter == null)
 			return null;

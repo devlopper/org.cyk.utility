@@ -336,6 +336,8 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 			addRecordMenuItemByArgumentsExecuteFunction((String)map.get(MenuItem.FIELD_VALUE), (String)map.get(MenuItem.FIELD_ICON), new MenuItem.Listener.AbstractImpl() {
 				@Override
 				protected Object __runExecuteFunction__(AbstractAction action) {
+					if(action == null || action.readArgument() == null)
+						return null;
 					Map<String,List<String>> parameters = new HashMap<>();
 					if(actionFinal != null)
 						parameters.put(ParameterName.ACTION_IDENTIFIER.getValue(),List.of(actionFinal.name()));

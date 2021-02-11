@@ -2,11 +2,19 @@ package org.cyk.utility.__kernel__.uri;
 
 import java.io.Serializable;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.cyk.utility.__kernel__.Helper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
+import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.Value;
@@ -98,6 +106,14 @@ public interface UniformResourceIdentifierBuilder {
 				query = ConstantEmpty.STRING;
 			if(!query.isBlank() && !query.startsWith("?"))
 				query = "?"+query;
+			if(MapHelper.isNotEmpty(arguments.queries)) {
+				String suffix = StringHelper.concatenate(arguments.queries.keySet().stream()
+					.filter(x -> StringHelper.isNotBlank(x) && CollectionHelper.isNotEmpty(arguments.queries.get(x)))
+					.map(x -> x+"="+arguments.queries.get(x).get(0))
+					.collect(Collectors.toList()),"&");
+				if(StringHelper.isNotBlank(suffix))
+					query = query + (StringHelper.isBlank(query) ? "?" : "&") + suffix;
+			}
 			return query;
 		}
 	}
@@ -109,8 +125,49 @@ public interface UniformResourceIdentifierBuilder {
 	@Getter @Setter @Accessors(chain=true)
 	public static class Arguments {
 		private String scheme,host,context,path,query;
+		private Map<String,List<String>> queries;
 		private Integer port;
 		private Object request;
+		
+		public Map<String,List<String>> getQueries(Boolean instantiateIfNull) {
+			if(queries == null && Boolean.TRUE.equals(instantiateIfNull))
+				queries = new LinkedHashMap<>();
+			return queries;
+		}
+		
+		public Arguments addQuery(Object name,Object value) {
+			if(name == null || value == null)
+				return null;
+			String nameAsString = StringHelper.get(name);
+			if(StringHelper.isBlank(nameAsString))
+				return this;
+			List<String> values = convertValueToStrings(value);
+			if(CollectionHelper.isEmpty(values))
+				return this;
+			Map<String,List<String>> queries = getQueries(Boolean.TRUE);
+			List<String> list = queries.get(nameAsString);
+			if(list == null)
+				queries.put(nameAsString, list = new ArrayList<>());			
+			list.addAll(values);
+			return this;
+		}
+		
+		private List<String> convertValueToStrings(Object value) {
+			if(value == null)
+				return null;
+			if(value instanceof String)
+				return List.of((String)value);
+			if(value instanceof Collection)
+				return ((Collection<?>)value).stream().filter(x -> x != null).map(x -> x.toString()).filter(x -> StringHelper.isNotBlank(x)).collect(Collectors.toList());
+			throw new RuntimeException(String.format("cannot convert value of class <<%s>> to strings",value.getClass()));
+		}
+		
+		public Arguments addQueries(Map<String,List<String>> queries) {
+			if(MapHelper.isEmpty(queries))
+				return this;
+			getQueries(Boolean.TRUE).putAll(queries);
+			return this;
+		}
 	}
 	
 	static UniformResourceIdentifierBuilder getInstance() {

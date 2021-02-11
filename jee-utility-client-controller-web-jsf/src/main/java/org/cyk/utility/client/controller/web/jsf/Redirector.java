@@ -2,8 +2,7 @@ package org.cyk.utility.client.controller.web.jsf;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.net.URI;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,15 +11,11 @@ import javax.faces.application.NavigationCase;
 import javax.faces.context.FacesContext;
 
 import org.cyk.utility.__kernel__.Helper;
-import org.cyk.utility.__kernel__.collection.CollectionHelper;
-import org.cyk.utility.__kernel__.identifier.resource.PathAsFunctionParameter;
-import org.cyk.utility.__kernel__.identifier.resource.QueryAsFunctionParameter;
-import org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierAsFunctionParameter;
-import org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.uri.UniformResourceIdentifierBuilder;
 import org.cyk.utility.__kernel__.value.Value;
 
 import lombok.Getter;
@@ -86,23 +81,13 @@ public interface Redirector {
 				LogHelper.logSevere("No path exist for outcome "+outcome, getClass());
 				return null;
 			}
-			Collection<String> queries = new ArrayList<>();
-			if(MapHelper.isNotEmpty(parameters)) {
-				parameters.forEach( (name,values) -> {
-					if(StringHelper.isNotBlank(name) && CollectionHelper.isNotEmpty(values))
-						queries.add(name+"="+values.get(0));
-				});
-			}
-			
-			UniformResourceIdentifierAsFunctionParameter p = new UniformResourceIdentifierAsFunctionParameter();
-			p.setRequest(FacesContext.getCurrentInstance().getExternalContext().getRequest());
-			p.setPath(new PathAsFunctionParameter());
-			p.getPath().setIdentifier(outcome);
-			if(CollectionHelper.isNotEmpty(queries)) {
-				p.setQuery(new QueryAsFunctionParameter());
-				p.getQuery().setValue(CollectionHelper.isEmpty(queries) ? null : StringHelper.concatenate(queries, "&"));	
-			}		
-			return UniformResourceIdentifierHelper.build(p);
+			URI uri = UniformResourceIdentifierBuilder.getInstance().build(new UniformResourceIdentifierBuilder.Arguments()
+					.setRequest(FacesContext.getCurrentInstance().getExternalContext().getRequest())
+					.setPath(path)
+					.addQueries(parameters));
+			if(uri == null)
+				throw new RuntimeException(String.format("could not build url from outcome %s and parameters %s",outcome,parameters));
+			return uri.toString();
 		}
 	}
 	
