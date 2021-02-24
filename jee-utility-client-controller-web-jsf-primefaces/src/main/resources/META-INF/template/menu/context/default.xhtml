@@ -23,9 +23,12 @@
 		style="#{contextMenu.style}"
 	 -->
 	
-	<p:contextMenu
-		id="#{contextMenu == null ? userInterfaceController.randomIdentifier : contextMenu.identifier}"		
-		for="#{contextMenu.for_}"	
+	<!-- 
+		id="#{contextMenu == null ? userInterfaceController.randomIdentifier : contextMenu.identifier}"
+	 -->
+	
+	<p:contextMenu				
+		for="#{contextMenu.for_}"		
 	>
 		<c:forEach var="menuitem" items="#{contextMenu.items}">
 			<ui:decorate template="../item/default.xhtml">

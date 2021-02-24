@@ -12,8 +12,11 @@ import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.RemoteCommand;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.AbstractInput;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.output.GraphicImage;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.panel.OutputPanel;
 
 import lombok.Getter;
@@ -30,6 +33,16 @@ public class Cell extends OutputPanel implements Serializable {
 	private Boolean isWidthFixed;
 	private Object control;
 	private String controlTemplate;// this is used to support custom content
+	private RemoteCommand controlBuilderRemoteCommand;
+	private Object builderRunningControl;
+	
+	/* */
+	
+	public void buildControl() {
+		if(listener == null)
+			return;
+		control = ((Listener)listener).buildControl(this);
+	}
 	
 	/**/
 	
@@ -47,6 +60,8 @@ public class Cell extends OutputPanel implements Serializable {
 	public static enum WidthUnit {
 		UI_G,FLEX,PIXEL
 	}
+	
+	/**/
 	
 	public static class ConfiguratorImpl extends OutputPanel.AbstractConfiguratorImpl<Cell> implements Serializable {
 
@@ -75,6 +90,24 @@ public class Cell extends OutputPanel implements Serializable {
 			}else {
 				
 			}
+			
+			//Object buildListener = MapHelper.readByKey(arguments, FIELD_CONTROL_BUILD_LISTENER);
+			if(Boolean.TRUE.equals(MapHelper.readByKey(arguments, FIELD_CONTROL_BUILD_DEFFERED))) {
+				if(cell.builderRunningControl == null)
+					cell.builderRunningControl = GraphicImage.build(GraphicImage.FIELD_LIBRARY,"animation",GraphicImage.FIELD_NAME,"processing04.gif"
+							,GraphicImage.FIELD_WIDTH,32,GraphicImage.FIELD_HEIGHT,32);
+					//cell.builderRunningControl = OutputText.buildFromValue("Construction en cours ...");
+				cell.control = cell.builderRunningControl;
+				cell.controlBuilderRemoteCommand =  RemoteCommand.build(RemoteCommand.FIELD_LISTENER,new AbstractAction.Listener.AbstractImpl() {
+					@Override
+					protected void runExecuteFunction(AbstractAction action) {
+						cell.buildControl();
+						cell.controlBuilderRemoteCommand.setRendered(Boolean.FALSE);
+					}
+				});
+				cell.controlBuilderRemoteCommand.addUpdates(cell.getIdentifier());
+			}
+			
 			if(cell.control == null) {
 				CommandButton commandButton = (CommandButton) MapHelper.readByKey(arguments, FIELD_CONTROL_COMMAND_BUTTON);
 				if(commandButton == null) {
@@ -108,6 +141,8 @@ public class Cell extends OutputPanel implements Serializable {
 		
 		public static final String FIELD_CONTROL_COMMAND_BUTTON = "commandButton";
 		public static final String FIELD_CONTROL_COMMAND_BUTTON_ARGUMENTS = "commandButtonArguments";
+		public static final String FIELD_CONTROL_BUILD_DEFFERED = "controlBuildDeferred";
+		//public static final String FIELD_CONTROL_BUILD_LISTENER = "controlBuildListener";
 	}
 
 	public static Cell build(Map<Object,Object> map) {
@@ -122,12 +157,25 @@ public class Cell extends OutputPanel implements Serializable {
 		
 		void addCell(Cell cell);
 		
+		Object buildControl(Cell cell);
+		
 		default void addCell(Map<Object,Object> map) {
 			if(MapHelper.isEmpty(map))
 				return;
 			
 		}
 		
+		public static abstract class AbstractImpl implements Listener,Serializable {
+			@Override
+			public Object buildControl(Cell cell) {
+				return cell.control;
+			}
+			
+			@Override
+			public void addCell(Cell cell) {
+				
+			}
+		}
 	}
 	
 	static {

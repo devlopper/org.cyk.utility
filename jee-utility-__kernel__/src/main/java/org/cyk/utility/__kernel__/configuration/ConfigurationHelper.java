@@ -1,6 +1,8 @@
 package org.cyk.utility.__kernel__.configuration;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.annotation.Configuration;
@@ -27,6 +29,7 @@ public interface ConfigurationHelper {
 			valueChecker = DependencyInjection.injectByQualifiersClasses(Checker.class,Configuration.Class.class);
 		if(ValueHelper.isNull(value, valueChecker))
 			value = nullValue;
+		GOT.put(name, value);
 		return value;
 	}
 	
@@ -153,4 +156,5 @@ public interface ConfigurationHelper {
 		VariableHelper.clear();
 	}
 
+	Map<String,Object> GOT = new HashMap<>();
 }

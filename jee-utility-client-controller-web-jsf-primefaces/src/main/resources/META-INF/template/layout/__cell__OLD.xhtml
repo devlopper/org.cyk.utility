@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<c:if test="#{cell.controlBuilderRemoteCommand != null}">
+		<ui:decorate template="#{primefacesHelper.getModelTemplate(cell.controlBuilderRemoteCommand)}">
+			<ui:param name="remoteCommand" value="#{cell.controlBuilderRemoteCommand}"/>   			
+		</ui:decorate>
+	</c:if>
+	
+	<!-- custom -->
+	
+	<c:if test="#{not empty cell.controlTemplate}">
+		<c:set var="processed" value="true"/>
+		<ui:decorate template="#{cell.controlTemplate}">
+	    	
+	    </ui:decorate>
+	</c:if>
+
+	<c:if test="#{empty cell.controlTemplate}">
+		<c:set var="template" value="#{empty cell.control.__template__ ? '/__dummy__.xhtml' : cell.control.__template__}"/>
+		<c:set var="classSimpleName" value="#{cell.control.class.simpleName}"/>
+		
+		<!-- output -->
+		
+		<c:if test="#{classSimpleName eq 'OutputLabel'}">
+			<c:set var="processed" value="true"/>
+			<ui:decorate template="#{template}">
+		    	<ui:param name="outputLabel" value="#{cell.control}"/>
+		    </ui:decorate>
+		</c:if>
+		
+		<c:if test="#{classSimpleName eq 'OutputText'}">
+			<c:set var="processed" value="true"/>
+			<ui:decorate template="#{template}">
+		    	<ui:param name="outputText" value="#{cell.control}"/>
+		    </ui:decorate>
+		</c:if>
+		
+		<c:if test="#{classSimpleName eq 'GraphicImage'}">
+			<c:set var="processed" value="true"/>
+			<ui:decorate template="#{template}">
+		    	<ui:param name="graphicImage" value="#{cell.control}"/>
+		    </ui:decorate>
+		</c:if>
+		
+		<!-- input -->
+		
+		<c:if test="#{classSimpleName eq 'InputText'}">
+			<c:set var="processed" value="true"/>
+			<ui:decorate template="#{template}">
+		    	<ui:param name="inputText" value="#{cell.control}"/>
+		    </ui:decorate>
+		</c:if>
+		
+		<c:if test="#{classSimpleName eq 'InputMask'}">
+			<c:set var="processed" value="true"/>
+			<ui:decorate template="#{template}">
+		    	<ui:param name="inputMask" value="#{cell.control}"/>
+		    </ui:decorate>
+		</c:if>
+		
+		<c:if test="#{classSimpleName eq 'InputTextarea'}">
+			<c:set var="processed" value="true"/>
+			<ui:decorate template="#{template}">
+		    	<ui:param name="inputTextarea" value="#{cell.control}"/>
+		    </ui:decorate>
+		</c:if>
+		
+		<c:if test="#{classSimpleName eq 'Password'}">
+			<c:set var="processed" value="true"/>
+			<ui:decorate template="#{template}">
+		    	<ui:param name="password" value="#{cell.control}"/>
+		    </ui:decorate>
+		</c:if>
+		
+		<c:if test="#{classSimpleName eq 'InputNumber'}">
+			<c:set var="processed" value="true"/>
+			<ui:decorate template="#{template}">
+		    	<ui:param name="inputNumber" value="#{cell.control}"/>
+		    </ui:decorate>
+		</c:if>
+	
+		<c:if test="#{classSimpleName eq 'Calendar'}">
+			<c:set var="processed" value="true"/>
+			<ui:decorate template="#{template}">
+		    	<ui:param name="calendar" value="#{cell.control}"/>
+		    </ui:decorate>
+		</c:if>
+	
+		<c:if test="#{classSimpleName eq 'AutoComplete'}">
+			<c:set var="processed" value="true"/>
+			<ui:decorate template="#{template}">
+		    	<ui:param name="autoComplete" value="#{cell.control}"/>
+		    </ui:decorate>
+		</c:if>
+		
+		<c:if test="#{classSimpleName eq 'SelectManyCheckbox'}">
+			<c:set var="processed" value="true"/>
+			<ui:decorate template="#{template}">
+		    	<ui:param name="selectManyCheckbox" value="#{cell.control}"/>
+		    </ui:decorate>
+		</c:if>
+		
+		<c:if test="#{classSimpleName eq 'SelectOneRadio'}">
+			<c:set var="processed" value="true"/>
+			<ui:decorate template="#{template}">
+		    	<ui:param name="selectOneRadio" value="#{cell.control}"/>
+		    </ui:decorate>
+		</c:if>
+		
+		<c:if test="#{classSimpleName eq 'SelectOneCombo'}">
+			<c:set var="processed" value="true"/>
+			<ui:decorate template="#{template}">
+		    	<ui:param name="selectOneMenu" value="#{cell.control}"/>
+		    </ui:decorate>
+		</c:if>
+		
+		<c:if test="#{classSimpleName eq 'SelectBooleanCheckbox'}">
+			<c:set var="processed" value="true"/>
+			<ui:decorate template="#{template}">
+		    	<ui:param name="selectBooleanCheckbox" value="#{cell.control}"/>
+		    </ui:decorate>
+		</c:if>
+		
+		<c:if test="#{classSimpleName eq 'SelectBooleanButton'}">
+			<c:set var="processed" value="true"/>
+			<ui:decorate template="#{template}">
+		    	<ui:param name="selectBooleanButton" value="#{cell.control}"/>
+		    </ui:decorate>
+		</c:if>
+		
+		<c:if test="#{classSimpleName eq 'FileUpload'}">
+			<c:set var="processed" value="true"/>
+			<ui:decorate template="#{template}">
+		    	<ui:param name="fileUpload" value="#{cell.control}"/>
+		    </ui:decorate>
+		</c:if>
+		
+		<!-- action -->
+		
+		<c:if test="#{classSimpleName eq 'CommandButton'}">
+			<c:set var="processed" value="true"/>
+			<ui:decorate template="#{template}">
+		    	<ui:param name="commandButton" value="#{cell.control}"/>
+		    </ui:decorate>
+		</c:if>
+		
+		<c:if test="#{classSimpleName eq 'Button'}">
+			<c:set var="processed" value="true"/>
+			<ui:decorate template="#{template}">
+		    	<ui:param name="button" value="#{cell.control}"/>
+		    </ui:decorate>
+		</c:if>
+		
+		<!-- menu -->
+		
+		<c:if test="#{classSimpleName eq 'TabMenu'}">
+			<c:set var="processed" value="true"/>
+			<ui:decorate template="#{template}">
+		    	<ui:param name="tabMenu" value="#{cell.control}"/>
+		    </ui:decorate>
+		</c:if>
+		
+		<c:if test="#{classSimpleName eq 'MenuBar'}">
+			<c:set var="processed" value="true"/>
+			<ui:decorate template="#{template}">
+		    	<ui:param name="menuBar" value="#{cell.control}"/>
+		    </ui:decorate>
+		</c:if>
+		
+		<!-- other -->
+		
+		<c:if test="#{classSimpleName eq 'Layout'}">
+			<c:set var="processed" value="true"/>
+			<ui:decorate template="#{template}">
+		    	<ui:param name="layout" value="#{cell.control}"/>
+		    </ui:decorate>
+		</c:if>
+		
+		<c:if test="#{classSimpleName eq 'DataTable'}">
+			<c:set var="processed" value="true"/>
+			<ui:decorate template="#{template}">
+		    	<ui:param name="dataTable" value="#{cell.control}"/>
+		    </ui:decorate>
+		</c:if>
+		
+		<c:if test="#{classSimpleName eq 'Tree'}">
+			<c:set var="processed" value="true"/>
+			<ui:decorate template="#{template}">
+		    	<ui:param name="tree" value="#{cell.control}"/>
+		    </ui:decorate>
+		</c:if>
+		
+		<c:if test="#{classSimpleName eq 'TreeNode'}">
+			<c:set var="processed" value="true"/>
+			<ui:decorate template="#{template}">
+		    	<ui:param name="treeNode" value="#{cell.control}"/>
+		    </ui:decorate>
+		</c:if>	
+		
+		<c:if test="#{classSimpleName eq 'RemoteCommand'}">
+			<c:set var="processed" value="true"/>
+			<ui:decorate template="#{template}">
+		    	<ui:param name="remoteCommand" value="#{cell.control}"/>
+		    </ui:decorate>
+		</c:if>	
+	</c:if>
+
+	<c:if test="#{not processed}">
+		<h:outputText value="#{cell.identifier} : #{classSimpleName} : #{cell.control.identifier}" />
+	</c:if>
+	
+</ui:composition>

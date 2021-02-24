@@ -421,7 +421,8 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 				collection.emptyMessage = "-- Aucun élément trouvé --";
 			
 			if(Boolean.TRUE.equals(collection.lazy)) {
-				collection.contentOutputPanel.setDeferred(Boolean.TRUE);
+				//FIXME context menu right click not working well when when deferred is true : might be prime faces bug. For now we will use false
+				//collection.contentOutputPanel.setDeferred(Boolean.TRUE);
 				if(collection.rows == null)
 					collection.rows = 20;
 				if(StringHelper.isBlank(collection.rowsPerPageTemplate))

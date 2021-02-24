@@ -2,6 +2,8 @@ package org.cyk.utility.__kernel__.uri;
 
 import java.io.Serializable;
 import java.net.URI;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -109,7 +111,7 @@ public interface UniformResourceIdentifierBuilder {
 			if(MapHelper.isNotEmpty(arguments.queries)) {
 				String suffix = StringHelper.concatenate(arguments.queries.keySet().stream()
 					.filter(x -> StringHelper.isNotBlank(x) && CollectionHelper.isNotEmpty(arguments.queries.get(x)))
-					.map(x -> x+"="+arguments.queries.get(x).get(0))
+					.map(x -> x+"="+URLEncoder.encode(arguments.queries.get(x).get(0),Charset.forName("UTF-8")))
 					.collect(Collectors.toList()),"&");
 				if(StringHelper.isNotBlank(suffix))
 					query = query + (StringHelper.isBlank(query) ? "?" : "&") + suffix;
@@ -161,6 +163,14 @@ public interface UniformResourceIdentifierBuilder {
 				return ((Collection<?>)value).stream().filter(x -> x != null).map(x -> x.toString()).filter(x -> StringHelper.isNotBlank(x)).collect(Collectors.toList());
 			throw new RuntimeException(String.format("cannot convert value of class <<%s>> to strings",value.getClass()));
 		}
+		/*
+		private static String encoreQueryValue(String value) {
+			if(StringHelper.isBlank(value))
+				return null;
+			String encoded = URLEncoder.encode((String)value,Charset.forName("UTF-8"));
+			System.out.println("UniformResourceIdentifierBuilder.Arguments.encoreQueryValue() : "+encoded);
+			return encoded;
+		}*/
 		
 		public Arguments addQueries(Map<String,List<String>> queries) {
 			if(MapHelper.isEmpty(queries))

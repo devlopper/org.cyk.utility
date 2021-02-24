@@ -60,7 +60,7 @@ public interface VariableHelper {
 		if(request != null && (value = RequestHelper.getParameter(name, request)) != null)
 			return write(name,value,VariableLocation.REQUEST);
 		
-		LogHelper.log("configuration parameter "+name+" not found");
+		LogHelper.logWarning("configuration parameter "+name+" not found",VariableHelper.class);
 		VARIABLES_NAMES_NOT_BOUND.add(name);
 		return null;
 	}
@@ -100,7 +100,7 @@ public interface VariableHelper {
 		if(variable == null) {
 			variable = new Variable().setName(name).setValue(value).setLocation(location);
 			VARIABLES.put(name, variable);
-			LogHelper.logInfo("variable mapped : "+variable, VariableHelper.class);
+			LogHelper.logConfig("variable mapped : "+variable, VariableHelper.class);
 		}else {
 			variable.setValue(value).setLocation(location);
 		}

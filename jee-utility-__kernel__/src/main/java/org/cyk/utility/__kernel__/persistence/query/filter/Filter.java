@@ -408,6 +408,10 @@ public class Filter extends AbstractObject implements Serializable {
 			return addField(path,value,null);
 		}
 		
+		public Dto addFieldTrue(String path) {
+			return addField(path, Boolean.TRUE);
+		}
+		
 		public Dto removeFields(Collection<String> names) {
 			if(CollectionHelper.isEmpty(fields) || CollectionHelper.isEmpty(names))
 				return this;

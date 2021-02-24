@@ -22,6 +22,7 @@ import org.cyk.utility.__kernel__.persistence.query.filter.Field;
 import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,6 +32,7 @@ import lombok.experimental.Accessors;
 @Getter @Setter @Accessors(chain=true)
 public class QueryExecutorArguments extends AbstractObject implements Serializable {
 	private Query query;
+	private Collection<String> processableTransientFieldsNames;
 	private Map<Object,Object> parameters;
 	private PropertiesArguments properties;
 	private Map<String,Object> hints;
@@ -61,6 +63,13 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 	private Collection<?> __objects__;
 	
 	private java.util.logging.Level loggingLevel;
+	
+	public Boolean isTransientFieldNameProcessable(String fieldName) {
+		if(StringHelper.isBlank(fieldName))
+			return Boolean.FALSE;
+		return CollectionHelper.isEmpty(processableTransientFieldsNames) ? Boolean.FALSE
+				: processableTransientFieldsNames.contains(fieldName);
+	}
 	
 	public QueryExecutorArguments setQueryFromIdentifier(String identifier) {
 		if(StringHelper.isBlank(identifier))
@@ -267,6 +276,10 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 		return this;
 	}
 
+	public Boolean isFilterFieldTrue(String...paths) {
+		return Boolean.TRUE.equals(ValueHelper.convertToBoolean(getFilterFieldValue(paths)));
+	}
+	
 	@Override
 	public String toString() {
 		Collection<String> strings = new ArrayList<>();
@@ -322,6 +335,7 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 	@XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor
 	public static class Dto extends AbstractObject implements Serializable {
 		private String queryIdentifier;
+		private ArrayList<String> processableTransientFieldsNames;
 		private Filter.Dto filter;
 		private Integer firstTupleIndex;
 		private Integer numberOfTuples;

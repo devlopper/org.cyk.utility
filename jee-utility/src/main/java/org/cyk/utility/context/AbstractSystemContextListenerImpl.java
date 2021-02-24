@@ -10,9 +10,9 @@ public abstract class AbstractSystemContextListenerImpl<CONTEXT> extends Abstrac
 
 	@Override
 	public SystemContextListener<CONTEXT> initialize(CONTEXT context) {
-		__logInfo__("Context initialization running.");
+		//__logInfo__("Context initialization running.");
 		__initialize__(context);
-		__logInfo__("Context initialization done.");
+		//__logInfo__("Context initialization done.");
 		return this;
 	}
 	
@@ -22,9 +22,9 @@ public abstract class AbstractSystemContextListenerImpl<CONTEXT> extends Abstrac
 	
 	@Override
 	public SystemContextListener<CONTEXT> destroy(CONTEXT context) {
-		__logInfo__("Context destruction running.");
+		//__logInfo__("Context destruction running.");
 		__destroy__(context);
-		__logInfo__("Context destruction done.");
+		//__logInfo__("Context destruction done.");
 		return this;
 	}
 	

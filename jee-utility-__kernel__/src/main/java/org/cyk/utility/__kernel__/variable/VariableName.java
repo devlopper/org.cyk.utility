@@ -204,5 +204,5 @@ public interface VariableName {
 	
 	/**/
 	
-	static String SEPARATOR = ConstantCharacter.HYPHEN.toString();
+	String SEPARATOR = ConstantCharacter.HYPHEN.toString();
 }

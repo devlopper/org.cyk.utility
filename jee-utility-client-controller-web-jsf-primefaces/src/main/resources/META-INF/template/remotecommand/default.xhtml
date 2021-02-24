@@ -8,16 +8,15 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
-	<h:outputText
-		id="#{outputText == null ? userInterfaceController.randomIdentifier : outputText.identifier}"
-		value="#{outputText.value}"
-		rendered="#{outputText.rendered}"
-		widgetVar="#{outputText.widgetVar}"
-		escape="#{outputText.escape}"
-		title="#{outputText.title}"
-		styleClass="#{outputText.styleClass}"
-		style="#{outputText.style}"
-	>
-	
-	</h:outputText>
+	<p:remoteCommand
+		action="#{remoteCommand.action}"
+		async="#{remoteCommand.async}"
+		autoRun="#{remoteCommand.autoRun}"
+		delay="#{remoteCommand.delay}"
+		global="#{remoteCommand.global}"
+		name="#{remoteCommand.name}"
+		update="#{remoteCommand.update}"
+		rendered="#{remoteCommand.rendered}"
+	/>
+  			
 </ui:composition>

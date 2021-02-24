@@ -40,16 +40,19 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 		return ((Listener)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).getChoiceLabel(this, choice);
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Object getChoiceDescription(Object choice) {
-		return null;
+		return ((Listener)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).getChoiceDescription(this, choice);
 	}
 	
-	public Object getIsChoiceDisabled(Object choice) {
-		return Boolean.FALSE;
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public Boolean getIsChoiceDisabled(Object choice) {
+		return ((Listener)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).getIsChoiceDisabled(this, choice);
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Boolean getIsChoiceLabelEscaped(Object choice) {
-		return Boolean.FALSE;
+		return ((Listener)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).getIsChoiceLabelEscaped(this, choice);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -86,6 +89,9 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 		
 		Object getChoiceLabel(AbstractInputChoice<VALUE> input,VALUE choice);
 		Object getChoiceValue(AbstractInputChoice<VALUE> input,VALUE choice);
+		Object getChoiceDescription(AbstractInputChoice<VALUE> input,VALUE choice);
+		Boolean getIsChoiceDisabled(AbstractInputChoice<VALUE> input,VALUE choice);
+		Boolean getIsChoiceLabelEscaped(AbstractInputChoice<VALUE> input,VALUE choice);
 		
 		public static abstract class AbstractImpl<VALUE> extends AbstractInput.Listener.AbstractImpl implements Listener<VALUE>,Serializable {
 			@Override
@@ -124,6 +130,27 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 				if(choice instanceof SelectItem)
 					return((SelectItem)choice).getValue();
 				return choice;
+			}
+			
+			@Override
+			public Object getChoiceDescription(AbstractInputChoice<VALUE> input, VALUE choice) {
+				if(choice instanceof SelectItem)
+					return((SelectItem)choice).getDescription();
+				return null;
+			}
+			
+			@Override
+			public Boolean getIsChoiceDisabled(AbstractInputChoice<VALUE> input, VALUE choice) {
+				if(choice instanceof SelectItem)
+					return((SelectItem)choice).isDisabled();
+				return null;
+			}
+			
+			@Override
+			public Boolean getIsChoiceLabelEscaped(AbstractInputChoice<VALUE> input, VALUE choice) {
+				if(choice instanceof SelectItem)
+					return((SelectItem)choice).isEscape();
+				return null;
 			}
 			
 			public static class DefaultImpl extends Listener.AbstractImpl<Object> implements Serializable {
