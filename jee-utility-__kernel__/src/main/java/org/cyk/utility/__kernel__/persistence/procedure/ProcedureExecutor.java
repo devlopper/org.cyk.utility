@@ -45,7 +45,12 @@ public interface ProcedureExecutor {
 			Long t = System.currentTimeMillis();
 			Boolean result = storedProcedureQuery.execute();
 			LogHelper.logInfo(String.format("Procédure stockée %s exécutée en %s", name,TimeHelper.formatDuration(System.currentTimeMillis() - t)), getClass());
+			releaseConnection(storedProcedureQuery, name);
 			return result;
+		}
+		
+		protected void releaseConnection(StoredProcedureQuery storedProcedureQuery,String name) {
+			LogHelper.logWarning(String.format("#### WE DO NOT KNOW HOW TO RELEASE CONNECTION FROM STORED PROCEDURE QUERY named <<%s>> ####", name), getClass());
 		}
 		
 		@Override
