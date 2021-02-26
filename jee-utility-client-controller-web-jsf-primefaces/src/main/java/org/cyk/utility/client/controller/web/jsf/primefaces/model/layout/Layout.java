@@ -30,6 +30,8 @@ public class Layout extends OutputPanel implements Serializable {
 	private Builder.Listener<Cell> cellBuilderListener;
 	private Integer numberOfRows,numberOfColumns;
 	
+	private Object container;
+	
 	public Cell getCellAt(Integer index) {
 		if(index == null)
 			return null;
@@ -153,6 +155,7 @@ public class Layout extends OutputPanel implements Serializable {
 	public static final String FIELD_CELL_WIDTH_UNIT = "cellWidthUnit";
 	public static final String FIELD_NUMBER_OF_ROWS = "numberOfRows";
 	public static final String FIELD_NUMBER_OF_COLUMNS = "numberOfColumns";
+	public static final String FIELD_CONTAINER = "container";
 	
 	/**/
 	

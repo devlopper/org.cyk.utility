@@ -34,39 +34,53 @@
  				</f:facet>
  				<f:facet name="right">
  					<span>
- 					<ui:insert name="headerToolbarRight">
- 						<ui:fragment rendered="#{dataTable.isExportable}">
- 							<ui:insert name="headerToolbarRightExports">
- 								<ui:fragment rendered="#{dataTable.isExportable}">
-	 								<p:commandButton id="export_excel" icon="fa fa-file-excel-o" ajax="false">
-				    					<p:dataExporter type="xls" target="#{dataTable.identifier}" fileName="#{dataTable.fileName}" />
-				    				</p:commandButton>
-				    				<p:tooltip for="export_excel" value="Exporter en excel" />
-			    				</ui:fragment>
- 							</ui:insert>
-						</ui:fragment>
- 						<ui:fragment rendered="#{dataTable.areColumnsChoosable}">
- 							<ui:insert name="headerToolbarRightColumns">
-	 							<p:commandButton id="toggler" type="button" value="Colonnes" icon="fa fa-columns" />
-			       				<p:columnToggler datasource="#{dataTable.identifier}" trigger="toggler" />
-	 						</ui:insert>	
- 						</ui:fragment>
- 						<ui:fragment rendered="#{dataTable.isColumnAddable}">
- 							<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.addColumnCommandButton)}">
-								<ui:param name="commandButton" value="#{dataTable.addColumnCommandButton}"/>
-							</ui:decorate>
- 						</ui:fragment>
- 						<ui:fragment rendered="#{dataTable.isLastColumnRemovable}">
- 							<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.removeLastColumnCommandButton)}">
-								<ui:param name="commandButton" value="#{dataTable.removeLastColumnCommandButton}"/>
-							</ui:decorate>
- 						</ui:fragment>
- 						<ui:fragment rendered="#{dataTable.isSavable}">
- 							<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.saveCommandButton)}">
-								<ui:param name="commandButton" value="#{dataTable.saveCommandButton}"/>
-							</ui:decorate>		
- 						</ui:fragment>	 	 								 									    				
-					</ui:insert>
+	 					<ui:insert name="headerToolbarRight">
+	 						<ui:insert name="headerToolbarRightCommands">
+	 							<c:forEach items="#{dataTable.headerToolbarRightCommands}" var="command" >
+	 								<c:if test="#{command.class.simpleName eq 'CommandButton'}">
+	 									<ui:decorate template="/command/commandbutton/default.xhtml">
+		 									<ui:param name="commandButton" value="#{command}"/>
+		 								</ui:decorate>
+	 								</c:if>
+		 							<c:if test="#{command.class.simpleName eq 'Button'}">
+	 									<ui:decorate template="/command/button/default.xhtml">
+		 									<ui:param name="button" value="#{command}"/>
+		 								</ui:decorate>
+	 								</c:if>	
+	 							</c:forEach>
+	 						</ui:insert>
+	 						<ui:fragment rendered="#{dataTable.isExportable}">
+	 							<ui:insert name="headerToolbarRightExports">
+	 								<ui:fragment rendered="#{dataTable.isExportable}">
+		 								<p:commandButton id="export_excel" icon="fa fa-file-excel-o" ajax="false">
+					    					<p:dataExporter type="xls" target="#{dataTable.identifier}" fileName="#{dataTable.fileName}" />
+					    				</p:commandButton>
+					    				<p:tooltip for="export_excel" value="Exporter en excel" />
+				    				</ui:fragment>
+	 							</ui:insert>
+							</ui:fragment>
+	 						<ui:fragment rendered="#{dataTable.areColumnsChoosable}">
+	 							<ui:insert name="headerToolbarRightColumns">
+		 							<p:commandButton id="toggler" type="button" value="Colonnes" icon="fa fa-columns" />
+				       				<p:columnToggler datasource="#{dataTable.identifier}" trigger="toggler" />
+		 						</ui:insert>	
+	 						</ui:fragment>
+	 						<ui:fragment rendered="#{dataTable.isColumnAddable}">
+	 							<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.addColumnCommandButton)}">
+									<ui:param name="commandButton" value="#{dataTable.addColumnCommandButton}"/>
+								</ui:decorate>
+	 						</ui:fragment>
+	 						<ui:fragment rendered="#{dataTable.isLastColumnRemovable}">
+	 							<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.removeLastColumnCommandButton)}">
+									<ui:param name="commandButton" value="#{dataTable.removeLastColumnCommandButton}"/>
+								</ui:decorate>
+	 						</ui:fragment>
+	 						<ui:fragment rendered="#{dataTable.isSavable}">
+	 							<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.saveCommandButton)}">
+									<ui:param name="commandButton" value="#{dataTable.saveCommandButton}"/>
+								</ui:decorate>		
+	 						</ui:fragment>	 	 								 									    				
+						</ui:insert>
 					</span>
 				</f:facet>
 			</p:toolbar>
@@ -75,7 +89,4 @@
 	
 	<!-- Column Grouping -->
 	<ui:insert name="headerColumnsGroups"/>
-	
-	
-	
 </ui:composition>

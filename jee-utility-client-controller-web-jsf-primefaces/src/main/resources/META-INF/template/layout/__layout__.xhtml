@@ -9,17 +9,14 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
-	<c:if test="#{layout.container == null}">
-		<ui:include src="__layout__.xhtml"/>
-	</c:if>
-	
-	<c:if test="#{layout.container.class.simpleName eq 'Panel'}">
-		<ui:decorate template="#{primefacesHelper.getModelTemplate(layout.container)}">
-			<ui:param name="panel" value="#{layout.container}"/>
-			<ui:define name="panelBody">			
-				<ui:include src="__layout__.xhtml"/>			
-			</ui:define>
-		</ui:decorate>
-	</c:if>
-		
+	<ui:decorate template="/panel/output/default.xhtml">
+	    <ui:param name="outputPanel" value="#{layout}"/>
+	    <ui:define name="outputPanelBody">
+	    	<ui:insert name="cells">
+	    		<ui:include src="cells.xhtml">
+	    			
+	    		</ui:include>
+	    	</ui:insert> 		
+	    </ui:define>
+	</ui:decorate>
 </ui:composition>

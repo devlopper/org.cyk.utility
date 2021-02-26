@@ -67,7 +67,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	protected Map<String,Object> map = new HashMap<>();
 	protected OutputPanel dialogOutputPanel;
 	protected Dialog dialog;
-	protected Collection<AbstractCommand> headerToolbarLeftCommands;
+	protected Collection<AbstractCommand> headerToolbarLeftCommands,headerToolbarRightCommands;
 	protected Collection<AbstractCommand> recordCommands;
 	protected AbstractMenu recordMenu;
 	protected ControllerEntity<Object> controllerEntity;
@@ -110,6 +110,12 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 		return headerToolbarLeftCommands;
 	}
 	
+	public Collection<AbstractCommand> getHeaderToolbarRightCommands(Boolean injectIfNull) {
+		if(headerToolbarRightCommands == null && Boolean.TRUE.equals(injectIfNull))
+			headerToolbarRightCommands = new ArrayList<>();
+		return headerToolbarRightCommands;
+	}
+	
 	public AbstractCollection addHeaderToolbarLeftCommands(Collection<AbstractCommand> headerToolbarLeftCommands) {
 		if(CollectionHelper.isEmpty(headerToolbarLeftCommands))
 			return this;
@@ -117,10 +123,23 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 		return this;
 	}
 	
+	public AbstractCollection addHeaderToolbarRightCommands(Collection<AbstractCommand> headerToolbarRightCommands) {
+		if(CollectionHelper.isEmpty(headerToolbarRightCommands))
+			return this;
+		getHeaderToolbarRightCommands(Boolean.TRUE).addAll(headerToolbarRightCommands);
+		return this;
+	}
+	
 	public AbstractCollection addHeaderToolbarLeftCommands(AbstractCommand...headerToolbarLeftCommands) {
 		if(ArrayHelper.isEmpty(headerToolbarLeftCommands))
 			return this;
 		return addHeaderToolbarLeftCommands(CollectionHelper.listOf(headerToolbarLeftCommands));
+	}
+	
+	public AbstractCollection addHeaderToolbarRightCommands(AbstractCommand...headerToolbarRightCommands) {
+		if(ArrayHelper.isEmpty(headerToolbarRightCommands))
+			return this;
+		return addHeaderToolbarRightCommands(CollectionHelper.listOf(headerToolbarRightCommands));
 	}
 	
 	public AbstractCollection addHeaderToolbarLeftCommandsByArguments(Collection<Map<Object,Object>> headerToolbarLeftCommandsArguments) {
