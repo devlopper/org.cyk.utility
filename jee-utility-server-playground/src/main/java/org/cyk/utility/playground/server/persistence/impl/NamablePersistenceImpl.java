@@ -7,7 +7,7 @@ import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.computation.LogicalOperator;
-import org.cyk.utility.__kernel__.persistence.query.QueryContext;
+import org.cyk.utility.persistence.query.QueryContext;
 import org.cyk.utility.__kernel__.persistence.query.QueryStringHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.playground.server.persistence.api.NamablePersistence;

@@ -1,6 +1,8 @@
 package org.cyk.utility.__kernel__.mapping;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.Helper;
@@ -28,6 +30,8 @@ public interface MapperClassGetter {
 		}
 		
 		protected Class<?> __get__(Class<?> klass) {
+			if(MAP.containsKey(klass))
+				return MAP.get(klass);
 			if(klass.equals(org.cyk.utility.__kernel__.field.Field.class) || klass.equals(org.cyk.utility.__kernel__.field.Field.Dto.class))
 				return org.cyk.utility.__kernel__.field.Field.Dto.Mapper.class;
 			if(klass.equals(Message.class) || klass.equals(Message.Dto.class))
@@ -58,4 +62,5 @@ public interface MapperClassGetter {
 	}
 	
 	Value INSTANCE = new Value();
+	Map<Class<?>,Class<?>> MAP = new HashMap<>();
 }

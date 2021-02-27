@@ -6,8 +6,8 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import org.cyk.utility.__kernel__.persistence.query.Query;
-import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
+import org.cyk.utility.persistence.query.Query;
+import org.cyk.utility.persistence.query.QueryHelper;
 import org.cyk.utility.__kernel__.test.TestRunner;
 import org.cyk.utility.server.persistence.api.MyEntityPersistence;
 import org.cyk.utility.server.persistence.entities.MyEntity;

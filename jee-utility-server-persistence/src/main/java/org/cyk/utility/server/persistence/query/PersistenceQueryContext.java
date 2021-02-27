@@ -17,8 +17,8 @@ import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.server.persistence.Persistence;
-import org.cyk.utility.__kernel__.persistence.query.filter.Field;
-import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
+import org.cyk.utility.persistence.query.Field;
+import org.cyk.utility.persistence.query.Filter;
 
 @Deprecated
 public interface PersistenceQueryContext extends Objectable {

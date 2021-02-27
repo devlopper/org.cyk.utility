@@ -2,7 +2,7 @@ package org.cyk.utility.server.persistence;
 
 import java.util.Collection;
 
-import org.cyk.utility.__kernel__.persistence.query.Query;
+import org.cyk.utility.persistence.query.Query;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.sql.builder.QueryStringBuilder;
 import org.cyk.utility.system.SystemServiceProvider;

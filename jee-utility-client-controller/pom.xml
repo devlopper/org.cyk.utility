@@ -28,6 +28,12 @@
 			<artifactId>jee-utility-javascript</artifactId>
 			<version>0.1.0</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.cyk.jee.utility.controller</groupId>
+			<artifactId>jee-utility-controller</artifactId>
+			<version>0.1.0</version>
+		</dependency>
 	</dependencies>
 	
 	<repositories>

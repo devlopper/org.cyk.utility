@@ -8,9 +8,9 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.server.persistence.PersistenceFunctionReader;
-import org.cyk.utility.__kernel__.persistence.query.QueryContext;
-import org.cyk.utility.__kernel__.persistence.query.filter.Field;
-import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
+import org.cyk.utility.persistence.query.QueryContext;
+import org.cyk.utility.persistence.query.Field;
+import org.cyk.utility.persistence.query.Filter;
 import static org.cyk.utility.__kernel__.klass.ClassHelper.getTupleName;
 
 public abstract class AbstractPersistenceIdentifiedByStringAndCodedImpl<ENTITY extends AbstractIdentifiedByStringAndCoded<ENTITY>,HIERARCHY extends AbstractHierarchy<ENTITY>,HIERARCHIES extends Hierarchies<HIERARCHY,ENTITY>,HIERARCHY_PERSISTENCE extends HierarchyPersistence<HIERARCHY,ENTITY, HIERARCHIES>> extends AbstractPersistenceIdentifiedByStringImpl<ENTITY,HIERARCHY,HIERARCHIES,HIERARCHY_PERSISTENCE> implements PersistenceIdentifiedByStringAndCoded<ENTITY>,Serializable {
@@ -109,7 +109,7 @@ public abstract class AbstractPersistenceIdentifiedByStringAndCodedImpl<ENTITY e
 	protected String __getQueryIdentifier__(Class<?> functionClass, Properties properties, Object... parameters) {
 		Filter filter = (Filter) Properties.getFromPath(properties,Properties.QUERY_FILTERS);
 		if(PersistenceFunctionReader.class.equals(functionClass)) {
-			org.cyk.utility.__kernel__.persistence.query.filter.Field field = filter == null? null : filter.getFieldByPath(AbstractIdentifiedByString.FIELD_PARENTS);
+			org.cyk.utility.persistence.query.Field field = filter == null? null : filter.getFieldByPath(AbstractIdentifiedByString.FIELD_PARENTS);
 			if(field != null) {
 				if(field.getValue() != null && ValueUsageType.BUSINESS.equals(field.getValueUsageType()))
 					return readByParentsCodes;

@@ -5,8 +5,8 @@ import java.io.Serializable;
 import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.AbstractApplicationScopeLifeCycleListener;
-import org.cyk.utility.__kernel__.persistence.query.Queries;
-import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
+import org.cyk.utility.persistence.query.Queries;
+import org.cyk.utility.persistence.query.QueryHelper;
 
 @ApplicationScoped
 public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeLifeCycleListener implements Serializable {

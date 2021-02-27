@@ -4,8 +4,8 @@ import javax.enterprise.context.Dependent;
 import javax.persistence.EntityManager;
 
 import org.cyk.utility.__kernel__.persistence.PersistenceHelper;
-import org.cyk.utility.__kernel__.persistence.query.Query;
-import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
+import org.cyk.utility.persistence.query.Query;
+import org.cyk.utility.persistence.query.QueryHelper;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.server.persistence.AbstractPersistenceFunctionModifierImpl;
 import org.cyk.utility.server.persistence.PersistenceFunctionModifier;

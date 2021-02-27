@@ -17,4 +17,16 @@
 	<name>jee-utility-business-client</name>
 	<url>http://maven.apache.org</url>
 
+	<dependencies>
+		<dependency>
+			<groupId>org.cyk.jee.utility.business</groupId>
+			<artifactId>jee-utility-business</artifactId>
+			<version>0.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.cyk.jee.utility.persistence.client</groupId>
+			<artifactId>jee-utility-persistence-client</artifactId>
+			<version>0.1.0</version>
+		</dependency>
+	</dependencies>
 </project>

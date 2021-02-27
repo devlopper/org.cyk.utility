@@ -14,9 +14,9 @@ import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.server.persistence.AbstractPersistenceEntityImpl;
 import org.cyk.utility.server.persistence.PersistenceFunctionReader;
 import org.cyk.utility.server.persistence.PersistenceQueryIdentifierStringBuilder;
-import org.cyk.utility.__kernel__.persistence.query.QueryContext;
-import org.cyk.utility.__kernel__.persistence.query.filter.Field;
-import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
+import org.cyk.utility.persistence.query.QueryContext;
+import org.cyk.utility.persistence.query.Field;
+import org.cyk.utility.persistence.query.Filter;
 import org.cyk.utility.__kernel__.string.Strings;
 
 
@@ -263,7 +263,7 @@ public abstract class AbstractPersistenceIdentifiedByStringImpl<ENTITY extends A
 	protected String __getQueryIdentifier__(Class<?> functionClass, Properties properties, Object... parameters) {
 		Filter filter = (Filter) Properties.getFromPath(properties,Properties.QUERY_FILTERS);
 		if(PersistenceFunctionReader.class.equals(functionClass)) {
-			org.cyk.utility.__kernel__.persistence.query.filter.Field field = filter == null? null : filter.getFieldByPath(AbstractIdentifiedByString.FIELD_PARENTS);
+			org.cyk.utility.persistence.query.Field field = filter == null? null : filter.getFieldByPath(AbstractIdentifiedByString.FIELD_PARENTS);
 			if(field != null) {
 				if(field.getValue() == null)
 					return readWhereNotHavingParent;

@@ -31,22 +31,24 @@ import org.cyk.utility.__kernel__.value.Value;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
-@Path(EntityReader.PATH)
-@Tag(name = EntityReader.TAG)
+//@Path(EntityReader.PATH)
+//@Tag(name = EntityReader.TAG)
 public interface EntityReader {
-
+	/*
 	@POST
 	@Path(PATH_READ_BY_POST)
 	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
 	@Produces({ MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML })
 	@Operation(description = "Read using post method")
+	*/
 	Response read(Arguments arguments);
-	
+	/*
 	@GET
 	@Path(PATH_READ_BY_GET)
 	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
 	@Produces({ MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML })
 	@Operation(description = "Read using get method")
+	*/
 	Response read(
 			@QueryParam(PARAMETER_NAME_REPRESENTATION_ENTITY_CLASS_NAME)String representationEntityClassName
 			,@QueryParam(PARAMETER_NAME_QUERY_IDENTIFIER) String queryIdentifier

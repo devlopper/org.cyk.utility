@@ -14,7 +14,7 @@ import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.time.TimeHelper;
 import org.cyk.utility.__kernel__.value.Value;
-import org.cyk.utility.persistence.server.EntityManagerGetter;
+import org.cyk.utility.persistence.EntityManagerGetter;
 
 public interface ProcedureExecutor {
 

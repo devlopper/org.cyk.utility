@@ -17,14 +17,15 @@ import org.cyk.utility.__kernel__.representation.Arguments.Internal;
 import org.cyk.utility.__kernel__.rest.ResponseBuilder;
 import org.cyk.utility.__kernel__.value.Value;
 
-@Path(EntityCounter.PATH)
+//@Path(EntityCounter.PATH)
 //@Tag(name = EntityCounter.TAG)
 public interface EntityCounter {
-
+	/*
 	@POST
 	@Path(PATH_READ)
 	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
 	@Produces({ MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML })
+	*/
 	//@Operation(description = "count")
 	Response count(Arguments arguments);
 	

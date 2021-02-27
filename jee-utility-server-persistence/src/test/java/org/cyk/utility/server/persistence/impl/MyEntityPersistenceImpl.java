@@ -10,7 +10,7 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.server.persistence.AbstractPersistenceEntityIdentifiedByStringImpl;
 import org.cyk.utility.server.persistence.api.MyEntityPersistence;
 import org.cyk.utility.server.persistence.entities.MyEntity;
-import org.cyk.utility.__kernel__.persistence.query.Query;
+import org.cyk.utility.persistence.query.Query;
 import org.cyk.utility.sql.builder.QueryParameterNameBuilder;
 import org.cyk.utility.sql.builder.QueryStringBuilderSelect;
 

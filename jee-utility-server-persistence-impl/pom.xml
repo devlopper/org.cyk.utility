@@ -29,6 +29,11 @@
 		    <version>5.4.12.Final</version>
 		    <scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.cyk.jee.utility.persistence.server</groupId>
+			<artifactId>jee-utility-persistence-server</artifactId>
+			<version>0.1.0</version>
+		</dependency>
 	</dependencies>
 	
 	<repositories>

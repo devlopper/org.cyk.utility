@@ -5,7 +5,7 @@ import java.lang.reflect.Field;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.Helper;
-import org.cyk.utility.__kernel__.controller.EntityCounter;
+import org.cyk.utility.controller.EntityCounter;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;

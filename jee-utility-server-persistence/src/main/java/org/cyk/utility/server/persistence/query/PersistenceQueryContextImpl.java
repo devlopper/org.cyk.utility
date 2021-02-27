@@ -3,8 +3,8 @@ package org.cyk.utility.server.persistence.query;
 import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
-import org.cyk.utility.__kernel__.persistence.query.filter.Field;
-import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
+import org.cyk.utility.persistence.query.Field;
+import org.cyk.utility.persistence.query.Filter;
 
 @Deprecated
 public class PersistenceQueryContextImpl extends AbstractObject implements PersistenceQueryContext,Serializable {

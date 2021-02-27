@@ -23,10 +23,10 @@ import org.cyk.utility.__kernel__.field.FieldInstance;
 import org.cyk.utility.__kernel__.field.FieldInstancesRuntime;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
-import org.cyk.utility.__kernel__.persistence.query.Query;
-import org.cyk.utility.__kernel__.persistence.query.QueryContext;
-import org.cyk.utility.__kernel__.persistence.query.QueryStringHelper;
-import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
+import org.cyk.utility.persistence.query.Query;
+import org.cyk.utility.persistence.query.QueryContext;
+import org.cyk.utility.persistence.query.QueryStringHelper;
+import org.cyk.utility.persistence.query.Filter;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.stacktrace.StackTraceHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
@@ -457,7 +457,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	protected String __getQueryIdentifierByIdentifierField__(ValueUsageType valueUsageType,String defaultQueryIdentifier,Filter filters){
 		String identifier = null;
 		Field identifierField = ValueUsageType.BUSINESS.equals(valueUsageType) ? __businessIdentifierField__ : __systemIdentifierField__;
-		org.cyk.utility.__kernel__.persistence.query.filter.Field field = null;
+		org.cyk.utility.persistence.query.Field field = null;
 		if(filters != null && identifierField != null)
 			field = filters.getFieldByPath(identifierField.getName());
 		if(field != null) {
