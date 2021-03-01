@@ -6,7 +6,7 @@ import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.annotation.Apache;
 import org.cyk.utility.__kernel__.annotation.Google;
 import org.cyk.utility.__kernel__.string.barcode.BarCodeBuilder.Parameters;
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 import org.krysalis.barcode4j.impl.code128.Code128Bean;
 

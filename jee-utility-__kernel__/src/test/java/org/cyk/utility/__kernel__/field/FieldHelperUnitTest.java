@@ -38,7 +38,7 @@ import javax.validation.constraints.NotNull;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
 import org.cyk.utility.__kernel__.string.RegularExpressionHelper;
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.__kernel__.variable.VariableHelper;
 import org.junit.jupiter.api.Test;

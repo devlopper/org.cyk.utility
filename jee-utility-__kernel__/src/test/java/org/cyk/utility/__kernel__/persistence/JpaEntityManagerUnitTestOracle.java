@@ -8,7 +8,7 @@ import org.cyk.utility.__kernel__.__entities__.JpaEntity;
 import org.cyk.utility.__kernel__.__entities__.JpaEntityCompositeId;
 import org.cyk.utility.__kernel__.__entities__.JpaEntityCompositeIdClass;
 import org.cyk.utility.__kernel__.__entities__.JpaEntityVersion;
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 
 public class JpaEntityManagerUnitTestOracle extends AbstractWeldUnitTest {

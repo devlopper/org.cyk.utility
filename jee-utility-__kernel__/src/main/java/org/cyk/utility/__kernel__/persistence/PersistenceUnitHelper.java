@@ -13,7 +13,6 @@ import javax.persistence.Transient;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
-import org.jboss.weld.exceptions.IllegalArgumentException;
 
 public interface PersistenceUnitHelper {
 

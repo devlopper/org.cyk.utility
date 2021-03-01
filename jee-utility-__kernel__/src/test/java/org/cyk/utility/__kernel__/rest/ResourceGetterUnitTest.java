@@ -25,7 +25,7 @@ import org.cyk.utility.__kernel__.JsonHelper;
 import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
 import org.cyk.utility.__kernel__.protocol.http.HttpClientGetter;
 import org.cyk.utility.__kernel__.protocol.http.HttpHelper;
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.__kernel__.variable.VariableName;
 import org.junit.jupiter.api.Test;
 import org.mockserver.client.MockServerClient;

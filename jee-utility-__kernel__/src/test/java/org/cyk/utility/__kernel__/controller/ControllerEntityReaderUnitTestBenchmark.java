@@ -16,7 +16,7 @@ import org.cyk.utility.__kernel__.persistence.query.EntityCreator;
 import org.cyk.utility.__kernel__.persistence.query.Query;
 import org.cyk.utility.__kernel__.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTestBenchmark;
+import org.cyk.utility.test.weld.AbstractWeldUnitTestBenchmark;
 import org.cyk.utility.__kernel__.user.interface_.message.MessageRenderer;
 import org.junit.jupiter.api.Test;
 

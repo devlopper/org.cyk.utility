@@ -19,6 +19,7 @@
 	<modules>
 		<module>../jee-utility-__kernel__</module>
 		<module>../jee-utility-mail</module>
+		<module>../jee-utility-mail-postmark</module>
 		<module>../jee-utility-javascript</module>
 		<module>../jee-utility-template</module>
 		<module>../jee-utility-template-freemarker</module>
@@ -38,6 +39,16 @@
 		<module>../jee-utility-persistence-server-hibernate</module>
 		<module>../jee-utility-persistence-client</module>
 		
+		<module>../jee-utility-business</module>
+		<module>../jee-utility-business-server</module>
+		<module>../jee-utility-business-client</module>
+		
+		<module>../jee-utility-representation</module>
+		<module>../jee-utility-representation-server</module>
+		<module>../jee-utility-representation-client</module>
+		
+		<module>../jee-utility-controller</module>
+				
 		<module>../jee-utility</module>
 		<module>../jee-utility-server-persistence</module>
 		<module>../jee-utility-server-persistence-impl</module>
@@ -50,6 +61,7 @@
 		<module>../jee-utility-client-controller-web-jsf</module>
 		<module>../jee-utility-client-controller-web-jsf-primefaces</module>
 		<module>../jee-utility-client-deployment</module>
+		
 		<!--
 		<module>../jee-utility-client-controller-web-jsf-primefaces-playground-common</module>
 		<module>../jee-utility-client-controller-web-jsf-primefaces-deployment-web</module>

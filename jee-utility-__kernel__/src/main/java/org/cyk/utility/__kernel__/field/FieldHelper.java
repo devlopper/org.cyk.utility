@@ -26,7 +26,6 @@ import javax.persistence.FetchType;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.assertj.core.util.diff.Delta.TYPE;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
@@ -604,10 +603,9 @@ public interface FieldHelper {
 		return getType(field,klass);
 	}
 	
-	@SuppressWarnings("unchecked")
 	static Class<?> getParameterAt(Field field,Class<?> klass, Integer index) {
 		ParameterizedType type = (ParameterizedType) field.getGenericType();
-		return (Class<TYPE>) type.getActualTypeArguments()[index];
+		return (Class<?>) type.getActualTypeArguments()[index];
 	}
 	
 	static void setType(Class<?> klass,Field field,Type type) {

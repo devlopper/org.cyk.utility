@@ -10,7 +10,7 @@ import org.cyk.utility.__kernel__.persistence.query.EntityCreator;
 import org.cyk.utility.__kernel__.persistence.query.Query;
 import org.cyk.utility.__kernel__.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
-import org.cyk.utility.__kernel__.test.weld.AbstractQueryUnitTestBenchmark;
+import org.cyk.utility.test.weld.AbstractQueryUnitTestBenchmark;
 import org.cyk.utility.__kernel__.user.interface_.message.MessageRenderer;
 
 import lombok.Getter;

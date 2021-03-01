@@ -18,7 +18,7 @@ import static org.cyk.utility.__kernel__.string.StringHelper.removeFromString;
 
 import java.util.List;
 
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 
 public class StringHelperUnitTest extends AbstractWeldUnitTest {

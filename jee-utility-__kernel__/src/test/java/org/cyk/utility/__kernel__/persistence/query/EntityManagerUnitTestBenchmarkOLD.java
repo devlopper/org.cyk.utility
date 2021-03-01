@@ -6,7 +6,7 @@ import javax.persistence.Persistence;
 import org.cyk.utility.__kernel__.__entities__.TestedEntityParent;
 import org.cyk.utility.__kernel__.persistence.EntityManagerFactoryGetterImpl;
 import org.cyk.utility.__kernel__.persistence.EntityManagerGetter;
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTestBenchmark;
+import org.cyk.utility.test.weld.AbstractWeldUnitTestBenchmark;
 import org.junit.jupiter.api.Test;
 
 public class EntityManagerUnitTestBenchmarkOLD extends AbstractWeldUnitTestBenchmark {

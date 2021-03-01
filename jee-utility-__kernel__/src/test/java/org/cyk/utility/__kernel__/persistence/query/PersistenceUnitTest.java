@@ -26,7 +26,7 @@ import org.cyk.utility.__kernel__.persistence.EntityManagerFactoryGetterImpl;
 import org.cyk.utility.__kernel__.persistence.EntityManagerGetter;
 import org.cyk.utility.__kernel__.persistence.EntitySaver;
 import org.cyk.utility.__kernel__.persistence.EntitySaver.Arguments;
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.hibernate.LazyInitializationException;
 import org.junit.jupiter.api.Test;
 

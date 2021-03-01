@@ -13,7 +13,6 @@ import javax.enterprise.util.AnnotationLiteral;
 
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
-import org.jboss.weld.exceptions.IllegalArgumentException;
 
 public class DependencyInjection implements Serializable {
 	private static final long serialVersionUID = 1L;

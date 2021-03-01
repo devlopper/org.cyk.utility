@@ -22,7 +22,6 @@ import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.__kernel__.variable.VariableHelper;
 import org.cyk.utility.__kernel__.variable.VariableName;
-import org.jboss.weld.exceptions.IllegalArgumentException;
 
 /**
  * Representational State Transfer Helper

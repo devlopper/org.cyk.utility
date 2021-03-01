@@ -9,7 +9,6 @@ import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.Case;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.Value;
-import org.jboss.weld.exceptions.IllegalArgumentException;
 
 public interface RepresentationClassGetter {
 

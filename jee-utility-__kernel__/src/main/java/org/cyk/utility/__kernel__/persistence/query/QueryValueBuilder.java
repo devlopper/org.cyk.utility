@@ -15,7 +15,6 @@ import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.Value;
-import org.jboss.weld.exceptions.IllegalArgumentException;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -8,7 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
 import org.cyk.utility.__kernel__.instance.InstanceGetterImpl;
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

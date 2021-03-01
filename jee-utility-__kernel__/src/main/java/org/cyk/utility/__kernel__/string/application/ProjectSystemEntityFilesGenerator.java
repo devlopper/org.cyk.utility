@@ -20,13 +20,13 @@ import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.string.StringTemplateGetter;
 import org.cyk.utility.__kernel__.string.StringTemplateIdentifierGetter;
 import org.cyk.utility.__kernel__.value.ValueHelper;
-import org.jboss.weld.environment.se.Weld;
+//import org.jboss.weld.environment.se.Weld;
 
 public class ProjectSystemEntityFilesGenerator {
 
 	public static void main(String[] args) {
-		Weld weld = new Weld();
-	    weld.initialize();
+		//Weld weld = new Weld();
+	    //weld.initialize();
 		
 		//String defaultIde = "Eclipse";
 		//String defaultProjectsWorkspaceFolder = "E:/Workspaces/"+defaultIde+"/201903";
@@ -76,7 +76,7 @@ public class ProjectSystemEntityFilesGenerator {
 				exception.printStackTrace();
 			}
 		}
-		weld.shutdown();
+		//weld.shutdown();
 	}
 	
 	private static void processEntities(String systemsFolder,String systemIdentifier,String packageName,Map<String,String> files,Collection<String> entities) {

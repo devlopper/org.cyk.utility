@@ -7,7 +7,7 @@ import org.cyk.utility.__kernel__.__entities__.AuditedEntity;
 import org.cyk.utility.__kernel__.object.__static__.persistence.EntityLifeCycleListener;
 import org.cyk.utility.__kernel__.persistence.EntityManagerFactoryGetterImpl;
 import org.cyk.utility.__kernel__.security.SecurityHelper;
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 
 public class PersistenceEntityLifeCycleListenerUnitTest extends AbstractWeldUnitTest {

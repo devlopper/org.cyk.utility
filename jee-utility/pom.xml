@@ -65,6 +65,13 @@
 		    <version>${commons-codec.commons-codec.version}</version>
 		</dependency>
 		
+		<dependency>
+			<groupId>org.cyk.jee.utility.test</groupId>
+			<artifactId>jee-utility-test</artifactId>
+			<version>0.1.0</version>
+			<scope>test</scope>
+		</dependency>
+		
 		<!--
 		<dependency>
 		    <groupId>org.glassfish.jersey.core</groupId>

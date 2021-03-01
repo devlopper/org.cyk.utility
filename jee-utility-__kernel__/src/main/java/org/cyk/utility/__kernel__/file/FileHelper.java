@@ -39,7 +39,6 @@ import org.cyk.utility.__kernel__.string.RegularExpressionHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.__kernel__.value.ValueHelper;
-import org.jboss.weld.exceptions.IllegalArgumentException;
 
 public interface FileHelper {
 

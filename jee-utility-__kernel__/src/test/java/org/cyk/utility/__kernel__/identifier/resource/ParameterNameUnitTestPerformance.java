@@ -1,6 +1,6 @@
 package org.cyk.utility.__kernel__.identifier.resource;
 
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTestPerformance;
+import org.cyk.utility.test.weld.AbstractWeldUnitTestPerformance;
 import org.junit.jupiter.api.Test;
 
 public class ParameterNameUnitTestPerformance extends AbstractWeldUnitTestPerformance {

@@ -13,7 +13,6 @@ import org.cyk.utility.__kernel__.persistence.PersistenceUnitHelper;
 import org.cyk.utility.__kernel__.persistence.query.EntityGraphArguments.Attributes;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.value.Value;
-import org.jboss.weld.exceptions.IllegalArgumentException;
 
 public interface QueryResultProcessor {
 

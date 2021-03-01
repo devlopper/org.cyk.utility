@@ -11,7 +11,7 @@ import javax.persistence.Persistence;
 import org.cyk.utility.__kernel__.__entities__.TestedEntityParent;
 import org.cyk.utility.__kernel__.persistence.EntityManagerFactoryGetterImpl;
 import org.cyk.utility.__kernel__.persistence.EntityManagerGetter;
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 
 public class EntityManagerUnitTest extends AbstractWeldUnitTest {

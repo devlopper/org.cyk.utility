@@ -34,7 +34,7 @@ public interface EntitySaver {
 		}
 		
 		protected <T> void __save__(Class<T> tupleClass,Arguments<T> arguments) {
-			org.cyk.utility.__kernel__.persistence.EntitySaver.getInstance().save(tupleClass, arguments.__persistenceArguments__);
+			org.cyk.utility.persistence.query.EntitySaver.getInstance().save(tupleClass, arguments.__persistenceArguments__);
 		}
 		
 		/**/
@@ -51,20 +51,20 @@ public interface EntitySaver {
 	
 	@Getter @Setter @Accessors(chain=true)
 	public static class Arguments<T> implements Serializable {
-		private org.cyk.utility.__kernel__.persistence.EntitySaver.Arguments<T> persistenceArguments;
+		private org.cyk.utility.persistence.query.EntitySaver.Arguments<T> persistenceArguments;
 		
-		private org.cyk.utility.__kernel__.persistence.EntitySaver.Arguments<T> __persistenceArguments__;
+		private org.cyk.utility.persistence.query.EntitySaver.Arguments<T> __persistenceArguments__;
 		
-		public org.cyk.utility.__kernel__.persistence.EntitySaver.Arguments<T> getPersistenceArguments(Boolean injectIfNull) {
+		public org.cyk.utility.persistence.query.EntitySaver.Arguments<T> getPersistenceArguments(Boolean injectIfNull) {
 			if(persistenceArguments == null && Boolean.TRUE.equals(injectIfNull))
-				persistenceArguments = new org.cyk.utility.__kernel__.persistence.EntitySaver.Arguments<T>();
+				persistenceArguments = new org.cyk.utility.persistence.query.EntitySaver.Arguments<T>();
 			return persistenceArguments;
 		}
 		
 		public Arguments<T> prepare() {
 			__persistenceArguments__ = persistenceArguments;
 			if(__persistenceArguments__ == null)
-				__persistenceArguments__ = new org.cyk.utility.__kernel__.persistence.EntitySaver.Arguments<T>();
+				__persistenceArguments__ = new org.cyk.utility.persistence.query.EntitySaver.Arguments<T>();
 			return this;
 		}
 		

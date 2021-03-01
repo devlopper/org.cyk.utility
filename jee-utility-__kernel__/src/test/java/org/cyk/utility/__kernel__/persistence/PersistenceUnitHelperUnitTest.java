@@ -9,7 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
 import org.cyk.utility.__kernel__.field.FieldHelper;
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 
 import lombok.Getter;

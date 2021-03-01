@@ -16,7 +16,7 @@ import java.util.Map;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTestPerformance;
+import org.cyk.utility.test.weld.AbstractWeldUnitTestPerformance;
 import org.junit.jupiter.api.Test;
 
 public class UniformResourceIdentifierHelperUnitTestPerformance extends AbstractWeldUnitTestPerformance {

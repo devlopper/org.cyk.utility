@@ -5,7 +5,7 @@ import javax.persistence.Persistence;
 
 import org.cyk.utility.__kernel__.__entities__.JpaEntity;
 import org.cyk.utility.__kernel__.__entities__.JpaEntityVersion;
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 
 public class JpaEntityManagerUnitTest extends AbstractWeldUnitTest {

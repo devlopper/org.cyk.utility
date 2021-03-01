@@ -1,17 +1,15 @@
 package org.cyk.utility.assertion;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.io.Serializable;
 import java.lang.reflect.Field;
 
 import org.cyk.utility.__kernel__.field.FieldName;
+import org.cyk.utility.__kernel__.log.LogLevel;
 import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.log.LogEventEntityRepository;
-import org.cyk.utility.__kernel__.log.LogLevel;
 
 public abstract class AbstractAssertionHelperImpl extends AbstractHelper implements AssertionHelper, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -137,29 +135,29 @@ public abstract class AbstractAssertionHelperImpl extends AbstractHelper impleme
 	
 	@Override
 	public AssertionHelper assertContainsLastLogEventMessage(String message, String expected) {
-		if(Boolean.TRUE.equals(getIsLogAssertionEnable()))
-			assertThat(__inject__(LogEventEntityRepository.class).getLastMessage()).contains(expected);
+		//if(Boolean.TRUE.equals(getIsLogAssertionEnable()))
+		//	assertThat(__inject__(LogEventEntityRepository.class).getLastMessage()).contains(expected);
 		return this;
 	}
 	
 	@Override
 	public AssertionHelper assertContainsLastLogEventMessage(String expected) {
-		if(Boolean.TRUE.equals(getIsLogAssertionEnable()))
-			assertThat(__inject__(LogEventEntityRepository.class).getLastMessage()).contains(expected);
+		//if(Boolean.TRUE.equals(getIsLogAssertionEnable()))
+		//	assertThat(__inject__(LogEventEntityRepository.class).getLastMessage()).contains(expected);
 		return this;
 	}
 	
 	@Override
 	public AssertionHelper assertStartsWithLastLogEventMessage(String message, String expected) {
-		if(Boolean.TRUE.equals(getIsLogAssertionEnable()))
-			assertThat(__inject__(LogEventEntityRepository.class).getLastMessage()).startsWith(expected);
+		//if(Boolean.TRUE.equals(getIsLogAssertionEnable()))
+		//	assertThat(__inject__(LogEventEntityRepository.class).getLastMessage()).startsWith(expected);
 		return this;
 	}
 	
 	@Override
 	public AssertionHelper assertStartsWithLastLogEventMessage(String expected) {
-		if(Boolean.TRUE.equals(getIsLogAssertionEnable()))
-			assertThat(__inject__(LogEventEntityRepository.class).getLastMessage()).startsWith(expected);
+		//if(Boolean.TRUE.equals(getIsLogAssertionEnable()))
+		//	assertThat(__inject__(LogEventEntityRepository.class).getLastMessage()).startsWith(expected);
 		return this;
 	}
 	

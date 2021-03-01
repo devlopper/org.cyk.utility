@@ -27,7 +27,6 @@ import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.StringHelper;
-import org.jboss.weld.exceptions.IllegalArgumentException;
 
 public interface PersistenceHelper {
 

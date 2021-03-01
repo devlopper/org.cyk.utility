@@ -1,7 +1,7 @@
 package org.cyk.utility.__kernel__.field;
 
 import org.cyk.utility.__kernel__.object.marker.IdentifiableSystem;
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTestBenchmark;
+import org.cyk.utility.test.weld.AbstractWeldUnitTestBenchmark;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.junit.jupiter.api.Test;
 

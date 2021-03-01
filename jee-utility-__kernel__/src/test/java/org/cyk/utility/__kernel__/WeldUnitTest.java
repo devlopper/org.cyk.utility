@@ -2,7 +2,7 @@ package org.cyk.utility.__kernel__;
 
 import javax.inject.Inject;
 
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 
 public class WeldUnitTest extends AbstractWeldUnitTest {

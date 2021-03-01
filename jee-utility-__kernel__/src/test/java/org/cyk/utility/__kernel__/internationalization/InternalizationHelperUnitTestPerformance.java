@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import static org.cyk.utility.__kernel__.internationalization.InternationalizationHelper.buildKey;
 import static org.cyk.utility.__kernel__.internationalization.InternationalizationHelper.buildString;
 
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTestPerformance;
+import org.cyk.utility.test.weld.AbstractWeldUnitTestPerformance;
 
 import static org.cyk.utility.__kernel__.internationalization.InternationalizationHelper.buildPhraseFromKeysValues;
 

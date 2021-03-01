@@ -2,7 +2,7 @@ package org.cyk.utility.__kernel__.persistence.query;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 
 public class QueryIdentifierGetterUnitTest extends AbstractWeldUnitTest {

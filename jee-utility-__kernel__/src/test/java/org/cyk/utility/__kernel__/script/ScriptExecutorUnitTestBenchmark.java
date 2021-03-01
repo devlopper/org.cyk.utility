@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTestBenchmark;
+import org.cyk.utility.test.weld.AbstractWeldUnitTestBenchmark;
 import org.junit.jupiter.api.Test;
 
 import lombok.Getter;

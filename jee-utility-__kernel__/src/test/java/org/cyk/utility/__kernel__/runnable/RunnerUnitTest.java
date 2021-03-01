@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 import org.cyk.utility.__kernel__.string.StringHelper;
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.__kernel__.user.interface_.message.Message;
 import org.cyk.utility.__kernel__.user.interface_.message.MessageRenderer;
 import org.cyk.utility.__kernel__.user.interface_.message.RenderType;

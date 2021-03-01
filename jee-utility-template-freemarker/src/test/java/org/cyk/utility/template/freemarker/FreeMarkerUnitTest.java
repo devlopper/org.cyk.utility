@@ -1,6 +1,6 @@
 package org.cyk.utility.template.freemarker;
 
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Disabled;
 
 @Disabled

@@ -1,0 +1,61 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.cyk.pom.jee.utility.test</groupId>
+		<artifactId>pom-jee-utility-test</artifactId>
+		<version>pom.jee.utility.test.0.1.0</version>
+	</parent>
+
+	<groupId>org.cyk.jee.utility.test</groupId>
+	<artifactId>jee-utility-test</artifactId>
+	<version>0.1.0</version>
+	<packaging>jar</packaging>
+
+	<name>jee-utility-test</name>
+	<url>http://maven.apache.org</url>
+	
+	<properties>
+		<commons-io.commons-io.version>2.6</commons-io.commons-io.version>
+	</properties>
+	
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.junit.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>${org.junit.jupiter.junit-jupiter-engine.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.junit.vintage</groupId>
+			<artifactId>junit-vintage-engine</artifactId>
+			<version>${org.junit.vintage.junit-vintage-engine.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.weld</groupId>
+			<artifactId>weld-junit5</artifactId>
+			<version>${org.jboss.weld.weld-junit5.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>${org.assertj.assertj-core.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${commons-io.commons-io.version}</version>
+		</dependency>
+	</dependencies>
+</project>

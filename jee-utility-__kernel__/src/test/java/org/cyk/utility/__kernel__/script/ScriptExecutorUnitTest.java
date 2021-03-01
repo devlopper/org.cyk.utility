@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.script.ScriptException;
 
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 
 public class ScriptExecutorUnitTest extends AbstractWeldUnitTest {

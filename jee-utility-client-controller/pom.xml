@@ -34,6 +34,11 @@
 			<artifactId>jee-utility-controller</artifactId>
 			<version>0.1.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.cyk.jee.utility.test</groupId>
+			<artifactId>jee-utility-test</artifactId>
+			<version>0.1.0</version>
+		</dependency>
 	</dependencies>
 	
 	<repositories>

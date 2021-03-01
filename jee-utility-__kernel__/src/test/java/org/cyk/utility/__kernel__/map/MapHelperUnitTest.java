@@ -6,7 +6,7 @@ import static org.cyk.utility.__kernel__.map.MapHelper.getKeys;
 import java.util.List;
 import java.util.Map;
 
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 
 public class MapHelperUnitTest extends AbstractWeldUnitTest {

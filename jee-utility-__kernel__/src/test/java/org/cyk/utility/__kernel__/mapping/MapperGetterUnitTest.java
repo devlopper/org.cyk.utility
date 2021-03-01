@@ -1,6 +1,6 @@
 package org.cyk.utility.__kernel__.mapping;
 
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.Mapper;
 

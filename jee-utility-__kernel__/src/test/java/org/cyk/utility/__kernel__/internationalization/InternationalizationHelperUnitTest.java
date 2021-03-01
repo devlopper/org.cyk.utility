@@ -24,7 +24,7 @@ import org.cyk.utility.__kernel__.string.Strings;
 import org.cyk.utility.__kernel__.system.action.SystemActionCreate;
 import org.cyk.utility.__kernel__.system.action.SystemActionProcess;
 import org.cyk.utility.__kernel__.system.action.SystemActionRead;
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.__kernel__.throwable.EntityNotFoundException;
 import org.cyk.utility.__kernel__.throwable.ServiceNotFoundException;
 import org.junit.jupiter.api.Test;

@@ -29,7 +29,7 @@ import org.cyk.utility.__kernel__.persistence.query.PropertiesArguments;
 import org.cyk.utility.__kernel__.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
 import org.cyk.utility.__kernel__.persistence.query.QueryResultProcessor;
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.hibernate.LazyInitializationException;
 import org.junit.jupiter.api.Test;
 

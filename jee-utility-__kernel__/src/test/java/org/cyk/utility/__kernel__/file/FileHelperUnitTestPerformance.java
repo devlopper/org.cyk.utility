@@ -8,7 +8,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTestPerformance;
+import org.cyk.utility.test.weld.AbstractWeldUnitTestPerformance;
 import org.junit.jupiter.api.Test;
 
 public class FileHelperUnitTestPerformance extends AbstractWeldUnitTestPerformance {

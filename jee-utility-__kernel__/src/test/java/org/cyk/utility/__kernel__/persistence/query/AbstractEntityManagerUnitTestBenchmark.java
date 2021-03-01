@@ -6,7 +6,7 @@ import javax.persistence.EntityManager;
 
 import org.cyk.utility.__kernel__.__entities__.TestedEntityParent;
 import org.cyk.utility.__kernel__.persistence.EntityManagerGetter;
-import org.cyk.utility.__kernel__.test.weld.AbstractQueryUnitTestBenchmark;
+import org.cyk.utility.test.weld.AbstractQueryUnitTestBenchmark;
 
 import lombok.Getter;
 import lombok.Setter;

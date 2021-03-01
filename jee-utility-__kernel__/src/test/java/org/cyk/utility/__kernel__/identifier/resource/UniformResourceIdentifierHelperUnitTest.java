@@ -29,7 +29,7 @@ import org.cyk.utility.__kernel__.system.action.SystemActionRead;
 import org.cyk.utility.__kernel__.system.action.SystemActionReadImpl;
 import org.cyk.utility.__kernel__.system.action.SystemActionTree;
 import org.cyk.utility.__kernel__.system.action.SystemActionUpdate;
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 
 public class UniformResourceIdentifierHelperUnitTest extends AbstractWeldUnitTest {

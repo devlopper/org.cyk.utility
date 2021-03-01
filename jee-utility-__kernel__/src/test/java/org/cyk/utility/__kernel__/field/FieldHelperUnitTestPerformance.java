@@ -11,7 +11,7 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTestPerformance;
+import org.cyk.utility.test.weld.AbstractWeldUnitTestPerformance;
 import org.junit.jupiter.api.Test;
 
 import lombok.Getter;

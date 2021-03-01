@@ -19,7 +19,7 @@ import org.cyk.utility.__kernel__.string.StringGenerator;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.string.StringTemplateGetter;
 import org.cyk.utility.__kernel__.string.StringTemplateIdentifierGetter;
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.junit.jupiter.api.Test;
 

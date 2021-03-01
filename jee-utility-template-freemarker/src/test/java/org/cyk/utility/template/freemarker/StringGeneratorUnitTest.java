@@ -7,7 +7,7 @@ import java.util.Map;
 import org.cyk.utility.__kernel__.string.StringGenerator;
 import org.cyk.utility.__kernel__.string.StringTemplateGetter;
 import org.cyk.utility.template.freemarker.FreeMarkerHelper;
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 
 public class StringGeneratorUnitTest extends AbstractWeldUnitTest {

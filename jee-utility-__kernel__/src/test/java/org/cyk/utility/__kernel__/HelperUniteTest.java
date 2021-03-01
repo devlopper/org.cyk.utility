@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.lang.reflect.Modifier;
 import java.util.List;
 
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 
 import lombok.Getter;

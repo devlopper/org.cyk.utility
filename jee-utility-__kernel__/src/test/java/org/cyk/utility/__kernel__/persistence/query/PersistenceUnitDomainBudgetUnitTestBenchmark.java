@@ -13,7 +13,7 @@ import org.cyk.utility.__kernel__.__entities__.domain.budget.Section;
 import org.cyk.utility.__kernel__.__entities__.domain.budget.ServiceGroup;
 import org.cyk.utility.__kernel__.persistence.EntityManagerFactoryGetterImpl;
 import org.cyk.utility.__kernel__.random.RandomHelper;
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTestBenchmark;
+import org.cyk.utility.test.weld.AbstractWeldUnitTestBenchmark;
 import org.junit.jupiter.api.Test;
 
 public class PersistenceUnitDomainBudgetUnitTestBenchmark extends AbstractWeldUnitTestBenchmark {

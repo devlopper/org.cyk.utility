@@ -6,7 +6,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.cyk.utility.__kernel__.array.ArrayTwoDimensionString;
 import org.cyk.utility.__kernel__.number.Interval;
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 
 public class ExcelSheetReaderUnitTest extends AbstractWeldUnitTest {

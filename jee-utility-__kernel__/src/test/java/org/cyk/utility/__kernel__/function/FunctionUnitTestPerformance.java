@@ -2,7 +2,7 @@ package org.cyk.utility.__kernel__.function;
 
 import java.io.Serializable;
 
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTestPerformance;
+import org.cyk.utility.test.weld.AbstractWeldUnitTestPerformance;
 import org.junit.jupiter.api.Test;
 
 public class FunctionUnitTestPerformance extends AbstractWeldUnitTestPerformance {

@@ -24,7 +24,7 @@ import org.cyk.utility.__kernel__.__entities__.domain.budget.ServiceGroup;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.persistence.EntityManagerFactoryGetterImpl;
 import org.cyk.utility.__kernel__.random.RandomHelper;
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jol.info.GraphLayout;
 

@@ -19,7 +19,6 @@ import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
-import org.jboss.weld.exceptions.IllegalArgumentException;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

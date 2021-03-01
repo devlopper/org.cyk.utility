@@ -2,7 +2,7 @@ package org.cyk.utility.persistence.server;
 
 import javax.persistence.Persistence;
 
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.persistence.EntityManagerFactoryGetterImpl;
 import org.junit.jupiter.api.Test;
 

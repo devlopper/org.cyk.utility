@@ -11,7 +11,7 @@ import static org.cyk.utility.__kernel__.number.NumberHelper.operate;
 import java.math.BigDecimal;
 
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
