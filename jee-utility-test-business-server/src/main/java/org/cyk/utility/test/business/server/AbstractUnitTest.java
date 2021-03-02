@@ -1,8 +1,10 @@
-package org.cyk.utility.business.server;
+package org.cyk.utility.test.business.server;
 
+import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 
 import org.cyk.utility.persistence.EntityManagerFactoryGetterImpl;
+import org.cyk.utility.persistence.EntityManagerGetter;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 
 public abstract class AbstractUnitTest extends AbstractWeldUnitTest {
@@ -20,5 +22,16 @@ public abstract class AbstractUnitTest extends AbstractWeldUnitTest {
 	
 	protected String getPersistenceUnitName() {
 		return "default";
+	}
+	
+	/**/
+	
+	protected static void executeTransaction(Runnable runnable) {
+		if(runnable == null)
+			return;
+		EntityManager entityManager = EntityManagerGetter.getInstance().get();
+		entityManager.getTransaction().begin();
+		runnable.run();
+		entityManager.getTransaction().commit();
 	}
 }

@@ -1,0 +1,6 @@
+# Data source connection pool
+/subsystem=datasources/data-source=OracleDS:write-attribute(name=min-pool-size,value=5)
+/subsystem=datasources/data-source=OracleDS:write-attribute(name=max-pool-size,value=100)
+
+# Statistics
+#/subsystem=datasources/data-source=OracleDS:write-attribute(name=statistics-enabled,value=true)

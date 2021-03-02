@@ -33,6 +33,7 @@ public interface Initializer {
 		
 		LogHelper.logInfo(String.format("Persistence server has been initialized. Entity Manager Factory Instance is : %s",EntityManagerFactoryGetterImpl.ENTITY_MANAGER_FACTORY)
 				, Initializer.class);
+		INITIALIZED.set(Boolean.TRUE);
 	}
 	
 	Value INITIALIZED = new Value();

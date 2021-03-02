@@ -1,0 +1,13 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd" version="2.0">
+    <persistence-unit name="actorPersistenceUnit" transaction-type="JTA">
+    	<jta-data-source>java:jboss/datasources/ExampleDS</jta-data-source>
+		<shared-cache-mode>NONE</shared-cache-mode>
+    	<class>org.cyk.utility.business.server.DataType</class>		
+    	<exclude-unlisted-classes>true</exclude-unlisted-classes>
+		<properties>
+			<property name="javax.persistence.schema-generation.database.action" value="create"/>
+        	<property name="javax.persistence.sql-load-script-source" value="memory/data.sql" />
+			<property name="hibernate.physical_naming_strategy" value="org.cyk.utility.persistence.server.hibernate.PhysicalNamingStrategyStandardImpl"/>
+		</properties>
+    </persistence-unit>  
+</persistence>
