@@ -53,7 +53,7 @@ public interface EntityUpdater {
 		}
 		
 		protected void __update__(QueryExecutorArguments queryExecutorArguments) {
-			org.cyk.utility.__kernel__.persistence.query.EntityUpdater.getInstance().updateMany(queryExecutorArguments);
+			org.cyk.utility.persistence.query.EntityUpdater.getInstance().updateMany(queryExecutorArguments);
 		}
 	}
 	/**/

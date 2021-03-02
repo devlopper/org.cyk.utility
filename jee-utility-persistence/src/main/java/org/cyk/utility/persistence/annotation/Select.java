@@ -1,4 +1,4 @@
-package org.cyk.utility.persistence.server.annotation;
+package org.cyk.utility.persistence.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,8 +7,8 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value={ElementType.TYPE})
-public @interface Queries {
+public @interface Select {
 
-	Query[] value();
+	boolean isCountDerivable() default true;
 	
 }

@@ -1,4 +1,4 @@
-package org.cyk.utility.persistence.server.annotation;
+package org.cyk.utility.persistence.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

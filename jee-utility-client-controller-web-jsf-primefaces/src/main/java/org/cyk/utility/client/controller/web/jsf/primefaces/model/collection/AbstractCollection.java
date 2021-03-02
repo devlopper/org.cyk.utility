@@ -25,7 +25,7 @@ import org.cyk.utility.__kernel__.klass.NamingModel;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.object.Builder;
-import org.cyk.utility.__kernel__.persistence.query.QueryHelper;
+import org.cyk.utility.persistence.query.QueryHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.user.interface_.UserInterfaceAction;

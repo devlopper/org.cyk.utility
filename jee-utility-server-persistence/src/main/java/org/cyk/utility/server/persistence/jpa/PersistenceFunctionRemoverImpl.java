@@ -5,7 +5,7 @@ import java.io.Serializable;
 import javax.enterprise.context.Dependent;
 import javax.persistence.EntityManager;
 
-import org.cyk.utility.__kernel__.persistence.PersistenceHelper;
+import org.cyk.utility.persistence.PersistenceHelper;
 import org.cyk.utility.persistence.query.Query;
 import org.cyk.utility.persistence.query.QueryHelper;
 import org.cyk.utility.__kernel__.system.action.SystemAction;

@@ -41,7 +41,7 @@ public interface EntityDeletor {
 		}
 		
 		protected void __deleteMany__(QueryExecutorArguments queryExecutorArguments) {
-			org.cyk.utility.__kernel__.persistence.query.EntityDeletor.getInstance().deleteMany(queryExecutorArguments);
+			org.cyk.utility.persistence.query.EntityDeletor.getInstance().deleteMany(queryExecutorArguments);
 		}
 	}
 	/**/

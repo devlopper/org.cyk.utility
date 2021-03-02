@@ -5,7 +5,7 @@ import java.io.Serializable;
 import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.mapping.MappingHelper;
-import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
+import org.cyk.utility.persistence.query.Filter;
 import org.cyk.utility.__kernel__.properties.Properties;
 
 @Dependent

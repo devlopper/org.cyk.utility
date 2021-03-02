@@ -55,7 +55,7 @@ public interface EntityCreator {
 		}
 		
 		protected void __createMany__(QueryExecutorArguments queryExecutorArguments) {
-			org.cyk.utility.__kernel__.persistence.query.EntityCreator.getInstance().createMany(queryExecutorArguments);
+			org.cyk.utility.persistence.query.EntityCreator.getInstance().createMany(queryExecutorArguments);
 		}
 	
 		@Override

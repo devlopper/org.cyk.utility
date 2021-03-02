@@ -17,7 +17,7 @@ import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.client.controller.Controller;
 import org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString;
 import org.cyk.utility.client.controller.web.jsf.primefaces.PrimefacesHelper;
-import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
+import org.cyk.utility.persistence.query.Filter;
 import org.primefaces.event.NodeExpandEvent;
 
 import lombok.Getter;

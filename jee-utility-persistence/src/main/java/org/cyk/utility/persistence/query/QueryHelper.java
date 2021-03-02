@@ -43,7 +43,7 @@ public interface QueryHelper {
 			return;
 		Collection<Query> queries = null;
 		for(Class<?> klass : classes) {
-			org.cyk.utility.__kernel__.persistence.query.annotation.Query queryAnnotation = klass.getAnnotation(org.cyk.utility.__kernel__.persistence.query.annotation.Query.class);
+			org.cyk.utility.persistence.annotation.Query queryAnnotation = klass.getAnnotation(org.cyk.utility.persistence.annotation.Query.class);
 			if(queryAnnotation != null) {
 				Collection<Query> __queries__ = Query.buildFromAnnotation(queryAnnotation);
 				if(CollectionHelper.isNotEmpty(__queries__)) {
@@ -52,7 +52,7 @@ public interface QueryHelper {
 					queries.addAll(__queries__);
 				}
 			}
-			org.cyk.utility.__kernel__.persistence.query.annotation.Queries queriesAnnotation = klass.getAnnotation(org.cyk.utility.__kernel__.persistence.query.annotation.Queries.class);
+			org.cyk.utility.persistence.annotation.Queries queriesAnnotation = klass.getAnnotation(org.cyk.utility.persistence.annotation.Queries.class);
 			if(queriesAnnotation != null && ArrayHelper.isNotEmpty(queriesAnnotation.value())) {
 				Collection<Query> __queries__ = Query.buildFromAnnotation(queriesAnnotation);
 				if(CollectionHelper.isNotEmpty(__queries__)) {

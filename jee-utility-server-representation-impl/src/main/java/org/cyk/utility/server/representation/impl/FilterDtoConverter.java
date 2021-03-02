@@ -4,7 +4,8 @@ import javax.json.bind.JsonbBuilder;
 import javax.json.bind.JsonbException;
 import javax.ws.rs.ext.ParamConverter;
 
-import org.cyk.utility.__kernel__.persistence.query.filter.Filter;
+import org.cyk.utility.__kernel__.log.LogHelper;
+import org.cyk.utility.persistence.query.Filter;
 
 public class FilterDtoConverter implements ParamConverter<Filter.Dto> {
 
@@ -13,8 +14,8 @@ public class FilterDtoConverter implements ParamConverter<Filter.Dto> {
 		try {
 			return JsonbBuilder.create().fromJson(string, Filter.Dto.class);
 		} catch (JsonbException exception) {
-			System.out.println("FilterDtoConverter.fromString() : We cannot build Filter.Dto from "+string);
-			exception.printStackTrace();
+			LogHelper.logSevere("FilterDtoConverter.fromString() : We cannot build Filter.Dto from "+string, getClass());
+			LogHelper.log(exception, getClass());
 			return null;
 		}
 	}
@@ -24,10 +25,9 @@ public class FilterDtoConverter implements ParamConverter<Filter.Dto> {
 		try {
 			return JsonbBuilder.create().toJson(filterDto);
 		} catch (JsonbException exception) {
-			System.out.println("FilterDtoConverter.toString() : We cannot build String from filter "+filterDto);
-			exception.printStackTrace();
+			LogHelper.logSevere("FilterDtoConverter.toString() : We cannot build String from filter "+filterDto,getClass());
+			LogHelper.log(exception, getClass());
 			return null;
 		}
 	}
-
 }

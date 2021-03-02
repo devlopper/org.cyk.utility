@@ -83,7 +83,7 @@ public interface EntitySaver {
 	
 	/**/
 	
-	public static class AbstractPersistenceArgumentsListener<T> extends org.cyk.utility.__kernel__.persistence.EntitySaver.Listener.AbstractImpl<T> {
+	public static class AbstractPersistenceArgumentsListener<T> extends org.cyk.utility.persistence.query.EntitySaver.Listener.AbstractImpl<T> {
 		
 		@Override
 		public void create(Collection<T> collection, EntityManager entityManager) {

@@ -50,7 +50,7 @@ public interface ProcedureExecutor {
 		}
 		
 		protected void releaseConnection(StoredProcedureQuery storedProcedureQuery,String name) {
-			LogHelper.logWarning(String.format("#### WE DO NOT KNOW HOW TO RELEASE CONNECTION FROM STORED PROCEDURE QUERY named <<%s>> ####", name), getClass());
+			LogHelper.logWarning(String.format("#### WE DO NOT KNOW HOW TO RELEASE CONNECTION FROM STORED PROCEDURE QUERY named <<%s>> #### --- #### THIS CAN PRODUCE CONNECTION LEAK ####", name), getClass());
 		}
 		
 		@Override

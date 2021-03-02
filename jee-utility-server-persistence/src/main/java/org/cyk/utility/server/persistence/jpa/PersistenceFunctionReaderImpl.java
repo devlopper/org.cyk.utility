@@ -12,7 +12,7 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.field.FieldName;
-import org.cyk.utility.__kernel__.persistence.PersistenceHelper;
+import org.cyk.utility.persistence.PersistenceHelper;
 import org.cyk.utility.persistence.query.Query;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.StringHelper;

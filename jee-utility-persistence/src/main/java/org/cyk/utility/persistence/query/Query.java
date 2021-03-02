@@ -133,7 +133,7 @@ public class Query extends AbstractObject implements Serializable {
 		return build(MapHelper.instantiate(objects));
 	}
 	
-	public static Collection<Query> buildFromAnnotation(org.cyk.utility.__kernel__.persistence.query.annotation.Query annotation) {
+	public static Collection<Query> buildFromAnnotation(org.cyk.utility.persistence.annotation.Query annotation) {
 		if(annotation == null)
 			return null;
 		Collection<Query> queries = null;
@@ -156,11 +156,11 @@ public class Query extends AbstractObject implements Serializable {
 		return queries;
 	}
 	
-	public static Collection<Query> buildFromAnnotation(org.cyk.utility.__kernel__.persistence.query.annotation.Queries annotation) {
+	public static Collection<Query> buildFromAnnotation(org.cyk.utility.persistence.annotation.Queries annotation) {
 		if(annotation == null || ArrayHelper.isEmpty(annotation.value()))
 			return null;
 		Collection<Query> queries = null;
-		for(org.cyk.utility.__kernel__.persistence.query.annotation.Query queryAnnotation : annotation.value()) {
+		for(org.cyk.utility.persistence.annotation.Query queryAnnotation : annotation.value()) {
 			Collection<Query> __queries__ = buildFromAnnotation(queryAnnotation);
 			if(CollectionHelper.isEmpty(__queries__))
 				continue;
