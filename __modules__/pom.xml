@@ -62,6 +62,12 @@
 		<module>../jee-utility-client-controller-web-jsf-primefaces</module>
 		<module>../jee-utility-client-deployment</module>
 		
+		<module>../jee-utility-test</module>		
+		<module>../jee-utility-test-persistence-server</module>
+		<module>../jee-utility-test-business-server</module>
+		<module>../jee-utility-test-representation-server</module>
+		<module>../jee-utility-test-controller</module>
+		
 		<!--
 		<module>../jee-utility-client-controller-web-jsf-primefaces-playground-common</module>
 		<module>../jee-utility-client-controller-web-jsf-primefaces-deployment-web</module>

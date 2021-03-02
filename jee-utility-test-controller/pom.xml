@@ -4,17 +4,17 @@
 	<modelVersion>4.0.0</modelVersion>
 	
 	<parent>
-		<groupId>org.cyk.pom.jee.utility.test.persistence.server</groupId>
-		<artifactId>pom-jee-utility-test-persistence-server</artifactId>
-		<version>pom.jee.utility.test.persistence.server.0.1.0</version>
+		<groupId>org.cyk.pom.jee.utility.test.controller</groupId>
+		<artifactId>pom-jee-utility-test-controller</artifactId>
+		<version>pom.jee.utility.test.controller.0.1.0</version>
 	</parent>
 	
-	<groupId>org.cyk.jee.utility.test.persistence.server</groupId>
-	<artifactId>jee-utility-test-persistence-server</artifactId>
+	<groupId>org.cyk.jee.utility.test.controller</groupId>
+	<artifactId>jee-utility-test-controller</artifactId>
 	<version>0.1.0</version>
 	<packaging>jar</packaging>
 
-	<name>jee-utility-test-persistence-server</name>
+	<name>jee-utility-test-controller</name>
 	<url>http://maven.apache.org</url>
 
 	<dependencies>
@@ -25,8 +25,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.cyk.jee.utility.persistence.server</groupId>
-			<artifactId>jee-utility-persistence-server</artifactId>
+			<groupId>org.cyk.jee.utility.controller</groupId>
+			<artifactId>jee-utility-controller</artifactId>
 			<version>0.1.0</version>
 		</dependency>
 	</dependencies>
