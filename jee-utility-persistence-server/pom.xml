@@ -24,6 +24,15 @@
 			<version>0.1.0</version>
 		</dependency>
 		
+		<!-- Test -->
+		
+		<dependency>
+			<groupId>org.cyk.jee.utility.test</groupId>
+			<artifactId>jee-utility-test</artifactId>
+			<version>0.1.0</version>
+			<scope>test</scope>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
@@ -35,13 +44,6 @@
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<version>1.4.197</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.cyk.jee.utility.test</groupId>
-			<artifactId>jee-utility-test</artifactId>
-			<version>0.1.0</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

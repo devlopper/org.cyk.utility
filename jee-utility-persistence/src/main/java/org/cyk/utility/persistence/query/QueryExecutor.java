@@ -3,6 +3,7 @@ package org.cyk.utility.persistence.query;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -55,6 +56,8 @@ public interface QueryExecutor {
 	}
 	
 	Integer executeUpdateOrDelete(QueryExecutorArguments arguments);
+	
+	
 	
 	/**/
 	
@@ -119,6 +122,22 @@ public interface QueryExecutor {
 			return query.executeUpdate();
 		}
 
+		public Collection<Object[]> readByValues(Collection<String> values) {
+			if(CollectionHelper.isEmpty(values))
+				return null;
+			Collection<Object[]> collection = null;
+			for(List<String> list : CollectionHelper.getBatches((List<String>) values, 1000)) {
+				Collection<Object[]> result = EntityManagerGetter.getInstance().get().createNativeQuery("SELECT email,message FROM V_APP_EX_COMPTE_ERREUR WHERE email IN :emails")
+						.setParameter("emails", list).getResultList();
+				if(CollectionHelper.isNotEmpty(result)) {
+					if(collection == null)
+						collection = new ArrayList<>();
+					collection.addAll(result);
+				}
+			}
+			return collection;
+		}
+		
 		/**/
 		
 		protected void validatePreConditions(Class<?> resultClass, QueryExecutorArguments arguments) {

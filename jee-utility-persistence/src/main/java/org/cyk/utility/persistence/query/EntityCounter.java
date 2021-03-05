@@ -9,19 +9,9 @@ import org.cyk.utility.__kernel__.value.Value;
 
 public interface EntityCounter {
 
-	<T> Long count(Class<T> tupleClass,QueryExecutorArguments arguments);
-	
-	default <T> Long count(Class<T> tupleClass) {
-		if(tupleClass == null)
-			throw new RuntimeException("Tuple class is required");
-		return count(tupleClass,null);
-	}
-	
-	default <T> Long count(Class<T> tupleClass,String queryIdentifier,Object...filterFieldsValues) {
-		if(tupleClass == null)
-			throw new RuntimeException("Tuple class is required");
-		return count(tupleClass,new QueryExecutorArguments().setQueryFromIdentifier(queryIdentifier).addFilterFieldsValues(filterFieldsValues));
-	}
+	Long count(Class<?> tupleClass,QueryExecutorArguments arguments);	
+	Long count(Class<?> tupleClass,String queryIdentifier,Object...filterFieldsValues);
+	Long count(Class<?> tupleClass);		
 	
 	/**/
 	
@@ -29,18 +19,36 @@ public interface EntityCounter {
 		private static final long serialVersionUID = 1L;		
 		
 		@Override
-		public <T> Long count(Class<T> tupleClass,QueryExecutorArguments arguments) {
-			if(tupleClass == null)
-				throw new RuntimeException("Tuple class is required");
+		public Long count(Class<?> tupleClass,QueryExecutorArguments arguments) {
+			validatePreconditions(tupleClass);
 			if(arguments == null)
 				arguments = new QueryExecutorArguments();
 			if(arguments.getQuery() == null) {
 				String queryIdentifier = QueryHelper.getIdentifierCountAll(tupleClass);
-				arguments.setQuery(QueryHelper.getQueries().getByIdentifier(queryIdentifier));
+				arguments.setQuery(QueryGetter.getInstance().get(queryIdentifier));
 				if(arguments.getQuery() == null)
 					arguments.setQuery(QueryGetter.getInstance().getByCount(tupleClass, QueryName.COUNT.getValue(),String.format("SELECT COUNT(tuple) FROM %s tuple",tupleClass.getSimpleName())));
 			}
 			return QueryExecutor.getInstance().executeCount(arguments);
+		}
+		
+		@Override
+		public Long count(Class<?> tupleClass,String queryIdentifier,Object...filterFieldsValues) {
+			validatePreconditions(tupleClass);
+			return count(tupleClass,new QueryExecutorArguments().setQueryFromIdentifier(queryIdentifier).addFilterFieldsValues(filterFieldsValues));
+		}
+		
+		@Override
+		public Long count(Class<?> tupleClass) {
+			validatePreconditions(tupleClass);
+			return count(tupleClass,null);
+		}
+		
+		/**/
+		
+		protected static void validatePreconditions(Class<?> tupleClass) {
+			if(tupleClass == null)
+				throw new RuntimeException("Tuple class to be count is required");
 		}
 	}
 	

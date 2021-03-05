@@ -7,7 +7,6 @@ import org.cyk.utility.__kernel__.annotation.Persistence;
 import org.cyk.utility.__kernel__.instance.InstanceGetter;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.mapping.MapperClassGetter;
-import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.persistence.EntityManagerFactoryGetterImpl;
 import org.cyk.utility.persistence.query.Field;
 import org.cyk.utility.persistence.query.Filter;
@@ -17,8 +16,6 @@ import org.cyk.utility.persistence.query.QueryHelper;
 public interface Initializer {
 
 	static void initialize() {
-		if(Boolean.TRUE.equals(INITIALIZED.get()))
-			return;
 		if(EntityManagerFactoryGetterImpl.ENTITY_MANAGER_FACTORY == null)
 			EntityManagerFactoryGetterImpl.ENTITY_MANAGER_FACTORY = DependencyInjection.inject(EntityManagerFactory.class);
 		QueryHelper.getQueries().setIsRegisterableToEntityManager(Boolean.TRUE);
@@ -33,8 +30,5 @@ public interface Initializer {
 		
 		LogHelper.logInfo(String.format("Persistence server has been initialized. Entity Manager Factory Instance is : %s",EntityManagerFactoryGetterImpl.ENTITY_MANAGER_FACTORY)
 				, Initializer.class);
-		INITIALIZED.set(Boolean.TRUE);
 	}
-	
-	Value INITIALIZED = new Value();
 }
