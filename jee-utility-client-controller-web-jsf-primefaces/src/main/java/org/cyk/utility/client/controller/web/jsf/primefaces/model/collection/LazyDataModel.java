@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.model.collection;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -197,6 +198,12 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 						.setFilter(lazyDataModel.__filter__))
 						.setCountable(Boolean.TRUE))
 						.setLoggableAsInfo(lazyDataModel.loggableAsInfo);
+				if(StringHelper.isNotBlank(lazyDataModel.__sortField__)) {
+					LinkedHashMap<String, org.cyk.utility.__kernel__.computation.SortOrder> map = new LinkedHashMap<>();
+					map.put(lazyDataModel.__sortField__,SortOrder.DESCENDING.equals(lazyDataModel.__sortOrder__) 
+							? org.cyk.utility.__kernel__.computation.SortOrder.DESCENDING : org.cyk.utility.__kernel__.computation.SortOrder.ASCENDING);
+					arguments.getRepresentationArguments().getQueryExecutorArguments().setSortOrders(map);
+				}
 				return arguments;
 			}
 			

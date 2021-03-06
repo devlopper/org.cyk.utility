@@ -49,8 +49,8 @@ public interface QueryResultMapper {
 					for(Object result : arguments.objects)
 						collection.add((T) result);
 				}else {
-					if(Boolean.TRUE.equals(QueryExecutor.AbstractImpl.LOGGABLE))
-						LogHelper.log(String.format("Instantiating %s by setting fields names %s",resultClass,arguments.query.getTupleFieldsNamesIndexes()), QueryExecutor.AbstractImpl.LOG_LEVEL, getClass());
+					//if(Boolean.TRUE.equals(QueryExecutor.AbstractImpl.LOGGABLE))
+					//	LogHelper.log(String.format("Instantiating %s by setting fields names %s",resultClass,arguments.query.getTupleFieldsNamesIndexes()), QueryExecutor.AbstractImpl.LOG_LEVEL, getClass());
 					arguments.objects.forEach(array -> {
 						collection.add(instantiate(resultClass, arguments.query.getTupleFieldsNamesIndexes(), array));
 					});
@@ -65,8 +65,8 @@ public interface QueryResultMapper {
 		}
 		
 		protected <T> T instantiate(Class<T> klass,Map<String,Integer> fieldsNamesIndexes,Object[] array) {
-			if(Boolean.TRUE.equals(QueryExecutor.AbstractImpl.LOGGABLE))
-				LogHelper.log(String.format("\tvalues %s",Arrays.toString(array)), QueryExecutor.AbstractImpl.LOG_LEVEL, getClass());
+			//if(Boolean.TRUE.equals(QueryExecutor.AbstractImpl.LOGGABLE))
+			//	LogHelper.log(String.format("\tvalues %s",Arrays.toString(array)), QueryExecutor.AbstractImpl.LOG_LEVEL, getClass());
 			ThrowableHelper.throwIllegalArgumentExceptionIfEmpty("fieldsNamesIndexes", fieldsNamesIndexes);
 			T instance = ClassHelper.instanciate(klass);
 			fieldsNamesIndexes.forEach( (fieldName,index) -> {

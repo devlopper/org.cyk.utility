@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.computation.SortOrder;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.mapping.MapperSourceDestination;
 import org.cyk.utility.__kernel__.mapping.MappingHelper;
@@ -38,6 +39,7 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 	private Boolean isResultCachable;
 	private Boolean isResultProcessable;
 	private Filter filter;
+	private Map<String,SortOrder> sortOrders;
 	private Integer firstTupleIndex;
 	private Integer numberOfTuples;
 	private Collection<Object> objects;
@@ -335,6 +337,7 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 		private String queryIdentifier;
 		private ArrayList<String> processableTransientFieldsNames;
 		private Filter.Dto filter;
+		private LinkedHashMap<String,SortOrder> sortOrders;
 		private Integer firstTupleIndex;
 		private Integer numberOfTuples;
 		private Boolean isResultCachable;

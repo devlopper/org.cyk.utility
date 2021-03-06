@@ -30,8 +30,8 @@ public class Column extends AbstractObject implements Serializable {
 	private Value.Type valueType;
 	private FilterInputType filterInputType;
 	private Collection<SelectItem> filterInputSelectItems;
-	private String headerText,footerText,footerStyle,footerStyleClass,selectionMode,width,filterBy,fieldName,field;
-	private Boolean visible = Boolean.TRUE,inputable;
+	private String headerText,footerText,footerStyle,footerStyleClass,selectionMode,width,filterBy,sortBy,fieldName,field;
+	private Boolean visible = Boolean.TRUE,inputable,sortable;
 	private Object filterValue;
 	private Integer index;
 	private OutputText footerOutputText;
@@ -58,6 +58,8 @@ public class Column extends AbstractObject implements Serializable {
 	public static final String FIELD_FIELD_NAME = "fieldName";
 	public static final String FIELD_FIELD_TYPE = "fieldType";
 	public static final String FIELD_FILTER_BY = "filterBy";
+	public static final String FIELD_SORTABLE = "sortable";
+	public static final String FIELD_SORT_BY = "sortBy";
 	public static final String FIELD_VISIBLE = "visible";
 	public static final String FIELD_VALUE_TYPE = "valueType";
 	public static final String FIELD_REMOVE_COMMAND_BUTTON = "removeCommandButton";
@@ -117,6 +119,8 @@ public class Column extends AbstractObject implements Serializable {
 					column.headerText = InternationalizationHelper.buildString(InternationalizationHelper.buildKey(column.fieldName),null,null,Case.FIRST_CHARACTER_UPPER);	
 				}				
 			}
+			if(column.sortable == null)
+				column.sortable = StringHelper.isNotBlank(column.sortBy);
 			Boolean isFilterable = (Boolean) MapHelper.readByKey(arguments, FIELD_FILTERABLE);
 			if(isFilterable == null)
 				isFilterable = Boolean.FALSE;
