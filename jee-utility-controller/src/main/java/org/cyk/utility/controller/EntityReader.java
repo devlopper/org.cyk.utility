@@ -29,6 +29,17 @@ public interface EntityReader {
 				.setQueryExecutorArguments(new QueryExecutorArguments.Dto().setQueryIdentifier(queryIdentifier).addFilterFieldsValues(filterFieldsValues))));
 	}
 	
+	default <ENTITY> Collection<ENTITY> readMany(Class<ENTITY> controllerEntityClass,String queryIdentifier,String[] processableTransientFieldsNames
+			,Object...filterFieldsValues) {
+		if(controllerEntityClass == null)
+			throw new RuntimeException("controller entity class is required");
+		return readMany(controllerEntityClass, new Arguments<ENTITY>().setControllerEntityClass(controllerEntityClass)
+				.setRepresentationArguments(new org.cyk.utility.representation.Arguments()
+				.setQueryExecutorArguments(new QueryExecutorArguments.Dto().setQueryIdentifier(queryIdentifier).addFilterFieldsValues(filterFieldsValues)
+				.addProcessableTransientFieldsNames(processableTransientFieldsNames)
+				)));
+	}
+	
 	<ENTITY> ENTITY readOne(Class<ENTITY> controllerEntityClass,Arguments<ENTITY> arguments);
 	
 	default <ENTITY> ENTITY readOne(Class<ENTITY> controllerEntityClass,String queryIdentifier,Object...filterFieldsValues) {
@@ -37,6 +48,15 @@ public interface EntityReader {
 		return readOne(controllerEntityClass, new Arguments<ENTITY>().setControllerEntityClass(controllerEntityClass)
 				.setRepresentationArguments(new org.cyk.utility.representation.Arguments()
 				.setQueryExecutorArguments(new QueryExecutorArguments.Dto().setQueryIdentifier(queryIdentifier).addFilterFieldsValues(filterFieldsValues))));
+	}
+	
+	default <ENTITY> ENTITY readOne(Class<ENTITY> controllerEntityClass,String queryIdentifier,String[] processableTransientFieldsNames,Object...filterFieldsValues) {
+		if(controllerEntityClass == null)
+			throw new RuntimeException("controller entity class is required");
+		return readOne(controllerEntityClass, new Arguments<ENTITY>().setControllerEntityClass(controllerEntityClass)
+				.setRepresentationArguments(new org.cyk.utility.representation.Arguments()
+				.setQueryExecutorArguments(new QueryExecutorArguments.Dto().setQueryIdentifier(queryIdentifier).addFilterFieldsValues(filterFieldsValues)
+						.addProcessableTransientFieldsNames(processableTransientFieldsNames))));
 	}
 	
 	/**/

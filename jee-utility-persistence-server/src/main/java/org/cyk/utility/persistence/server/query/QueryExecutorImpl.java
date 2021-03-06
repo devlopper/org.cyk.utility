@@ -17,6 +17,7 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.SortOrder;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
+import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.time.TimeHelper;
@@ -28,10 +29,11 @@ import org.cyk.utility.persistence.query.QueryExecutor;
 import org.cyk.utility.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.persistence.query.QueryGetter;
 import org.cyk.utility.persistence.query.QueryResultMapper;
+import org.cyk.utility.persistence.server.TransientFieldsProcessor;
 import org.cyk.utility.persistence.server.query.string.OrderStringBuilder;
 import org.cyk.utility.persistence.server.query.string.Replacer;
 
-public class QueryExecutorImpl extends QueryExecutor.AbstractImpl implements Serializable {
+public class QueryExecutorImpl extends AbstractObject implements QueryExecutor,Serializable {
 
 	public static Boolean LOGGABLE = Boolean.TRUE;
 	public static Level LOG_LEVEL = Level.FINEST;
@@ -58,9 +60,11 @@ public class QueryExecutorImpl extends QueryExecutor.AbstractImpl implements Ser
 					resultMapperArguments.setTuples((Collection<Tuple>) result);
 				else
 					resultMapperArguments.setObjects((Collection<Object[]>) result);
-				collection = QueryResultMapper.getInstance().map(resultClass, resultMapperArguments);
+				collection = QueryResultMapper.getInstance().map(resultClass, resultMapperArguments);				
 			}
 		}
+		if(CollectionHelper.isNotEmpty(collection) && CollectionHelper.isNotEmpty(arguments.getProcessableTransientFieldsNames()))
+			TransientFieldsProcessor.getInstance().process(collection,arguments.getProcessableTransientFieldsNames());
 		arguments.set__objects__(collection);
 		arguments.finalise();
 		if(CollectionHelper.isNotEmpty(collection))
@@ -69,6 +73,26 @@ public class QueryExecutorImpl extends QueryExecutor.AbstractImpl implements Ser
 			LogHelper.log(String.format("collection size = %s , duration = %s", CollectionHelper.getSize(collection),TimeHelper.formatDuration(duration)), LOG_LEVEL,getClass());
 		}
 		return collection;
+	}
+	
+	@Override
+	public <T> Collection<T> executeReadMany(Class<T> resultClass) {
+		return executeReadMany(resultClass, new QueryExecutorArguments().setQuery(QueryGetter.getInstance().getBySelect(resultClass)));
+	}
+	
+	@Override
+	public <T> Collection<T> executeReadMany(Class<T> resultClass,String queryIdentifier,Object...filterFieldsValues) {
+		if(resultClass == null)
+			throw new RuntimeException("Result class is required");
+		return executeReadMany(resultClass, new QueryExecutorArguments().setQueryFromIdentifier(queryIdentifier).addFilterFieldsValues(filterFieldsValues));
+	}
+	
+	@Override
+	public <T> T executeReadOne(Class<T> resultClass,QueryExecutorArguments arguments) {
+		Collection<T> collection = executeReadMany(resultClass, arguments);
+		if(CollectionHelper.getSize(collection) > 1)
+			throw new RuntimeException(String.format("read.one : too much result found after executing query %s with filter %s",arguments.getQuery(),arguments.get__parameters__()));
+		return CollectionHelper.getFirst(collection);
 	}
 	
 	protected <T> Collection<T> processResult(Class<T> resultClass, QueryExecutorArguments arguments,Collection<T> collection) {

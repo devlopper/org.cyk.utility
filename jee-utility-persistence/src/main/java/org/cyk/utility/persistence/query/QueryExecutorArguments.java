@@ -363,6 +363,27 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 			return this;
 		}
 		
+		public ArrayList<String> getProcessableTransientFieldsNames(Boolean injectIfNull) {
+			if(processableTransientFieldsNames == null && Boolean.TRUE.equals(injectIfNull))
+				processableTransientFieldsNames = new ArrayList<>();
+			return processableTransientFieldsNames;
+		}
+		
+		public Dto addProcessableTransientFieldsNames(ArrayList<String> processableTransientFieldsNames) {
+			if(CollectionHelper.isEmpty(processableTransientFieldsNames))
+				return this;
+			getProcessableTransientFieldsNames(Boolean.TRUE).addAll(processableTransientFieldsNames);
+			return this;
+		}
+		
+		public Dto addProcessableTransientFieldsNames(String...processableTransientFieldsNames) {
+			if(ArrayHelper.isEmpty(processableTransientFieldsNames))
+				return this;
+			ArrayList<String> list = new ArrayList<>();
+			list.addAll(CollectionHelper.listOf(processableTransientFieldsNames));
+			return addProcessableTransientFieldsNames(list);
+		}
+		
 		@Override
 		public String toString() {
 			Collection<String> strings = new ArrayList<>();
