@@ -6,20 +6,23 @@ import java.util.Map;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
+import org.cyk.utility.__kernel__.string.StringHelper;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
-@Getter @Setter
+@Getter @Setter @Accessors(chain=true)
 public class OutputLabel extends AbstractOutput<String> implements Serializable {
 
-	private String for_;
+	private String for_,title;
 	
 	/**/
 	
 	/**/
 	
 	public static final String FIELD_FOR = "for_";
+	public static final String FIELD_TITLE = "title";
 	
 	/**/
 	
@@ -28,7 +31,8 @@ public class OutputLabel extends AbstractOutput<String> implements Serializable 
 		@Override
 		public void configure(OutputLabel outputLabel, Map<Object, Object> arguments) {
 			super.configure(outputLabel, arguments);
-			
+			if(StringHelper.isBlank(outputLabel.title))
+				outputLabel.title = outputLabel.value;
 		}
 		
 		@Override

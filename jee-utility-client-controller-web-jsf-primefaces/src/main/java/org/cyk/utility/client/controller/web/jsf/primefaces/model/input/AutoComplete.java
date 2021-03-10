@@ -130,9 +130,13 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 	
 	public AutoComplete enableAjaxItemSelect() {
 		getAjaxes().get("itemSelect").setDisabled(Boolean.FALSE).setListener(new Ajax.Listener.AbstractImpl() {
+			@SuppressWarnings({ "unchecked" })
 			@Override
 			public void run(AbstractAction action) {
-				itemSelected = FieldHelper.read(action.get__argument__(), "source.value");
+				if(listener == null)
+					itemSelected = FieldHelper.read(action.get__argument__(), "source.value");
+				else
+					((Listener<Object>)listener).select(AutoComplete.this, FieldHelper.read(action.get__argument__(), "source.value"));
 			}
 		});
 		return this;
@@ -229,7 +233,8 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 		Properties instantiateReadProperties(AutoComplete autoComplete);
 		Collection<T> complete(AutoComplete autoComplete);
 		Response getResponse(AutoComplete autoComplete);
-		Integer getCount(AutoComplete autoComplete);
+		Integer getCount(AutoComplete autoComplete);		
+		void select(AutoComplete autoComplete,T choice);
 		
 		default void listenComplete(AutoComplete autoComplete,Runner.Arguments arguments,Filter.Dto filter,String queryString) {
 			if(autoComplete == null || autoComplete.controllerEntity == null) {
@@ -318,7 +323,13 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 						}
 					});				
 					return (Collection<T>) Runner.getInstance().run(arguments);	
-				}				
+				}
+			}
+			
+			@Override
+			public void select(AutoComplete autoComplete,T choice) {
+				autoComplete.setValue(choice);
+				autoComplete.setItemSelected(choice);
 			}
 			
 			@Override

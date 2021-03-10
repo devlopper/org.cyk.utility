@@ -116,6 +116,13 @@ public class AbstractInputChoiceOne extends AbstractInputChoice<Object> implemen
 		return this;
 	}
 	
+	public AbstractInputChoiceOne selectByValueSystemIdentifier() {
+		if(value == null)
+			return this;
+		selectBySystemIdentifier(FieldHelper.readSystemIdentifier(value));
+		return this;
+	}
+	
 	/**/
 	
 	

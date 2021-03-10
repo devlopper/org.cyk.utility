@@ -33,6 +33,15 @@ import one.util.streamex.StreamEx;
 
 public interface CollectionHelper {
 
+	static <T> Collection<T> filterByInstanceOf(Class<T> klass,Collection<?> elements) {
+		if(klass == null || CollectionHelper.isEmpty(elements))
+			return null;
+		Collection<?> result = elements.stream().filter(x -> ClassHelper.isInstanceOf(x.getClass(), klass)).collect(Collectors.toList());
+		if(CollectionHelper.isEmpty(result))
+			return null;
+		return cast(klass, result);
+	}
+	
 	static <T> void addNullAtFirstIfSizeGreaterThanOne(Collection<T> collection) {
 		if(getSize(collection) > 1)
 			addElementAt(collection, 0, null);

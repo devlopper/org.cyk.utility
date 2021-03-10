@@ -17,4 +17,8 @@ public class FromStringBuilderUnitTest extends AbstractWeldUnitTest {
 		assertThat(FromStringBuilder.getInstance().build(new Tuple().add("T t","E e").addJoins("LEFT JOIN N n ON n.e = e"))).isEqualTo("FROM T t,E e LEFT JOIN N n ON n.e = e");
 	}
 
+	@Test
+	public void from_leftJoin_tuple(){
+		assertThat(FromStringBuilder.getInstance().build(new Tuple("T").leftJoinTuple("N"))).isEqualTo("FROM T t LEFT JOIN N n ON n = t.n");
+	}
 }

@@ -11,6 +11,7 @@ import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.Value;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
@@ -63,9 +64,19 @@ public interface FromStringBuilder {
 	
 	/**/
 	
-	@Getter @Setter @Accessors(chain=true)
+	@Getter @Setter @Accessors(chain=true) @NoArgsConstructor
 	public static class Tuple extends org.cyk.utility.__kernel__.string.List implements Serializable {
+		private String variableName;
 		private Join join;
+		
+		public Tuple(String name,String variableName) {
+			this.variableName = variableName;
+			add(name+" "+variableName);
+		}
+		
+		public Tuple(String name) {
+			this(name,StringHelper.getVariableNameFrom(name));
+		}
 		
 		public Join getJoin(Boolean injectIfNull) {
 			if(join == null && Boolean.TRUE.equals(injectIfNull))
@@ -93,6 +104,16 @@ public interface FromStringBuilder {
 			return this;
 		}
 		
+		public Tuple leftJoinTuple(String tupleName) {
+			getJoin(Boolean.TRUE).addFromTupleLeft(tupleName, variableName);
+			return this;
+		}
+		
+		public Tuple leftJoinTuple(String tupleName,String variableName) {
+			getJoin(Boolean.TRUE).addFromTupleLeft(tupleName, variableName);
+			return this;
+		}
+		
 		/**/
 		
 		@Getter @Setter @Accessors(chain=true)
@@ -107,6 +128,24 @@ public interface FromStringBuilder {
 			public Join add(String... strings) {
 				return (Join) super.add(strings);
 			}
+			
+			public Join addFromTuple(String tupleName,String variableName,String fieldName,JoinType type) {
+				if(StringHelper.isBlank(fieldName))
+					fieldName = StringHelper.getVariableNameFrom(tupleName);
+				if(type == null)
+					type = JoinType.LEFT;
+				return add(String.format(FORMAT, type,tupleName,fieldName,variableName));
+			}
+			
+			public Join addFromTupleLeft(String tupleName,String variableName,String fieldName) {
+				return addFromTuple(tupleName, variableName, fieldName, JoinType.LEFT);
+			}
+			
+			public Join addFromTupleLeft(String tupleName,String variableName) {
+				return addFromTupleLeft(tupleName, variableName, null);
+			}
+
+			private static final String FORMAT = "%1$s JOIN %2$s %3$s ON %3$s = %4$s.%3$s";
 		}
 	}
 	
