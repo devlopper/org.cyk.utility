@@ -36,6 +36,7 @@ public class Query extends AbstractObject implements Serializable {
 	private Query queryDerivedFromQuery;
 	private Map<String,Integer> tupleFieldsNamesIndexes;
 	private QueryType type;
+	//private Boolean processableAtRuntime;
 	
 	public Query setQueryDerivedFromQueryIdentifier(Object identifier){
 		setQueryDerivedFromQuery(QueryHelper.getQueries().getBySystemIdentifier(identifier, Boolean.TRUE));
@@ -70,6 +71,7 @@ public class Query extends AbstractObject implements Serializable {
 	public static final String FIELD_RESULT_CLASS = "resultClass";
 	public static final String FIELD_TUPLE_FIELDS_NAMES_INDEXES = "tupleFieldsNamesIndexes";
 	public static final String FIELD_TYPE = "type";
+	//public static final String FIELD_PROCESSABLE_AT_RUNTIME = "processableAtRuntime";
 	
 	/**/
 	

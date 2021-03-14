@@ -40,6 +40,7 @@ public class QueryExecutorImpl extends AbstractObject implements QueryExecutor,S
 			
 	@Override
 	public <T> Collection<T> executeReadMany(Class<T> resultClass, QueryExecutorArguments arguments) {
+		RuntimeQueryBuilder.getInstance().build(arguments);
 		validatePreConditions(resultClass, arguments);
 		arguments.prepare(resultClass);
 		TypedQuery<?> typedQuery = __getTypedQuery__(arguments.get__resultClass__(), arguments.get__query__(),arguments.get__parameters__(),arguments.getSortOrders()

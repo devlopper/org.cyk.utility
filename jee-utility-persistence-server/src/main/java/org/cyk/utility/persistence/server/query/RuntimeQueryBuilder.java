@@ -1,6 +1,8 @@
 package org.cyk.utility.persistence.server.query;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashSet;
 
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
@@ -23,7 +25,8 @@ public interface RuntimeQueryBuilder {
 		public Query build(QueryExecutorArguments arguments) {
 			ThrowableHelper.throwIllegalArgumentExceptionIfNull("arguments", arguments);
 			ThrowableHelper.throwIllegalArgumentExceptionIfNull("query", arguments.getQuery());
-			
+			if(!Boolean.TRUE.equals(isBuildable(arguments)))
+				return arguments.getQuery();
 			return __build__(arguments);
 		}
 		
@@ -48,6 +51,10 @@ public interface RuntimeQueryBuilder {
 			
 			return query;
 		}
+		
+		protected Boolean isBuildable(QueryExecutorArguments arguments) {
+			return BUILDABLES.contains(arguments.getQuery().getIdentifier());
+		}
 	}
 	
 	/**/
@@ -59,4 +66,6 @@ public interface RuntimeQueryBuilder {
 	}
 	
 	Value INSTANCE = new Value();	
+	
+	Collection<String> BUILDABLES = new HashSet<>();
 }
