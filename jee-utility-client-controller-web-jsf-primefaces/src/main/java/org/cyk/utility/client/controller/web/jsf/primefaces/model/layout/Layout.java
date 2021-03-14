@@ -13,8 +13,11 @@ import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
+import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.AbstractInput;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.layout.Cell.WidthUnit;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.output.OutputText;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.panel.OutputPanel;
 
 import lombok.Getter;
@@ -31,6 +34,20 @@ public class Layout extends OutputPanel implements Serializable {
 	private Integer numberOfRows,numberOfColumns;
 	
 	private Object container;
+	
+	public Layout addLabelValue(String label,String value,String blankValue) {
+		if(StringHelper.isBlank(label))
+			return this;
+		addCellsByMaps(CollectionHelper.listOf(
+				MapHelper.instantiate(Cell.FIELD_CONTROL,OutputText.buildFromValue(label),Cell.FIELD_WIDTH,4)
+				,MapHelper.instantiate(Cell.FIELD_CONTROL,OutputText.buildFromValue(ValueHelper.defaultToIfBlank(value,blankValue)),Cell.FIELD_WIDTH,8)
+			));
+		return this;
+	}
+	
+	public Layout addLabelValue(String label,String value) {
+		return addLabelValue(label, value, "--- NA ---");
+	}
 	
 	public Cell getCellAt(Integer index) {
 		if(index == null)

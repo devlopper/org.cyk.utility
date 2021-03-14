@@ -78,6 +78,12 @@
 		</navigation-case>
 		
 		<navigation-case>
+			<from-outcome>__internal__MetricsSystemView</from-outcome>
+			<to-view-id>/private/__internal__/metrics/system.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
 			<from-outcome>__file__GetFunction</from-outcome>
 			<to-view-id>/private/__file__/</to-view-id>
 			<redirect />

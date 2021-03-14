@@ -72,11 +72,35 @@ public interface WhereStringBuilder {
 		}
 		
 		public Predicate and() {
-			return add("AND");
+			return add(AND);
+		}
+		
+		public Predicate ands(Collection<String> strings) {
+			if(CollectionHelper.isEmpty(strings))
+				return this;
+			return add(StringHelper.concatenate(strings,AND_SEPARATOR));
+		}
+		
+		public Predicate ands(String... strings) {
+			if(ArrayHelper.isEmpty(strings))
+				return this;
+			return ands(CollectionHelper.listOf(strings));
 		}
 		
 		public Predicate or() {
 			return add("OR");
+		}
+		
+		public Predicate ors(Collection<String> strings) {
+			if(CollectionHelper.isEmpty(strings))
+				return this;
+			return add(StringHelper.concatenate(strings,OR_SEPARATOR));
+		}
+		
+		public Predicate ors(String... strings) {
+			if(ArrayHelper.isEmpty(strings))
+				return this;
+			return ors(CollectionHelper.listOf(strings));
 		}
 		
 		public Predicate leftParenthesis() {
@@ -96,4 +120,8 @@ public interface WhereStringBuilder {
 	
 	Value INSTANCE = new Value();
 	String FORMAT = "WHERE %s";
+	String AND = "AND";
+	String AND_SEPARATOR = " AND ";
+	String OR = "OR";
+	String OR_SEPARATOR = " OR ";
 }

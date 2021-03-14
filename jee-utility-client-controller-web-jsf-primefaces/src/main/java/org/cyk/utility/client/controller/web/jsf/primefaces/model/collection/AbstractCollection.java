@@ -610,6 +610,6 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	/**/
 	
 	public static enum RenderType {
-		OUTPUT,INPUT,SELECTION
+		OUTPUT,OUTPUT_UNSELECTABLE,INPUT,SELECTION
 	}
 }

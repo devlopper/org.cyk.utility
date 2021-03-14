@@ -42,9 +42,9 @@ public class QueryExecutorImpl extends AbstractObject implements QueryExecutor,S
 	public <T> Collection<T> executeReadMany(Class<T> resultClass, QueryExecutorArguments arguments) {
 		validatePreConditions(resultClass, arguments);
 		arguments.prepare(resultClass);
-		TypedQuery<?> typedQuery = __getTypedQuery__(arguments.get__resultClass__(), arguments.getQuery(),arguments.get__parameters__(),arguments.getSortOrders()
-				,arguments.getFirstTupleIndex()
-				,arguments.getNumberOfTuples(),arguments.get__hints__(),arguments.get__entityManager__(),LOGGABLE,ValueHelper.defaultToIfNull(arguments.getLoggingLevel(),LOG_LEVEL));
+		TypedQuery<?> typedQuery = __getTypedQuery__(arguments.get__resultClass__(), arguments.get__query__(),arguments.get__parameters__(),arguments.getSortOrders()
+				,arguments.getFirstTupleIndex(),arguments.getNumberOfTuples(),arguments.get__hints__(),arguments.get__entityManager__(),LOGGABLE
+				,ValueHelper.defaultToIfNull(arguments.getLoggingLevel(),LOG_LEVEL));
 		Long t = System.currentTimeMillis();
 		Collection<?> result = typedQuery.getResultList();
 		Long duration = System.currentTimeMillis() - t;

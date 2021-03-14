@@ -30,7 +30,7 @@ import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
 public class QueryExecutorArguments extends AbstractObject implements Serializable {
-	private Query query;
+	private Query query;	
 	private Collection<String> processableTransientFieldsNames;
 	private Map<Object,Object> parameters;
 	private PropertiesArguments properties;
@@ -61,8 +61,15 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 	private Boolean __isEntityManagerClosable__;
 	private Class<?> __resultClass__;
 	private Collection<?> __objects__;
+	private Query __query__;	
+	private Filter __filter__;
 	
 	private java.util.logging.Level loggingLevel;
+	
+	/* runtime */
+	private Boolean queryBuildableAtRuntime;
+	private Query runtimeQuery;	
+	private Filter runtimeFilter;
 	
 	public Boolean isTransientFieldNameProcessable(String fieldName) {
 		if(StringHelper.isBlank(fieldName))
@@ -80,11 +87,16 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 	}
 	
 	public QueryExecutorArguments prepare(Class<?> resultClass) {
-		if(query != null) {
-			if(query.getIntermediateResultClass() == null)
-				__resultClass__ = query.getResultClass();
+		if(runtimeQuery == null)
+			__query__ = query;
+		else
+			__query__ = runtimeQuery;
+		
+		if(__query__ != null) {
+			if(__query__.getIntermediateResultClass() == null)
+				__resultClass__ = __query__.getResultClass();
 			else
-				__resultClass__ = query.getIntermediateResultClass();
+				__resultClass__ = __query__.getIntermediateResultClass();
 		}
 		
 		if(__resultClass__ == null)
@@ -106,8 +118,13 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 		
 		/* parameters */
 		
-		if(filter != null) {
-			Map<Object,Object> map = filter.generateMap();
+		if(runtimeFilter == null)
+			__filter__ = filter;
+		else
+			__filter__ = runtimeFilter;
+		
+		if(__filter__ != null) {
+			Map<Object,Object> map = __filter__.generateMap();
 			if(MapHelper.isNotEmpty(map)) {
 				for(Map.Entry<Object,Object> entry : map.entrySet()) {
 					if(__parameters__ == null || !__parameters__.containsKey(entry.getKey())) {
@@ -343,6 +360,8 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 		private Boolean isResultCachable;
 		private Boolean collectionable;
 		private Boolean loggableAsInfo;
+		
+		private Boolean queryBuildableAtRuntime;
 		
 		public Filter.Dto getFilter(Boolean injectIfNull) {
 			if(filter == null && Boolean.TRUE.equals(injectIfNull))

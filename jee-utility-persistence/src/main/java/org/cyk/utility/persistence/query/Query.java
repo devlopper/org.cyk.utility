@@ -66,7 +66,9 @@ public class Query extends AbstractObject implements Serializable {
 	public static final String FIELD_TUPLE_CLASS = "tupleClass";
 	public static final String FIELD_IDENTIFIER = "identifier";
 	public static final String FIELD_VALUE = "value";
+	public static final String FIELD_INTERMEDIATE_RESULT_CLASS = "intermediateResultClass";
 	public static final String FIELD_RESULT_CLASS = "resultClass";
+	public static final String FIELD_TUPLE_FIELDS_NAMES_INDEXES = "tupleFieldsNamesIndexes";
 	public static final String FIELD_TYPE = "type";
 	
 	/**/

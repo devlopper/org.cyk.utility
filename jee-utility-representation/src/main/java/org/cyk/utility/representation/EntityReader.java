@@ -104,6 +104,8 @@ public interface EntityReader {
 					if(StringHelper.isNotBlank(countQueryIdentifier)) {							
 						queryExecutorArguments.setQuery(QueryGetter.getInstance().get(countQueryIdentifier));
 						if(queryExecutorArguments.getQuery() != null) {
+							//queryExecutorArguments.set__query__(null);
+							//queryExecutorArguments.set__filter__(null);
 							t = System.currentTimeMillis();
 							xTotalCount = EntityCounter.getInstance().count(internal.persistenceEntityClass,queryExecutorArguments);	
 							logMessages.add(StringHelper.get(xTotalCount));
