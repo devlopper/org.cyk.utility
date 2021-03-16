@@ -36,10 +36,10 @@ public class Query extends AbstractObject implements Serializable {
 	private Query queryDerivedFromQuery;
 	private Map<String,Integer> tupleFieldsNamesIndexes;
 	private QueryType type;
-	//private Boolean processableAtRuntime;
+	private Boolean registerableToEntityManager = Boolean.TRUE;
 	
 	public Query setQueryDerivedFromQueryIdentifier(Object identifier){
-		setQueryDerivedFromQuery(QueryHelper.getQueries().getBySystemIdentifier(identifier, Boolean.TRUE));
+		setQueryDerivedFromQuery(QueryManager.getInstance().getByIdentifier((String)identifier));
 		return this;
 	}
 	
@@ -55,6 +55,12 @@ public class Query extends AbstractObject implements Serializable {
 	public Query setTupleFieldsNamesIndexesFromFieldsNames(String...fieldsNames) {
 		setTupleFieldsNamesIndexes(MapHelper.instantiateStringIntegerByStrings(fieldsNames));
 		return this;
+	}
+	
+	public Boolean isIdentifierEquals(Class<?> klass,QueryName queryName) {
+		if(StringHelper.isBlank(identifier) || klass == null || queryName == null)
+			return Boolean.FALSE;
+		return identifier.equals(QueryIdentifierGetter.getInstance().get(klass, queryName));
 	}
 	
 	@Override
@@ -206,6 +212,10 @@ public class Query extends AbstractObject implements Serializable {
 		return build(tupleClass, QueryName.READ_BY_BUSINESS_IDENTIFIERS.getValue(), value, null);
 	}
 	
+	public static Query buildDynamicSelect(String identifier,Class<?> tupleClass) {
+		return new Query().setIdentifier(identifier).setResultClass(tupleClass).setIntermediateResultClass(Object[].class).setRegisterableToEntityManager(Boolean.FALSE);
+	}
+	
 	/* Count */
 	
 	public static Query buildCount(String identifier,String value) {
@@ -230,6 +240,10 @@ public class Query extends AbstractObject implements Serializable {
 		throw new IllegalArgumentException(String.format("we cannot build count query from following select query : %s",selectQuery));
 	}
 	
+	public static Query buildDynamicCount(String identifier) {
+		return new Query().setIdentifier(identifier).setResultClass(Long.class).setRegisterableToEntityManager(Boolean.FALSE);
+	}
+	
 	/* Select And Derivation*/
 	
 	public static Collection<Query> buildSelect(Class<?> tupleClass,String value,Boolean isCountDerivable) {
@@ -252,6 +266,12 @@ public class Query extends AbstractObject implements Serializable {
 	}
 	
 	/**/
+	
+	/*public static Boolean identifierEquals(Query query,Class<?> klass,QueryName queryName) {
+		if(query == null || query.getTupleClass() == null || klass == null || queryName == null)
+			return null;
+		return QueryIdentifierGetter.getInstance().get(klass, queryName).equals(QueryIdentifierGetter.getInstance().get(query.getTupleClass(), queryName));
+	}*/
 	
 	static {
 		Configurator.set(Query.class, new ConfiguratorImpl());

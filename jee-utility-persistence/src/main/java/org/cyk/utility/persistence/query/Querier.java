@@ -295,14 +295,14 @@ public interface Querier {
 		}
 		
 		static void initialize(Class<?> klass,Query readWhereCodeOrNameLike) {
-			QueryHelper.addQueries(readWhereCodeOrNameLike);		
-			QueryHelper.addQueries(Query.build(Query.FIELD_IDENTIFIER,QueryIdentifierGetter.getInstance().get(klass, QueryName.COUNT_WHERE_CODE_OR_NAME_LIKE)
+			QueryManager.getInstance().register(readWhereCodeOrNameLike);		
+			QueryManager.getInstance().register(Query.build(Query.FIELD_IDENTIFIER,QueryIdentifierGetter.getInstance().get(klass, QueryName.COUNT_WHERE_CODE_OR_NAME_LIKE)
 					,Query.FIELD_TUPLE_CLASS,klass,Query.FIELD_RESULT_CLASS,Long.class
 					,Query.FIELD_VALUE,Querier.CodableAndNamable.getQueryValueCountWhereCodeOrNameLike(klass.getSimpleName())
 					)
 				);
 			
-			QueryHelper.addQueries(Query.build(Query.FIELD_IDENTIFIER,QueryIdentifierGetter.getInstance().get(klass, QueryName.READ_CODES)
+			QueryManager.getInstance().register(Query.build(Query.FIELD_IDENTIFIER,QueryIdentifierGetter.getInstance().get(klass, QueryName.READ_CODES)
 					,Query.FIELD_TUPLE_CLASS,klass,Query.FIELD_RESULT_CLASS,Object[].class
 					,Query.FIELD_VALUE,Querier.CodableAndNamable.getQueryValueReadCodes(klass.getSimpleName())
 					)

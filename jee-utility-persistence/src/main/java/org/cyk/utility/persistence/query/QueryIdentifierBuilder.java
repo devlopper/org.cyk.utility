@@ -43,6 +43,8 @@ public interface QueryIdentifierBuilder {
 		return build(new Arguments().setClassSimpleName(klass.getSimpleName()).setName(name));
 	}
 	
+	String build(Class<?> klass,QueryName name);
+	
 	String buildCountFrom(String identifier);
 	
 	String buildReadWhereCodeOrNameLike(Class<?> klass);
@@ -51,6 +53,13 @@ public interface QueryIdentifierBuilder {
 	
 	public abstract class AbstractImpl extends AbstractObject implements QueryIdentifierBuilder,Serializable {
 		private static final long serialVersionUID = 1L;
+		
+		@Override
+		public String build(Class<?> klass, QueryName name) {
+			if(klass == null || name == null)
+				return null;
+			return build(klass,name.getValue());
+		}
 		
 		@Override
 		public String buildCountFrom(String identifier) {

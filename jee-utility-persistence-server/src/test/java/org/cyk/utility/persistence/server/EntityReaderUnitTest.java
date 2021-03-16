@@ -4,12 +4,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Map;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.SortOrder;
 import org.cyk.utility.persistence.query.EntityReader;
 import org.cyk.utility.persistence.query.Query;
 import org.cyk.utility.persistence.query.QueryExecutor;
 import org.cyk.utility.persistence.query.QueryExecutorArguments;
-import org.cyk.utility.persistence.query.QueryHelper;
+import org.cyk.utility.persistence.query.QueryManager;
 import org.junit.jupiter.api.Test;
 
 public class EntityReaderUnitTest extends AbstractUnitTest {
@@ -17,13 +18,13 @@ public class EntityReaderUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void readDataType_registerNamedQuery_auto(){
-		assertThat(QueryHelper.QUERIES.getSize()).isEqualTo(0);
+		assertThat(CollectionHelper.getSize(QueryManager.getInstance().getQueries())).isEqualTo(0);
 		assertThat(EntityReader.getInstance().readMany(DataType.class)).isNotEmpty();
 		assertThat(EntityReader.getInstance().readMany(DataType.class).stream().map(x -> x.getCode())).containsExactly("SG","INT","LG","ST");
 		assertThat(EntityReader.getInstance().readMany(DataType.class).stream().map(x -> x.getName())).containsExactly("String","Integer","Long","Short");
-		assertThat(QueryHelper.QUERIES.getSize()).isEqualTo(1);
+		assertThat(CollectionHelper.getSize(QueryManager.getInstance().getQueries())).isEqualTo(1);
 		assertThat(EntityReader.getInstance().readMany(DataType.class)).isNotEmpty();
-		assertThat(QueryHelper.QUERIES.getSize()).isEqualTo(1);
+		assertThat(CollectionHelper.getSize(QueryManager.getInstance().getQueries())).isEqualTo(1);
 	}
 	
 	@Test
@@ -42,7 +43,7 @@ public class EntityReaderUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void readDataType_dynamicQuery_orderByCode_asc_UI(){
-		QueryHelper.addQueries(new Query().setIdentifier("q1").setValue("SELECT t FROM DataType t ORDER BY t.code ASC").setResultClass(DataType.class));
+		QueryManager.getInstance().register(new Query().setIdentifier("q1").setValue("SELECT t FROM DataType t ORDER BY t.code ASC").setResultClass(DataType.class));
 		QueryExecutorArguments arguments = new QueryExecutorArguments().setQuery(new Query().setIdentifier("q1")).setSortOrders(Map.of("code",SortOrder.DESCENDING));
 		
 		assertThat(QueryExecutor.getInstance().executeReadMany(DataType.class, arguments).stream().map(x -> x.getCode())).containsExactly("ST","SG","LG","INT");		

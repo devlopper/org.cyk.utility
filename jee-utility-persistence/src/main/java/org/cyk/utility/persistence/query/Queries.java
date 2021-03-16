@@ -8,12 +8,12 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@Getter @Setter @Accessors(chain=true)
+@Getter @Setter @Accessors(chain=true) @Deprecated
 public class Queries extends AbstractCollectionInstanceImpl<Query> implements Serializable {
 
-	public static Boolean IS_REGISTERABLE_TO_ENTITY_MANAGER = Boolean.FALSE;
+	//public static Boolean IS_REGISTERABLE_TO_ENTITY_MANAGER = Boolean.FALSE;
 	
-	private Boolean isRegisterableToEntityManager = IS_REGISTERABLE_TO_ENTITY_MANAGER;
+	//private Boolean isRegisterableToEntityManager = IS_REGISTERABLE_TO_ENTITY_MANAGER;
 	
 	public Queries() {
 		setElementClass(Query.class);

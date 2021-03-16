@@ -56,8 +56,8 @@ public class QueryExecutorImpl extends AbstractObject implements QueryExecutor,S
 			if(resultClass.equals(arguments.get__resultClass__()))
 				collection = (Collection<T>) result;
 			else {
-				QueryResultMapper.Arguments resultMapperArguments = new QueryResultMapper.Arguments().setQuery(arguments.getQuery());
-				if(Tuple.class.equals(arguments.getQuery().getResultClass()))
+				QueryResultMapper.Arguments resultMapperArguments = new QueryResultMapper.Arguments().setQuery(arguments.get__query__());
+				if(Tuple.class.equals(arguments.get__query__().getResultClass()))
 					resultMapperArguments.setTuples((Collection<Tuple>) result);
 				else
 					resultMapperArguments.setObjects((Collection<Object[]>) result);

@@ -2,8 +2,9 @@ package org.cyk.utility.persistence.server;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.persistence.query.EntityCounter;
-import org.cyk.utility.persistence.query.QueryHelper;
+import org.cyk.utility.persistence.query.QueryManager;
 import org.junit.jupiter.api.Test;
 
 public class EntityCounterUnitTest extends AbstractUnitTest {
@@ -11,10 +12,10 @@ public class EntityCounterUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void countDataType_registerNamedQuery_auto(){
-		assertThat(QueryHelper.QUERIES.getSize()).isEqualTo(0);
+		assertThat(CollectionHelper.getSize(QueryManager.getInstance().getQueries())).isEqualTo(0);
 		assertThat(EntityCounter.getInstance().count(DataType.class)).isEqualTo(4);
-		assertThat(QueryHelper.QUERIES.getSize()).isEqualTo(1);
+		assertThat(CollectionHelper.getSize(QueryManager.getInstance().getQueries())).isEqualTo(1);
 		assertThat(EntityCounter.getInstance().count(DataType.class)).isEqualTo(4);
-		assertThat(QueryHelper.QUERIES.getSize()).isEqualTo(1);
+		assertThat(CollectionHelper.getSize(QueryManager.getInstance().getQueries())).isEqualTo(1);
 	}
 }

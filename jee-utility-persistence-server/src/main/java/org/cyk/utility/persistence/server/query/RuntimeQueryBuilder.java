@@ -10,6 +10,8 @@ import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.persistence.query.Query;
 import org.cyk.utility.persistence.query.QueryExecutorArguments;
+import org.cyk.utility.persistence.query.QueryIdentifierGetter;
+import org.cyk.utility.persistence.query.QueryName;
 import org.cyk.utility.persistence.server.query.string.RuntimeQueryStringBuilder;
 
 public interface RuntimeQueryBuilder {
@@ -44,16 +46,26 @@ public interface RuntimeQueryBuilder {
 			query.setType(arguments.getQuery().getType());
 			query.setValue(arguments.getQuery().getValue());
 			
-			query.setValue(RuntimeQueryStringBuilder.getInstance().build(arguments));
-			query.setIdentifier(null);//Disable named query mapping
+			setValue(query, RuntimeQueryStringBuilder.getInstance().build(arguments));
 			
+			query.setIdentifier(null);//Disable named query mapping			
 			arguments.setRuntimeQuery(query);
 			
 			return query;
 		}
 		
+		protected void setValue(Query query,String value) {
+			query.setValue(value);
+		}
+		
 		protected Boolean isBuildable(QueryExecutorArguments arguments) {
-			return BUILDABLES.contains(arguments.getQuery().getIdentifier());
+			if(BUILDABLES.contains(arguments.getQuery().getIdentifier()))
+				return Boolean.TRUE;
+			if(arguments.getQuery().getIdentifier().equals(QueryIdentifierGetter.getInstance().get(arguments.getQuery().getTupleClass(), QueryName.READ_DYNAMIC)))
+				return Boolean.TRUE;
+			if(arguments.getQuery().getIdentifier().equals(QueryIdentifierGetter.getInstance().get(arguments.getQuery().getTupleClass(), QueryName.COUNT_DYNAMIC)))
+				return Boolean.TRUE;
+			return Boolean.FALSE;
 		}
 	}
 	

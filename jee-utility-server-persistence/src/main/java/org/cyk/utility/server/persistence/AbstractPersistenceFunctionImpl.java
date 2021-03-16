@@ -5,13 +5,13 @@ import java.util.Map;
 
 import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
 import org.cyk.utility.__kernel__.log.LogLevel;
-import org.cyk.utility.persistence.query.Query;
-import org.cyk.utility.persistence.query.QueryHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.system.action.SystemAction;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.variable.VariableName;
+import org.cyk.utility.persistence.query.Query;
+import org.cyk.utility.persistence.query.QueryGetter;
 import org.cyk.utility.system.AbstractSystemFunctionServerImpl;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerPersistence;
@@ -37,7 +37,7 @@ public abstract class AbstractPersistenceFunctionImpl extends AbstractSystemFunc
 		if(StringHelper.isBlank(queryIdentifier) &&StringHelper.isBlank(queryValue)){
 			__executeQuery__(action);		
 		}else {
-			Query query = QueryHelper.getQueries().getBySystemIdentifier(queryIdentifier);
+			Query query = QueryGetter.getInstance().get(queryIdentifier);
 			if(query == null){
 				if(StringHelper.isBlank(queryValue))
 					throw new RuntimeException("persistence query with identifier "+queryIdentifier+" not found.");	
@@ -90,7 +90,7 @@ public abstract class AbstractPersistenceFunctionImpl extends AbstractSystemFunc
 	public PersistenceFunction setQueryIdentifier(Object identifier) {
 		getProperties().setFromPath(new Object[]{Properties.QUERY,Properties.IDENTIFIER}, identifier);
 		if(getEntityClass() == null){
-			Query query = QueryHelper.getQueries().getBySystemIdentifier(identifier,Boolean.TRUE);
+			Query query = QueryGetter.getInstance().get((String) identifier);
 			if(query!=null){
 				setEntityClass(query.getResultClass());
 				setQueryResultClass(query.getResultClass());

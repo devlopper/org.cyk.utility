@@ -13,7 +13,9 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.persistence.query.Query;
 import org.cyk.utility.persistence.query.QueryContext;
+import org.cyk.utility.persistence.query.QueryGetter;
 import org.cyk.utility.persistence.query.QueryHelper;
+import org.cyk.utility.persistence.query.QueryManager;
 import org.cyk.utility.persistence.query.Filter;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.stacktrace.StackTraceHelper;
@@ -108,7 +110,7 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	}
 	
 	protected final Object[] __getQueryParameters__(String queryIdentifier,Properties properties,Object...objects){
-		Query persistenceQuery = QueryHelper.getQueries().getBySystemIdentifier(queryIdentifier);
+		Query persistenceQuery = QueryGetter.getInstance().get(queryIdentifier);
 		if(persistenceQuery == null)
 			throw new RuntimeException("persistence query with identifier "+queryIdentifier+" not found.");
 		return __getQueryParameters__(persistenceQuery, properties, objects);
@@ -350,7 +352,7 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	@Override
 	public PersistenceServiceProvider<OBJECT> addQueries(Collection<Query> queries) {
 		setQueries(CollectionHelper.add(HashSet.class, getQueries(), Boolean.TRUE, queries));
-		QueryHelper.getQueries().add(getQueries());//TODO is it the right place ? what if call multiple times ??? are the old ones overwritten ???
+		QueryManager.getInstance().register(getQueries());//TODO is it the right place ? what if call multiple times ??? are the old ones overwritten ???
 		return this;
 	}
 	
@@ -379,7 +381,7 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	
 	@Override
 	public PersistenceServiceProvider<OBJECT> addQueryCountInstancesFromCollection(Object collectionIdentifier) {
-		Query query = QueryHelper.getQueries().getBySystemIdentifier(collectionIdentifier, Boolean.TRUE);
+		Query query = QueryGetter.getInstance().get((String) collectionIdentifier);
 		if(query!=null){
 			String value = "SELECT COUNT("
 					+StringUtils.substringBetween(query.getValue(),"SELECT ", " FROM ")
@@ -388,7 +390,7 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 					.setDerivedFromQueryIdentifier(collectionIdentifier).setIsCountInstances(Boolean.TRUE).execute().getOutput();
 			value = StringUtils.substringBefore(value, "ORDER BY");
 			addQuery(identifier, value, Long.class);
-			QueryHelper.getQueries().getBySystemIdentifier(identifier, Boolean.TRUE).setQueryDerivedFromQuery(query);
+			QueryGetter.getInstance().get(identifier).setQueryDerivedFromQuery(query);
 			//addDerivedQueryIdentifier(collectionIdentifier, identifier);
 		}
 		return this;

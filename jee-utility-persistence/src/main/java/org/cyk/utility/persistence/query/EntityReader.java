@@ -80,7 +80,7 @@ public interface EntityReader {
 				arguments = new QueryExecutorArguments();
 			if(arguments.getQuery() == null) {
 				String queryIdentifier = QueryHelper.getIdentifierReadAll(tupleClass);
-				arguments.setQuery(QueryHelper.getQueries().getByIdentifier(queryIdentifier));
+				arguments.setQuery(QueryGetter.getInstance().get(queryIdentifier));
 				if(arguments.getQuery() == null)
 					arguments.setQuery(QueryGetter.getInstance().getBySelect(tupleClass, QueryName.READ.getValue(),QueryValueBuilder.getInstance().buildSelect(tupleClass)));
 			}

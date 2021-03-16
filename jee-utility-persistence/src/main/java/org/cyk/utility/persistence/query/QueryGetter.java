@@ -17,7 +17,7 @@ public interface QueryGetter {
 	}
 	
 	default Query get(String queryIdentifier) {
-		return QueryHelper.getQueries().getBySystemIdentifier(queryIdentifier);
+		return QueryManager.getInstance().getByIdentifier(queryIdentifier);
 	}
 	
 	/* Select */
@@ -83,7 +83,7 @@ public interface QueryGetter {
 					query = get(queryIdentifier);
 					if(query == null) {
 						query = Query.build(Query.FIELD_IDENTIFIER,queryIdentifier,Query.FIELD_VALUE,queryValue,Query.FIELD_RESULT_CLASS,resultClass);
-						QueryHelper.addQueries(query);
+						QueryManager.getInstance().register(query);
 					}else {
 						if(!queryValue.equalsIgnoreCase(query.getValue()))
 							throw new IllegalArgumentException(String.format("%s has already been registered. it cannot be overriden with %s", query,queryValue));

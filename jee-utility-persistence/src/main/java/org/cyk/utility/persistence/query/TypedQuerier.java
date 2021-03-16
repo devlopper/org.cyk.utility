@@ -134,7 +134,7 @@ public interface TypedQuerier<TYPE,IDENTIFIER> extends Querier {
 	
 	static void initialize(Class<?> klass) {
 		String tupleName = PersistenceHelper.getEntityName(klass);
-		QueryHelper.addQueries(
+		QueryManager.getInstance().register(
 			Query.buildSelect(klass, QueryIdentifierGetter.getInstance().get(klass, QueryName.READ), String.format("SELECT t FROM %s t",tupleName))
 			,Query.buildCount(QueryIdentifierGetter.getInstance().get(klass, QueryName.COUNT), String.format("SELECT COUNT(t) FROM %s t",tupleName))
 		);
