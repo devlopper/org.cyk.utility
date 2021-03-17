@@ -52,6 +52,11 @@ public class Query extends AbstractObject implements Serializable {
 		return identifier!=null && (identifier.equals(value) || isQueryDerivedFromQueryIdentifierEqualsTo(value));
 	}
 	
+	public Query setTupleFieldsNamesIndexesFromFieldsNames(Collection<String> fieldsNames) {
+		setTupleFieldsNamesIndexes(MapHelper.instantiateStringIntegerByStrings(fieldsNames));
+		return this;
+	}
+	
 	public Query setTupleFieldsNamesIndexesFromFieldsNames(String...fieldsNames) {
 		setTupleFieldsNamesIndexes(MapHelper.instantiateStringIntegerByStrings(fieldsNames));
 		return this;

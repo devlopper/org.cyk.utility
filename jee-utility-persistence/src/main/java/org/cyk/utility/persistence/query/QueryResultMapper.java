@@ -51,9 +51,15 @@ public interface QueryResultMapper {
 				}else {
 					//if(Boolean.TRUE.equals(QueryExecutor.AbstractImpl.LOGGABLE))
 					//	LogHelper.log(String.format("Instantiating %s by setting fields names %s",resultClass,arguments.query.getTupleFieldsNamesIndexes()), QueryExecutor.AbstractImpl.LOG_LEVEL, getClass());
+					for(Object object : arguments.objects)
+						if(object instanceof Object[])
+							collection.add(instantiateArray(resultClass, arguments.query.getTupleFieldsNamesIndexes(), (Object[])object));
+						else
+							collection.add(instantiateScalar(resultClass, arguments.query.getTupleFieldsNamesIndexes(), object));						
+					/*
 					arguments.objects.forEach(array -> {
 						collection.add(instantiate(resultClass, arguments.query.getTupleFieldsNamesIndexes(), array));
-					});
+					});*/
 				}
 			}else if(CollectionHelper.isNotEmpty(arguments.tuples)){
 				arguments.tuples.forEach(tuple -> {
@@ -64,7 +70,7 @@ public interface QueryResultMapper {
 			return collection;
 		}
 		
-		protected <T> T instantiate(Class<T> klass,Map<String,Integer> fieldsNamesIndexes,Object[] array) {
+		protected <T> T instantiateArray(Class<T> klass,Map<String,Integer> fieldsNamesIndexes,Object[] array) {
 			//if(Boolean.TRUE.equals(QueryExecutor.AbstractImpl.LOGGABLE))
 			//	LogHelper.log(String.format("\tvalues %s",Arrays.toString(array)), QueryExecutor.AbstractImpl.LOG_LEVEL, getClass());
 			ThrowableHelper.throwIllegalArgumentExceptionIfEmpty("fieldsNamesIndexes", fieldsNamesIndexes);
@@ -78,6 +84,18 @@ public interface QueryResultMapper {
 									,Arrays.toString(array)), exception), getClass());
 				}
 			});
+			return instance;
+		}
+		
+		protected <T> T instantiateScalar(Class<T> klass,Map<String,Integer> fieldsNamesIndexes,Object object) {
+			ThrowableHelper.throwIllegalArgumentExceptionIfEmpty("fieldsNamesIndexes", fieldsNamesIndexes);
+			T instance = ClassHelper.instanciate(klass);
+			for(Map.Entry<String,Integer> entry : fieldsNamesIndexes.entrySet())
+				try {
+					write(instance, entry.getKey(), object);
+				} catch (Exception exception) {
+					LogHelper.log(new RuntimeException(String.format("cannot write field %s.%s with value %s", instance.getClass().getName(),object), exception), getClass());
+				}
 			return instance;
 		}
 		

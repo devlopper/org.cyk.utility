@@ -30,8 +30,10 @@ import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
 public class QueryExecutorArguments extends AbstractObject implements Serializable {
-	private Query query;	
+	private Query query;
+	private Collection<Projection> projections;
 	private Collection<String> processableTransientFieldsNames;
+	private Collection<String> resultsFieldsNames;
 	private Map<Object,Object> parameters;
 	private PropertiesArguments properties;
 	private Map<String,Object> hints;
@@ -61,8 +63,10 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 	private Boolean __isEntityManagerClosable__;
 	private Class<?> __resultClass__;
 	private Collection<?> __objects__;
-	private Query __query__;	
+	private Query __query__;
+	private Collection<String> __projections__;
 	private Filter __filter__;
+	private Collection<String> __resultsFieldsNames__;
 	
 	private java.util.logging.Level loggingLevel;
 	
@@ -70,6 +74,45 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 	private Boolean queryBuildableAtRuntime;
 	private Query runtimeQuery;	
 	private Filter runtimeFilter;
+	
+	public Collection<Projection> getProjections(Boolean injectIfNull) {
+		if(projections == null && Boolean.TRUE.equals(injectIfNull))
+			projections = new ArrayList<>();
+		return projections;
+	}
+	
+	public QueryExecutorArguments addProjections(Collection<Projection> projections) {
+		if(CollectionHelper.isEmpty(projections))
+			return this;
+		getProjections(Boolean.TRUE).addAll(projections);
+		return this;
+	}
+	
+	public QueryExecutorArguments addProjections(Projection...projections) {
+		if(ArrayHelper.isEmpty(projections))
+			return this;
+		return addProjections(CollectionHelper.listOf(projections));
+	}
+	
+	public QueryExecutorArguments addProjectionsFromStrings(ArrayList<String> strings) {
+		if(CollectionHelper.isEmpty(strings))
+			return this;
+		Collection<Projection> projections = new ArrayList<>();
+		for(String string : strings) {
+			Projection projection = new Projection().setFieldName(string);
+			projections.add(projection);
+		}
+		getProjections(Boolean.TRUE).addAll(projections);
+		return this;
+	}
+	
+	public QueryExecutorArguments addProjectionsFromStrings(String...strings) {
+		if(ArrayHelper.isEmpty(strings))
+			return this;
+		ArrayList<String> list = new ArrayList<>();
+		list.addAll(CollectionHelper.listOf(strings));
+		return addProjectionsFromStrings(list);
+	}
 	
 	public Boolean isTransientFieldNameProcessable(String fieldName) {
 		if(StringHelper.isBlank(fieldName))
@@ -101,6 +144,9 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 		
 		if(__resultClass__ == null)
 			__resultClass__ = resultClass;
+		
+		if(__resultsFieldsNames__ == null)
+			__resultsFieldsNames__ = resultsFieldsNames;
 		
 		__isEntityManagerFlushable__ = isEntityManagerFlushable;
 		__isEntityManagerClearable__ = isEntityManagerClearable;
@@ -360,7 +406,9 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 	@XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor
 	public static class Dto extends AbstractObject implements Serializable {
 		private String queryIdentifier;
+		private ArrayList<Projection.Dto> projections;
 		private ArrayList<String> processableTransientFieldsNames;
+		private ArrayList<String> resultsFieldsNames;
 		private Filter.Dto filter;
 		private LinkedHashMap<String,SortOrder> sortOrders;
 		private Integer firstTupleIndex;
@@ -390,6 +438,47 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 			return this;
 		}
 		
+		public ArrayList<Projection.Dto> getProjections(Boolean injectIfNull) {
+			if(projections == null && Boolean.TRUE.equals(injectIfNull))
+				projections = new ArrayList<>();
+			return projections;
+		}
+		
+		public Dto addProjections(ArrayList<Projection.Dto> projections) {
+			if(CollectionHelper.isEmpty(projections))
+				return this;
+			getProjections(Boolean.TRUE).addAll(projections);
+			return this;
+		}
+		
+		public Dto addProjections(Projection.Dto...projections) {
+			if(ArrayHelper.isEmpty(projections))
+				return this;
+			ArrayList<Projection.Dto> list = new ArrayList<>();
+			list.addAll(CollectionHelper.listOf(projections));
+			return addProjections(list);
+		}
+		
+		public Dto addProjectionsFromStrings(ArrayList<String> strings) {
+			if(CollectionHelper.isEmpty(strings))
+				return this;
+			ArrayList<Projection.Dto> projections = new ArrayList<>();
+			for(String string : strings) {
+				Projection.Dto projection = new Projection.Dto().setFieldName(string);
+				projections.add(projection);
+			}
+			getProjections(Boolean.TRUE).addAll(projections);
+			return this;
+		}
+		
+		public Dto addProjectionsFromStrings(String...strings) {
+			if(ArrayHelper.isEmpty(strings))
+				return this;
+			ArrayList<String> list = new ArrayList<>();
+			list.addAll(CollectionHelper.listOf(strings));
+			return addProjectionsFromStrings(list);
+		}
+		
 		public ArrayList<String> getProcessableTransientFieldsNames(Boolean injectIfNull) {
 			if(processableTransientFieldsNames == null && Boolean.TRUE.equals(injectIfNull))
 				processableTransientFieldsNames = new ArrayList<>();
@@ -409,6 +498,27 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 			ArrayList<String> list = new ArrayList<>();
 			list.addAll(CollectionHelper.listOf(processableTransientFieldsNames));
 			return addProcessableTransientFieldsNames(list);
+		}
+		
+		public ArrayList<String> getResultsFieldsNames(Boolean injectIfNull) {
+			if(resultsFieldsNames == null && Boolean.TRUE.equals(injectIfNull))
+				resultsFieldsNames = new ArrayList<>();
+			return resultsFieldsNames;
+		}
+		
+		public Dto addResultsFieldsNames(ArrayList<String> resultsFieldsNames) {
+			if(CollectionHelper.isEmpty(resultsFieldsNames))
+				return this;
+			getResultsFieldsNames(Boolean.TRUE).addAll(resultsFieldsNames);
+			return this;
+		}
+		
+		public Dto addResultsFieldsNames(String...resultsFieldsNames) {
+			if(ArrayHelper.isEmpty(resultsFieldsNames))
+				return this;
+			ArrayList<String> list = new ArrayList<>();
+			list.addAll(CollectionHelper.listOf(resultsFieldsNames));
+			return addResultsFieldsNames(list);
 		}
 		
 		@Override

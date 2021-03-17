@@ -8,6 +8,7 @@ import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.persistence.query.Query;
 import org.cyk.utility.persistence.query.QueryExecutor;
 import org.cyk.utility.persistence.query.QueryExecutorArguments;
+import org.cyk.utility.persistence.query.QueryType;
 
 public interface ManyBasedExecutor extends Executor {
 
@@ -39,7 +40,7 @@ public interface ManyBasedExecutor extends Executor {
 		}
 		
 		protected void setReadQuery(Class<?> klass,QueryExecutorArguments arguments) {
-			Query query = new Query().setTupleClass(klass).setResultClass(klass);
+			Query query = new Query().setType(QueryType.READ_MANY).setTupleClass(klass).setResultClass(klass);
 			arguments.setQuery(query);
 		}
 		
@@ -72,7 +73,7 @@ public interface ManyBasedExecutor extends Executor {
 		}
 		
 		protected void setCountQuery(Class<?> klass,QueryExecutorArguments arguments) {
-			Query query = new Query().setTupleClass(klass).setResultClass(Long.class);
+			Query query = new Query().setType(QueryType.COUNT).setTupleClass(klass).setResultClass(Long.class);
 			arguments.setQuery(query);
 		}
 		
