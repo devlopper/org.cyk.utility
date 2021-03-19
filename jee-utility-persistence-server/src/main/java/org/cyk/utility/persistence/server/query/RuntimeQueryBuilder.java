@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.persistence.query.Query;
@@ -69,8 +70,10 @@ public interface RuntimeQueryBuilder {
 		}
 		
 		protected Boolean isBuildable(QueryExecutorArguments arguments) {
+			if(StringHelper.isBlank(arguments.getQuery().getIdentifier()))
+				return Boolean.FALSE;
 			if(BUILDABLES.contains(arguments.getQuery().getIdentifier()))
-				return Boolean.TRUE;
+				return Boolean.TRUE;			
 			if(arguments.getQuery().getIdentifier().equals(QueryIdentifierGetter.getInstance().get(arguments.getQuery().getTupleClass(), QueryName.READ_DYNAMIC)))
 				return Boolean.TRUE;
 			if(arguments.getQuery().getIdentifier().equals(QueryIdentifierGetter.getInstance().get(arguments.getQuery().getTupleClass(), QueryName.COUNT_DYNAMIC)))

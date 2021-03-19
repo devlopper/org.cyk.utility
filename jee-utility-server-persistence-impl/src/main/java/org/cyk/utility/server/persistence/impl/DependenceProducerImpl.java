@@ -6,20 +6,18 @@ import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Produces;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceUnit;
 
-@Dependent
+@Dependent @Deprecated
 public class DependenceProducerImpl implements Serializable,DependenceProducer {
 	private static final long serialVersionUID = 1L;
 
-	@PersistenceUnit
+	//@PersistenceUnit
 	private EntityManagerFactory entityManagerFactory;
 	
-	@PersistenceContext
+	//@PersistenceContext
 	private EntityManager entityManager;
 	
-	@Override @Produces
+	//@Override @Produces
 	public EntityManagerFactory getEntityManagerFactory() {
 		return entityManagerFactory;
 	}

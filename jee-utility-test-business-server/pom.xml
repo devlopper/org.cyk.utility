@@ -19,8 +19,8 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.cyk.jee.utility.test</groupId>
-			<artifactId>jee-utility-test</artifactId>
+			<groupId>org.cyk.jee.utility.test.persistence.server</groupId>
+			<artifactId>jee-utility-test-persistence-server</artifactId>
 			<version>0.1.0</version>
 		</dependency>
 
@@ -31,7 +31,7 @@
 		</dependency>
 		
 		<!-- Test -->
-		
+		<!--
 		<dependency>
 			<groupId>org.cyk.jee.utility.persistence.server.hibernate</groupId>
 			<artifactId>jee-utility-persistence-server-hibernate</artifactId>
@@ -73,9 +73,9 @@
 			<version>0.2.0</version>
 			<scope>test</scope>
 		</dependency>
-		
+		-->
 		<!-- Integration Test -->
-		
+		<!--
         <dependency>
             <groupId>org.wildfly.arquillian</groupId>
             <artifactId>wildfly-arquillian-container-bootable</artifactId>
@@ -106,5 +106,6 @@
 		    <version>3.1.4</version>
 		    <scope>test</scope>
 		</dependency>
+		-->
 	</dependencies>
 </project>

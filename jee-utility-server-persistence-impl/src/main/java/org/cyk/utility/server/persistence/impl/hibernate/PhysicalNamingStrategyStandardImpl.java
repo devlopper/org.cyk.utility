@@ -6,6 +6,7 @@ import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifi
 import org.hibernate.boot.model.naming.Identifier;
 import org.hibernate.engine.jdbc.env.spi.JdbcEnvironment;
 
+@Deprecated
 public class PhysicalNamingStrategyStandardImpl extends org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl {
 
 	@Override

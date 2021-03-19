@@ -2,12 +2,11 @@
     <persistence-unit name="businessPersistenceUnit" transaction-type="JTA">
     	<jta-data-source>java:jboss/datasources/ExampleDS</jta-data-source>
 		<shared-cache-mode>NONE</shared-cache-mode>
-    	<class>org.cyk.utility.business.server.DataType</class>		
+    	<class>org.cyk.utility.persistence.server.DataType</class>		
     	<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		<properties>
 			<property name="javax.persistence.schema-generation.database.action" value="create"/>
         	<property name="javax.persistence.sql-load-script-source" value="META-INF/data.sql" />
-			<property name="hibernate.physical_naming_strategy" value="org.cyk.utility.persistence.server.hibernate.PhysicalNamingStrategyStandardImpl"/>
 		</properties>
     </persistence-unit>  
 </persistence>

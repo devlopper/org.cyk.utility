@@ -1,0 +1,4 @@
+/subsystem=logging/logger=org.jboss.as.server.deployment:add(level=ERROR)
+/subsystem=logging/logger=org.reflections.Reflections:add(level=ERROR)
+/subsystem=logging/root-logger=ROOT:write-attribute(name=level, value=INFO)
+/subsystem=logging/console-handler=CONSOLE:write-attribute(name=level, value=INFO)
