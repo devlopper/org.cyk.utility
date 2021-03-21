@@ -14,60 +14,35 @@
 	<version>0.1.0</version>
 	<packaging>jar</packaging>
 
-	<name>jee-utility-controller</name>
-	<url>http://maven.apache.org</url>
-
 	<dependencies>
 		<dependency>
-			<groupId>org.cyk.jee.utility.representation.client</groupId>
-			<artifactId>jee-utility-representation-client</artifactId>
+			<groupId>org.cyk.jee.utility.representation.server</groupId>
+			<artifactId>jee-utility-representation-server</artifactId>
 			<version>0.1.0</version>
 		</dependency>
-		
-		<!-- Test -->
 		
 		<dependency>
 			<groupId>org.cyk.jee.utility.server.representation.impl</groupId>
 			<artifactId>jee-utility-server-representation-impl</artifactId>
 			<version>0.1.0</version>
-			<scope>provided</scope>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.cyk.jee.utility.server.deployment</groupId>
 			<artifactId>jee-utility-server-deployment</artifactId>
 			<version>0.1.0</version>
-			<scope>provided</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.cyk.jee.utility.test</groupId>
-			<artifactId>jee-utility-test</artifactId>
-			<version>0.1.0</version>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.cyk.jee.utility.representation.server</groupId>
-			<artifactId>jee-utility-representation-server</artifactId>
-			<version>0.1.0</version>
-			<scope>test</scope>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.cyk.jee.utility.persistence.server.hibernate</groupId>
 			<artifactId>jee-utility-persistence-server-hibernate</artifactId>
 			<version>0.1.0</version>
-			<scope>test</scope>
 		</dependency>
 		
-        <!-- Integration Test -->
-		
-        <dependency>
+		<dependency>
 			<groupId>org.cyk.jee.utility.test.arquillian.bootablejar</groupId>
 			<artifactId>jee-utility-test-arquillian-bootablejar</artifactId>
 			<version>0.1.0</version>
-			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 </project>

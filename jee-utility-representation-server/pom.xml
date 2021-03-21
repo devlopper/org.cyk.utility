@@ -28,5 +28,44 @@
 			<artifactId>jee-utility-business-server</artifactId>
 			<version>0.1.0</version>
 		</dependency>
+		
+		<!-- Test -->
+		
+		<dependency>
+			<groupId>org.cyk.jee.utility.test.persistence.server</groupId>
+			<artifactId>jee-utility-test-persistence-server</artifactId>
+			<version>0.1.0</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.cyk.jee.utility.persistence.server.hibernate</groupId>
+			<artifactId>jee-utility-persistence-server-hibernate</artifactId>
+			<version>0.1.0</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${org.hibernate.version}</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>${com.h2database.h2.version}</version>
+			<scope>test</scope>
+		</dependency>
+						
+        <!-- Integration Test -->
+		
+        <dependency>
+			<groupId>org.cyk.jee.utility.test.arquillian.bootablejar</groupId>
+			<artifactId>jee-utility-test-arquillian-bootablejar</artifactId>
+			<version>0.1.0</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 </project>

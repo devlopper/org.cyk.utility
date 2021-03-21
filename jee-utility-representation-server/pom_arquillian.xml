@@ -4,29 +4,29 @@
 	<modelVersion>4.0.0</modelVersion>
 	
 	<parent>
-		<groupId>org.cyk.pom.jee.utility.persistence.server</groupId>
-		<artifactId>pom-jee-utility-persistence-server</artifactId>
-		<version>pom.jee.utility.persistence.server.0.1.0</version>
+		<groupId>org.cyk.pom.jee.utility.representation.server</groupId>
+		<artifactId>pom-jee-utility-representation-server</artifactId>
+		<version>pom.jee.utility.representation.server.0.1.0</version>
 	</parent>
 	
-	<groupId>org.cyk.jee.utility.persistence.server</groupId>
-	<artifactId>jee-utility-persistence-server</artifactId>
+	<groupId>org.cyk.jee.utility.representation.server</groupId>
+	<artifactId>jee-utility-representation-server</artifactId>
 	<version>0.1.0</version>
 	<packaging>jar</packaging>
 
-	<name>jee-utility-persistence-server</name>
+	<name>jee-utility-representation-server</name>
 	<url>http://maven.apache.org</url>
 
 	<dependencies>
 		<dependency>
-			<groupId>org.cyk.jee.utility.persistence</groupId>
-			<artifactId>jee-utility-persistence</artifactId>
+			<groupId>org.cyk.jee.utility.business.server</groupId>
+			<artifactId>jee-utility-business-server</artifactId>
 			<version>0.1.0</version>
 		</dependency>
-		
+				
 		<dependency>
-			<groupId>org.cyk.jee.utility.test.persistence.server</groupId>
-			<artifactId>jee-utility-test-persistence-server</artifactId>
+			<groupId>org.cyk.jee.utility.persistence.server.hibernate</groupId>
+			<artifactId>jee-utility-persistence-server-hibernate</artifactId>
 			<version>0.1.0</version>
 		</dependency>
 		
@@ -34,6 +34,6 @@
 			<groupId>org.cyk.jee.utility.test.arquillian.bootablejar</groupId>
 			<artifactId>jee-utility-test-arquillian-bootablejar</artifactId>
 			<version>0.1.0</version>
-		</dependency>		
+		</dependency>
 	</dependencies>
 </project>

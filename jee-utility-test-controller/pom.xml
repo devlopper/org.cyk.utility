@@ -19,8 +19,8 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.cyk.jee.utility.test</groupId>
-			<artifactId>jee-utility-test</artifactId>
+			<groupId>org.cyk.jee.utility.test.representation.server</groupId>
+			<artifactId>jee-utility-test-representation-server</artifactId>
 			<version>0.1.0</version>
 		</dependency>
 

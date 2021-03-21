@@ -1,12 +1,14 @@
-package org.cyk.utility.business.server;
+package org.cyk.utility.representation.server.integration;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
 import org.cyk.utility.__kernel__.object.AbstractObject;
+import org.cyk.utility.business.server.EntityCreator;
 import org.cyk.utility.persistence.query.EntityCounter;
 import org.cyk.utility.persistence.query.EntityFinder;
 import org.cyk.utility.persistence.server.hibernate.Initializer;
+import org.cyk.utility.representation.server.DataType;
 import org.cyk.utility.test.arquillian.bootablejar.ArchiveBuilder;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -15,11 +17,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(Arquillian.class)
-public class BusinessIT extends AbstractObject {
+public class RepresentationIT extends AbstractObject {
 
     @Deployment
     public static Archive<?> buildArchive() {
-    	return new ArchiveBuilder().setPersistenceEnabled(Boolean.TRUE).setRootPackagesNames(List.of("org.cyk.utility.business.server")).build();
+    	return new ArchiveBuilder().setPersistenceEnabled(Boolean.TRUE).setRootPackagesNames(List.of("org.cyk.utility.representation.server")).build();
     }
 
     @Test
