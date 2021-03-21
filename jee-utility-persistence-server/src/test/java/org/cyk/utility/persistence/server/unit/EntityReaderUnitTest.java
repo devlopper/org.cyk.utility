@@ -3,19 +3,47 @@ package org.cyk.utility.persistence.server.unit;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.SortOrder;
-import org.cyk.utility.persistence.query.EntityReader;
 import org.cyk.utility.persistence.query.Query;
 import org.cyk.utility.persistence.query.QueryExecutor;
 import org.cyk.utility.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.persistence.query.QueryManager;
 import org.cyk.utility.persistence.server.DataType;
+import org.cyk.utility.persistence.query.EntityReader;
 import org.junit.jupiter.api.Test;
 
 public class EntityReaderUnitTest extends AbstractUnitTest {
 	private static final long serialVersionUID = 1L;
+	
+	@Test
+	public void readMany() { 	
+    	assertThat(EntityReader.getInstance().readMany(DataType.class).stream().map(x -> x.getCode()).collect(Collectors.toList()))
+    	.containsExactlyInAnyOrder("SG","LG","ST","INT");
+	}
+    
+    @Test
+	public void readOneBySystemIdentifier() { 	
+    	assertThat(EntityReader.getInstance().readOneBySystemIdentifier(DataType.class,"dt1").getCode()).isEqualTo("SG");
+	}
+    
+    @Test
+	public void readOneByBusinessIdentifier() { 	
+    	assertThat(EntityReader.getInstance().readOneByBusinessIdentifier(DataType.class,"SG").getName()).isEqualTo("String");
+	}
+    
+    @Test
+	public void readOneWhereFieldEquals() {
+    	assertThat(CollectionHelper.getSize(QueryManager.getInstance().getQueries())).isEqualTo(0);
+    	assertThat(EntityReader.getInstance().readOneWhereFieldEquals(DataType.class,"name","Long").getCode()).isEqualTo("LG");
+    	assertThat(CollectionHelper.getSize(QueryManager.getInstance().getQueries())).isEqualTo(1);
+    	assertThat(EntityReader.getInstance().readOneWhereFieldEquals(DataType.class,"name","String").getCode()).isEqualTo("SG");
+    	assertThat(CollectionHelper.getSize(QueryManager.getInstance().getQueries())).isEqualTo(1);
+    	assertThat(EntityReader.getInstance().readOneWhereFieldEquals(DataType.class,"code","LG").getName()).isEqualTo("Long");
+    	assertThat(CollectionHelper.getSize(QueryManager.getInstance().getQueries())).isEqualTo(2);
+	}
 	
 	@Test
 	public void readDataType_registerNamedQuery_auto(){

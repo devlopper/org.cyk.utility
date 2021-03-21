@@ -30,7 +30,7 @@ public interface Language {
 	
 	static String of(String...clauses) {
 		ThrowableHelper.throwIllegalArgumentExceptionIfEmpty("clauses", clauses);
-		return of(CollectionHelper.listOf(clauses));
+		return of(CollectionHelper.listOf(Boolean.TRUE,clauses));
 	}
 	
 	static String jpql(Collection<String> clauses) {
