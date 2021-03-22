@@ -1,5 +1,6 @@
 package org.cyk.utility.test.arquillian.bootablejar;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.array.ArrayHelper;
@@ -23,7 +24,7 @@ public class ArchiveBuilder {
 	@Setter @Accessors(chain = true) private String pomXmlName= "pom_arquillian.xml";
 	@Setter @Accessors(chain = true) private String webXmlName;
 	@Setter @Accessors(chain = true) private Collection<String> rootPackagesNames;
-	@Setter @Accessors(chain = true) private Class<?>[] classes;
+	@Setter @Accessors(chain = true) private Collection<Class<?>> classes;
 	
 	/**/
 	
@@ -70,6 +71,35 @@ public class ArchiveBuilder {
         webArchive.addAsLibraries(Maven.resolver().loadPomFromFile(pomXmlName).importCompileAndRuntimeDependencies().resolve().withTransitivity().asFile());
 	}
 	
+	/**/
+	
+	private Collection<String> getRootPackagesNames(Boolean injectIfNull) {
+		if(rootPackagesNames == null && Boolean.TRUE.equals(injectIfNull))
+			rootPackagesNames = new ArrayList<>();
+		return rootPackagesNames;
+	}
+	
+	public ArchiveBuilder addPackages(Collection<String> rootPackagesNames) {
+		if(CollectionHelper.isEmpty(rootPackagesNames))
+			return this;
+		getRootPackagesNames(Boolean.TRUE).addAll(rootPackagesNames);
+		return this;
+	}
+	
+	public ArchiveBuilder addPackages(String...rootPackagesNames) {
+		if(ArrayHelper.isEmpty(rootPackagesNames))
+			return this;
+		return addPackages(CollectionHelper.listOf(rootPackagesNames));
+	}
+	
+	public ArchiveBuilder addPackages(Package...rootPackages) {
+		if(ArrayHelper.isEmpty(rootPackages))
+			return this;
+		for(Package rootPackage : rootPackages)
+			addPackages(rootPackage.getName());
+		return this;
+	}
+	
 	private void addPackages() {
 		if(CollectionHelper.isEmpty(rootPackagesNames))
 			return;
@@ -77,12 +107,35 @@ public class ArchiveBuilder {
 		webArchive.addPackages(Boolean.TRUE, rootPackagesNames.toArray(new String[] {}));
 	}
 	
-	private void addClasses() {
+	/**/
+	
+	private Collection<Class<?>> getClasses(Boolean injectIfNull) {
+		if(classes == null && Boolean.TRUE.equals(injectIfNull))
+			classes = new ArrayList<>();
+		return classes;
+	}
+	
+	public ArchiveBuilder addClasses(Collection<Class<?>> classes) {
+		if(CollectionHelper.isEmpty(classes))
+			return this;
+		getClasses(Boolean.TRUE).addAll(classes);
+		return this;
+	}
+	
+	public ArchiveBuilder addClasses(Class<?>...classes) {
 		if(ArrayHelper.isEmpty(classes))
+			return this;
+		return addClasses(CollectionHelper.listOf(classes));
+	}
+	
+	private void addClasses() {
+		if(CollectionHelper.isEmpty(classes))
 			return;
 		WebArchive webArchive = (WebArchive) archive;   
-        webArchive.addClasses(classes);
+        webArchive.addClasses(classes.toArray(new Class<?>[] {}));
 	}
+	
+	/**/
 	
 	private void setWebXml() {
 		if(StringHelper.isBlank(webXmlName))

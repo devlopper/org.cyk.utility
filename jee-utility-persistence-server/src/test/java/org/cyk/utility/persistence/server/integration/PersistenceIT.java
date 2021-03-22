@@ -20,7 +20,7 @@ public class PersistenceIT extends AbstractTest {
 
     @Deployment
     public static Archive<?> buildArchive() {
-    	return new ArchiveBuilder().setPersistenceEnabled(Boolean.TRUE).setClasses(new Class<?>[] {DataType.class}).build();
+    	return new ArchiveBuilder().setPersistenceEnabled(Boolean.TRUE).addClasses(DataType.class).build();
     }
 
     @Test @InSequence(1)
