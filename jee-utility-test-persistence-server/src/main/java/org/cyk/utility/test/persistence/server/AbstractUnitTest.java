@@ -1,8 +1,14 @@
 package org.cyk.utility.test.persistence.server;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.Collection;
+
 import javax.persistence.Persistence;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.persistence.EntityManagerFactoryGetterImpl;
+import org.cyk.utility.persistence.query.EntityCounter;
 import org.cyk.utility.persistence.server.Initializer;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 
@@ -22,5 +28,29 @@ public abstract class AbstractUnitTest extends AbstractWeldUnitTest {
 	
 	protected String getPersistenceUnitName() {
 		return "default";
+	}
+	
+	public void assertThatCountIsGreaterThan(Class<?> klass,Long number,Boolean printable){
+		Long count = EntityCounter.getInstance().count(klass);
+		if(Boolean.TRUE.equals(printable))
+			System.out.println(klass.getSimpleName()+" : "+count);
+		assertThat(count).as(String.format("number of %s is greater than %s",klass.getSimpleName(),number)).isGreaterThan(number);
+	}
+	
+	public void assertThatCountIsGreaterThanZero(Boolean printable,Collection<Class<?>> classes){
+		for(Class<?> klass : classes)
+			assertThatCountIsGreaterThan(klass, 0l,printable);
+	}
+	
+	public void assertThatCountIsGreaterThanZero(Collection<Class<?>> classes){
+		assertThatCountIsGreaterThanZero(null, classes);
+	}
+	
+	public void assertThatCountIsGreaterThanZero(Boolean printable,Class<?>...classes){
+		assertThatCountIsGreaterThanZero(printable,CollectionHelper.listOf(classes));
+	}
+	
+	public void assertThatCountIsGreaterThanZero(Class<?>...classes){
+		assertThatCountIsGreaterThanZero(null, classes);
 	}
 }

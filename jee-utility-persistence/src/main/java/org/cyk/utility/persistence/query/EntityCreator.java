@@ -21,13 +21,13 @@ public interface EntityCreator {
 
 	void createMany(QueryExecutorArguments arguments);
 	
-	void createMany(Collection<Object> objects,EntityManager entityManager);
+	void createMany(Collection<?> objects,EntityManager entityManager);
 	
-	void createMany(Collection<Object> objects);
+	void createMany(Collection<?> objects);
 	
 	void createMany(EntityManager entityManager,Object...objects);
 	
-	void createMany(Object...objects);
+	void createManyFromArray(Object...objects);
 	
 	void createManyInTransaction(Collection<Object> objects);
 	
@@ -78,14 +78,14 @@ public interface EntityCreator {
 		}
 		
 		@Override
-		public void createMany(Collection<Object> objects,EntityManager entityManager) {
+		public void createMany(Collection<?> objects,EntityManager entityManager) {
 			if(entityManager == null || CollectionHelper.isEmpty(objects))
 				return;
-			createMany(new QueryExecutorArguments().setObjects(objects).setEntityManager(entityManager));
+			createMany(new QueryExecutorArguments().setObjects((Collection<Object>) objects).setEntityManager(entityManager));
 		}
 		
 		@Override
-		public void createMany(Collection<Object> objects) {
+		public void createMany(Collection<?> objects) {
 			if(CollectionHelper.isEmpty(objects))
 				return;
 			createMany(objects, EntityManagerGetter.getInstance().get());
@@ -99,7 +99,7 @@ public interface EntityCreator {
 		}
 		
 		@Override
-		public void createMany(Object...objects) {
+		public void createManyFromArray(Object...objects) {
 			if(ArrayHelper.isEmpty(objects))
 				return;
 			createMany(CollectionHelper.listOf(objects));
