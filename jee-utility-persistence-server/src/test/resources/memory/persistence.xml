@@ -2,11 +2,12 @@
     <persistence-unit name="persistencePersistenceUnit" transaction-type="JTA">
     	<jta-data-source>java:jboss/datasources/ExampleDS</jta-data-source>
 		<shared-cache-mode>NONE</shared-cache-mode>
-    	<class>org.cyk.utility.persistence.server.DataType</class>		
-    	<exclude-unlisted-classes>true</exclude-unlisted-classes>
-		<properties>
+    	<properties>
 			<property name="javax.persistence.schema-generation.database.action" value="create"/>
         	<property name="javax.persistence.sql-load-script-source" value="META-INF/data.sql" />
+        	<property name="hibernate.hbm2ddl.charset_name" value="UTF-8" />
+        	<property name="hibernate.show_sql" value = "false" />
+			<property name="hibernate.format_sql" value="false" />
 		</properties>
     </persistence-unit>  
 </persistence>

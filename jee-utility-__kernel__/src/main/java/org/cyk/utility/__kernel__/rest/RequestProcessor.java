@@ -10,7 +10,6 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.runnable.Runner;
-import org.cyk.utility.__kernel__.runnable.Runner.Arguments;
 import org.cyk.utility.__kernel__.value.Value;
 
 public interface RequestProcessor {
@@ -39,48 +38,57 @@ public interface RequestProcessor {
 			if(runnerArguments.getThrowableCatchableOnly() == null)
 				runnerArguments.setThrowableCatchableOnly(Boolean.TRUE);
 			
-			request.execute(runnerArguments);
-			
+			return request.execute(runnerArguments);
+			/*
 			if(runnerArguments.getThrowable() == null)
 				return request.getResponseWhenThrowableIsNull(runnerArguments);
 			return ResponseBuilder.getInstance().build(runnerArguments.getThrowable());
+			*/
 		}
 	}
 	
 	public static interface Request {
 		Runner.Arguments getRunnerArguments();
 		Runnable getRunnable();
-		void execute(Runner.Arguments arguments);
+		Response execute(Runner.Arguments arguments);
+		//Response getResponse();
+		//Request buildResponse();
 		Response.ResponseBuilder getResponseBuilderWhenThrowableIsNull(Runner.Arguments runnerArguments);
 		Response getResponseWhenThrowableIsNull(Runner.Arguments runnerArguments);
 		
 		public static abstract class AbstractImpl implements Request {
 			@Override
-			public Arguments getRunnerArguments() {
+			public Runner.Arguments getRunnerArguments() {
 				return null;
 			}
 			
 			@Override
-			public Response.ResponseBuilder getResponseBuilderWhenThrowableIsNull(Arguments runnerArguments) {
+			public Response.ResponseBuilder getResponseBuilderWhenThrowableIsNull(Runner.Arguments runnerArguments) {
 				return Response.ok(getResponseWhenThrowableIsNullAsString(runnerArguments));
 			}
 			
 			@Override
-			public Response getResponseWhenThrowableIsNull(Arguments runnerArguments) {
+			public Response getResponseWhenThrowableIsNull(Runner.Arguments runnerArguments) {
 				return getResponseBuilderWhenThrowableIsNull(runnerArguments).build();
 			}
 			
 			@Override
-			public void execute(Runner.Arguments arguments) {
+			public Response execute(Runner.Arguments arguments) {
 				try {
 					Runner.getInstance().run(arguments);
 				} catch (Exception exception) {
 					LogHelper.log(exception, getClass());
 					arguments.setThrowable(exception);
 				}
+				
+				if(arguments.getThrowable() == null)
+					return getResponseWhenThrowableIsNull(arguments);
+				return ResponseBuilder.getInstance().build(arguments.getThrowable());
 			}
 			
-			protected String getResponseWhenThrowableIsNullAsString(Arguments runnerArguments) {
+			protected String getResponseWhenThrowableIsNullAsString(Runner.Arguments runnerArguments) {
+				if(runnerArguments != null && runnerArguments.getResult() != null)
+					return runnerArguments.getResult().toString();
 				return "success";
 			}
 		}

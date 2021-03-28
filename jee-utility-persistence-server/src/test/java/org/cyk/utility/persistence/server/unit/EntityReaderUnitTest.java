@@ -19,9 +19,14 @@ public class EntityReaderUnitTest extends AbstractUnitTest {
 	private static final long serialVersionUID = 1L;
 	
 	@Test
-	public void readMany() { 	
+	public void readMany() {
     	assertThat(EntityReader.getInstance().readMany(DataType.class).stream().map(x -> x.getCode()).collect(Collectors.toList()))
     	.containsExactlyInAnyOrder("SG","LG","ST","INT");
+	}
+	
+	@Test
+	public void read_specialChars() {
+		assertThat(EntityReader.getInstance().readOneBySystemIdentifier(DataType.class,"dt2").getDescription()).isEqualTo("Valeur entière");
 	}
     
     @Test
