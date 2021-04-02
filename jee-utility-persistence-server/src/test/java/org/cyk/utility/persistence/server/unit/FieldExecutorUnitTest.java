@@ -18,21 +18,28 @@ public class FieldExecutorUnitTest extends AbstractUnitTest {
 	}
 	
 	@Test
-	public void specific_exists(){
+	public void specific_code_getOne(){
+		assertThat(CodeExecutor.getInstance().getOne(DataType.class, "SG")).isNotNull();
+		assertThat(CodeExecutor.getInstance().getOne(DataType.class, "LG")).isNotNull();
+		assertThat(CodeExecutor.getInstance().getOne(DataType.class, "X")).isNull();
+	}
+	
+	@Test
+	public void specific_code_exists(){
 		assertThat(CodeExecutor.getInstance().exists(DataType.class, "SG")).isTrue();
 		assertThat(CodeExecutor.getInstance().exists(DataType.class, "SG","LG")).isTrue();
 		assertThat(CodeExecutor.getInstance().exists(DataType.class, "SG","LG","X")).isFalse();
 	}
 	
 	@Test
-	public void specific_unexisting(){
+	public void specific_code_unexisting(){
 		assertThat(CodeExecutor.getInstance().getUnexisting(DataType.class, "SG")).isNull();
 		assertThat(CodeExecutor.getInstance().getUnexisting(DataType.class, "SG","LG")).isNull();
 		assertThat(CodeExecutor.getInstance().getUnexisting(DataType.class, "SG","LG","X")).contains("X");
 	}
 	
 	@Test
-	public void specific_existing(){
+	public void specific_code_existing(){
 		assertThat(CodeExecutor.getInstance().getExisting(DataType.class, "SG")).contains("SG");
 		assertThat(CodeExecutor.getInstance().getExisting(DataType.class, "SG","LG")).contains("SG","LG");
 		assertThat(CodeExecutor.getInstance().getExisting(DataType.class, "SG","LG","X")).contains("SG","LG");

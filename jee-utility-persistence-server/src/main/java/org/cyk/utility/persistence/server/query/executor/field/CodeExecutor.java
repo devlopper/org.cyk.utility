@@ -7,13 +7,12 @@ import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifi
 import org.cyk.utility.__kernel__.value.Value;
 
 public interface CodeExecutor extends SpecificFieldExecutor<String> {
-
+	
 	public static abstract class AbstractImpl extends SpecificFieldExecutor.AbstractImpl<String> implements CodeExecutor,Serializable {
 
 		public AbstractImpl() {
 			super(AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringImpl.FIELD_CODE, String.class);
 		}
-		
 	}
 	
 	/**/

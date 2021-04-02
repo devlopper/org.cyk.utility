@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.persistence.NoResultException;
+
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
@@ -17,6 +19,8 @@ import org.cyk.utility.persistence.EntityManagerGetter;
 
 public interface GenericFieldExecutor extends FieldBasedExecutor {
 
+	<T,V> T getOne(Class<T> klass,Class<V> valueClass,String fieldName,V value);
+	
 	<T,V> Boolean exists(Class<T> klass,Class<V> valueClass,String fieldName,Collection<V> values);
 	<T,V> Boolean exists(Class<T> klass,Class<V> valueClass,String fieldName,V...values);
 	
@@ -27,6 +31,20 @@ public interface GenericFieldExecutor extends FieldBasedExecutor {
 	<T,V> Collection<V> getUnexisting(Class<T> klass,Class<V> valueClass,String fieldName,V...values);
 	
 	public static abstract class AbstractImpl extends FieldBasedExecutor.AbstractImpl implements GenericFieldExecutor,Serializable {
+		
+		@Override
+		public <T, V> T getOne(Class<T> klass, Class<V> valueClass, String fieldName, V value) {
+			if(klass == null || valueClass == null || StringHelper.isBlank(fieldName) || value == null)
+				return null;
+			T instance = null;
+			try {
+				instance = (T) EntityManagerGetter.getInstance().get().createQuery(String.format("SELECT t FROM %s t WHERE t.%s = :value"
+						,klass.getSimpleName(),fieldName),klass).setParameter("value", value).getSingleResult();
+			} catch (NoResultException exception) {
+				instance = null;
+			}
+			return instance;
+		}
 		
 		@Override
 		public <T,V> Boolean exists(Class<T> klass,Class<V> valueClass,String fieldName, Collection<V> values) {

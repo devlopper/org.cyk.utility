@@ -17,11 +17,13 @@ import lombok.experimental.Accessors;
 public class ArchiveBuilder {
 
 	@Setter @Accessors(chain = true) private Class<? extends Archive<?>> archiveClass = WebArchive.class;
-	@Setter @Accessors(chain = true) private String archiveName = "test.war";
+	@Setter @Accessors(chain = true) private Mode mode;
+	@Setter @Accessors(chain = true) private String archiveName;
 	@Setter @Accessors(chain = true) private Boolean cdiEnabled = Boolean.TRUE;
 	@Setter @Accessors(chain = true) private Boolean persistenceEnabled;
 	@Setter @Accessors(chain = true) private String persistenceCreationScriptName;
-	@Setter @Accessors(chain = true) private String pomXmlName= "pom_arquillian.xml";
+	@Setter @Accessors(chain = true) private String pomXmlName;
+	@Setter @Accessors(chain = true) private Boolean webConfigEnabled;
 	@Setter @Accessors(chain = true) private String webXmlName;
 	@Setter @Accessors(chain = true) private Collection<String> rootPackagesNames;
 	@Setter @Accessors(chain = true) private Collection<Class<?>> classes;
@@ -30,9 +32,22 @@ public class ArchiveBuilder {
 	
 	private Archive<?> archive;
 
+	private String buildFileName(String blankValue,String name,String extension) {
+		if(StringHelper.isBlank(name))
+			name = blankValue;
+		if(mode != null)
+			name = name + "_" + mode.name().toLowerCase();
+		if(StringHelper.isNotBlank(extension)) {
+			if(!name.endsWith("."+extension))
+				name = name + "."+extension;
+		}
+		return name;
+	}
+	
 	public ArchiveBuilder instantiate() {
 		if(archive != null)
 			return this;
+		archiveName = buildFileName("test",archiveName,"war");
 		archive = ShrinkWrap.create(archiveClass, archiveName);
 		return this;
 	}
@@ -65,6 +80,7 @@ public class ArchiveBuilder {
 	}
 	
 	private void addDependencies() {
+		pomXmlName = buildFileName("pom_arquillian",pomXmlName,"xml");
 		if(StringHelper.isBlank(pomXmlName))
 			return;
 		WebArchive webArchive = (WebArchive) archive;   
@@ -138,9 +154,19 @@ public class ArchiveBuilder {
 	/**/
 	
 	private void setWebXml() {
+		if(!Boolean.TRUE.equals(webConfigEnabled))
+			return;
+		if(StringHelper.isBlank(webXmlName) && mode != null)
+			webXmlName = buildFileName("memory/web",webXmlName,"xml");
 		if(StringHelper.isBlank(webXmlName))
 			return;
 		WebArchive webArchive = (WebArchive) archive;   
         webArchive.setWebXML(webXmlName);
+	}
+	
+	/**/
+	
+	public static enum Mode{
+		SERVER,CLIENT
 	}
 }

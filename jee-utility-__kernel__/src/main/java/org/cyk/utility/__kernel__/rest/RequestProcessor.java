@@ -63,13 +63,16 @@ public interface RequestProcessor {
 			}
 			
 			@Override
-			public Response.ResponseBuilder getResponseBuilderWhenThrowableIsNull(Runner.Arguments runnerArguments) {
+			public Response.ResponseBuilder getResponseBuilderWhenThrowableIsNull(Runner.Arguments runnerArguments) {				
 				return Response.ok(getResponseWhenThrowableIsNullAsString(runnerArguments));
 			}
 			
 			@Override
 			public Response getResponseWhenThrowableIsNull(Runner.Arguments runnerArguments) {
-				return getResponseBuilderWhenThrowableIsNull(runnerArguments).build();
+				if(runnerArguments.getResult() == null)
+					return getResponseBuilderWhenThrowableIsNull(runnerArguments).build();
+				return ResponseBuilder.getInstance().build(new ResponseBuilder.Arguments().setEntity(runnerArguments.getResult()));
+				//return getResponseBuilderWhenThrowableIsNull(runnerArguments).build();
 			}
 			
 			@Override

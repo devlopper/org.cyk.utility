@@ -14,6 +14,8 @@ public interface SpecificFieldExecutor<V> extends FieldBasedExecutor {
 	String getName();
 	Class<V> getKlass();
 	
+	<T> T getOne(Class<T> klass,V value);
+	
 	<T> Boolean exists(Class<T> klass,Collection<V> values);
 	<T> Boolean exists(Class<T> klass,V...values);
 	
@@ -34,6 +36,11 @@ public interface SpecificFieldExecutor<V> extends FieldBasedExecutor {
 		public AbstractImpl(String name,Class<V> klass) {
 			this.name = name;
 			this.klass = klass;
+		}
+		
+		@Override
+		public <T> T getOne(Class<T> klass, V value) {
+			return GenericFieldExecutor.getInstance().getOne(klass, getKlass(), getName(), value);
 		}
 		
 		@Override
