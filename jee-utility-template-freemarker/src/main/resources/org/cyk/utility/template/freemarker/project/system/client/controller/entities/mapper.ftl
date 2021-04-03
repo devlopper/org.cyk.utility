@@ -1,6 +1,6 @@
 package ${system_package}.${system_identifier}.client.controller.entities;
 import ${system_package}.${system_identifier}.server.representation.entities.${entity_class_name}Dto;
-import org.cyk.utility.__kernel__.controller.AbstractMapperSourceDestinationImpl;
+import org.cyk.utility.controller.AbstractMapperSourceDestinationImpl;
 import org.mapstruct.Mapper;
 
 @Mapper

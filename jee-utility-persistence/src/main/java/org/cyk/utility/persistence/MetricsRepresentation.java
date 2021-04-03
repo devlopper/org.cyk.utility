@@ -14,7 +14,7 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 @Path(MetricsRepresentation.PATH)
 @Tag(name = "Persistence Metrics")
-public interface MetricsRepresentation extends org.cyk.utility.__kernel__.representation.Representation {
+public interface MetricsRepresentation extends org.cyk.utility.rest.Representation {
 
 	@GET
 	@Path(PATH_GET)

@@ -71,7 +71,7 @@ public class Arguments extends AbstractObject implements Serializable {
 	/**/
 	
 	public static class Internal implements Serializable {	
-		Class<?> representationEntityClass,persistenceEntityClass;
+		public Class<?> representationEntityClass,persistenceEntityClass;
 		
 		public Internal(Arguments arguments,Class<?> actionClass) {
 			if(StringHelper.isBlank(arguments.getRepresentationEntityClassName()))
