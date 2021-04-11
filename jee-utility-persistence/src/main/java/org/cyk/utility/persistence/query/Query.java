@@ -68,6 +68,26 @@ public class Query extends AbstractObject implements Serializable {
 		return identifier.equals(QueryIdentifierGetter.getInstance().get(klass, queryName));
 	}
 	
+	public Boolean isIdentifierEqualsOne(Class<?> klass,Collection<QueryName> queriesNames) {
+		if(StringHelper.isBlank(identifier) || klass == null || CollectionHelper.isEmpty(queriesNames))
+			return Boolean.FALSE;
+		for(QueryName queryName : queriesNames)
+			if(Boolean.TRUE.equals(isIdentifierEquals(klass, queryName)))
+				return Boolean.TRUE;
+		return Boolean.FALSE;
+		
+	}
+	
+	public Boolean isIdentifierEqualsOne(Class<?> klass,QueryName...queriesNames) {
+		if(StringHelper.isBlank(identifier) || klass == null || ArrayHelper.isEmpty(queriesNames))
+			return Boolean.FALSE;
+		return isIdentifierEqualsOne(klass, CollectionHelper.listOf(queriesNames));
+	}
+	
+	public Boolean isIdentifierEqualsDynamic(Class<?> klass,QueryName...queriesNames) {
+		return isIdentifierEqualsOne(klass, QueryName.READ_DYNAMIC,QueryName.COUNT_DYNAMIC);
+	}
+	
 	@Override
 	public String toString() {
 		return String.format(TO_STRING_FORMAT, type == null ? Query.class.getSimpleName() : type.name(),getIdentifier(),getValue(),getTupleClass(),getResultClass());

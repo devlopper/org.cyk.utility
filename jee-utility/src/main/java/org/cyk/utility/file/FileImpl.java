@@ -166,7 +166,7 @@ public class FileImpl extends AbstractObject implements File,Serializable {
 		if(bytes == null) {
 			String pathAndNameAndExtension = getPathAndNameAndExtension();
 			if(StringHelper.isNotBlank(pathAndNameAndExtension))
-				bytes = __inject__(FileHelper.class).getBytes(new java.io.File(pathAndNameAndExtension));
+				bytes = __inject__(FileHelperToDel.class).getBytes(new java.io.File(pathAndNameAndExtension));
 		}
 		if(bytes != null)
 			checksum = __inject__(HashFunction.class).setBytes(bytes).setAlgorithm("SHA-1").execute().getOutput();

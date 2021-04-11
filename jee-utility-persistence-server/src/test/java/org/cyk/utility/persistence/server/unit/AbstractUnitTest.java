@@ -8,6 +8,7 @@ import org.cyk.utility.persistence.EntityManagerFactoryGetterImpl;
 import org.cyk.utility.persistence.query.QueryHelper;
 import org.cyk.utility.persistence.query.QueryManager;
 import org.cyk.utility.persistence.server.Initializer;
+import org.cyk.utility.persistence.server.TransientFieldsProcessor;
 import org.cyk.utility.persistence.server.query.string.RuntimeQueryStringBuilder;
 
 public class AbstractUnitTest extends org.cyk.utility.test.weld.AbstractWeldUnitTest {
@@ -18,7 +19,7 @@ public class AbstractUnitTest extends org.cyk.utility.test.weld.AbstractWeldUnit
 		super.__listenBefore__();
 		EntityManagerFactoryGetterImpl.ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("default");
 		Initializer.initialize();
-		DependencyInjection.setQualifierClassTo(Test.class,RuntimeQueryStringBuilder.class);
+		DependencyInjection.setQualifierClassTo(Test.class,RuntimeQueryStringBuilder.class,TransientFieldsProcessor.class);
 	}
 	
 	@Override

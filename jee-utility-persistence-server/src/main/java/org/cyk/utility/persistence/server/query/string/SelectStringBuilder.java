@@ -2,6 +2,7 @@ package org.cyk.utility.persistence.server.query.string;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
@@ -99,6 +100,20 @@ public interface SelectStringBuilder {
 			if(StringHelper.isBlank(variableName) || ArrayHelper.isEmpty(fieldsNames))
 				return this;
 			return addFromTuple(variableName, CollectionHelper.listOf(fieldsNames));
+		}
+		
+		public Projection addFromQueryProjections(String variableName,Collection<org.cyk.utility.persistence.query.Projection> projections) {
+			if(CollectionHelper.isEmpty(projections))
+				return this;
+			addFromTuple(variableName,projections.stream().map(x -> x.getFieldName()).collect(Collectors.toList()));
+			return this;
+		}
+		
+		public Projection addFromQueryProjections(String variableName,org.cyk.utility.persistence.query.Projection...projections) {
+			if(ArrayHelper.isEmpty(projections))
+				return this;
+			addFromQueryProjections(variableName,CollectionHelper.listOf(projections));
+			return this;
 		}
 	}
 	

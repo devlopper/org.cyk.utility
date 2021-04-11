@@ -43,7 +43,7 @@ public class FilesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 					java.io.File javaFile = path.toFile();
 					Boolean isAddable = Boolean.TRUE;
 					if(Boolean.TRUE.equals(isAddable) && CollectionHelper.isNotEmpty(fileExtensions))
-						isAddable = CollectionHelper.contains(fileExtensions, __inject__(FileHelper.class).getExtension(javaFile.getName()).toLowerCase());
+						isAddable = CollectionHelper.contains(fileExtensions, __inject__(FileHelperToDel.class).getExtension(javaFile.getName()).toLowerCase());
 					if(Boolean.TRUE.equals(isAddable) && CollectionHelper.isNotEmpty(fileSizeIntervals))
 						isAddable = fileSizeIntervals.contains(javaFile.length());
 					

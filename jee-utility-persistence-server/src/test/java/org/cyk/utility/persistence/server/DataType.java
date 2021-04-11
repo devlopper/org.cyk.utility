@@ -1,6 +1,7 @@
 package org.cyk.utility.persistence.server;
 
 import javax.persistence.Entity;
+import javax.persistence.Transient;
 
 import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl;
 
@@ -13,4 +14,7 @@ public class DataType extends AbstractIdentifiableSystemScalarStringIdentifiable
 
 	private String description;
 	
+	@Transient private String codeAndName;
+	
+	public static final String FIELD_CODE_AND_NAME = "codeAndName";
 }

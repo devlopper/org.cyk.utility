@@ -87,7 +87,8 @@ public interface ManyBasedExecutor extends Executor {
 		}
 		
 		protected Long __count__(Class<?> klass,QueryExecutorArguments arguments) {
-			throw new RuntimeException(String.format("count of %s not yet implemented",arguments.getQuery().getIdentifier()));
+			return QueryExecutor.getInstance().executeCount(arguments);
+			//throw new RuntimeException(String.format("count of %s not yet implemented",arguments.getQuery().getIdentifier()));
 		}
 		
 		/**/

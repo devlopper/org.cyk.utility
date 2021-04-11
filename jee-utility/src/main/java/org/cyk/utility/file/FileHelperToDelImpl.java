@@ -39,7 +39,7 @@ import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.number.Intervals;
 
 @ApplicationScoped @Deprecated
-public class FileHelperImpl extends AbstractHelper implements FileHelper,Serializable {
+public class FileHelperToDelImpl extends AbstractHelper implements FileHelperToDel,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override

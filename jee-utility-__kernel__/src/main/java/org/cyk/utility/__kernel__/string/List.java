@@ -9,10 +9,13 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 
 import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 public class List implements Serializable {
 
 	@Getter private java.util.List<String> strings;
+	@Getter @Setter @Accessors(chain=true) private String separator = ConstantEmpty.STRING;
 	
 	public String concatenate(String separator) {
 		if(CollectionHelper.isEmpty(strings))
@@ -21,7 +24,7 @@ public class List implements Serializable {
 	}
 	
 	public String concatenate() {
-		return concatenate(ConstantEmpty.STRING);
+		return concatenate(separator);
 	}
 	
 	/**/

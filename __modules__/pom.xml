@@ -19,6 +19,7 @@
 	<modules>
 		<module>../jee-utility-__kernel__</module>
 		<module>../jee-utility-rest</module>
+		<module>../jee-utility-file</module>
 		<module>../jee-utility-mail</module>
 		<module>../jee-utility-mail-postmark</module>
 		<module>../jee-utility-javascript</module>

@@ -9,15 +9,18 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.SortOrder;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.mapping.MapperSourceDestination;
 import org.cyk.utility.__kernel__.mapping.MappingHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
+import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemImpl;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
@@ -94,7 +97,7 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 		return addProjections(CollectionHelper.listOf(projections));
 	}
 	
-	public QueryExecutorArguments addProjectionsFromStrings(ArrayList<String> strings) {
+	public QueryExecutorArguments addProjectionsFromStrings(Collection<String> strings) {
 		if(CollectionHelper.isEmpty(strings))
 			return this;
 		Collection<Projection> projections = new ArrayList<>();
@@ -112,6 +115,25 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 		ArrayList<String> list = new ArrayList<>();
 		list.addAll(CollectionHelper.listOf(strings));
 		return addProjectionsFromStrings(list);
+	}
+	
+	public Collection<String> getProcessableTransientFieldsNames(Boolean injectIfNull) {
+		if(processableTransientFieldsNames == null && Boolean.TRUE.equals(injectIfNull))
+			processableTransientFieldsNames = new ArrayList<>();
+		return processableTransientFieldsNames;
+	}
+	
+	public QueryExecutorArguments addProcessableTransientFieldsNames(Collection<String> processableTransientFieldsNames) {
+		if(CollectionHelper.isEmpty(processableTransientFieldsNames))
+			return this;
+		getProcessableTransientFieldsNames(Boolean.TRUE).addAll(processableTransientFieldsNames);
+		return this;
+	}
+	
+	public QueryExecutorArguments addProcessableTransientFieldsNames(String...processableTransientFieldsNames) {
+		if(ArrayHelper.isEmpty(processableTransientFieldsNames))
+			return this;
+		return addProcessableTransientFieldsNames(CollectionHelper.listOf(processableTransientFieldsNames));
 	}
 	
 	public Boolean isTransientFieldNameProcessable(String fieldName) {
@@ -341,6 +363,53 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 
 	public Boolean isFilterFieldTrue(String...paths) {
 		return Boolean.TRUE.equals(ValueHelper.convertToBoolean(getFilterFieldValue(paths)));
+	}
+	
+	public QueryExecutorArguments normalize(Collection<String> defaultProjectionsFieldsNames,Map<String,SortOrder> defaultSortOrders) {
+		if(CollectionHelper.isEmpty(projections))
+			addProjectionsFromStrings(defaultProjectionsFieldsNames);
+		
+		Collection<String> tuplePersistedFieldsNames = null;
+		Collection<String> tupleTransientFieldsNames = null;
+		if(CollectionHelper.isNotEmpty(projections)) {
+			for(Projection projection : projections) {
+				if(FieldHelper.getByName(query.getTupleClass(), projection.getFieldName()).getAnnotation(Transient.class) == null) {
+					if(tuplePersistedFieldsNames == null)
+						tuplePersistedFieldsNames = new ArrayList<>();
+					tuplePersistedFieldsNames.add(projection.getFieldName());
+				}else {
+					if(tupleTransientFieldsNames == null)
+						tupleTransientFieldsNames = new ArrayList<>();
+					tupleTransientFieldsNames.add(projection.getFieldName());
+				}
+			}
+		}
+		if(CollectionHelper.isNotEmpty(tupleTransientFieldsNames)) {
+			if(CollectionHelper.isNotEmpty(projections))
+				for(String tupleTransientFieldName : tupleTransientFieldsNames) {
+					org.cyk.utility.persistence.query.Projection projectionIndex = null;
+					for(org.cyk.utility.persistence.query.Projection index : projections)
+						if(index.getFieldName().equals(tupleTransientFieldName)) {
+							projectionIndex = index;
+							break;
+						}
+					if(projectionIndex != null)
+						projections.remove(projectionIndex);
+				}
+			addProcessableTransientFieldsNames(tupleTransientFieldsNames);
+		}
+		
+		if(CollectionHelper.isEmpty(tuplePersistedFieldsNames) && CollectionHelper.isNotEmpty(tupleTransientFieldsNames)) {
+			addProjectionsFromStrings(AbstractIdentifiableSystemImpl.FIELD_IDENTIFIER);
+		}
+		
+		if(MapHelper.isEmpty(sortOrders))
+			sortOrders = defaultSortOrders;
+		return this;
+	}
+	
+	public QueryExecutorArguments normalize() {
+		return normalize(null,null);
 	}
 	
 	@Override

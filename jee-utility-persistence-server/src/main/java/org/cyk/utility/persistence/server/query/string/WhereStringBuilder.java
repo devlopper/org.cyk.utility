@@ -32,12 +32,14 @@ public interface WhereStringBuilder {
 			if(CollectionHelper.isEmpty(predicate.getStrings()))
 				throw new RuntimeException("Where predicate is required");
 			Collection<String> predicates = predicate.getStrings();
-			String string = __build__(predicates);
+			String string = __build__(predicates,predicate.getSeparator());
 			return string;
 		}
 		
-		private String __build__(Collection<String> predicates) {
-			java.lang.StringBuilder stringBuilder = new java.lang.StringBuilder(StringHelper.concatenate(predicates, " "));
+		private String __build__(Collection<String> predicates,String separator) {
+			if(separator == null)
+				separator = " ";
+			java.lang.StringBuilder stringBuilder = new java.lang.StringBuilder(StringHelper.concatenate(predicates, separator));
 			return String.format(FORMAT, stringBuilder.toString());
 		}
 		
@@ -45,7 +47,7 @@ public interface WhereStringBuilder {
 		public String build(Collection<String> predicates) {
 			if(CollectionHelper.isEmpty(predicates))
 				throw new RuntimeException("Where predicates are required");
-			return __build__(predicates);
+			return __build__(predicates," ");
 		}
 		
 		@Override
@@ -60,6 +62,19 @@ public interface WhereStringBuilder {
 	
 	@Getter @Setter @Accessors(chain=true)
 	public static class Predicate extends org.cyk.utility.__kernel__.string.List implements Serializable {
+		
+		public Predicate() {
+			setSeparator(" ");
+		}
+		
+		@Override
+		public Predicate setSeparator(String separator) {
+			return (Predicate) super.setSeparator(separator);
+		}
+		
+		public Predicate setSeparatorAsAnd() {
+			return setSeparator(" AND ");
+		}
 		
 		@Override
 		public Predicate add(Collection<String> strings) {

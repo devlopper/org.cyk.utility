@@ -21,8 +21,8 @@ public class DynamicManyExecutorUnitTest extends AbstractUnitTest {
 		assertThat(CollectionHelper.getSize(QueryManager.getInstance().getQueries())).isEqualTo(0);
 		assertThat(DynamicManyExecutor.getInstance().read(DataType.class)).isNotEmpty();
 		
-		assertThat(DynamicManyExecutor.getInstance().read(DataType.class).stream().map(x -> x.getCode())).containsExactly("SG","INT","LG","ST");
-		assertThat(DynamicManyExecutor.getInstance().read(DataType.class).stream().map(x -> x.getName())).containsExactly("String","Integer","Long","Short");
+		assertThat(DynamicManyExecutor.getInstance().read(DataType.class).stream().map(x -> x.getCode())).containsExactly("INT","LG","SG","ST");
+		assertThat(DynamicManyExecutor.getInstance().read(DataType.class).stream().map(x -> x.getName())).containsExactly("Integer","Long","String","Short");
 		assertThat(CollectionHelper.getSize(QueryManager.getInstance().getQueries())).isEqualTo(0);
 		
 		assertThat(DynamicManyExecutor.getInstance().read(DataType.class)).isNotEmpty();
@@ -30,30 +30,94 @@ public class DynamicManyExecutorUnitTest extends AbstractUnitTest {
 	}
 	
 	@Test
-	public void readDataType_identifier_code_name(){
-		assertThat(DynamicManyExecutor.getInstance().read(DataType.class)).isNotEmpty();
-		assertThat(DynamicManyExecutor.getInstance().read(DataType.class).stream().map(x -> x.getCode())).containsExactly("SG","INT","LG","ST");
-		assertThat(DynamicManyExecutor.getInstance().read(DataType.class).stream().map(x -> x.getName())).containsExactly("String","Integer","Long","Short");
-	}
-	
-	@Test
-	public void readDataType_identifier_code(){
-		QueryExecutorArguments queryExecutorArguments = new QueryExecutorArguments();
-		queryExecutorArguments.addProjectionsFromStrings("identifier","code");
-		Collection<DataType> collection = DynamicManyExecutor.getInstance().read(DataType.class,queryExecutorArguments);
-		assertThat(collection).isNotEmpty();
-		assertThat(collection.stream().map(x -> x.getCode())).containsExactly("SG","INT","LG","ST");
-		assertThat(collection.stream().map(x -> x.getName())).containsExactly(null,null,null,null);
-	}
-	
-	@Test
-	public void readDataType_code(){
-		QueryExecutorArguments queryExecutorArguments = new QueryExecutorArguments();
-		queryExecutorArguments.addProjectionsFromStrings("code").setSortOrders(Map.of("code",SortOrder.ASCENDING));
-		Collection<DataType> collection = DynamicManyExecutor.getInstance().read(DataType.class,queryExecutorArguments);
-		assertThat(collection).isNotEmpty();
-		assertThat(collection.stream().map(x -> x.getIdentifier())).containsExactly(null,null,null,null);
+	public void readDataType_defaults(){
+		Collection<DataType> collection = DynamicManyExecutor.getInstance().read(DataType.class);
+		assertThat(collection).isNotEmpty();		
+		assertThat(collection.stream().map(x -> x.getIdentifier())).containsExactly("dt2","dt3","dt1","dt4");
 		assertThat(collection.stream().map(x -> x.getCode())).containsExactly("INT","LG","SG","ST");
-		assertThat(collection.stream().map(x -> x.getName())).containsExactly(null,null,null,null);
+		assertThat(collection.stream().map(x -> x.getName())).containsExactly("Integer","Long","String","Short");
+		assertThat(collection.stream().map(x -> x.getDescription())).containsExactly((String)null,(String)null,(String)null,(String)null);
+		assertThat(collection.stream().map(x -> x.getCodeAndName())).containsExactly((String)null,(String)null,(String)null,(String)null);
+	}
+	
+	@Test
+	public void readDataType_specificFields_withoutTransient(){
+		Collection<DataType> collection = DynamicManyExecutor.getInstance().read(DataType.class,new QueryExecutorArguments()
+				.addProjectionsFromStrings(DataType.FIELD_IDENTIFIER,DataType.FIELD_NAME));
+		assertThat(collection).isNotEmpty();		
+		assertThat(collection.stream().map(x -> x.getIdentifier())).containsExactly("dt2","dt3","dt1","dt4");
+		assertThat(collection.stream().map(x -> x.getCode())).containsExactly((String)null,(String)null,(String)null,(String)null);
+		assertThat(collection.stream().map(x -> x.getName())).containsExactly("Integer","Long","String","Short");
+		assertThat(collection.stream().map(x -> x.getDescription())).containsExactly((String)null,(String)null,(String)null,(String)null);
+		assertThat(collection.stream().map(x -> x.getCodeAndName())).containsExactly((String)null,(String)null,(String)null,(String)null);
+	}
+	
+	@Test
+	public void readDataType_specificFields_withTransient(){
+		Collection<DataType> collection = DynamicManyExecutor.getInstance().read(DataType.class,new QueryExecutorArguments()
+				.addProjectionsFromStrings(DataType.FIELD_IDENTIFIER,DataType.FIELD_CODE_AND_NAME));
+		assertThat(collection).isNotEmpty();		
+		assertThat(collection.stream().map(x -> x.getIdentifier())).containsExactly("dt2","dt3","dt1","dt4");
+		assertThat(collection.stream().map(x -> x.getCode())).containsExactly((String)null,(String)null,(String)null,(String)null);
+		assertThat(collection.stream().map(x -> x.getName())).containsExactly((String)null,(String)null,(String)null,(String)null);
+		assertThat(collection.stream().map(x -> x.getDescription())).containsExactly((String)null,(String)null,(String)null,(String)null);
+		assertThat(collection.stream().map(x -> x.getCodeAndName())).containsExactly("INT Integer","LG Long","SG String","ST Short");
+	}
+	
+	@Test
+	public void readDataType_specificOrder_ascending(){
+		Collection<DataType> collection = DynamicManyExecutor.getInstance().read(DataType.class,new QueryExecutorArguments().setSortOrders(Map.of(DataType.FIELD_CODE,SortOrder.ASCENDING)));
+		assertThat(collection).isNotEmpty();		
+		assertThat(collection.stream().map(x -> x.getIdentifier())).containsExactly("dt2","dt3","dt1","dt4");
+		assertThat(collection.stream().map(x -> x.getCode())).containsExactly("INT","LG","SG","ST");
+		assertThat(collection.stream().map(x -> x.getName())).containsExactly("Integer","Long","String","Short");
+		assertThat(collection.stream().map(x -> x.getDescription())).containsExactly((String)null,(String)null,(String)null,(String)null);
+		assertThat(collection.stream().map(x -> x.getCodeAndName())).containsExactly((String)null,(String)null,(String)null,(String)null);
+	}
+	
+	@Test
+	public void readDataType_specificOrder_descending(){
+		Collection<DataType> collection = DynamicManyExecutor.getInstance().read(DataType.class,new QueryExecutorArguments().setSortOrders(Map.of(DataType.FIELD_CODE,SortOrder.DESCENDING)));
+		assertThat(collection).isNotEmpty();		
+		assertThat(collection.stream().map(x -> x.getIdentifier())).containsExactly("dt4","dt1","dt3","dt2");
+		assertThat(collection.stream().map(x -> x.getCode())).containsExactly("ST","SG","LG","INT");
+		assertThat(collection.stream().map(x -> x.getName())).containsExactly("Short","String","Long","Integer");
+		assertThat(collection.stream().map(x -> x.getDescription())).containsExactly((String)null,(String)null,(String)null,(String)null);
+		assertThat(collection.stream().map(x -> x.getCodeAndName())).containsExactly((String)null,(String)null,(String)null,(String)null);
+	}
+	
+	@Test
+	public void dataType_filter_nameContains(){
+		assertDataTypeReadFilter("o", 2l
+			, new String[] {"dt3","dt4"}
+			, new String[] {"Long","Short"}
+		);
+		
+		assertDataTypeReadFilter("I", 2l
+				, new String[] {"dt2","dt1"}
+				, new String[] {"Integer","String"}
+			);
+		
+		assertDataTypeReadFilter("i", 2l
+				, new String[] {"dt2","dt1"}
+				, new String[] {"Integer","String"}
+			);
+		
+		assertDataTypeReadFilter("ri", 1l
+				, new String[] {"dt1"}
+				, new String[] {"String"}
+			);
+	}
+	
+	/**/
+	
+	private void assertDataTypeReadFilter(String name,Long expectedCount,String[] expectedIdentifiers,String[] expectedNames){
+		Collection<DataType> collection = DynamicManyExecutor.getInstance().read(DataType.class,new QueryExecutorArguments().addFilterField(DataType.FIELD_NAME, name));
+		assertThat(collection).isNotEmpty();
+		assertThat(collection.stream().map(x -> x.getIdentifier())).containsExactly(expectedIdentifiers);
+		assertThat(collection.stream().map(x -> x.getName())).containsExactly(expectedNames);
+		
+		assertThat(DynamicManyExecutor.getInstance().count(DataType.class,new QueryExecutorArguments()
+				.addFilterFieldsValues(DataType.FIELD_NAME,name))).isEqualTo(expectedCount);
 	}
 }

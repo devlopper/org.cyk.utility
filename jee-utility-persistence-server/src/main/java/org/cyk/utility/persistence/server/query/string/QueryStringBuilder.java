@@ -79,6 +79,30 @@ public interface QueryStringBuilder {
 		private OrderStringBuilder.Order order;
 		
 		private Class<?> tupleClass;
+		
+		public SelectStringBuilder.Projection getProjection(Boolean injectIfNull) {
+			if(projection == null && Boolean.TRUE.equals(injectIfNull))
+				projection = new SelectStringBuilder.Projection();
+			return projection;			
+		}
+		
+		public FromStringBuilder.Tuple getTuple(Boolean injectIfNull) {
+			if(tuple == null && Boolean.TRUE.equals(injectIfNull))
+				tuple = new FromStringBuilder.Tuple();
+			return tuple;			
+		}
+		
+		public WhereStringBuilder.Predicate getPredicate(Boolean injectIfNull) {
+			if(predicate == null && Boolean.TRUE.equals(injectIfNull))
+				predicate = new WhereStringBuilder.Predicate();
+			return predicate;			
+		}
+		
+		public OrderStringBuilder.Order getOrder(Boolean injectIfNull) {
+			if(order == null && Boolean.TRUE.equals(injectIfNull))
+				order = new OrderStringBuilder.Order();
+			return order;			
+		}
 	}
 	
 	/**/

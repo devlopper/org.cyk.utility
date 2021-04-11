@@ -34,16 +34,16 @@ public class FileBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 		file.setPath(path);
 		
 		String name = getName();
-		file.setName(__inject__(FileHelper.class).getName(name));
+		file.setName(__inject__(FileHelperToDel.class).getName(name));
 		
 		String extension = getExtension();
 		if(StringHelper.isBlank(extension))
-			extension = __inject__(FileHelper.class).getExtension(name);
+			extension = __inject__(FileHelperToDel.class).getExtension(name);
 		file.setExtension(extension);
 		
 		String mimeType = getMimeType();
 		if(StringHelper.isBlank(mimeType))
-			mimeType = __inject__(FileHelper.class).getMimeTypeByExtension(file.getExtension());
+			mimeType = __inject__(FileHelperToDel.class).getMimeTypeByExtension(file.getExtension());
 		file.setMimeType(mimeType);
 		
 		byte[] bytes = getBytes();

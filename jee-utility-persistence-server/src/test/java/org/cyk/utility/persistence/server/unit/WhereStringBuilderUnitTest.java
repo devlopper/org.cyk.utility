@@ -15,6 +15,7 @@ public class WhereStringBuilderUnitTest extends AbstractWeldUnitTest {
 		assertThat(WhereStringBuilder.getInstance().build(new Predicate().add("t.f = :a"))).isEqualTo("WHERE t.f = :a");
 		assertThat(WhereStringBuilder.getInstance().build("t.a is NULL")).isEqualTo("WHERE t.a is NULL");
 		assertThat(WhereStringBuilder.getInstance().build(new Predicate().add("t.f > 1","AND","t.d < 5"))).isEqualTo("WHERE t.f > 1 AND t.d < 5");
+		assertThat(WhereStringBuilder.getInstance().build(new Predicate().add("t.f > 1","t.d < 5").setSeparatorAsAnd())).isEqualTo("WHERE t.f > 1 AND t.d < 5");
 		assertThat(WhereStringBuilder.getInstance().build(new Predicate().add("t.f > 1").and().add("t.d < 5"))).isEqualTo("WHERE t.f > 1 AND t.d < 5");
 		assertThat(WhereStringBuilder.getInstance().build(new Predicate().add("t.f > 1").or().add("t.d < 5"))).isEqualTo("WHERE t.f > 1 OR t.d < 5");
 	}
