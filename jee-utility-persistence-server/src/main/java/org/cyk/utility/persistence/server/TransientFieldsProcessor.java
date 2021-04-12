@@ -27,7 +27,11 @@ public interface TransientFieldsProcessor {
 		public void process(Arguments arguments) {
 			if(arguments == null || CollectionHelper.isEmpty(arguments.fieldsNames))
 				return;
-			__process__(arguments.klass, arguments.objects,arguments.fieldsNames);
+			try {
+				__process__(arguments.klass, arguments.objects,arguments.fieldsNames);
+			} catch (Exception exception) {
+				LogHelper.log(exception, getClass());
+			}
 		}
 		
 		protected void __process__(Class<?> klass,Collection<?> objects,Collection<String> fieldsNames) {
