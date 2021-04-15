@@ -3,10 +3,16 @@ package org.cyk.utility.__kernel__;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Modifier;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -108,6 +114,56 @@ public interface Helper {
 		return getUrl(DependencyInjection.inject(HttpServletRequest.class));
 	}
 
+	static byte[] getBytes(InputStream inputStream) {
+		if(inputStream == null)
+			return null;
+		byte[] buffer = new byte[1024 * 8];
+		byte[] bytes = null;
+		try {			
+	        int numberOfBytesRead = inputStream.read(buffer);
+	        if(numberOfBytesRead > -1) {
+	        	if (numberOfBytesRead < buffer.length) {
+		        	bytes = Arrays.copyOf(buffer, numberOfBytesRead);
+		        }else {
+		        	ByteArrayOutputStream outputStream = new ByteArrayOutputStream(1024 * 16);
+			        while (numberOfBytesRead != -1) {
+			        	outputStream.write(buffer, 0, numberOfBytesRead);
+			        	numberOfBytesRead = inputStream.read(buffer);
+			        }
+			        bytes = outputStream.toByteArray();
+			        outputStream.close();
+		        }	
+	        }		        		    
+		    buffer = null;    
+		} catch(Exception exception) {
+			throw new RuntimeException(exception);
+		}
+		return bytes;
+	}
+	
+	static byte[] getBytesFromURL(URL url) {
+		if(url == null)
+			return null;
+		try {
+			InputStream inputStream = url.openStream();
+			byte[] bytes = getBytes(inputStream);
+			close(inputStream);
+			return bytes;
+		} catch (IOException exception) {
+			throw new RuntimeException(exception);
+		}
+	}
+	
+	static byte[] getBytesFromURL(String url) {
+		if(StringHelper.isBlank(url))
+			return null;
+		try {
+			return getBytesFromURL(URI.create(url).toURL());
+		} catch (MalformedURLException exception) {
+			throw new RuntimeException(exception);
+		}
+	}
+	
 	static void write(byte[] bytes,OutputStream outputStream) throws IOException {
 		if(bytes == null || outputStream == null)
 			return;

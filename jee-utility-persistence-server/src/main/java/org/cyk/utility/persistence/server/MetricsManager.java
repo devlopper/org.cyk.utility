@@ -26,6 +26,9 @@ public interface MetricsManager {
 	MetricsManager enable();
 	MetricsManager disable();
 	
+	Integer getConnectionCount();
+	Integer getSuccessfulTransactionCount();
+	
 	/**/
 	
 	public static abstract class AbstractImpl extends AbstractObject implements MetricsManager,Serializable {
@@ -78,6 +81,16 @@ public interface MetricsManager {
 		
 		protected void populate(EntityManagerFactory entityManagerFactory,Map<String, Object> map) {
 		
+		}
+		
+		@Override
+		public Integer getConnectionCount() {
+			return null;
+		}
+		
+		@Override
+		public Integer getSuccessfulTransactionCount() {
+			return null;
 		}
 	}
 	

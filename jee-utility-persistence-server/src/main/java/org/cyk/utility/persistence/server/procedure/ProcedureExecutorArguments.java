@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.persistence.EntityManager;
+
 import org.cyk.utility.__kernel__.object.AbstractObject;
 
 import lombok.Getter;
@@ -17,4 +19,5 @@ public class ProcedureExecutorArguments extends AbstractObject implements Serial
 	private ProcedureName procedureName;
 	private String name;
 	private Map<String,Object> parameters = new HashMap<>();
+	private EntityManager entityManager;
 }

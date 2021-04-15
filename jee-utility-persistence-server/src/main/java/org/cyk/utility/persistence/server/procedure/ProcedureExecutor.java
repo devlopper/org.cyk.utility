@@ -34,7 +34,7 @@ public interface ProcedureExecutor {
 			if(StringHelper.isBlank(name))
 				name = arguments.getKlass().getSimpleName()+"."+arguments.getProcedureName().getValue();
 			ThrowableHelper.throwIllegalArgumentExceptionIfBlank("procedure name", name);
-			EntityManager entityManager = EntityManagerGetter.getInstance().get();
+			EntityManager entityManager = arguments.getEntityManager() == null ? EntityManagerGetter.getInstance().get() : arguments.getEntityManager();
 			StoredProcedureQuery storedProcedureQuery = entityManager.createNamedStoredProcedureQuery(name);
 			if(MapHelper.isNotEmpty(arguments.getParameters())) {
 				arguments.getParameters().forEach( (key,value) -> {

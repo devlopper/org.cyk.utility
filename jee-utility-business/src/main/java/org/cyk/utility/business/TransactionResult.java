@@ -1,4 +1,4 @@
-package org.cyk.utility.business.server;
+package org.cyk.utility.business;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -23,6 +23,21 @@ public class TransactionResult implements Serializable {
 	private Long numberOfUpdate;
 	private Long numberOfDeletion;
 	private String tupleName;
+	
+	public TransactionResult incrementNumberOfCreation(Long numberOfCreation) {
+		this.numberOfCreation = NumberHelper.getLong(NumberHelper.add(this.numberOfCreation,numberOfCreation));
+		return this;
+	}
+	
+	public TransactionResult incrementNumberOfUpdate(Long numberOfUpdate) {
+		this.numberOfUpdate = NumberHelper.getLong(NumberHelper.add(this.numberOfUpdate,numberOfUpdate));
+		return this;
+	}
+	
+	public TransactionResult incrementNumberOfDeletion(Long numberOfDeletion) {
+		this.numberOfDeletion = NumberHelper.getLong(NumberHelper.add(this.numberOfDeletion,numberOfDeletion));
+		return this;
+	}
 	
 	public TransactionResult setNumberOfCreationFromSavables(Collection<?> savables) {
 		if(CollectionHelper.isEmpty(savables))

@@ -37,6 +37,14 @@ public class PathsScannerUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	@Test
+	public void scan_sizes() {
+		Collection<Path> paths = PathsScanner.getInstance().scan(new PathsScanner.Arguments().addPathsFromNames(rootPath).setMinimalSize(5l));
+		assertThat(paths).isNotEmpty();
+		assertThat(paths.stream().map(x -> StringUtils.substringAfter(x.toFile().getAbsolutePath(),rootPath)).collect(Collectors.toList()))
+			.containsExactly("d2\\f1.txt");
+	}
+	
+	@Test
 	public void scan_directory_returnFilesOnly() {
 		Collection<Path> paths = PathsScanner.getInstance().scan(new PathsScanner.Arguments().addPathsFromNames(rootPath).setIsDiretoryReturnable(Boolean.FALSE)
 				.setIsFileReturnable(Boolean.TRUE));

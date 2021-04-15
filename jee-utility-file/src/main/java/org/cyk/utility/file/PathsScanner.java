@@ -12,7 +12,9 @@ import java.util.Collection;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.log.LogHelper;
+import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.RegularExpressionHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
@@ -41,16 +43,19 @@ public interface PathsScanner {
 			String acceptedPathNameRegularExpression = arguments.acceptedPathNameRegularExpression;
 			Boolean isDiretoryReturnable = ValueHelper.defaultToIfNull(arguments.isDiretoryReturnable, Boolean.TRUE);
 			Boolean isFileReturnable = ValueHelper.defaultToIfNull(arguments.isFileReturnable, Boolean.TRUE);
+			Long minimalSize = ValueHelper.defaultToIfNull(arguments.minimalSize, Long.MIN_VALUE);
+			Long maximalSize = ValueHelper.defaultToIfNull(arguments.maximalSize, Long.MAX_VALUE);
 			for(Path index : inputs) {
 				if(index == null)
 					continue;
-				if(index.toFile().isFile() && isFileReturnable && isMatchingAcceptedPathNameREgularExpression(index, acceptedPathNameRegularExpression)) {
+				if(index.toFile().isFile() && isFileReturnable && isMatchingAcceptedPathNameRegularExpression(index, acceptedPathNameRegularExpression)
+						&& isBetweenSizes(index, minimalSize, maximalSize)) {
 					if(outputs == null)
 						outputs = new ArrayList<>();
 					outputs.add(index);
 					continue;
 				}
-				Collection<Path> result = scanDirectory(index,isDiretoryReturnable,isFileReturnable,acceptedPathNameRegularExpression);
+				Collection<Path> result = scanDirectory(index,isDiretoryReturnable,isFileReturnable,acceptedPathNameRegularExpression,minimalSize,maximalSize);
 				if(CollectionHelper.isNotEmpty(result)) {
 					if(outputs == null)
 						outputs = new ArrayList<>();
@@ -61,7 +66,7 @@ public interface PathsScanner {
 			return outputs;
 		}
 		
-		private Collection<Path> scanDirectory(Path path,Boolean isDiretoryReturnable,Boolean isFileReturnable,String acceptedPathNameRegularExpression) {
+		private Collection<Path> scanDirectory(Path path,Boolean isDiretoryReturnable,Boolean isFileReturnable,String acceptedPathNameRegularExpression,Long minimalSize,Long maximalSize) {
 			if(path == null || path.toFile().isFile())
 				return null;
 			Collection<Path> paths = null;
@@ -69,13 +74,13 @@ public interface PathsScanner {
 				DirectoryStream<Path> directoryStream = Files.newDirectoryStream(path);
 				for(Path child : directoryStream) {
 					if((child.toFile().isDirectory() && isDiretoryReturnable || child.toFile().isFile() && isFileReturnable) 
-							&& isMatchingAcceptedPathNameREgularExpression(child, acceptedPathNameRegularExpression)) {
+							&& isMatchingAcceptedPathNameRegularExpression(child, acceptedPathNameRegularExpression) && isBetweenSizes(child, minimalSize, maximalSize)) {
 						if(paths == null)
 							paths = new ArrayList<>();
 						paths.add(child);
 					}					
 					if(child.toFile().isDirectory()) {
-						Collection<Path> childPaths = scanDirectory(child,isDiretoryReturnable,isFileReturnable,acceptedPathNameRegularExpression);
+						Collection<Path> childPaths = scanDirectory(child,isDiretoryReturnable,isFileReturnable,acceptedPathNameRegularExpression,minimalSize, maximalSize);
 						if(CollectionHelper.isNotEmpty(childPaths)) {
 							if(paths == null)
 								paths = new ArrayList<>();
@@ -90,12 +95,19 @@ public interface PathsScanner {
 			return paths;
 		}
 		
-		protected Boolean isMatchingAcceptedPathNameREgularExpression(Path path,String expression) {
+		protected Boolean isMatchingAcceptedPathNameRegularExpression(Path path,String expression) {
 			if(path == null)
 				return Boolean.FALSE;
 			if(StringHelper.isBlank(expression))
 				return Boolean.TRUE;
 			return RegularExpressionHelper.match(path.toFile().getName(), expression);
+		}
+		
+		protected Boolean isBetweenSizes(Path path,Long minimalSize,Long maximalSize) {
+			if(path == null)
+				return Boolean.FALSE;
+			Long size = path.toFile().length();
+			return NumberHelper.compare(size, minimalSize, ComparisonOperator.GTE) && NumberHelper.compare(size, maximalSize, ComparisonOperator.LTE);
 		}
 	}
 	
@@ -113,6 +125,7 @@ public interface PathsScanner {
 	public static class Arguments {
 		private Collection<Path> paths;
 		private String acceptedPathNameRegularExpression;
+		private Long minimalSize,maximalSize;
 		private Boolean isDiretoryReturnable,isFileReturnable;
 		
 		public Collection<Path> getPaths(Boolean injectIfNull) {

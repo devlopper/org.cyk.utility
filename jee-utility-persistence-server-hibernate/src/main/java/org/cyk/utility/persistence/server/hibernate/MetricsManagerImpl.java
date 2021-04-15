@@ -9,6 +9,7 @@ import javax.persistence.EntityManagerFactory;
 
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.cyk.utility.__kernel__.log.LogHelper;
+import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.persistence.server.hibernate.annotation.Hibernate;
 import org.hibernate.SessionFactory;
@@ -63,5 +64,15 @@ public class MetricsManagerImpl extends org.cyk.utility.persistence.server.Metri
 	protected Boolean getEnabled(EntityManagerFactory entityManagerFactory) {
 		Statistics statistics = getStatistics(entityManagerFactory);
 		return statistics.isStatisticsEnabled();
+	}
+	
+	@Override
+	public Integer getConnectionCount() {
+		return NumberHelper.getInteger(get().get("Connect Count"));
+	}
+	
+	@Override
+	public Integer getSuccessfulTransactionCount() {
+		return NumberHelper.getInteger(get().get("Successful Transaction Count"));
 	}
 }
