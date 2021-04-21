@@ -45,11 +45,14 @@ public interface QueryStringBuilder {
 			
 			OrderStringBuilder.Order order = arguments.order;
 			
+			GroupStringBuilder.Group group = arguments.group;
+			
 			return jpql(
 					SelectStringBuilder.getInstance().build(projection)
 					,FromStringBuilder.getInstance().build(tuple)
 					,predicate == null ? null : WhereStringBuilder.getInstance().build(predicate)
 					,order == null ? null : OrderStringBuilder.getInstance().build(order)
+					,group == null ? null : GroupStringBuilder.getInstance().build(group)
 					);
 		}
 		
@@ -77,6 +80,7 @@ public interface QueryStringBuilder {
 		private FromStringBuilder.Tuple tuple;
 		private WhereStringBuilder.Predicate predicate;
 		private OrderStringBuilder.Order order;
+		private GroupStringBuilder.Group group;
 		
 		private Class<?> tupleClass;
 		
@@ -102,6 +106,12 @@ public interface QueryStringBuilder {
 			if(order == null && Boolean.TRUE.equals(injectIfNull))
 				order = new OrderStringBuilder.Order();
 			return order;			
+		}
+		
+		public GroupStringBuilder.Group getGroup(Boolean injectIfNull) {
+			if(group == null && Boolean.TRUE.equals(injectIfNull))
+				group = new GroupStringBuilder.Group();
+			return group;			
 		}
 	}
 	

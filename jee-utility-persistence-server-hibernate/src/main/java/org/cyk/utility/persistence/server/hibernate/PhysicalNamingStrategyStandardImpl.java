@@ -11,17 +11,27 @@ public class PhysicalNamingStrategyStandardImpl extends org.hibernate.boot.model
 	@Override
 	public Identifier toPhysicalColumnName(Identifier identifier, JdbcEnvironment jdbcEnvironment) {
 		if(AbstractIdentifiableSystemScalarStringImpl.FIELD_IDENTIFIER.equals(identifier.getCanonicalName()))
-			return Identifier.toIdentifier("identifiant");
+			return Identifier.toIdentifier(COLUMN_IDENTIFIER);
 		if(AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl.FIELD_NAME.equals(identifier.getCanonicalName()))
-			return Identifier.toIdentifier("libelle");
+			return Identifier.toIdentifier(COLUMN_NAME);
 		if(AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringAuditedImpl.FIELD___AUDIT_WHO__.equals(identifier.getCanonicalName()))
-			return Identifier.toIdentifier("audit_acteur");
+			return Identifier.toIdentifier(COLUMN___AUDIT_WHO__);
 		if(AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringAuditedImpl.FIELD___AUDIT_WHAT__.equals(identifier.getCanonicalName()))
-			return Identifier.toIdentifier("audit_action");
+			return Identifier.toIdentifier(COLUMN___AUDIT_WHAT__);
 		if(AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringAuditedImpl.FIELD___AUDIT_WHEN__.equals(identifier.getCanonicalName()))
-			return Identifier.toIdentifier("audit_date");
+			return Identifier.toIdentifier(COLUMN___AUDIT_FUNCTIONALITY__);
 		if(AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringAuditedImpl.FIELD___AUDIT_FUNCTIONALITY__.equals(identifier.getCanonicalName()))
-			return Identifier.toIdentifier("audit_fonctionalite");
+			return Identifier.toIdentifier(COLUMN___AUDIT_WHEN__);
 		return super.toPhysicalColumnName(identifier, jdbcEnvironment);
-	}   
+	}
+	
+	/**/
+	
+	public static final String COLUMN_IDENTIFIER = "identifiant";
+	public static final String COLUMN_NAME = "libelle";
+	public static final String COLUMN_CODE = "code";
+	public static final String COLUMN___AUDIT_WHO__ = "audit_acteur";
+	public static final String COLUMN___AUDIT_WHAT__ = "audit_action";
+	public static final String COLUMN___AUDIT_FUNCTIONALITY__ = "audit_date";
+	public static final String COLUMN___AUDIT_WHEN__ = "audit_fonctionalite";
 }
