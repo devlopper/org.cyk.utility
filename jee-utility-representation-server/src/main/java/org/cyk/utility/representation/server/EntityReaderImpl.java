@@ -17,6 +17,7 @@ import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.time.TimeHelper;
 import org.cyk.utility.persistence.query.CountQueryIdentifierGetter;
 import org.cyk.utility.persistence.query.EntityCounter;
+import org.cyk.utility.persistence.query.Query;
 import org.cyk.utility.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.persistence.query.QueryGetter;
 import org.cyk.utility.representation.Arguments;
@@ -70,6 +71,8 @@ public class EntityReaderImpl extends EntityReader.AbstractImpl implements Seria
 				String countQueryIdentifier =  CountQueryIdentifierGetter.getInstance().get(queryExecutorArguments.getQuery().getIdentifier());
 				if(StringHelper.isNotBlank(countQueryIdentifier)) {							
 					queryExecutorArguments.setQuery(QueryGetter.getInstance().get(countQueryIdentifier));
+					if(queryExecutorArguments.getQuery() == null)
+						queryExecutorArguments.setQuery(new Query().setIdentifier(countQueryIdentifier));
 					if(queryExecutorArguments.getQuery() != null) {
 						//queryExecutorArguments.set__query__(null);
 						//queryExecutorArguments.set__filter__(null);

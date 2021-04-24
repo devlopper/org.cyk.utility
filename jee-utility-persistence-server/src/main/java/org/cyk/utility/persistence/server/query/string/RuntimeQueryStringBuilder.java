@@ -104,6 +104,24 @@ public interface RuntimeQueryStringBuilder {
 		protected void populatePredicate(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter) {
 			
 		}
+		
+		protected void addEqualsIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
+				,String path,String variable,String fieldName) {
+			if(arguments.getFilter().hasFieldWithPath(path)) {
+				filter.addFieldEquals(path, arguments);
+				predicate.add(String.format("%s.%s = :%s", variable,fieldName,path));
+			}
+		}
+		
+		protected void addEqualsIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
+				,String path,String variable) {
+			addEqualsIfFilterHasFieldWithPath(arguments, builderArguments, predicate, filter, path, variable, path);
+		}
+		
+		protected void addEqualsIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
+				,String path) {
+			addEqualsIfFilterHasFieldWithPath(arguments, builderArguments, predicate, filter, path, "t", path);
+		}
 	}
 	
 	/**/

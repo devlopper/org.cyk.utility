@@ -7,6 +7,7 @@ import javax.ws.rs.core.Response;
 
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
+import org.cyk.utility.persistence.query.Querier;
 import org.cyk.utility.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.value.Value;
@@ -15,53 +16,70 @@ public interface EntityReader {
 
 	<ENTITY> Collection<ENTITY> readMany(Class<ENTITY> controllerEntityClass,Arguments<ENTITY> arguments);
 	
-	default <ENTITY> Collection<ENTITY> readMany(Class<ENTITY> controllerEntityClass) {
-		Arguments<ENTITY> arguments = new Arguments<ENTITY>();
-		arguments.setControllerEntityClass(controllerEntityClass);
-		return readMany(controllerEntityClass, arguments);
-	}
+	<ENTITY> Collection<ENTITY> readMany(Class<ENTITY> controllerEntityClass);
 	
-	default <ENTITY> Collection<ENTITY> readMany(Class<ENTITY> controllerEntityClass,String queryIdentifier,Object...filterFieldsValues) {
-		if(controllerEntityClass == null)
-			throw new RuntimeException("controller entity class is required");
-		return readMany(controllerEntityClass, new Arguments<ENTITY>().setControllerEntityClass(controllerEntityClass)
-				.setRepresentationArguments(new org.cyk.utility.representation.Arguments()
-				.setQueryExecutorArguments(new QueryExecutorArguments.Dto().setQueryIdentifier(queryIdentifier).addFilterFieldsValues(filterFieldsValues))));
-	}
+	<ENTITY> Collection<ENTITY> readMany(Class<ENTITY> controllerEntityClass,String queryIdentifier,Object...filterFieldsValues);
 	
-	default <ENTITY> Collection<ENTITY> readMany(Class<ENTITY> controllerEntityClass,String queryIdentifier,String[] processableTransientFieldsNames
-			,Object...filterFieldsValues) {
-		if(controllerEntityClass == null)
-			throw new RuntimeException("controller entity class is required");
-		return readMany(controllerEntityClass, new Arguments<ENTITY>().setControllerEntityClass(controllerEntityClass)
-				.setRepresentationArguments(new org.cyk.utility.representation.Arguments()
-				.setQueryExecutorArguments(new QueryExecutorArguments.Dto().setQueryIdentifier(queryIdentifier).addFilterFieldsValues(filterFieldsValues)
-				.addProcessableTransientFieldsNames(processableTransientFieldsNames)
-				)));
-	}
+	<ENTITY> Collection<ENTITY> readMany(Class<ENTITY> controllerEntityClass,String queryIdentifier,String[] processableTransientFieldsNames,Object...filterFieldsValues);
 	
 	<ENTITY> ENTITY readOne(Class<ENTITY> controllerEntityClass,Arguments<ENTITY> arguments);
 	
-	default <ENTITY> ENTITY readOne(Class<ENTITY> controllerEntityClass,String queryIdentifier,Object...filterFieldsValues) {
-		if(controllerEntityClass == null)
-			throw new RuntimeException("controller entity class is required");
-		return readOne(controllerEntityClass, new Arguments<ENTITY>().setControllerEntityClass(controllerEntityClass)
-				.setRepresentationArguments(new org.cyk.utility.representation.Arguments()
-				.setQueryExecutorArguments(new QueryExecutorArguments.Dto().setQueryIdentifier(queryIdentifier).addFilterFieldsValues(filterFieldsValues))));
-	}
+	<ENTITY> ENTITY readOne(Class<ENTITY> controllerEntityClass,String queryIdentifier,Object...filterFieldsValues);
 	
-	default <ENTITY> ENTITY readOne(Class<ENTITY> controllerEntityClass,String queryIdentifier,String[] processableTransientFieldsNames,Object...filterFieldsValues) {
-		if(controllerEntityClass == null)
-			throw new RuntimeException("controller entity class is required");
-		return readOne(controllerEntityClass, new Arguments<ENTITY>().setControllerEntityClass(controllerEntityClass)
-				.setRepresentationArguments(new org.cyk.utility.representation.Arguments()
-				.setQueryExecutorArguments(new QueryExecutorArguments.Dto().setQueryIdentifier(queryIdentifier).addFilterFieldsValues(filterFieldsValues)
-						.addProcessableTransientFieldsNames(processableTransientFieldsNames))));
-	}
+	<ENTITY> ENTITY readOne(Class<ENTITY> controllerEntityClass,String queryIdentifier,String[] processableTransientFieldsNames,Object...filterFieldsValues);
+	
+	<ENTITY> ENTITY readOneBySystemIdentifier(Class<ENTITY> klass,String queryIdentifier,String identifier,String...processableTransientFieldsNames);
 	
 	/**/
 	
 	public abstract static class AbstractImpl extends AbstractObject implements EntityReader,Serializable {
+		
+		@Override
+		public <ENTITY> Collection<ENTITY> readMany(Class<ENTITY> controllerEntityClass) {
+			Arguments<ENTITY> arguments = new Arguments<ENTITY>();
+			arguments.setControllerEntityClass(controllerEntityClass);
+			return readMany(controllerEntityClass, arguments);
+		}
+		
+		@Override
+		public <ENTITY> Collection<ENTITY> readMany(Class<ENTITY> controllerEntityClass,String queryIdentifier,Object...filterFieldsValues) {
+			if(controllerEntityClass == null)
+				throw new RuntimeException("controller entity class is required");
+			return readMany(controllerEntityClass, new Arguments<ENTITY>().setControllerEntityClass(controllerEntityClass)
+					.setRepresentationArguments(new org.cyk.utility.representation.Arguments()
+					.setQueryExecutorArguments(new QueryExecutorArguments.Dto().setQueryIdentifier(queryIdentifier).addFilterFieldsValues(filterFieldsValues))));
+		}
+		
+		@Override
+		public <ENTITY> Collection<ENTITY> readMany(Class<ENTITY> controllerEntityClass,String queryIdentifier,String[] processableTransientFieldsNames
+				,Object...filterFieldsValues) {
+			if(controllerEntityClass == null)
+				throw new RuntimeException("controller entity class is required");
+			return readMany(controllerEntityClass, new Arguments<ENTITY>().setControllerEntityClass(controllerEntityClass)
+					.setRepresentationArguments(new org.cyk.utility.representation.Arguments()
+					.setQueryExecutorArguments(new QueryExecutorArguments.Dto().setQueryIdentifier(queryIdentifier).addFilterFieldsValues(filterFieldsValues)
+					.addProcessableTransientFieldsNames(processableTransientFieldsNames)
+					)));
+		}
+		
+		@Override
+		public <ENTITY> ENTITY readOne(Class<ENTITY> controllerEntityClass,String queryIdentifier,Object...filterFieldsValues) {
+			if(controllerEntityClass == null)
+				throw new RuntimeException("controller entity class is required");
+			return readOne(controllerEntityClass, new Arguments<ENTITY>().setControllerEntityClass(controllerEntityClass)
+					.setRepresentationArguments(new org.cyk.utility.representation.Arguments()
+					.setQueryExecutorArguments(new QueryExecutorArguments.Dto().setQueryIdentifier(queryIdentifier).addFilterFieldsValues(filterFieldsValues))));
+		}
+		
+		@Override
+		public <ENTITY> ENTITY readOne(Class<ENTITY> controllerEntityClass,String queryIdentifier,String[] processableTransientFieldsNames,Object...filterFieldsValues) {
+			if(controllerEntityClass == null)
+				throw new RuntimeException("controller entity class is required");
+			return readOne(controllerEntityClass, new Arguments<ENTITY>().setControllerEntityClass(controllerEntityClass)
+					.setRepresentationArguments(new org.cyk.utility.representation.Arguments()
+					.setQueryExecutorArguments(new QueryExecutorArguments.Dto().setQueryIdentifier(queryIdentifier).addFilterFieldsValues(filterFieldsValues)
+							.addProcessableTransientFieldsNames(processableTransientFieldsNames))));
+		}
 		
 		@Override
 		public <ENTITY> Collection<ENTITY> readMany(Class<ENTITY> controllerEntityClass,Arguments<ENTITY> arguments) {
@@ -90,6 +108,17 @@ public interface EntityReader {
 			Response response = __readOne__(controllerEntityClass, arguments);
 			arguments.finalise(response);
 			return (ENTITY) arguments.__responseEntity__;	
+		}
+		
+		@Override
+		public <ENTITY> ENTITY readOneBySystemIdentifier(Class<ENTITY> klass, String queryIdentifier,String identifier,String... processableTransientFieldsNames) {
+			if(klass == null)
+				throw new RuntimeException("controller entity class is required");
+			return readOne(klass, new Arguments<ENTITY>().setControllerEntityClass(klass)
+					.setRepresentationArguments(new org.cyk.utility.representation.Arguments()
+					.setQueryExecutorArguments(new QueryExecutorArguments.Dto().setQueryIdentifier(queryIdentifier)
+							.addFilterFieldsValues(Querier.PARAMETER_NAME_IDENTIFIER,identifier)
+							.addProcessableTransientFieldsNames(processableTransientFieldsNames))));
 		}
 		
 		protected <ENTITY> Response __readOne__(Class<ENTITY> controllerEntityClass, Arguments<ENTITY> arguments) {

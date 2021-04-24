@@ -24,6 +24,7 @@ public class RuntimeQueryStringBuilderImpl extends RuntimeQueryStringBuilder.Abs
 				
 				predicate.add(LikeStringBuilder.getInstance().build("t", DataType.FIELD_NAME, DataType.FIELD_NAME, 2));
 				filter.addFieldContainsStringOrWords(DataType.FIELD_NAME, 2, arguments);
+				
 			}	
 		}
 	}

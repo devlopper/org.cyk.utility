@@ -154,7 +154,7 @@ public interface Querier {
 		Collection<String> readCodes();
 		
 		Boolean isOwner(QueryExecutorArguments arguments);
-
+		
 		T readOne(QueryExecutorArguments arguments);
 		Collection<T> readMany(QueryExecutorArguments arguments);
 		Long count(QueryExecutorArguments arguments);

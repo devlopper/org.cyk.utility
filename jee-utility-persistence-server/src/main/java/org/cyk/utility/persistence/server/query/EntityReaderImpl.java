@@ -10,10 +10,12 @@ import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.persistence.query.EntityFinder;
 import org.cyk.utility.persistence.query.EntityReader;
+import org.cyk.utility.persistence.query.Query;
 import org.cyk.utility.persistence.query.QueryExecutor;
 import org.cyk.utility.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.persistence.query.QueryGetter;
 import org.cyk.utility.persistence.query.QueryHelper;
+import org.cyk.utility.persistence.query.QueryIdentifierBuilder;
 import org.cyk.utility.persistence.query.QueryName;
 import org.cyk.utility.persistence.query.QueryParameterNameBuilder;
 import org.cyk.utility.persistence.query.QueryValueBuilder;
@@ -55,6 +57,16 @@ public class EntityReaderImpl extends EntityReader.AbstractImpl implements Seria
 	@Override
 	public <T> Collection<T> readMany(Class<T> tupleClass) {
 		return readMany(tupleClass, null);
+	}
+	
+	@Override
+	public <T> Collection<T> readManyDynamically(Class<T> tupleClass, QueryExecutorArguments arguments) {
+		return readMany(tupleClass, arguments.setQuery(new Query().setIdentifier(QueryIdentifierBuilder.getInstance().build(tupleClass, QueryName.READ_DYNAMIC))));
+	}
+	
+	@Override
+	public <T> Collection<T> readManyDynamically(Class<T> tupleClass, Object... filterFieldsValues) {
+		return readManyDynamically(tupleClass, new QueryExecutorArguments().addFilterFieldsValues(filterFieldsValues));
 	}
 	
 	@Override

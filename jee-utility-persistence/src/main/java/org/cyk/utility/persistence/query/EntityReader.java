@@ -14,6 +14,9 @@ public interface EntityReader {
 	<T> Collection<T> readMany(Class<T> tupleClass,String queryIdentifier,Object...filterFieldsValues);	
 	<T> Collection<T> readMany(Class<T> tupleClass);
 	
+	<T> Collection<T> readManyDynamically(Class<T> tupleClass,QueryExecutorArguments arguments);	
+	<T> Collection<T> readManyDynamically(Class<T> tupleClass,Object...filterFieldsValues);	
+	
 	<T> T readOne(Class<T> tupleClass,QueryExecutorArguments arguments);	
 	<T> T readOneWhereFieldEquals(Class<T> tupleClass,String fieldName,Object fieldValue);
 	<T> T readOneWhereFieldIn(Class<T> tupleClass,String queryName,String fieldName,Object fieldValue);	

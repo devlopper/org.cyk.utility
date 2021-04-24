@@ -14,10 +14,13 @@ public enum QueryName {
 	,READ_CODES("readCodes")
 	,COUNT_CODES("countCodes")
 	
+	,READ_BY_IDENTIFIER("readByIdentifier")
 	,READ_BY_IDENTIFIER_FOR_UI("readByIdentifierForUI")
 	,READ_BY_IDENTIFIER_FOR_EDIT("readByIdentifierForEdit")
+	
 	,READ_BY_SYSTEM_IDENTIFIERS("readBySystemIdentifiers")
 	,READ_BY_SYSTEM_IDENTIFIERS_WITH_ALL("readBySystemIdentifiersWithAll")
+	
 	,READ_BY_SYSTEM_IDENTIFIER_WITH_ALL("readBySystemIdentifierWithAll")
 	
 	,READ_BY_BUSINESS_IDENTIFIERS("readByBusinessIdentifiers")

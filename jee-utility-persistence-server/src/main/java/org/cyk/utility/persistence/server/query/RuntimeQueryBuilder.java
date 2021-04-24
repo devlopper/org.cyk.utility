@@ -65,7 +65,6 @@ public interface RuntimeQueryBuilder {
 					query.setTupleFieldsNamesIndexesFromFieldsNames(resultsFieldsNames);
 				}
 			}
-			
 			return query;
 		}
 		
