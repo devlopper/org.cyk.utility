@@ -17,7 +17,7 @@
 	<name>JEE utility __kernel__</name>
 
 	<properties>
-		<commons-io.commons-io.version>2.6</commons-io.commons-io.version>
+		<commons-io.commons-io.version>2.7</commons-io.commons-io.version>
 		<commons-beanutils-commons-beanutils>1.9.4</commons-beanutils-commons-beanutils>
 		<org.apache.commons.commons-collections4.version>4.3</org.apache.commons.commons-collections4.version>
 		<org.reflections.reflections.version>0.9.12</org.reflections.reflections.version>
