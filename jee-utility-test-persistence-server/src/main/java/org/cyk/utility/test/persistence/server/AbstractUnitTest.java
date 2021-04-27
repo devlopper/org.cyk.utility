@@ -26,6 +26,10 @@ public abstract class AbstractUnitTest extends AbstractWeldUnitTest {
 	
 	protected void initializeEntityManagerFactory(String persistenceUnitName) {
 		EntityManagerFactoryGetterImpl.ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory(persistenceUnitName);
+		callInitialize();
+	}
+	
+	protected void callInitialize() {
 		Initializer.initialize();
 	}
 	

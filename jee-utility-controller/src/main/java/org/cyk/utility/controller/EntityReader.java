@@ -7,10 +7,11 @@ import javax.ws.rs.core.Response;
 
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
-import org.cyk.utility.persistence.query.Querier;
-import org.cyk.utility.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.value.Value;
+import org.cyk.utility.__kernel__.value.ValueHelper;
+import org.cyk.utility.persistence.query.Querier;
+import org.cyk.utility.persistence.query.QueryExecutorArguments;
 
 public interface EntityReader {
 
@@ -28,7 +29,7 @@ public interface EntityReader {
 	
 	<ENTITY> ENTITY readOne(Class<ENTITY> controllerEntityClass,String queryIdentifier,String[] processableTransientFieldsNames,Object...filterFieldsValues);
 	
-	<ENTITY> ENTITY readOneBySystemIdentifier(Class<ENTITY> klass,String queryIdentifier,String identifier,String...processableTransientFieldsNames);
+	<ENTITY> ENTITY readOneBySystemIdentifier(Class<ENTITY> klass,String queryIdentifier,Object identifier,String...processableTransientFieldsNames);
 	
 	/**/
 	
@@ -111,9 +112,11 @@ public interface EntityReader {
 		}
 		
 		@Override
-		public <ENTITY> ENTITY readOneBySystemIdentifier(Class<ENTITY> klass, String queryIdentifier,String identifier,String... processableTransientFieldsNames) {
+		public <ENTITY> ENTITY readOneBySystemIdentifier(Class<ENTITY> klass, String queryIdentifier,Object identifier,String... processableTransientFieldsNames) {
 			if(klass == null)
 				throw new RuntimeException("controller entity class is required");
+			if(Boolean.TRUE.equals(ValueHelper.isBlank(identifier)))
+				return null;
 			return readOne(klass, new Arguments<ENTITY>().setControllerEntityClass(klass)
 					.setRepresentationArguments(new org.cyk.utility.representation.Arguments()
 					.setQueryExecutorArguments(new QueryExecutorArguments.Dto().setQueryIdentifier(queryIdentifier)

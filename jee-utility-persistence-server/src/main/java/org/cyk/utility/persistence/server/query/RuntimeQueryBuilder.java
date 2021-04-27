@@ -75,6 +75,8 @@ public interface RuntimeQueryBuilder {
 				return Boolean.TRUE;			
 			if(arguments.getQuery().getIdentifier().equals(QueryIdentifierGetter.getInstance().get(arguments.getQuery().getTupleClass(), QueryName.READ_DYNAMIC)))
 				return Boolean.TRUE;
+			if(arguments.getQuery().getIdentifier().equals(QueryIdentifierGetter.getInstance().get(arguments.getQuery().getTupleClass(), QueryName.READ_DYNAMIC_ONE)))
+				return Boolean.TRUE;
 			if(arguments.getQuery().getIdentifier().equals(QueryIdentifierGetter.getInstance().get(arguments.getQuery().getTupleClass(), QueryName.COUNT_DYNAMIC)))
 				return Boolean.TRUE;
 			return Boolean.FALSE;

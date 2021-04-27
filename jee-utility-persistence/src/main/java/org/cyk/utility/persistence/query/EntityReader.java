@@ -23,6 +23,8 @@ public interface EntityReader {
 	<T> T readOneBySystemIdentifier(Class<T> tupleClass,Object systemIdentifier);	
 	<T> T readOneByBusinessIdentifier(Class<T> tupleClass,Object businessIdentifier);
 	
+	<T> T readOneDynamically(Class<T> tupleClass,QueryExecutorArguments arguments);	
+	
 	/**/
 	
 	public abstract class AbstractImpl extends AbstractObject implements EntityReader,Serializable {

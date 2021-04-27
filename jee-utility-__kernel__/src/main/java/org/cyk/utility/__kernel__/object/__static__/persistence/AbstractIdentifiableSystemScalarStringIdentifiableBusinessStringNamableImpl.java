@@ -8,6 +8,8 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.object.marker.Namable;
 import org.cyk.utility.__kernel__.string.StringHelper;
 
@@ -31,6 +33,19 @@ public abstract class AbstractIdentifiableSystemScalarStringIdentifiableBusiness
 	
 	public AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl(String code,String name) {
 		this(null,code,name);
+	}
+	
+	public static <T extends AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl> T instantiateFromIdentifierCodeName(Class<T> klass,String identifier
+			,String codeName) {
+		T instance = ClassHelper.instanciate(klass);
+		instance.setIdentifier(identifier);
+		instance.setCode(StringUtils.substringBefore(codeName, " "));
+		instance.setName(StringUtils.substringAfter(codeName, " "));
+		return instance;
+	}
+	
+	public static <T extends AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl> T instantiateFromCodeName(Class<T> klass,String codeName) {
+		return instantiateFromIdentifierCodeName(klass, null, codeName);
 	}
 	
 	@Override

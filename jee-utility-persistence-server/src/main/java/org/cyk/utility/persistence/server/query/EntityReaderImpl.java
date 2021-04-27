@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.array.ArrayHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
@@ -120,4 +121,15 @@ public class EntityReaderImpl extends EntityReader.AbstractImpl implements Seria
 		return readOne(tupleClass,arguments);
 	}
 	
+	@Override
+	public <T> T readOneDynamically(Class<T> tupleClass, QueryExecutorArguments arguments) {
+		if(tupleClass == null)
+			throw new RuntimeException("Tuple class is required");
+		if(arguments == null)
+			throw new RuntimeException("arguments are required");
+		Collection<T> instances = readManyDynamically(tupleClass, arguments);
+		if(CollectionHelper.getSize(instances) > 1)
+			throw new java.lang.RuntimeException("Too much result found while reading dynamically one "+tupleClass.getSimpleName());
+		return CollectionHelper.getFirst(instances);
+	}
 }

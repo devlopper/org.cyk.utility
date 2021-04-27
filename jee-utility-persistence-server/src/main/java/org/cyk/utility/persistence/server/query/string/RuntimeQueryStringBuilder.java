@@ -20,6 +20,7 @@ import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.persistence.query.Filter;
+import org.cyk.utility.persistence.query.Querier;
 import org.cyk.utility.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.persistence.query.QueryType;
 import org.cyk.utility.persistence.server.query.string.WhereStringBuilder.Predicate;
@@ -102,7 +103,7 @@ public interface RuntimeQueryStringBuilder {
 		}
 		
 		protected void populatePredicate(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter) {
-			
+			addEqualsIfFilterHasFieldWithPath(arguments, builderArguments, predicate, filter, Querier.PARAMETER_NAME_IDENTIFIER);
 		}
 		
 		protected void addEqualsIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter

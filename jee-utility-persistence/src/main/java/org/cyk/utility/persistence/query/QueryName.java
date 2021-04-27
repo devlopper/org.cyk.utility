@@ -8,6 +8,8 @@ public enum QueryName {
 	READ
 	,READ_FOR_UI("readForUI")
 	,COUNT
+	
+	,READ_DYNAMIC_ONE("readDynamicOne")
 	,READ_DYNAMIC("readDynamic")
 	,COUNT_DYNAMIC("countDynamic")
 	

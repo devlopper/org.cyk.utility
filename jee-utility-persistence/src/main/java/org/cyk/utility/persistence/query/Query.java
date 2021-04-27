@@ -85,7 +85,7 @@ public class Query extends AbstractObject implements Serializable {
 	}
 	
 	public Boolean isIdentifierEqualsDynamic(Class<?> klass,QueryName...queriesNames) {
-		return isIdentifierEqualsOne(klass, QueryName.READ_DYNAMIC,QueryName.COUNT_DYNAMIC);
+		return isIdentifierEqualsOne(klass, QueryName.READ_DYNAMIC,QueryName.READ_DYNAMIC_ONE,QueryName.COUNT_DYNAMIC);
 	}
 	
 	@Override
