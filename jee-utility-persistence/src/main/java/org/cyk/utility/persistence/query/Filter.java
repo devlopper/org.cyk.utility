@@ -40,6 +40,21 @@ public class Filter extends AbstractObject implements Serializable {
 	private Collection<Field> fields;
 	private String value;
 	
+	public static Filter clone(Filter filter) {
+		if(filter == null)
+			return null;
+		Filter clone = new Filter();
+		clone.klass = filter.klass;
+		clone.value = filter.value;
+		if(CollectionHelper.isNotEmpty(filter.fields)) {
+			clone.fields = new ArrayList<>();
+			filter.fields.forEach(field -> {
+				clone.fields.add(Field.clone(field));
+			});
+		}
+		return clone;
+	}
+	
 	public Collection<Field> getFields(Boolean injectIfNull) {
 		if(fields == null && Boolean.TRUE.equals(injectIfNull))
 			fields = new ArrayList<>();

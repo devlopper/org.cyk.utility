@@ -23,6 +23,7 @@ public interface NativeQueryStringBuilder {
 	<T> String buildInsertOne(Class<T> klass,T object);
 	
 	String buildInsertManyFromMaps(Class<?> klass,Collection<Map<String,String>> maps);
+	//<T> String buildInsertMany(Class<T> klass,Collection<T> collection,Boolean isBooleanAsNumber);
 	<T> String buildInsertMany(Class<T> klass,Collection<T> collection);
 	
 	String buildUpdateManyFromMaps(Class<?> klass,Collection<Map<String,String>> maps);
@@ -57,6 +58,10 @@ public interface NativeQueryStringBuilder {
 		
 		protected String getIntoValues(String tableName,Set<String> columnsNames,Collection<String> values) {
 			return String.format(INTO_FORMAT,tableName,StringUtils.join(columnsNames,","),StringUtils.join(values,","));
+		}
+		
+		protected Boolean getIsBooleanAsNumber() {
+			return Boolean.FALSE;
 		}
 		
 		/* Update */

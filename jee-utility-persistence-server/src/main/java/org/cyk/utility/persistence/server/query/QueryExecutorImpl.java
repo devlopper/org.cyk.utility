@@ -23,7 +23,6 @@ import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.time.TimeHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.persistence.EntityManagerGetter;
-import org.cyk.utility.persistence.query.Filter;
 import org.cyk.utility.persistence.query.Language;
 import org.cyk.utility.persistence.query.Query;
 import org.cyk.utility.persistence.query.QueryExecutor;
@@ -41,7 +40,7 @@ public class QueryExecutorImpl extends AbstractObject implements QueryExecutor,S
 			
 	@Override
 	public <T> Collection<T> executeReadMany(Class<T> resultClass, QueryExecutorArguments arguments) {
-		Filter filter = arguments.getFilter();
+		//Filter filter = arguments.getFilter();
 		RuntimeQueryBuilder.getInstance().build(arguments);
 		validatePreConditions(resultClass, arguments);
 		arguments.prepare(resultClass);
@@ -67,7 +66,8 @@ public class QueryExecutorImpl extends AbstractObject implements QueryExecutor,S
 			}
 		}
 		if(CollectionHelper.isNotEmpty(collection) && CollectionHelper.isNotEmpty(arguments.getProcessableTransientFieldsNames()))
-			TransientFieldsProcessor.getInstance().process(collection,filter,arguments.getProcessableTransientFieldsNames());
+			TransientFieldsProcessor.getInstance().process(collection,/*filter*/arguments.getFilterBackup() == null ? arguments.getFilter() : arguments.getFilterBackup()
+					,arguments.getProcessableTransientFieldsNames());
 		arguments.set__objects__(collection);
 		arguments.finalise();
 		if(CollectionHelper.isNotEmpty(collection))

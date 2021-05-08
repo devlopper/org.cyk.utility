@@ -76,6 +76,8 @@ public class EntityReaderImpl extends EntityReader.AbstractImpl implements Seria
 					if(queryExecutorArguments.getQuery() != null) {
 						//queryExecutorArguments.set__query__(null);
 						//queryExecutorArguments.set__filter__(null);
+						if(queryExecutorArguments.getFilterBackup() != null)
+							queryExecutorArguments.setFilter(queryExecutorArguments.getFilterBackup());
 						t = System.currentTimeMillis();
 						xTotalCount = EntityCounter.getInstance().count(internal.persistenceEntityClass,queryExecutorArguments);	
 						logMessages.add(StringHelper.get(xTotalCount));

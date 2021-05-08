@@ -206,7 +206,7 @@ public interface PersistenceHelper {
 		return names;
 	}
 	
-	static Collection<String> getColumnsValues(Object object) {
+	static Collection<String> getColumnsValues(Object object,Boolean isBooleanAsNumber) {
 		if(object == null)
 			return null;
 		Collection<String> names = getColumnsNames(object.getClass());
@@ -215,13 +215,15 @@ public interface PersistenceHelper {
 		Collection<String> values = new ArrayList<>();
 		for(String name : names) {
 			Field field = COLUMN_NAME_FIELD.get(object.getClass()).get(name);
-			values.add(readFieldValueAsString(object, field));
+			values.add(readFieldValueAsString(object, field,isBooleanAsNumber));
 		}
 		return values;
 	}
 	
-	static String readFieldValueAsString(Object object,Field field) {
+	static String readFieldValueAsString(Object object,Field field,Boolean isBooleanAsNumber) {
 		Object fieldValue = FieldHelper.read(object, field);
+		if(fieldValue instanceof Boolean && Boolean.TRUE.equals(isBooleanAsNumber))
+			fieldValue = Boolean.TRUE.equals(fieldValue) ? 1 : 0;
 		if(fieldValue == null)
 			return "NULL";
 		else
@@ -238,7 +240,7 @@ public interface PersistenceHelper {
 		return value.toString();
 	}
 	
-	static Map<String,String> getColumnsValuesAsMap(Object object) {
+	static Map<String,String> getColumnsValuesAsMap(Object object,Boolean isBooleanAsNumber) {
 		if(object == null)
 			return null;
 		Collection<String> names = getColumnsNames(object.getClass());
@@ -247,9 +249,13 @@ public interface PersistenceHelper {
 		Map<String,String> map = new LinkedHashMap<>();
 		for(String name : names) {
 			Field field = COLUMN_NAME_FIELD.get(object.getClass()).get(name);
-			map.put(name,readFieldValueAsString(object, field));
+			map.put(name,readFieldValueAsString(object, field,isBooleanAsNumber));
 		}
 		return map;
+	}
+	
+	static Map<String,String> getColumnsValuesAsMap(Object object) {
+		return getColumnsValuesAsMap(object, null);
 	}
 	
 	static String getPrimaryKeyColumnName(Class<?> klass) {

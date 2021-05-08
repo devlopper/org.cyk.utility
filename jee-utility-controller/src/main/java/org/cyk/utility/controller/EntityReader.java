@@ -2,10 +2,12 @@ package org.cyk.utility.controller;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.core.Response;
 
 import org.cyk.utility.__kernel__.Helper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.value.Value;
@@ -28,6 +30,8 @@ public interface EntityReader {
 	<ENTITY> ENTITY readOne(Class<ENTITY> controllerEntityClass,String queryIdentifier,Object...filterFieldsValues);
 	
 	<ENTITY> ENTITY readOne(Class<ENTITY> controllerEntityClass,String queryIdentifier,String[] processableTransientFieldsNames,Object...filterFieldsValues);
+	
+	<ENTITY> ENTITY readOneBySystemIdentifierAsParent(Class<ENTITY> klass,Arguments<ENTITY> arguments);
 	
 	<ENTITY> ENTITY readOneBySystemIdentifier(Class<ENTITY> klass,String queryIdentifier,Object identifier,String...processableTransientFieldsNames);
 	
@@ -109,6 +113,22 @@ public interface EntityReader {
 			Response response = __readOne__(controllerEntityClass, arguments);
 			arguments.finalise(response);
 			return (ENTITY) arguments.__responseEntity__;	
+		}
+		
+		@Override
+		public <ENTITY> ENTITY readOneBySystemIdentifierAsParent(Class<ENTITY> klass, Arguments<ENTITY> arguments) {
+			if(klass == null)
+				throw new RuntimeException("controller entity class is required");
+			if(arguments == null)
+				throw new RuntimeException("arguments is required");			
+			if(arguments.getRepresentationArguments() == null || arguments.getRepresentationArguments().getQueryExecutorArguments() == null
+					|| arguments.getRepresentationArguments().getQueryExecutorArguments().getFilter() == null
+					|| CollectionHelper.isEmpty(arguments.getRepresentationArguments().getQueryExecutorArguments().getFilter().getFields()))
+				return null;
+			if(arguments.getRepresentationArguments().getQueryExecutorArguments().getFilter().getFields().stream()
+						.filter(field -> Querier.PARAMETER_NAME_IDENTIFIER.equals(field.getName())).collect(Collectors.toList()).isEmpty())
+				return null;			
+			return readOne(klass, arguments);
 		}
 		
 		@Override

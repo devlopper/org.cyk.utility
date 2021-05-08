@@ -75,4 +75,9 @@ public class MetricsManagerImpl extends org.cyk.utility.persistence.server.Metri
 	public Integer getSuccessfulTransactionCount() {
 		return NumberHelper.getInteger(get().get("Successful Transaction Count"));
 	}
+	
+	@Override
+	public Integer getQueryExecutionCount() {
+		return NumberHelper.getInteger(get().get("Query Execution Count"));
+	}
 }

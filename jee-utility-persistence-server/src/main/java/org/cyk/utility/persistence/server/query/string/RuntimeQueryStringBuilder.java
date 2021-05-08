@@ -19,6 +19,7 @@ import org.cyk.utility.__kernel__.object.marker.Namable;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.Value;
+import org.cyk.utility.persistence.query.Field;
 import org.cyk.utility.persistence.query.Filter;
 import org.cyk.utility.persistence.query.Querier;
 import org.cyk.utility.persistence.query.QueryExecutorArguments;
@@ -93,7 +94,7 @@ public interface RuntimeQueryStringBuilder {
 		}
 		
 		protected void setPredicate(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments) {
-			if(arguments.getFilter() != null && CollectionHelper.isNotEmpty(arguments.getFilter().getFields())) {
+			if(CollectionHelper.isNotEmpty(getPredicateFilterFields(arguments))) {
 				Predicate predicate = new Predicate().setSeparatorAsAnd();
 				Filter filter = new Filter();
 				populatePredicate(arguments,builderArguments, predicate,filter);
@@ -102,8 +103,23 @@ public interface RuntimeQueryStringBuilder {
 			}			
 		}
 		
+		protected Collection<Field> getPredicateFilterFields(QueryExecutorArguments arguments) {
+			if(arguments.getFilter() == null)
+				return null;
+			return getPredicateFilterFields(arguments,arguments.getFilter().getFields());
+		}
+		
+		protected Collection<Field> getPredicateFilterFields(QueryExecutorArguments arguments,Collection<Field> fields) {
+			return fields;
+		}
+		
 		protected void populatePredicate(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter) {
 			addEqualsIfFilterHasFieldWithPath(arguments, builderArguments, predicate, filter, Querier.PARAMETER_NAME_IDENTIFIER);
+			
+			if(arguments.getFilter().hasFieldWithPath(Querier.PARAMETER_NAME_IDENTIFIERS)) {
+				filter.addField(Querier.PARAMETER_NAME_IDENTIFIERS, arguments.getFilterFieldValue(Querier.PARAMETER_NAME_IDENTIFIERS));
+				predicate.add(String.format("%s.%s IN :%s", "t",AbstractIdentifiableSystemImpl.FIELD_IDENTIFIER,Querier.PARAMETER_NAME_IDENTIFIERS));
+			}
 		}
 		
 		protected void addEqualsIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
@@ -122,6 +138,22 @@ public interface RuntimeQueryStringBuilder {
 		protected void addEqualsIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
 				,String path) {
 			addEqualsIfFilterHasFieldWithPath(arguments, builderArguments, predicate, filter, path, "t", path);
+		}
+		
+		protected void addIsFalseOrNullIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
+				,String path,String variable,String fieldName) {
+			if(arguments.getFilter().hasFieldWithPath(path)) {
+				//filter.addFieldEquals(path, arguments);
+				predicate.add(String.format("(%1$s.%2$s = false OR %1$s.%2$s IS NULL)", variable,fieldName,path));
+			}
+		}
+		
+		protected void addIsTrueIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
+				,String path,String variable,String fieldName) {
+			if(arguments.getFilter().hasFieldWithPath(path)) {
+				//filter.addFieldEquals(path, arguments);
+				predicate.add(String.format("(%1$s.%2$s = true)", variable,fieldName,path));
+			}
 		}
 	}
 	

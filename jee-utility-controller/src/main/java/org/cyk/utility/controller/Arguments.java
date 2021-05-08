@@ -19,6 +19,7 @@ import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.rest.ResponseHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
+import org.cyk.utility.persistence.query.Querier;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -53,6 +54,44 @@ public class Arguments<T> extends AbstractObject implements Serializable {
 	Response __response__;
 	Object __responseEntity__;
 	RuntimeException __runtimeException__;
+	
+	public Arguments<T> queryIdentifier(String queryIdentifier) {
+		getRepresentationArguments(Boolean.TRUE).getQueryExecutorArguments(Boolean.TRUE).setQueryIdentifier(queryIdentifier);
+		return this;
+	}
+	
+	public Arguments<T> projections(String...projections) {
+		getRepresentationArguments(Boolean.TRUE).getQueryExecutorArguments(Boolean.TRUE).addProjectionsFromStrings(projections);
+		return this;
+	}
+	
+	public Arguments<T> transientFieldsNames(String...processableTransientFieldsNames) {
+		getRepresentationArguments(Boolean.TRUE).getQueryExecutorArguments(Boolean.TRUE).addProcessableTransientFieldsNames(processableTransientFieldsNames);
+		return this;
+	}
+	
+	public Arguments<T> filterFieldsValues(Object...filterFieldsValues) {
+		getRepresentationArguments(Boolean.TRUE).getQueryExecutorArguments(Boolean.TRUE).addFilterFieldsValues(filterFieldsValues);
+		return this;
+	}
+	
+	public Arguments<T> filterFieldValue(String name,Object value) {
+		if(StringHelper.isBlank(name) || value == null)
+			return this;
+		return filterFieldsValues(name,value);
+	}
+	
+	public Arguments<T> filterByIdentifier(Object identifier) {
+		if(identifier == null)
+			return this;
+		return filterFieldValue(Querier.PARAMETER_NAME_IDENTIFIER, identifier);
+	}
+	
+	public org.cyk.utility.representation.Arguments getRepresentationArguments(Boolean injectIfNull) {
+		if(representationArguments == null && Boolean.TRUE.equals(injectIfNull))
+			representationArguments = new org.cyk.utility.representation.Arguments();
+		return representationArguments;
+	}
 	
 	public Collection<T> getCreatables(Boolean injectIfNull) {
 		if(creatables == null && Boolean.TRUE.equals(injectIfNull))

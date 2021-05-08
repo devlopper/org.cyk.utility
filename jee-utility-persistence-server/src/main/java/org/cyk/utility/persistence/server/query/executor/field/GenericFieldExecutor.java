@@ -19,6 +19,8 @@ import org.cyk.utility.persistence.EntityManagerGetter;
 
 public interface GenericFieldExecutor extends FieldBasedExecutor {
 
+	/* Instance */
+	
 	<T,V> T getOne(Class<T> klass,Class<V> valueClass,String fieldName,V value);
 	
 	<T,V> Boolean exists(Class<T> klass,Class<V> valueClass,String fieldName,Collection<V> values);
@@ -29,6 +31,10 @@ public interface GenericFieldExecutor extends FieldBasedExecutor {
 	
 	<T,V> Collection<V> getUnexisting(Class<T> klass,Class<V> valueClass,String fieldName,Collection<V> values);
 	<T,V> Collection<V> getUnexisting(Class<T> klass,Class<V> valueClass,String fieldName,V...values);
+	
+	/* Value */
+	
+	<T,V> Collection<V> getValues(Class<T> klass,Class<V> valueClass,String fieldName);
 	
 	public static abstract class AbstractImpl extends FieldBasedExecutor.AbstractImpl implements GenericFieldExecutor,Serializable {
 		
@@ -104,6 +110,17 @@ public interface GenericFieldExecutor extends FieldBasedExecutor {
 			if(klass == null || valueClass == null || StringHelper.isBlank(fieldName) || ArrayHelper.isEmpty(values))
 				return null;
 			return getUnexisting(klass,valueClass,fieldName, CollectionHelper.listOf(values));
+		}
+	
+		@Override
+		public <T, V> Collection<V> getValues(Class<T> klass, Class<V> valueClass, String fieldName) {
+			if(klass == null || valueClass == null || StringHelper.isBlank(fieldName))
+				return null;
+			Collection<V> values = EntityManagerGetter.getInstance().get().createQuery(String.format("SELECT DISTINCT t.%2$s FROM %1$s t ORDER BY t.%2$s",klass.getSimpleName(),fieldName))
+					.getResultList();
+			if(CollectionHelper.isEmpty(values))
+				return null;
+			return values;
 		}
 	}
 	

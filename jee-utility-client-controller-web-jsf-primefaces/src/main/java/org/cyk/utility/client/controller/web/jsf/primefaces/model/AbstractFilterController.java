@@ -39,8 +39,8 @@ public abstract class AbstractFilterController extends AbstractObject implements
 	protected Map<String,Boolean> ignorables;	
 	protected Redirector.Arguments onSelectRedirectorArguments;	
 	protected CommandButton filterCommandButton;
-	
-	protected Layout layout;
+	protected Layout layout;	
+	protected RenderType renderType;
 	
 	public Map<String,Boolean> getIgnorables(Boolean injectIfNull) {
 		if(ignorables == null && Boolean.TRUE.equals(injectIfNull))
@@ -146,18 +146,16 @@ public abstract class AbstractFilterController extends AbstractObject implements
 				Collection<AbstractInputChoiceOne> inputsChoicesOne = CollectionHelper.filterByInstanceOf(AbstractInputChoiceOne.class, getInputs());
 				if(CollectionHelper.isNotEmpty(inputsChoicesOne)) {
 					for(AbstractInputChoiceOne input : inputsChoicesOne) {
-						if(input != null && input.getValue() != null)
-							onSelectRedirectorArguments.addParameters(Map.of(ParameterName.stringify(input.getChoiceClass())
-									,List.of(FieldHelper.readSystemIdentifier(input.getValue()).toString())));
+						if(Boolean.TRUE.equals(isInputValueNotNull(input)) && Boolean.TRUE.equals(isSelectRedirectorArgumentsParameter(input.getChoiceClass(), input)))
+							onSelectRedirectorArguments.addParameters(Map.of(buildParameterName(input),List.of(buildParameterValue(input))));
 					}
 				}
 				
 				Collection<AutoComplete> autoCompletes = CollectionHelper.filterByInstanceOf(AutoComplete.class, getInputs());
 				if(CollectionHelper.isNotEmpty(autoCompletes)) {
 					for(AutoComplete input : autoCompletes) {
-						if(input != null && input.getValue() != null)
-							onSelectRedirectorArguments.addParameters(Map.of(ParameterName.stringify(input.getEntityClass())
-									,List.of(FieldHelper.readSystemIdentifier(input.getValue()).toString())));
+						if(Boolean.TRUE.equals(isInputValueNotNull(input)) && Boolean.TRUE.equals(isSelectRedirectorArgumentsParameter(input.getEntityClass(), input)))
+							onSelectRedirectorArguments.addParameters(Map.of(buildParameterName(input),List.of(buildParameterValue(input))));
 					}
 				}
 				
@@ -165,6 +163,26 @@ public abstract class AbstractFilterController extends AbstractObject implements
 				return super.__runExecuteFunction__(action);
 			}
 		});
+	}
+	
+	protected Boolean isInputValueNotNull(AbstractInput<?> input) {
+		return input != null && input.getValue() != null;
+	}
+	
+	protected Boolean isSelectRedirectorArgumentsParameter(Class<?> klass,AbstractInput<?> input) {
+		return Boolean.TRUE;
+	}
+	
+	protected String buildParameterName(AbstractInput<?> input) {
+		if(input instanceof AbstractInputChoiceOne)
+			return ParameterName.stringify( ((AbstractInputChoiceOne)input).getChoiceClass());
+		return null;
+	}
+	
+	protected String buildParameterValue(AbstractInput<?> input) {
+		if(input instanceof AbstractInputChoiceOne)
+			return FieldHelper.readSystemIdentifier(input.getValue()).toString();
+		return null;
 	}
 	
 	protected void buildLayout() {
@@ -190,5 +208,13 @@ public abstract class AbstractFilterController extends AbstractObject implements
 			cellsMaps.add(MapHelper.instantiate(Cell.FIELD_CONTROL,filterCommandButton,Cell.FIELD_WIDTH,filterCommandButtonWidth));
 		}
 		return cellsMaps;
+	}
+	
+	/**/
+	
+	public static enum RenderType {
+		INLINE
+		,DIALOG
+		;
 	}
 }

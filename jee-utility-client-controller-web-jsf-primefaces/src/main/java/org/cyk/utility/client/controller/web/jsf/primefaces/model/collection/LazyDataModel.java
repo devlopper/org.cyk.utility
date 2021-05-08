@@ -13,16 +13,12 @@ import javax.ws.rs.core.Response;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
-import org.cyk.utility.controller.Arguments;
-import org.cyk.utility.controller.EntityReader;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.identifier.resource.ParameterName;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
-import org.cyk.utility.persistence.query.QueryExecutorArguments;
-import org.cyk.utility.persistence.query.Filter;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.rest.ResponseHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
@@ -30,6 +26,11 @@ import org.cyk.utility.__kernel__.value.ValueConverter;
 import org.cyk.utility.client.controller.ControllerEntity;
 import org.cyk.utility.client.controller.ControllerLayer;
 import org.cyk.utility.client.controller.web.WebController;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractFilterController;
+import org.cyk.utility.controller.Arguments;
+import org.cyk.utility.controller.EntityReader;
+import org.cyk.utility.persistence.query.Filter;
+import org.cyk.utility.persistence.query.QueryExecutorArguments;
 import org.primefaces.model.SortOrder;
 
 import lombok.Getter;
@@ -163,9 +164,17 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 		Response getResponse(LazyDataModel<T> lazyDataModel);
 		Integer getCount(LazyDataModel<T> lazyDataModel);
 		Collection<String> getCopiableFiltersEntriesKeysToFilterFields(LazyDataModel<T> lazyDataModel);
+		
+		AbstractFilterController getFilterController();
+		Listener<?> setFilterController(AbstractFilterController filterController);
+		
 		/**/
 		
 		public static abstract class AbstractImpl<T> extends AbstractObject implements Listener<T>,Serializable{
+			
+			@Getter @Setter @Accessors(chain=true)
+			protected AbstractFilterController filterController;
+			
 			@Override
 			public Boolean getReaderUsable(LazyDataModel<T> lazyDataModel) {
 				return lazyDataModel.readerUsable;

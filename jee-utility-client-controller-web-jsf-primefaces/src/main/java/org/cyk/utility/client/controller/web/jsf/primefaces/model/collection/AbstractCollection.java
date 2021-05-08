@@ -25,7 +25,6 @@ import org.cyk.utility.__kernel__.klass.NamingModel;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.object.Builder;
-import org.cyk.utility.persistence.query.QueryHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.__kernel__.user.interface_.UserInterfaceAction;
@@ -34,6 +33,7 @@ import org.cyk.utility.client.controller.ControllerLayer;
 import org.cyk.utility.client.controller.web.jsf.OutcomeGetter;
 import org.cyk.utility.client.controller.web.jsf.Redirector;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractFilterController;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObjectAjaxable;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax.Ajax;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.AbstractCommand;
@@ -45,6 +45,7 @@ import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.MenuItem;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.output.OutputText;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.panel.Dialog;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.panel.OutputPanel;
+import org.cyk.utility.persistence.query.QueryHelper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -74,6 +75,8 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	protected CommandButton saveCommandButton;
 	protected Map<String,UIComponent> cellsBindings;
 	
+	//protected AbstractFilterController filterController;
+	
 	/**/
 	
 	/*@SuppressWarnings("unchecked")
@@ -84,6 +87,24 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	public List<?> getSelectionAsList() {
 		return (List<?>) selection;
 	}*/
+	
+	@SuppressWarnings("unchecked")
+	public <T> List<T> getList(Class<T> klass) {
+		if(klass == null)
+			return null;
+		if(value instanceof LazyDataModel<?>)
+			return ((LazyDataModel<T>)value).getList();
+		return (List<T>) value;
+	}
+	
+	public AbstractFilterController getFilterController() {
+		if(!(value instanceof LazyDataModel<?>))
+			return null;
+		LazyDataModel.Listener<?> listener = ((LazyDataModel<?>)value).getListener();
+		if(listener == null)
+			return null;
+		return listener.getFilterController();
+	}
 	
 	public AbstractCollection useQueryIdentifiersFiltersLike() {
 		if(value instanceof LazyDataModel<?>) {
@@ -414,6 +435,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	public static final String FIELD_RENDER_TYPE = "renderType";
 	public static final String FIELD_SELECTION = "selection";
 	public static final String FIELD_SELECTION_AS_COLLECTION = "selectionAsCollection";
+	//public static final String FIELD_FILTER_CONTROLLER = "filterController";
 	
 	/**/
 	
@@ -576,8 +598,10 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 		AbstractMenu buildRecordMenu(AbstractCollection collection);
 		
 		Object listenSave(AbstractCollection collection);
+		
 		/**/
 		public static abstract class AbstractImpl extends AbstractObject implements Listener,Serializable {
+			
 			@Override
 			public Object listenSave(AbstractCollection collection) {
 				return null;

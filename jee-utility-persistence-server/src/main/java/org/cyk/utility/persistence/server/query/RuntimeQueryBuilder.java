@@ -11,6 +11,7 @@ import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.Value;
+import org.cyk.utility.persistence.query.Filter;
 import org.cyk.utility.persistence.query.Query;
 import org.cyk.utility.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.persistence.query.QueryIdentifierGetter;
@@ -44,6 +45,10 @@ public interface RuntimeQueryBuilder {
 		}
 		
 		protected Query instantiateQuery(QueryExecutorArguments arguments) {
+			//Filter might change. Hence we must clone the filter to keep track of the original one
+			arguments.setFilterBackup(Filter.clone(arguments.getFilter()));
+			processQueryExecutorArguments(arguments);
+			
 			Query query = new Query();
 			query.setIdentifier(arguments.getQuery().getIdentifier());
 			query.setIntermediateResultClass(arguments.getQuery().getIntermediateResultClass());
@@ -66,6 +71,10 @@ public interface RuntimeQueryBuilder {
 				}
 			}
 			return query;
+		}
+		
+		protected void processQueryExecutorArguments(QueryExecutorArguments arguments) {
+			
 		}
 		
 		protected Boolean isBuildable(QueryExecutorArguments arguments) {

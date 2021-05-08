@@ -19,6 +19,15 @@
 			<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.title)}">
 	 			<ui:param name="outputText" value="#{dataTable.title}"/>
 	 		</ui:decorate>
-		</ui:insert>		
+		</ui:insert>
+		
+		<ui:insert name="beforeDataTable_filterController">
+			<ui:fragment rendered="#{dataTable.filterController.renderType == null or dataTable.filterController.renderType.name() eq 'INLINE'}">
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.filterController.layout)}">
+	 				<ui:param name="layout" value="#{dataTable.filterController.layout}"/>
+	 			</ui:decorate>
+	 			<p:separator/>
+			</ui:fragment>
+		</ui:insert>
 	</ui:insert>
 </ui:composition>

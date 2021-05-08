@@ -21,6 +21,7 @@ public class ArchiveBuilder {
 	@Setter @Accessors(chain = true) protected String archiveName;
 	@Setter @Accessors(chain = true) protected Boolean cdiEnabled = Boolean.TRUE;
 	@Setter @Accessors(chain = true) protected Boolean persistenceEnabled;
+	@Setter @Accessors(chain = true) protected String persistenceXmlName;
 	@Setter @Accessors(chain = true) protected String persistenceCreationScriptName;
 	@Setter @Accessors(chain = true) protected String pomXmlName;
 	@Setter @Accessors(chain = true) protected Boolean webConfigEnabled;
@@ -74,7 +75,10 @@ public class ArchiveBuilder {
 	protected void enablePersistence() {
 		if(Boolean.TRUE.equals(persistenceEnabled)) {
 			WebArchive webArchive = (WebArchive) archive;
-			webArchive.addAsResource("memory/persistence.xml","META-INF/persistence.xml");
+			persistenceXmlName = buildFileName("memory/persistence",persistenceXmlName,"xml");
+			if(StringHelper.isBlank(persistenceXmlName))
+				return;
+			webArchive.addAsResource(persistenceXmlName,"META-INF/persistence.xml");
 	        webArchive.addAsResource("memory/data.sql","META-INF/data.sql");
 		}
 	}

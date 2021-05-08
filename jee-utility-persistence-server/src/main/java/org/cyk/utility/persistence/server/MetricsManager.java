@@ -28,6 +28,9 @@ public interface MetricsManager {
 	
 	Integer getConnectionCount();
 	Integer getSuccessfulTransactionCount();
+	Integer getQueryExecutionCount();
+	
+	void print();
 	
 	/**/
 	
@@ -91,6 +94,21 @@ public interface MetricsManager {
 		@Override
 		public Integer getSuccessfulTransactionCount() {
 			return null;
+		}
+		
+		@Override
+		public Integer getQueryExecutionCount() {
+			return null;
+		}
+		
+		@Override
+		public void print() {
+			Map<String,Object> map = get();
+			if(map == null)
+				return;
+			map.forEach( (k,v) -> {
+				System.out.println(k+" : "+v);
+			});
 		}
 	}
 	

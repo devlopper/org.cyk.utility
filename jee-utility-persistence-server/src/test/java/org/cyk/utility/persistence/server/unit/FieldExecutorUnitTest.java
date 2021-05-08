@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.cyk.utility.persistence.server.DataType;
 import org.cyk.utility.persistence.server.query.executor.field.CodeExecutor;
 import org.cyk.utility.persistence.server.query.executor.field.GenericFieldExecutor;
+import org.cyk.utility.persistence.server.query.executor.field.IdentifierExecutor;
 import org.junit.jupiter.api.Test;
 
 public class FieldExecutorUnitTest extends AbstractUnitTest {
@@ -43,5 +44,15 @@ public class FieldExecutorUnitTest extends AbstractUnitTest {
 		assertThat(CodeExecutor.getInstance().getExisting(DataType.class, "SG")).contains("SG");
 		assertThat(CodeExecutor.getInstance().getExisting(DataType.class, "SG","LG")).contains("SG","LG");
 		assertThat(CodeExecutor.getInstance().getExisting(DataType.class, "SG","LG","X")).contains("SG","LG");
+	}
+	
+	@Test
+	public void specific_identifier_values(){
+		assertThat(IdentifierExecutor.getInstance().getValues(DataType.class)).containsExactly("dt1","dt2","dt3","dt4");
+	}
+	
+	@Test
+	public void specific_code_values(){
+		assertThat(CodeExecutor.getInstance().getValues(DataType.class)).containsExactly("INT","LG","SG","ST");
 	}
 }

@@ -6,12 +6,13 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.__kernel__.annotation.Oracle;
+import org.cyk.utility.__kernel__.annotation.H2;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.persistence.PersistenceHelper;
 
-@Oracle
-public class NativeQueryStringBuilderOracleImpl extends NativeQueryStringBuilder.AbstractImpl implements Serializable {
+@H2
+public class NativeQueryStringBuilderH2Impl extends NativeQueryStringBuilder.AbstractImpl implements Serializable {
 
 	@Override
 	public String buildInsertManyFromMaps(Class<?> klass, Collection<Map<String, String>> maps) {
@@ -22,9 +23,9 @@ public class NativeQueryStringBuilderOracleImpl extends NativeQueryStringBuilder
 		maps.forEach(map -> {
 			ThrowableHelper.throwIllegalArgumentExceptionIfEmpty(String.format("columns names of class %s", klass),map.keySet());
 			ThrowableHelper.throwIllegalArgumentExceptionIfEmpty(String.format("columns values of class %s", klass),map.values());
-			intos.add(getIntoValues(tableName, map.keySet(), map.values()));
-		});		
-		return String.format(INSERT_ALL_FORMAT,String.format(HINTS_FORMAT, String.format(PARALLEL_FORMAT, tableName,4)), StringUtils.join(intos," "));
+			intos.add(String.format("(%s)", StringHelper.concatenate(map.values(), ",")));
+		});
+		return String.format(INSERT_ALL_FORMAT, tableName,StringHelper.concatenate(maps.iterator().next().keySet(),","), StringUtils.join(intos,","));
 	}
 	
 	@Override
@@ -33,19 +34,12 @@ public class NativeQueryStringBuilderOracleImpl extends NativeQueryStringBuilder
 		ThrowableHelper.throwIllegalArgumentExceptionIfEmpty("collection", collection);
 		Collection<Map<String, String>> maps = new ArrayList<>();
 		for(Object object : collection) {
-			Map<String, String> map = PersistenceHelper.getColumnsValuesAsMap(object,getIsBooleanAsNumber());
+			Map<String, String> map = PersistenceHelper.getColumnsValuesAsMap(object);
 			ThrowableHelper.throwIllegalArgumentExceptionIfEmpty(String.format("columns values of class %s", klass),map);
 			maps.add(map);
 		}
 		return buildInsertManyFromMaps(klass, maps);
 	}
 	
-	@Override
-	protected Boolean getIsBooleanAsNumber() {
-		return Boolean.TRUE;
-	}
-	
-	private static final String PARALLEL_FORMAT = "PARALLEL(%s,%s)";
-	private static final String HINTS_FORMAT = "/*+ %s */";
-	private static final String INSERT_ALL_FORMAT = "INSERT %s ALL %s SELECT * FROM dual";
+	private static final String INSERT_ALL_FORMAT = "INSERT INTO %s (%s) VALUES %s";
 }

@@ -8,13 +8,8 @@ import java.util.logging.Level;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.SortOrder;
-import org.cyk.utility.persistence.query.EntityReader;
-import org.cyk.utility.persistence.query.Query;
-import org.cyk.utility.persistence.query.QueryExecutor;
 import org.cyk.utility.persistence.query.QueryExecutorArguments;
-import org.cyk.utility.persistence.query.QueryIdentifierBuilder;
 import org.cyk.utility.persistence.query.QueryManager;
-import org.cyk.utility.persistence.query.QueryName;
 import org.cyk.utility.persistence.server.DataType;
 import org.cyk.utility.persistence.server.query.QueryExecutorImpl;
 import org.cyk.utility.persistence.server.query.executor.DynamicManyExecutor;
@@ -28,7 +23,7 @@ public class DynamicManyExecutorUnitTest extends AbstractUnitTest {
 		QueryExecutorImpl.LOGGABLE = Boolean.TRUE;
 		QueryExecutorImpl.LOG_LEVEL = Level.INFO;
 		
-		String queryIdentifier = QueryIdentifierBuilder.getInstance().build(DataType.class, QueryName.READ_DYNAMIC);
+		//String queryIdentifier = QueryIdentifierBuilder.getInstance().build(DataType.class, QueryName.READ_DYNAMIC);
 		//Collection<DataType> dataTypes = DynamicManyExecutor.getInstance().read(DataType.class, new QueryExecutorArguments().setQuery(new Query().setIdentifier(queryIdentifier)));
 		Collection<DataType> dataTypes = DynamicManyExecutor.getInstance().read(DataType.class);
 		//Collection<DataType> dataTypes = EntityReader.getInstance().readMany(DataType.class, new QueryExecutorArguments().setQuery(new Query().setIdentifier(queryIdentifier)));

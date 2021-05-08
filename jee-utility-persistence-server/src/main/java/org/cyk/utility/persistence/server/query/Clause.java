@@ -15,6 +15,9 @@ public enum Clause {
 	,GROUP_BY
 	,ORDER_BY
 	
+	,UPDATE
+	,DELETE
+	
 	;
 	
 	private String value;

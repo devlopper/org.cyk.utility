@@ -123,6 +123,20 @@ public class AbstractInputChoiceOne extends AbstractInputChoice<Object> implemen
 		return this;
 	}
 	
+	public AbstractInputChoiceOne selectFirstChoiceIfValueIsNullElseSelectByValueSystemIdentifier() {
+		if(value == null)
+			selectFirstChoice();
+		else
+			selectByValueSystemIdentifier();
+		return this;
+	}
+	
+	public AbstractInputChoiceOne setValueAsFirstChoiceIfNull() {
+		if(getValue() == null)
+			setValue(CollectionHelper.getFirst(getChoices()));
+		return this;
+	}
+	
 	/**/
 	
 	

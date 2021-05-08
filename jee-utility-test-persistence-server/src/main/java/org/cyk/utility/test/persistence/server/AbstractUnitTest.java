@@ -12,7 +12,10 @@ import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.persistence.EntityManagerFactoryGetterImpl;
 import org.cyk.utility.persistence.query.EntityCounter;
 import org.cyk.utility.persistence.query.EntityReader;
+import org.cyk.utility.persistence.query.Querier;
+import org.cyk.utility.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.persistence.server.Initializer;
+import org.cyk.utility.persistence.server.query.executor.DynamicOneExecutor;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 
 public abstract class AbstractUnitTest extends AbstractWeldUnitTest {
@@ -78,5 +81,11 @@ public abstract class AbstractUnitTest extends AbstractWeldUnitTest {
 			for(Integer index = from; index < array.length; index = index + 1)
 				array[index] = NumberHelper.getLong(array[index]);
 		return array;
+	}
+	
+	public static <T> T assertExistenceAndGet(Class<T> klass,Object identifier) {
+		T instance = DynamicOneExecutor.getInstance().read(klass, new QueryExecutorArguments().addFilterFieldsValues(Querier.PARAMETER_NAME_IDENTIFIER,identifier));
+		assertThat(instance).as(String.format("%s with ID %s not found", klass.getSimpleName(),identifier)).isNotNull();
+		return instance;
 	}
 }

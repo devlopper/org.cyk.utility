@@ -28,8 +28,23 @@ public class ThrowablesMessages extends AbstractObject implements Serializable{
 		return add(CollectionHelper.listOf(messages));
 	}
 	
+	public ThrowablesMessages addIfTrue(String message,Boolean condition) {
+		if(StringHelper.isBlank(message))
+			return this;
+		if(Boolean.TRUE.equals(condition))
+			add(message);
+		return this;
+	}
+	
 	public void throwIfNotEmpty() {
 		if(CollectionHelper.isNotEmpty(collection))
 			throw new RuntimeException(StringHelper.concatenate(collection, "\r\n"));	
+	}
+	
+	public ThrowablesMessages clear() {
+		if(collection == null)
+			return this;
+		collection.clear();
+		return this;
 	}
 }

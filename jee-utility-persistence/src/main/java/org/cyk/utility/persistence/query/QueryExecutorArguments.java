@@ -43,7 +43,7 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 	private Boolean collectionable;
 	private Boolean isResultCachable;
 	private Boolean isResultProcessable;
-	private Filter filter;
+	private Filter filter,filterBackup;
 	private Map<String,SortOrder> sortOrders;
 	private Integer firstTupleIndex;
 	private Integer numberOfTuples;
@@ -410,6 +410,20 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 	
 	public QueryExecutorArguments normalize() {
 		return normalize(null,null);
+	}
+	
+	public QueryExecutorArguments removeFilterFields(Collection<String> filterFieldsNames) {
+		if(CollectionHelper.isEmpty(filterFieldsNames) || filter == null)
+			return this;
+		filter.removeFields(filterFieldsNames);
+		return this;
+	}
+	
+	public QueryExecutorArguments removeFilterFields(String...filterFieldsNames) {
+		if(ArrayHelper.isEmpty(filterFieldsNames))
+			return this;
+		removeFilterFields(CollectionHelper.listOf(filterFieldsNames));
+		return this;
 	}
 	
 	@Override

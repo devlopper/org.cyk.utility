@@ -28,6 +28,8 @@ public interface SpecificFieldExecutor<V> extends FieldBasedExecutor {
 	<T> Collection<V> getExistingFromIdentifiables(Class<T> klass,Collection<T> identifiables);
 	<T> Collection<V> getExistingFromIdentifiables(Class<T> klass,T...identifiables);
 	
+	<T> Collection<V> getValues(Class<T> klass);
+	
 	public static abstract class AbstractImpl<V> extends FieldBasedExecutor.AbstractImpl implements SpecificFieldExecutor<V>,Serializable {
 		
 		@Getter protected String name;
@@ -98,6 +100,13 @@ public interface SpecificFieldExecutor<V> extends FieldBasedExecutor {
 			if(klass == null || ArrayHelper.isEmpty(identifiables))
 				return null;
 			return getExistingFromIdentifiables(klass, CollectionHelper.listOf(identifiables));
+		}
+		
+		@Override
+		public <T> Collection<V> getValues(Class<T> klass) {
+			if(klass == null || this.klass == null)
+				return null;
+			return GenericFieldExecutor.getInstance().getValues(klass, this.klass, getName());
 		}
 	}	
 }

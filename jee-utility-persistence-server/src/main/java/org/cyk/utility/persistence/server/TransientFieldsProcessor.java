@@ -70,6 +70,10 @@ public interface TransientFieldsProcessor {
 		protected String ifTrueYesElseNo(Class<?> klass,String fieldName,Boolean value) {
 			return org.cyk.utility.persistence.server.Helper.ifTrueYesElseNo(value);
 		}
+		
+		protected String ifTrueYesElseNo(Boolean value) {
+			return org.cyk.utility.persistence.server.Helper.ifTrueYesElseNo(value);
+		}
 	}
 	
 	/**/

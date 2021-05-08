@@ -37,6 +37,18 @@ public class Field extends AbstractObject implements Serializable {
 	private ValueUsageType valueUsageType;
 	private ArithmeticOperator arithmeticOperator;
 
+	public static Field clone(Field field) {
+		if(field == null)
+			return null;
+		Field clone = new Field();
+		clone.arithmeticOperator = field.arithmeticOperator;
+		clone.instance = field.instance;
+		clone.name = field.name;
+		clone.value = field.value;
+		clone.valueUsageType = field.valueUsageType;
+		return clone;
+	}
+	
 	public List<String> getValueLikes(Integer numberOfTokens) {
 		if(value instanceof String)
 			return QueryArgumentHelper.getLikes((String) value, numberOfTokens);
