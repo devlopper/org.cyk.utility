@@ -16,6 +16,7 @@ import org.cyk.utility.__kernel__.object.Configurator;
 import org.cyk.utility.__kernel__.string.Case;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.Value;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObject;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.output.OutputText;
@@ -139,9 +140,13 @@ public class Column extends AbstractObject implements Serializable {
 				column.width = width.toString();
 			}
 			if(Boolean.TRUE.equals(MapHelper.readByKey(arguments, FIELD_SHOW_FOOTER))) {
-				if(Value.Type.CURRENCY.equals(column.valueType))
-					column.footerOutputText = OutputText.build(OutputText.FIELD_VALUE,"-",OutputText.FIELD_STYLE,"float:right;font-weight: bold;");
-				else
+				if(Value.Type.CURRENCY.equals(column.valueType)) {
+					Object value = MapHelper.readByKey(arguments, FIELD_FOOTER_OUTPUT_TEXT_VALUE);
+					if(value instanceof Number)
+						value = NumberHelper.format((Number) value);
+					column.footerOutputText = OutputText.build(OutputText.FIELD_VALUE,ValueHelper.defaultToIfBlank(value, "-")
+							,OutputText.FIELD_STYLE,"float:right;font-weight: bold;");
+				}else
 					column.footerOutputText = OutputText.build();
 			}
 			
@@ -162,6 +167,7 @@ public class Column extends AbstractObject implements Serializable {
 		public static final String FIELD_FILTERABLE = "filterable";
 		public static final String FIELD_EDITABLE = "editable";
 		public static final String FIELD_SHOW_FOOTER = "showFooter";
+		public static final String FIELD_FOOTER_OUTPUT_TEXT_VALUE = "footerOutputTextValue";
 	}
 	
 	public static interface FooterValueBuilder {

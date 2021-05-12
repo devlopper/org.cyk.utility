@@ -37,6 +37,7 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 	private Collection<Projection> projections;
 	private Collection<String> processableTransientFieldsNames;
 	private Collection<String> resultsFieldsNames;
+	private Collection<String> flags;
 	private Map<Object,Object> parameters;
 	private PropertiesArguments properties;
 	private Map<String,Object> hints;
@@ -77,6 +78,29 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 	private Boolean queryBuildableAtRuntime;
 	private Query runtimeQuery;	
 	private Filter runtimeFilter;
+	
+	public Collection<String> getFlags(Boolean injectIfNull) {
+		if(flags == null && Boolean.TRUE.equals(injectIfNull))
+			flags = new ArrayList<>();
+		return flags;
+	}
+	
+	public QueryExecutorArguments addFlags(Collection<String> flags) {
+		if(CollectionHelper.isEmpty(flags))
+			return this;
+		getFlags(Boolean.TRUE).addAll(flags);
+		return this;
+	}
+	
+	public QueryExecutorArguments addFlags(String...flags) {
+		if(ArrayHelper.isEmpty(flags))
+			return this;
+		return addFlags(CollectionHelper.listOf(flags));
+	}
+	
+	public Boolean isFlagged(String flag) {
+		return CollectionHelper.contains(flags, flag);
+	}
 	
 	public Collection<Projection> getProjections(Boolean injectIfNull) {
 		if(projections == null && Boolean.TRUE.equals(injectIfNull))
@@ -373,7 +397,10 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 		Collection<String> tupleTransientFieldsNames = null;
 		if(CollectionHelper.isNotEmpty(projections)) {
 			for(Projection projection : projections) {
-				if(FieldHelper.getByName(query.getTupleClass(), projection.getFieldName()).getAnnotation(Transient.class) == null) {
+				java.lang.reflect.Field field = FieldHelper.getByName(query.getTupleClass(), projection.getFieldName());
+				if(field == null)
+					continue;
+				if(field.getAnnotation(Transient.class) == null) {
 					if(tuplePersistedFieldsNames == null)
 						tuplePersistedFieldsNames = new ArrayList<>();
 					tuplePersistedFieldsNames.add(projection.getFieldName());
@@ -491,6 +518,7 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 		private String queryIdentifier;
 		private ArrayList<Projection.Dto> projections;
 		private ArrayList<String> processableTransientFieldsNames;
+		private ArrayList<String> flags;
 		private ArrayList<String> resultsFieldsNames;
 		private Filter.Dto filter;
 		private LinkedHashMap<String,SortOrder> sortOrders;
@@ -501,6 +529,25 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 		private Boolean loggableAsInfo;
 		
 		private Boolean queryBuildableAtRuntime;
+		
+		public Collection<String> getFlags(Boolean injectIfNull) {
+			if(flags == null && Boolean.TRUE.equals(injectIfNull))
+				flags = new ArrayList<>();
+			return flags;
+		}
+		
+		public Dto addFlags(Collection<String> flags) {
+			if(CollectionHelper.isEmpty(flags))
+				return this;
+			getFlags(Boolean.TRUE).addAll(flags);
+			return this;
+		}
+		
+		public Dto addFlags(String...flags) {
+			if(ArrayHelper.isEmpty(flags))
+				return this;
+			return addFlags(CollectionHelper.listOf(flags));
+		}
 		
 		public Filter.Dto getFilter(Boolean injectIfNull) {
 			if(filter == null && Boolean.TRUE.equals(injectIfNull))

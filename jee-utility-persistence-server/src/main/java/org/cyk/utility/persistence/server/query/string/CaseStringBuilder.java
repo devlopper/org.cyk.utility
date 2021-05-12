@@ -18,9 +18,11 @@ import lombok.experimental.Accessors;
 
 public interface CaseStringBuilder {
 
-	String build(Case order);
+	String build(Case kase);
 	String build(Collection<String> strings);
 	String build(String...strings);
+	
+	String buildWhenFieldIsNullThenZeroElseField(String fieldName);
 	
 	/**/
 	
@@ -66,6 +68,11 @@ public interface CaseStringBuilder {
 			return build(CollectionHelper.listOf(strings));
 		}
 		
+		@Override
+		public String buildWhenFieldIsNullThenZeroElseField(String fieldName) {
+			return build(Case.instantiateWhenFieldIsNullThenZeroElseField(fieldName));
+		}
+		
 		private static final String FORMAT = "CASE %s END";
 	}
 	
@@ -102,6 +109,10 @@ public interface CaseStringBuilder {
 		public Case else_(String result) {
 			getWhens(Boolean.TRUE).add(When.instantiateElse(result));
 			return this;
+		}
+		
+		public static Case instantiateWhenFieldIsNullThenZeroElseField(String fieldName) {
+			return new Case().when(String.format("%s IS NULL",fieldName),"0").else_(fieldName);
 		}
 		
 		/**/

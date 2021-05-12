@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.Helper;
+import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.SortOrder;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
@@ -49,6 +50,8 @@ public interface RuntimeQueryStringBuilder {
 				setProjection(arguments, builderArguments);
 				setTuple(arguments, builderArguments);
 				setPredicate(arguments, builderArguments);
+				setGroup(arguments, builderArguments);
+				setOrder(arguments, builderArguments);
 				return QueryStringBuilder.getInstance().build(builderArguments);
 			}else
 				return arguments.getQuery().getValue();
@@ -57,7 +60,7 @@ public interface RuntimeQueryStringBuilder {
 		protected void normalizeQueryExecutorArguments(QueryExecutorArguments arguments) {
 			arguments.normalize(
 					QueryType.COUNT.equals(arguments.getQuery().getType()) ? null : getDefaultProjections(arguments)
-					,QueryType.COUNT.equals(arguments.getQuery().getType()) ? null : getDefaultSortOrders(arguments)
+					,QueryType.READ_MANY.equals(arguments.getQuery().getType()) ? getDefaultSortOrders(arguments) : null
 				);		
 		}
 		
@@ -122,7 +125,36 @@ public interface RuntimeQueryStringBuilder {
 			}
 		}
 		
-		protected void addEqualsIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
+		protected void setGroup(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments) {
+			
+		}
+		
+		protected void setOrder(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments) {
+			
+		}
+		
+		/**/
+		
+		protected static Boolean isQueryExecutorArgumentsFilterHasFieldWithPath(QueryExecutorArguments arguments,String path) {
+			return arguments == null || arguments.getFilter() == null ? null : arguments.getFilter().hasFieldWithPath(path);
+		}
+		
+		protected static Boolean isQueryExecutorArgumentsFilterHasFieldsWithPaths(QueryExecutorArguments arguments,Collection<String> paths) {
+			if(arguments == null || arguments.getFilter() == null || CollectionHelper.isEmpty(paths))
+				return null;
+			for(String path : paths)
+				if(!Boolean.TRUE.equals(isQueryExecutorArgumentsFilterHasFieldWithPath(arguments, path)))
+					return null;
+			return Boolean.TRUE;
+		}
+		
+		protected static Boolean isQueryExecutorArgumentsFilterHasFieldsWithPaths(QueryExecutorArguments arguments,String...paths) {
+			if(arguments == null || arguments.getFilter() == null || ArrayHelper.isEmpty(paths))
+				return null;
+			return isQueryExecutorArgumentsFilterHasFieldsWithPaths(arguments, CollectionHelper.listOf(paths));
+		}
+		
+		protected static void addEqualsIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
 				,String path,String variable,String fieldName) {
 			if(arguments.getFilter().hasFieldWithPath(path)) {
 				filter.addFieldEquals(path, arguments);
@@ -130,17 +162,17 @@ public interface RuntimeQueryStringBuilder {
 			}
 		}
 		
-		protected void addEqualsIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
+		protected static void addEqualsIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
 				,String path,String variable) {
 			addEqualsIfFilterHasFieldWithPath(arguments, builderArguments, predicate, filter, path, variable, path);
 		}
 		
-		protected void addEqualsIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
+		protected static void addEqualsIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
 				,String path) {
 			addEqualsIfFilterHasFieldWithPath(arguments, builderArguments, predicate, filter, path, "t", path);
 		}
 		
-		protected void addIsFalseOrNullIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
+		protected static void addIsFalseOrNullIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
 				,String path,String variable,String fieldName) {
 			if(arguments.getFilter().hasFieldWithPath(path)) {
 				//filter.addFieldEquals(path, arguments);
@@ -148,7 +180,7 @@ public interface RuntimeQueryStringBuilder {
 			}
 		}
 		
-		protected void addIsTrueIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
+		protected static void addIsTrueIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
 				,String path,String variable,String fieldName) {
 			if(arguments.getFilter().hasFieldWithPath(path)) {
 				//filter.addFieldEquals(path, arguments);

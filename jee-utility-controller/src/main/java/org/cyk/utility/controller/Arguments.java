@@ -19,6 +19,7 @@ import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.rest.ResponseHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
+import org.cyk.utility.persistence.query.Filter;
 import org.cyk.utility.persistence.query.Querier;
 
 import lombok.Getter;
@@ -65,8 +66,18 @@ public class Arguments<T> extends AbstractObject implements Serializable {
 		return this;
 	}
 	
+	public Arguments<T> flags(String...flags) {
+		getRepresentationArguments(Boolean.TRUE).getQueryExecutorArguments(Boolean.TRUE).addFlags(flags);
+		return this;
+	}
+	
 	public Arguments<T> transientFieldsNames(String...processableTransientFieldsNames) {
 		getRepresentationArguments(Boolean.TRUE).getQueryExecutorArguments(Boolean.TRUE).addProcessableTransientFieldsNames(processableTransientFieldsNames);
+		return this;
+	}
+	
+	public Arguments<T> filter(Filter.Dto filter) {
+		getRepresentationArguments(Boolean.TRUE).getQueryExecutorArguments(Boolean.TRUE).setFilter(filter);
 		return this;
 	}
 	

@@ -3,7 +3,6 @@ package org.cyk.utility.persistence.server.query;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -121,7 +120,7 @@ public class QueryExecutorImpl extends AbstractObject implements QueryExecutor,S
 		return query.executeUpdate();
 	}
 
-	public Collection<Object[]> readByValues(Collection<String> values) {
+	/*public Collection<Object[]> readByValues(Collection<String> values) {
 		if(CollectionHelper.isEmpty(values))
 			return null;
 		Collection<Object[]> collection = null;
@@ -135,7 +134,7 @@ public class QueryExecutorImpl extends AbstractObject implements QueryExecutor,S
 			}
 		}
 		return collection;
-	}
+	}*/
 	
 	/**/
 	

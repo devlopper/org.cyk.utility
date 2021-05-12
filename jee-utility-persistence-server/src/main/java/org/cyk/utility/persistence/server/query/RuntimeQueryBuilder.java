@@ -58,7 +58,15 @@ public interface RuntimeQueryBuilder {
 			query.setTupleFieldsNamesIndexes(arguments.getQuery().getTupleFieldsNamesIndexes());
 			query.setType(arguments.getQuery().getType());
 			query.setValue(RuntimeQueryStringBuilder.getInstance().build(arguments));
+			setTupleFieldsNamesIndexesFromFieldsNames(arguments, query);
+			return query;
+		}
+		
+		protected void processQueryExecutorArguments(QueryExecutorArguments arguments) {
 			
+		}
+		
+		protected void setTupleFieldsNamesIndexesFromFieldsNames(QueryExecutorArguments arguments,Query query) {
 			if(QueryType.READ_MANY.equals(query.getType()) || QueryType.READ_ONE.equals(query.getType())) {
 				if(CollectionHelper.isEmpty(arguments.getProjections()))
 					;
@@ -70,11 +78,6 @@ public interface RuntimeQueryBuilder {
 					query.setTupleFieldsNamesIndexesFromFieldsNames(resultsFieldsNames);
 				}
 			}
-			return query;
-		}
-		
-		protected void processQueryExecutorArguments(QueryExecutorArguments arguments) {
-			
 		}
 		
 		protected Boolean isBuildable(QueryExecutorArguments arguments) {

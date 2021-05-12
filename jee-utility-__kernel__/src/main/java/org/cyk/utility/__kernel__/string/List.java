@@ -29,7 +29,7 @@ public class List implements Serializable {
 	
 	/**/
 	
-	private java.util.List<String> getStrings(Boolean injectIfNull) {
+	public java.util.List<String> getStrings(Boolean injectIfNull) {
 		if(strings == null && Boolean.TRUE.equals(injectIfNull))
 			strings = new ArrayList<>();
 		return strings;
