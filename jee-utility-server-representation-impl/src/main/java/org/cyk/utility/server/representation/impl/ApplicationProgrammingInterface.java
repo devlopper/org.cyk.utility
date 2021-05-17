@@ -30,7 +30,10 @@ public class ApplicationProgrammingInterface extends javax.ws.rs.core.Applicatio
 	@Path("/")
 	@Produces(javax.ws.rs.core.MediaType.TEXT_PLAIN)
 	public String get() {
-		return ConfigurationHelper.getValueAsString(VariableName.SYSTEM_NAME)+" Application Programming Interface. Time is "+new java.util.Date();
+		return ConfigurationHelper.getValueAsString(VariableName.SYSTEM_NAME)
+				+" Application Programming Interface."
+				+" Build Timestamp : "+ConfigurationHelper.getValueAsString(VariableName.SYSTEM_TIMESTAMP_AS_STRING)
+				+" Time is "+new java.util.Date();
 	}
 	
 	/**/
