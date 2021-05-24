@@ -264,7 +264,9 @@ public interface ClientManager {
 					if(StringHelper.isBlank(resource.getName()) || CollectionHelper.isEmpty(resource.getUniformResourceIdentifiers()))
 						continue;
 					String name = String.format(RESOURCE_NAME_FORMAT, resource.getName());
-					ResourceRepresentation resourceRepresentation = CollectionHelper.getFirst(resourcesResource.findByName(name));
+					Collection<ResourceRepresentation> resourceRepresentations = resourcesResource.findByName(name);
+					ResourceRepresentation resourceRepresentation = resourceRepresentations == null ? null : 
+						CollectionHelper.getFirst(resourceRepresentations.stream().filter(x -> x.getName().equals(name)).collect(Collectors.toList()));
 					if(resourceRepresentation != null) {
 						LogHelper.log(String.format("Resource named <<%s>> has not been overriden.",resourceRepresentation.getName()), LOGGING_LEVEL, getClass());
 						continue;
