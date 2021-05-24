@@ -10,7 +10,7 @@ import org.cyk.utility.security.keycloak.server.Resource;
 import org.cyk.utility.security.keycloak.server.Role;
 import org.cyk.utility.security.keycloak.server.User;
 import org.cyk.utility.security.keycloak.server.UserManager;
-import org.cyk.utility.__kernel__.test.weld.AbstractPersistenceUnitTest;
+import org.cyk.utility.test.weld.AbstractPersistenceUnitTest;
 import org.cyk.utility.__kernel__.variable.VariableHelper;
 import org.cyk.utility.__kernel__.variable.VariableName;
 import org.junit.jupiter.api.Test;

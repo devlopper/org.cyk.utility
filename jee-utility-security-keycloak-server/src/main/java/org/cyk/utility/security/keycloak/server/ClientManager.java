@@ -84,13 +84,23 @@ public interface ClientManager {
 			//	client.setResources(resourceRepresentations.stream().map(x -> new Resource().setIdentifier(x.getId()).setName(x.getName()).setUniformResourceIdentifiers(x.getUris()))
 			//			.collect(Collectors.toList()));
 			//read resources
-			Collection<ResourceRepresentation> resourceRepresentations = authorizationResource.resources().resources();
+			Collection<ResourceRepresentation> resourceRepresentations = null;
+			try {
+				resourceRepresentations = authorizationResource.resources().resources();
+			} catch (Exception exception) {
+				LogHelper.log(exception, getClass());
+			}
 			if(CollectionHelper.isNotEmpty(resourceRepresentations))
 				client.setResources(resourceRepresentations.stream().map(x -> new Resource().setIdentifier(x.getId()).setName(x.getName()).setUniformResourceIdentifiers(x.getUris()))
 						.collect(Collectors.toList()));
 			//read policies based on roles
 			PoliciesResource policiesResource = authorizationResource.policies();
-			Collection<PolicyRepresentation> policyRepresentations = policiesResource.policies();
+			Collection<PolicyRepresentation> policyRepresentations = null;
+			try {
+				policyRepresentations = policiesResource.policies();
+			} catch (Exception exception) {
+				LogHelper.log(exception, getClass());
+			}
 			if(CollectionHelper.isNotEmpty(policyRepresentations)) {
 				for(PolicyRepresentation policyRepresentation : policyRepresentations) {
 					if(POLICY_TYPE_ROLE.equals(policyRepresentation.getType())) {

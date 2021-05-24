@@ -2,7 +2,7 @@ package org.cyk.utility.security.keycloak.server;
 
 import java.util.List;
 
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.__kernel__.variable.VariableHelper;
 import org.cyk.utility.__kernel__.variable.VariableName;
 import org.junit.jupiter.api.Test;

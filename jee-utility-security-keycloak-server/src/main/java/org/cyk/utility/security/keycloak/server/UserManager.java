@@ -80,10 +80,14 @@ public interface UserManager {
 	}
 	
 	UserManager addRolesByNames(Collection<User> users,Collection<String> rolesNames);
-	UserManager addRolesByNames(Collection<User> users,String...rolesNames);
+	UserManager addRolesByNames(Collection<User> users,String...rolesNames);	
+	UserManager addRolesByNames(String userIdentifier,Collection<String> rolesNames);
+	UserManager addRolesByNames(String userIdentifier,String...rolesNames);
 	
 	UserManager deleteRolesByNames(Collection<User> users,Collection<String> rolesNames);
 	UserManager deleteRolesByNames(Collection<User> users,String...rolesNames);
+	UserManager deleteRolesByNames(String userIdentifier,Collection<String> rolesNames);
+	UserManager deleteRolesByNames(String userIdentifier,String...rolesNames);
 	
 	UserManager delete(Collection<String> usersNames);
 	
@@ -288,6 +292,26 @@ public interface UserManager {
 			return this;
 		}
 		
+		@Override
+		public UserManager addRolesByNames(String userIdentifier, Collection<String> rolesNames) {
+			if(StringHelper.isBlank(userIdentifier) || CollectionHelper.isEmpty(rolesNames))
+				return this;
+			User user = readByUserName(userIdentifier);
+			if(user == null)
+				return this;
+			return addRolesByNames(List.of(user), rolesNames);
+		}
+		
+		@Override
+		public UserManager addRolesByNames(String userIdentifier, String... rolesNames) {
+			if(StringHelper.isBlank(userIdentifier) || ArrayHelper.isEmpty(rolesNames))
+				return this;
+			User user = readByUserName(userIdentifier);
+			if(user == null)
+				return this;
+			return addRolesByNames(List.of(user), rolesNames);
+		}
+		
 		private void addRolesByNames(User user, Collection<String> rolesNames) {
 			if(user == null || CollectionHelper.isEmpty(rolesNames))
 				return;
@@ -331,6 +355,26 @@ public interface UserManager {
 				return this;
 			deleteRolesByNames(users, CollectionHelper.listOf(rolesNames));
 			return this;
+		}
+		
+		@Override
+		public UserManager deleteRolesByNames(String userIdentifier, Collection<String> rolesNames) {
+			if(StringHelper.isBlank(userIdentifier) || CollectionHelper.isEmpty(rolesNames))
+				return this;
+			User user = readByUserName(userIdentifier);
+			if(user == null)
+				return this;
+			return deleteRolesByNames(List.of(user), rolesNames);
+		}
+		
+		@Override
+		public UserManager deleteRolesByNames(String userIdentifier, String... rolesNames) {
+			if(StringHelper.isBlank(userIdentifier) || ArrayHelper.isEmpty(rolesNames))
+				return this;
+			User user = readByUserName(userIdentifier);
+			if(user == null)
+				return this;
+			return deleteRolesByNames(List.of(user), rolesNames);
 		}
 		
 		private void deleteRolesByNames(User user, Collection<String> rolesNames) {

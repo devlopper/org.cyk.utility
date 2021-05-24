@@ -11,7 +11,7 @@ import org.cyk.utility.security.keycloak.server.User;
 import org.cyk.utility.security.keycloak.server.UserManager;
 import org.cyk.utility.security.keycloak.server.UserManager.Arguments;
 import org.cyk.utility.security.keycloak.server.UserManager.Property;
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.__kernel__.variable.VariableHelper;
 import org.cyk.utility.__kernel__.variable.VariableName;
 import org.junit.jupiter.api.Test;
