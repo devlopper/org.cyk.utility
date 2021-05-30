@@ -25,6 +25,14 @@ public class WebController extends AbstractObject implements Serializable {
 
 	/**/
 	
+	public Collection<String> getRequestParameters(String name) {
+		if(StringHelper.isBlank(name))
+			return null;
+		HttpServletRequest request = __inject__(HttpServletRequest.class);
+		String[] array = request.getParameterValues(name);
+		return array == null || array.length == 0 ? null : CollectionHelper.listOf(array);
+	}
+	
 	public String getRequestParameter(String name) {
 		if(StringHelper.isBlank(name))
 			return null;

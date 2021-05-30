@@ -59,6 +59,11 @@ public interface RuntimeQueryBuilder {
 			query.setType(arguments.getQuery().getType());
 			query.setValue(RuntimeQueryStringBuilder.getInstance().build(arguments));
 			setTupleFieldsNamesIndexesFromFieldsNames(arguments, query);
+			
+			if(QueryType.COUNT.equals(arguments.getQuery().getType()) || QueryType.READ_ONE.equals(arguments.getQuery().getType())) {
+				arguments.setSortOrders(null);
+			}
+			
 			return query;
 		}
 		
@@ -92,6 +97,10 @@ public interface RuntimeQueryBuilder {
 			if(arguments.getQuery().getIdentifier().equals(QueryIdentifierGetter.getInstance().get(arguments.getQuery().getTupleClass(), QueryName.COUNT_DYNAMIC)))
 				return Boolean.TRUE;
 			return Boolean.FALSE;
+		}
+		
+		protected static Boolean hasFilterField(QueryExecutorArguments arguments,String fieldName) {
+			return arguments == null ? Boolean.FALSE : arguments.getFilterField(fieldName) != null; 			
 		}
 	}
 	

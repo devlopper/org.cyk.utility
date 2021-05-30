@@ -36,10 +36,8 @@ import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.client.controller.web.ComponentHelper;
 import org.cyk.utility.client.controller.web.WebController;
 import org.cyk.utility.client.controller.web.jsf.OutcomeGetter;
-import org.cyk.utility.client.controller.web.jsf.primefaces.PrimefacesHelper;
 import org.cyk.utility.client.controller.web.jsf.primefaces.dialog.DialogOpener;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction.Listener.OpenViewInDialogArgumentsGetter;
-import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractActionOLD202005021055.Listener;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax.Ajax;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.collection.AbstractCollection;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.AbstractInput;
@@ -414,7 +412,7 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 				//Notifications
 				Object argument = action.readArgument();
 				MessageRenderer.getInstance().clear();
-				MessageRenderer.getInstance().render("Opération bien éffectuée",RenderType.GROWL);
+				MessageRenderer.getInstance().render("Opération bien éffectuée",RenderType.GROWL);				
 				if(argument instanceof SelectEvent) {
 					argument = ((SelectEvent)argument).getObject();
 					if(argument instanceof String) {

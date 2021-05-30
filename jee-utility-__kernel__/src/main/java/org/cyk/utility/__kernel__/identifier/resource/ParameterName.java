@@ -86,6 +86,13 @@ public enum ParameterName {
 		return string;
 	}
 	
+	public static String stringifyMany(Object value) {
+		String string = stringify(value);
+		if(StringHelper.isBlank(string))
+			return string;
+		return string+"m";
+	}
+	
 	public static String normalize(String string) {
 		if(string == null || string.isBlank())
 			return null;

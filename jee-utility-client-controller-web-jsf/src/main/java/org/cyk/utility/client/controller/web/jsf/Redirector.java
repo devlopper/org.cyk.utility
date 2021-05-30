@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller.web.jsf;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import javax.faces.application.NavigationCase;
 import javax.faces.context.FacesContext;
 
 import org.cyk.utility.__kernel__.Helper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
@@ -124,7 +126,14 @@ public interface Redirector {
 		public Arguments addParameters(Map<String,List<String>> parameters) {
 			if(MapHelper.isEmpty(parameters))
 				return this;
-			getParameters(Boolean.TRUE).putAll(parameters);
+			for(Map.Entry<String,List<String>> entry : parameters.entrySet()) {
+				if(StringHelper.isBlank(entry.getKey()) || CollectionHelper.isEmpty(entry.getValue()))
+					continue;
+				List<String> list = getParameters(Boolean.TRUE).get(entry.getKey());
+				if(list == null)
+					getParameters(Boolean.TRUE).put(entry.getKey(), list = new ArrayList<>());
+				list.addAll(entry.getValue());
+			}
 			return this;
 		}
 		

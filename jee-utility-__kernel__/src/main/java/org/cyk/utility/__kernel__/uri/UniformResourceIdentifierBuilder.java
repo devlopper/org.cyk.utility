@@ -2,8 +2,6 @@ package org.cyk.utility.__kernel__.uri;
 
 import java.io.Serializable;
 import java.net.URI;
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -109,10 +107,23 @@ public interface UniformResourceIdentifierBuilder {
 			if(!query.isBlank() && !query.startsWith("?"))
 				query = "?"+query;
 			if(MapHelper.isNotEmpty(arguments.queries)) {
-				String suffix = StringHelper.concatenate(arguments.queries.keySet().stream()
+				String suffix = null;
+				/*String suffix = StringHelper.concatenate(arguments.queries.keySet().stream()
 					.filter(x -> StringHelper.isNotBlank(x) && CollectionHelper.isNotEmpty(arguments.queries.get(x)))
 					.map(x -> x+"="+URLEncoder.encode(arguments.queries.get(x).get(0),Charset.forName("UTF-8")))
 					.collect(Collectors.toList()),"&");
+				*/
+				Collection<String> strings = new ArrayList<>();
+				for(Map.Entry<String, List<String>> entry : arguments.queries.entrySet()) {
+					if(StringHelper.isBlank(entry.getKey()) || CollectionHelper.isEmpty(entry.getValue()))
+						continue;
+					for(String value : entry.getValue()) {
+						if(StringHelper.isBlank(value))
+							continue;
+						strings.add(entry.getKey()+"="+value);
+					}						
+				}
+				suffix = StringHelper.concatenate(strings, "&");
 				if(StringHelper.isNotBlank(suffix))
 					query = query + (StringHelper.isBlank(query) ? "?" : "&") + suffix;
 			}

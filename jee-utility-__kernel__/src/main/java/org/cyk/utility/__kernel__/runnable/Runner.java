@@ -12,10 +12,12 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.enumeration.Action;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
+import org.cyk.utility.__kernel__.runnable.Runner.Arguments.SuccessMessageGetter;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.user.interface_.message.Message;
 import org.cyk.utility.__kernel__.user.interface_.message.MessageRenderer;
+import org.cyk.utility.__kernel__.user.interface_.message.Severity;
 import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 
@@ -74,8 +76,11 @@ public interface Runner {
 				if(arguments.successMessageArguments == null) {
 					
 				}else {
-					if(Boolean.TRUE.equals(ValueHelper.defaultToIfNull(arguments.messageRenderable, Boolean.TRUE)))
-						MessageRenderer.getInstance().render("Opération bien éffectuée",arguments.successMessageArguments.getSeverity(), arguments.successMessageArguments.getRenderTypes());
+					if(Boolean.TRUE.equals(ValueHelper.defaultToIfNull(arguments.messageRenderable, Boolean.TRUE))) {
+						Message message = arguments.successMessageGetter == null ? SuccessMessageGetter.getDefault(this) : arguments.successMessageGetter.get(this);
+						message.setSeverity(arguments.successMessageArguments.getSeverity());
+						MessageRenderer.getInstance().render(message, arguments.successMessageArguments.getRenderTypes());
+					}
 				}			
 			} catch (Exception exception) {
 				LogHelper.log(exception, getClass());
@@ -132,6 +137,7 @@ public interface Runner {
 		private Class<?> actionOnClass;
 		private String name;
 		private Collection<Runnable> runnables;
+		private SuccessMessageGetter successMessageGetter;
 		private MessageRenderer.Arguments successMessageArguments;
 		private MessageRenderer.Arguments throwableMessageArguments;
 		private Boolean throwableCatchableOnly;
@@ -143,6 +149,13 @@ public interface Runner {
 		
 		private Message message;
 		private Throwable throwable;
+		
+		public SuccessMessageGetter getSuccessMessageGetter(Boolean injectIfNull) {
+			if(successMessageGetter == null && Boolean.TRUE.equals(injectIfNull))
+				successMessageGetter = new SuccessMessageGetter.AbstractImpl.Default();
+			return successMessageGetter;
+		}
+		
 		
 		public Collection<Runnable> getRunnables(Boolean injectIfNull) {
 			if(runnables == null && Boolean.TRUE.equals(injectIfNull))
@@ -167,6 +180,28 @@ public interface Runner {
 			successMessageArguments = new MessageRenderer.Arguments(MessageRenderer.Arguments.INFORMATION_INLINE_DIALOG);
 			throwableMessageArguments = new MessageRenderer.Arguments(MessageRenderer.Arguments.ERROR_INLINE_DIALOG);
 			return this;
+		}
+		
+		public static interface SuccessMessageGetter {
+			Message get(Runner runner);
+			
+			static Message getDefault(Runner runner) {
+				String details = "Opération bien éffectuée";
+				return new Message().setDetails(details).setSummary(details).setSeverity(Severity.INFORMATION);
+			}
+			
+			public static abstract class AbstractImpl extends AbstractObject implements SuccessMessageGetter,Serializable {
+				
+				@Override
+				public Message get(Runner runner) {
+					return getDefault(runner);
+				}
+				
+				
+				public static class Default extends AbstractImpl implements Serializable {
+					
+				}
+			}
 		}
 	}
 	
