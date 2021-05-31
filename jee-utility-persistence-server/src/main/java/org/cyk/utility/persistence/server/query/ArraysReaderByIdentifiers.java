@@ -22,6 +22,8 @@ public interface ArraysReaderByIdentifiers<ENTITY,IDENTIFIER> extends Reader<ENT
 	void set(ENTITY entity,Object[] array);
 	void set(Collection<ENTITY> entities,Collection<Object[]> arrays);
 	
+	void readThenSet(Collection<ENTITY> entities,Map<String,Object> parameters);
+	
 	/**/
 	
 	public static abstract class AbstractImpl<ENTITY,IDENTIFIER> extends Reader.AbstractImpl<ENTITY, IDENTIFIER, Object[]> implements ArraysReaderByIdentifiers<ENTITY,IDENTIFIER>,Serializable {
@@ -93,6 +95,12 @@ public interface ArraysReaderByIdentifiers<ENTITY,IDENTIFIER> extends Reader<ENT
 					}
 				}
 			}
+		}
+		
+		@Override
+		public void readThenSet(Collection<ENTITY> entities, Map<String, Object> parameters) {
+			Collection<Object[]> arrays = read(entities, null);
+			set(entities, arrays);
 		}
 		
 		/**/

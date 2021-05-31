@@ -18,4 +18,37 @@ public abstract class AbstractSpecificRepresentationImpl<ENTITY> extends Abstrac
 		responseBuilderArguments.setHeader(Action.UPDATE.name(), transactionResult.getNumberOfUpdate());
 		responseBuilderArguments.setHeader(Action.DELETE.name(), transactionResult.getNumberOfDeletion());
 	}
+	
+	/**/
+	
+	public static abstract class AbstractRunnableImpl extends AbstractObject implements Runnable,Serializable {
+		
+		protected ResponseBuilder.Arguments responseBuilderArguments;
+		
+		public AbstractRunnableImpl(ResponseBuilder.Arguments responseBuilderArguments) {
+			this.responseBuilderArguments = responseBuilderArguments;
+		}
+		
+		@Override
+		public void run() {
+			__run__();
+		}
+		
+		protected abstract void __run__();
+		
+		public static abstract class TransactionImpl extends AbstractRunnableImpl implements Serializable {
+			
+			public TransactionImpl(ResponseBuilder.Arguments responseBuilderArguments) {
+				super(responseBuilderArguments);
+			}
+			
+			@Override
+			protected void __run__() {
+				TransactionResult result = transact();
+				processTransactionResult(result, responseBuilderArguments);
+			}
+			
+			protected abstract TransactionResult transact();
+		}
+	}
 }
