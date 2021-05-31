@@ -23,7 +23,9 @@
 			outcome="#{menuitem.outcome}"
 		>
 			<c:forEach items="#{menuitem.parameters}" var="parameter">
-				<f:param name="#{parameter.key}" value="#{parameter.value}"/>
+				<c:forEach items="#{parameter.value}" var="value">
+					<f:param name="#{parameter.key}" value="#{value}"/>
+				</c:forEach>				
 			</c:forEach>
 			<f:param name="#{menuitem.__actionArgumentIdentifierParameterName__}" value="#{actionArgument.identifier}"/>
 			<ui:decorate template="#{dialogReturnTemplate}">

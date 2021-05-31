@@ -98,6 +98,12 @@ public class Arguments<T> extends AbstractObject implements Serializable {
 		return filterFieldValue(Querier.PARAMETER_NAME_IDENTIFIER, identifier);
 	}
 	
+	public Arguments<T> filterByIdentifiers(Collection<?> identifiers) {
+		if(CollectionHelper.isEmpty(identifiers))
+			return this;
+		return filterFieldValue(Querier.PARAMETER_NAME_IDENTIFIERS, identifiers);
+	}
+	
 	public org.cyk.utility.representation.Arguments getRepresentationArguments(Boolean injectIfNull) {
 		if(representationArguments == null && Boolean.TRUE.equals(injectIfNull))
 			representationArguments = new org.cyk.utility.representation.Arguments();

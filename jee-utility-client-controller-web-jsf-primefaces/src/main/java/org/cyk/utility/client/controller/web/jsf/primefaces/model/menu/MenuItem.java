@@ -1,6 +1,7 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces.model.menu;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.field.FieldHelper;
@@ -34,7 +35,7 @@ public class MenuItem extends AbstractCommand implements Serializable {
 	}
 	
 	@Override
-	public MenuItem setParameters(Map<String, String> parameters) {
+	public MenuItem setParameters(Map<String, List<String>> parameters) {
 		return (MenuItem) super.setParameters(parameters);
 	}
 	

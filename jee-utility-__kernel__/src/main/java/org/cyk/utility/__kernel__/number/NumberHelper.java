@@ -199,6 +199,18 @@ public interface NumberHelper {
 		return compare(number, 0, ComparisonOperator.LTE);
 	}
 	
+	static Boolean isGreaterThanOne(Number number) {
+		if(number == null)
+			return Boolean.FALSE;
+		return compare(number, 1, ComparisonOperator.GT);
+	}
+	
+	static Boolean isGreaterThanOrEqualOne(Number number) {
+		if(number == null)
+			return Boolean.FALSE;
+		return compare(number, 1, ComparisonOperator.GTE);
+	}
+	
 	/* operate */
 	
 	static Number operate(Operation operation,Collection<Number> numbers){

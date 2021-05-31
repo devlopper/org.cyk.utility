@@ -55,8 +55,9 @@ public class TabMenu extends AbstractMenu implements Serializable {
 					item.setOutcome(outcome);
 				if(MapHelper.isNotEmpty(index.getParameters()))
 					index.getParameters().forEach( (name,value) -> {
-						if(StringHelper.isNotBlank(name) && StringHelper.isNotBlank(value))
-							item.setParam(name, value);
+						if(StringHelper.isNotBlank(name) && CollectionHelper.isNotEmpty(value))
+							value.stream().filter(x -> StringHelper.isNotBlank(x)).forEach(x -> item.setParam(name, x));
+							//item.setParam(name, value);
 					});
 				tabMenu.model.addElement(item);
 			}

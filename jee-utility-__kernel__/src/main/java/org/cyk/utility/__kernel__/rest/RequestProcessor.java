@@ -53,25 +53,35 @@ public interface RequestProcessor {
 		Response execute(Runner.Arguments arguments);
 		//Response getResponse();
 		//Request buildResponse();
-		Response.ResponseBuilder getResponseBuilderWhenThrowableIsNull(Runner.Arguments runnerArguments);
+		//Response.ResponseBuilder getResponseBuilderWhenThrowableIsNull(Runner.Arguments runnerArguments);
 		Response getResponseWhenThrowableIsNull(Runner.Arguments runnerArguments);
 		
 		public static abstract class AbstractImpl implements Request {
+			
+			protected ResponseBuilder.Arguments responseBuilderArguments = new ResponseBuilder.Arguments();
+			
 			@Override
 			public Runner.Arguments getRunnerArguments() {
 				return null;
 			}
-			
+			/*
 			@Override
 			public Response.ResponseBuilder getResponseBuilderWhenThrowableIsNull(Runner.Arguments runnerArguments) {				
 				return Response.ok(getResponseWhenThrowableIsNullAsString(runnerArguments));
 			}
-			
+			*/
 			@Override
 			public Response getResponseWhenThrowableIsNull(Runner.Arguments runnerArguments) {
+				if(responseBuilderArguments.getEntity() == null)
+					if(runnerArguments.getResult() == null)
+						responseBuilderArguments.setEntity(getResponseWhenThrowableIsNullAsString(runnerArguments));
+					else
+						responseBuilderArguments.setEntity(runnerArguments.getResult());
+				/*
 				if(runnerArguments.getResult() == null)
 					return getResponseBuilderWhenThrowableIsNull(runnerArguments).build();
-				return ResponseBuilder.getInstance().build(new ResponseBuilder.Arguments().setEntity(runnerArguments.getResult()));
+				*/
+				return ResponseBuilder.getInstance().build(responseBuilderArguments/*new ResponseBuilder.Arguments().setEntity(runnerArguments.getResult())*/);
 				//return getResponseBuilderWhenThrowableIsNull(runnerArguments).build();
 			}
 			

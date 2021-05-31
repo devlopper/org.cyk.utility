@@ -66,6 +66,10 @@ public abstract class AbstractSelectionController<T> implements Serializable {
 		dialog = Dialog.build(Dialog.FIELD_HEADER,"Recherche",Dialog.FIELD_MODAL,Boolean.TRUE
 				,Dialog.ConfiguratorImpl.FIELD_COMMAND_BUTTONS_BUILDABLE,Boolean.FALSE);
 		dialog.addStyleClasses("cyk-min-width-90-percent");
+		if(Boolean.TRUE.equals(isMultiple)) {
+			dialog.setHeight(150);
+			dialog.setResizable(Boolean.TRUE);
+		}
 	}
 	
 	protected void buildShowDialogCommandButton() {

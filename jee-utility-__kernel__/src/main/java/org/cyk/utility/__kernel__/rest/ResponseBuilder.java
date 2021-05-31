@@ -3,7 +3,9 @@ package org.cyk.utility.__kernel__.rest;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
@@ -12,6 +14,7 @@ import javax.ws.rs.core.Response.Status;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.TypeHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.Message;
@@ -74,6 +77,11 @@ public interface ResponseBuilder {
 			addHeader(responseBuilder, ResponseHelper.HEADER_PROCESSING_START_TIME, arguments.processingStartTime);
 			addHeader(responseBuilder, ResponseHelper.HEADER_PROCESSING_END_TIME, arguments.processingEndTime);
 			addHeader(responseBuilder, ResponseHelper.HEADER_PROCESSING_DURATION, arguments.processingDuration);
+			if(MapHelper.isNotEmpty(arguments.headers)) {
+				arguments.headers.forEach((name,value) -> {
+					addHeader(responseBuilder, name, value);
+				});
+			}
 			return responseBuilder.build();
 		}
 		
@@ -114,6 +122,7 @@ public interface ResponseBuilder {
 		private RuntimeException.Dto runtimeException;
 		private Collection<Message.Dto> messageDtos;
 		private Collection<?> entities;
+		private Map<String,Object> headers;
 		private Long xTotalCount;
 		private Long processingStartTime,processingEndTime,processingDuration;
 		
@@ -124,6 +133,19 @@ public interface ResponseBuilder {
 		
 		public Arguments(RuntimeException.Dto runtimeException) {
 			this(runtimeException,Response.Status.BAD_REQUEST);
+		}
+		
+		public Map<String,Object> getHeaders(Boolean injectIfNull) {
+			if(headers == null && Boolean.TRUE.equals(injectIfNull))
+				headers = new LinkedHashMap<>();
+			return headers;
+		}
+		
+		public Arguments setHeader(String name,Object value) {
+			if(StringHelper.isBlank(name))
+				return this;
+			getHeaders(Boolean.TRUE).put(name, value);
+			return this;
 		}
 	}
 	

@@ -1,7 +1,9 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces.model.command;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
@@ -28,7 +30,7 @@ public abstract class AbstractCommand extends AbstractAction implements Serializ
 	protected Boolean disabled;
 	
 	protected String outcome;
-	protected Map<String,String> parameters;
+	protected Map<String,List<String>> parameters;
 	
 	public AbstractCommand setIcon(Icon icon) {
 		if(icon == null)
@@ -43,7 +45,7 @@ public abstract class AbstractCommand extends AbstractAction implements Serializ
 		return this;
 	}
 	
-	public Map<String,String> getParameters(Boolean injectIfNull) {
+	public Map<String,List<String>> getParameters(Boolean injectIfNull) {
 		if(parameters == null && Boolean.TRUE.equals(injectIfNull))
 			parameters = new HashMap<>();
 		return parameters;
@@ -52,7 +54,10 @@ public abstract class AbstractCommand extends AbstractAction implements Serializ
 	public AbstractCommand addParameter(String name,String value) {
 		if(StringHelper.isBlank(name) || StringHelper.isBlank(value))
 			return this;
-		getParameters(Boolean.TRUE).put(name, value);
+		List<String> list = getParameters(Boolean.TRUE).get(name);
+		if(list == null)
+			getParameters(Boolean.TRUE).put(name, list = new ArrayList<>());
+		list.add(value);
 		return this;
 	}
 	
