@@ -52,6 +52,10 @@ public abstract class AbstractIdentifiableSystemImpl<IDENTIFIER> extends Abstrac
 	
 	/**/
 	
+	
+	
+	/**/
+	
 	@PrePersist
 	public void __listenBeforeCreation__() {
 		EntityLifeCycleListener.getInstance().listen(this, EntityLifeCycleListener.Event.CREATE, EntityLifeCycleListener.When.BEFORE);
@@ -86,6 +90,8 @@ public abstract class AbstractIdentifiableSystemImpl<IDENTIFIER> extends Abstrac
 	public void __listenAfterDeletion__() {
 		EntityLifeCycleListener.getInstance().listen(this, EntityLifeCycleListener.Event.DELETE, EntityLifeCycleListener.When.AFTER);
 	}
+	
+	/**/
 	
 	/**/
 	

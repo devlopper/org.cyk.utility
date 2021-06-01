@@ -116,7 +116,7 @@ public class TransactionResult implements Serializable {
 				strings = add(transactionResult, Action.CREATE, strings);
 				strings = add(transactionResult, Action.UPDATE, strings);
 				strings = add(transactionResult, Action.DELETE, strings);
-				return CollectionHelper.isEmpty(strings) ? null : StringHelper.concatenate(strings, "\n\r");
+				return CollectionHelper.isEmpty(strings) ? "Aucune modification" : StringHelper.concatenate(strings, "\n\r");
 			}
 			
 			protected Collection<String> add(TransactionResult transactionResult,Action action,Collection<String> strings) {

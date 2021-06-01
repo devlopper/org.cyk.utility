@@ -43,4 +43,12 @@ public interface IdentifiableSystem<IDENTIFIER> extends Identifiable<IDENTIFIER>
 	static String generateRandomly() {
 		return UUID.randomUUID().toString();					
 	}
+	
+	static Boolean areIdentifiersEqual(IdentifiableSystem<?> instance1,IdentifiableSystem<?> instance2) {
+		Object identifier1 = FieldHelper.readSystemIdentifier(instance1);
+		Object identifier2 = FieldHelper.readSystemIdentifier(instance2);
+		if(identifier1 == null)
+			return identifier2 == null;
+		return identifier1.equals(identifier2);		
+	}
 }
