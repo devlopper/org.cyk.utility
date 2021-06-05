@@ -278,6 +278,11 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 				if(Boolean.TRUE.equals(action.get__isWindowContainerRenderedAsDialog__())) {
 					PrimeFaces.current().dialog().closeDynamic(object);
 					logAsInfo(action, "dynamic dialog has been closed with object "+object);
+				}else {
+					if(object instanceof String) {
+						MessageRenderer.getInstance().render((String)object,RenderType.GROWL);
+					}
+						
 				}
 				logAsInfo(action, "function executed");
 			}

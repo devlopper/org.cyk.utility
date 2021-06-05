@@ -8,14 +8,16 @@ import javax.persistence.Persistence;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
+import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringAuditedImpl;
+import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringAuditedImpl;
+import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableAuditedImpl;
 import org.cyk.utility.persistence.EntityManagerFactoryGetterImpl;
 import org.cyk.utility.persistence.query.EntityCounter;
+import org.cyk.utility.persistence.query.EntityFinder;
 import org.cyk.utility.persistence.query.EntityReader;
-import org.cyk.utility.persistence.query.Querier;
-import org.cyk.utility.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.persistence.server.Initializer;
-import org.cyk.utility.persistence.server.query.executor.DynamicOneExecutor;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 
 public abstract class AbstractUnitTest extends AbstractWeldUnitTest {
@@ -84,8 +86,39 @@ public abstract class AbstractUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	public static <T> T assertExistenceAndGet(Class<T> klass,Object identifier) {
-		T instance = DynamicOneExecutor.getInstance().read(klass, new QueryExecutorArguments().addFilterFieldsValues(Querier.PARAMETER_NAME_IDENTIFIER,identifier));
+		T instance = EntityFinder.getInstance().find(klass, identifier);
+		//T instance = DynamicOneExecutor.getInstance().read(klass, new QueryExecutorArguments().addFilterFieldsValues(Querier.PARAMETER_NAME_IDENTIFIER,identifier));
 		assertThat(instance).as(String.format("%s with ID %s not found", klass.getSimpleName(),identifier)).isNotNull();
+		return instance;
+	}
+	
+	public static <T> T assertAudits(Class<T> klass,Object identifier,String expectedActor,String expectedFunctionality,String expectedAction) {
+		T instance = assertExistenceAndGet(klass, identifier);
+		assertThat(ClassHelper.isInstanceOfOne(klass, AbstractIdentifiableSystemScalarStringAuditedImpl.class
+				,AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringAuditedImpl.class
+				,AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableAuditedImpl.class))
+			.as(String.format("%s with ID %s is not audited", klass.getSimpleName(),identifier)).isNotNull();
+		String actor = null,functionality = null,what = null;
+		//LocalDateTime when = null;
+		if(ClassHelper.isInstanceOf(klass, AbstractIdentifiableSystemScalarStringAuditedImpl.class)) {
+			actor = ((AbstractIdentifiableSystemScalarStringAuditedImpl)instance).get__auditWho__();
+			functionality = ((AbstractIdentifiableSystemScalarStringAuditedImpl)instance).get__auditFunctionality__();
+			what = ((AbstractIdentifiableSystemScalarStringAuditedImpl)instance).get__auditWhat__();
+			//when = ((AbstractIdentifiableSystemScalarStringAuditedImpl)instance).get__auditWhen__();
+		}else if(ClassHelper.isInstanceOf(klass, AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringAuditedImpl.class)) {
+			actor = ((AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringAuditedImpl)instance).get__auditWho__();
+			functionality = ((AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringAuditedImpl)instance).get__auditFunctionality__();
+			what = ((AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringAuditedImpl)instance).get__auditWhat__();
+			//when = ((AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringAuditedImpl)instance).get__auditWhen__();
+		}else if(ClassHelper.isInstanceOf(klass, AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableAuditedImpl.class)) {
+			actor = ((AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableAuditedImpl)instance).get__auditWho__();
+			functionality = ((AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableAuditedImpl)instance).get__auditFunctionality__();
+			what = ((AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableAuditedImpl)instance).get__auditWhat__();
+			//when = ((AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableAuditedImpl)instance).get__auditWhen__();
+		}
+		assertThat(actor).as(String.format("%s with ID %s - Actor %s", klass.getSimpleName(),identifier,actor)).isEqualTo(expectedActor);
+		assertThat(functionality).as(String.format("%s with ID %s - Functionality %s", klass.getSimpleName(),identifier,functionality)).isEqualTo(expectedFunctionality);
+		assertThat(what).as(String.format("%s with ID %s - Action %s", klass.getSimpleName(),identifier,what)).isEqualTo(expectedAction);
 		return instance;
 	}
 }

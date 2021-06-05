@@ -19,6 +19,10 @@ public class UniformResourceIdentifierBuilderUnitTest extends AbstractWeldUnitTe
 			.isEqualTo("http://localhost:80/p/?p=v1");
 		
 		assertThat(UniformResourceIdentifierBuilder.getInstance().build(new UniformResourceIdentifierBuilder.Arguments()
+				.setScheme("http").setHost("localhost").setPort(80).setContext("p").addQuery("p", "v1 v2")).toString())
+			.isEqualTo("http://localhost:80/p/?p=v1+v2");
+		
+		assertThat(UniformResourceIdentifierBuilder.getInstance().build(new UniformResourceIdentifierBuilder.Arguments()
 				.setScheme("http").setHost("localhost").setPort(80).setContext("p").addQuery("p", "v1").addQuery("p", "v2")).toString())
 			.isEqualTo("http://localhost:80/p/?p=v1&p=v2");
 	}

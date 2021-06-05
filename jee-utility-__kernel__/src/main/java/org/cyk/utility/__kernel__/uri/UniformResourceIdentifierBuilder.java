@@ -2,6 +2,8 @@ package org.cyk.utility.__kernel__.uri;
 
 import java.io.Serializable;
 import java.net.URI;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -120,7 +122,7 @@ public interface UniformResourceIdentifierBuilder {
 					for(String value : entry.getValue()) {
 						if(StringHelper.isBlank(value))
 							continue;
-						strings.add(entry.getKey()+"="+value);
+						strings.add(entry.getKey()+"="+URLEncoder.encode(value,Charset.forName("UTF-8")));
 					}						
 				}
 				suffix = StringHelper.concatenate(strings, "&");

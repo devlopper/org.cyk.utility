@@ -116,8 +116,11 @@ public class QueryExecutorImpl extends AbstractObject implements QueryExecutor,S
 	@Override
 	public Integer executeUpdateOrDelete(QueryExecutorArguments arguments) {
 		validatePreConditions(Void.class, arguments);
-		javax.persistence.Query query = __getQuery__(arguments.getQuery().getIdentifier(),arguments.getQuery().getValue(), arguments.getEntityManager());
-		return query.executeUpdate();
+		arguments.prepare(Void.class);
+		javax.persistence.Query query = __getQuery__(arguments.getQuery().getIdentifier(),arguments.getQuery().getValue(),arguments.get__parameters__(), arguments.getEntityManager());
+		Integer count = query.executeUpdate();
+		arguments.finalise();
+		return count;
 	}
 
 	/*public Collection<Object[]> readByValues(Collection<String> values) {
@@ -212,14 +215,23 @@ public class QueryExecutorImpl extends AbstractObject implements QueryExecutor,S
 		return typedQuery;
 	}
 	
-	protected javax.persistence.Query __getQuery__(String queryIdentifier,String queryValue,EntityManager entityManager) {
+	protected javax.persistence.Query __getQuery__(String queryIdentifier,String queryValue,Map<Object,Object> parameters,EntityManager entityManager) {
 		if(StringHelper.isBlank(queryIdentifier) && StringHelper.isBlank(queryValue))
 			throw new IllegalArgumentException("query identifier or query value is required");
 		if(entityManager == null)
 			entityManager = DependencyInjection.inject(EntityManagerGetter.class).get();
 		Query query = QueryGetter.getInstance().get(Void.class, queryIdentifier, queryValue);
-		return (javax.persistence.Query) (StringHelper.isBlank(queryIdentifier) ? entityManager.createQuery(query.getValue()) 
+		
+		javax.persistence.Query __query__ = (javax.persistence.Query) (StringHelper.isBlank(queryIdentifier) ? entityManager.createQuery(query.getValue()) 
 				: entityManager.createNamedQuery(queryIdentifier));
-	}		
-	
+		
+		if(MapHelper.isNotEmpty(parameters))
+			for(Map.Entry<Object,Object> entry : parameters.entrySet()) {
+				if(entry.getKey() instanceof String) {
+					__query__.setParameter((String) entry.getKey(), entry.getValue());
+				}
+			}
+		
+		return __query__;
+	}
 }

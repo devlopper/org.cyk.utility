@@ -2,25 +2,9 @@ package org.cyk.utility.test.business.server;
 
 import java.io.Serializable;
 
-import javax.persistence.EntityManager;
+public interface Transaction extends org.cyk.utility.test.persistence.server.Transaction {
 
-import org.cyk.utility.__kernel__.object.AbstractObject;
-import org.cyk.utility.persistence.EntityManagerGetter;
+	public static abstract class AbstractImpl extends org.cyk.utility.test.persistence.server.Transaction.AbstractImpl implements Transaction,Serializable {
 
-public interface Transaction {
-
-	void run();
-	
-	public static abstract class AbstractImpl extends AbstractObject implements Transaction,Serializable {
-
-		@Override
-		public void run() {
-			EntityManager entityManager = EntityManagerGetter.getInstance().get();
-			entityManager.getTransaction().begin();
-			__run__(entityManager);
-			entityManager.getTransaction().commit();
-		}
-		
-		protected abstract void __run__(EntityManager entityManager);
 	}	
 }

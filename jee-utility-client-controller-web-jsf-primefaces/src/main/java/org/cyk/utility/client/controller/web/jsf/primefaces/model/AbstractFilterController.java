@@ -215,6 +215,7 @@ public abstract class AbstractFilterController extends AbstractObject implements
 	public static enum RenderType {
 		INLINE
 		,DIALOG
+		,NONE
 		;
 	}
 }

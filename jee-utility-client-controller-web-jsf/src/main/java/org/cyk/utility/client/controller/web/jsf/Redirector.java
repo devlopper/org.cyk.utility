@@ -13,12 +13,15 @@ import javax.faces.context.FacesContext;
 
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.identifier.resource.ParameterName;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.uri.UniformResourceIdentifierBuilder;
 import org.cyk.utility.__kernel__.value.Value;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -137,11 +140,27 @@ public interface Redirector {
 			return this;
 		}
 		
-		public Arguments addParameter(String name,String value) {
-			if(StringHelper.isBlank(name) || StringHelper.isBlank(value))
+		public Arguments addParameter(String name,Object value) {
+			if(StringHelper.isBlank(name) || ValueHelper.isBlank(value))
 				return this;
-			addParameters(Map.of(name,List.of(value)));
+			String string = StringHelper.get(value);
+			List<String> list = getParameters(Boolean.TRUE).get(name);
+			if(list == null)
+				getParameters(Boolean.TRUE).put(name, list = new ArrayList<>());
+			list.add(string);
 			return this;
+		}
+		
+		public Arguments addParameterByReadingSystemIdentifier(String name,Object value) {
+			if(StringHelper.isBlank(name) || value == null)
+				return this;
+			return addParameter(name, FieldHelper.readSystemIdentifier(value));
+		}
+		
+		public Arguments addParameterByReadingSystemIdentifier(Object value) {
+			if(value == null)
+				return this;
+			return addParameterByReadingSystemIdentifier(ParameterName.stringify(value.getClass()), value);
 		}
 	}
 	

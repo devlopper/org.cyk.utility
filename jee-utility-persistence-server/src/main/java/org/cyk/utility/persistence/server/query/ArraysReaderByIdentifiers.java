@@ -89,12 +89,21 @@ public interface ArraysReaderByIdentifiers<ENTITY,IDENTIFIER> extends Reader<ENT
 				return;
 			for(ENTITY entity : entities) {
 				for(Object[] array : arrays) {
-					if(array[0].equals(FieldHelper.readSystemIdentifier(entity))) {
+					if(isEntityArray(entity, array)) {
 						__set__(entity, array);
-						break;
+						if(Boolean.TRUE.equals(isEntityHasOnlyArray(entity)))
+							break;
 					}
 				}
 			}
+		}
+		
+		protected Boolean isEntityArray(ENTITY entity,Object[] array) {
+			return array[0].equals(FieldHelper.readSystemIdentifier(entity));
+		}
+		
+		protected Boolean isEntityHasOnlyArray(ENTITY entity) {
+			return Boolean.TRUE;
 		}
 		
 		@Override

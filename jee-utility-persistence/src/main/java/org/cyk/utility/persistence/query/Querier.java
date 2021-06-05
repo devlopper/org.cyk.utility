@@ -27,6 +27,11 @@ public interface Querier {
 	String PARAMETER_NAME_EXCLUDED_IDENTIFIERS = "excludedIdentifiers";
 	String PARAMETER_NAME_EXCLUDED_CODES = "excludedCodes";
 	
+	String PARAMETER_NAME_AUDIT_WHO = "audit_who";
+	String PARAMETER_NAME_AUDIT_FUNCTIONALITY = "audit_functionality";
+	String PARAMETER_NAME_AUDIT_WHAT = "audit_what";
+	String PARAMETER_NAME_AUDIT_WHEN = "audit_when";
+	
 	/**/
 	
 	<T,I> Collection<T> readBySystemIdentifiers(Class<T> resultClass,Class<I> identifierClass,Collection<I> identifiers);
