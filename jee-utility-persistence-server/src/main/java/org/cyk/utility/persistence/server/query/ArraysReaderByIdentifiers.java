@@ -47,8 +47,12 @@ public interface ArraysReaderByIdentifiers<ENTITY,IDENTIFIER> extends Reader<ENT
 			return query.getResultList();
 		}
 		
+		protected Collection<IDENTIFIER> processIdentifiers(Collection<IDENTIFIER> identifiers) {
+			return identifiers;
+		}
+		
 		protected void setQueryParameters(Query query,Collection<IDENTIFIER> identifiers,Map<String,Object> parameters) {
-			query.setParameter("identifiers", identifiers);
+			query.setParameter("identifiers", processIdentifiers(identifiers));
 		}
 		
 		@Override
@@ -108,7 +112,7 @@ public interface ArraysReaderByIdentifiers<ENTITY,IDENTIFIER> extends Reader<ENT
 		
 		@Override
 		public void readThenSet(Collection<ENTITY> entities, Map<String, Object> parameters) {
-			Collection<Object[]> arrays = read(entities, null);
+			Collection<Object[]> arrays = read(entities, parameters);
 			set(entities, arrays);
 		}
 		

@@ -66,16 +66,16 @@ public interface QueryStringBuilder {
 			
 			WhereStringBuilder.Predicate predicate = arguments.predicate;
 			
-			OrderStringBuilder.Order order = arguments.order;
-			
 			GroupStringBuilder.Group group = arguments.group;
+			
+			OrderStringBuilder.Order order = arguments.order;
 			
 			return jpql(
 					SelectStringBuilder.getInstance().build(projection)
 					,FromStringBuilder.getInstance().build(tuple)
 					,predicate == null ? null : WhereStringBuilder.getInstance().build(predicate)
-					,order == null ? null : OrderStringBuilder.getInstance().build(order)
 					,group == null ? null : GroupStringBuilder.getInstance().build(group)
+					,order == null ? null : OrderStringBuilder.getInstance().build(order)					
 					);
 		}
 		
