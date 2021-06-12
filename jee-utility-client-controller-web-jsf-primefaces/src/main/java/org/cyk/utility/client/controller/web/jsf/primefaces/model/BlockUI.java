@@ -3,6 +3,8 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.model;
 import java.io.Serializable;
 import java.util.Map;
 
+import org.cyk.utility.__kernel__.map.MapHelper;
+import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
 
 import lombok.Getter;
@@ -47,6 +49,14 @@ public class BlockUI extends AbstractObject implements Serializable {
 		protected String __getTemplate__(BlockUI object, Map<Object, Object> arguments) {
 			return "/blockui/default.xhtml";
 		}
+	}
+	
+	public static BlockUI build(Map<Object, Object> arguments) {
+		return Builder.build(BlockUI.class,arguments);
+	}
+	
+	public static BlockUI build(Object...objects) {
+		return build(MapHelper.instantiate(objects));
 	}
 	
 	static {

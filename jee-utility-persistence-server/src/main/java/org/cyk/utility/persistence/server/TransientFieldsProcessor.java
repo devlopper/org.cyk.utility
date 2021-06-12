@@ -26,10 +26,13 @@ public interface TransientFieldsProcessor {
 		
 		@Override
 		public void process(Arguments arguments) {
-			if(arguments == null || CollectionHelper.isEmpty(arguments.fieldsNames))
+			if(arguments == null || CollectionHelper.isEmpty(arguments.objects) || CollectionHelper.isEmpty(arguments.fieldsNames))
 				return;
+			Class<?> klass = arguments.klass;
+			if(klass == null)
+				klass = arguments.objects.iterator().next().getClass();
 			try {
-				__process__(arguments.klass, arguments.objects,arguments.filter,arguments.fieldsNames);
+				__process__(klass, arguments.objects,arguments.filter,arguments.fieldsNames);
 			} catch (Exception exception) {
 				LogHelper.log(exception, getClass());
 			}
@@ -83,6 +86,7 @@ public interface TransientFieldsProcessor {
 		private Class<?> klass;
 		private Collection<?> objects;
 		private Collection<String> fieldsNames;
+		private Collection<String> flags;
 		private Filter filter;
 	}
 	

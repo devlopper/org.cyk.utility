@@ -10,6 +10,7 @@ import org.cyk.utility.__kernel__.random.RandomHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.user.interface_.UserInterfaceAction;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
+import org.primefaces.PrimeFaces;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +21,7 @@ public class RemoteCommand extends AbstractAction implements Serializable{
 
 	private String name;
 	private Long delay;
-	private Boolean async,autoRun,global;
+	private Boolean async,autoRun;
 	
 	/**/
 	
@@ -28,12 +29,16 @@ public class RemoteCommand extends AbstractAction implements Serializable{
 		act(null);
 	}
 	
+	public RemoteCommand executeScript() {
+		PrimeFaces.current().executeScript(name+"();");
+		return this;
+	}
+	
 	/**/
 
 	public static final String FIELD_ASYNC = "async";
 	public static final String FIELD_AUTO_RUN = "autoRun";
 	public static final String FIELD_DELAY = "delay";
-	public static final String FIELD_GLOBAL = "global";
 	public static final String FIELD_NAME = "name";
 	
 	/**/
@@ -49,7 +54,7 @@ public class RemoteCommand extends AbstractAction implements Serializable{
 				remoteCommand.async = Boolean.TRUE;
 			if(remoteCommand.autoRun == null)
 				remoteCommand.autoRun = Boolean.TRUE;
-			if(remoteCommand.global == null)
+			//if(remoteCommand.global == null)
 				remoteCommand.global = Boolean.FALSE;
 			if(remoteCommand.userInterfaceAction == null) {
 				remoteCommand.userInterfaceAction = UserInterfaceAction.EXECUTE_FUNCTION;

@@ -2,12 +2,15 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.model.input;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
+import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObject;
@@ -19,6 +22,9 @@ import lombok.Setter;
 @Getter @Setter
 public class AbstractInputChoiceOne extends AbstractInputChoice<Object> implements Serializable {
 
+	protected Object initialChoiceSystemIdentifier;
+	protected Integer selectedChoiceIndex;
+	
 	/**/
 	
 	public AbstractInputChoiceOne enableAjaxListener(String event,Ajax.Listener listener,Collection<Object> updatables) {
@@ -116,6 +122,28 @@ public class AbstractInputChoiceOne extends AbstractInputChoice<Object> implemen
 		return this;
 	}
 	
+	public AbstractInputChoiceOne selectChoiceAt(Integer index) {
+		if(index == null || NumberHelper.isLessThanZero(index) || NumberHelper.compare(index, CollectionHelper.getSize(choices), ComparisonOperator.GTE))
+			return selectFirstChoice();
+		select(CollectionHelper.getElementAt(choices, index));
+		return this;
+	}
+	
+	public AbstractInputChoiceOne selectChoiceAtSelectedIndex() {
+		return selectChoiceAt(selectedChoiceIndex);
+	}
+	
+	public AbstractInputChoiceOne selectChoiceAtSelectedIndexOrInitial() {
+		if(selectedChoiceIndex == null)
+			if(initialChoiceSystemIdentifier == null)
+				selectFirstChoice();
+			else
+				selectBySystemIdentifier(initialChoiceSystemIdentifier);
+		else
+			selectChoiceAt(selectedChoiceIndex);
+		return this;
+	}
+	
 	public AbstractInputChoiceOne selectByValueSystemIdentifier() {
 		if(value == null)
 			return this;
@@ -137,6 +165,33 @@ public class AbstractInputChoiceOne extends AbstractInputChoice<Object> implemen
 		return this;
 	}
 	
+	public AbstractInputChoiceOne setSelectedChoiceIndexFromSystemIdentifier(Object identifier) {
+		if(identifier == null)
+			return this;
+		Collection<Object> choices = getChoices();
+		if(CollectionHelper.isEmpty(choices))
+			return this;			
+		Integer index = 0;
+		for(Object choice : choices)
+			if(identifier.equals(FieldHelper.readSystemIdentifier(choice))) {
+				selectedChoiceIndex = index;
+				break;
+			}else
+				index++;			
+		return this;
+	}
+	
+	public AbstractInputChoiceOne setSelectedChoiceIndexFromSystemIdentifierOf(Object object) {
+		if(object == null)
+			return this;
+		return setSelectedChoiceIndexFromSystemIdentifier(FieldHelper.readSystemIdentifier(object));
+	}
+	
+	public AbstractInputChoiceOne setInitialChoiceSystemIdentifierFrom(Object object) {
+		setInitialChoiceSystemIdentifier(FieldHelper.readSystemIdentifier(object));
+		return this;
+	}
+	
 	/**/
 	
 	
@@ -152,6 +207,10 @@ public class AbstractInputChoiceOne extends AbstractInputChoice<Object> implemen
 			@Override
 			public void select(AbstractInputChoiceOne input, VALUE choice) {
 				input.setValue(choice);
+				if(choice == null)
+					input.selectedChoiceIndex = null;
+				else
+					input.selectedChoiceIndex = CollectionHelper.getIndex((List<Object>)input.getChoices(),choice);				
 			}
 			/*
 			@Override

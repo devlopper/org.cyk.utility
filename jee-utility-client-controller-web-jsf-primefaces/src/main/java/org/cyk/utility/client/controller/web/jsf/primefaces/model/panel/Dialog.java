@@ -23,7 +23,7 @@ import lombok.experimental.Accessors;
 @Getter @Setter @Accessors(chain=true)
 public class Dialog extends AbstractObject implements Serializable {
 	
-	private String header,__containerIdentifier__;
+	private String header,__containerIdentifier__,appendTo;
 	private Boolean modal,fitViewport,closeOnEscape,draggable,dynamic,resizable;
 	private Integer minWidth,minHeight,width,height;
 	private CommandButton closeCommandButton,executeCommandButton;
@@ -77,6 +77,7 @@ public class Dialog extends AbstractObject implements Serializable {
 	public static final String FIELD_MIN_HEIGHT = "minHeight";
 	public static final String FIELD_WIDTH = "width";
 	public static final String FIELD_HEIGHT = "height";
+	public static final String FIELD_APPEND_TO = "appendTo";
 	
 	/**/
 	

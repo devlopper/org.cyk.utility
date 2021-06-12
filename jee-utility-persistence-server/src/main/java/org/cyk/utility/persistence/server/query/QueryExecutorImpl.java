@@ -64,9 +64,17 @@ public class QueryExecutorImpl extends AbstractObject implements QueryExecutor,S
 				collection = QueryResultMapper.getInstance().map(resultClass, resultMapperArguments);				
 			}
 		}
-		if(CollectionHelper.isNotEmpty(collection) && CollectionHelper.isNotEmpty(arguments.getProcessableTransientFieldsNames()))
-			TransientFieldsProcessor.getInstance().process(collection,/*filter*/arguments.getFilterBackup() == null ? arguments.getFilter() : arguments.getFilterBackup()
+		if(CollectionHelper.isNotEmpty(collection) && CollectionHelper.isNotEmpty(arguments.getProcessableTransientFieldsNames())) {
+			TransientFieldsProcessor.Arguments transientFieldsProcessorArguments = new TransientFieldsProcessor.Arguments();
+			transientFieldsProcessorArguments.setObjects(collection).setFieldsNames(arguments.getProcessableTransientFieldsNames())
+				.setFilter(/*filter*/arguments.getFilterBackup() == null ? arguments.getFilter() : arguments.getFilterBackup())
+				.setFlags(arguments.getFlags());
+			TransientFieldsProcessor.getInstance().process(transientFieldsProcessorArguments);
+			/*		
+			TransientFieldsProcessor.getInstance().process(collection,arguments.getFilterBackup() == null ? arguments.getFilter() : arguments.getFilterBackup()
 					,arguments.getProcessableTransientFieldsNames());
+			*/
+		}
 		arguments.set__objects__(collection);
 		arguments.finalise();
 		if(CollectionHelper.isNotEmpty(collection))

@@ -18,7 +18,7 @@ import lombok.Setter;
 public class InputNumber extends AbstractInput<Number> implements Serializable {
 
 	private Integer decimalPlaces;
-	private String decimalSeparator,thousandSeparator;
+	private String decimalSeparator,thousandSeparator,inputStyle,inputStyleClass;
 	private Number minValue,maxValue;
 	
 	/**/
@@ -26,6 +26,16 @@ public class InputNumber extends AbstractInput<Number> implements Serializable {
 	@Override
 	public Object deriveBinding(String beanPath) {
 		org.primefaces.component.inputnumber.InputNumber component = new org.primefaces.component.inputnumber.InputNumber();
+		if(StringHelper.isNotBlank(styleClass))
+			component.setStyleClass(styleClass);
+		if(StringHelper.isNotBlank(style))
+			component.setStyle(style);
+		
+		if(StringHelper.isNotBlank(inputStyleClass))
+			component.setInputStyleClass(inputStyleClass);
+		if(StringHelper.isNotBlank(inputStyle))
+			component.setInputStyle(inputStyle);
+		
 		if(decimalPlaces != null)
 			component.setDecimalPlaces(decimalPlaces.toString());
 		if(minValue != null)
@@ -53,6 +63,8 @@ public class InputNumber extends AbstractInput<Number> implements Serializable {
 	
 	/**/
 	
+	public static final String FIELD_INPUT_STYLE = "inputStyle";
+	public static final String FIELD_INPUT_STYLE_CLASS = "inputStyleClass";
 	public static final String FIELD_DECIMAL_PLACES = "decimalPlaces";
 	public static final String FIELD_DECIMAL_SEPARATOR = "decimalSeparator";
 	public static final String FIELD_THOUSAND_SEPARATOR = "thousandSeparator";

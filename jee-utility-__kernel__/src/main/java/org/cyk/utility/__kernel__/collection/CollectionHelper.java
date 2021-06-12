@@ -359,6 +359,12 @@ public interface CollectionHelper {
 		return collectionInstance.getSize();
 	}
 	
+	static <ELEMENT> Integer getIndex(List<ELEMENT> collection,ELEMENT element) {
+		if(Boolean.TRUE.equals(isEmpty(collection)))
+			return null;
+		return collection.indexOf(element);
+	}
+	
 	static <ELEMENT> void setElementAt(Collection<ELEMENT> collection, Object index, ELEMENT value) {
 		Integer indexValue = index instanceof Integer ? (Integer)index :  NumberHelper.getInteger(index);
 		if(isEmpty(collection) || indexValue == null || indexValue < 0 || indexValue >= getSize(collection))

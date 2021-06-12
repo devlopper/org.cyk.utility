@@ -41,6 +41,7 @@ public abstract class AbstractFilterController extends AbstractObject implements
 	protected CommandButton filterCommandButton;
 	protected Layout layout;	
 	protected RenderType renderType;
+	protected Boolean isNotBuildable;
 	
 	public Map<String,Boolean> getIgnorables(Boolean injectIfNull) {
 		if(ignorables == null && Boolean.TRUE.equals(injectIfNull))
@@ -67,6 +68,8 @@ public abstract class AbstractFilterController extends AbstractObject implements
 	}
 	
 	public AbstractFilterController build() {
+		if(Boolean.TRUE.equals(isNotBuildable))
+			return this;
 		buildDialog();
 		buildShowDialogCommandButton();		
 		buildInputs();		
@@ -84,7 +87,7 @@ public abstract class AbstractFilterController extends AbstractObject implements
 	}
 	
 	private void buildDialog() {
-		dialog = Dialog.build(Dialog.FIELD_HEADER,"Filtre demande(s)",Dialog.FIELD_MODAL,Boolean.TRUE
+		dialog = Dialog.build(Dialog.FIELD_HEADER,"Filtre",Dialog.FIELD_MODAL,Boolean.TRUE
 				,Dialog.ConfiguratorImpl.FIELD_COMMAND_BUTTONS_BUILDABLE,Boolean.FALSE);
 		dialog.addStyleClasses("cyk-min-width-90-percent");
 	}
