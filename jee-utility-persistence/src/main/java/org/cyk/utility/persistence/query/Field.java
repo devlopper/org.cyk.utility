@@ -36,6 +36,8 @@ public class Field extends AbstractObject implements Serializable {
 	private Object value;
 	private ValueUsageType valueUsageType;
 	private ArithmeticOperator arithmeticOperator;
+	/* arithmetic operator details */
+	private Boolean likeStartsWithAny,likeEndsWithAny,negate;
 
 	public static Field clone(Field field) {
 		if(field == null)
@@ -81,6 +83,8 @@ public class Field extends AbstractObject implements Serializable {
 		private org.cyk.utility.__kernel__.field.Field.Dto field;
 		private Value.Dto value;
 		private ArithmeticOperator arithmeticOperator;
+		/* arithmetic operator details */
+		private Boolean likeStartsWithAny,likeEndsWithAny,negate;
 		
 		@Override
 		public String toString() {

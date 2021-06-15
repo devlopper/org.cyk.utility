@@ -33,7 +33,7 @@ public interface LikeStringBuilder {
 			if(StringHelper.isBlank(arguments.tupleName) || StringHelper.isBlank(arguments.fieldName) || StringHelper.isBlank(arguments.parameterName))
 				throw new RuntimeException(String.format("Illegal parameters. tuple name %s , field name : %s , parameter name : %s."
 						,arguments.tupleName,arguments.fieldName,arguments.parameterName));
-			String like = format(arguments.tupleName, arguments.fieldName, arguments.parameterName, arguments.isCaseSensitive);
+			String like = format(arguments.tupleName, arguments.fieldName, arguments.parameterName, arguments.isCaseSensitive,arguments.negate);
 			if(arguments.numberOfAdditionalParameters == null || arguments.numberOfAdditionalParameters <= 0)
 				return like;
 			if(arguments.operator == null)
@@ -81,12 +81,17 @@ public interface LikeStringBuilder {
 			return build(tupleName, fieldName, parameterName, null, null, null);
 		}
 		
-		private static String format(String tupleName,String fieldName,String parameterName,Boolean isCaseSensitive) {
-			return String.format(Boolean.TRUE.equals(isCaseSensitive) ? FORMAT_CASE_SENSITIVE : FORMAT,tupleName, fieldName, parameterName);
+		private static String format(String tupleName,String fieldName,String parameterName,Boolean isCaseSensitive,Boolean negate) {
+			return String.format(Boolean.TRUE.equals(isCaseSensitive) ? FORMAT_CASE_SENSITIVE : FORMAT,tupleName, fieldName
+					,Boolean.TRUE.equals(negate) ? "NOT LIKE" : "LIKE", parameterName);
 		}
 		
-		private static final String FORMAT = "LOWER(%s.%s) LIKE LOWER(:%s)";
-		private static final String FORMAT_CASE_SENSITIVE = "%s.%s LIKE :%s";
+		private static String format(String tupleName,String fieldName,String parameterName,Boolean isCaseSensitive) {
+			return format(tupleName, fieldName, parameterName, isCaseSensitive, null);
+		}
+		
+		private static final String FORMAT = "LOWER(%s.%s) %s LOWER(:%s)";
+		private static final String FORMAT_CASE_SENSITIVE = "%s.%s %s :%s";
 	}
 	
 	/**/
@@ -97,6 +102,7 @@ public interface LikeStringBuilder {
 		private String fieldName;
 		private String parameterName;
 		private LogicalOperator operator;
+		private Boolean negate;
 		private Boolean isCaseSensitive;
 		private Integer numberOfAdditionalParameters;
 		private LogicalOperator additionalParametersOperator;

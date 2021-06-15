@@ -13,4 +13,10 @@ public class LikeStringBuilderUnitTest extends AbstractWeldUnitTest {
 	public void like(){
 		assertThat(LikeStringBuilder.getInstance().build("t","name","name")).isEqualTo("LOWER(t.name) LIKE LOWER(:name)");
 	}
+	
+	@Test
+	public void like_negate(){
+		assertThat(LikeStringBuilder.getInstance().build(new LikeStringBuilder.Arguments().setTupleName("t").setFieldName("name").setParameterName("name")
+				.setNegate(Boolean.TRUE))).isEqualTo("LOWER(t.name) NOT LIKE LOWER(:name)");
+	}
 }

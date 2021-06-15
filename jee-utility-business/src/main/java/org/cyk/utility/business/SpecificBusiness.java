@@ -9,11 +9,11 @@ import org.cyk.utility.persistence.query.QueryExecutorArguments;
 public interface SpecificBusiness<ENTITY> {
 
 	@Transactional
-	void create(QueryExecutorArguments arguments);
+	TransactionResult create(QueryExecutorArguments arguments);
 	
 	@Transactional
-	void create(Collection<ENTITY> entities);
+	TransactionResult create(Collection<ENTITY> entities);
 	
 	@Transactional
-	void create(ENTITY...entities);
+	TransactionResult create(ENTITY...entities);
 }

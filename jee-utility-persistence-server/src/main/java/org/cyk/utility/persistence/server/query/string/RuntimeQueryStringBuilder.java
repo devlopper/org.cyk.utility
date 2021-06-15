@@ -154,12 +154,30 @@ public interface RuntimeQueryStringBuilder {
 			return isQueryExecutorArgumentsFilterHasFieldsWithPaths(arguments, CollectionHelper.listOf(paths));
 		}
 		
-		protected static void addEqualsIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
+		protected static Boolean addLikeIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
 				,String path,String variable,String fieldName) {
-			if(arguments.getFilter().hasFieldWithPath(path)) {
-				filter.addFieldEquals(path, arguments);
-				predicate.add(String.format("%s.%s = :%s", variable,fieldName,path));
-			}
+			Field field = arguments.getFilterField(path);
+			if(field == null)
+				return null;
+			filter.addField(path, LikeStringValueBuilder.getInstance().build((String)field.getValue(), field.getLikeStartsWithAny(), field.getLikeEndsWithAny()));
+			predicate.add(LikeStringBuilder.getInstance().build(new LikeStringBuilder.Arguments().setTupleName(variable).setFieldName(fieldName).setParameterName(path)
+					.setNegate(field.getNegate())));
+			/*
+			LikeStringBuilder.Arguments likeArguments = new LikeStringBuilder.Arguments();
+			LikeStringBuilder.getInstance().build(likeArguments);
+			predicate.add(String.format("%s.%s LIKE :%s", variable,fieldName,path));
+			*/
+			return Boolean.TRUE;
+		}
+		
+		protected static Boolean addEqualsIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
+				,String path,String variable,String fieldName) {
+			Field field = arguments.getFilterField(path);
+			if(field == null)
+				return null;
+			filter.addFieldEquals(path, arguments);
+			predicate.add(String.format("%s.%s = :%s", variable,fieldName,path));
+			return Boolean.TRUE;
 		}
 		
 		protected static void addEqualsIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
