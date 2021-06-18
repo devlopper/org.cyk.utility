@@ -76,4 +76,11 @@ public abstract class AbstractDataIdentifiableSystemStringIdentifiableBusinessSt
 	/**/
 	
 	public static final String FIELD_NAME = "name";
+	
+	public static final String FIELD___AUDIT_WHO__ = "__auditWho__";
+	public static final String FIELD___AUDIT_WHAT__ = "__auditWhat__";
+	public static final String FIELD___AUDIT_FUNCTIONALITY__ = "__auditFunctionality__";
+	public static final String FIELD___AUDIT_WHEN__ = "__auditWhen__";
+	public static final String FIELD___AUDIT_WHEN_AS_TIMESTAMP__ = "__auditWhenAsTimestamp__";
+	public static final String FIELD___AUDIT_WHEN_AS_STRING__ = "__auditWhenAsString__";
 }

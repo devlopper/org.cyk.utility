@@ -85,4 +85,11 @@ public abstract class AbstractDataIdentifiableSystemStringAuditedImpl extends Ab
 	
 	public static final String FIELD_IDENTIFIER = "identifier";
 	public static final String FIELD_AS_STRING = "asString";
+	
+	public static final String FIELD___AUDIT_WHO__ = "__auditWho__";
+	public static final String FIELD___AUDIT_WHAT__ = "__auditWhat__";
+	public static final String FIELD___AUDIT_FUNCTIONALITY__ = "__auditFunctionality__";
+	public static final String FIELD___AUDIT_WHEN__ = "__auditWhen__";
+	public static final String FIELD___AUDIT_WHEN_AS_TIMESTAMP__ = "__auditWhenAsTimestamp__";
+	public static final String FIELD___AUDIT_WHEN_AS_STRING__ = "__auditWhenAsString__";
 }

@@ -44,4 +44,6 @@ public abstract class AbstractIdentifiableSystemScalarStringAuditedImpl extends 
 	public static final String FIELD___AUDIT_WHEN__ = "__auditWhen__";
 	public static final String FIELD___AUDIT_WHEN_AS_TIMESTAMP__ = "__auditWhenAsTimestamp__";
 	public static final String FIELD___AUDIT_WHEN_AS_STRING__ = "__auditWhenAsString__";
+	
+	public static final String FIELD___AUDIT_RECORDS__ = "__auditRecords__";
 }
