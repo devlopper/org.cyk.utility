@@ -2,13 +2,13 @@ package org.cyk.utility.mail.postmark;
 
 import javax.mail.MessagingException;
 
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.__kernel__.variable.VariableHelper;
 import org.cyk.utility.__kernel__.variable.VariableName;
 import org.cyk.utility.mail.MailSender;
 import org.junit.jupiter.api.Test;
 
-public class MailSenderUnitTestPingPostmarkSigobe extends AbstractWeldUnitTest {
+public class MailSenderUnitTestPingPostmark extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 	
 	@Override

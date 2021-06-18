@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.mail.MessagingException;
 
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.__kernel__.variable.VariableHelper;
 import org.cyk.utility.__kernel__.variable.VariableName;
 import org.junit.jupiter.api.Test;

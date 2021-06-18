@@ -144,6 +144,14 @@ public interface OrderStringBuilder {
 		public Order addFromTupleDescending(String variableName,String...fieldsNames) {
 			return addFromTuple(variableName, SortOrder.DESCENDING, fieldsNames);
 		}
+		
+		public Order asc(String variableName,String...fieldsNames) {
+			return addFromTupleAscending(variableName, fieldsNames);
+		}
+		
+		public Order desc(String variableName,String...fieldsNames) {
+			return addFromTupleDescending(variableName, fieldsNames);
+		}
 	}
 	
 	/**/

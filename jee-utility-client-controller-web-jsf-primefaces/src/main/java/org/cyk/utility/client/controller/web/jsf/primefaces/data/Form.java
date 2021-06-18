@@ -290,6 +290,16 @@ public class Form extends AbstractObject implements Serializable {
 				@Override
 				public Map<Object,Object> getInputCellArguments(Form form,AbstractInput<?> input) {
 					Map<Object,Object> arguments = new HashMap<>();
+					/*
+					arguments.put(Cell.ConfiguratorImpl.FIELD_CONTROL_BUILD_DEFFERED,Boolean.TRUE);
+					
+					arguments.put(Cell.FIELD_LISTENER,new Cell.Listener.AbstractImpl() {
+						@Override
+						public Object buildControl(Cell cell) {
+							return buildDataTable();
+						}
+					});
+					*/
 					arguments.put(Cell.FIELD_CONTROL,input);
 					return arguments;
 				}

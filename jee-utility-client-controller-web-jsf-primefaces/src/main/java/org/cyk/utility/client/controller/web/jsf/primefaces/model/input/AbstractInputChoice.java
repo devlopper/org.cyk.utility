@@ -15,6 +15,8 @@ import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.web.jsf.converter.Converter;
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -69,6 +71,12 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 		setChoicesInitialized(null);
 		getChoices();
 		return this;
+	}
+	
+	public Boolean getValueAsBoolean() {
+		if(value instanceof ChoiceYesNo)
+			return ((ChoiceYesNo)value).getValue();
+		return null;
 	}
 	
 	/**/
@@ -199,6 +207,9 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 			if(input.nullable == null)
 				input.nullable = Boolean.FALSE;
 			
+			if(input.choices == null && ChoiceYesNo.class.equals(input.choiceClass))			
+				input.choices = CollectionHelper.cast(Object.class, ChoiceYesNo.COLLECTION);
+			
 			if(input.choices == null && Boolean.TRUE.equals(MapHelper.readByKey(arguments, FIELD_CHOICES_ARE_YES_NO_ONLY))) {
 				input.choices = CHOICES_YES_NO;
 			}
@@ -212,7 +223,34 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 		}
 		
 		public static final String FIELD_CHOICES_ARE_YES_NO_ONLY = "choicesAreYesOrNoOnly";
+		public static final String FIELD_CHOICE_CLASS = "AbstractConfiguratorImpl.choiceClass";
 	}
 	
 	private static final Collection<Object> CHOICES_YES_NO = List.of(new SelectItem(Boolean.TRUE, "Oui"),new SelectItem(Boolean.FALSE, "Non"));
+
+	@Getter @Setter @AllArgsConstructor @EqualsAndHashCode(of = "label")
+	public static class ChoiceYesNo implements Serializable {
+		private String label;
+		private Boolean value;
+		
+		public static final ChoiceYesNo YES = new ChoiceYesNo("Oui", Boolean.TRUE);
+		public static final ChoiceYesNo NO = new ChoiceYesNo("Non", Boolean.FALSE);
+		public static final Collection<ChoiceYesNo> COLLECTION = List.of(YES,NO);
+		
+		public static ChoiceYesNo get(Object value) {
+			if(value == null)
+				return NO;
+			if(value instanceof Boolean) {
+				if(Boolean.TRUE.equals(value))
+					return YES;
+				return NO;
+			}
+			return null;
+		}
+		
+		@Override
+		public String toString() {
+			return label;
+		}
+	}
 }

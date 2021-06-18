@@ -72,7 +72,7 @@ public abstract class AbstractFilterController extends AbstractObject implements
 			return this;
 		buildDialog();
 		buildShowDialogCommandButton();		
-		buildInputs();		
+		buildInputs();
 		buildFilterCommandButton();
 		buildLayout();
 		if(layout != null)

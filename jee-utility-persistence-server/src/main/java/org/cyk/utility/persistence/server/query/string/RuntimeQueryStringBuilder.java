@@ -176,7 +176,9 @@ public interface RuntimeQueryStringBuilder {
 			if(field == null)
 				return null;
 			filter.addFieldEquals(path, arguments);
-			predicate.add(String.format("%s.%s = :%s", variable,fieldName,path));
+			predicate.add(EqualStringBuilder.getInstance().build(new EqualStringBuilder.Arguments().setTupleName(variable).setFieldName(fieldName).setParameterName(path)
+					.setNegate(field.getNegate()))); 
+			//String.format("%s.%s = :%s", variable,fieldName,path));
 			return Boolean.TRUE;
 		}
 		

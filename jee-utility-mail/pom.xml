@@ -2,13 +2,13 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<parent>
 		<groupId>org.cyk.pom.jee.utility.mail</groupId>
 		<artifactId>pom-jee-utility-mail</artifactId>
 		<version>pom.jee.utility.mail.0.1.0</version>
 	</parent>
-	
+
 	<groupId>org.cyk.jee.utility.mail</groupId>
 	<artifactId>jee-utility-mail</artifactId>
 	<version>0.1.0</version>
@@ -16,30 +16,37 @@
 
 	<name>jee-utility-mail</name>
 	<url>http://maven.apache.org</url>
-	
+
 	<properties>
 		<javax.mail.mail.version>1.5.0-b01</javax.mail.mail.version>
 	</properties>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.cyk.jee.utility.__kernel__</groupId>
 			<artifactId>jee-utility-__kernel__</artifactId>
 			<version>0.1.0</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
 			<version>${javax.mail.mail.version}</version>
 		</dependency>
-		
+
 		<dependency>
-		  	<groupId>com.mailjet</groupId>
-		    <artifactId>mailjet-client</artifactId>
-		    <version>4.2.0</version>
-		    <scope>test</scope>
+			<groupId>com.mailjet</groupId>
+			<artifactId>mailjet-client</artifactId>
+			<version>4.2.0</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.cyk.jee.utility.test</groupId>
+			<artifactId>jee-utility-test</artifactId>
+			<version>0.1.0</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	
+
 </project>

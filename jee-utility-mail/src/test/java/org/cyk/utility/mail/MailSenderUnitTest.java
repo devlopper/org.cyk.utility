@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.__kernel__.variable.VariableHelper;
 import org.cyk.utility.__kernel__.variable.VariableName;
 import org.junit.jupiter.api.Test;
@@ -82,6 +82,5 @@ public class MailSenderUnitTest extends AbstractWeldUnitTest {
 		assertThat(emails[0].getSubject()).isEqualTo("subject");
 		assertThat(GreenMailUtil.getBody(emails[0])).isEqualTo("body");
 	}
-
 	
 }
