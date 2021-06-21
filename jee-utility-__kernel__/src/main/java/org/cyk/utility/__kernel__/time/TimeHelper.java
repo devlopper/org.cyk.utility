@@ -3,8 +3,10 @@ package org.cyk.utility.__kernel__.time;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Locale;
 
 import org.cyk.utility.__kernel__.log.LogHelper;
@@ -13,6 +15,12 @@ import org.cyk.utility.__kernel__.value.ValueHelper;
 
 public interface TimeHelper {
 
+	static LocalDateTime parseLocalDateTimeFromDate(Date date) {
+		if(date == null)
+			return null;
+		return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+	}
+	
 	static LocalDateTime parseLocalDateTimeFromString(String string) {
 		if(StringHelper.isBlank(string))
 			return null;

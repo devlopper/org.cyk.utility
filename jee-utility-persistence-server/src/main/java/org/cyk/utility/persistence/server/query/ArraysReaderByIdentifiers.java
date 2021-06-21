@@ -1,6 +1,7 @@
 package org.cyk.utility.persistence.server.query;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import javax.persistence.Query;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.persistence.EntityManagerGetter;
 
@@ -23,6 +25,8 @@ public interface ArraysReaderByIdentifiers<ENTITY,IDENTIFIER> extends Reader<ENT
 	void set(Collection<ENTITY> entities,Collection<Object[]> arrays);
 	
 	void readThenSet(Collection<ENTITY> entities,Map<String,Object> parameters);
+	Collection<ENTITY> readByIdentifiersThenInstantiate(Collection<IDENTIFIER> identifiers,Map<String,Object> parameters);
+	Collection<ENTITY> readByIdentifiersThenInstantiate(Map<String,Object> parameters,IDENTIFIER...identifiers);
 	
 	/**/
 	
@@ -114,6 +118,31 @@ public interface ArraysReaderByIdentifiers<ENTITY,IDENTIFIER> extends Reader<ENT
 		public void readThenSet(Collection<ENTITY> entities, Map<String, Object> parameters) {
 			Collection<Object[]> arrays = read(entities, parameters);
 			set(entities, arrays);
+		}
+		
+		@Override
+		public Collection<ENTITY> readByIdentifiersThenInstantiate(Collection<IDENTIFIER> identifiers,Map<String, Object> parameters) {
+			Collection<Object[]> arrays = readByIdentifiers(identifiers, parameters);
+			if(CollectionHelper.isEmpty(arrays))
+				return null;
+			Collection<ENTITY> collection = null;
+			for(Object[] array : arrays) {
+				if(array == null)
+					continue;
+				ENTITY entity = ClassHelper.instanciate(getEntityClass());
+				__set__(entity, array);
+				if(collection == null)
+					collection = new ArrayList<>();
+				collection.add(entity);
+			}
+			return collection;
+		}
+		
+		@Override
+		public Collection<ENTITY> readByIdentifiersThenInstantiate(Map<String, Object> parameters,IDENTIFIER... identifiers) {
+			if(ArrayHelper.isEmpty(identifiers))
+				return null;
+			return readByIdentifiersThenInstantiate(CollectionHelper.listOf(Boolean.TRUE, identifiers), parameters);
 		}
 		
 		/**/

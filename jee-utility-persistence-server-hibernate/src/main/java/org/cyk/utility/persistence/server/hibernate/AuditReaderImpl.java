@@ -15,23 +15,40 @@ import org.hibernate.envers.AuditReaderFactory;
 public class AuditReaderImpl extends AuditReader.AbstractImpl implements Serializable {
 
 	@Override
-	protected <T> Collection<T> __readByIdentifiers__(Class<T> klass, Arguments arguments) {
+	protected <T> Collection<T> __readByIdentifiers__(Class<T> klass, Arguments<T> arguments,Collection<Object> identifiers) {
 		Collection<T> collection = null;
 		org.hibernate.envers.AuditReader reader = AuditReaderFactory.get(EntityManagerGetter.getInstance().get());
-		for(Object identifier : arguments.getIdentifiers()) {
-			//Get all revisions numbers by identifier
-			List<Number> numbers = reader.getRevisions(klass, identifier);
-			if(CollectionHelper.isEmpty(numbers))
+		for(Object identifier : identifiers) {
+			Collection<T> revisions = getRevisions(klass, arguments, reader, identifier);
+			if(CollectionHelper.isEmpty(revisions))
 				continue;
-			for(Number number : numbers) {
-				//Get instance by identifier and revision number
-				T instance = reader.find(klass, identifier, number);
-				if(instance == null)
-					continue;
-				if(collection == null)
-					collection = new ArrayList<>();
-				collection.add(instance);
-			}
+			if(collection == null)
+				collection = new ArrayList<>();
+			collection.addAll(revisions);		
+		}
+		return collection;
+	}
+	
+	protected <T> Collection<T> getRevisions(Class<T> klass, Arguments<T> arguments,org.hibernate.envers.AuditReader reader,Object identifier) {
+		//Get all revisions numbers by identifier
+		List<Number> numbers = reader.getRevisions(klass, identifier);
+		if(CollectionHelper.isEmpty(numbers))
+			return null;
+		Collection<T> collection = getInstanceByIdentifierByRevision(klass, arguments, reader, identifier, numbers);		
+		return collection;
+	}
+	
+	protected <T> Collection<T> getInstanceByIdentifierByRevision(Class<T> klass, Arguments<T> arguments,org.hibernate.envers.AuditReader reader,Object identifier
+			,Collection<Number> numbers) {
+		Collection<T> collection = null;
+		for(Number number : numbers) {
+			//Get instance by identifier and revision number
+			T instance = reader.find(klass, identifier, number);
+			if(instance == null)
+				continue;
+			if(collection == null)
+				collection = new ArrayList<>();
+			collection.add(instance);
 		}
 		return collection;
 	}

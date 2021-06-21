@@ -17,6 +17,7 @@ import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.object.Builder;
+import org.cyk.utility.__kernel__.object.__static__.controller.AbstractDataIdentifiableSystemStringAuditedImpl;
 import org.cyk.utility.__kernel__.object.__static__.controller.AbstractDataIdentifiableSystemStringIdentifiableBusinessStringImpl;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.Case;
@@ -456,8 +457,12 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 		void addHeaderToolbarLeftCommands(AbstractDataTable dataTable,Collection<Action> actions);
 		Map<Object,Object> getRecordMenuItemArguments(AbstractDataTable dataTable,Action action);
 		void addRecordMenuItems(AbstractDataTable dataTable,Collection<Action> actions);
+		Listener setIsAuditRecord(Boolean isAuditRecord);
 		/**/
 		public static abstract class AbstractImpl extends AbstractCollection.Listener.AbstractImpl implements Listener,Serializable {
+			
+			protected Boolean isAuditRecord;
+			
 			@Override
 			public Object getCellValueByRecordByColumn(Object record, Integer recordIndex, Column column,Integer columnIndex) {
 				if(record == null || column == null || StringHelper.isBlank(column.getFieldName()))
@@ -532,8 +537,22 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 				if(StringHelper.isBlank(fieldName))
 					fieldName = String.format(dataTable.columnFieldNameFormat, CollectionHelper.getSize(dataTable.columnsAfterRowIndex));
 				String headerText = InternationalizationHelper.buildString(InternationalizationHelper.buildKey(fieldName),null,null,Case.FIRST_CHARACTER_UPPER_REMAINDER_LOWER);
-				return MapHelper.instantiate(Column.FIELD_HEADER_TEXT,headerText,Column.FIELD_FIELD_NAME,fieldName
+				Map<Object,Object> map = MapHelper.instantiate(Column.FIELD_HEADER_TEXT,headerText,Column.FIELD_FIELD_NAME,fieldName
 						,Column.ConfiguratorImpl.FIELD_EDITABLE,dataTable.editable,Column.FIELD_REMOVE_COMMAND_BUTTON);
+				
+				if(AbstractDataIdentifiableSystemStringAuditedImpl.FIELD___AUDIT_FUNCTIONALITY__.equals(fieldName)) {
+					map.put(Column.FIELD_HEADER_TEXT, "Fonctionnalité");		
+				}else if(AbstractDataIdentifiableSystemStringAuditedImpl.FIELD___AUDIT_WHAT__.equals(fieldName)) {
+					map.put(Column.FIELD_HEADER_TEXT, "Action");		
+					map.put(Column.FIELD_WIDTH, "100");
+					map.put(Column.FIELD_VISIBLE, Boolean.FALSE);
+				}else if(AbstractDataIdentifiableSystemStringAuditedImpl.FIELD___AUDIT_WHEN_AS_STRING__.equals(fieldName)) {
+					map.put(Column.FIELD_HEADER_TEXT, "Date");		
+					map.put(Column.FIELD_WIDTH, "120");
+				}else if(AbstractDataIdentifiableSystemStringAuditedImpl.FIELD___AUDIT_WHO__.equals(fieldName)) {
+					map.put(Column.FIELD_HEADER_TEXT, "Opérateur");		
+				}
+				return map;
 			}
 			
 			@Override
@@ -576,6 +595,12 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 					}else
 						dataTable.addRecordCommands(MenuItem.build(arguments));
 				});
+			}
+			
+			@Override
+			public Listener setIsAuditRecord(Boolean isAuditRecord) {
+				this.isAuditRecord = isAuditRecord;
+				return this;
 			}
 			
 			/**/

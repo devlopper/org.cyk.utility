@@ -8,9 +8,11 @@ import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
+import org.cyk.utility.__kernel__.object.marker.AuditableWhoDoneWhatWhen;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.persistence.query.Filter;
+import org.cyk.utility.persistence.server.audit.AuditReader;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -31,8 +33,10 @@ public interface TransientFieldsProcessor {
 			Class<?> klass = arguments.klass;
 			if(klass == null)
 				klass = arguments.objects.iterator().next().getClass();
-			try {
+			try {				
 				__process__(klass, arguments.objects,arguments.filter,arguments.fieldsNames);
+				if(CollectionHelper.contains(arguments.fieldsNames, AuditableWhoDoneWhatWhen.FIELD___AUDIT_RECORDS__))
+					__processAuditsRecords__(klass, arguments.objects,arguments.filter);
 			} catch (Exception exception) {
 				LogHelper.log(exception, getClass());
 			}
@@ -49,6 +53,14 @@ public interface TransientFieldsProcessor {
 		}
 		
 		protected Boolean __process__(Class<?> klass,Collection<?> objects,Filter filter,String fieldName) {
+			return Boolean.TRUE;
+		}
+		
+		protected Boolean __processAuditsRecords__(Class<?> klass,Collection<?> objects,Filter filter) {
+			AuditReader.Arguments<Object> arguments = new AuditReader.Arguments<Object>();
+			arguments.setIdentifiables(CollectionHelper.cast(Object.class, objects));
+			arguments.setAuditsRecordsCollectionSettable(Boolean.TRUE);
+			AuditReader.getInstance().read((Class<Object>)klass, arguments);
 			return Boolean.TRUE;
 		}
 		

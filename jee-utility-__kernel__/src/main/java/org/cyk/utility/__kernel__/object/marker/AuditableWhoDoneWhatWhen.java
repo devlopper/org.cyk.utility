@@ -21,4 +21,6 @@ public interface AuditableWhoDoneWhatWhen {
 	
 	String get__auditWhenAsString__();
 	AuditableWhoDoneWhatWhen set__auditWhenAsString__(String whenAsString);
+	
+	String FIELD___AUDIT_RECORDS__ = "__auditRecords__";
 }
