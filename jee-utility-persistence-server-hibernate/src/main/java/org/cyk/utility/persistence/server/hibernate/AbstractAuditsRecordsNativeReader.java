@@ -12,6 +12,7 @@ import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.marker.AuditableWhoDoneWhatWhen;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.time.TimeHelper;
+import org.cyk.utility.persistence.PersistenceHelper;
 import org.cyk.utility.persistence.query.Querier;
 import org.cyk.utility.persistence.server.query.ArraysReaderByIdentifiers;
 import org.cyk.utility.persistence.server.query.string.QueryStringBuilder;
@@ -41,7 +42,9 @@ public abstract class AbstractAuditsRecordsNativeReader<ENTITY> extends ArraysRe
 		}
 	}
 	
-	protected abstract Collection<String> getProjections();
+	protected Collection<String> getProjections() {
+		return null;
+	}
 	
 	protected void setTuple(QueryStringBuilder.Arguments arguments) {
 		arguments.getTuple(Boolean.TRUE).add(getAuditTableName()+" t");
@@ -58,7 +61,7 @@ public abstract class AbstractAuditsRecordsNativeReader<ENTITY> extends ArraysRe
 	@Override
 	protected void setQueryParameters(Query query, Collection<String> identifiers, Map<String, Object> parameters) {
 		super.setQueryParameters(query, identifiers, parameters);
-		query.setParameter("numbers", MapHelper.readByKey(parameters, "numbers"));
+		query.setParameter(PARAMETER_NAME_NUMBERS, MapHelper.readByKey(parameters, PARAMETER_NAME_NUMBERS));
 	}
 	
 	@Override
@@ -69,8 +72,12 @@ public abstract class AbstractAuditsRecordsNativeReader<ENTITY> extends ArraysRe
 			AuditableWhoDoneWhatWhen record = (AuditableWhoDoneWhatWhen) entity;
 			record.set__auditFunctionality__((String) array[i++]);
 			record.set__auditWhat__((String) array[i++]);
-			record.set__auditWho__((String) array[i++]);		
-			record.set__auditWhen__(TimeHelper.parseLocalDateTimeFromDate((java.util.Date) array[i++]));
+			record.set__auditWho__((String) array[i++]);
+			Object dateValue = array[i++];
+			if(dateValue instanceof java.util.Date)
+				record.set__auditWhen__(TimeHelper.parseLocalDateTimeFromDate((java.util.Date) dateValue));
+			else if(dateValue instanceof String)
+				record.set__auditWhen__(TimeHelper.parseLocalDateTimeFromString((String) dateValue));
 		}
 		__set__(entity, array, i);
 	}
@@ -84,21 +91,34 @@ public abstract class AbstractAuditsRecordsNativeReader<ENTITY> extends ArraysRe
 
 	/**/
 	
-	protected abstract String getAuditTableName();
+	protected String getAuditTableName() {
+		return PersistenceHelper.getTableName(getEntityClass())+"_AUD";
+	}
 	
 	protected String getAuditFunctionalityColumnName() {
-		return "AUDIT_FONCTIONNALITE";
+		return readAuditColumnName(getEntityClass(), "COLUMN_AUDIT_FUNCTIONALITY", "AUDIT_FONCTIONNALITE");
 	}
 	
 	protected String getAuditActionColumnName() {
-		return "AUDIT_ACTION";
+		return readAuditColumnName(getEntityClass(), "COLUMN_AUDIT_ACTION", "AUDIT_ACTION");
 	}
 	
 	protected String getAuditActorColumnName() {
-		return "AUDIT_ACTEUR";
+		return readAuditColumnName(getEntityClass(), "COLUMN_AUDIT_ACTOR", "AUDIT_ACTEUR");
 	}
 	
 	protected String getAuditDateColumnName() {
-		return "AUDIT_DATE";
+		return readAuditColumnName(getEntityClass(), "COLUMN_AUDIT_DATE", "AUDIT_DATE");
 	}
+	
+	/**/
+	
+	private static String readAuditColumnName(Class<?> entityClass,String fieldName,String defaultValue) {
+		String name = (String) FieldHelper.readStatic(entityClass, fieldName);
+		if(StringHelper.isNotBlank(name))
+			return name;		
+		return defaultValue;
+	}
+	
+	public static final String PARAMETER_NAME_NUMBERS = "numbers";
 }

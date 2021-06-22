@@ -12,6 +12,7 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
+import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.persistence.EntityManagerGetter;
 
 public interface ArraysReaderByIdentifiers<ENTITY,IDENTIFIER> extends Reader<ENTITY, IDENTIFIER, Object[]> {
@@ -143,6 +144,14 @@ public interface ArraysReaderByIdentifiers<ENTITY,IDENTIFIER> extends Reader<ENT
 			if(ArrayHelper.isEmpty(identifiers))
 				return null;
 			return readByIdentifiersThenInstantiate(CollectionHelper.listOf(Boolean.TRUE, identifiers), parameters);
+		}
+		
+		/**/
+		
+		protected static String getAsString(Object[] array,Integer index) {
+			if(ArrayHelper.isEmpty(array) || NumberHelper.isLessThanZero(index))
+				return null;
+			return (String) array[index];
 		}
 		
 		/**/
