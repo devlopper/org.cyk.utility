@@ -1,11 +1,9 @@
-package org.cyk.utility.server.representation.impl;
+package org.cyk.utility.representation.server;
 
 import java.io.Serializable;
 import java.net.URI;
 
-//import javax.enterprise.context.ApplicationScoped;
 import javax.servlet.http.HttpServletRequest;
-//import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -17,13 +15,10 @@ import org.cyk.utility.__kernel__.rest.RestHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.variable.VariableName;
 
-//@ApplicationPath(ApplicationProgrammingInterface.PATH) @Path("/")
-//@ApplicationScoped
-@Deprecated
-public class ApplicationProgrammingInterface extends javax.ws.rs.core.Application implements Serializable {
+public abstract class AbstractApplication extends javax.ws.rs.core.Application implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	public ApplicationProgrammingInterface() {
+	public AbstractApplication() {
 		RestHelper.APPLICATION_PATH.set(PATH);
 	}
 	
