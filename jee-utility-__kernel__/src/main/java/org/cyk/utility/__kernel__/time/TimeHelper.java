@@ -63,6 +63,10 @@ public interface TimeHelper {
 		return formatLocalDateTime(localDateTime, "dd/MM/yyyy à HH:mm");
 	}
 	
+	static String formatLocalDateTimeTillSecond(LocalDateTime localDateTime) {
+		return formatLocalDateTime(localDateTime, "dd/MM/yyyy à HH:mm:ss");
+	}
+	
 	static String formatLocalDate(LocalDate localDate,String pattern) {
 		if(localDate == null)
 			return null;

@@ -2,18 +2,13 @@ package org.cyk.utility.persistence.server.hibernate;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Map;
-
-import javax.persistence.Query;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
-import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.marker.AuditableWhoDoneWhatWhen;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.time.TimeHelper;
 import org.cyk.utility.persistence.PersistenceHelper;
-import org.cyk.utility.persistence.query.Querier;
 import org.cyk.utility.persistence.server.query.ArraysReaderByIdentifiers;
 import org.cyk.utility.persistence.server.query.string.QueryStringBuilder;
 
@@ -26,12 +21,15 @@ public abstract class AbstractAuditsRecordsNativeReader<ENTITY> extends ArraysRe
 		setTuple(arguments);
 		setPredicate(arguments);
 		setOrder(arguments);
+		//String s = QueryStringBuilder.getInstance().build(arguments);
+		//System.out.println(s);
+		//return s;
 		return QueryStringBuilder.getInstance().build(arguments);
 	}
 	
 	protected void setProjections(QueryStringBuilder.Arguments arguments) {
-		arguments.getProjection(Boolean.TRUE).addFromTuple("t","IDENTIFIANT",getAuditFunctionalityColumnName(),getAuditActionColumnName(),getAuditActorColumnName()
-				,getAuditDateColumnName());
+		arguments.getProjection(Boolean.TRUE).addFromTuple("t",getAuditIdentifierColumnName(),getAuditFunctionalityColumnName(),getAuditActionColumnName()
+				,getAuditActorColumnName(),getAuditDateColumnName());
 		Collection<String> projections = getProjections();
 		if(CollectionHelper.isNotEmpty(projections)) {
 			for(String projection : projections) {
@@ -51,17 +49,11 @@ public abstract class AbstractAuditsRecordsNativeReader<ENTITY> extends ArraysRe
 	}
 	
 	protected void setPredicate(QueryStringBuilder.Arguments arguments) {
-		arguments.getPredicate(Boolean.TRUE).add("t.identifiant IN :"+Querier.PARAMETER_NAME_IDENTIFIERS+" AND t.rev IN :numbers");
+		
 	}
 	
 	protected void setOrder(QueryStringBuilder.Arguments arguments) {
 		arguments.getOrder(Boolean.TRUE).desc("t", getAuditDateColumnName());
-	}
-	
-	@Override
-	protected void setQueryParameters(Query query, Collection<String> identifiers, Map<String, Object> parameters) {
-		super.setQueryParameters(query, identifiers, parameters);
-		query.setParameter(PARAMETER_NAME_NUMBERS, MapHelper.readByKey(parameters, PARAMETER_NAME_NUMBERS));
 	}
 	
 	@Override
@@ -95,6 +87,10 @@ public abstract class AbstractAuditsRecordsNativeReader<ENTITY> extends ArraysRe
 		return PersistenceHelper.getTableName(getEntityClass())+"_AUD";
 	}
 	
+	protected String getAuditIdentifierColumnName() {
+		return readAuditColumnName(getEntityClass(), "COLUMN_IDENTIFIER", "IDENTIFIANT");
+	}
+	
 	protected String getAuditFunctionalityColumnName() {
 		return readAuditColumnName(getEntityClass(), "COLUMN_AUDIT_FUNCTIONALITY", "AUDIT_FONCTIONNALITE");
 	}
@@ -119,6 +115,4 @@ public abstract class AbstractAuditsRecordsNativeReader<ENTITY> extends ArraysRe
 			return name;		
 		return defaultValue;
 	}
-	
-	public static final String PARAMETER_NAME_NUMBERS = "numbers";
 }

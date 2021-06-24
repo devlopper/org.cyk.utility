@@ -32,6 +32,11 @@ public interface Querier {
 	String PARAMETER_NAME_AUDIT_WHAT = "audit_what";
 	String PARAMETER_NAME_AUDIT_WHEN = "audit_when";
 	
+	String PARAMETER_NAME_FROM_DATE = "fromDate";
+	String PARAMETER_NAME_TO_DATE = "toDate";
+	
+	String FLAG_HISTORY = "history";
+	
 	/**/
 	
 	<T,I> Collection<T> readBySystemIdentifiers(Class<T> resultClass,Class<I> identifierClass,Collection<I> identifiers);
