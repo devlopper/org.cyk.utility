@@ -119,9 +119,16 @@ public interface QueryManager {
 			}
 			for(Query query : queries) {
 				Class<?> resultClass = query.getIntermediateResultClass() == null ? query.getResultClass() : query.getIntermediateResultClass();
-				javax.persistence.Query __query__ = resultClass == null ? entityManager.createQuery(query.getValue()) : entityManager.createQuery(query.getValue(), resultClass);
+				javax.persistence.Query __query__ = null;
+				if(resultClass == null) {
+					if(Boolean.TRUE.equals(query.getIsNative()))
+						__query__ = entityManager.createNativeQuery(query.getValue());
+					else
+						__query__ = entityManager.createQuery(query.getValue());
+				}else
+					__query__ = entityManager.createQuery(query.getValue(), resultClass);
 				entityManager.getEntityManagerFactory().addNamedQuery(query.getIdentifier(), __query__);
-			}		
+			}
 		}
 		
 		@Override

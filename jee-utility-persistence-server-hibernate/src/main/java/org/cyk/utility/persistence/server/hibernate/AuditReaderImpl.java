@@ -4,10 +4,14 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.instance.InstanceCopier;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.persistence.EntityManagerGetter;
 import org.cyk.utility.persistence.query.Querier;
 import org.cyk.utility.persistence.query.QueryExecutorArguments;
@@ -72,8 +76,42 @@ public class AuditReaderImpl extends AuditReader.AbstractImpl implements Seriali
 	
 	@Override
 	protected <T> Collection<T> __readByDates__(Class<T> klass, Arguments<T> arguments, LocalDateTime fromDate,LocalDateTime toDate) {
-		Collection<T> collection = null;
-		collection = DynamicManyExecutor.getInstance().read(klass, null/*new QueryExecutorArguments().addFilterFieldsValues("fromDate",fromDate,"toDate",toDate)*/);
+		@SuppressWarnings("unchecked")
+		Class<T> auditClass = (Class<T>) getAuditClass(klass);
+		if(auditClass == null)
+			return null;
+		QueryExecutorArguments queryExecutorArguments = arguments.getQueryExecutorArguments();
+		if(queryExecutorArguments == null)
+			queryExecutorArguments = new QueryExecutorArguments();
+		if(fromDate != null)
+			queryExecutorArguments.addFilterField(Querier.PARAMETER_NAME_FROM_DATE,fromDate);
+		if(toDate != null)
+			queryExecutorArguments.addFilterField(Querier.PARAMETER_NAME_TO_DATE,toDate);
+		Collection<?> __collection__ = DynamicManyExecutor.getInstance().read(auditClass, queryExecutorArguments);
+		if(CollectionHelper.isEmpty(__collection__))
+			return null;
+		return convert(klass, queryExecutorArguments, __collection__);
+	}
+	
+	private <T> Collection<T> convert(Class<T> klass,QueryExecutorArguments queryExecutorArguments,Collection<?> __collection__) {
+		Collection<T> collection = new ArrayList<>();
+		Collection<String> fieldsNames = getConvertableFieldsNames(klass, queryExecutorArguments, __collection__);
+		if(CollectionHelper.isEmpty(fieldsNames))
+			return null;
+		for(Object index : __collection__) {
+			T instance = ClassHelper.instanciate(klass);
+			InstanceCopier.getInstance().copy(index, instance,fieldsNames);
+			collection.add(instance);
+		}
 		return collection;
+	}
+	
+	private <T> Collection<String> getConvertableFieldsNames(Class<T> klass,QueryExecutorArguments queryExecutorArguments,Collection<?> __collection__) {
+		Collection<String> fieldsNames = new HashSet<>();
+		if(CollectionHelper.isNotEmpty(queryExecutorArguments.getProjections()))
+			fieldsNames.addAll(queryExecutorArguments.getProjections().stream().map(p -> p.getFieldName()).collect(Collectors.toList()));
+		if(CollectionHelper.isNotEmpty(queryExecutorArguments.getProcessableTransientFieldsNames()))
+			fieldsNames.addAll(queryExecutorArguments.getProcessableTransientFieldsNames());
+		return fieldsNames;
 	}
 }

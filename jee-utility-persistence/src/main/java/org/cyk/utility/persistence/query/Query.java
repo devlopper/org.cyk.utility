@@ -37,6 +37,7 @@ public class Query extends AbstractObject implements Serializable {
 	private Map<String,Integer> tupleFieldsNamesIndexes;
 	private QueryType type;
 	private Boolean registerableToEntityManager = Boolean.TRUE;
+	private Boolean isNative;
 	
 	public Query setQueryDerivedFromQueryIdentifier(Object identifier){
 		setQueryDerivedFromQuery(QueryManager.getInstance().getByIdentifier((String)identifier));

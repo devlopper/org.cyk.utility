@@ -15,10 +15,10 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @AttributeOverrides(value= {
-		@AttributeOverride(name = DataAuditedAudit.FIELD___WHO__,column = @Column(name=DataAudited.COLUMN_AUDIT_ACTOR))
-		,@AttributeOverride(name = DataAuditedAudit.FIELD___WHAT__,column = @Column(name=DataAudited.COLUMN_AUDIT_ACTION))
-		,@AttributeOverride(name = DataAuditedAudit.FIELD___WHEN__,column = @Column(name=DataAudited.COLUMN_AUDIT_DATE))
-		,@AttributeOverride(name = DataAuditedAudit.FIELD___FUNCTIONALITY__,column = @Column(name=DataAudited.COLUMN_AUDIT_FUNCTIONALITY))
+		@AttributeOverride(name = DataAuditedAudit.FIELD___AUDIT_WHO__,column = @Column(name=DataAudited.COLUMN___AUDIT_WHO__))
+		,@AttributeOverride(name = DataAuditedAudit.FIELD___AUDIT_WHAT__,column = @Column(name=DataAudited.COLUMN___AUDIT_WHAT__))
+		,@AttributeOverride(name = DataAuditedAudit.FIELD___AUDIT_WHEN__,column = @Column(name=DataAudited.COLUMN___AUDIT_WHEN__))
+		,@AttributeOverride(name = DataAuditedAudit.FIELD___AUDIT_FUNCTIONALITY__,column = @Column(name=DataAudited.COLUMN___AUDIT_FUNCTIONALITY__))
 })
 @Entity @Table(name = DataAuditedAudit.TABLE_NAME) @Getter @Setter @Accessors(chain=true)
 public class DataAuditedAudit extends AbstractAuditIdentifiedByString implements Serializable {

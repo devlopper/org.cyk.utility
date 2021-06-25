@@ -8,6 +8,7 @@ import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.object.marker.AuditableWhoDoneWhatWhen;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.time.TimeHelper;
+import org.cyk.utility.persistence.Auditable;
 import org.cyk.utility.persistence.PersistenceHelper;
 import org.cyk.utility.persistence.server.query.ArraysReaderByIdentifiers;
 import org.cyk.utility.persistence.server.query.string.QueryStringBuilder;
@@ -92,19 +93,19 @@ public abstract class AbstractAuditsRecordsNativeReader<ENTITY> extends ArraysRe
 	}
 	
 	protected String getAuditFunctionalityColumnName() {
-		return readAuditColumnName(getEntityClass(), "COLUMN_AUDIT_FUNCTIONALITY", "AUDIT_FONCTIONNALITE");
+		return readAuditColumnName(getEntityClass(), Auditable.COLUMN___AUDIT_FUNCTIONALITY__, "AUDIT_FONCTIONNALITE");
 	}
 	
 	protected String getAuditActionColumnName() {
-		return readAuditColumnName(getEntityClass(), "COLUMN_AUDIT_ACTION", "AUDIT_ACTION");
+		return readAuditColumnName(getEntityClass(), Auditable.COLUMN___AUDIT_WHAT__, "AUDIT_ACTION");
 	}
 	
 	protected String getAuditActorColumnName() {
-		return readAuditColumnName(getEntityClass(), "COLUMN_AUDIT_ACTOR", "AUDIT_ACTEUR");
+		return readAuditColumnName(getEntityClass(), Auditable.COLUMN___AUDIT_WHO__, "AUDIT_ACTEUR");
 	}
 	
 	protected String getAuditDateColumnName() {
-		return readAuditColumnName(getEntityClass(), "COLUMN_AUDIT_DATE", "AUDIT_DATE");
+		return readAuditColumnName(getEntityClass(), Auditable.COLUMN___AUDIT_WHEN__, "AUDIT_DATE");
 	}
 	
 	/**/

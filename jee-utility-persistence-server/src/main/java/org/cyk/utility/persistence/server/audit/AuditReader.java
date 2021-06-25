@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.object.marker.AuditableWhoDoneWhatWhen;
@@ -18,6 +19,7 @@ import org.cyk.utility.__kernel__.time.TimeHelper;
 import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.__kernel__.value.ValueConverter;
 import org.cyk.utility.__kernel__.value.ValueHelper;
+import org.cyk.utility.persistence.query.QueryExecutorArguments;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -186,6 +188,14 @@ public interface AuditReader {
 			return read(klass, new Arguments<T>().setFromDate(ValueConverter.getInstance().convert(fromDate, LocalDateTime.class))
 					.setToDate(ValueConverter.getInstance().convert(toDate, LocalDateTime.class)).setIsReadableByDates(Boolean.TRUE));
 		}
+		
+		/**/
+		
+		protected Class<?> getAuditClass(Class<?> klass) {
+			if(klass == null)
+				return null;
+			return ClassHelper.getByName(klass.getName()+"Audit",Boolean.FALSE);
+		}
 	}
 	
 	/**/
@@ -200,6 +210,8 @@ public interface AuditReader {
 		private String auditsRecordsCollectionFieldName;
 		private Boolean auditRecordIdentityComputable;
 		private LocalDateTime fromDate,toDate;
+		
+		private QueryExecutorArguments queryExecutorArguments;
 		
 		public Collection<Object> computeIdentifiers() {
 			Collection<Object> result = null;

@@ -23,10 +23,10 @@ import lombok.experimental.Accessors;
 
 @Entity @Table(name = DataAudited.TABLE_NAME) @Getter @Setter @Accessors(chain=true)
 @AttributeOverrides(value= {
-		@AttributeOverride(name = DataAudited.FIELD___AUDIT_WHO__,column = @Column(name=DataAudited.COLUMN_AUDIT_ACTOR))
-		,@AttributeOverride(name = DataAudited.FIELD___AUDIT_WHAT__,column = @Column(name=DataAudited.COLUMN_AUDIT_ACTION))
-		,@AttributeOverride(name = DataAudited.FIELD___AUDIT_WHEN__,column = @Column(name=DataAudited.COLUMN_AUDIT_DATE))
-		,@AttributeOverride(name = DataAudited.FIELD___AUDIT_FUNCTIONALITY__,column = @Column(name=DataAudited.COLUMN_AUDIT_FUNCTIONALITY))
+		@AttributeOverride(name = DataAudited.FIELD___AUDIT_WHO__,column = @Column(name=DataAudited.COLUMN___AUDIT_WHO__))
+		,@AttributeOverride(name = DataAudited.FIELD___AUDIT_WHAT__,column = @Column(name=DataAudited.COLUMN___AUDIT_WHAT__))
+		,@AttributeOverride(name = DataAudited.FIELD___AUDIT_WHEN__,column = @Column(name=DataAudited.COLUMN___AUDIT_WHEN__))
+		,@AttributeOverride(name = DataAudited.FIELD___AUDIT_FUNCTIONALITY__,column = @Column(name=DataAudited.COLUMN___AUDIT_FUNCTIONALITY__))
 })
 @AuditOverrides(value = {
 	@AuditOverride(forClass = AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableAuditedImpl.class)
@@ -58,9 +58,9 @@ public class DataAudited extends AbstractIdentifiableSystemScalarStringIdentifia
 	public static final String AUDIT_TABLE_NAME = TABLE_NAME+"_AUD";
 	
 	public static final String COLUMN_IDENTIFIER = "IDENTIFIER";
-	public static final String COLUMN_AUDIT_ACTOR = "AUDIT_ACTEUR";
-	public static final String COLUMN_AUDIT_FUNCTIONALITY = "AUDIT_FONCTIONNALITE";
-	public static final String COLUMN_AUDIT_ACTION = "AUDIT_ACTION";
-	public static final String COLUMN_AUDIT_DATE = "AUDIT_DATE";
+	public static final String COLUMN___AUDIT_WHO__ = "AUDIT_ACTEUR";
+	public static final String COLUMN___AUDIT_FUNCTIONALITY__ = "AUDIT_FONCTIONNALITE";
+	public static final String COLUMN___AUDIT_WHAT__ = "AUDIT_ACTION";
+	public static final String COLUMN___AUDIT_WHEN__ = "AUDIT_DATE";
 	
 }

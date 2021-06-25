@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.persistence.query.Filter;
+import org.cyk.utility.persistence.query.Querier;
 import org.cyk.utility.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.persistence.server.hibernate.annotation.Hibernate;
 import org.cyk.utility.persistence.server.hibernate.entity.AbstractAudit;
@@ -19,14 +20,15 @@ public class RuntimeQueryStringBuilderImpl extends RuntimeQueryStringBuilder.Abs
 		super.populatePredicate(arguments, builderArguments, predicate, filter);
 		if(Boolean.TRUE.equals(ClassHelper.isInstanceOf(arguments.getQuery().getTupleClass(),AbstractAudit.class)) 
 				&& arguments.getQuery().isIdentifierEqualsDynamic(arguments.getQuery().getTupleClass())) {
-			if(arguments.getFilterFieldValue("fromDate") != null) {
-				predicate.add("t."+AbstractAudit.FIELD___WHEN__+" >= :fromDate");
-				filter.addField("fromDate", arguments.getFilterFieldValue("fromDate"));
+			
+			if(arguments.getFilterFieldValue(Querier.PARAMETER_NAME_FROM_DATE) != null) {
+				predicate.add("t."+AbstractAudit.FIELD___AUDIT_WHEN__+" >= :"+Querier.PARAMETER_NAME_FROM_DATE);
+				filter.addField(Querier.PARAMETER_NAME_FROM_DATE, arguments.getFilterFieldValue(Querier.PARAMETER_NAME_FROM_DATE));
 			}
 			
-			if(arguments.getFilterFieldValue("toDate") != null) {
-				predicate.add("t."+AbstractAudit.FIELD___WHEN__+" <= :toDate");
-				filter.addField("toDate", arguments.getFilterFieldValue("toDate"));
+			if(arguments.getFilterFieldValue(Querier.PARAMETER_NAME_TO_DATE) != null) {
+				predicate.add("t."+AbstractAudit.FIELD___AUDIT_WHEN__+" <= :"+Querier.PARAMETER_NAME_TO_DATE);
+				filter.addField(Querier.PARAMETER_NAME_TO_DATE, arguments.getFilterFieldValue(Querier.PARAMETER_NAME_TO_DATE));
 			}
 		}
 	}
