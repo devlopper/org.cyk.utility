@@ -27,7 +27,7 @@ public abstract class AbstractAudit implements Serializable {
 	@Column(name=COLUMN___AUDIT_FUNCTIONALITY__)
 	protected String __auditFunctionality__;
 	
-	@Column(name=COLUMN___AUDIT_WHEN__)
+	@Column(name=COLUMN___AUDIT_WHEN__, columnDefinition = "TIMESTAMP")
 	protected LocalDateTime __auditWhen__;
 	
 	@Transient
@@ -44,6 +44,8 @@ public abstract class AbstractAudit implements Serializable {
 	public static final String FIELD___AUDIT_WHEN__ = "__auditWhen__";
 	public static final String FIELD___AUDIT_WHEN_AS_STRING__ = "__auditWhenAsString__";
 	public static final String FIELD___AUDIT_FUNCTIONALITY__ = "__auditFunctionality__";
+	
+	public static final String FIELDS___AUDITED__ = "__auditedFields__";
 	
 	/**/
 	

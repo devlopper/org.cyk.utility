@@ -1,6 +1,7 @@
 package org.cyk.utility.persistence.server;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.Helper;
@@ -33,8 +34,11 @@ public interface TransientFieldsProcessor {
 			Class<?> klass = arguments.klass;
 			if(klass == null)
 				klass = arguments.objects.iterator().next().getClass();
-			try {				
-				__process__(klass, arguments.objects,arguments.filter,arguments.fieldsNames);
+			try {
+				Collection<String> fieldsNames = CollectionHelper.isEmpty(arguments.fieldsNames) ? null : new ArrayList<String>(arguments.fieldsNames);
+				if(CollectionHelper.isNotEmpty(fieldsNames))
+					fieldsNames.remove(AuditableWhoDoneWhatWhen.FIELD___AUDIT_RECORDS__);
+				__process__(klass, arguments.objects,arguments.filter,fieldsNames);
 				if(CollectionHelper.contains(arguments.fieldsNames, AuditableWhoDoneWhatWhen.FIELD___AUDIT_RECORDS__))
 					__processAuditsRecords__(klass, arguments.objects,arguments.filter);
 			} catch (Exception exception) {

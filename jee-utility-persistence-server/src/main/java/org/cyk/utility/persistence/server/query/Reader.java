@@ -1,8 +1,6 @@
 package org.cyk.utility.persistence.server.query;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
@@ -29,7 +27,9 @@ public interface Reader<ENTITY,IDENTIFIER,RESULT> {
 			String queryName = getQueryName();
 			ThrowableHelper.throwIllegalArgumentExceptionIfBlank("query name", queryName);			
 			queryIdentifier = QueryIdentifierBuilder.getInstance().build(entityClass, queryName);
-			if(QUERIES_IDENTIFIERS.contains(queryIdentifier))
+			//if(QUERIES_IDENTIFIERS.contains(queryIdentifier))
+			//	return;
+			if(Boolean.TRUE.equals(QueryManager.getInstance().isQueryRegistered(queryIdentifier)))
 				return;
 			//EntityManagerFactory entityManagerFactory = EntityManagerFactoryGetter.getInstance().get();			
 			String queryValue = getQueryValue();
@@ -38,7 +38,7 @@ public interface Reader<ENTITY,IDENTIFIER,RESULT> {
 			//		? entityManagerFactory.createEntityManager().createNativeQuery(queryValue) : entityManagerFactory.createEntityManager().createQuery(queryValue));
 			QueryManager.getInstance().register(new Query().setIdentifier(queryIdentifier).setValue(queryValue).setIsNative(getIsNativeQuery()));
 			//namedQueryRegistered = Boolean.TRUE;
-			QUERIES_IDENTIFIERS.add(queryIdentifier);
+			//QUERIES_IDENTIFIERS.add(queryIdentifier);
 		}
 		
 		protected Class<ENTITY> getEntityClass() {
@@ -57,10 +57,10 @@ public interface Reader<ENTITY,IDENTIFIER,RESULT> {
 	}
 	
 	/**/
-	
+	/*
 	Set<String> QUERIES_IDENTIFIERS = new HashSet<>();
 	
 	static void clear() {
 		QUERIES_IDENTIFIERS.clear();
-	}
+	}*/
 }

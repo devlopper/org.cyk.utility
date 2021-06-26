@@ -3,6 +3,7 @@ package org.cyk.utility.__kernel__.time;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -67,6 +68,10 @@ public interface TimeHelper {
 		return formatLocalDateTime(localDateTime, "dd/MM/yyyy à HH:mm:ss");
 	}
 	
+	static String formatLocalDateTimeTillMillisecond(LocalDateTime localDateTime) {
+		return formatLocalDateTime(localDateTime, "dd/MM/yyyy à HH:mm:ss.SSS");
+	}
+	
 	static String formatLocalDate(LocalDate localDate,String pattern) {
 		if(localDate == null)
 			return null;
@@ -89,5 +94,23 @@ public interface TimeHelper {
 		if(date == null)
 			return null;
 		return date.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli();
+	}
+
+	static Date convertLocalDateToDate(LocalDate localDate) {
+		if(localDate == null)
+			return null;
+		return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+	}
+	
+	static Date convertLocalDateTimeToDate(LocalDateTime localDateTime) {
+		if(localDateTime == null)
+			return null;
+		return Date.from(localDateTime.toInstant(ZoneOffset.UTC));
+	}
+	
+	static Date convertLocalTimeToDate(LocalTime localTime) {
+		if(localTime == null)
+			return null;
+		return Date.from(localTime.atDate(LocalDate.now()).atZone(ZoneId.systemDefault()).toInstant());
 	}
 }

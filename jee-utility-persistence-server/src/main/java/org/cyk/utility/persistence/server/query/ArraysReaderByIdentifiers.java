@@ -26,6 +26,10 @@ public interface ArraysReaderByIdentifiers<ENTITY,IDENTIFIER> extends Reader<ENT
 	void set(Collection<ENTITY> entities,Collection<Object[]> arrays);
 	
 	void readThenSet(Collection<ENTITY> entities,Map<String,Object> parameters);
+	
+	<T> Collection<T> readByIdentifiersThenInstantiate(Class<T> klass,Collection<IDENTIFIER> identifiers,Map<String,Object> parameters);
+	<T> Collection<T> readByIdentifiersThenInstantiate(Class<T> klass,Map<String,Object> parameters,IDENTIFIER...identifiers);
+	
 	Collection<ENTITY> readByIdentifiersThenInstantiate(Collection<IDENTIFIER> identifiers,Map<String,Object> parameters);
 	Collection<ENTITY> readByIdentifiersThenInstantiate(Map<String,Object> parameters,IDENTIFIER...identifiers);
 	
@@ -89,7 +93,11 @@ public interface ArraysReaderByIdentifiers<ENTITY,IDENTIFIER> extends Reader<ENT
 		}
 		
 		protected void __set__(ENTITY entity,Object[] array) {
-			LogHelper.logWarning("instantiate not yet implemented", getClass());
+			LogHelper.logWarning("set "+getEntityClass()+" not yet implemented", getClass());
+		}
+		
+		protected void __setObject__(Object object,Object[] array) {
+			LogHelper.logWarning("set object not yet implemented", getClass());
 		}
 		
 		@Override
@@ -122,21 +130,39 @@ public interface ArraysReaderByIdentifiers<ENTITY,IDENTIFIER> extends Reader<ENT
 		}
 		
 		@Override
-		public Collection<ENTITY> readByIdentifiersThenInstantiate(Collection<IDENTIFIER> identifiers,Map<String, Object> parameters) {
+		public <T> Collection<T> readByIdentifiersThenInstantiate(Class<T> klass, Collection<IDENTIFIER> identifiers,Map<String, Object> parameters) {
+			if(klass == null || CollectionHelper.isEmpty(identifiers))
+				return null;
 			Collection<Object[]> arrays = readByIdentifiers(identifiers, parameters);
 			if(CollectionHelper.isEmpty(arrays))
 				return null;
-			Collection<ENTITY> collection = null;
+			Collection<T> collection = null;
+			Class<?> entityClass = getEntityClass();
 			for(Object[] array : arrays) {
 				if(array == null)
 					continue;
-				ENTITY entity = ClassHelper.instanciate(getEntityClass());
-				__set__(entity, array);
+				T object = ClassHelper.instanciate(klass);
+				if(klass.equals(entityClass))
+					__set__((ENTITY) object, array);
+				else
+					__setObject__(object, array);
 				if(collection == null)
 					collection = new ArrayList<>();
-				collection.add(entity);
+				collection.add(object);
 			}
 			return collection;
+		}
+		
+		@Override
+		public <T> Collection<T> readByIdentifiersThenInstantiate(Class<T> klass, Map<String, Object> parameters,IDENTIFIER... identifiers) {
+			if(klass == null || ArrayHelper.isEmpty(identifiers))
+				return null;
+			return readByIdentifiersThenInstantiate(klass,CollectionHelper.listOf(Boolean.TRUE, identifiers), parameters);
+		}
+		
+		@Override
+		public Collection<ENTITY> readByIdentifiersThenInstantiate(Collection<IDENTIFIER> identifiers,Map<String, Object> parameters) {
+			return readByIdentifiersThenInstantiate(getEntityClass(), identifiers, parameters);
 		}
 		
 		@Override

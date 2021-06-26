@@ -73,8 +73,11 @@ public interface EntityCreator {
 				for(Object index : arguments.getObjects())
 					entityManager.persist(index);
 			}	
-			if(Boolean.TRUE.equals(arguments.getIsTransactional()))
+			if(Boolean.TRUE.equals(arguments.getIsTransactional())) {
+				//entityManager.flush();
+				//entityManager.clear();
 				entityManager.getTransaction().commit();
+			}
 		}
 		
 		@Override

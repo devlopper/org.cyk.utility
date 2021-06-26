@@ -25,8 +25,11 @@ public interface EntityUpdater {
 		for(Object index : arguments.getObjects()) {
 			entityManager.merge(index);
 		}
-		if(Boolean.TRUE.equals(arguments.getIsTransactional()))
-			entityManager.getTransaction().commit();
+		if(Boolean.TRUE.equals(arguments.getIsTransactional())) {
+			//entityManager.flush();
+			//entityManager.clear();
+			entityManager.getTransaction().commit();			
+		}
 	}
 	
 	default void updateMany(Collection<Object> objects,EntityManager entityManager) {

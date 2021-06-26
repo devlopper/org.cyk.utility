@@ -45,6 +45,8 @@ public interface QueryManager {
 	
 	Query getByIdentifier(String identifier);
 	
+	Boolean isQueryRegistered(String identifier);
+	
 	void clear();
 	
 	@Getter @Setter @Accessors(chain=true)
@@ -165,6 +167,11 @@ public interface QueryManager {
 				if(identifier.equals(query.getIdentifier()))
 					return query;
 			return null;
+		}
+		
+		@Override
+		public Boolean isQueryRegistered(String identifier) {
+			return getByIdentifier(identifier) != null;
 		}
 		
 		@Override

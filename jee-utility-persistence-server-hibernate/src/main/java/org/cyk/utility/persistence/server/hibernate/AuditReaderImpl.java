@@ -17,6 +17,7 @@ import org.cyk.utility.persistence.query.Querier;
 import org.cyk.utility.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.persistence.server.audit.AuditReader;
 import org.cyk.utility.persistence.server.hibernate.annotation.Hibernate;
+import org.cyk.utility.persistence.server.hibernate.entity.AbstractAudit;
 import org.cyk.utility.persistence.server.query.executor.DynamicManyExecutor;
 import org.hibernate.envers.AuditReaderFactory;
 
@@ -83,6 +84,7 @@ public class AuditReaderImpl extends AuditReader.AbstractImpl implements Seriali
 		QueryExecutorArguments queryExecutorArguments = arguments.getQueryExecutorArguments();
 		if(queryExecutorArguments == null)
 			queryExecutorArguments = new QueryExecutorArguments();
+		queryExecutorArguments.addProcessableTransientFieldsNames(AbstractAudit.FIELDS___AUDITED__);
 		if(fromDate != null)
 			queryExecutorArguments.addFilterField(Querier.PARAMETER_NAME_FROM_DATE,fromDate);
 		if(toDate != null)
@@ -93,17 +95,21 @@ public class AuditReaderImpl extends AuditReader.AbstractImpl implements Seriali
 		return convert(klass, queryExecutorArguments, __collection__);
 	}
 	
-	private <T> Collection<T> convert(Class<T> klass,QueryExecutorArguments queryExecutorArguments,Collection<?> __collection__) {
+	protected <T> Collection<T> convert(Class<T> klass,QueryExecutorArguments queryExecutorArguments,Collection<?> audits) {
 		Collection<T> collection = new ArrayList<>();
-		Collection<String> fieldsNames = getConvertableFieldsNames(klass, queryExecutorArguments, __collection__);
+		Collection<String> fieldsNames = getConvertableFieldsNames(klass, queryExecutorArguments, audits);
 		if(CollectionHelper.isEmpty(fieldsNames))
 			return null;
-		for(Object index : __collection__) {
-			T instance = ClassHelper.instanciate(klass);
-			InstanceCopier.getInstance().copy(index, instance,fieldsNames);
-			collection.add(instance);
+		for(Object audit : audits) {
+			T entity = ClassHelper.instanciate(klass);
+			copyAuditToEntity(klass, audit, entity,fieldsNames);			
+			collection.add(entity);
 		}
 		return collection;
+	}
+	
+	protected void copyAuditToEntity(Class<?> entityClass,Object audit,Object entity,Collection<String> fieldsNames) {
+		InstanceCopier.getInstance().copy(audit, entity,fieldsNames);
 	}
 	
 	private <T> Collection<String> getConvertableFieldsNames(Class<T> klass,QueryExecutorArguments queryExecutorArguments,Collection<?> __collection__) {
@@ -112,6 +118,9 @@ public class AuditReaderImpl extends AuditReader.AbstractImpl implements Seriali
 			fieldsNames.addAll(queryExecutorArguments.getProjections().stream().map(p -> p.getFieldName()).collect(Collectors.toList()));
 		if(CollectionHelper.isNotEmpty(queryExecutorArguments.getProcessableTransientFieldsNames()))
 			fieldsNames.addAll(queryExecutorArguments.getProcessableTransientFieldsNames());
+		fieldsNames.remove(AbstractAudit.FIELDS___AUDITED__);
+		/*fieldsNames.addAll(List.of(AbstractAudit.FIELD___AUDIT_WHO__,AbstractAudit.FIELD___AUDIT_FUNCTIONALITY__,AbstractAudit.FIELD___AUDIT_WHAT__
+				,AbstractAudit.FIELD___AUDIT_WHEN_AS_STRING__));*/
 		return fieldsNames;
 	}
 }

@@ -1,12 +1,17 @@
 package org.cyk.utility.persistence.server.query;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Map;
 import java.util.logging.Level;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TemporalType;
 import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 
@@ -14,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.SortOrder;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
@@ -212,9 +218,10 @@ public class QueryExecutorImpl extends AbstractObject implements QueryExecutor,S
 		
 		if(MapHelper.isNotEmpty(parameters))
 			for(Map.Entry<Object,Object> entry : parameters.entrySet()) {
-				if(entry.getKey() instanceof String) {
+				setQueryParameter(typedQuery, entry.getKey(), entry.getValue());
+				/*if(entry.getKey() instanceof String) {
 					typedQuery.setParameter((String) entry.getKey(), entry.getValue());
-				}
+				}*/
 			}
 		if(MapHelper.isNotEmpty(hints)) {
 			for(Map.Entry<String,Object> entry : hints.entrySet())			
@@ -235,11 +242,41 @@ public class QueryExecutorImpl extends AbstractObject implements QueryExecutor,S
 		
 		if(MapHelper.isNotEmpty(parameters))
 			for(Map.Entry<Object,Object> entry : parameters.entrySet()) {
-				if(entry.getKey() instanceof String) {
+				setQueryParameter(__query__, entry.getKey(), entry.getValue());
+				/*if(entry.getKey() instanceof String) {
 					__query__.setParameter((String) entry.getKey(), entry.getValue());
 				}
+				*/
 			}
 		
 		return __query__;
+	}
+	
+	protected void setQueryParameter(javax.persistence.Query query,Object name,Object value) {
+		if(!(name instanceof String))
+			return;
+		query.setParameter((String)name, value);
+		/*
+		if(value != null && Boolean.TRUE.equals(ClassHelper.isInstanceOfOne(value.getClass(), Date.class,LocalDateTime.class, LocalDate.class, LocalTime.class))) {
+			TemporalType temporalType = null;
+			Date date = null;			
+			if(value instanceof LocalDate) {
+				temporalType = TemporalType.DATE;
+				date = TimeHelper.convertLocalDateToDate((LocalDate) value);
+			}else if(value instanceof LocalTime) {
+				temporalType = TemporalType.TIME;
+				date = TimeHelper.convertLocalTimeToDate((LocalTime) value);
+			} else if(value instanceof LocalDateTime) {
+				temporalType = TemporalType.DATE;
+				date = TimeHelper.convertLocalDateTimeToDate((LocalDateTime) value);
+			}else {
+				temporalType = TemporalType.TIMESTAMP;
+				date = (Date) value;
+			}
+			query.setParameter((String)name, value,temporalType);			
+		}else {
+			query.setParameter((String)name, value);
+		}
+		*/
 	}
 }

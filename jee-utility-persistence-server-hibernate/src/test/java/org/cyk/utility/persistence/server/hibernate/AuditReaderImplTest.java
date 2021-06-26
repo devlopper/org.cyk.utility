@@ -23,4 +23,6 @@ public class AuditReaderImplTest extends org.cyk.utility.persistence.server.hibe
 			return (AbstractAuditsRecordsByRevisionsNumbersNativeReader<T>) new DataAuditedAuditsRecordsByRevisionsNumbersNativeReader();
 		return super.getAuditsRecordsByRevisionsNumbersNativeReader(klass, arguments, identifier, numbers);
 	}
+	
+	
 }

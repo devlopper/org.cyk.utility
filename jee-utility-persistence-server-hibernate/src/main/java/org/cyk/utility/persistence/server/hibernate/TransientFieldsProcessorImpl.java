@@ -23,16 +23,16 @@ public class TransientFieldsProcessorImpl extends org.cyk.utility.persistence.se
 
 	public void processAuditsRecords(Class<AbstractAuditIdentifiedByString> klass,Collection<?> auditsRecords,Filter filter, Collection<String> fieldsNames) {
 		for(String fieldName : fieldsNames) {
-			if(AbstractAudit.FIELD___AUDIT_WHEN_AS_STRING__.equals(fieldName)) {
-				AbstractAuditIdentifiedByStringWhensReader<AbstractAuditIdentifiedByString> reader = getAuditsRecordsWhensReader(klass);
+			if(AbstractAudit.FIELDS___AUDITED__.equals(fieldName)) {
+				AbstractAuditIdentifiedByStringReader<AbstractAuditIdentifiedByString> reader = getAuditsRecordsReader(klass);
 				if(reader == null)
-					throw new RuntimeException("No audits records whens reader defined for "+klass);
+					throw new RuntimeException("No audits records reader defined for "+klass);
 				reader.readThenSet(CollectionHelper.cast(AbstractAuditIdentifiedByString.class, auditsRecords), null);
 			}
 		}
 	}
 	
-	protected <T extends AbstractAuditIdentifiedByString> AbstractAuditIdentifiedByStringWhensReader<T> getAuditsRecordsWhensReader(Class<T> klass) {
+	protected <T extends AbstractAuditIdentifiedByString> AbstractAuditIdentifiedByStringReader<T> getAuditsRecordsReader(Class<T> klass) {
 		return null;
 	}
 }

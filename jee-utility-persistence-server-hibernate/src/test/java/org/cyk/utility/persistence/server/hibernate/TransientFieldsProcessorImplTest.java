@@ -8,9 +8,9 @@ public class TransientFieldsProcessorImplTest extends org.cyk.utility.persistenc
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected <T extends AbstractAuditIdentifiedByString> AbstractAuditIdentifiedByStringWhensReader<T> getAuditsRecordsWhensReader(Class<T> klass) {
+	protected <T extends AbstractAuditIdentifiedByString> AbstractAuditIdentifiedByStringReader<T> getAuditsRecordsReader(Class<T> klass) {
 		if(DataAuditedAudit.class.equals(klass))
-			return (AbstractAuditIdentifiedByStringWhensReader<T>) new DataAuditedAuditWhensReader();
-		return super.getAuditsRecordsWhensReader(klass);
+			return (AbstractAuditIdentifiedByStringReader<T>) new DataAuditedAuditReader();
+		return super.getAuditsRecordsReader(klass);
 	}
 }
