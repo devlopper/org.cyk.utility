@@ -11,6 +11,8 @@ import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.object.marker.AuditableWhoDoneWhatWhen;
 import org.cyk.utility.__kernel__.time.TimeHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
+import org.cyk.utility.persistence.query.EntityCounter;
 import org.cyk.utility.persistence.query.EntityCreator;
 import org.cyk.utility.persistence.query.EntityFinder;
 import org.cyk.utility.persistence.query.EntityReader;
@@ -67,12 +69,10 @@ public class AuditUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void readAudits(){
+		assertAudit(null,null,0);
 		List<LocalDateTime> dateTimes = new ArrayList<>();
 		String identifier = "d01";
-		Collection<DataAudited> histories = null;
 		pause(dateTimes, 100);
-		histories = AuditReader.getInstance().readByDates(DataAudited.class, null, null);
-		assertThat(histories).isNull();
 		
 		DataAudited data = new DataAudited().setCode(identifier);
 		pause(dateTimes, 100);
@@ -102,20 +102,27 @@ public class AuditUnitTest extends AbstractUnitTest {
 	/**/
 	
 	private void assertAudit(LocalDateTime fromDate,LocalDateTime toDate,Integer expectedCount) {
-		QueryExecutorArguments queryExecutorArguments = new QueryExecutorArguments()
-				.addProjectionsFromStrings(DataAuditedAudit.FIELD_IDENTIFIER,DataAuditedAudit.FIELD_CODE,DataAuditedAudit.FIELD_NAME)
+		QueryExecutorArguments queryExecutorArguments = new QueryExecutorArguments().setIsProcessableAsAuditByDates(Boolean.TRUE)
+				.addProjectionsFromStrings(DataAuditedAudit.FIELD_IDENTIFIER,DataAuditedAudit.FIELD_CODE,DataAuditedAudit.FIELD_NAME
+						,DataAuditedAudit.FIELD___AUDIT_REVISION__)
 				.addProcessableTransientFieldsNames(DataAuditedAudit.FIELD___AUDIT_WHEN_AS_STRING__);
-		Collection<DataAudited> histories = AuditReader.getInstance().read(DataAudited.class,new AuditReader.Arguments<DataAudited>()
-				.setFromDate(fromDate).setToDate(toDate).setIsReadableByDates(Boolean.TRUE).setQueryExecutorArguments(queryExecutorArguments));
+		if(fromDate != null)
+			queryExecutorArguments.addFilterField(Querier.PARAMETER_NAME_FROM_DATE, fromDate);
+		if(toDate != null)
+			queryExecutorArguments.addFilterField(Querier.PARAMETER_NAME_TO_DATE, toDate);
+		Collection<DataAudited> audits = EntityReader.getInstance().readMany(DataAudited.class, queryExecutorArguments);
 		
-		assertThat(CollectionHelper.getSize(histories)).isEqualTo(expectedCount);
+		Long count = ValueHelper.defaultToIfNull(EntityCounter.getInstance().count(DataAudited.class, queryExecutorArguments),0l);
 		
-		if(CollectionHelper.isNotEmpty(histories)) {
-			histories.forEach(history -> {
-				assertThat(history.getIdentifier()).as("identifier is null").isNotNull();
-				assertThat(history.getCode()).as("code is null").isNotNull();
-				assertThat(history.getName()).as("name is null").isNotNull();
-				assertThat(history.get__auditWhenAsString__()).as("when as string is null").isNotNull();				
+		assertThat(CollectionHelper.getSize(audits)).as("collection size is not equal").isEqualTo(expectedCount);
+		assertThat(count.intValue()).as("count is not equal").isEqualTo(expectedCount);
+		
+		if(CollectionHelper.isNotEmpty(audits)) {
+			audits.forEach(audit -> {
+				assertThat(audit.getIdentifier()).as("identifier is null").isNotNull();
+				assertThat(audit.getCode()).as("code is null").isNotNull();
+				assertThat(audit.getName()).as("name is null").isNotNull();
+				assertThat(audit.get__auditWhenAsString__()).as("when as string is null").isNotNull();
 			});
 		}
 	}

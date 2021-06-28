@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.annotation.Test;
+import org.cyk.utility.persistence.server.audit.Arguments;
 
 @Test
 public class AuditReaderImplTest extends org.cyk.utility.persistence.server.hibernate.AuditReaderImpl implements Serializable {

@@ -20,6 +20,8 @@ import org.cyk.utility.persistence.query.QueryIdentifierBuilder;
 import org.cyk.utility.persistence.query.QueryName;
 import org.cyk.utility.persistence.query.QueryParameterNameBuilder;
 import org.cyk.utility.persistence.query.QueryValueBuilder;
+import org.cyk.utility.persistence.server.audit.Arguments;
+import org.cyk.utility.persistence.server.audit.AuditReader;
 import org.cyk.utility.persistence.server.query.string.QueryStringBuilder;
 
 public class EntityReaderImpl extends EntityReader.AbstractImpl implements Serializable {
@@ -30,7 +32,9 @@ public class EntityReaderImpl extends EntityReader.AbstractImpl implements Seria
 		if(tupleClass == null)
 			throw new RuntimeException("Tuple class is required");
 		if(arguments == null)
-			arguments = new QueryExecutorArguments();
+			arguments = new QueryExecutorArguments();		
+		if(Boolean.TRUE.equals(arguments.getIsProcessableAsAuditByDates()))
+			return readAudits(tupleClass, arguments);
 		if(arguments.getQuery() == null) {
 			String queryIdentifier = QueryHelper.getIdentifierReadAll(tupleClass);
 			arguments.setQuery(QueryGetter.getInstance().get(queryIdentifier));
@@ -38,6 +42,10 @@ public class EntityReaderImpl extends EntityReader.AbstractImpl implements Seria
 				arguments.setQuery(QueryGetter.getInstance().getBySelect(tupleClass, QueryName.READ.getValue(),QueryValueBuilder.getInstance().buildSelect(tupleClass)));
 		}
 		return QueryExecutor.getInstance().executeReadMany(tupleClass, arguments);
+	}
+	
+	protected <T> Collection<T> readAudits(Class<T> tupleClass,QueryExecutorArguments arguments) {
+		return AuditReader.getInstance().read(tupleClass,new Arguments<T>().setIsReadableByDates(Boolean.TRUE).setQueryExecutorArguments(arguments));
 	}
 	
 	@Override

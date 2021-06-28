@@ -33,10 +33,9 @@ public abstract class AbstractIdentifiableSystemScalarStringIdentifiableBusiness
 	@Column(name="audit_event_when")
 	protected LocalDateTime __auditWhen__;
 	
-	@Transient
-	protected Long __auditWhenAsTimestamp__;
-	@Transient
-	protected String __auditWhenAsString__;
+	@Transient protected Integer __auditRevision__;	
+	@Transient protected Long __auditWhenAsTimestamp__;
+	@Transient protected String __auditWhenAsString__;
 	
 	public static final String FIELD___AUDIT_WHO__ = "__auditWho__";
 	public static final String FIELD___AUDIT_WHAT__ = "__auditWhat__";

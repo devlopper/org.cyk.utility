@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
-import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.object.marker.AuditableWhoDoneWhatWhen;
@@ -19,11 +18,6 @@ import org.cyk.utility.__kernel__.time.TimeHelper;
 import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.__kernel__.value.ValueConverter;
 import org.cyk.utility.__kernel__.value.ValueHelper;
-import org.cyk.utility.persistence.query.QueryExecutorArguments;
-
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 
 public interface AuditReader {
 
@@ -42,19 +36,18 @@ public interface AuditReader {
 				return null;
 			Collection<T> collection = __read__(klass, arguments);
 			if(CollectionHelper.isNotEmpty(collection)) {
-				Boolean auditRecordIdentityComputable = ValueHelper.defaultToIfNull(arguments.auditRecordIdentityComputable, Boolean.TRUE);
+				Boolean auditRecordIdentityComputable = ValueHelper.defaultToIfNull(arguments.getAuditRecordIdentityComputable(), Boolean.TRUE);
 				if(Boolean.TRUE.equals(auditRecordIdentityComputable))
 					computeIdentities(klass, arguments, collection);
-				if(CollectionHelper.isNotEmpty(arguments.identifiables)) {
-					String auditsRecordsCollectionFieldName = arguments.auditsRecordsCollectionFieldName;
+				if(CollectionHelper.isNotEmpty(arguments.getIdentifiables())) {
+					String auditsRecordsCollectionFieldName = arguments.getAuditsRecordsCollectionFieldName();
 					if(StringHelper.isBlank(auditsRecordsCollectionFieldName))
 						auditsRecordsCollectionFieldName = AuditableWhoDoneWhatWhen.FIELD___AUDIT_RECORDS__;
-					if(Boolean.TRUE.equals(arguments.auditsRecordsCollectionSettable))
+					if(Boolean.TRUE.equals(arguments.getAuditsRecordsCollectionSettable()))
 						__setAuditsRecordsCollection__(klass, arguments, collection,auditsRecordsCollectionFieldName);
-					__process__(klass, arguments.identifiables,auditsRecordsCollectionFieldName);
+					__process__(klass, arguments.getIdentifiables(),auditsRecordsCollectionFieldName);
 				}
-			}
-			
+			}			
 			return collection;
 		}
 		
@@ -64,9 +57,9 @@ public interface AuditReader {
 			if(arguments.getIsReadableByIdentifiers() == null)
 				arguments.setIsReadableByIdentifiers(CollectionHelper.isNotEmpty(identifiers));
 			if(arguments.getIsReadableByDates() == null)
-				arguments.setIsReadableByDates(arguments.fromDate != null || arguments.toDate != null);
+				arguments.setIsReadableByDates(arguments.getFromDate() != null || arguments.getToDate() != null);
 			
-			if(Boolean.TRUE.equals(arguments.isReadableByIdentifiers) && !Boolean.TRUE.equals(arguments.isReadableByDates)) {
+			if(Boolean.TRUE.equals(arguments.getIsReadableByIdentifiers()) && !Boolean.TRUE.equals(arguments.getIsReadableByDates())) {
 				Collection<T> result = __readByIdentifiers__(klass, arguments,identifiers);
 				if(CollectionHelper.isNotEmpty(result)) {
 					if(collection == null)
@@ -75,8 +68,8 @@ public interface AuditReader {
 				}
 			}
 			
-			if(Boolean.TRUE.equals(arguments.isReadableByDates) && !Boolean.TRUE.equals(arguments.isReadableByIdentifiers)) {
-				Collection<T> result = __readByDates__(klass, arguments,arguments.fromDate,arguments.toDate);
+			if(Boolean.TRUE.equals(arguments.getIsReadableByDates()) && !Boolean.TRUE.equals(arguments.getIsReadableByIdentifiers())) {
+				Collection<T> result = __readByDates__(klass, arguments,arguments.getFromDate(),arguments.getToDate());
 				if(CollectionHelper.isNotEmpty(result)) {
 					if(collection == null)
 						collection = new ArrayList<>();
@@ -84,12 +77,16 @@ public interface AuditReader {
 				}
 			}
 			
+			if(arguments.getAuditsRecordsCollectionSettable() == null && !Boolean.TRUE.equals(arguments.getIsReadableByIdentifiers()) 
+					&& Boolean.TRUE.equals(arguments.getIsReadableByDates()))
+				arguments.setAuditsRecordsCollectionSettable(Boolean.FALSE);
+			
 			if(CollectionHelper.isNotEmpty(collection)) {
 				for(T index : collection) {
 					if(index instanceof AuditableWhoDoneWhatWhen) {
 						AuditableWhoDoneWhatWhen auditableWhoDoneWhatWhen = (AuditableWhoDoneWhatWhen) index;
 						if(auditableWhoDoneWhatWhen.get__auditWhen__() != null) {
-							auditableWhoDoneWhatWhen.set__auditWhenAsString__(TimeHelper.formatLocalDateTimeTillSecond(auditableWhoDoneWhatWhen.get__auditWhen__()));
+							auditableWhoDoneWhatWhen.set__auditWhenAsString__(TimeHelper.formatLocalDateTimeTillMillisecond(auditableWhoDoneWhatWhen.get__auditWhen__()));
 						}
 					}
 				}
@@ -135,7 +132,7 @@ public interface AuditReader {
 		}
 		
 		protected <T> void __setAuditsRecordsCollection__(Class<T> klass, Arguments<T> arguments,Collection<T> collection,String auditsRecordsCollectionFieldName) {
-			for(T identifiable : arguments.identifiables) {
+			for(T identifiable : arguments.getIdentifiables()) {
 				Object identifier = FieldHelper.readSystemIdentifier(identifiable);
 				if(identifier == null)
 					continue;
@@ -188,49 +185,9 @@ public interface AuditReader {
 			return read(klass, new Arguments<T>().setFromDate(ValueConverter.getInstance().convert(fromDate, LocalDateTime.class))
 					.setToDate(ValueConverter.getInstance().convert(toDate, LocalDateTime.class)).setIsReadableByDates(Boolean.TRUE));
 		}
-		
-		/**/
-		
-		protected Class<?> getAuditClass(Class<?> klass) {
-			if(klass == null)
-				return null;
-			return ClassHelper.getByName(klass.getName()+"Audit",Boolean.FALSE);
-		}
 	}
 	
 	/**/
-	
-	@Getter @Setter @Accessors(chain=true)
-	public static class Arguments<T> extends AbstractObject implements Serializable {
-		private Class<?> klass;
-		private Boolean isReadableByIdentifiers,isReadableByDates;
-		private Collection<Object> identifiers;
-		private Collection<T> identifiables;
-		private Boolean auditsRecordsCollectionSettable;
-		private String auditsRecordsCollectionFieldName;
-		private Boolean auditRecordIdentityComputable;
-		private LocalDateTime fromDate,toDate;
-		
-		private QueryExecutorArguments queryExecutorArguments;
-		
-		public Collection<Object> computeIdentifiers() {
-			Collection<Object> result = null;
-			if(CollectionHelper.isNotEmpty(identifiers)) {
-				if(result == null)
-					result = new ArrayList<>();
-				result.addAll(identifiers);
-			}
-			if(CollectionHelper.isNotEmpty(identifiables)) {
-				Collection<Object> _identifiers_ = FieldHelper.readSystemIdentifiers(identifiables);
-				if(CollectionHelper.isNotEmpty(_identifiers_)) {
-					if(result == null)
-						result = new ArrayList<>();
-					result.addAll(_identifiers_);
-				}				
-			}
-			return result;
-		}
-	}
 	
 	/**/
 	

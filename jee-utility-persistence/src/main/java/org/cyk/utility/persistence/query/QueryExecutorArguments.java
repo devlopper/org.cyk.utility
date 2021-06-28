@@ -41,6 +41,7 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 	private Map<Object,Object> parameters;
 	private PropertiesArguments properties;
 	private Map<String,Object> hints;
+	private Boolean isProcessableAsAuditByDates;
 	private Boolean collectionable;
 	private Boolean isResultCachable;
 	private Boolean isResultProcessable;
@@ -527,6 +528,7 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 		private Boolean isResultCachable;
 		private Boolean collectionable;
 		private Boolean loggableAsInfo;
+		private Boolean isProcessableAsAuditByDates;
 		
 		private Boolean queryBuildableAtRuntime;
 		

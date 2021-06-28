@@ -18,6 +18,10 @@ public interface DataAuditedQuerier extends Querier.CodableAndNamable<DataAudite
 	String QUERY_IDENTIFIER_READ_DYNAMIC_ONE = QueryIdentifierBuilder.getInstance().build(DataAudited.class, QueryName.READ_DYNAMIC_ONE);
 	String QUERY_IDENTIFIER_COUNT_DYNAMIC = QueryIdentifierBuilder.getInstance().build(DataAudited.class, QueryName.COUNT_DYNAMIC);
 	
+	String QUERY_IDENTIFIER_READ_AUDIT = QueryIdentifierBuilder.getInstance().build(DataAudited.class, QueryName.READ_AUDIT);	
+	String QUERY_IDENTIFIER_READ_AUDIT_ONE = QueryIdentifierBuilder.getInstance().build(DataAudited.class, QueryName.READ_AUDIT_ONE);
+	String QUERY_IDENTIFIER_COUNT_AUDIT = QueryIdentifierBuilder.getInstance().build(DataAudited.class, QueryName.COUNT_AUDIT);
+	
 	/**/
 	
 	public static abstract class AbstractImpl extends Querier.CodableAndNamable.AbstractImpl<DataAudited> implements DataAuditedQuerier,Serializable {

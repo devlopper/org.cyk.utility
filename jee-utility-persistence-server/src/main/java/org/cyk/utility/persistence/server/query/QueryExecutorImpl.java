@@ -1,17 +1,12 @@
 package org.cyk.utility.persistence.server.query;
 
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Map;
 import java.util.logging.Level;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TemporalType;
 import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 
@@ -19,7 +14,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.SortOrder;
-import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;

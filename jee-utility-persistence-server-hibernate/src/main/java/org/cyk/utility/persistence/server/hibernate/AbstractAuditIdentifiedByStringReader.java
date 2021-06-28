@@ -22,7 +22,8 @@ public abstract class AbstractAuditIdentifiedByStringReader<ENTITY extends Abstr
 	}
 	
 	protected void setProjections(QueryStringBuilder.Arguments arguments) {
-		arguments.getProjection(Boolean.TRUE).addFromTuple("t",AbstractAuditIdentifiedByString.FIELD_IDENTIFIER,AbstractAudit.FIELD___AUDIT_WHEN__);
+		arguments.getProjection(Boolean.TRUE).addFromTuple("t",AbstractAuditIdentifiedByString.FIELD_IDENTIFIER,AbstractAudit.FIELD___AUDIT_REVISION__
+				,AbstractAudit.FIELD___AUDIT_WHEN__);
 	}
 	
 	protected void setTuple(QueryStringBuilder.Arguments arguments) {
@@ -39,9 +40,8 @@ public abstract class AbstractAuditIdentifiedByStringReader<ENTITY extends Abstr
 	
 	@Override
 	protected void __set__(ENTITY entity, Object[] array) {
-		int i = 1;
+		int i = 2;
 		entity.set__auditWhenAsString__(TimeHelper.formatLocalDateTimeTillMillisecond((LocalDateTime) array[i]));
-		array[i++] = null;
 		__set__(entity, array, i);
 	}
 	
@@ -51,6 +51,6 @@ public abstract class AbstractAuditIdentifiedByStringReader<ENTITY extends Abstr
 	
 	@Override
 	protected Boolean isEntityArray(ENTITY entity, Object[] array) {
-		return Boolean.TRUE.equals(super.isEntityArray(entity, array)) && array[1] != null;
+		return Boolean.TRUE.equals(super.isEntityArray(entity, array)) && entity.get__auditRevision__().equals(array[1]);
 	}
 }

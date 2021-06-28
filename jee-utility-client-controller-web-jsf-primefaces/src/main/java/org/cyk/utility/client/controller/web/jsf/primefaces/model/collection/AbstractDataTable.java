@@ -548,7 +548,7 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 					map.put(Column.FIELD_VISIBLE, Boolean.FALSE);
 				}else if(AbstractDataIdentifiableSystemStringAuditedImpl.FIELD___AUDIT_WHEN_AS_STRING__.equals(fieldName)) {
 					map.put(Column.FIELD_HEADER_TEXT, "Date");		
-					map.put(Column.FIELD_WIDTH, "120");
+					map.put(Column.FIELD_WIDTH, "170");
 				}else if(AbstractDataIdentifiableSystemStringAuditedImpl.FIELD___AUDIT_WHO__.equals(fieldName)) {
 					map.put(Column.FIELD_HEADER_TEXT, "Opérateur");		
 				}

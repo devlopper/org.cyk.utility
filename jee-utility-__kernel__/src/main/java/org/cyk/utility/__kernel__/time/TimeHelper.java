@@ -69,7 +69,7 @@ public interface TimeHelper {
 	}
 	
 	static String formatLocalDateTimeTillMillisecond(LocalDateTime localDateTime) {
-		return formatLocalDateTime(localDateTime, "dd/MM/yyyy à HH:mm:ss.SSS");
+		return formatLocalDateTime(localDateTime, "dd/MM/yyyy à HH:mm:ss.S");
 	}
 	
 	static String formatLocalDate(LocalDate localDate,String pattern) {

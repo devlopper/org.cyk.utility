@@ -12,9 +12,12 @@ import java.util.stream.Collectors;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.instance.InstanceCopier;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.object.marker.AuditableWhoDoneWhatWhen;
 import org.cyk.utility.persistence.EntityManagerGetter;
 import org.cyk.utility.persistence.query.Querier;
 import org.cyk.utility.persistence.query.QueryExecutorArguments;
+import org.cyk.utility.persistence.server.audit.Arguments;
+import org.cyk.utility.persistence.server.audit.AuditClassGetter;
 import org.cyk.utility.persistence.server.audit.AuditReader;
 import org.cyk.utility.persistence.server.hibernate.annotation.Hibernate;
 import org.cyk.utility.persistence.server.hibernate.entity.AbstractAudit;
@@ -78,21 +81,28 @@ public class AuditReaderImpl extends AuditReader.AbstractImpl implements Seriali
 	@Override
 	protected <T> Collection<T> __readByDates__(Class<T> klass, Arguments<T> arguments, LocalDateTime fromDate,LocalDateTime toDate) {
 		@SuppressWarnings("unchecked")
-		Class<T> auditClass = (Class<T>) getAuditClass(klass);
+		Class<T> auditClass = (Class<T>) AuditClassGetter.getInstance().get(klass);
 		if(auditClass == null)
 			return null;
 		QueryExecutorArguments queryExecutorArguments = arguments.getQueryExecutorArguments();
 		if(queryExecutorArguments == null)
 			queryExecutorArguments = new QueryExecutorArguments();
+		prepareQueryExecutorArgumentsForReadByDates(klass, arguments, fromDate, toDate, queryExecutorArguments);		
 		queryExecutorArguments.addProcessableTransientFieldsNames(AbstractAudit.FIELDS___AUDITED__);
-		if(fromDate != null)
-			queryExecutorArguments.addFilterField(Querier.PARAMETER_NAME_FROM_DATE,fromDate);
-		if(toDate != null)
-			queryExecutorArguments.addFilterField(Querier.PARAMETER_NAME_TO_DATE,toDate);
+		queryExecutorArguments.setQuery(null);
 		Collection<?> __collection__ = DynamicManyExecutor.getInstance().read(auditClass, queryExecutorArguments);
 		if(CollectionHelper.isEmpty(__collection__))
 			return null;
 		return convert(klass, queryExecutorArguments, __collection__);
+	}
+	
+	public static <T> void prepareQueryExecutorArgumentsForReadByDates(Class<T> klass, Arguments<T> arguments, LocalDateTime fromDate,LocalDateTime toDate,QueryExecutorArguments queryExecutorArguments) {
+		if(queryExecutorArguments == null)
+			return;
+		if(fromDate != null && queryExecutorArguments.getFilterFieldValue(Querier.PARAMETER_NAME_FROM_DATE) == null)
+			queryExecutorArguments.addFilterField(Querier.PARAMETER_NAME_FROM_DATE,fromDate);
+		if(toDate != null && queryExecutorArguments.getFilterFieldValue(Querier.PARAMETER_NAME_TO_DATE) == null)
+			queryExecutorArguments.addFilterField(Querier.PARAMETER_NAME_TO_DATE,toDate);
 	}
 	
 	protected <T> Collection<T> convert(Class<T> klass,QueryExecutorArguments queryExecutorArguments,Collection<?> audits) {
@@ -102,7 +112,11 @@ public class AuditReaderImpl extends AuditReader.AbstractImpl implements Seriali
 			return null;
 		for(Object audit : audits) {
 			T entity = ClassHelper.instanciate(klass);
-			copyAuditToEntity(klass, audit, entity,fieldsNames);			
+			((AuditableWhoDoneWhatWhen)entity).set__auditFunctionality__(((AbstractAudit)audit).get__auditFunctionality__());
+			((AuditableWhoDoneWhatWhen)entity).set__auditWhat__(((AbstractAudit)audit).get__auditWhat__());
+			((AuditableWhoDoneWhatWhen)entity).set__auditWhenAsString__(((AbstractAudit)audit).get__auditWhenAsString__());
+			((AuditableWhoDoneWhatWhen)entity).set__auditWho__(((AbstractAudit)audit).get__auditWho__());
+			copyAuditToEntity(klass, audit, entity,fieldsNames);
 			collection.add(entity);
 		}
 		return collection;

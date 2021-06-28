@@ -13,6 +13,10 @@ public enum QueryName {
 	,READ_DYNAMIC("readDynamic")
 	,COUNT_DYNAMIC("countDynamic")
 	
+	,READ_AUDIT_ONE("readAuditOne")
+	,READ_AUDIT("readAudit")
+	,COUNT_AUDIT("countAudit")
+	
 	,READ_CODES("readCodes")
 	,COUNT_CODES("countCodes")
 	

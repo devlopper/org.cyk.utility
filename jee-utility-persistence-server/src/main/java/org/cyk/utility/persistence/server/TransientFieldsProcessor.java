@@ -61,7 +61,7 @@ public interface TransientFieldsProcessor {
 		}
 		
 		protected Boolean __processAuditsRecords__(Class<?> klass,Collection<?> objects,Filter filter) {
-			AuditReader.Arguments<Object> arguments = new AuditReader.Arguments<Object>();
+			org.cyk.utility.persistence.server.audit.Arguments<Object> arguments = new org.cyk.utility.persistence.server.audit.Arguments<Object>();
 			arguments.setIdentifiables(CollectionHelper.cast(Object.class, objects));
 			arguments.setAuditsRecordsCollectionSettable(Boolean.TRUE);
 			AuditReader.getInstance().read((Class<Object>)klass, arguments);
