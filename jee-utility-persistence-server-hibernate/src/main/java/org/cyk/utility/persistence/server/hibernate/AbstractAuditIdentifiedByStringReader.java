@@ -41,7 +41,7 @@ public abstract class AbstractAuditIdentifiedByStringReader<ENTITY extends Abstr
 	@Override
 	protected void __set__(ENTITY entity, Object[] array) {
 		int i = 2;
-		entity.set__auditWhenAsString__(TimeHelper.formatLocalDateTimeTillMillisecond((LocalDateTime) array[i]));
+		entity.set__auditWhenAsString__(TimeHelper.formatLocalDateTimeTillMillisecond((LocalDateTime) array[i++]));
 		__set__(entity, array, i);
 	}
 	
@@ -51,6 +51,9 @@ public abstract class AbstractAuditIdentifiedByStringReader<ENTITY extends Abstr
 	
 	@Override
 	protected Boolean isEntityArray(ENTITY entity, Object[] array) {
-		return Boolean.TRUE.equals(super.isEntityArray(entity, array)) && entity.get__auditRevision__().equals(array[1]);
+		Boolean result = super.isEntityArray(entity, array);
+		if(entity.get__auditRevision__() == null)
+			return result;
+		return Boolean.TRUE.equals(result) && entity.get__auditRevision__().equals(array[1]);
 	}
 }

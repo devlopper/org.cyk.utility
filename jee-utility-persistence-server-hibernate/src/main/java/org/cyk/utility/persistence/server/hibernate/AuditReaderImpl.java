@@ -10,8 +10,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.instance.InstanceCopier;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringImpl;
 import org.cyk.utility.__kernel__.object.marker.AuditableWhoDoneWhatWhen;
 import org.cyk.utility.persistence.EntityManagerGetter;
 import org.cyk.utility.persistence.query.Querier;
@@ -21,6 +23,7 @@ import org.cyk.utility.persistence.server.audit.AuditClassGetter;
 import org.cyk.utility.persistence.server.audit.AuditReader;
 import org.cyk.utility.persistence.server.hibernate.annotation.Hibernate;
 import org.cyk.utility.persistence.server.hibernate.entity.AbstractAudit;
+import org.cyk.utility.persistence.server.hibernate.entity.AbstractAuditIdentifiedByString;
 import org.cyk.utility.persistence.server.query.executor.DynamicManyExecutor;
 import org.hibernate.envers.AuditReaderFactory;
 
@@ -88,6 +91,8 @@ public class AuditReaderImpl extends AuditReader.AbstractImpl implements Seriali
 		if(queryExecutorArguments == null)
 			queryExecutorArguments = new QueryExecutorArguments();
 		prepareQueryExecutorArgumentsForReadByDates(klass, arguments, fromDate, toDate, queryExecutorArguments);		
+		if(CollectionHelper.isNotEmpty(queryExecutorArguments.getProjections()))
+			queryExecutorArguments.addProjectionsFromStrings(AbstractAudit.FIELD___AUDIT_REVISION__);
 		queryExecutorArguments.addProcessableTransientFieldsNames(AbstractAudit.FIELDS___AUDITED__);
 		queryExecutorArguments.setQuery(null);
 		Collection<?> __collection__ = DynamicManyExecutor.getInstance().read(auditClass, queryExecutorArguments);
@@ -112,10 +117,13 @@ public class AuditReaderImpl extends AuditReader.AbstractImpl implements Seriali
 			return null;
 		for(Object audit : audits) {
 			T entity = ClassHelper.instanciate(klass);
+			FieldHelper.write(entity, AbstractIdentifiableSystemScalarStringImpl.FIELD_IDENTIFIER, ((AbstractAuditIdentifiedByString)audit).getIdentifier());
+			FieldHelper.write(entity, AbstractAudit.FIELD___AUDIT_REVISION__, ((AbstractAuditIdentifiedByString)audit).get__auditRevision__());
 			((AuditableWhoDoneWhatWhen)entity).set__auditFunctionality__(((AbstractAudit)audit).get__auditFunctionality__());
 			((AuditableWhoDoneWhatWhen)entity).set__auditWhat__(((AbstractAudit)audit).get__auditWhat__());
 			((AuditableWhoDoneWhatWhen)entity).set__auditWhenAsString__(((AbstractAudit)audit).get__auditWhenAsString__());
 			((AuditableWhoDoneWhatWhen)entity).set__auditWho__(((AbstractAudit)audit).get__auditWho__());
+						
 			copyAuditToEntity(klass, audit, entity,fieldsNames);
 			collection.add(entity);
 		}
