@@ -152,8 +152,10 @@ public interface PathsScanner {
 				return this;
 			for(String name : names) {
 				File file = new File(name);
-				if(!file.exists())
+				if(!file.exists()) {
+					LogHelper.logWarning(String.format("Path with name <<%s>> will not be added because it does not exist", name), getClass());
 					continue;
+				}
 				addPaths(file.toPath());
 			}
 			return this;
