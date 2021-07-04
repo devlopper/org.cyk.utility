@@ -117,6 +117,24 @@ public interface ConfigurationHelper {
 		return getValueAsLong(name,null,null);
 	}
 	
+	static Collection<String> getValueAsStrings(String name,Object context,Object request) {
+		String string = ConfigurationHelper.getValueAsString(name, context, request);
+		if(StringHelper.isBlank(string))
+			return null;
+		String[] array = string.split(";");
+		if(array == null || array.length == 0)
+			return null;
+		return CollectionHelper.listOf(array);
+	}
+	
+	static Collection<String> getValueAsStrings(String name,Object context) {
+		return getValueAsStrings(name,context, null);
+	}
+	
+	static Collection<String> getValueAsStrings(String name) {
+		return getValueAsStrings(name,null,null);
+	}
+	
 	/**/
 	
 	static String getClassUniformResourceIdentifier(Class<?> klass,Object classifier) {
