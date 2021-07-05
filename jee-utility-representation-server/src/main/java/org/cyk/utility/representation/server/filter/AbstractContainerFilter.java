@@ -13,6 +13,7 @@ public abstract class AbstractContainerFilter extends AbstractObject implements 
 	
 	protected LogMessages getLogMessages(ContainerRequestContext containerRequestContext,String marker) {
 		LogMessages logMessages = new LogMessages();
+		logMessages.setLoggable(Boolean.TRUE).setLevel(java.util.logging.Level.INFO);
 		String path = containerRequestContext.getUriInfo().getPath();
 		logMessages.add(marker,containerRequestContext.getMethod(),path);
 		
