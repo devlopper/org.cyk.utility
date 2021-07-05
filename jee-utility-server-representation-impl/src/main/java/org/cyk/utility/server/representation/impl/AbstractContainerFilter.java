@@ -8,6 +8,7 @@ import javax.ws.rs.container.ContainerRequestContext;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.log.Log;
 
+@Deprecated
 public abstract class AbstractContainerFilter extends AbstractObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 

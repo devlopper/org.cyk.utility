@@ -95,6 +95,12 @@ public interface TimeHelper {
 			return null;
 		return date.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli();
 	}
+	
+	static Long toMillisecond(LocalDateTime localDateTime) {
+		if(localDateTime == null)
+			return null;
+		return localDateTime.toInstant(ZoneOffset.UTC).toEpochMilli();
+	}
 
 	static Date convertLocalDateToDate(LocalDate localDate) {
 		if(localDate == null)
