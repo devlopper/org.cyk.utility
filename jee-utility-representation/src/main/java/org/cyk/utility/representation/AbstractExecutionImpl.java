@@ -22,7 +22,8 @@ public abstract class AbstractExecutionImpl extends AbstractObject implements Se
 		if(Boolean.TRUE.equals(arguments.getLoggableAsInfo()))
 			logMessages.setLoggable(Boolean.TRUE).setLevel(Level.INFO);
 		try {
-			ResponseBuilder.Arguments responseBuilderArguments = new ResponseBuilder.Arguments().setProcessingStartTime(System.currentTimeMillis());
+			ResponseBuilder.Arguments responseBuilderArguments = arguments.getResponseBuilderArguments(Boolean.TRUE); 
+			responseBuilderArguments.setProcessingStartTime(System.currentTimeMillis());
 			internal = new Arguments.Internal(arguments, EntityReader.class);
 			QueryExecutorArguments queryExecutorArguments = instantiateQueryExecutorArguments(arguments);	
 			__execute__(arguments,internal,queryExecutorArguments,logMessages,responseBuilderArguments);

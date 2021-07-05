@@ -3,15 +3,15 @@ package org.cyk.utility.representation;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.mapping.MapperSourceDestination;
 import org.cyk.utility.__kernel__.object.AbstractObject;
-import org.cyk.utility.persistence.query.QueryExecutorArguments;
+import org.cyk.utility.__kernel__.rest.ResponseBuilder;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
+import org.cyk.utility.persistence.query.QueryExecutorArguments;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,6 +29,7 @@ public class Arguments extends AbstractObject implements Serializable {
 	private Boolean loggableAsInfo;
 	private MapperSourceDestination.Arguments.Dto mappingArguments;
 	private Listener listener;
+	private ResponseBuilder.Arguments responseBuilderArguments;
 	
 	public Arguments setRepresentationEntityClass(Class<?> entityClass) {
 		if(entityClass == null)
@@ -42,6 +43,12 @@ public class Arguments extends AbstractObject implements Serializable {
 			return this;
 		setPersistenceEntityClassName(entityClass.getName());
 		return this;
+	}
+	
+	public ResponseBuilder.Arguments getResponseBuilderArguments(Boolean injectIfNull) {
+		if(responseBuilderArguments == null && Boolean.TRUE.equals(injectIfNull))
+			responseBuilderArguments = new ResponseBuilder.Arguments();
+		return responseBuilderArguments;
 	}
 	
 	public QueryExecutorArguments.Dto getQueryExecutorArguments(Boolean injectIfNull) {

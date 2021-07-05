@@ -147,6 +147,14 @@ public interface ResponseBuilder {
 			getHeaders(Boolean.TRUE).put(name, value);
 			return this;
 		}
+		
+		public Arguments setHeadersCORS() {
+			setHeader("Access-Control-Allow-Origin", "*");
+			setHeader("Access-Control-Allow-Credentials", "true");
+			setHeader("Access-Control-Allow-Headers","origin, content-type, accept, authorization");
+			setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
+			return this;
+		}
 	}
 	
 	static void addHeader(javax.ws.rs.core.Response.ResponseBuilder responseBuilder,String name,Object value) {
@@ -154,7 +162,7 @@ public interface ResponseBuilder {
 			return;
 		responseBuilder.header(name, value);
 	}
-	
+		
 	/**/
 	
 	static ResponseBuilder getInstance() {
