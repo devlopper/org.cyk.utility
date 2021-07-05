@@ -17,7 +17,7 @@ public class ContainerRequestFilterImpl extends AbstractContainerFilter implemen
 	private static final long serialVersionUID = 1L;
 
 	public void filter(ContainerRequestContext containerRequestContext) throws IOException {
-		containerRequestContext.setProperty(LocalDateTime.class.getName(), LocalDateTime.now());
+		containerRequestContext.setProperty(LocalDateTime.class.getName(), System.currentTimeMillis());
 		LogMessages logMessages = getLogMessages(containerRequestContext, "Request");
 		LogHelper.log(logMessages, getClass());
 	}	
