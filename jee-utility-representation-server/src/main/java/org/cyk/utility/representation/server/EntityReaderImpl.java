@@ -63,6 +63,7 @@ public class EntityReaderImpl extends EntityReader.AbstractImpl implements Seria
 			logMessages.add("persistences.mapping.duration:"+TimeHelper.formatDuration(System.currentTimeMillis()-t));
 			if(arguments.getListener() != null)
 				arguments.getListener().processRepresentationEntities(representations);
+			
 			Long xTotalCount = null;
 			Boolean countable = Boolean.TRUE.equals(arguments.getCountable()) && queryExecutorArguments.getQuery() != null;
 			if(Boolean.TRUE.equals(countable)) {
@@ -89,7 +90,7 @@ public class EntityReaderImpl extends EntityReader.AbstractImpl implements Seria
 			}
 			if(CollectionHelper.isNotEmpty(representations))
 				DataTransferObjectProcessor.getInstance().processRead((Class<Object>) internal.representationEntityClass,arguments, (Collection<Object>)representations);
-			responseBuilderArguments.setEntities(representations).setXTotalCount(xTotalCount);
+			responseBuilderArguments.setIsCollection(Boolean.TRUE).setEntities(representations).setXTotalCount(xTotalCount);
 		}else {
 			logMessages.add("one");
 			Object persistence = org.cyk.utility.persistence.query.EntityReader.getInstance().readOne(internal.persistenceEntityClass,queryExecutorArguments);

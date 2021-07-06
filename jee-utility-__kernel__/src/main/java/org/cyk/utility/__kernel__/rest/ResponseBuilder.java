@@ -73,6 +73,8 @@ public interface ResponseBuilder {
 				arguments.processingEndTime = System.currentTimeMillis();
 			if(arguments.processingStartTime != null && arguments.processingEndTime != null && arguments.processingDuration == null)
 				arguments.processingDuration = arguments.processingEndTime - arguments.processingStartTime;
+			if(Boolean.TRUE.equals(arguments.isCollection))
+				addHeader(responseBuilder, ResponseHelper.HEADER_COLLECTION_SIZE, CollectionHelper.getSize(arguments.entities));
 			addHeader(responseBuilder, ResponseHelper.HEADER_X_TOTAL_COUNT, arguments.xTotalCount);
 			addHeader(responseBuilder, ResponseHelper.HEADER_PROCESSING_START_TIME, arguments.processingStartTime);
 			addHeader(responseBuilder, ResponseHelper.HEADER_PROCESSING_END_TIME, arguments.processingEndTime);
@@ -125,6 +127,7 @@ public interface ResponseBuilder {
 		private Map<String,Object> headers;
 		private Long xTotalCount;
 		private Long processingStartTime,processingEndTime,processingDuration;
+		private Boolean isCollection;
 		
 		public Arguments(RuntimeException.Dto runtimeException,Response.Status status) {
 			this.runtimeException = runtimeException;

@@ -56,6 +56,8 @@ public interface Representation {
 	String PARAMETER_COLUMN_INDEX_FIELD_NAME = ConstantString.COLUMN_INDEX_FIELD_NAME;
 	String PARAMETER_UNIFORM_RESOURCE_IDENTIFIER = "uniformResourceIdentifier";
 	String PARAMETER_PROPERTIES = ConstantString.PROPERTIES;
+	String PARAMETER_PAGE_INDEX = "pageIndex";
+	String PARAMETER_PAGE_SIZE = "pageSize";
 	
 	/* Format */
 	

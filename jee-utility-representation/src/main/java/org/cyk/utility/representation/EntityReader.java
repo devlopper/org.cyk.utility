@@ -65,6 +65,7 @@ public interface EntityReader {
 	String PARAMETER_NAME_REPRESENTATION_ENTITY_CLASS_NAME = "representationEntityClassName";
 	String PARAMETER_NAME_QUERY_IDENTIFIER = "queryIdentifier";
 	String PARAMETER_NAME_FILTER_AS_JSON = "filterAsJson";
+	String PARAMETER_NAME_FILTER_AS_STRING = "filterAsString";
 	String PARAMETER_NAME_FIRST_TUPLE_INDEX = "firstTupleIndex";
 	String PARAMETER_NAME_NUMBER_OF_TUPLES = "numberOfTuples";
 	String PARAMETER_NAME_COLLECTIONABLE = "collectionable";
