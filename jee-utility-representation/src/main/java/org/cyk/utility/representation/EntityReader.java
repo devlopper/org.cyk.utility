@@ -63,11 +63,11 @@ public interface EntityReader {
 	String TAG = "Generic Read Interface";
 	
 	String PARAMETER_NAME_REPRESENTATION_ENTITY_CLASS_NAME = "representationEntityClassName";
-	String PARAMETER_NAME_QUERY_IDENTIFIER = "queryIdentifier";
-	String PARAMETER_NAME_FILTER_AS_JSON = "filterAsJson";
-	String PARAMETER_NAME_FILTER_AS_STRING = "filterAsString";
-	String PARAMETER_NAME_FIRST_TUPLE_INDEX = "firstTupleIndex";
-	String PARAMETER_NAME_NUMBER_OF_TUPLES = "numberOfTuples";
+	String PARAMETER_NAME_QUERY_IDENTIFIER = "queryidentifier";
+	String PARAMETER_NAME_FILTER_AS_JSON = "filterjson";
+	String PARAMETER_NAME_FILTER_AS_STRING = "filterstring";
+	String PARAMETER_NAME_FIRST_TUPLE_INDEX = "from";
+	String PARAMETER_NAME_NUMBER_OF_TUPLES = "count";
 	String PARAMETER_NAME_COLLECTIONABLE = "collectionable";
 	String PARAMETER_NAME_COUNTABLE = "countable";
 }
