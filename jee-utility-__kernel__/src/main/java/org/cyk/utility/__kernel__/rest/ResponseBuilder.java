@@ -156,6 +156,7 @@ public interface ResponseBuilder {
 			setHeader("Access-Control-Allow-Credentials", "true");
 			setHeader("Access-Control-Allow-Headers","origin, content-type, accept, authorization");
 			setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
+			setHeader("Access-Control-Expose-Headers", "X-Total-Count, X-Paging-PageSize");
 			return this;
 		}
 	}
