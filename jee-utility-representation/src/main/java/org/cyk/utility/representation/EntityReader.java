@@ -39,7 +39,7 @@ public interface EntityReader {
 			,@QueryParam(PARAMETER_NAME_FIRST_TUPLE_INDEX)Integer firstTupleIndex
 			,@QueryParam(PARAMETER_NAME_NUMBER_OF_TUPLES)Integer numberOfTuples
 			,@QueryParam(PARAMETER_NAME_COLLECTIONABLE)Boolean collectionable
-			,@QueryParam(PARAMETER_NAME_QUERY_COUNTABLE)Boolean countable
+			,@QueryParam(PARAMETER_NAME_COUNTABLE)Boolean countable
 		);
 	
 	/**/
@@ -69,5 +69,5 @@ public interface EntityReader {
 	String PARAMETER_NAME_FIRST_TUPLE_INDEX = "firstTupleIndex";
 	String PARAMETER_NAME_NUMBER_OF_TUPLES = "numberOfTuples";
 	String PARAMETER_NAME_COLLECTIONABLE = "collectionable";
-	String PARAMETER_NAME_QUERY_COUNTABLE = "countable";
+	String PARAMETER_NAME_COUNTABLE = "countable";
 }

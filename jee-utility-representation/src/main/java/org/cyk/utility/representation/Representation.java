@@ -58,6 +58,7 @@ public interface Representation {
 	String PARAMETER_PROPERTIES = ConstantString.PROPERTIES;
 	String PARAMETER_PAGE_INDEX = "pageIndex";
 	String PARAMETER_PAGE_SIZE = "pageSize";
+	String PARAMETER_COUNTABLE = "countable";
 	
 	/* Format */
 	
