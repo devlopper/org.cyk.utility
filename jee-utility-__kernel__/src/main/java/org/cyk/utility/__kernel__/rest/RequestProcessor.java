@@ -85,6 +85,10 @@ public interface RequestProcessor {
 				//return getResponseBuilderWhenThrowableIsNull(runnerArguments).build();
 			}
 			
+			public Response getResponseWhenThrowableIsNotNull(Runner.Arguments arguments) {
+				return ResponseBuilder.getInstance().build(arguments.getThrowable());
+			}
+			
 			@Override
 			public Response execute(Runner.Arguments arguments) {
 				try {
@@ -96,7 +100,7 @@ public interface RequestProcessor {
 				
 				if(arguments.getThrowable() == null)
 					return getResponseWhenThrowableIsNull(arguments);
-				return ResponseBuilder.getInstance().build(arguments.getThrowable());
+				return getResponseWhenThrowableIsNotNull(arguments);
 			}
 			
 			protected String getResponseWhenThrowableIsNullAsString(Runner.Arguments runnerArguments) {
