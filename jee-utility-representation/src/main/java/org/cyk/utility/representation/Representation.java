@@ -31,6 +31,7 @@ public interface Representation {
 	/* Parameter */
 	
 	String PARAMETER_IDENTIFIER = ConstantString.IDENTIFIER;
+	String PARAMETER_IDENTIFIERS = "identifiers";
 	String PARAMETER_PARAMETERS_NAMES = "parametersNames";
 	String PARAMETER_PARAMETERS_NAMES_VALUES_AS_JSON = "parametersNamesValuesAsJson";
 	String PARAMETER_FILE_TYPE = "fileType";
