@@ -23,6 +23,11 @@ public class PathsScannerUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	@Test
+	public void scan_directory_count() {
+		assertThat(PathsScanner.getInstance().count(new PathsScanner.Arguments().addPathsFromNames(rootPath))).isEqualTo(5);
+	}
+	
+	@Test
 	public void scan_acceptedPathNameRegularExpression() {
 		Collection<Path> paths = PathsScanner.getInstance().scan(new PathsScanner.Arguments().addPathsFromNames(rootPath).setAcceptedPathNameRegularExpression(".txt"));
 		assertThat(paths).isNotEmpty();

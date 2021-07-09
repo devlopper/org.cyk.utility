@@ -50,7 +50,14 @@ public class EntityCounterImpl extends org.cyk.utility.representation.EntityCoun
 		return execute(arguments);
 	}
 	
-	public static Boolean LOGGABLE = Boolean.FALSE;
-	public static Level LOG_LEVEL = Level.FINEST;
+	@Override
+	public Response count(String representationEntityClassName,String queryIdentifier, String filterAsJson) {
+		Arguments arguments = new Arguments();
+		arguments.setRepresentationEntityClassName(representationEntityClassName);
+		arguments.setQueryExecutorArguments(new QueryExecutorArguments.Dto().setQueryIdentifier(queryIdentifier));
+		return count(arguments);
+	}
 	
+	public static Boolean LOGGABLE = Boolean.FALSE;
+	public static Level LOG_LEVEL = Level.FINEST;	
 }

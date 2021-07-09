@@ -30,6 +30,8 @@ public interface PathsScanner {
 
 	Collection<Path> scan(Arguments arguments);
 	
+	Integer count(Arguments arguments);
+	
 	public static abstract class AbstractImpl extends AbstractObject implements PathsScanner,Serializable {
 		
 		@Override
@@ -108,6 +110,17 @@ public interface PathsScanner {
 				return Boolean.FALSE;
 			Long size = path.toFile().length();
 			return NumberHelper.compare(size, minimalSize, ComparisonOperator.GTE) && NumberHelper.compare(size, maximalSize, ComparisonOperator.LTE);
+		}
+	
+		@Override
+		public Integer count(Arguments arguments) {
+			Collection<Path> paths = scan(arguments);
+			Integer count = CollectionHelper.getSize(paths);
+			if(paths != null) {
+				paths.clear();
+				paths = null;
+			}
+			return count;
 		}
 	}
 	

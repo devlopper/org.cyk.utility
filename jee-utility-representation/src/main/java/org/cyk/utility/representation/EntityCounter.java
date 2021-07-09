@@ -3,9 +3,11 @@ package org.cyk.utility.representation;
 import java.io.Serializable;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -13,15 +15,23 @@ import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.value.Value;
 
 @Path(EntityCounter.PATH)
-//@Tag(name = EntityCounter.TAG)
 public interface EntityCounter {
 
 	@POST
-	@Path(PATH_READ)
-	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-	@Produces({ MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML })
-	//@Operation(description = "count")
+	@Path(PATH_COUNT_BY_POST)
+	@Consumes({MediaType.APPLICATION_JSON})
+	@Produces({ MediaType.APPLICATION_JSON})
 	Response count(Arguments arguments);
+	
+	@GET
+	@Path(PATH_COUNT_BY_GET)
+	@Consumes({MediaType.APPLICATION_JSON})
+	@Produces({ MediaType.APPLICATION_JSON})
+	Response count(
+			@QueryParam(EntityReader.PARAMETER_NAME_REPRESENTATION_ENTITY_CLASS_NAME)String representationEntityClassName
+			,@QueryParam(EntityReader.PARAMETER_NAME_QUERY_IDENTIFIER) String queryIdentifier
+			,@QueryParam(EntityReader.PARAMETER_NAME_FILTER_AS_JSON)String filterAsJson
+		);
 	
 	/**/
 	
@@ -40,5 +50,6 @@ public interface EntityCounter {
 	String TAG = "Generic Count Interface";
 	
 	String PATH = "/cyk/entity/counter";
-	String PATH_READ = "count";
+	String PATH_COUNT_BY_POST = "post";
+	String PATH_COUNT_BY_GET = "get";
 }
