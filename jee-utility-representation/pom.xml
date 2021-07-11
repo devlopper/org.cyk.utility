@@ -16,12 +16,39 @@
 
 	<name>jee-utility-representation</name>
 	<url>http://maven.apache.org</url>
-
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.cyk.jee.utility.business</groupId>
 			<artifactId>jee-utility-business</artifactId>
 			<version>0.1.0</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jackson2-provider</artifactId>
+			<version>${org.jboss.resteasy.resteasy-bom.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-client</artifactId>
+			<version>${org.jboss.resteasy.resteasy-bom.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jaxb-provider</artifactId>
+			<version>${org.jboss.resteasy.resteasy-bom.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+		    <groupId>com.google.code.gson</groupId>
+		    <artifactId>gson</artifactId>
+		    <version>2.8.6</version>
 		</dependency>
 	</dependencies>
 </project>

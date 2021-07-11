@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.mapping.MapperSourceDestination;
 import org.cyk.utility.__kernel__.object.AbstractObject;
@@ -107,7 +108,15 @@ public class Arguments extends AbstractObject implements Serializable {
 		void processRepresentationEntities(Collection<?> representationEntities);
 		public static abstract class AbstractImpl extends AbstractObject implements Listener,Serializable {
 			@Override public void processPersistenceEntities(Collection<?> persistenceEntities) {}
-			@Override public void processRepresentationEntities(Collection<?> representationEntities) {}
+			@Override public void processRepresentationEntities(Collection<?> representationEntities) {
+				if(CollectionHelper.isEmpty(representationEntities))
+					return;
+				representationEntities.forEach(entity -> {
+					processRepresentationEntity(entity);
+				});
+			}
+			
+			protected void processRepresentationEntity(Object representationEntity) {}
 		}
 	}
 }
