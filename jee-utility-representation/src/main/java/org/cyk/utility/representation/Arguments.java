@@ -29,6 +29,7 @@ public class Arguments extends AbstractObject implements Serializable {
 	private Boolean countable;
 	private Boolean loggableAsInfo;
 	private MapperSourceDestination.Arguments.Dto mappingArguments;
+	@SuppressWarnings("rawtypes")
 	private Listener listener;
 	private ResponseBuilder.Arguments responseBuilderArguments;
 	
@@ -103,12 +104,12 @@ public class Arguments extends AbstractObject implements Serializable {
 	
 	/**/
 	
-	public static interface Listener {
-		void processPersistenceEntities(Collection<?> persistenceEntities);
-		void processRepresentationEntities(Collection<?> representationEntities);
-		public static abstract class AbstractImpl extends AbstractObject implements Listener,Serializable {
-			@Override public void processPersistenceEntities(Collection<?> persistenceEntities) {}
-			@Override public void processRepresentationEntities(Collection<?> representationEntities) {
+	public static interface Listener<REPRESENTATION,PERSISTENCE> {
+		void processPersistenceEntities(Collection<PERSISTENCE> persistenceEntities);
+		void processRepresentationEntities(Collection<REPRESENTATION> representationEntities);
+		public static abstract class AbstractImpl<REPRESENTATION,PERSISTENCE> extends AbstractObject implements Listener<REPRESENTATION,PERSISTENCE>,Serializable {
+			@Override public void processPersistenceEntities(Collection<PERSISTENCE> persistenceEntities) {}
+			@Override public void processRepresentationEntities(Collection<REPRESENTATION> representationEntities) {
 				if(CollectionHelper.isEmpty(representationEntities))
 					return;
 				representationEntities.forEach(entity -> {
@@ -116,7 +117,9 @@ public class Arguments extends AbstractObject implements Serializable {
 				});
 			}
 			
-			protected void processRepresentationEntity(Object representationEntity) {}
+			protected void processRepresentationEntity(REPRESENTATION representationEntity) {}
 		}
+		
+		
 	}
 }

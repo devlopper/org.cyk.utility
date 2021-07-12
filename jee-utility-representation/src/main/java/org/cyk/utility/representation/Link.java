@@ -1,4 +1,4 @@
-package org.cyk.utility.representation.entity;
+package org.cyk.utility.representation;
 
 import java.io.Serializable;
 
@@ -9,6 +9,7 @@ import lombok.experimental.Accessors;
 @Getter @Setter @Accessors(chain=true)
 public class Link implements Serializable{
 
-	private String name;
+	private String identifier;
 	private String value;
+	
 }
