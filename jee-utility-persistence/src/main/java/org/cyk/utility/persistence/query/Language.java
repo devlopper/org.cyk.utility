@@ -277,7 +277,7 @@ public interface Language {
 		static String of(String...strings) {
 			if(ArrayHelper.isEmpty(strings))
 				return ConstantEmpty.STRING;
-			return of(CollectionHelper.listOf(strings));
+			return of(CollectionHelper.listOf(Boolean.TRUE,strings));
 		}
 		
 		static String where(Collection<String> strings) {

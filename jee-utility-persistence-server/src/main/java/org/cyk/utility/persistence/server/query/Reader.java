@@ -5,7 +5,9 @@ import java.io.Serializable;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
+import org.cyk.utility.persistence.EntityManagerGetter;
 import org.cyk.utility.persistence.query.Query;
 import org.cyk.utility.persistence.query.QueryIdentifierBuilder;
 import org.cyk.utility.persistence.query.QueryManager;
@@ -53,6 +55,22 @@ public interface Reader<ENTITY,IDENTIFIER,RESULT> {
 		
 		protected Boolean getIsNativeQuery() {
 			return null;
+		}
+		
+		protected Boolean isRegisterable() {
+			return Boolean.TRUE;
+		}
+		
+		protected javax.persistence.Query instantiateQuery() {
+			javax.persistence.Query query;
+			if(StringHelper.isBlank(queryIdentifier) && Boolean.TRUE.equals(isRegisterable()))
+				registerNamedQuery();
+			if(StringHelper.isBlank(queryIdentifier)) {
+				query = EntityManagerGetter.getInstance().get().createQuery(getQueryValue());			
+			}else {
+				query = EntityManagerGetter.getInstance().get().createNamedQuery(queryIdentifier);
+			}
+			return query;
 		}
 	}
 	

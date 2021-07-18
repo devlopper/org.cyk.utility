@@ -17,9 +17,13 @@ public class AbstractUnitTest extends org.cyk.utility.test.weld.AbstractWeldUnit
 	@Override
 	protected void __listenBefore__() {		
 		super.__listenBefore__();
-		EntityManagerFactoryGetterImpl.ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("default");
+		EntityManagerFactoryGetterImpl.ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory(getUnitName());
 		Initializer.initialize();
 		DependencyInjection.setQualifierClassTo(Test.class,RuntimeQueryStringBuilder.class,TransientFieldsProcessor.class);
+	}
+	
+	protected String getUnitName() {
+		return "default";
 	}
 	
 	@Override

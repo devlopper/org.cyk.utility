@@ -12,16 +12,19 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.identifier.resource.ParameterName;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.user.interface_.UserInterfaceAction;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.client.controller.web.WebController;
 import org.cyk.utility.client.controller.web.jsf.Redirector;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.AbstractInput;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.AbstractInputChoiceOne;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.AutoComplete;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.InputText;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.layout.Cell;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.layout.Layout;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.panel.Dialog;
@@ -99,6 +102,27 @@ public abstract class AbstractFilterController extends AbstractObject implements
 	
 	protected abstract void buildInputs();
 	
+	/* Build Input */
+	
+	protected void buildInputText(String fieldName) {
+		if(StringHelper.isBlank(fieldName))
+			return;
+		if(!Boolean.TRUE.equals(isBuildable(fieldName)))
+			return;
+		String string = getInputTextInitialValue(fieldName);
+		AbstractInput<?> input = buildInput(fieldName, string);
+		FieldHelper.write(this, fieldName, input);
+	}
+	
+	protected String getInputTextInitialValue(String fieldName) {
+		String parameterName =  buildParameterName(fieldName);
+		if(StringHelper.isBlank(parameterName)) {
+			LogHelper.logSevere(String.format("Request parameter name has not been defined for field named <<%s>>", fieldName), getClass());
+			return null;
+		}
+		return WebController.getInstance().getRequestParameter(parameterName);
+	}
+		
 	protected void buildInputSelectOne(String fieldName,Class<?> klass) {
 		if(StringHelper.isBlank(fieldName))
 			return;
@@ -112,6 +136,8 @@ public abstract class AbstractFilterController extends AbstractObject implements
 	protected Object getInputSelectOneInitialValue(String fieldName,Class<?> klass) {
 		return WebController.getInstance().getRequestParameterEntityAsParentBySystemIdentifier(klass, null);
 	}
+	
+	/**/
 	
 	protected abstract AbstractInput<?> buildInput(String fieldName,Object value);
 	
@@ -162,6 +188,14 @@ public abstract class AbstractFilterController extends AbstractObject implements
 					}
 				}
 				
+				Collection<InputText> inputTexts = CollectionHelper.filterByInstanceOf(InputText.class, getInputs());
+				if(CollectionHelper.isNotEmpty(inputTexts)) {
+					for(InputText input : inputTexts) {
+						if(Boolean.TRUE.equals(isInputValueNotBlank(input)) && Boolean.TRUE.equals(isSelectRedirectorArgumentsParameter(String.class, input)))
+							onSelectRedirectorArguments.addParameters(Map.of(buildParameterName(input),List.of(buildParameterValue(input))));
+					}
+				}
+				
 				Redirector.getInstance().redirect(onSelectRedirectorArguments);		
 				return super.__runExecuteFunction__(action);
 			}
@@ -172,19 +206,35 @@ public abstract class AbstractFilterController extends AbstractObject implements
 		return input != null && input.getValue() != null;
 	}
 	
+	protected Boolean isInputValueNotBlank(AbstractInput<?> input) {
+		return input != null && ValueHelper.isNotBlank(input.getValue());
+	}
+	
 	protected Boolean isSelectRedirectorArgumentsParameter(Class<?> klass,AbstractInput<?> input) {
 		return Boolean.TRUE;
 	}
 	
-	protected String buildParameterName(AbstractInput<?> input) {
+	protected String buildParameterName(String fieldName,AbstractInput<?> input) {
 		if(input instanceof AbstractInputChoiceOne)
 			return ParameterName.stringify( ((AbstractInputChoiceOne)input).getChoiceClass());
 		return null;
 	}
 	
+	protected String buildParameterName(String fieldName) {
+		return buildParameterName(fieldName, null);
+	}
+	
+	protected String buildParameterName(AbstractInput<?> input) {
+		return buildParameterName(null, input);
+	}
+	
 	protected String buildParameterValue(AbstractInput<?> input) {
 		if(input instanceof AbstractInputChoiceOne)
-			return FieldHelper.readSystemIdentifier(input.getValue()).toString();
+			return StringHelper.get(FieldHelper.readSystemIdentifier(input.getValue()));
+		if(input instanceof AutoComplete)
+			return StringHelper.get(FieldHelper.readSystemIdentifier(input.getValue()));
+		if(input instanceof InputText)
+			return (String)input.getValue();
 		return null;
 	}
 	

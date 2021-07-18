@@ -13,7 +13,6 @@ import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
-import org.cyk.utility.persistence.EntityManagerGetter;
 
 public interface ArraysReaderByIdentifiers<ENTITY,IDENTIFIER> extends Reader<ENTITY, IDENTIFIER, Object[]> {
 
@@ -50,8 +49,7 @@ public interface ArraysReaderByIdentifiers<ENTITY,IDENTIFIER> extends Reader<ENT
 		}
 
 		protected Collection<Object[]> __readByIdentifiers__(Collection<IDENTIFIER> identifiers,Map<String,Object> parameters) {
-			registerNamedQuery();
-			Query query = EntityManagerGetter.getInstance().get().createNamedQuery(queryIdentifier);
+			Query query = instantiateQuery();
 			setQueryParameters(query, identifiers,parameters);
 			return query.getResultList();
 		}

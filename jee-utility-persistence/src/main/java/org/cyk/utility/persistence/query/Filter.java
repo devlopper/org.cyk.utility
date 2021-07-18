@@ -25,6 +25,7 @@ import org.cyk.utility.__kernel__.mapping.MappingHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.Value;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 import lombok.Getter;
@@ -455,6 +456,15 @@ public class Filter extends AbstractObject implements Serializable {
 		
 		public static Dto addFieldIfValueNotNull(String name,Object value,Dto filter) {
 			if(value != null) {
+				if(filter == null)
+					filter = new Dto();
+				filter.addField(name, value);
+			}
+			return filter;
+		}
+		
+		public static Dto addFieldIfValueNotBlank(String name,Object value,Dto filter) {
+			if(ValueHelper.isNotBlank(value)) {
 				if(filter == null)
 					filter = new Dto();
 				filter.addField(name, value);
