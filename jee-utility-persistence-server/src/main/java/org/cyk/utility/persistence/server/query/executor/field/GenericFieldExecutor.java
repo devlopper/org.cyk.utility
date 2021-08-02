@@ -15,6 +15,7 @@ import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.Value;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.persistence.EntityManagerGetter;
 
 public interface GenericFieldExecutor extends FieldBasedExecutor {
@@ -25,6 +26,7 @@ public interface GenericFieldExecutor extends FieldBasedExecutor {
 	
 	<T,V> Boolean exists(Class<T> klass,Class<V> valueClass,String fieldName,Collection<V> values);
 	<T,V> Boolean exists(Class<T> klass,Class<V> valueClass,String fieldName,V...values);
+	<T,V> void throwExceptionIfNotExist(Class<T> klass,Class<V> valueClass,String fieldName,V value);
 	
 	<T,V> Collection<V> getExisting(Class<T> klass,Class<V> valueClass,String fieldName,Collection<V> values);
 	<T,V> Collection<V> getExisting(Class<T> klass,Class<V> valueClass,String fieldName,V...values);
@@ -66,6 +68,27 @@ public interface GenericFieldExecutor extends FieldBasedExecutor {
 			if(klass == null || valueClass == null || StringHelper.isBlank(fieldName) || ArrayHelper.isEmpty(values))
 				return null;
 			return exists(klass,valueClass,fieldName, CollectionHelper.listOf(values));
+		}
+		
+		@Override
+		public <T,V> void throwExceptionIfNotExist(Class<T> klass,Class<V> valueClass,String fieldName,V value) {
+			if(ValueHelper.isBlank(value))
+				throw new RuntimeException(String.format(getValueRequiredMessageFormat(klass, valueClass, fieldName, value),value));
+			if(exists(klass,valueClass,fieldName, value))
+				return;
+			throw new RuntimeException(String.format(getValueNotExistMessageFormat(klass, valueClass, fieldName, value),value));
+		}
+		
+		protected <T,V> String getValueRequiredMessageFormat(Class<T> klass,Class<V> valueClass,String fieldName,V value) {
+			return getValueName(klass, valueClass, fieldName, value)+" <<%s>> obligatoire";
+		}
+		
+		protected <T,V> String getValueNotExistMessageFormat(Class<T> klass,Class<V> valueClass,String fieldName,V value) {
+			return getValueName(klass, valueClass, fieldName, value)+" <<%s>> inconnu";
+		}
+		
+		protected <T,V> String getValueName(Class<T> klass,Class<V> valueClass,String fieldName,V value) {
+			return fieldName;
 		}
 		
 		@Override

@@ -71,6 +71,10 @@ public interface EntitySaver {
 		public Arguments<T> finalise() {
 			return this;
 		}
+		
+		public Boolean isPersistenceCreatableAndUpdatablesAndDeletablesEmpty() {
+			return persistenceArguments == null || Boolean.TRUE.equals(persistenceArguments.isCreatableAndUpdatablesAndDeletablesEmpty());
+		}
 	}
 	
 	/**/

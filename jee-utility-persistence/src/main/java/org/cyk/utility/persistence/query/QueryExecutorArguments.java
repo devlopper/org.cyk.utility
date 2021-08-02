@@ -23,6 +23,7 @@ import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemImpl;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
+import org.cyk.utility.__kernel__.value.ValueConverter;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.persistence.EntityManagerGetter;
 
@@ -310,6 +311,10 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 		if(filter == null)
 			return null;
 		return filter.getFieldValue(paths);
+	}
+	
+	public Boolean getFilterFieldValueAsBoolean(Boolean valueIfNull,String...paths) {
+		return ValueHelper.defaultToIfNull(ValueConverter.getInstance().convertToBoolean(getFilterFieldValue(paths)),valueIfNull);
 	}
 	
 	public Field getFilterField(Collection<String> paths) {

@@ -76,6 +76,10 @@ public interface WhereStringBuilder {
 			return setSeparator(" AND ");
 		}
 		
+		public Predicate setSeparatorAsOr() {
+			return setSeparator(" OR ");
+		}
+		
 		@Override
 		public Predicate add(Collection<String> strings) {
 			return (Predicate) super.add(strings);

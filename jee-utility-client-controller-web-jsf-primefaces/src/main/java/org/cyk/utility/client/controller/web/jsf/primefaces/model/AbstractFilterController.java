@@ -15,6 +15,7 @@ import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
+import org.cyk.utility.__kernel__.random.RandomHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.user.interface_.UserInterfaceAction;
 import org.cyk.utility.__kernel__.value.ValueHelper;
@@ -42,7 +43,8 @@ public abstract class AbstractFilterController extends AbstractObject implements
 	protected Map<String,Boolean> ignorables;	
 	protected Redirector.Arguments onSelectRedirectorArguments;	
 	protected CommandButton filterCommandButton;
-	protected Layout layout;	
+	protected Layout layout;
+	protected String layoutIdentifier = RandomHelper.getAlphabetic(4);
 	protected RenderType renderType;
 	protected Boolean isNotBuildable;
 	
@@ -176,7 +178,7 @@ public abstract class AbstractFilterController extends AbstractObject implements
 				if(CollectionHelper.isNotEmpty(inputsChoicesOne)) {
 					for(AbstractInputChoiceOne input : inputsChoicesOne) {
 						if(Boolean.TRUE.equals(isInputValueNotNull(input)) && Boolean.TRUE.equals(isSelectRedirectorArgumentsParameter(input.getChoiceClass(), input)))
-							onSelectRedirectorArguments.addParameters(Map.of(buildParameterName(input),List.of(buildParameterValue(input))));
+							onSelectRedirectorArguments.addParameters(Map.of(buildParameterName(input),CollectionHelper.listOf(Boolean.TRUE,buildParameterValue(input))));
 					}
 				}
 				
@@ -184,7 +186,7 @@ public abstract class AbstractFilterController extends AbstractObject implements
 				if(CollectionHelper.isNotEmpty(autoCompletes)) {
 					for(AutoComplete input : autoCompletes) {
 						if(Boolean.TRUE.equals(isInputValueNotNull(input)) && Boolean.TRUE.equals(isSelectRedirectorArgumentsParameter(input.getEntityClass(), input)))
-							onSelectRedirectorArguments.addParameters(Map.of(buildParameterName(input),List.of(buildParameterValue(input))));
+							onSelectRedirectorArguments.addParameters(Map.of(buildParameterName(input),CollectionHelper.listOf(Boolean.TRUE,buildParameterValue(input))));
 					}
 				}
 				
@@ -192,7 +194,7 @@ public abstract class AbstractFilterController extends AbstractObject implements
 				if(CollectionHelper.isNotEmpty(inputTexts)) {
 					for(InputText input : inputTexts) {
 						if(Boolean.TRUE.equals(isInputValueNotBlank(input)) && Boolean.TRUE.equals(isSelectRedirectorArgumentsParameter(String.class, input)))
-							onSelectRedirectorArguments.addParameters(Map.of(buildParameterName(input),List.of(buildParameterValue(input))));
+							onSelectRedirectorArguments.addParameters(Map.of(buildParameterName(input),CollectionHelper.listOf(Boolean.TRUE,buildParameterValue(input))));
 					}
 				}
 				
@@ -217,6 +219,8 @@ public abstract class AbstractFilterController extends AbstractObject implements
 	protected String buildParameterName(String fieldName,AbstractInput<?> input) {
 		if(input instanceof AbstractInputChoiceOne)
 			return ParameterName.stringify( ((AbstractInputChoiceOne)input).getChoiceClass());
+		if(input instanceof AutoComplete)
+			return ParameterName.stringify( ((AutoComplete)input).getEntityClass());
 		return null;
 	}
 	
@@ -242,7 +246,7 @@ public abstract class AbstractFilterController extends AbstractObject implements
 		Collection<Map<Object,Object>> cellsMaps = buildLayoutCells();
 		if(CollectionHelper.isEmpty(cellsMaps))
 			return;
-		layout = Layout.build(Layout.FIELD_CELL_WIDTH_UNIT,Cell.WidthUnit.FLEX,Layout.ConfiguratorImpl.FIELD_CELLS_MAPS,cellsMaps
+		layout = Layout.build(Layout.FIELD_IDENTIFIER,layoutIdentifier,Layout.FIELD_CELL_WIDTH_UNIT,Cell.WidthUnit.FLEX,Layout.ConfiguratorImpl.FIELD_CELLS_MAPS,cellsMaps
 				,Layout.FIELD_CONTAINER,Panel.build(Panel.FIELD_HEADER,"Filtre",Panel.FIELD_TOGGLEABLE,Boolean.TRUE));
 	}
 	

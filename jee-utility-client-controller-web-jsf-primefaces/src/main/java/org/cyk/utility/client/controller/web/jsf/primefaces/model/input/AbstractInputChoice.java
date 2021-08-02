@@ -8,12 +8,12 @@ import java.util.Map;
 import javax.faces.model.SelectItem;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
-import org.cyk.utility.controller.EntityReader;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.client.controller.web.jsf.converter.Converter;
+import org.cyk.utility.controller.EntityReader;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -213,6 +213,11 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 			if(input.choices == null && Boolean.TRUE.equals(MapHelper.readByKey(arguments, FIELD_CHOICES_ARE_YES_NO_ONLY))) {
 				input.choices = CHOICES_YES_NO;
 			}
+			
+			if(input.choices == null && Boolean.TRUE.equals(MapHelper.readByKey(arguments, FIELD_CHOICES_ARE_UNKNOWN_YES_NO_ONLY))) {
+				input.choices = CHOICES_UNKNOWN_YES_NO;
+			}
+			
 			if(input.choices == null && input.field != null && Boolean.TRUE.equals(ClassHelper.isInstanceOf(input.field.getType(),Boolean.class))) {
 				input.choices = CHOICES_YES_NO;
 			}
@@ -223,11 +228,16 @@ public class AbstractInputChoice<VALUE> extends AbstractInput<VALUE> implements 
 		}
 		
 		public static final String FIELD_CHOICES_ARE_YES_NO_ONLY = "choicesAreYesOrNoOnly";
+		public static final String FIELD_CHOICES_ARE_UNKNOWN_YES_NO_ONLY = "choicesAreUnknownOrYesOrNoOnly";
 		public static final String FIELD_CHOICE_CLASS = "AbstractConfiguratorImpl.choiceClass";
 	}
 	
-	private static final Collection<Object> CHOICES_YES_NO = List.of(new SelectItem(Boolean.TRUE, "Oui"),new SelectItem(Boolean.FALSE, "Non"));
-
+	private static final SelectItem CHOICE_UNKNOWN = new SelectItem(null, "-- Aucune sélection --");
+	private static final SelectItem CHOICE_YES = new SelectItem(Boolean.TRUE, "Oui");
+	private static final SelectItem CHOICE_NO = new SelectItem(Boolean.FALSE, "Non");
+	private static final Collection<Object> CHOICES_YES_NO = List.of(CHOICE_YES,CHOICE_NO);
+	private static final Collection<Object> CHOICES_UNKNOWN_YES_NO = List.of(CHOICE_UNKNOWN,CHOICE_YES,CHOICE_NO);
+	
 	@Getter @Setter @AllArgsConstructor @EqualsAndHashCode(of = "label")
 	public static class ChoiceYesNo implements Serializable {
 		private String label;

@@ -19,6 +19,8 @@ public interface SpecificFieldExecutor<V> extends FieldBasedExecutor {
 	<T> Boolean exists(Class<T> klass,Collection<V> values);
 	<T> Boolean exists(Class<T> klass,V...values);
 	
+	<T> void throwExceptionIfNotExist(Class<T> klass,V value);
+	
 	<T> Collection<V> getUnexisting(Class<T> klass,Collection<V> values);
 	<T> Collection<V> getUnexisting(Class<T> klass,V...values);
 	
@@ -57,6 +59,13 @@ public interface SpecificFieldExecutor<V> extends FieldBasedExecutor {
 			if(klass == null || ArrayHelper.isEmpty(values))
 				return null;
 			return exists(klass, CollectionHelper.listOf(values));
+		}
+		
+		@Override
+		public <T> void throwExceptionIfNotExist(Class<T> klass,V value) {
+			if(klass == null)
+				return;
+			GenericFieldExecutor.getInstance().throwExceptionIfNotExist(klass,getKlass(), getName(), value);
 		}
 		
 		@Override

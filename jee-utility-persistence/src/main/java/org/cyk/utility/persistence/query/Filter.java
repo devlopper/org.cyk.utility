@@ -171,7 +171,7 @@ public class Filter extends AbstractObject implements Serializable {
 	}
 
 	public Filter addField(String fieldName,Object fieldValue,ValueUsageType valueUsageType,ArithmeticOperator arithmeticOperator) {
-		Field field = __inject__(Field.class);
+		Field field = new Field();
 		Class<?> klass = getKlass();
 		if(klass == null)
 			field.setName(fieldName);

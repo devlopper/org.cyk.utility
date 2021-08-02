@@ -293,6 +293,12 @@ public interface Language {
 			return String.format(NOT, predicate);
 		}
 		
+		static String notIfTrue(String predicate,Boolean condition) {
+			if(Boolean.TRUE.equals(condition))
+				predicate = not(predicate);
+			return predicate;
+		}
+		
 		static String join(Collection<String> predicates,LogicalOperator operator) {
 			ThrowableHelper.throwIllegalArgumentExceptionIfEmpty("predicates", predicates);
 			ThrowableHelper.throwIllegalArgumentExceptionIfNull("operator", operator);

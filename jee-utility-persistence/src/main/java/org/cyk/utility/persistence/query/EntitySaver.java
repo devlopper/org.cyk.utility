@@ -124,6 +124,29 @@ public interface EntitySaver {
 		
 		private Collection<Object> __existingIdentifiers__;
 		
+		public Collection<T> getCreatables(Boolean injectIfNull) {
+			if(creatables == null && Boolean.TRUE.equals(injectIfNull))
+				creatables = new ArrayList<>();
+			return creatables;
+		}
+		
+		public Collection<T> getUpdatables(Boolean injectIfNull) {
+			if(updatables == null && Boolean.TRUE.equals(injectIfNull))
+				updatables = new ArrayList<>();
+			return updatables;
+		}
+		
+		public Collection<T> getDeletables(Boolean injectIfNull) {
+			if(deletables == null && Boolean.TRUE.equals(injectIfNull))
+				deletables = new ArrayList<>();
+			return deletables;
+		}
+		
+		public Boolean isCreatableAndUpdatablesAndDeletablesEmpty() {
+			return Boolean.TRUE.equals(CollectionHelper.isEmpty(creatables)) && Boolean.TRUE.equals(CollectionHelper.isEmpty(updatables))
+					&& Boolean.TRUE.equals(CollectionHelper.isEmpty(deletables));
+		}
+		
 		public void computeExistingIdentifiers() {
 			__existingIdentifiers__ = FieldHelper.readSystemIdentifiers(existingCollection);
 		}

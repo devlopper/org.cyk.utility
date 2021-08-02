@@ -45,6 +45,11 @@ public abstract class AbstractUnitTest extends AbstractWeldUnitTest {
 		return "default";
 	}
 	
+	public void assertThatCountIsEqualTo(Class<?> klass,Long number){
+		Long count = EntityCounter.getInstance().count(klass);
+		assertThat(count).as(String.format("number of %s is greater than %s",klass.getSimpleName(),number)).isEqualTo(number);
+	}
+	
 	public void assertThatCountIsGreaterThan(Class<?> klass,Long number,Boolean printable){
 		Long count = EntityCounter.getInstance().count(klass);
 		if(Boolean.TRUE.equals(printable))

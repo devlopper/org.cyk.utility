@@ -104,7 +104,6 @@ public interface ValueConverter {
 		Type sourceFieldType = FieldHelper.getType(sourceField, null);
 		Type destinationFieldType = FieldHelper.getType(destinationField, null);	
 		if(sourceFieldValue instanceof Collection) {
-			@SuppressWarnings("unchecked")
 			Collection<Object> collection = (Collection<Object>) ClassHelper.instanciate((Class<?>) ((ParameterizedType)destinationFieldType).getRawType());
 			sourceFieldType = ((ParameterizedType)sourceFieldType).getActualTypeArguments()[0];
 			destinationFieldType = ((ParameterizedType)destinationFieldType).getActualTypeArguments()[0];

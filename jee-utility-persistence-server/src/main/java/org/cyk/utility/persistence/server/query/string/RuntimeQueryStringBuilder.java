@@ -9,6 +9,7 @@ import java.util.Map;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
 import org.cyk.utility.__kernel__.computation.SortOrder;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
@@ -20,6 +21,7 @@ import org.cyk.utility.__kernel__.object.marker.Namable;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.Value;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.persistence.query.Field;
 import org.cyk.utility.persistence.query.Filter;
 import org.cyk.utility.persistence.query.Querier;
@@ -154,13 +156,40 @@ public interface RuntimeQueryStringBuilder {
 			return isQueryExecutorArgumentsFilterHasFieldsWithPaths(arguments, CollectionHelper.listOf(paths));
 		}
 		
+		/**/
+		
+		protected static Boolean addIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
+				,String path,String variable,String fieldName) {
+			if(arguments == null || arguments.getFilter() == null)
+				return null;
+			Field field = arguments.getFilter().getField(path);
+			if(field == null)
+				return null;
+			ArithmeticOperator arithmeticOperator = ValueHelper.defaultToIfNull(field.getArithmeticOperator(), ArithmeticOperator.EQ);
+			if(ArithmeticOperator.EQ.equals(arithmeticOperator))
+				return addEqualsIfFilterHasFieldWithPath(arguments, builderArguments, predicate, filter, path);
+			if(ArithmeticOperator.LIKE.equals(arithmeticOperator))
+				return addLikeIfFilterHasFieldWithPath(arguments, builderArguments, predicate, filter, path, variable, fieldName);
+			return null;
+		}
+		
+		protected static Boolean addIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
+				,String path,String variable) {
+			return addIfFilterHasFieldWithPath(arguments, builderArguments, predicate, filter, path, variable, path);
+		}
+		
+		protected static Boolean addIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
+				,String path) {
+			return addIfFilterHasFieldWithPath(arguments, builderArguments, predicate, filter, path, "t", path);
+		}
+		
 		protected static Boolean addLikeIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
 				,String path,String variable,String fieldName) {
 			Field field = arguments.getFilterField(path);
 			if(field == null)
 				return null;
 			filter.addField(path, LikeStringValueBuilder.getInstance().build((String)field.getValue(), field.getLikeStartsWithAny(), field.getLikeEndsWithAny()));
-			predicate.add(LikeStringBuilder.getInstance().build(new LikeStringBuilder.Arguments().setTupleName(variable).setFieldName(fieldName).setParameterName(path)
+			predicate.add(LikeStringBuilder.getInstance().build(new LikeStringBuilder.Arguments().setVariable(variable).setFieldName(fieldName).setParameterName(path)
 					.setNegate(field.getNegate())));
 			/*
 			LikeStringBuilder.Arguments likeArguments = new LikeStringBuilder.Arguments();
@@ -168,6 +197,16 @@ public interface RuntimeQueryStringBuilder {
 			predicate.add(String.format("%s.%s LIKE :%s", variable,fieldName,path));
 			*/
 			return Boolean.TRUE;
+		}
+		
+		protected static Boolean addLikeIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
+				,String path,String variable) {
+			return addLikeIfFilterHasFieldWithPath(arguments, builderArguments, predicate, filter, path, variable, path);
+		}
+		
+		protected static Boolean addLikeIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
+				,String path) {
+			return addLikeIfFilterHasFieldWithPath(arguments, builderArguments, predicate, filter, path, "t");
 		}
 		
 		protected static Boolean addEqualsIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
@@ -187,9 +226,9 @@ public interface RuntimeQueryStringBuilder {
 			addEqualsIfFilterHasFieldWithPath(arguments, builderArguments, predicate, filter, path, variable, path);
 		}
 		
-		protected static void addEqualsIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
+		protected static Boolean addEqualsIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
 				,String path) {
-			addEqualsIfFilterHasFieldWithPath(arguments, builderArguments, predicate, filter, path, "t", path);
+			return addEqualsIfFilterHasFieldWithPath(arguments, builderArguments, predicate, filter, path, "t", path);
 		}
 		
 		protected static void addIsFalseOrNullIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter

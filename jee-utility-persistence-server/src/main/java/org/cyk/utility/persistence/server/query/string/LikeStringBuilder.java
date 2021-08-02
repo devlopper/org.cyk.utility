@@ -19,21 +19,22 @@ import lombok.experimental.Accessors;
 public interface LikeStringBuilder {
 
 	String build(Arguments arguments);	
-	String build(String tupleName,String fieldName,String parameterName,LogicalOperator operator,Integer numberOfAdditionalParameters,LogicalOperator additionalParametersOperator,Boolean isCaseSensitive);
-	String build(String tupleName,String fieldName,String parameterName,LogicalOperator operator,Integer numberOfAdditionalParameters,LogicalOperator additionalParametersOperator);
-	String build(String tupleName,String fieldName,String parameterName,LogicalOperator operator,Integer numberOfAdditionalParameters);
-	String build(String tupleName,String fieldName,String parameterName,Integer numberOfAdditionalParameters);
-	String build(String tupleName,String fieldName,String parameterName);
+	String build(String variable,String fieldName,String parameterName,LogicalOperator operator,Integer numberOfAdditionalParameters,LogicalOperator additionalParametersOperator,Boolean isCaseSensitive);
+	String build(String variable,String fieldName,String parameterName,LogicalOperator operator,Integer numberOfAdditionalParameters,LogicalOperator additionalParametersOperator);
+	String build(String variable,String fieldName,String parameterName,LogicalOperator operator,Integer numberOfAdditionalParameters);
+	String build(String variable,String fieldName,String parameterName,Integer numberOfAdditionalParameters);
+	String build(String variable,String fieldName,String parameterName);
+	String build(String variable,String fieldName);
 	
 	public static abstract class AbstractImpl extends AbstractObject implements LikeStringBuilder,Serializable {
 	
 		@Override
 		public String build(Arguments arguments) {
 			ThrowableHelper.throwIllegalArgumentExceptionIfNull("like string builder arguments", arguments);
-			if(StringHelper.isBlank(arguments.tupleName) || StringHelper.isBlank(arguments.fieldName) || StringHelper.isBlank(arguments.parameterName))
+			if(StringHelper.isBlank(arguments.variable) || StringHelper.isBlank(arguments.fieldName) || StringHelper.isBlank(arguments.parameterName))
 				throw new RuntimeException(String.format("Illegal parameters. tuple name %s , field name : %s , parameter name : %s."
-						,arguments.tupleName,arguments.fieldName,arguments.parameterName));
-			String like = format(arguments.tupleName, arguments.fieldName, arguments.parameterName, arguments.isCaseSensitive,arguments.negate);
+						,arguments.variable,arguments.fieldName,arguments.parameterName));
+			String like = format(arguments.variable, arguments.fieldName, arguments.parameterName, arguments.isCaseSensitive,arguments.negate);
 			if(arguments.numberOfAdditionalParameters == null || arguments.numberOfAdditionalParameters <= 0)
 				return like;
 			if(arguments.operator == null)
@@ -45,7 +46,7 @@ public interface LikeStringBuilder {
 				additionalParametersNames.add(arguments.parameterName+index);
 			Collection<String> likes = new ArrayList<String>();
 			additionalParametersNames.forEach(parameterName -> {
-				likes.add(format(arguments.tupleName, arguments.fieldName, parameterName, arguments.isCaseSensitive));
+				likes.add(format(arguments.variable, arguments.fieldName, parameterName, arguments.isCaseSensitive));
 			});
 			String additionalParametersLike;
 			if(likes.size() == 1)
@@ -56,38 +57,43 @@ public interface LikeStringBuilder {
 		}
 		
 		@Override
-		public String build(String tupleName,String fieldName,String parameterName,LogicalOperator operator,Integer numberOfAdditionalParameters,LogicalOperator additionalParametersOperator,Boolean isCaseSensitive) {
-			return new Like().setTupleName(tupleName).setFieldName(fieldName).setParameterName(parameterName).setNumberOfAdditionalParameters(numberOfAdditionalParameters)
+		public String build(String variable,String fieldName,String parameterName,LogicalOperator operator,Integer numberOfAdditionalParameters,LogicalOperator additionalParametersOperator,Boolean isCaseSensitive) {
+			return new Like().setTupleName(variable).setFieldName(fieldName).setParameterName(parameterName).setNumberOfAdditionalParameters(numberOfAdditionalParameters)
 					.setOperator(operator).setIsCaseSensitive(isCaseSensitive).setAdditionalParametersOperator(additionalParametersOperator).generate();
 		}
 		
 		@Override
-		public String build(String tupleName,String fieldName,String parameterName,LogicalOperator operator,Integer numberOfAdditionalParameters,LogicalOperator additionalParametersOperator) {
-			return build(tupleName, fieldName, parameterName, operator, numberOfAdditionalParameters, additionalParametersOperator, null);
+		public String build(String variable,String fieldName,String parameterName,LogicalOperator operator,Integer numberOfAdditionalParameters,LogicalOperator additionalParametersOperator) {
+			return build(variable, fieldName, parameterName, operator, numberOfAdditionalParameters, additionalParametersOperator, null);
 		}
 		
 		@Override
-		public String build(String tupleName,String fieldName,String parameterName,LogicalOperator operator,Integer numberOfAdditionalParameters) {
-			return build(tupleName, fieldName, parameterName, operator, numberOfAdditionalParameters, null);
+		public String build(String variable,String fieldName,String parameterName,LogicalOperator operator,Integer numberOfAdditionalParameters) {
+			return build(variable, fieldName, parameterName, operator, numberOfAdditionalParameters, null);
 		}
 		
 		@Override
-		public String build(String tupleName,String fieldName,String parameterName,Integer numberOfAdditionalParameters) {
-			return build(tupleName, fieldName, parameterName, LogicalOperator.OR, numberOfAdditionalParameters, LogicalOperator.AND, null);
+		public String build(String variable,String fieldName,String parameterName,Integer numberOfAdditionalParameters) {
+			return build(variable, fieldName, parameterName, LogicalOperator.OR, numberOfAdditionalParameters, LogicalOperator.AND, null);
 		}
 		
 		@Override
-		public String build(String tupleName,String fieldName,String parameterName) {
-			return build(tupleName, fieldName, parameterName, null, null, null);
+		public String build(String variable,String fieldName,String parameterName) {
+			return build(variable, fieldName, parameterName, null, null, null);
 		}
 		
-		private static String format(String tupleName,String fieldName,String parameterName,Boolean isCaseSensitive,Boolean negate) {
-			return String.format(Boolean.TRUE.equals(isCaseSensitive) ? FORMAT_CASE_SENSITIVE : FORMAT,tupleName, fieldName
+		@Override
+		public String build(String variable,String fieldName) {
+			return build(variable, fieldName, fieldName, null, null, null);
+		}
+		
+		private static String format(String variable,String fieldName,String parameterName,Boolean isCaseSensitive,Boolean negate) {
+			return String.format(Boolean.TRUE.equals(isCaseSensitive) ? FORMAT_CASE_SENSITIVE : FORMAT,variable, fieldName
 					,Boolean.TRUE.equals(negate) ? "NOT LIKE" : "LIKE", parameterName);
 		}
 		
-		private static String format(String tupleName,String fieldName,String parameterName,Boolean isCaseSensitive) {
-			return format(tupleName, fieldName, parameterName, isCaseSensitive, null);
+		private static String format(String variable,String fieldName,String parameterName,Boolean isCaseSensitive) {
+			return format(variable, fieldName, parameterName, isCaseSensitive, null);
 		}
 		
 		private static final String FORMAT = "LOWER(%s.%s) %s LOWER(:%s)";
@@ -98,7 +104,7 @@ public interface LikeStringBuilder {
 	
 	@Getter @Setter @Accessors(chain=true)
 	public static class Arguments extends AbstractObject implements Serializable {		
-		private String tupleName;
+		private String variable;
 		private String fieldName;
 		private String parameterName;
 		private LogicalOperator operator;

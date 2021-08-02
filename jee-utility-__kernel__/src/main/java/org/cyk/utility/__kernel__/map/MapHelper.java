@@ -158,6 +158,14 @@ public interface MapHelper {
 		return map;
 	}
 	
+	static Map<String,String> instantiateStringString(String...strings) {
+		if(org.cyk.utility.__kernel__.array.ArrayHelper.isEmpty(strings))
+			return null;
+		Map<String, String> map = new LinkedHashMap<String, String>();
+		set(map,(Object[])strings);
+		return map;
+	}
+	
 	static Map<String,Integer> instantiateStringInteger(Object...objects) {
 		if(org.cyk.utility.__kernel__.array.ArrayHelper.isEmpty(objects))
 			return null;

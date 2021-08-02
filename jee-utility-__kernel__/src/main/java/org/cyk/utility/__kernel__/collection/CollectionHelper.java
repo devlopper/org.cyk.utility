@@ -51,7 +51,7 @@ public interface CollectionHelper {
 		if(klass == null || elements == null || elements.length == 0)
 			return null;
 		if(klass.equals(List.class)) {
-			Collection<T> collection = new ArrayList<>();
+			Collection<T> collection = null;
 			for(T element : elements) {
 				if(element == null && Boolean.TRUE.equals(ignoreNullElement))
 					continue;
@@ -62,12 +62,12 @@ public interface CollectionHelper {
 			return collection;
 		}
 		if(klass.equals(Set.class)) {
-			Collection<T> collection = new LinkedHashSet<T>();
+			Collection<T> collection = null;
 			for(T element : elements) {
 				if(element == null && Boolean.TRUE.equals(ignoreNullElement))
 					continue;
 				if(collection == null)
-					collection = new ArrayList<>();
+					collection = new LinkedHashSet<T>();
 				collection.add(element);
 			}
 			return collection;
