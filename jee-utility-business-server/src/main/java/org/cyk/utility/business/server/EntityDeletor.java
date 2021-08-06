@@ -15,6 +15,9 @@ import org.cyk.utility.__kernel__.value.Value;
 public interface EntityDeletor {
 
 	@Transactional
+	void delete(QueryExecutorArguments arguments);
+	
+	@Transactional
 	<T> void deleteMany(Collection<Object> objects);
 	
 	@Transactional
@@ -28,6 +31,14 @@ public interface EntityDeletor {
 	
 	public static abstract class AbstractImpl extends AbstractObject implements EntityDeletor,Serializable{
 		public static Boolean IS_CONTAINER_MANAGED_TRANSACTION = Boolean.TRUE;
+		
+		@Override @Transactional
+		public void delete(QueryExecutorArguments queryExecutorArguments) {
+			if(queryExecutorArguments == null)
+				return;
+			queryExecutorArguments.setIsTransactional(!Boolean.TRUE.equals(IS_CONTAINER_MANAGED_TRANSACTION));
+			__deleteMany__(queryExecutorArguments);
+		}
 		
 		@Transactional
 		@Override

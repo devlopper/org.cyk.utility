@@ -59,4 +59,9 @@ public abstract class AbstractSpecificBusinessImpl<ENTITY> extends AbstractObjec
 			return null;
 		return create(CollectionHelper.listOf(entities));
 	}
+	
+	@Override
+	public TransactionResult delete(Collection<String> identifiers, String actorCode) {
+		throw new RuntimeException("Delete not yet implemented");
+	}
 }

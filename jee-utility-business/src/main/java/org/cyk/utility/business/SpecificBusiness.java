@@ -16,4 +16,8 @@ public interface SpecificBusiness<ENTITY> {
 	
 	@Transactional
 	TransactionResult create(ENTITY...entities);
+
+	String DELETE = "delete";
+	@Transactional
+	TransactionResult delete(Collection<String> identifiers,String actorCode);
 }
