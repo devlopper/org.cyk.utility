@@ -52,8 +52,13 @@ public abstract class AbstractInput<VALUE> extends AbstractInputOutput<VALUE> im
 		}
 		//if(value != null && ClassHelper.isInstanceOf(field.getType(), Boolean.class) && value instanceof String)
 		//	value = (VALUE) ValueConverter.getInstance().convertToBoolean(value);
-		FieldHelper.write(object, field, value);
+		//FieldHelper.write(object, field, value);
+		writeValueToObjectField(value);
 		return this;
+	}
+	
+	protected void writeValueToObjectField(Object value) {
+		FieldHelper.write(object, field, value);
 	}
 	
 	@Override

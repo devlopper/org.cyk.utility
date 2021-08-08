@@ -3,9 +3,11 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.model.input;
 import java.io.Serializable;
 import java.util.Map;
 
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
+import org.cyk.utility.__kernel__.value.ValueConverter;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax.Ajax;
 
 import lombok.Getter;
@@ -22,6 +24,13 @@ public class SelectOneRadio extends AbstractInputChoiceOne implements Serializab
 	public void setReadOnly(Boolean readOnly) {
 		super.setReadOnly(readOnly);
 		setDisabled(readOnly);
+	}
+		
+	@Override
+	protected void writeValueToObjectField(Object value) {
+		if(ClassHelper.isInstanceOf(field.getType(), Boolean.class) && value instanceof String)
+			value = ValueConverter.getInstance().convertToBoolean(value);
+		super.writeValueToObjectField(value);
 	}
 	
 	/**/

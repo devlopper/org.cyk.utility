@@ -256,7 +256,11 @@ public class Form extends AbstractObject implements Serializable {
 			Map<Object,Object> getLayoutArguments(Form form,Collection<Map<Object,Object>> cellsArguments);
 			//Layout instantiateLayout(Form form);
 			
+			@Getter @Setter @Accessors(chain=true)
 			public static abstract class AbstractImpl extends AbstractObject implements Listener,Serializable {
+				
+				protected Object pageContainerManaged;
+				
 				@Override
 				public Collection<String> getFieldsNames(Form form) {
 					Collection<String> fieldsNames = FieldHelper.getNames(FieldHelper.getByAnnotationClass(form.entity.getClass(), Input.class));
