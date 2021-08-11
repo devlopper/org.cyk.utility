@@ -1,13 +1,19 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces.model.input;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
+import javax.faces.model.SelectItem;
+
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.Configurator;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.ValueConverter;
+import org.cyk.utility.client.controller.web.jsf.JavaServerFacesHelper;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax.Ajax;
 
 import lombok.Getter;
@@ -31,6 +37,29 @@ public class SelectOneRadio extends AbstractInputChoiceOne implements Serializab
 		if(ClassHelper.isInstanceOf(field.getType(), Boolean.class) && value instanceof String)
 			value = ValueConverter.getInstance().convertToBoolean(value);
 		super.writeValueToObjectField(value);
+	}
+	
+	@Override
+	public Object deriveBinding(String beanPath) {
+		org.primefaces.component.selectoneradio.SelectOneRadio component = new org.primefaces.component.selectoneradio.SelectOneRadio();
+		if(StringHelper.isNotBlank(styleClass))
+			component.setStyleClass(styleClass);
+		if(StringHelper.isNotBlank(style))
+			component.setStyle(style);
+		component.setSelectItems((List<SelectItem>)CollectionHelper.cast(SelectItem.class, choices));
+		for(Object[] array : new Object[][] {
+				/*new Object[] {FIELD_DECIMAL_PLACES,null,String.class}
+				,new Object[] {FIELD_DECIMAL_SEPARATOR,null,String.class}
+				,new Object[] {FIELD_THOUSAND_SEPARATOR,null,String.class}
+				,new Object[] {FIELD_MIN_VALUE,null,String.class}
+				,new Object[] {FIELD_MAX_VALUE,null,String.class}
+				,*/new Object[] {FIELD_RENDERED,null,Boolean.class}
+			}) {
+			String property = array[1] == null ? (String) array[0] : (String) array[1];
+			Class<?> klass = array[2] == null ? String.class : (Class<?>) array[2];
+			__inject__(JavaServerFacesHelper.class).setValueExpression(component, property, JavaServerFacesHelper.buildValueExpression(String.format("#{%s.%s}",beanPath,array[0]), klass));
+		}
+		return component;
 	}
 	
 	/**/
