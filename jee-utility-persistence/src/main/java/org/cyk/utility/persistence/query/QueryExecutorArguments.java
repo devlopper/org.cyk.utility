@@ -537,6 +537,12 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 		
 		private Boolean queryBuildableAtRuntime;
 		
+		public LinkedHashMap<String,SortOrder> getSortOrders(Boolean injectIfNull) {
+			if(sortOrders == null && Boolean.TRUE.equals(injectIfNull))
+				sortOrders = new LinkedHashMap<String,SortOrder>();
+			return sortOrders;
+		}
+		
 		public Collection<String> getFlags(Boolean injectIfNull) {
 			if(flags == null && Boolean.TRUE.equals(injectIfNull))
 				flags = new ArrayList<>();

@@ -47,6 +47,7 @@ public abstract class AbstractFilterController extends AbstractObject implements
 	protected String layoutIdentifier = RandomHelper.getAlphabetic(4);
 	protected RenderType renderType;
 	protected Boolean isNotBuildable;
+	protected Class<?> pageClass;
 	
 	public Map<String,Boolean> getIgnorables(Boolean injectIfNull) {
 		if(ignorables == null && Boolean.TRUE.equals(injectIfNull))
@@ -66,6 +67,14 @@ public abstract class AbstractFilterController extends AbstractObject implements
 		if(ArrayHelper.isEmpty(fieldNames))
 			return this;
 		return ignore(CollectionHelper.listOf(fieldNames));
+	}
+	
+	public Boolean isIgnored(String fieldName) {
+		if(ignorables == null || ignorables.isEmpty())
+			return Boolean.FALSE;
+		if(StringHelper.isBlank(fieldName))
+			return null;		
+		return ignorables.containsKey(fieldName);
 	}
 	
 	protected Boolean isBuildable(String fieldName) {
@@ -265,6 +274,10 @@ public abstract class AbstractFilterController extends AbstractObject implements
 			cellsMaps.add(MapHelper.instantiate(Cell.FIELD_CONTROL,filterCommandButton,Cell.FIELD_WIDTH,filterCommandButtonWidth));
 		}
 		return cellsMaps;
+	}
+	
+	public Map<String, List<String>> asMap() {
+		throw new RuntimeException(getClass().getSimpleName()+" as map not yet implemented");
 	}
 	
 	/**/

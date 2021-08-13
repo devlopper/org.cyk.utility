@@ -3,6 +3,7 @@ package org.cyk.utility.controller;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 
 import javax.ws.rs.core.Response;
 
@@ -10,6 +11,7 @@ import org.apache.commons.lang3.reflect.MethodUtils;
 import org.cyk.utility.__kernel__.TypeHelper;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.computation.SortOrder;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.identifier.resource.ProxyGetter;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
@@ -21,6 +23,8 @@ import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
 import org.cyk.utility.persistence.query.Filter;
 import org.cyk.utility.persistence.query.Querier;
+import org.cyk.utility.persistence.query.QueryIdentifierBuilder;
+import org.cyk.utility.persistence.query.QueryName;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -55,6 +59,14 @@ public class Arguments<T> extends AbstractObject implements Serializable {
 	Response __response__;
 	Object __responseEntity__;
 	RuntimeException __runtimeException__;
+	
+	public Arguments<T> queryIdentifierReadDynamicMany(Class<?> klass) {
+		return queryIdentifier(QueryIdentifierBuilder.getInstance().build(klass, QueryName.READ_DYNAMIC));
+	}
+	
+	public Arguments<T> queryIdentifierReadDynamicOne(Class<?> klass) {
+		return queryIdentifier(QueryIdentifierBuilder.getInstance().build(klass, QueryName.READ_DYNAMIC_ONE));
+	}
 	
 	public Arguments<T> queryIdentifier(String queryIdentifier) {
 		getRepresentationArguments(Boolean.TRUE).getQueryExecutorArguments(Boolean.TRUE).setQueryIdentifier(queryIdentifier);
@@ -102,6 +114,24 @@ public class Arguments<T> extends AbstractObject implements Serializable {
 		if(CollectionHelper.isEmpty(identifiers))
 			return this;
 		return filterFieldValue(Querier.PARAMETER_NAME_IDENTIFIERS, identifiers);
+	}
+	
+	public Arguments<T> setSortOrders(LinkedHashMap<String, SortOrder> sortOrders) {
+		getRepresentationArguments(Boolean.TRUE).getQueryExecutorArguments(Boolean.TRUE).setSortOrders(sortOrders);
+		return this;
+	}
+	
+	public Arguments<T> order(String fieldName,SortOrder sortOrder) {		
+		getRepresentationArguments(Boolean.TRUE).getQueryExecutorArguments(Boolean.TRUE).getSortOrders(Boolean.TRUE).put(fieldName, sortOrder);
+		return this;
+	}
+	
+	public Arguments<T> asc(String fieldName) {
+		return order(fieldName, SortOrder.ASCENDING);
+	}
+	
+	public Arguments<T> desc(String fieldName) {
+		return order(fieldName, SortOrder.DESCENDING);
 	}
 	
 	public org.cyk.utility.representation.Arguments getRepresentationArguments(Boolean injectIfNull) {
