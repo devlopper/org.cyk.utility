@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.enumeration.Action;
 import org.cyk.utility.__kernel__.field.FieldHelper;
@@ -29,6 +30,26 @@ public class TransactionResult implements Serializable {
 	private String tupleName;
 	private Boolean isTupleNameFeminine;
 	private SuccessMessageBuilder successMessageBuilder;
+	private Collection<String> messages;
+	
+	public Collection<String> getMessages(Boolean injectIfNull) {
+		if(messages == null && Boolean.TRUE.equals(injectIfNull))
+			messages = new ArrayList<>();
+		return messages;
+	}
+	
+	public TransactionResult addMessages(Collection<String> messages) {
+		if(CollectionHelper.isEmpty(messages))
+			return this;
+		getMessages(Boolean.TRUE).addAll(messages);
+		return this;
+	}
+	
+	public TransactionResult addMessages(String...messages) {
+		if(ArrayHelper.isEmpty(messages))
+			return this;
+		return addMessages(CollectionHelper.listOf(messages));
+	}
 	
 	public TransactionResult incrementNumberOfCreation(Long numberOfCreation) {
 		this.numberOfCreation = NumberHelper.getLong(NumberHelper.add(this.numberOfCreation,numberOfCreation));
@@ -89,6 +110,10 @@ public class TransactionResult implements Serializable {
 		LogHelper.logInfo(String.format("%s exécuté(e) en %s. %s => %s(C) %s(U) %s(D)."
 				, name,TimeHelper.formatDuration(duration),tupleName,ValueHelper.defaultToIfNull(numberOfCreation,0),ValueHelper.defaultToIfNull(numberOfUpdate,0)
 				,ValueHelper.defaultToIfNull(numberOfDeletion,0)), klass);
+		if(CollectionHelper.isNotEmpty(messages))
+			messages.forEach(message -> {
+				LogHelper.logInfo(message, klass);
+			});
 		return this;
 	}
 	
@@ -116,6 +141,8 @@ public class TransactionResult implements Serializable {
 				strings = add(transactionResult, Action.CREATE, strings);
 				strings = add(transactionResult, Action.UPDATE, strings);
 				strings = add(transactionResult, Action.DELETE, strings);
+				if(CollectionHelper.isNotEmpty(transactionResult.messages))
+					strings.addAll(transactionResult.messages);
 				return CollectionHelper.isEmpty(strings) ? "Aucune modification" : StringHelper.concatenate(strings, "\n\r");
 			}
 			
