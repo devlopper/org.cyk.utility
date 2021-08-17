@@ -130,6 +130,11 @@ public class NumberHelperUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	@Test
+	public void compare_null_1_lt(){
+		assertThat(compare(null,1,ComparisonOperator.LT)).isFalse();
+	}
+	
+	@Test
 	public void compare_1_null_null(){
 		assertThat(compare(1,null,null)).isFalse();
 	}

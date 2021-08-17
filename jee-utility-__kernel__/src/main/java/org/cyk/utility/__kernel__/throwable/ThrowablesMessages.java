@@ -37,8 +37,7 @@ public class ThrowablesMessages extends AbstractObject implements Serializable{
 	}
 	
 	public void throwIfNotEmpty() {
-		if(CollectionHelper.isNotEmpty(collection))
-			throw new RuntimeException(StringHelper.concatenate(collection, "\r\n"));	
+		throwIfNotEmpty(this);
 	}
 	
 	public ThrowablesMessages clear() {
@@ -46,5 +45,17 @@ public class ThrowablesMessages extends AbstractObject implements Serializable{
 			return this;
 		collection.clear();
 		return this;
+	}
+
+	public Collection<String> getMessages() {
+		return collection;
+	}
+
+	/**/
+	
+	public static void throwIfNotEmpty(ThrowablesMessages throwablesMessages) {
+		if(throwablesMessages == null || CollectionHelper.isEmpty(throwablesMessages.collection))
+			return;
+		throw new RuntimeException(StringHelper.concatenate(throwablesMessages.collection, "\r\n"));	
 	}
 }

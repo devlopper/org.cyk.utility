@@ -10,8 +10,8 @@ public class TransactionResultUnitTest extends AbstractWeldUnitTest {
 
 	@Test
 	public void buildSuccessMessage() {
-		assertBuildSuccessMessage(new TransactionResult(), null);
-		assertBuildSuccessMessage(new TransactionResult().setNumberOfCreation(0l), null);
+		assertBuildSuccessMessage(new TransactionResult(), "Aucune modification");
+		assertBuildSuccessMessage(new TransactionResult().setNumberOfCreation(0l), "Aucune modification");
 		assertBuildSuccessMessage(new TransactionResult().setTupleName("mesure").setIsTupleNameFeminine(Boolean.TRUE).setNumberOfCreation(1l), "1 mesure créée");
 		assertBuildSuccessMessage(new TransactionResult().setTupleName("mesure").setIsTupleNameFeminine(Boolean.TRUE).setNumberOfCreation(2l), "2 mesures créées");
 	}
