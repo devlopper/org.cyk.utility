@@ -60,6 +60,11 @@ public class Arguments<T> extends AbstractObject implements Serializable {
 	Object __responseEntity__;
 	RuntimeException __runtimeException__;
 	
+	public Arguments<T> actionIdentifier(String actionIdentifier) {
+		getRepresentationArguments(Boolean.TRUE).setActionIdentifier(actionIdentifier);
+		return this;
+	}
+	
 	public Arguments<T> queryIdentifierReadDynamicMany(Class<?> klass) {
 		return queryIdentifier(QueryIdentifierBuilder.getInstance().build(klass, QueryName.READ_DYNAMIC));
 	}
