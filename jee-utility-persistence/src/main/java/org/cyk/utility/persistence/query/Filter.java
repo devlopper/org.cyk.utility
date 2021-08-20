@@ -344,6 +344,16 @@ public class Filter extends AbstractObject implements Serializable {
 		return map;
 	}
 	
+	public Map<String,Object> generateMapStringObject() {
+		if(CollectionHelper.isEmpty(fields))
+			return null;
+		Map<String,Object> map = new HashMap<>();
+		fields.forEach(field -> {
+			map.put(field.getName(), field.getValue());
+		});
+		return map;
+	}
+	
 	/**/
 	
 	@XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor

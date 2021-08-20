@@ -17,6 +17,8 @@ public enum QueryName {
 	,READ_AUDIT("readAudit")
 	,COUNT_AUDIT("countAudit")
 	
+	,INSTANTIATE("instantiate")
+	
 	,READ_CODES("readCodes")
 	,COUNT_CODES("countCodes")
 	
