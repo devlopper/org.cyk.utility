@@ -14,7 +14,7 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 	@Override
 	public void __initialize__(Object object) {
 		VariableHelper.write(VariableName.ENABLED, Boolean.TRUE);
-		LogHelper.logInfo("Jasper report server initialized", getClass());
+		LogHelper.logConfig("Jasper report server initialized", getClass());
 	}
 
 	@Override

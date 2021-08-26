@@ -14,7 +14,6 @@ import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.persistence.query.Query;
 import org.cyk.utility.persistence.query.QueryContext;
 import org.cyk.utility.persistence.query.QueryGetter;
-import org.cyk.utility.persistence.query.QueryHelper;
 import org.cyk.utility.persistence.query.QueryManager;
 import org.cyk.utility.persistence.query.Filter;
 import org.cyk.utility.__kernel__.properties.Properties;
@@ -40,7 +39,7 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	@Override
 	protected void __listenAfterPostConstruct__() {
 		super.__listenAfterPostConstruct__();
-		__logInfo__(getIdentifier()+" : Number of queries : "+CollectionHelper.getSize(getQueries()));
+		//__logInfo__(getIdentifier()+" : Number of queries : "+CollectionHelper.getSize(getQueries()));
 	}
 	
 	/**

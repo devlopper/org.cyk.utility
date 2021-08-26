@@ -47,22 +47,28 @@ public interface RuntimeQueryStringBuilder {
 		
 		protected String __build__(QueryExecutorArguments arguments) {
 			if(StringHelper.isBlank(arguments.getQuery().getValue())) {				
-				normalizeQueryExecutorArguments(arguments);
 				QueryStringBuilder.Arguments builderArguments = new QueryStringBuilder.Arguments();
+				
+				setOrder(arguments, builderArguments);
+				
+				normalizeQueryExecutorArguments(arguments,builderArguments);
+				
 				setProjection(arguments, builderArguments);
 				setTuple(arguments, builderArguments);
 				setPredicate(arguments, builderArguments);
 				setGroup(arguments, builderArguments);
-				setOrder(arguments, builderArguments);
+				
 				return QueryStringBuilder.getInstance().build(builderArguments);
 			}else
 				return arguments.getQuery().getValue();
 		}
 		
-		protected void normalizeQueryExecutorArguments(QueryExecutorArguments arguments) {
+		protected void normalizeQueryExecutorArguments(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments) {
 			arguments.normalize(
 					QueryType.COUNT.equals(arguments.getQuery().getType()) ? null : getDefaultProjections(arguments)
-					,QueryType.READ_MANY.equals(arguments.getQuery().getType()) ? getDefaultSortOrders(arguments) : null
+					,QueryType.READ_MANY.equals(arguments.getQuery().getType()) 
+						? (builderArguments.getOrder() != null ? null : getDefaultSortOrders(arguments)) 
+						: null
 				);		
 		}
 		

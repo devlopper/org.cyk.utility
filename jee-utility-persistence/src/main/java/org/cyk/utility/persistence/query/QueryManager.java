@@ -64,7 +64,7 @@ public interface QueryManager {
 		public QueryManager scan(Collection<Package> packages) {
 			if(QueryManager.getInstance().getIsRegisterableToEntityManagerFactory() == null)
 				QueryManager.getInstance().setIsRegisterableToEntityManagerFactory(Boolean.TRUE);
-			LogHelper.logInfo(String.format("query helper scanning packages %s.Registerable to entity manager=%s"
+			LogHelper.logConfig(String.format("query helper scanning packages %s.Registerable to entity manager=%s"
 					, packages,QueryManager.getInstance().getIsRegisterableToEntityManagerFactory()),QueryHelper.class);
 			if(CollectionHelper.isEmpty(packages))
 				return this;
@@ -93,7 +93,7 @@ public interface QueryManager {
 				}
 			}
 			register(queries);
-			LogHelper.logInfo(String.format("query helper scanned packages %s", packages),QueryHelper.class);
+			LogHelper.logConfig(String.format("query helper scanned packages %s", packages),QueryHelper.class);
 			return this;
 		}
 		

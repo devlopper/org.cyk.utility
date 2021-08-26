@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 public class DynamicManyExecutorUnitTest extends AbstractUnitTest {
 	private static final long serialVersionUID = 1L;
 	
-	@Test
+	//@Test
 	public void readDataType_namedQuery(){
 		QueryExecutorImpl.LOGGABLE = Boolean.TRUE;
 		QueryExecutorImpl.LOG_LEVEL = Level.INFO;

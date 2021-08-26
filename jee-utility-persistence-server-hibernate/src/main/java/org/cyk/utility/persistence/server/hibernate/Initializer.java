@@ -12,6 +12,6 @@ public interface Initializer {
 	static void initialize() {
 		org.cyk.utility.persistence.server.Initializer.initialize();		
 		DependencyInjection.setQualifierClassTo(Hibernate.Class.class, ProcedureExecutor.class,MetricsManager.class,AuditReader.class);
-		LogHelper.logInfo(String.format("Persistence server using hibernate has been initialized"), Initializer.class);
+		LogHelper.logConfig(String.format("Persistence server using hibernate has been initialized"), Initializer.class);
 	}
 }

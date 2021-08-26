@@ -29,7 +29,7 @@ public interface Initializer {
 		MapperClassGetter.AbstractImpl.MAP.put(Field.class, Field.Dto.Mapper.class);
 		MapperClassGetter.AbstractImpl.MAP.put(Field.Dto.class, Field.Dto.Mapper.class);
 		
-		LogHelper.logInfo(String.format("Persistence server has been initialized. Entity Manager Factory Instance is : %s , Query Manager Instance is : %s"
+		LogHelper.logConfig(String.format("Persistence server has been initialized. Entity Manager Factory Instance is : %s , Query Manager Instance is : %s"
 				,EntityManagerFactoryGetterImpl.ENTITY_MANAGER_FACTORY,QueryManager.getInstance()), Initializer.class);
 	}
 }

@@ -48,6 +48,7 @@ public abstract class AbstractFilterController extends AbstractObject implements
 	protected RenderType renderType;
 	protected Boolean isNotBuildable;
 	protected Class<?> pageClass;
+	protected Boolean isUsedForLoggedUser;
 	
 	public Map<String,Boolean> getIgnorables(Boolean injectIfNull) {
 		if(ignorables == null && Boolean.TRUE.equals(injectIfNull))

@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.enumeration.Action;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.throwable.ThrowablesMessages;
 import org.cyk.utility.business.SpecificBusiness;
@@ -16,6 +17,8 @@ import org.cyk.utility.business.TransactionResult;
 import org.cyk.utility.persistence.query.QueryExecutorArguments;
 
 public abstract class AbstractSpecificBusinessImpl<ENTITY> extends AbstractObject implements SpecificBusiness<ENTITY>,Serializable {
+
+	protected Class<ENTITY> entityClass;
 	
 	@Override @Transactional
 	public TransactionResult create(QueryExecutorArguments arguments) {
@@ -63,5 +66,13 @@ public abstract class AbstractSpecificBusinessImpl<ENTITY> extends AbstractObjec
 	@Override
 	public TransactionResult delete(Collection<String> identifiers, String actorCode) {
 		throw new RuntimeException("Delete not yet implemented");
+	}
+
+	/**/
+	
+	protected Class<ENTITY> getEntityClass() {
+		if(entityClass == null)
+			entityClass = (Class<ENTITY>) ClassHelper.getParameterAt(getClass(), 0);
+		return entityClass;
 	}
 }

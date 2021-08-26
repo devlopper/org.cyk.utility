@@ -18,7 +18,7 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 	@Override
 	public void __initialize__(Object object) {
 		DependencyInjection.setQualifierClassTo(FreeMarker.class,StringGenerator.class,StringTemplateGetter.class,StringTemplateIdentifierGetter.class);
-		LogHelper.logInfo("Freemarker template engine has been initialized", getClass());
+		LogHelper.logConfig("Freemarker template engine has been initialized", getClass());
 	}
 
 	@Override
