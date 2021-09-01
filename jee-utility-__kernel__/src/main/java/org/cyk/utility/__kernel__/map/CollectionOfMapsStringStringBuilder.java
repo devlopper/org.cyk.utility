@@ -1,6 +1,7 @@
 package org.cyk.utility.__kernel__.map;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -29,8 +30,10 @@ public interface CollectionOfMapsStringStringBuilder {
 		public <T> Collection<Map<String, String>> build(Class<T> klass, Arguments<T> arguments) {
 			ThrowableHelper.throwIllegalArgumentExceptionIfNull("klass", klass);
 			ThrowableHelper.throwIllegalArgumentExceptionIfNull("arguments", arguments);
-			if(CollectionHelper.isEmpty(arguments.collection) || MapHelper.isEmpty(arguments.fieldsNames))
-				return null;
+			if(CollectionHelper.isEmpty(arguments.collection))
+				return arguments.emptyValue;
+			if(MapHelper.isEmpty(arguments.fieldsNames))
+				return arguments.emptyValue;
 			return __build__(klass, arguments.collection,arguments.fieldsNames);
 		}
 		
@@ -65,6 +68,7 @@ public interface CollectionOfMapsStringStringBuilder {
 		
 		private Collection<T> collection;
 		private Map<String,String> fieldsNames;
+		private Collection<Map<String,String>> emptyValue;
 		
 		public Map<String,String> getFieldsNames(Boolean injectIfNull) {
 			if(fieldsNames == null && Boolean.TRUE.equals(injectIfNull))
@@ -78,6 +82,11 @@ public interface CollectionOfMapsStringStringBuilder {
 			getFieldsNames(Boolean.TRUE).putAll(MapHelper.instantiateStringString(fieldsNames));
 			return this;
 		}
+		
+		public Arguments<T> setEmptyValueAsArrayList() {
+			setEmptyValue(EMPTY_AS_ARRAY_LIST);
+			return this;
+		}
 	}
 	
 	/**/
@@ -86,4 +95,6 @@ public interface CollectionOfMapsStringStringBuilder {
 		return Helper.getInstance(CollectionOfMapsStringStringBuilder.class, INSTANCE);
 	}
 	Value INSTANCE = new Value();
+	
+	Collection<Map<String,String>> EMPTY_AS_ARRAY_LIST = new ArrayList<Map<String,String>>();
 }

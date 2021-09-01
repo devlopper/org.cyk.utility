@@ -31,7 +31,13 @@ public interface Representation {
 	/* Parameter */
 	
 	String PARAMETER_IDENTIFIER = ConstantString.IDENTIFIER;
-	String PARAMETER_IDENTIFIERS = "identifiers";
+	String DESCRIPTION_IDENTIFIER = "Identifiant";
+	String EXAMPLE_IDENTIFIER = "1";
+	
+	String PARAMETER_IDENTIFIERS = "identifiants";
+	String DESCRIPTION_IDENTIFIERS = "Identifiants";
+	String EXAMPLE_IDENTIFIERS = "1,2,3";
+	
 	String PARAMETER_PARAMETERS_NAMES = "parametersNames";
 	String PARAMETER_PARAMETERS_NAMES_VALUES_AS_JSON = "parametersNamesValuesAsJson";
 	String PARAMETER_FILE_TYPE = "fileType";
@@ -113,5 +119,18 @@ public interface Representation {
 	String TAG_ALL = "all";
 	String TAG_BY_IDENTIFIERS = "by identifiers";
 	String TAG_EXCEL = "excel";
+
+	/**/
 	
+	String PARAMETER_PAGEABLE = "paginer";
+	String DESCRIPTION_PAGEABLE = "Activer la pagination";
+	String EXAMPLE_PAGEABLE = "true";
+	
+	String PARAMETER_FIRST_TUPLE_INDEX = "index";
+	String DESCRIPTION_FIRST_TUPLE_INDEX = "index du premier élément";
+	String EXAMPLE_FIRST_TUPLE_INDEX = "0";
+	
+	String PARAMETER_NUMBER_OF_TUPLES = "nombre";
+	String DESCRIPTION_NUMBER_OF_TUPLES = "Nombre d'élément";
+	String EXAMPLE_NUMBER_OF_TUPLES = "5";
 }

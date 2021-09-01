@@ -126,4 +126,18 @@ public interface RepresentationEntity<ENTITY> extends RepresentationServiceProvi
 	String QUERY_PARAMETER_NAME_CODE = "code";
 	String QUERY_PARAMETER_NAME_NAME = "libelle";
 	String QUERY_PARAMETER_NAME_ACTOR = "acteur";
+	
+	/**/
+	
+	String PARAMETER_PAGEABLE = "paginer";
+	String DESCRIPTION_PAGEABLE = "Activer la pagination";
+	String EXAMPLE_PAGEABLE = "true";
+	
+	String PARAMETER_FIRST_TUPLE_INDEX = "index";
+	String DESCRIPTION_FIRST_TUPLE_INDEX = "index du premier élément";
+	String EXAMPLE_FIRST_TUPLE_INDEX = "0";
+	
+	String PARAMETER_NUMBER_OF_TUPLES = "nombre";
+	String DESCRIPTION_NUMBER_OF_TUPLES = "Nombre d'élément";
+	String EXAMPLE_NUMBER_OF_TUPLES = "5";
 }
