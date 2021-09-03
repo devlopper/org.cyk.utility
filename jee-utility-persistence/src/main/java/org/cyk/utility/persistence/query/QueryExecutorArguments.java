@@ -19,6 +19,7 @@ import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.mapping.MapperSourceDestination;
 import org.cyk.utility.__kernel__.mapping.MappingHelper;
+import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemImpl;
 import org.cyk.utility.__kernel__.string.StringHelper;
@@ -80,6 +81,37 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 	private Boolean queryBuildableAtRuntime;
 	private Query runtimeQuery;	
 	private Filter runtimeFilter;
+	
+	public QueryExecutorArguments queryReadDynamic(Class<?> klass) {
+		setQuery(new Query().setIdentifier(QueryIdentifierBuilder.getInstance().build(klass,QueryName.READ_DYNAMIC)));
+		return this;
+	}
+	
+	public QueryExecutorArguments page(Boolean pageable,Integer firstTupleIndex,Integer numberOfTuples) {
+		if(pageable == null)
+			pageable = NumberHelper.isGreaterThanOrEqualZero(firstTupleIndex) || NumberHelper.isGreaterThanZero(numberOfTuples);
+		if(Boolean.TRUE.equals(pageable)) {
+			if(NumberHelper.isLessThanZero(firstTupleIndex))
+				firstTupleIndex = 0;
+			if(NumberHelper.isLessThanZero(numberOfTuples))
+				numberOfTuples = 25;
+			setFirstTupleIndex(firstTupleIndex);
+			setNumberOfTuples(numberOfTuples);
+		}
+		return this;
+	}
+	
+	public QueryExecutorArguments filterIfNotBlank(String name,String value) {
+		if(StringHelper.isNotBlank(value))
+			addFilterField(name, value);
+		return this;
+	}
+	
+	public QueryExecutorArguments filterIfNotNull(String name,Object value) {
+		if(value == null)
+			return this;
+		return addFilterField(name, value);
+	}
 	
 	public Collection<String> getFlags(Boolean injectIfNull) {
 		if(flags == null && Boolean.TRUE.equals(injectIfNull))
