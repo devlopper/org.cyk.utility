@@ -2,10 +2,11 @@ package org.cyk.utility.persistence;
 
 import java.io.Serializable;
 
-import javax.persistence.EntityManager;
+import javax.enterprise.context.ApplicationScoped;
 
+@ApplicationScoped
 public class EntityManagerGetterImpl extends EntityManagerGetter.AbstractImpl implements Serializable {
-
+	/*
 	public static EntityManager ENTITY_MANAGER;
 	
 	@Override
@@ -14,5 +15,5 @@ public class EntityManagerGetterImpl extends EntityManagerGetter.AbstractImpl im
 			return super.get();
 		return ENTITY_MANAGER;
 	}
-	
+	*/
 }

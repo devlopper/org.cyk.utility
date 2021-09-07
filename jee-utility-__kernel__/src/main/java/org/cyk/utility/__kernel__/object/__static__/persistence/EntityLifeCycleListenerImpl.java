@@ -2,6 +2,9 @@ package org.cyk.utility.__kernel__.object.__static__.persistence;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
 public class EntityLifeCycleListenerImpl extends EntityLifeCycleListener.AbstractImpl implements Serializable {
 
 	public static void useFrenchValues() {

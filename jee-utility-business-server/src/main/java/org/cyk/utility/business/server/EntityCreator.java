@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.transaction.Transactional;
 
 import org.cyk.utility.__kernel__.Helper;
@@ -11,8 +12,8 @@ import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
-import org.cyk.utility.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.__kernel__.value.Value;
+import org.cyk.utility.persistence.query.QueryExecutorArguments;
 
 public interface EntityCreator {
 
@@ -36,6 +37,9 @@ public interface EntityCreator {
 	public static abstract class AbstractImpl extends AbstractObject implements EntityCreator,Serializable{
 		public static Boolean IS_CONTAINER_MANAGED_TRANSACTION = Boolean.TRUE;
 		
+		@Inject
+		protected org.cyk.utility.persistence.query.EntityCreator persistence;
+		
 		@Override @Transactional
 		public void create(QueryExecutorArguments queryExecutorArguments) {
 			if(queryExecutorArguments == null)
@@ -55,7 +59,7 @@ public interface EntityCreator {
 		}
 		
 		protected void __createMany__(QueryExecutorArguments queryExecutorArguments) {
-			org.cyk.utility.persistence.query.EntityCreator.getInstance().createMany(queryExecutorArguments);
+			getPersistence().createMany(queryExecutorArguments);
 		}
 	
 		@Override
@@ -67,6 +71,10 @@ public interface EntityCreator {
 				createMany(CollectionHelper.cast(Object.class, index));
 				LogHelper.logInfo(String.format("%s batch created", index.size()), getClass());
 			}
+		}
+		
+		protected org.cyk.utility.persistence.query.EntityCreator getPersistence() {
+			return persistence;
 		}
 		
 	}

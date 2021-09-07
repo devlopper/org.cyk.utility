@@ -2,11 +2,13 @@ package org.cyk.utility.persistence.server;
 
 import java.util.Collection;
 
+import javax.enterprise.context.ApplicationScoped;
+
 import org.cyk.utility.__kernel__.annotation.Persistence;
 import org.cyk.utility.persistence.query.Query;
 import org.cyk.utility.persistence.server.query.RuntimeQueryBuilder;
 
-@Persistence
+@ApplicationScoped @Persistence
 public class QueryManagerImpl extends org.cyk.utility.persistence.query.QueryManagerImpl {
 
 	@Override

@@ -8,6 +8,7 @@ import java.util.logging.Level;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.SortOrder;
+import org.cyk.utility.persistence.EntityManagerGetter;
 import org.cyk.utility.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.persistence.query.QueryManager;
 import org.cyk.utility.persistence.server.DataType;
@@ -28,6 +29,11 @@ public class DynamicManyExecutorUnitTest extends AbstractUnitTest {
 		Collection<DataType> dataTypes = DynamicManyExecutor.getInstance().read(DataType.class);
 		//Collection<DataType> dataTypes = EntityReader.getInstance().readMany(DataType.class, new QueryExecutorArguments().setQuery(new Query().setIdentifier(queryIdentifier)));
 		System.out.println("DynamicManyExecutorUnitTest.readDataType_namedQuery() ::: "+dataTypes);
+	}
+	
+	@Test
+	public void entityManagerIsNotNull(){
+		assertThat(EntityManagerGetter.getInstance().get()).isNotNull();
 	}
 	
 	@Test

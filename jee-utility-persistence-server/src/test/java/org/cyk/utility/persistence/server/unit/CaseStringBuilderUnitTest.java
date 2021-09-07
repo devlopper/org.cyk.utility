@@ -4,10 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.cyk.utility.persistence.server.query.string.CaseStringBuilder;
 import org.cyk.utility.persistence.server.query.string.CaseStringBuilder.Case;
-import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 
-public class CaseStringBuilderUnitTest extends AbstractWeldUnitTest {
+public class CaseStringBuilderUnitTest extends AbstractUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test

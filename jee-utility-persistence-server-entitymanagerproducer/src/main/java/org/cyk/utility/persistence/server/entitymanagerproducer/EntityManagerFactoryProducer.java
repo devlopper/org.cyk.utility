@@ -1,4 +1,4 @@
-package org.cyk.utility.persistence.server;
+package org.cyk.utility.persistence.server.entitymanagerproducer;
 
 import java.io.Serializable;
 
@@ -6,7 +6,6 @@ import javax.persistence.EntityManagerFactory;
 
 import org.cyk.utility.__kernel__.object.AbstractObject;
 
-@Deprecated
 public interface EntityManagerFactoryProducer {
 
 	EntityManagerFactory produce();

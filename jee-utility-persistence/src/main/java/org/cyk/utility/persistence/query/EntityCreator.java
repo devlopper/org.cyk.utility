@@ -49,14 +49,16 @@ public interface EntityCreator {
 	
 	public abstract class AbstractImpl extends AbstractObject implements EntityCreator,Serializable {
 		private static final long serialVersionUID = 1L;
-	
+		
+		//@Inject protected EntityManager entityManager;
+		
 		@Override
 		public void createMany(QueryExecutorArguments arguments) {
 			if(arguments == null || CollectionHelper.isEmpty(arguments.getObjects()))
 				return;
 			EntityManager entityManager = arguments.getEntityManager();
 			if(entityManager == null)
-				entityManager = EntityManagerGetter.getInstance().get();
+				entityManager =	getEntityManager();
 			if(Boolean.TRUE.equals(arguments.getIsTransactional()))
 				entityManager.getTransaction().begin();
 			for(Object index : arguments.getObjects()) {	
@@ -91,7 +93,7 @@ public interface EntityCreator {
 		public void createMany(Collection<?> objects) {
 			if(CollectionHelper.isEmpty(objects))
 				return;
-			createMany(objects, EntityManagerGetter.getInstance().get());
+			createMany(objects, null);
 		}
 		
 		@Override
@@ -154,7 +156,7 @@ public interface EntityCreator {
 		public void createByNativesQueriesStrings(Collection<String> queriesStrings) {
 			if(CollectionHelper.isEmpty(queriesStrings))
 				return;
-			EntityManager entityManager = EntityManagerGetter.getInstance().get();
+			EntityManager entityManager = getEntityManager();
 			queriesStrings.stream().filter(queryString -> StringHelper.isNotBlank(queryString)).forEach(queryString -> {
 				entityManager.createNativeQuery(queryString).executeUpdate();
 			});
@@ -193,6 +195,10 @@ public interface EntityCreator {
 			if(name == null)
 				return;
 			((Namable)object).setName(name.toString());										
+		}
+		
+		protected EntityManager getEntityManager() {
+			return EntityManagerGetter.getInstance().get();
 		}
 	}
 	

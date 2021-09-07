@@ -1,17 +1,17 @@
-package org.cyk.utility.persistence.server;
+package org.cyk.utility.persistence.server.entitymanagerproducer;
 
 import java.io.Serializable;
 
+import javax.enterprise.inject.Produces;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-@Deprecated
 public class EntityManagerProducerImpl extends EntityManagerProducer.AbstractImpl implements Serializable {
 
 	@PersistenceContext
 	private EntityManager entityManager;
 	
-	@Override //@Produces
+	@Override @Produces
 	public EntityManager produce() {
 		return entityManager;
 	}

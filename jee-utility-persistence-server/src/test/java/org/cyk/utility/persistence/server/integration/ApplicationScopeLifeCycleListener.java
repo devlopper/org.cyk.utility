@@ -8,9 +8,12 @@ import org.cyk.utility.persistence.server.Initializer;
 @ApplicationScoped
 public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeLifeCycleListener {
 
+	public static Boolean INTEGRATION = Boolean.TRUE;
+	
 	@Override
 	public void __initialize__(Object object) {
-		Initializer.initialize();
+		if(Boolean.TRUE.equals(INTEGRATION))
+			Initializer.initialize();
 	}
 	
 	@Override

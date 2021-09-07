@@ -15,6 +15,21 @@ import lombok.experimental.Accessors;
 @NamedStoredProcedureQueries(value = {@NamedStoredProcedureQuery(name = "myproc", procedureName = "myproc")})
 public class DataType extends AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl {
 
+	@Override
+	public DataType setIdentifier(String identifier) {
+		return (DataType) super.setIdentifier(identifier);
+	}
+	
+	@Override
+	public DataType setCode(String code) {
+		return (DataType) super.setCode(code);
+	}
+	
+	@Override
+	public DataType setName(String name) {
+		return (DataType) super.setName(name);
+	}
+	
 	private String description;
 	
 	@Transient private String codeAndName;

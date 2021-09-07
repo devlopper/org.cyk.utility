@@ -38,6 +38,7 @@
 		
 		<module>../jee-utility-persistence</module>
 		<module>../jee-utility-persistence-server</module>
+		<module>../jee-utility-persistence-server-entitymanagerproducer</module>
 		<module>../jee-utility-persistence-server-hibernate</module>
 		<module>../jee-utility-persistence-client</module>
 		

@@ -13,13 +13,22 @@ import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringAuditedImpl;
 import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringAuditedImpl;
 import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableAuditedImpl;
+import org.cyk.utility.__kernel__.object.__static__.persistence.EntityLifeCycleListener;
 import org.cyk.utility.__kernel__.variable.VariableHelper;
 import org.cyk.utility.__kernel__.variable.VariableName;
+import org.cyk.utility.persistence.EntityManagerFactoryGetter;
 import org.cyk.utility.persistence.EntityManagerFactoryGetterImpl;
+import org.cyk.utility.persistence.EntityManagerGetter;
 import org.cyk.utility.persistence.query.EntityCounter;
+import org.cyk.utility.persistence.query.EntityCreator;
+import org.cyk.utility.persistence.query.EntityDeletor;
 import org.cyk.utility.persistence.query.EntityFinder;
 import org.cyk.utility.persistence.query.EntityReader;
+import org.cyk.utility.persistence.query.EntityUpdater;
+import org.cyk.utility.persistence.query.QueryHelper;
+import org.cyk.utility.persistence.query.QueryManager;
 import org.cyk.utility.persistence.server.Initializer;
+import org.cyk.utility.persistence.server.MetricsManager;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 
 public abstract class AbstractUnitTest extends AbstractWeldUnitTest {
@@ -30,6 +39,22 @@ public abstract class AbstractUnitTest extends AbstractWeldUnitTest {
 		super.__listenBefore__();
 		initializeEntityManagerFactory(getPersistenceUnitName());
 		VariableHelper.write(VariableName.SYSTEM_LOGGING_THROWABLE_PRINT_STACK_TRACE, Boolean.TRUE);
+	}
+	
+	@Override
+	protected void __listenAfter__() {
+		super.__listenAfter__();
+		QueryHelper.clear();
+		QueryManager.getInstance().clear();
+		QueryManager.INSTANCE.set(null);
+		EntityManagerFactoryGetter.INSTANCE.set(null);
+		EntityManagerGetter.INSTANCE.set(null);
+		EntityCreator.INSTANCE.set(null);
+		EntityReader.INSTANCE.set(null);
+		EntityUpdater.INSTANCE.set(null);
+		EntityDeletor.INSTANCE.set(null);
+		MetricsManager.INSTANCE.set(null);
+		EntityLifeCycleListener.INSTANCE.set(null);
 	}
 	
 	protected void initializeEntityManagerFactory(String persistenceUnitName) {

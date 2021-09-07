@@ -41,14 +41,14 @@ public interface ProcedureExecutor {
 					storedProcedureQuery.setParameter(key, value);
 				});
 			}
-			LogHelper.logInfo(String.format("Exécution de la procédure stockée %s en cours...", name), getClass());
+			LogHelper.logFine(String.format("Exécution de la procédure stockée %s en cours...", name), getClass());
 			if(arguments.getEntityManager() == null)
 				entityManager.getTransaction().begin();
 			Long t = System.currentTimeMillis();
 			Boolean result = storedProcedureQuery.execute();
 			if(arguments.getEntityManager() == null)
 				entityManager.getTransaction().commit();
-			LogHelper.logInfo(String.format("Procédure stockée %s exécutée en %s", name,TimeHelper.formatDuration(System.currentTimeMillis() - t)), getClass());
+			LogHelper.logFine(String.format("Procédure stockée %s exécutée en %s", name,TimeHelper.formatDuration(System.currentTimeMillis() - t)), getClass());
 			releaseConnection(storedProcedureQuery, name);
 			return result;
 		}
