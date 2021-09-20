@@ -107,13 +107,13 @@ public class TransactionResult implements Serializable {
 	/**/
 	
 	public TransactionResult log(Class<?> klass,Long duration) {
-		LogHelper.logInfo(String.format("%s exécuté(e) en %s. %s => %s(C) %s(U) %s(D)."
-				, name,TimeHelper.formatDuration(duration),tupleName,ValueHelper.defaultToIfNull(numberOfCreation,0),ValueHelper.defaultToIfNull(numberOfUpdate,0)
-				,ValueHelper.defaultToIfNull(numberOfDeletion,0)), klass);
 		if(CollectionHelper.isNotEmpty(messages))
 			messages.forEach(message -> {
-				LogHelper.logInfo(message, klass);
+				LogHelper.logWarning(message, klass);
 			});
+		LogHelper.logInfo(String.format("%s exécuté(e) en %s. %s => %s(C) %s(U) %s(D)."
+				, name,TimeHelper.formatDuration(duration),tupleName,ValueHelper.defaultToIfNull(numberOfCreation,0),ValueHelper.defaultToIfNull(numberOfUpdate,0)
+				,ValueHelper.defaultToIfNull(numberOfDeletion,0)), klass);		
 		return this;
 	}
 	

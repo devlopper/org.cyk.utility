@@ -13,6 +13,8 @@ import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
+import org.cyk.utility.persistence.query.Querier;
+import org.cyk.utility.persistence.server.query.string.QueryStringBuilder;
 
 public interface ArraysReaderByIdentifiers<ENTITY,IDENTIFIER> extends Reader<ENTITY, IDENTIFIER, Object[]> {
 
@@ -168,6 +170,12 @@ public interface ArraysReaderByIdentifiers<ENTITY,IDENTIFIER> extends Reader<ENT
 			if(ArrayHelper.isEmpty(identifiers))
 				return null;
 			return readByIdentifiersThenInstantiate(CollectionHelper.listOf(Boolean.TRUE, identifiers), parameters);
+		}
+		
+		protected QueryStringBuilder.Arguments instantiateQueryStringBuilderArguments() {
+			QueryStringBuilder.Arguments arguments = super.instantiateQueryStringBuilderArguments();
+			arguments.getPredicate(Boolean.TRUE).add("t.identifier IN :"+Querier.PARAMETER_NAME_IDENTIFIERS);
+			return arguments;
 		}
 		
 		/**/

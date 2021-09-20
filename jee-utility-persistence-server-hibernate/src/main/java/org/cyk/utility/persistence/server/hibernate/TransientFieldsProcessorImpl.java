@@ -2,6 +2,8 @@ package org.cyk.utility.persistence.server.hibernate;
 
 import java.util.Collection;
 
+import javax.enterprise.context.ApplicationScoped;
+
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.persistence.query.Filter;
@@ -9,7 +11,7 @@ import org.cyk.utility.persistence.server.hibernate.annotation.Hibernate;
 import org.cyk.utility.persistence.server.hibernate.entity.AbstractAudit;
 import org.cyk.utility.persistence.server.hibernate.entity.AbstractAuditIdentifiedByString;
 
-@Hibernate
+@ApplicationScoped @Hibernate
 public class TransientFieldsProcessorImpl extends org.cyk.utility.persistence.server.TransientFieldsProcessorImpl {
 
 	@SuppressWarnings("unchecked")

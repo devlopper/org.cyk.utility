@@ -38,7 +38,7 @@ public interface PathsScanner {
 		public Collection<Path> scan(Arguments arguments) {
 			ThrowableHelper.throwIllegalArgumentExceptionIfNull("arguments", arguments);
 			Collection<Path> inputs = arguments.getPaths();
-			LogHelper.logInfo(String.format("%s paths to be scanned : %s",CollectionHelper.getSize(inputs),inputs), getClass());
+			LogHelper.logFine(String.format("%s paths to be scanned : %s",CollectionHelper.getSize(inputs),inputs), getClass());
 			if(CollectionHelper.isEmpty(inputs))
 				return null;
 			Collection<Path> outputs = null;
@@ -64,7 +64,7 @@ public interface PathsScanner {
 					outputs.addAll(result);
 				}
 			}
-			LogHelper.logInfo(String.format("%s paths found",CollectionHelper.getSize(outputs)), getClass());
+			LogHelper.logFine(String.format("%s paths found",CollectionHelper.getSize(outputs)), getClass());
 			return outputs;
 		}
 		

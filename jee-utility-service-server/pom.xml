@@ -28,6 +28,16 @@
 			<artifactId>jee-utility-business-server</artifactId>
 			<version>0.1.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.cyk.jee.utility.rest</groupId>
+			<artifactId>jee-utility-rest</artifactId>
+			<version>0.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.cyk.jee.utility.mapping</groupId>
+			<artifactId>jee-utility-mapping</artifactId>
+			<version>0.1.0</version>
+		</dependency>
 		
 		<!-- Test -->
 		

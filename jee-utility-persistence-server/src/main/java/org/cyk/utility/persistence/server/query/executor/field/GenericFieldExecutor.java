@@ -17,6 +17,7 @@ import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.persistence.EntityManagerGetter;
+import org.cyk.utility.persistence.PersistenceHelper;
 
 public interface GenericFieldExecutor extends FieldBasedExecutor {
 
@@ -47,7 +48,7 @@ public interface GenericFieldExecutor extends FieldBasedExecutor {
 			T instance = null;
 			try {
 				instance = (T) EntityManagerGetter.getInstance().get().createQuery(String.format("SELECT t FROM %s t WHERE t.%s = :value"
-						,klass.getSimpleName(),fieldName),klass).setParameter("value", value).getSingleResult();
+						,PersistenceHelper.getEntityName(klass),fieldName),klass).setParameter("value", value).getSingleResult();
 			} catch (NoResultException exception) {
 				instance = null;
 			}
@@ -59,7 +60,7 @@ public interface GenericFieldExecutor extends FieldBasedExecutor {
 			if(klass == null || valueClass == null || StringHelper.isBlank(fieldName) || CollectionHelper.isEmpty(values))
 				return null;
 			Long count = EntityManagerGetter.getInstance().get().createQuery(String.format("SELECT COUNT(t.identifier) FROM %s t WHERE t.%s IN :values"
-					,klass.getSimpleName(),fieldName),Long.class).setParameter("values", values).getSingleResult();
+					,PersistenceHelper.getEntityName(klass),fieldName),Long.class).setParameter("values", values).getSingleResult();
 			return NumberHelper.compare(count, values.size(), ComparisonOperator.EQ);
 		}
 		
@@ -139,7 +140,8 @@ public interface GenericFieldExecutor extends FieldBasedExecutor {
 		public <T, V> Collection<V> getValues(Class<T> klass, Class<V> valueClass, String fieldName) {
 			if(klass == null || valueClass == null || StringHelper.isBlank(fieldName))
 				return null;
-			Collection<V> values = EntityManagerGetter.getInstance().get().createQuery(String.format("SELECT DISTINCT t.%2$s FROM %1$s t ORDER BY t.%2$s",klass.getSimpleName(),fieldName))
+			Collection<V> values = EntityManagerGetter.getInstance().get().createQuery(String.format("SELECT DISTINCT t.%2$s FROM %1$s t ORDER BY t.%2$s",
+					PersistenceHelper.getEntityName(klass),fieldName))
 					.getResultList();
 			if(CollectionHelper.isEmpty(values))
 				return null;

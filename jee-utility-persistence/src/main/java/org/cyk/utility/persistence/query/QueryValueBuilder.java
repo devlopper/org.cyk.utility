@@ -15,6 +15,7 @@ import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.Value;
+import org.cyk.utility.persistence.PersistenceHelper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -66,7 +67,7 @@ public interface QueryValueBuilder {
 			//if(arguments.name == null)
 			//	throw new RuntimeException("name is required");
 			String value = null;
-			String tupleName = arguments.tupleClass.getSimpleName();
+			String tupleName = PersistenceHelper.getEntityName(arguments.tupleClass);
 			String variableName = StringHelper.getVariableNameFrom(tupleName);
 			if(StringHelper.isBlank(value) && StringHelper.isNotBlank(arguments.fieldInName)) {
 				value = formatSelectWhereFieldIn(tupleName, variableName, arguments.fieldInName, arguments.fieldInParameterName);
@@ -83,7 +84,7 @@ public interface QueryValueBuilder {
 				throw new RuntimeException("result class is required");
 			if(arguments.tupleClass == null)
 				throw new RuntimeException("tuple class is required");
-			String tupleName = arguments.tupleClass.getSimpleName();
+			String tupleName = PersistenceHelper.getEntityName(arguments.tupleClass);
 			String variableName = StringHelper.getVariableNameFrom(tupleName);
 			if(QueryName.READ.equals(arguments.name))
 				return String.format(FORMAT_SELECT,tupleName,variableName);

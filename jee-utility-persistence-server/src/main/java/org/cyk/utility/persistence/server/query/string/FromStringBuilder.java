@@ -9,6 +9,7 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.Value;
+import org.cyk.utility.persistence.PersistenceHelper;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -76,6 +77,14 @@ public interface FromStringBuilder {
 		
 		public Tuple(String name) {
 			this(name,StringHelper.getVariableNameFrom(name));
+		}
+		
+		public Tuple add(Class<?> klass,String variableName) {
+			return add(PersistenceHelper.getEntityName(klass)+" "+variableName);
+		}
+		
+		public Tuple add(Class<?> klass) {
+			return add(klass, "t");
 		}
 		
 		public Join getJoin(Boolean injectIfNull) {

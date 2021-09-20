@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.logging.Level;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
@@ -32,6 +33,7 @@ import org.cyk.utility.persistence.server.TransientFieldsProcessor;
 import org.cyk.utility.persistence.server.query.string.OrderStringBuilder;
 import org.cyk.utility.persistence.server.query.string.Replacer;
 
+@ApplicationScoped
 public class QueryExecutorImpl extends AbstractObject implements QueryExecutor,Serializable {
 
 	public static Boolean LOGGABLE = Boolean.TRUE;

@@ -28,12 +28,12 @@ public interface CollectionProcessor {
 		public <T> void process(Class<T> klass,Arguments<T> arguments) {
 			ThrowableHelper.throwIllegalArgumentExceptionIfNull("arguments", arguments);
 			ThrowableHelper.throwIllegalArgumentExceptionIfNull("processing logic", arguments.processing);		
-			LogHelper.logInfo(String.format("%s element(s) to be processed",CollectionHelper.getSize(arguments.list)), getClass());
+			LogHelper.logFine(String.format("%s element(s) to be processed",CollectionHelper.getSize(arguments.list)), getClass());
 			if(CollectionHelper.isEmpty(arguments.list))
 				return;
 			Integer batchSize = ValueHelper.defaultToIfNull(arguments.batchSize,1000);
 			List<List<Object>> batches = CollectionHelper.getBatches(arguments.list, batchSize);
-			LogHelper.logInfo(String.format("%s processing will be done in %s batches (batch size = %s).",arguments.runnerArguments == null ? "sequential" : "parallel"
+			LogHelper.logFine(String.format("%s processing will be done in %s batches (batch size = %s).",arguments.runnerArguments == null ? "sequential" : "parallel"
 				, batches.size(),batchSize), getClass());
 			if(arguments.runnerArguments == null) {
 				for(List<Object> batch : batches) {
@@ -50,7 +50,7 @@ public interface CollectionProcessor {
 				}				
 				Runner.getInstance().run(arguments.runnerArguments);
 			}
-			LogHelper.logInfo("processing done.", getClass());
+			LogHelper.logFine("processing done.", getClass());
 		}
 	}
 	

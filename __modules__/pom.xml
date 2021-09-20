@@ -50,6 +50,9 @@
 		<module>../jee-utility-representation-server</module>
 		<module>../jee-utility-representation-client</module>
 		
+		<module>../jee-utility-service</module>
+		<module>../jee-utility-service-server</module>
+		
 		<module>../jee-utility-controller</module>
 				
 		<module>../jee-utility</module>

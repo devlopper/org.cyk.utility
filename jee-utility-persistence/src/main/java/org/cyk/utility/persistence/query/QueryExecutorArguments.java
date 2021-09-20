@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -551,7 +552,7 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 	
 	/**/
 	
-	@XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor
+	@XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor @RequestScoped
 	public static class Dto extends AbstractObject implements Serializable {
 		private String queryIdentifier;
 		private ArrayList<Projection.Dto> projections;
@@ -718,7 +719,7 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 		
 		/**/
 		
-		@org.mapstruct.Mapper
+		@org.mapstruct.Mapper @RequestScoped
 		public static abstract class Mapper extends MapperSourceDestination.AbstractImpl<Dto, QueryExecutorArguments> {
 
 			@Override

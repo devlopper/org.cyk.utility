@@ -8,9 +8,11 @@ import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.persistence.EntityManagerGetter;
+import org.cyk.utility.persistence.PersistenceHelper;
 import org.cyk.utility.persistence.query.Query;
 import org.cyk.utility.persistence.query.QueryIdentifierBuilder;
 import org.cyk.utility.persistence.query.QueryManager;
+import org.cyk.utility.persistence.server.query.string.QueryStringBuilder;
 
 public interface Reader<ENTITY,IDENTIFIER,RESULT> {
 
@@ -51,7 +53,11 @@ public interface Reader<ENTITY,IDENTIFIER,RESULT> {
 			return "read"+StringUtils.substringBetween(getClass().getSimpleName(), getEntityClass().getSimpleName(), "Reader");
 		}
 		
-		protected abstract String getQueryValue();
+		protected String getQueryValue() {
+			QueryStringBuilder.Arguments arguments = instantiateQueryStringBuilderArguments();
+			ThrowableHelper.throwIllegalArgumentExceptionIfNull("Query value string builder arguments required", arguments);
+			return QueryStringBuilder.getInstance().build(arguments);
+		}
 		
 		protected Boolean getIsNativeQuery() {
 			return null;
@@ -71,6 +77,18 @@ public interface Reader<ENTITY,IDENTIFIER,RESULT> {
 				query = EntityManagerGetter.getInstance().get().createNamedQuery(queryIdentifier);
 			}
 			return query;
+		}
+		
+		protected String getEntityName(Class<?> klass) {
+			if(klass == null)
+				return null;
+			return PersistenceHelper.getEntityName(klass);
+		}
+	
+		protected QueryStringBuilder.Arguments instantiateQueryStringBuilderArguments() {
+			QueryStringBuilder.Arguments arguments = new QueryStringBuilder.Arguments();
+			arguments.getTuple(Boolean.TRUE).add(getEntityClass());
+			return arguments;
 		}
 	}
 	

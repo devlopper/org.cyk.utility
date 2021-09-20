@@ -21,7 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
-import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.Value;
@@ -203,7 +202,7 @@ public interface Helper {
 	}
 	
 	/**/
-	
+	/*
 	static <T> T getInstance(Class<T> klass,Value INSTANCE) {
 		ThrowableHelper.throwIllegalArgumentExceptionIfNull("class", klass);
 		ThrowableHelper.throwIllegalArgumentExceptionIfNull("instance", INSTANCE);
@@ -213,5 +212,11 @@ public interface Helper {
 		INSTANCE.set(instance = DependencyInjection.inject(klass));
 		LogHelper.logFine("instance has been set. <<"+instance.getClass()+">>", klass);
 		return instance;
+	}
+	*/
+	static <T> T getInstance(Class<T> klass,Value INSTANCE) {
+		ThrowableHelper.throwIllegalArgumentExceptionIfNull("class", klass);
+		ThrowableHelper.throwIllegalArgumentExceptionIfNull("instance", INSTANCE);
+		return DependencyInjection.inject(klass);
 	}
 }

@@ -2,9 +2,9 @@ package org.cyk.utility.__kernel__.value;
 
 import java.io.Serializable;
 
-import javax.enterprise.inject.Default;
+import javax.enterprise.context.ApplicationScoped;
 
-@Default
+@ApplicationScoped
 public class ValueConverterImpl extends AbstractValueConverterImpl implements Serializable {
 
 }

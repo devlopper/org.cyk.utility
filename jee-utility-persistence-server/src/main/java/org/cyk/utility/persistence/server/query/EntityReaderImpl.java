@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Collection;
 
+import javax.enterprise.context.ApplicationScoped;
+
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
@@ -24,6 +26,7 @@ import org.cyk.utility.persistence.server.audit.Arguments;
 import org.cyk.utility.persistence.server.audit.AuditReader;
 import org.cyk.utility.persistence.server.query.string.QueryStringBuilder;
 
+@ApplicationScoped
 public class EntityReaderImpl extends EntityReader.AbstractImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 

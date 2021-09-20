@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.enterprise.context.Dependent;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
@@ -19,7 +18,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@Dependent @Getter @Setter @Accessors(chain=true)
+@Getter @Setter @Accessors(chain=true)
 public class Value extends AbstractObject implements  Serializable {
 	private static final long serialVersionUID = 1L;
 

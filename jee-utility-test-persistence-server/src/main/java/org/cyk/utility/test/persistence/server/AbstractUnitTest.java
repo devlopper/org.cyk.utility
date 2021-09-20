@@ -26,9 +26,11 @@ import org.cyk.utility.persistence.query.EntityFinder;
 import org.cyk.utility.persistence.query.EntityReader;
 import org.cyk.utility.persistence.query.EntityUpdater;
 import org.cyk.utility.persistence.query.QueryHelper;
+import org.cyk.utility.persistence.query.QueryIdentifierBuilder;
 import org.cyk.utility.persistence.query.QueryManager;
 import org.cyk.utility.persistence.server.Initializer;
 import org.cyk.utility.persistence.server.MetricsManager;
+import org.cyk.utility.persistence.server.query.executor.DynamicManyExecutor;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 
 public abstract class AbstractUnitTest extends AbstractWeldUnitTest {
@@ -55,6 +57,8 @@ public abstract class AbstractUnitTest extends AbstractWeldUnitTest {
 		EntityDeletor.INSTANCE.set(null);
 		MetricsManager.INSTANCE.set(null);
 		EntityLifeCycleListener.INSTANCE.set(null);
+		DynamicManyExecutor.INSTANCE.set(null);
+		QueryIdentifierBuilder.INSTANCE.set(null);
 	}
 	
 	protected void initializeEntityManagerFactory(String persistenceUnitName) {
