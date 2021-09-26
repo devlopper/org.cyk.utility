@@ -1,23 +1,18 @@
 package org.cyk.utility.service.server;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
-import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierHelper;
-import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.object.__static__.representation.AbstractRepresentationObject;
 import org.cyk.utility.__kernel__.object.__static__.representation.Action;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.string.RegularExpressionHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.string.Strings;
-import org.cyk.utility.__kernel__.value.ValueHelper;
 
 public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> extends org.cyk.utility.__kernel__.mapping.MapperSourceDestination.AbstractImpl<SOURCE,DESTINATION> {
 	private static final long serialVersionUID = 1L;

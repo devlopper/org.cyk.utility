@@ -1,17 +1,15 @@
 package org.cyk.utility.service.server;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 
 import javax.inject.Inject;
-import javax.ws.rs.core.Response;
 
 import org.cyk.utility.__kernel__.enumeration.Action;
 import org.cyk.utility.__kernel__.object.AbstractObject;
-import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.business.Result;
 import org.cyk.utility.business.TransactionResult;
-import org.cyk.utility.mapping.Mapper;
 import org.cyk.utility.rest.RequestExecutor;
 import org.cyk.utility.rest.ResponseBuilder;
 import org.cyk.utility.service.SpecificService;
@@ -19,6 +17,14 @@ import org.cyk.utility.service.SpecificService;
 public abstract class AbstractSpecificServiceImpl<ENTITY> extends AbstractObject implements SpecificService<ENTITY>,Serializable {
 
 	@Inject protected RequestExecutor requestExecutor;
+	
+	public <PERSISTENCE_ENTITY,SERVICE_ENTITY> EntityReaderRequestImpl<PERSISTENCE_ENTITY,SERVICE_ENTITY> instantiateGetEntityReaderRequest(Class<PERSISTENCE_ENTITY> persistenceEntityClass,Class<SERVICE_ENTITY> serviceEntityClass,String filterAsString,List<String> projections,Boolean countable,Boolean pageable,Integer firstTupleIndex,Integer numberOfTuples) {
+		EntityReaderRequestImpl<PERSISTENCE_ENTITY,SERVICE_ENTITY> request = new EntityReaderRequestImpl<PERSISTENCE_ENTITY, SERVICE_ENTITY>(serviceEntityClass)
+				.projections(projections).filter(filterAsString)
+				.count(ValueHelper.defaultToIfNull(countable, Boolean.TRUE)).page(pageable,firstTupleIndex, numberOfTuples);
+		return request;
+	}
+	
 	/*
 	@Override
 	public Response get(String filterAsString, Collection<String> projections, Boolean countable, Boolean pageable,Integer firstTupleIndex, Integer numberOfTuples) {
