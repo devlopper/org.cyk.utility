@@ -62,4 +62,6 @@ public interface EntityReader {
 	String PARAMETER_NAME_NUMBER_OF_TUPLES = "count";
 	String PARAMETER_NAME_COLLECTIONABLE = "collectionable";
 	String PARAMETER_NAME_COUNTABLE = "countable";
+	String PARAMETER_NAME_PROJECTIONS = "projections";
+	String PARAMETER_NAME_PAGEABLE = "pageable";
 }

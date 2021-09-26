@@ -25,6 +25,8 @@
 		<module>../jee-utility-javascript</module>
 		<module>../jee-utility-template</module>
 		<module>../jee-utility-template-freemarker</module>
+		<module>../jee-utility-mapping</module>
+		<module>../jee-utility-mapping-mapstruct</module>
 		
 		<module>../jee-utility-report</module>
 		<module>../jee-utility-report-jasper</module>

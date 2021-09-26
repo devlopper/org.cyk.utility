@@ -24,6 +24,12 @@
 			<version>0.1.0</version>
 		</dependency>
 		
+		<dependency>
+			<groupId>org.eclipse.microprofile.config</groupId>
+			<artifactId>microprofile-config-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
 		<!-- Test -->
 		
 		<dependency>
