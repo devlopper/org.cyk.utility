@@ -189,11 +189,15 @@ public class Filter extends AbstractObject implements Serializable {
 		return addField(fieldName, fieldValue, null);
 	}
 
-	public Filter addFieldContainsStringOrWords(String name,Integer numberOfAdditionalParameters,QueryExecutorArguments arguments) {
-		List<String> names = Language.Argument.Like.containsStringOrWords(arguments == null ? null : arguments.getFilterFieldValue(name), numberOfAdditionalParameters);
+	public Filter addFieldContainsStringOrWords(String sourceName,String targetName,Integer numberOfAdditionalParameters,QueryExecutorArguments arguments) {
+		List<String> names = Language.Argument.Like.containsStringOrWords(arguments == null ? null : arguments.getFilterFieldValue(sourceName), numberOfAdditionalParameters);
 		for(Integer index = 0; index < names.size(); index++)
-			addField(name+(index == 0 ? ConstantEmpty.STRING : index-1), names.get(index));
+			addField(targetName+(index == 0 ? ConstantEmpty.STRING : index-1), names.get(index));
 		return this;
+	}
+	
+	public Filter addFieldContainsStringOrWords(String name,Integer numberOfAdditionalParameters,QueryExecutorArguments arguments) {
+		return addFieldContainsStringOrWords(name, name, numberOfAdditionalParameters, arguments);
 	}
 	
 	public Filter addFieldsContains(QueryExecutorArguments arguments,Collection<String> names) {

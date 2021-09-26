@@ -31,7 +31,7 @@ public interface EntityReader {
 	@Produces({ MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML })
 	@Operation(description = "Read using get method")
 	Response read(
-			@QueryParam(PARAMETER_NAME_REPRESENTATION_ENTITY_CLASS_NAME)String representationEntityClassName
+			@QueryParam(PARAMETER_NAME_SERVICE_ENTITY_CLASS_NAME)String serviceEntityClassName
 			,@QueryParam(PARAMETER_NAME_QUERY_IDENTIFIER) String queryIdentifier
 			,@QueryParam(PARAMETER_NAME_FILTER_AS_JSON)String filterAsJson
 			,@QueryParam(PARAMETER_NAME_FIRST_TUPLE_INDEX)Integer firstTupleIndex
@@ -54,14 +54,33 @@ public interface EntityReader {
 	
 	String TAG = "Generic Read Interface";
 	
-	String PARAMETER_NAME_REPRESENTATION_ENTITY_CLASS_NAME = "representationEntityClassName";
+	String PARAMETER_NAME_SERVICE_ENTITY_CLASS_NAME = "serviceEntityClassName";
+	String PARAMETER_NAME_SERVICE_ENTITY_CLASS_NAME_DESCRIPTION = "serviceEntityClassName";
+	
 	String PARAMETER_NAME_QUERY_IDENTIFIER = "queryidentifier";
-	String PARAMETER_NAME_FILTER_AS_JSON = "filterjson";
-	String PARAMETER_NAME_FILTER_AS_STRING = "filterstring";
+	String PARAMETER_NAME_QUERY_IDENTIFIER_DESCRIPTION = "Query identifier";
+	
+	String PARAMETER_NAME_FILTER_AS_JSON = "fjson";
+	String PARAMETER_NAME_FILTER_AS_JSON_DESCRIPTION = "Filter as json";
+	
+	String PARAMETER_NAME_FILTER_AS_STRING = "f";
+	String PARAMETER_NAME_FILTER_AS_STRING_DESCRIPTION = "Filter as string";
+	
 	String PARAMETER_NAME_FIRST_TUPLE_INDEX = "from";
+	String PARAMETER_NAME_FIRST_TUPLE_INDEX_DESCRIPTION = "First tuple index";
+	
 	String PARAMETER_NAME_NUMBER_OF_TUPLES = "count";
+	String PARAMETER_NAME_NUMBER_OF_TUPLES_DESCRIPTION = "Number of tuples";
+	
 	String PARAMETER_NAME_COLLECTIONABLE = "collectionable";
+	String PARAMETER_NAME_COLLECTIONABLE_DESCRIPTION = "Collectionable";
+	
 	String PARAMETER_NAME_COUNTABLE = "countable";
+	String PARAMETER_NAME_COUNTABLE_DESCRIPTION = "Countable";
+	
 	String PARAMETER_NAME_PROJECTIONS = "projections";
+	String PARAMETER_NAME_PROJECTIONS_DESCRIPTION = "Projections";
+	
 	String PARAMETER_NAME_PAGEABLE = "pageable";
+	String PARAMETER_NAME_PAGEABLE_DESCRIPTION = "Pageable";
 }

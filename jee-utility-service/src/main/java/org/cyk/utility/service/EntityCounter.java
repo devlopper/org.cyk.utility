@@ -26,7 +26,7 @@ public interface EntityCounter {
 	@Consumes({MediaType.APPLICATION_JSON})
 	@Produces({ MediaType.APPLICATION_JSON})
 	Response count(
-			@QueryParam(EntityReader.PARAMETER_NAME_REPRESENTATION_ENTITY_CLASS_NAME)String representationEntityClassName
+			@QueryParam(EntityReader.PARAMETER_NAME_SERVICE_ENTITY_CLASS_NAME)String serviceEntityClassName
 			,@QueryParam(EntityReader.PARAMETER_NAME_QUERY_IDENTIFIER) String queryIdentifier
 			,@QueryParam(EntityReader.PARAMETER_NAME_FILTER_AS_JSON)String filterAsJson
 		);

@@ -17,4 +17,10 @@ public interface SpecificPersistence<ENTITY> {
 	Boolean hasQueryIdentifier(String identifier);
 	
 	Boolean isProcessable(QueryExecutorArguments arguments);
+	
+	String getFilterAsStringParameterName();
+	
+	/**/
+	
+	String PARAMETER_NAME_FILTER_AS_STRING = "filter_as_string";
 }

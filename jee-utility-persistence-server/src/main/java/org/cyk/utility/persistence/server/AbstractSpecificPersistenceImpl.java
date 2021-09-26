@@ -46,6 +46,11 @@ public abstract class AbstractSpecificPersistenceImpl<ENTITY> implements Specifi
 		return hasQueryIdentifier(arguments.getQuery().getIdentifier());
 	}
 	
+	@Override
+	public String getFilterAsStringParameterName() {
+		return PARAMETER_NAME_FILTER_AS_STRING;
+	}
+	
 	protected static String getQueryIdentifierFromConfiguration(String propertyName) {
 		return ConfigProvider.getConfig().getOptionalValue(propertyName, String.class).orElse(propertyName);
 	}

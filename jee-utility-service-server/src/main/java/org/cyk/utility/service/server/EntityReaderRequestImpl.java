@@ -3,14 +3,17 @@ package org.cyk.utility.service.server;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.mapping.Mapper;
+import org.cyk.utility.persistence.SpecificPersistence;
 import org.cyk.utility.persistence.query.EntityCounter;
 import org.cyk.utility.persistence.query.EntityReader;
 import org.cyk.utility.persistence.query.Query;
 import org.cyk.utility.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.persistence.query.QueryGetter;
+import org.cyk.utility.persistence.server.SpecificPersistenceGetter;
 import org.cyk.utility.rest.RequestExecutor;
 import org.cyk.utility.rest.ResponseBuilder;
 import org.cyk.utility.rest.ResponseHelper;
@@ -24,23 +27,21 @@ public class EntityReaderRequestImpl<PERSISTENCE_ENTITY,SERVICE_ENTITY> implemen
 
 	private Class<PERSISTENCE_ENTITY> persistenceEntityClass;
 	private Class<SERVICE_ENTITY> serviceEntityClass;
+	private SpecificPersistence<?> persistence;
 	private QueryExecutorArguments queryExecutorArguments;
 	private Mapper<PERSISTENCE_ENTITY,SERVICE_ENTITY> mapper;
 	private Boolean countable;
-	private String countQueryIdentifier;
+	private String countQueryIdentifier;	
 	private ResponseBuilder.Arguments responseBuilderArguments;
 	
-	public EntityReaderRequestImpl(String queryIdentifier,Class<PERSISTENCE_ENTITY> persistenceEntityClass,Class<SERVICE_ENTITY> serviceEntityClass
-			,Mapper<PERSISTENCE_ENTITY,SERVICE_ENTITY> mapper,Collection<String> projections,Collection<String> transientFieldsNames) {
-		if(StringHelper.isNotBlank(queryIdentifier))
-			query(queryIdentifier);
-		this.persistenceEntityClass = persistenceEntityClass;
+	@SuppressWarnings("unchecked")
+	public EntityReaderRequestImpl(Class<SERVICE_ENTITY> serviceEntityClass) {
 		this.serviceEntityClass = serviceEntityClass;
-		this.mapper = mapper;
-		if(CollectionHelper.isNotEmpty(projections))
-			projections(projections);
-		if(CollectionHelper.isNotEmpty(transientFieldsNames))
-			transientFieldsNames(transientFieldsNames);
+		this.persistenceEntityClass = (Class<PERSISTENCE_ENTITY>) DependencyInjection.inject(PersistenceEntityClassGetter.class).get(this.serviceEntityClass);
+		if(persistenceEntityClass != null)
+			persistence = DependencyInjection.inject(SpecificPersistenceGetter.class).get(persistenceEntityClass);
+		if(serviceEntityClass != null && persistenceEntityClass != null)
+			mapper = DependencyInjection.inject(MapperGetter.class).get(persistenceEntityClass, serviceEntityClass);
 	}
 	
 	public QueryExecutorArguments getQueryExecutorArguments(Boolean instantiateIfNull) {
@@ -64,24 +65,32 @@ public class EntityReaderRequestImpl<PERSISTENCE_ENTITY,SERVICE_ENTITY> implemen
 		return this;
 	}
 	
-	public EntityReaderRequestImpl<PERSISTENCE_ENTITY,SERVICE_ENTITY> transientFieldsNames(Collection<String> processableTransientFieldsNames) {
-		getQueryExecutorArguments(Boolean.TRUE).addProcessableTransientFieldsNames(processableTransientFieldsNames);
+	public EntityReaderRequestImpl<PERSISTENCE_ENTITY,SERVICE_ENTITY> filter(String string) {
+		if(StringHelper.isNotBlank(string))
+			getQueryExecutorArguments(Boolean.TRUE).addFilterFieldsValues(persistence.getFilterAsStringParameterName(),string);
 		return this;
 	}
 	
-	public EntityReaderRequestImpl<PERSISTENCE_ENTITY,SERVICE_ENTITY> transientFieldsNames(String...processableTransientFieldsNames) {
-		getQueryExecutorArguments(Boolean.TRUE).addProcessableTransientFieldsNames(processableTransientFieldsNames);
+	public EntityReaderRequestImpl<PERSISTENCE_ENTITY,SERVICE_ENTITY> page(Boolean pageable,Integer firstTupleIndex,Integer numberOfTuples) {
+		if(pageable == null || Boolean.TRUE.equals(pageable))
+			getQueryExecutorArguments(Boolean.TRUE).setFirstTupleIndex(firstTupleIndex).setNumberOfTuples(numberOfTuples);
 		return this;
 	}
 	
-	public EntityReaderRequestImpl<PERSISTENCE_ENTITY,SERVICE_ENTITY> page(Integer firstTupleIndex,Integer numberOfTuples) {
-		getQueryExecutorArguments(Boolean.TRUE).setFirstTupleIndex(firstTupleIndex).setNumberOfTuples(numberOfTuples);
-		return this;
-	}
-	
-	public EntityReaderRequestImpl<PERSISTENCE_ENTITY,SERVICE_ENTITY> count(String queryIdentifier) {
+	public EntityReaderRequestImpl<PERSISTENCE_ENTITY,SERVICE_ENTITY> count(Boolean countable,String queryIdentifier) {
+		if(Boolean.TRUE.equals(countable) && StringHelper.isBlank(queryIdentifier) && persistence != null)
+			queryIdentifier = persistence.getQueryIdentifierCountDynamic();
 		setCountable(StringHelper.isNotBlank(queryIdentifier));
 		setCountQueryIdentifier(queryIdentifier);
+		return this;
+	}
+	
+	public EntityReaderRequestImpl<PERSISTENCE_ENTITY,SERVICE_ENTITY> count(Boolean countable) {
+		return count(countable, null);
+	}
+	
+	public EntityReaderRequestImpl<PERSISTENCE_ENTITY,SERVICE_ENTITY> enableResponseHeadersCORS() {
+		getResponseBuilderArguments(Boolean.TRUE).setHeadersCORS();
 		return this;
 	}
 	
@@ -93,6 +102,10 @@ public class EntityReaderRequestImpl<PERSISTENCE_ENTITY,SERVICE_ENTITY> implemen
 	
 	@Override
 	public ResponseBuilder.Arguments execute() {
+		if((queryExecutorArguments == null || queryExecutorArguments.getQuery() == null || StringHelper.isBlank(queryExecutorArguments.getQuery().getIdentifier()))) {
+			if(persistence != null)
+				query(persistence.getQueryIdentifierReadDynamic());
+		}
 		validatePreConditions();
 		readPersistenceEntities();
 		if(Boolean.TRUE.equals(countable))
@@ -101,12 +114,12 @@ public class EntityReaderRequestImpl<PERSISTENCE_ENTITY,SERVICE_ENTITY> implemen
 	}
 	
 	protected void validatePreConditions() {
+		if(serviceEntityClass == null)
+			throw new RuntimeException("Service entity class is required");
 		if(persistenceEntityClass == null)
 			throw new RuntimeException("Persistence entity class is required");
 		if(queryExecutorArguments == null)
-			throw new RuntimeException("Query executor arguments is required");
-		if(serviceEntityClass == null)
-			throw new RuntimeException("Service entity class is required");
+			throw new RuntimeException("Query executor arguments is required");		
 		if(mapper == null)
 			throw new RuntimeException("Persistence entity to service entity mapper is required");
 	}
@@ -139,4 +152,16 @@ public class EntityReaderRequestImpl<PERSISTENCE_ENTITY,SERVICE_ENTITY> implemen
 			queryExecutorArguments.setFilter(queryExecutorArguments.getFilterBackup());		
 		getResponseBuilderArguments(Boolean.TRUE).setHeader(ResponseHelper.HEADER_X_TOTAL_COUNT, EntityCounter.getInstance().count(persistenceEntityClass,queryExecutorArguments));
 	}
+	
+	/**/
+	
+	/*public static <PERSISTENCE_ENTITY,PERSISTENCE_ENTITY_IMPL,SERVICE_ENTITY> EntityReaderRequestImpl<PERSISTENCE_ENTITY_IMPL,SERVICE_ENTITY> instantiate(
+			Class<PERSISTENCE_ENTITY> persistenceEntityClass,Class<PERSISTENCE_ENTITY_IMPL> persistenceEntityImplClass,Class<SERVICE_ENTITY> serviceEntityClass
+			,SpecificPersistence<PERSISTENCE_ENTITY> persistence,Mapper<PERSISTENCE_ENTITY_IMPL, SERVICE_ENTITY> mapper
+			,String filterAsString,List<String> projections,Boolean countable,Boolean pageable,Integer firstTupleIndex,Integer numberOfTuples) {		
+		EntityReaderRequestImpl<PERSISTENCE_ENTITY_IMPL,SERVICE_ENTITY> request = new EntityReaderRequestImpl<PERSISTENCE_ENTITY_IMPL,SERVICE_ENTITY>(
+				persistenceEntityImplClass,serviceEntityClass);
+		request.projections(projections).filter(filterAsString).count(countable).page(pageable,firstTupleIndex, numberOfTuples);
+		return request;
+	}*/
 }

@@ -1,4 +1,4 @@
-package org.cyk.utility.service;
+package org.cyk.utility.service.server;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -12,10 +12,10 @@ public class PersistenceEntityClassGetterImpl extends PersistenceEntityClassGett
 	public static final Map<Class<?>,Class<?>> MAP = new HashMap<>();
 	
 	@Override
-	public Class<?> get(Class<?> controllerEntityClass) {
-		if(MAP.containsKey(controllerEntityClass))
-			return MAP.get(controllerEntityClass);
-		return super.get(controllerEntityClass);
+	public Class<?> __get__(Class<?> klass) {
+		if(MAP.containsKey(klass))
+			return MAP.get(klass);
+		throw new RuntimeException(String.format("Persistence entity class of <<%s>> cannot be got", klass));
 	}
 	
 }
