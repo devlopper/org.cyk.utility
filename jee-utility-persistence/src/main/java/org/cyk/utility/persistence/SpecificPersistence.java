@@ -18,9 +18,13 @@ public interface SpecificPersistence<ENTITY> {
 	
 	Boolean isProcessable(QueryExecutorArguments arguments);
 	
-	String getFilterAsStringParameterName();
+	String getParameterNameFilterAsString();
+	
+	String getParameterNameIdentifier();
 	
 	/**/
 	
 	String PARAMETER_NAME_FILTER_AS_STRING = "filter_as_string";
+	
+	String PARAMETER_NAME_IDENTIFIER = "identifier";
 }

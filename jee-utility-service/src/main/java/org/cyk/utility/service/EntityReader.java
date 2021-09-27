@@ -83,4 +83,7 @@ public interface EntityReader {
 	
 	String PARAMETER_NAME_PAGEABLE = "pageable";
 	String PARAMETER_NAME_PAGEABLE_DESCRIPTION = "Pageable";
+	
+	String PARAMETER_NAME_IDENTIFIER = "identifier";
+	String PARAMETER_NAME_IDENTIFIER_DESCRIPTION = "Identifier";
 }

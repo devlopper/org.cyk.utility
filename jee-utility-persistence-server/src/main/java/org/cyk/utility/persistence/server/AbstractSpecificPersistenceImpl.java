@@ -47,8 +47,13 @@ public abstract class AbstractSpecificPersistenceImpl<ENTITY> implements Specifi
 	}
 	
 	@Override
-	public String getFilterAsStringParameterName() {
+	public String getParameterNameFilterAsString() {
 		return PARAMETER_NAME_FILTER_AS_STRING;
+	}
+	
+	@Override
+	public String getParameterNameIdentifier() {
+		return PARAMETER_NAME_IDENTIFIER;
 	}
 	
 	protected static String getQueryIdentifierFromConfiguration(String propertyName) {
