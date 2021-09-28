@@ -10,4 +10,5 @@ public interface SpecificService<ENTITY> extends Service {
 	
 	Response getOne(String identifier,List<String> projections);
 	
+	Response count(String filterAsString);
 }

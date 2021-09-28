@@ -83,7 +83,7 @@ public class EntityReaderRequestImpl<PERSISTENCE_ENTITY,SERVICE_ENTITY> extends 
 		if((queryExecutorArguments == null || queryExecutorArguments.getQuery() == null || StringHelper.isBlank(queryExecutorArguments.getQuery().getIdentifier()))) {
 			if(persistence != null)
 				query(Boolean.TRUE.equals(collectionable) ? persistence.getQueryIdentifierReadDynamic() : persistence.getQueryIdentifierReadDynamicOne());
-		}		
+		}
 		validatePreConditions();
 		if(Boolean.TRUE.equals(collectionable))
 			readPersistenceEntities();

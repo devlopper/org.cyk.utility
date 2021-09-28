@@ -9,20 +9,18 @@ import org.cyk.utility.persistence.query.Query;
 import org.cyk.utility.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.persistence.server.SpecificPersistenceGetter;
 import org.cyk.utility.rest.RequestExecutor;
-import org.cyk.utility.rest.ResponseBuilder;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
-public abstract class AbstractEntityRequestImpl<PERSISTENCE_ENTITY,SERVICE_ENTITY> implements RequestExecutor.Request,Serializable {
+public abstract class AbstractEntityRequestImpl<PERSISTENCE_ENTITY,SERVICE_ENTITY> extends AbstractRequestImpl implements RequestExecutor.Request,Serializable {
 
 	protected Class<PERSISTENCE_ENTITY> persistenceEntityClass;
 	protected Class<SERVICE_ENTITY> serviceEntityClass;
 	protected SpecificPersistence<?> persistence;
 	protected QueryExecutorArguments queryExecutorArguments;
-	protected ResponseBuilder.Arguments responseBuilderArguments;
 	
 	@SuppressWarnings("unchecked")
 	public AbstractEntityRequestImpl(Class<SERVICE_ENTITY> serviceEntityClass) {
@@ -59,12 +57,6 @@ public abstract class AbstractEntityRequestImpl<PERSISTENCE_ENTITY,SERVICE_ENTIT
 	public AbstractEntityRequestImpl<PERSISTENCE_ENTITY,SERVICE_ENTITY> enableResponseHeadersCORS() {
 		getResponseBuilderArguments(Boolean.TRUE).setHeadersCORS();
 		return this;
-	}
-	
-	public ResponseBuilder.Arguments getResponseBuilderArguments(Boolean instantiateIfNull) {
-		if(responseBuilderArguments == null && Boolean.TRUE.equals(instantiateIfNull))
-			responseBuilderArguments = new ResponseBuilder.Arguments();
-		return responseBuilderArguments;
 	}
 	
 	protected void validatePreConditions() {
