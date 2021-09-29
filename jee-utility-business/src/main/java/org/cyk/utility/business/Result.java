@@ -31,6 +31,7 @@ public class Result extends AbstractObject implements Serializable {
 	private String name;
 	private Long startingTime,stoppingTime,duration;
 	private Map<Class<?>,Map<Action,Integer>> countsMap;
+	private Object value;
 	private Collection<String> messages;
 	
 	public Result open() {
@@ -67,6 +68,11 @@ public class Result extends AbstractObject implements Serializable {
 		if(map == null)
 			return null;
 		return map.get(action) > 0;
+	}
+	
+	public Result value(Object value) {
+		this.value = value;
+		return this;
 	}
 	
 	public Collection<String> getMessages(Boolean injectIfNull) {

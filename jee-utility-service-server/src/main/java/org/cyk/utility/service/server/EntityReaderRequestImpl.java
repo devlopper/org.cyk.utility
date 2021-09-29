@@ -12,7 +12,6 @@ import org.cyk.utility.persistence.query.EntityReader;
 import org.cyk.utility.persistence.query.Query;
 import org.cyk.utility.persistence.query.QueryGetter;
 import org.cyk.utility.rest.RequestExecutor;
-import org.cyk.utility.rest.ResponseBuilder;
 import org.cyk.utility.rest.ResponseHelper;
 
 import lombok.Getter;
@@ -20,7 +19,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
-public class EntityReaderRequestImpl<PERSISTENCE_ENTITY,SERVICE_ENTITY> extends AbstractEntityRequestImpl<PERSISTENCE_ENTITY, SERVICE_ENTITY> implements RequestExecutor.Request,Serializable {
+public class EntityReaderRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> extends AbstractEntityRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> implements RequestExecutor.Request,Serializable {
 
 	private Mapper<PERSISTENCE_ENTITY,SERVICE_ENTITY> mapper;
 	private Boolean countable,collectionable;
@@ -32,23 +31,23 @@ public class EntityReaderRequestImpl<PERSISTENCE_ENTITY,SERVICE_ENTITY> extends 
 			mapper = DependencyInjection.inject(MapperGetter.class).get(persistenceEntityClass, serviceEntityClass);
 	}
 	
-	public EntityReaderRequestImpl<PERSISTENCE_ENTITY,SERVICE_ENTITY> page(Boolean pageable,Integer firstTupleIndex,Integer numberOfTuples) {
+	public EntityReaderRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> page(Boolean pageable,Integer firstTupleIndex,Integer numberOfTuples) {
 		if(pageable == null || Boolean.TRUE.equals(pageable))
 			getQueryExecutorArguments(Boolean.TRUE).setFirstTupleIndex(firstTupleIndex).setNumberOfTuples(numberOfTuples);
 		return this;
 	}
 	
-	public EntityReaderRequestImpl<PERSISTENCE_ENTITY,SERVICE_ENTITY> projections(Collection<String> strings) {
+	public EntityReaderRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> projections(Collection<String> strings) {
 		getQueryExecutorArguments(Boolean.TRUE).addProjectionsFromStrings(strings);
 		return this;
 	}
 	
-	public EntityReaderRequestImpl<PERSISTENCE_ENTITY,SERVICE_ENTITY> projections(String...strings) {
+	public EntityReaderRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> projections(String...strings) {
 		getQueryExecutorArguments(Boolean.TRUE).addProjectionsFromStrings(strings);
 		return this;
 	}
 	
-	public EntityReaderRequestImpl<PERSISTENCE_ENTITY,SERVICE_ENTITY> count(Boolean countable,String queryIdentifier) {
+	public EntityReaderRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> count(Boolean countable,String queryIdentifier) {
 		if(Boolean.TRUE.equals(countable) && StringHelper.isBlank(queryIdentifier) && persistence != null)
 			queryIdentifier = persistence.getQueryIdentifierCountDynamic();
 		setCountable(StringHelper.isNotBlank(queryIdentifier));
@@ -56,48 +55,24 @@ public class EntityReaderRequestImpl<PERSISTENCE_ENTITY,SERVICE_ENTITY> extends 
 		return this;
 	}
 	
-	public EntityReaderRequestImpl<PERSISTENCE_ENTITY,SERVICE_ENTITY> count(Boolean countable) {
+	public EntityReaderRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> count(Boolean countable) {
 		return count(countable, null);
 	}
 	
-	public EntityReaderRequestImpl<PERSISTENCE_ENTITY,SERVICE_ENTITY> collect(Boolean collectionable) {
+	public EntityReaderRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> collect(Boolean collectionable) {
 		this.collectionable = collectionable;
 		return this;
 	}
 	
 	@Override
-	public EntityReaderRequestImpl<PERSISTENCE_ENTITY, SERVICE_ENTITY> filter(String string) {
-		return (EntityReaderRequestImpl<PERSISTENCE_ENTITY, SERVICE_ENTITY>) super.filter(string);
+	public EntityReaderRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> filter(String string) {
+		return (EntityReaderRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY>) super.filter(string);
 	}
 	
 	@Override
-	public EntityReaderRequestImpl<PERSISTENCE_ENTITY, SERVICE_ENTITY> filterByIdentifier(String identifier) {
+	public EntityReaderRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> filterByIdentifier(String identifier) {
 		collect(Boolean.FALSE);
-		return (EntityReaderRequestImpl<PERSISTENCE_ENTITY, SERVICE_ENTITY>) super.filterByIdentifier(identifier);
-	}
-	
-	@Override
-	public ResponseBuilder.Arguments execute() {
-		if(collectionable == null)
-			collectionable = Boolean.TRUE;
-		if((queryExecutorArguments == null || queryExecutorArguments.getQuery() == null || StringHelper.isBlank(queryExecutorArguments.getQuery().getIdentifier()))) {
-			if(persistence != null)
-				query(Boolean.TRUE.equals(collectionable) ? persistence.getQueryIdentifierReadDynamic() : persistence.getQueryIdentifierReadDynamicOne());
-		}
-		validatePreConditions();
-		if(Boolean.TRUE.equals(collectionable))
-			readPersistenceEntities();
-		else
-			readPersistenceEntity();
-		if(Boolean.TRUE.equals(collectionable) && Boolean.TRUE.equals(countable))
-			countPersistenceEntities();
-		return responseBuilderArguments;
-	}
-	
-	protected void validatePreConditions() {
-		super.validatePreConditions();
-		if(mapper == null)
-			throw new RuntimeException("Persistence entity to service entity mapper is required");
+		return (EntityReaderRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY>) super.filterByIdentifier(identifier);
 	}
 	
 	protected Collection<PERSISTENCE_ENTITY> getPersistenceEntities() {
@@ -116,16 +91,44 @@ public class EntityReaderRequestImpl<PERSISTENCE_ENTITY,SERVICE_ENTITY> extends 
 		return mapper.mapSourceToDestination(entity);
 	}
 	
+	@Override
+	protected void prepare() {
+		super.prepare();
+		if(collectionable == null)
+			collectionable = Boolean.TRUE;
+		if((queryExecutorArguments == null || queryExecutorArguments.getQuery() == null || StringHelper.isBlank(queryExecutorArguments.getQuery().getIdentifier()))) {
+			if(persistence != null)
+				query(Boolean.TRUE.equals(collectionable) ? persistence.getQueryIdentifierReadDynamic() : persistence.getQueryIdentifierReadDynamicOne());
+		}
+	}
+	
+	@Override
+	protected void validatePreConditions() {
+		super.validatePreConditions();
+		if(mapper == null)
+			throw new RuntimeException("Persistence entity to service entity mapper is required");
+	}
+	
+	@Override
+	protected void __execute__() {
+		if(Boolean.TRUE.equals(collectionable))
+			readPersistenceEntities();
+		else
+			readPersistenceEntity();
+		if(Boolean.TRUE.equals(collectionable) && Boolean.TRUE.equals(countable))
+			countPersistenceEntities();
+	}
+
 	protected void readPersistenceEntities() {		
 		Collection<PERSISTENCE_ENTITY> persistenceEntities = getPersistenceEntities();
 		Collection<SERVICE_ENTITY> serviceEntities =  CollectionHelper.isEmpty(persistenceEntities) ? null : mapPersistenceEntitiesToServiceEntities(persistenceEntities);
-		getResponseBuilderArguments(Boolean.TRUE).setEntities(serviceEntities);		
+		responseBuilderArguments.setEntities(serviceEntities);		
 	}
 	
 	protected void readPersistenceEntity() {		
 		PERSISTENCE_ENTITY persistenceEntity = getPersistenceEntity();
 		SERVICE_ENTITY serviceEntity =  persistenceEntity == null ? null : mapPersistenceEntityToServiceEntity(persistenceEntity);
-		getResponseBuilderArguments(Boolean.TRUE).setEntity(serviceEntity);
+		responseBuilderArguments.setEntity(serviceEntity);
 	}
 	
 	protected void countPersistenceEntities() {
@@ -136,6 +139,6 @@ public class EntityReaderRequestImpl<PERSISTENCE_ENTITY,SERVICE_ENTITY> extends 
 			queryExecutorArguments.setQuery(new Query().setIdentifier(countQueryIdentifier));
 		if(queryExecutorArguments.getFilterBackup() != null)
 			queryExecutorArguments.setFilter(queryExecutorArguments.getFilterBackup());		
-		getResponseBuilderArguments(Boolean.TRUE).setHeader(ResponseHelper.HEADER_X_TOTAL_COUNT, EntityCounter.getInstance().count(persistenceEntityClass,queryExecutorArguments));
+		responseBuilderArguments.setHeader(ResponseHelper.HEADER_X_TOTAL_COUNT, EntityCounter.getInstance().count(persistenceEntityClass,queryExecutorArguments));
 	}
 }

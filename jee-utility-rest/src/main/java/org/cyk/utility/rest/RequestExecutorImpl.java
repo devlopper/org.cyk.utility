@@ -13,7 +13,8 @@ public class RequestExecutorImpl implements RequestExecutor,Serializable {
 		if(request == null)
 			throw new RuntimeException("Request is required");		
 		try {
-			return ResponseBuilder.getInstance().build(request.execute());
+			ResponseBuilder.Arguments responseBuilderArguments = request.execute();
+			return ResponseBuilder.getInstance().build(responseBuilderArguments);
 		} catch (Exception exception) {
 			return ResponseBuilder.getInstance().build(exception);
 		}

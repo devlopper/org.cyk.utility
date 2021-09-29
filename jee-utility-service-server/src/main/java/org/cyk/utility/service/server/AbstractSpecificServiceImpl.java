@@ -14,14 +14,12 @@ import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.business.Result;
 import org.cyk.utility.business.TransactionResult;
-import org.cyk.utility.rest.RequestExecutor;
 import org.cyk.utility.rest.ResponseBuilder;
 import org.cyk.utility.service.SpecificService;
 import org.eclipse.microprofile.config.ConfigProvider;
 
-public abstract class AbstractSpecificServiceImpl<SERVICE_ENTITY,SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY,PERSISTENCE_ENTITY_IMPL> extends AbstractObject implements SpecificService<SERVICE_ENTITY>,Serializable {
+public abstract class AbstractSpecificServiceImpl<SERVICE_ENTITY,SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY,PERSISTENCE_ENTITY_IMPL> extends AbstractServiceImpl implements SpecificService<SERVICE_ENTITY>,Serializable {
 
-	@Inject protected RequestExecutor requestExecutor;
 	@Inject protected ClassIdentifierGetter classIdentifierGetter;
 	protected Class<SERVICE_ENTITY> serviceEntityClass;
 	protected Class<SERVICE_ENTITY_IMPL> serviceEntityImplClass;
@@ -46,11 +44,11 @@ public abstract class AbstractSpecificServiceImpl<SERVICE_ENTITY,SERVICE_ENTITY_
 	
 	@Override
 	public Response get(String filterAsString,List<String> projections,Boolean countable,Boolean pageable,Integer firstTupleIndex,Integer numberOfTuples) {
-		return requestExecutor.execute(__get__(filterAsString, projections, countable, pageable, firstTupleIndex, numberOfTuples));
+		return execute(__get__(filterAsString, projections, countable, pageable, firstTupleIndex, numberOfTuples));
 	}
 	
-	protected EntityReaderRequestImpl<PERSISTENCE_ENTITY_IMPL,SERVICE_ENTITY_IMPL> __get__(String filterAsString,List<String> projections,Boolean countable,Boolean pageable,Integer firstTupleIndex,Integer numberOfTuples) {
-		EntityReaderRequestImpl<PERSISTENCE_ENTITY_IMPL,SERVICE_ENTITY_IMPL> request = new EntityReaderRequestImpl<PERSISTENCE_ENTITY_IMPL, SERVICE_ENTITY_IMPL>(serviceEntityImplClass)
+	protected EntityReaderRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL> __get__(String filterAsString,List<String> projections,Boolean countable,Boolean pageable,Integer firstTupleIndex,Integer numberOfTuples) {
+		EntityReaderRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL> request = new EntityReaderRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL>(serviceEntityImplClass)
 				.projections(projections).filter(filterAsString)
 				.count(ValueHelper.defaultToIfNull(countable, Boolean.TRUE)).page(pageable,firstTupleIndex, numberOfTuples);
 		if(Boolean.TRUE.equals(isResponseHeadersCORSEnabled))
@@ -60,20 +58,20 @@ public abstract class AbstractSpecificServiceImpl<SERVICE_ENTITY,SERVICE_ENTITY_
 	
 	@Override
 	public Response getOne(String identifier,List<String> projections) {
-		EntityReaderRequestImpl<PERSISTENCE_ENTITY_IMPL,SERVICE_ENTITY_IMPL> request = new EntityReaderRequestImpl<PERSISTENCE_ENTITY_IMPL,SERVICE_ENTITY_IMPL>(serviceEntityImplClass)
+		EntityReaderRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL> request = new EntityReaderRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL>(serviceEntityImplClass)
 				.filterByIdentifier(identifier).projections(projections);
 		if(Boolean.TRUE.equals(isResponseHeadersCORSEnabled))
 			request.enableResponseHeadersCORS();
-		return requestExecutor.execute(request);
+		return execute(request);
 	}
 	
 	@Override
 	public Response count(String filterAsString) {
-		EntityCounterRequestImpl<PERSISTENCE_ENTITY_IMPL,SERVICE_ENTITY_IMPL> request = new EntityCounterRequestImpl<PERSISTENCE_ENTITY_IMPL,SERVICE_ENTITY_IMPL>(serviceEntityImplClass)
+		EntityCounterRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL> request = new EntityCounterRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL>(serviceEntityImplClass)
 				.filter(filterAsString);
 		if(Boolean.TRUE.equals(isResponseHeadersCORSEnabled))
 			request.enableResponseHeadersCORS();
-		return requestExecutor.execute(request);
+		return execute(request);
 	}
 	
 	protected static void processTransactionResult(TransactionResult transactionResult,ResponseBuilder.Arguments responseBuilderArguments) {
