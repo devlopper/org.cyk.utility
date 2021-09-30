@@ -8,7 +8,7 @@ import org.cyk.utility.__kernel__.enumeration.Action;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.business.Result;
 
-@lombok.Getter @lombok.Setter @lombok.experimental.Accessors(chain=true)
+@lombok.Getter @lombok.Setter @lombok.experimental.Accessors(chain=true) @Deprecated
 public class EntityBusinessRequestImpl extends AbstractRequestImpl implements Serializable {
 
 	private Business business;

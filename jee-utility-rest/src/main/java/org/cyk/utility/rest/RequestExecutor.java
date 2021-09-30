@@ -10,15 +10,10 @@ public interface RequestExecutor {
 		
 		ResponseBuilder.Arguments execute();
 		
+		@lombok.Getter @lombok.Setter @lombok.experimental.Accessors(chain=true)
 		public static abstract class AbstractImpl extends org.cyk.utility.__kernel__.object.AbstractObject implements Request,java.io.Serializable {
 			
 			protected org.cyk.utility.rest.ResponseBuilder.Arguments responseBuilderArguments = new org.cyk.utility.rest.ResponseBuilder.Arguments();
-			
-			public org.cyk.utility.rest.ResponseBuilder.Arguments getResponseBuilderArguments(Boolean instantiateIfNull) {
-				if(responseBuilderArguments == null && Boolean.TRUE.equals(instantiateIfNull))
-					responseBuilderArguments = new ResponseBuilder.Arguments();
-				return responseBuilderArguments;
-			}
 			
 			protected void prepare() {}
 			protected void validatePreConditions() {}

@@ -11,25 +11,26 @@ import org.cyk.utility.business.Result;
 @lombok.Getter @lombok.Setter @lombok.experimental.Accessors(chain=true)
 public class RequestImpl extends org.cyk.utility.rest.RequestExecutor.Request.AbstractImpl implements Serializable {
 
-	private Business business;
 	private Class<?> persistenceEntityClass;
 
-	public RequestImpl(Business business,Class<?> persistenceEntityClass) {
-		this.business = business;
+	public RequestImpl(Class<?> persistenceEntityClass) {
 		this.persistenceEntityClass = persistenceEntityClass;		
 	}
 	
 	@Override
 	protected void __execute__() {
-		if(business == null)
-			throw new RuntimeException("Business is required");
-		Result result = business.execute();
+		Result result = executeBusiness();
+		processResult(result);
+	}
+	
+	protected Result executeBusiness() {
+		throw new RuntimeException("Not yet implemented");
+	}
+	
+	protected void processResult(Result result) {
 		if(persistenceEntityClass != null && Boolean.TRUE.equals(result.isCountGreaterThanZero(persistenceEntityClass, Action.CREATE)))
 			responseBuilderArguments.setStatus(Status.CREATED);
-		if(result.getValue() == null)
-			responseBuilderArguments.setEntity(String.format("%s executed", result.getName()));
-		else
-			responseBuilderArguments.setEntity(result.getValue());
+		setResponseBuilderArgumentsEntity(result);
 		if(MapHelper.isNotEmpty(result.getCountsMap())) {
 			result.getCountsMap().entrySet().forEach( entry -> {
 				if(MapHelper.isEmpty(entry.getValue()))
@@ -41,6 +42,13 @@ public class RequestImpl extends org.cyk.utility.rest.RequestExecutor.Request.Ab
 		}
 	}
 
+	protected void setResponseBuilderArgumentsEntity(Result result) {
+		if(result.getValue() == null)
+			responseBuilderArguments.setEntity(String.format("%s executed", result.getName()));
+		else
+			responseBuilderArguments.setEntity(result.getValue());
+	}
+	
 	public static interface Business {		
 		Result execute();
 	}

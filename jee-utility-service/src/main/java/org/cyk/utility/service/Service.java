@@ -30,12 +30,12 @@ public interface Service {
 	
 	/* Parameter */
 	
-	String PARAMETER_IDENTIFIER = ConstantString.IDENTIFIER;
-	String DESCRIPTION_IDENTIFIER = "Identifiant";
+	String PARAMETER_IDENTIFIER = "identifier";
+	String DESCRIPTION_IDENTIFIER = "Identifier";
 	String EXAMPLE_IDENTIFIER = "1";
 	
-	String PARAMETER_IDENTIFIERS = "identifiants";
-	String DESCRIPTION_IDENTIFIERS = "Identifiants";
+	String PARAMETER_IDENTIFIERS = "identifiers";
+	String DESCRIPTION_IDENTIFIERS = "Identifiers";
 	String EXAMPLE_IDENTIFIERS = "1,2,3";
 	
 	String PARAMETER_PARAMETERS_NAMES = "parametersNames";

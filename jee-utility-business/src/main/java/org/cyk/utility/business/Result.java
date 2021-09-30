@@ -70,6 +70,16 @@ public class Result extends AbstractObject implements Serializable {
 		return map.get(action) > 0;
 	}
 	
+	public Result add(Result result) {
+		if(result == null)
+			return this;
+		if(MapHelper.isNotEmpty(result.countsMap))
+			getCountsMap(Boolean.TRUE).putAll(result.countsMap);
+		if(CollectionHelper.isNotEmpty(result.messages))
+			addMessages(result.messages);
+		return this;
+	}
+	
 	public Result value(Object value) {
 		this.value = value;
 		return this;

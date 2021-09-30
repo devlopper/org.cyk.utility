@@ -8,14 +8,13 @@ import org.cyk.utility.persistence.SpecificPersistence;
 import org.cyk.utility.persistence.query.Query;
 import org.cyk.utility.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.persistence.server.SpecificPersistenceGetter;
-import org.cyk.utility.rest.RequestExecutor;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
-public abstract class AbstractEntityRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> extends AbstractRequestImpl implements RequestExecutor.Request,Serializable {
+public abstract class AbstractEntityRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> extends AbstractRequestImpl implements Serializable {
 
 	protected Class<SERVICE_ENTITY> serviceEntityClass;
 	protected Class<PERSISTENCE_ENTITY> persistenceEntityClass;	
@@ -67,6 +66,6 @@ public abstract class AbstractEntityRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTIT
 		if(persistenceEntityClass == null)
 			throw new RuntimeException("Persistence entity class is required");
 		if(queryExecutorArguments == null)
-			throw new RuntimeException("Query executor arguments is required");	
+			throw new RuntimeException("Query executor arguments is required");
 	}
 }

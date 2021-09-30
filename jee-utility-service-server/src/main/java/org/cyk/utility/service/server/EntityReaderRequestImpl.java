@@ -11,7 +11,6 @@ import org.cyk.utility.persistence.query.EntityCounter;
 import org.cyk.utility.persistence.query.EntityReader;
 import org.cyk.utility.persistence.query.Query;
 import org.cyk.utility.persistence.query.QueryGetter;
-import org.cyk.utility.rest.RequestExecutor;
 import org.cyk.utility.rest.ResponseHelper;
 
 import lombok.Getter;
@@ -19,7 +18,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
-public class EntityReaderRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> extends AbstractEntityRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> implements RequestExecutor.Request,Serializable {
+public class EntityReaderRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> extends AbstractEntityRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> implements Serializable {
 
 	private Mapper<PERSISTENCE_ENTITY,SERVICE_ENTITY> mapper;
 	private Boolean countable,collectionable;

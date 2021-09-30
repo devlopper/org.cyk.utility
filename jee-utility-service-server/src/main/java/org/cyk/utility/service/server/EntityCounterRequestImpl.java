@@ -4,14 +4,13 @@ import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.persistence.query.EntityCounter;
-import org.cyk.utility.rest.RequestExecutor;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
-public class EntityCounterRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> extends AbstractEntityRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> implements RequestExecutor.Request,Serializable {
+public class EntityCounterRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> extends AbstractEntityRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> implements Serializable {
 
 	public EntityCounterRequestImpl(Class<SERVICE_ENTITY> serviceEntityClass) {
 		super(serviceEntityClass);
