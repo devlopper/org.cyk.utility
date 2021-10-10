@@ -141,6 +141,27 @@ public class Filter extends AbstractObject implements Serializable {
 		return this;
 	}
 	
+	public Filter addFieldsFrom(QueryExecutorArguments arguments,Collection<String> names) {
+		if(CollectionHelper.isEmpty(names))
+			return this;
+		names.forEach(name -> {
+			addField(name, arguments == null ? null : arguments.getFilterFieldValue(name));
+		});		
+		return this;
+	}
+	
+	public Filter addFieldsFrom(QueryExecutorArguments arguments,String...names) {
+		if(ArrayHelper.isEmpty(names))
+			return this;
+		return addFieldsFrom(arguments, CollectionHelper.listOf(names));
+	}
+	
+	public Filter addFieldsFrom(String name,QueryExecutorArguments arguments) {
+		if(StringHelper.isBlank(name))
+			return this;
+		return addFieldsFrom(arguments, name);
+	}
+	
 	public Filter addFieldsEquals(QueryExecutorArguments arguments,Collection<String> names) {
 		if(CollectionHelper.isEmpty(names))
 			return this;

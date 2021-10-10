@@ -80,11 +80,15 @@ public class SelectOneCombo extends AbstractInputChoiceOne implements Serializab
 		return build(MapHelper.instantiate(objects));
 	}
 	
-	public static SelectOneCombo buildUnknownYesNoOnly(Boolean value,String outputLabelValue) {
+	public static SelectOneCombo buildUnknownYesNoOnly(Boolean value,String outputLabelValue,Listener<Boolean> listener) {
 		SelectOneCombo input = SelectOneCombo.build(SelectOneCombo.FIELD_VALUE,value,SelectOneCombo.ConfiguratorImpl.FIELD_CHOICES_ARE_UNKNOWN_YES_NO_ONLY,Boolean.TRUE
-				,SelectOneCombo.ConfiguratorImpl.FIELD_OUTPUT_LABEL_VALUE,outputLabelValue);
+				,SelectOneCombo.ConfiguratorImpl.FIELD_OUTPUT_LABEL_VALUE,outputLabelValue,SelectOneCombo.FIELD_LISTENER,listener);
 		//input.setValueAsFirstChoiceIfNull();
 		return input;
+	}
+	
+	public static SelectOneCombo buildUnknownYesNoOnly(Boolean value,String outputLabelValue) {
+		return buildUnknownYesNoOnly(value, outputLabelValue, null);
 	}
 	
 	public static SelectOneCombo buildYesNoOnly(Boolean value,String outputLabelValue) {

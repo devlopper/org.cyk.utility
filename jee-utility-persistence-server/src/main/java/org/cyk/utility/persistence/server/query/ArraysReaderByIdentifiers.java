@@ -174,8 +174,12 @@ public interface ArraysReaderByIdentifiers<ENTITY,IDENTIFIER> extends Reader<ENT
 		
 		protected QueryStringBuilder.Arguments instantiateQueryStringBuilderArguments() {
 			QueryStringBuilder.Arguments arguments = super.instantiateQueryStringBuilderArguments();
-			arguments.getPredicate(Boolean.TRUE).add("t.identifier IN :"+Querier.PARAMETER_NAME_IDENTIFIERS);
+			arguments.getPredicate(Boolean.TRUE).ands(instantiateQueryStringBuilderArgumentsPredicates());
 			return arguments;
+		}
+		
+		protected Collection<String> instantiateQueryStringBuilderArgumentsPredicates() {
+			return CollectionHelper.listOf("t.identifier IN :"+Querier.PARAMETER_NAME_IDENTIFIERS);
 		}
 		
 		/**/

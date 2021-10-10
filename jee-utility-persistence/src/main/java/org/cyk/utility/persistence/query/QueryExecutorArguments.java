@@ -88,6 +88,16 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 		return this;
 	}
 	
+	public QueryExecutorArguments queryReadOneDynamic(Class<?> klass) {
+		setQuery(new Query().setIdentifier(QueryIdentifierBuilder.getInstance().build(klass,QueryName.READ_DYNAMIC_ONE)));
+		return this;
+	}
+	
+	public QueryExecutorArguments queryCountDynamic(Class<?> klass) {
+		setQuery(new Query().setIdentifier(QueryIdentifierBuilder.getInstance().build(klass,QueryName.COUNT_DYNAMIC)));
+		return this;
+	}
+	
 	public QueryExecutorArguments page(Boolean pageable,Integer firstTupleIndex,Integer numberOfTuples) {
 		if(pageable == null)
 			pageable = NumberHelper.isGreaterThanOrEqualZero(firstTupleIndex) || NumberHelper.isGreaterThanZero(numberOfTuples);
