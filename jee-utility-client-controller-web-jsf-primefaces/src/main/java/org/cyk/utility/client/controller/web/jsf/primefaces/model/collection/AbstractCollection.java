@@ -38,6 +38,7 @@ import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObject
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax.Ajax;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.AbstractCommand;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.layout.Layout;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.AbstractMenu;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.ContextMenu;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.MenuButton;
@@ -68,6 +69,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	protected Map<String,Object> map = new HashMap<>();
 	protected OutputPanel dialogOutputPanel;
 	protected Dialog dialog;
+	protected Layout afterFilterControllerLayout;
 	protected Collection<AbstractCommand> headerToolbarLeftCommands,headerToolbarRightCommands;
 	protected Collection<AbstractCommand> recordCommands;
 	protected AbstractMenu recordMenu;

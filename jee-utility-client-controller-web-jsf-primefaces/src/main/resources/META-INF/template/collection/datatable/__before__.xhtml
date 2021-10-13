@@ -29,5 +29,15 @@
 	 			<p:separator/>
 			</ui:fragment>
 		</ui:insert>
+		
+		<ui:insert name="beforeDataTable_afterFilterController_layout">
+			<ui:fragment rendered="#{dataTable.afterFilterControllerLayout != null}">
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.afterFilterControllerLayout)}">
+	 				<ui:param name="layout" value="#{dataTable.afterFilterControllerLayout}"/>
+	 			</ui:decorate>
+	 			<p:separator/>
+			</ui:fragment>
+		</ui:insert>
+		
 	</ui:insert>
 </ui:composition>

@@ -49,6 +49,11 @@ public abstract class AbstractFilterController extends AbstractObject implements
 	protected Boolean isNotBuildable;
 	protected Class<?> pageClass;
 	protected Boolean isUsedForLoggedUser;
+	protected Listener listener;
+	
+	public AbstractFilterController initialize() {
+		return this;
+	}
 	
 	public Map<String,Boolean> getIgnorables(Boolean injectIfNull) {
 		if(ignorables == null && Boolean.TRUE.equals(injectIfNull))
@@ -288,5 +293,12 @@ public abstract class AbstractFilterController extends AbstractObject implements
 		,DIALOG
 		,NONE
 		;
+	}
+
+	/**/
+	
+	public static interface Listener {
+		void listenBeforeBuildLayoutCells(AbstractFilterController filterController,Collection<Map<Object,Object>> cellsMaps);
+		void listenAfterBuildLayoutCells(AbstractFilterController filterController,Collection<Map<Object,Object>> cellsMaps);
 	}
 }

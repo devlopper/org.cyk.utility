@@ -1,6 +1,8 @@
 package org.cyk.utility.persistence.server.query;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
@@ -13,6 +15,7 @@ import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
+import org.cyk.utility.__kernel__.time.TimeHelper;
 import org.cyk.utility.persistence.query.Querier;
 import org.cyk.utility.persistence.server.query.string.QueryStringBuilder;
 
@@ -188,6 +191,24 @@ public interface ArraysReaderByIdentifiers<ENTITY,IDENTIFIER> extends Reader<ENT
 			if(ArrayHelper.isEmpty(array) || NumberHelper.isLessThanZero(index))
 				return null;
 			return (String) array[index];
+		}
+		
+		protected static Long getAsLong(Object[] array,Integer index) {
+			if(ArrayHelper.isEmpty(array) || NumberHelper.isLessThanZero(index))
+				return null;
+			return (Long) array[index];
+		}
+		
+		protected static String formatLocalDateTime(Object[] array,Integer index) {
+			if(ArrayHelper.isEmpty(array) || NumberHelper.isLessThanZero(index))
+				return null;
+			return TimeHelper.formatLocalDateTime((LocalDateTime) array[index],"dd/MM/yyyy à HH:mm");
+		}
+		
+		protected static String formatLocalDate(Object[] array,Integer index) {
+			if(ArrayHelper.isEmpty(array) || NumberHelper.isLessThanZero(index))
+				return null;
+			return TimeHelper.formatLocalDate((LocalDate) array[index],"dd/MM/yyyy");
 		}
 		
 		/**/

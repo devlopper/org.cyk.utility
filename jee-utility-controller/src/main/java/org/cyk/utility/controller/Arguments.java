@@ -73,6 +73,10 @@ public class Arguments<T> extends AbstractObject implements Serializable {
 		return queryIdentifier(QueryIdentifierBuilder.getInstance().build(klass, QueryName.READ_DYNAMIC_ONE));
 	}
 	
+	public Arguments<T> queryIdentifierCountDynamic(Class<?> klass) {
+		return queryIdentifier(QueryIdentifierBuilder.getInstance().build(klass, QueryName.COUNT_DYNAMIC));
+	}
+	
 	public Arguments<T> queryIdentifier(String queryIdentifier) {
 		getRepresentationArguments(Boolean.TRUE).getQueryExecutorArguments(Boolean.TRUE).setQueryIdentifier(queryIdentifier);
 		return this;
