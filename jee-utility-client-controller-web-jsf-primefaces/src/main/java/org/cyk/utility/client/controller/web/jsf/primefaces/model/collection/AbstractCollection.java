@@ -61,7 +61,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	protected OutputText title;
 	protected Object value,selectedCommandIdentifier;
 	protected String emptyMessage,rowsPerPageTemplate,paginatorTemplate,currentPageReportTemplate,selectionMode,fileName;
-	protected String rowStyleClass,editMode;
+	protected String rowStyleClass,editMode,sortMode;
 	protected Boolean lazy,paginator,paginatorAlwaysVisible,isExportable,isSelectionShowableInDialog,editable,isSavable;
 	protected Integer rows,filterDelay;
 	protected Object selection;
@@ -436,6 +436,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	public static final String FIELD_EDIT_MODE = "editMode";
 	public static final String FIELD_RENDER_TYPE = "renderType";
 	public static final String FIELD_SELECTION = "selection";
+	public static final String FIELD_SORT_MODE = "sortMode";
 	public static final String FIELD_SELECTION_AS_COLLECTION = "selectionAsCollection";
 	//public static final String FIELD_FILTER_CONTROLLER = "filterController";
 	
@@ -448,6 +449,9 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 		public void configure(COLLECTION collection, Map<Object, Object> arguments) {
 			super.configure(collection, arguments);
 			setRenderType(collection,arguments);
+			
+			if(StringHelper.isBlank(collection.sortMode))
+				collection.sortMode = "single";
 			
 			if(collection.controllerEntity == null) {
 				if(collection.elementClass != null && !Grid.Row.class.equals(collection.elementClass))

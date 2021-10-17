@@ -3,10 +3,15 @@ package org.cyk.utility.persistence.server.query;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.computation.SortOrder;
+import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
@@ -60,10 +65,12 @@ public interface RuntimeQueryBuilder {
 			query.setValue(RuntimeQueryStringBuilder.getInstance().build(arguments));
 			setTupleFieldsNamesIndexesFromFieldsNames(arguments, query);
 			
+			setSortOrders(arguments);
+			/*
 			if(QueryType.COUNT.equals(arguments.getQuery().getType()) || QueryType.READ_ONE.equals(arguments.getQuery().getType())) {
 				arguments.setSortOrders(null);
 			}
-			
+			*/
 			return query;
 		}
 		
@@ -97,6 +104,37 @@ public interface RuntimeQueryBuilder {
 			if(arguments.getQuery().getIdentifier().equals(QueryIdentifierGetter.getInstance().get(arguments.getQuery().getTupleClass(), QueryName.COUNT_DYNAMIC)))
 				return Boolean.TRUE;
 			return Boolean.FALSE;
+		}
+		
+		protected void setSortOrders(QueryExecutorArguments arguments) {
+			if(QueryType.COUNT.equals(arguments.getQuery().getType()) || QueryType.READ_ONE.equals(arguments.getQuery().getType())) {
+				arguments.setSortOrders(null);
+				return;
+			}
+			Map<String,SortOrder> sortOrders = arguments.getSortOrders();
+			if(MapHelper.isEmpty(sortOrders))
+				return;
+			sortOrders = computeSortOrders(arguments,sortOrders);
+			if(MapHelper.isEmpty(sortOrders))
+				return;
+			arguments.setSortOrders(sortOrders);
+		}
+		
+		protected Map<String,SortOrder> computeSortOrders(QueryExecutorArguments arguments,Map<String,SortOrder> sortOrders) {
+			Map<String,SortOrder> map = new LinkedHashMap<>();
+			sortOrders.forEach((fieldName,sortOrder) -> {
+				Collection<String> fieldsNames = computeSortOrdersFieldsNames(arguments,fieldName);
+				if(CollectionHelper.isEmpty(fieldsNames))
+					fieldsNames = List.of(fieldName);
+				fieldsNames.forEach(x -> {
+					map.put(x, sortOrder);
+				});
+			});			
+			return map;
+		}
+		
+		protected Collection<String> computeSortOrdersFieldsNames(QueryExecutorArguments arguments,String fieldName) {
+			return List.of(fieldName);
 		}
 		
 		protected static Boolean hasFilterField(QueryExecutorArguments arguments,String fieldName) {

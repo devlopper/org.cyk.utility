@@ -3,7 +3,6 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.model.collection;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -31,6 +30,7 @@ import org.cyk.utility.controller.Arguments;
 import org.cyk.utility.controller.EntityReader;
 import org.cyk.utility.persistence.query.Filter;
 import org.cyk.utility.persistence.query.QueryExecutorArguments;
+import org.primefaces.model.SortMeta;
 import org.primefaces.model.SortOrder;
 
 import lombok.Getter;
@@ -59,6 +59,7 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 	private Integer __count__;
 	private String __sortField__,__entityFieldsNamesAsString__;
 	private SortOrder __sortOrder__;
+	private List<SortMeta> __multiSortMeta__;
 	private Map<String, Object> __filters__;
 	private Filter.Dto __filter__;
 	private Properties __readProperties__;
@@ -74,14 +75,11 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 	}
 	
 	@SuppressWarnings("unchecked")
-	@Override
-	public List<ENTITY> load(int first, int pageSize, String sortField, SortOrder sortOrder,Map<String, Object> filters) {
+	protected List<ENTITY> __load__(int first, int pageSize,Map<String, Object> filters) {
 		long timestamp = System.currentTimeMillis();
 		list = null;
 		__first__ = first;
 		__pageSize__ = pageSize;
-		__sortField__ = sortField;
-		__sortOrder__ = sortOrder;
 		__filters__ = filters;
 		if(controller == null)
 			return null;
@@ -114,6 +112,33 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 		map = null;
 		return list;
 	}
+	
+	@Override
+	public List<ENTITY> load(int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, Object> filters) {
+		long timestamp = System.currentTimeMillis();
+		__multiSortMeta__ = multiSortMeta;
+		__load__(first, pageSize, filters);
+		long duration = System.currentTimeMillis() - timestamp;
+		if(Boolean.TRUE.equals(LOGGABLE))
+			LogHelper.log(String.format("Page(%s,%s) , duration=%s", first,pageSize,duration), LOG_LEVEL,getClass());
+		map = null;
+		return list;
+	}
+	
+	@Override
+	public List<ENTITY> load(int first, int pageSize, String sortField, SortOrder sortOrder,Map<String, Object> filters) {
+		long timestamp = System.currentTimeMillis();
+		__sortField__ = sortField;
+		__sortOrder__ = sortOrder;
+		__load__(first, pageSize, filters);
+		long duration = System.currentTimeMillis() - timestamp;
+		if(Boolean.TRUE.equals(LOGGABLE))
+			LogHelper.log(String.format("Page(%s,%s) , duration=%s", first,pageSize,duration), LOG_LEVEL,getClass());
+		map = null;
+		return list;
+	}
+	
+	
 	
 	/**/
 	
@@ -207,12 +232,15 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 						.setFilter(lazyDataModel.__filter__))
 						.setCountable(Boolean.TRUE))
 						.setLoggableAsInfo(lazyDataModel.loggableAsInfo);
+				order(lazyDataModel, arguments);
+				/*
 				if(StringHelper.isNotBlank(lazyDataModel.__sortField__)) {
 					LinkedHashMap<String, org.cyk.utility.__kernel__.computation.SortOrder> map = new LinkedHashMap<>();
 					map.put(lazyDataModel.__sortField__,SortOrder.DESCENDING.equals(lazyDataModel.__sortOrder__) 
 							? org.cyk.utility.__kernel__.computation.SortOrder.DESCENDING : org.cyk.utility.__kernel__.computation.SortOrder.ASCENDING);
 					arguments.getRepresentationArguments().getQueryExecutorArguments().setSortOrders(map);
 				}
+				*/
 				return arguments;
 			}
 			
@@ -259,6 +287,36 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 			@Override
 			public Collection<String> getCopiableFiltersEntriesKeysToFilterFields(LazyDataModel<T> lazyDataModel) {
 				return null;
+			}
+			
+			protected void order(LazyDataModel<T> lazyDataModel,Arguments<T> arguments) {
+				if(StringHelper.isNotBlank(lazyDataModel.get__sortField__()) && !SortOrder.UNSORTED.equals(lazyDataModel.get__sortOrder__()))
+					orderOne(lazyDataModel, arguments);
+				else if(CollectionHelper.isNotEmpty(lazyDataModel.get__multiSortMeta__()))
+					orderMany(lazyDataModel, arguments);
+			}
+			
+			protected void orderOne(LazyDataModel<T> lazyDataModel,Arguments<T> arguments) {
+				order(lazyDataModel, arguments, lazyDataModel.get__sortField__(), lazyDataModel.get__sortOrder__());
+			}
+			
+			protected void order(LazyDataModel<T> lazyDataModel,Arguments<T> arguments,String fieldName,SortOrder sortOrder) {
+				if(StringHelper.isBlank(fieldName) || sortOrder == null || SortOrder.UNSORTED.equals(sortOrder))
+					return;
+				org.cyk.utility.__kernel__.computation.SortOrder mapping = org.cyk.utility.__kernel__.computation.SortOrder.valueOf(sortOrder.name());
+				if(mapping == null) {
+					LogHelper.logWarning(String.format("No sort order mapping found for %s", sortOrder), getClass());
+					return;
+				}
+				arguments.order(fieldName, mapping);
+			}
+			
+			protected void orderMany(LazyDataModel<T> lazyDataModel,Arguments<T> arguments) {
+				if(CollectionHelper.isEmpty(lazyDataModel.get__multiSortMeta__()))
+					return;
+				lazyDataModel.get__multiSortMeta__().forEach(sortMeta -> {
+					order(lazyDataModel, arguments, sortMeta.getSortField(), sortMeta.getSortOrder());
+				});
 			}
 			
 			/**/

@@ -87,6 +87,7 @@
 				paginatorTemplate="#{dataTable.paginatorTemplate}" currentPageReportTemplate="#{dataTable.currentPageReportTemplate}"
 				widgetVar="#{dataTable.widgetVar}" rowIndexVar="rowIndex" filterDelay="#{dataTable.filterDelay}" 
 				selection="#{dataTable[dataTable.selectionMode eq 'multiple' ? 'selectionAsCollection' : 'selection']}" selectionMode="#{dataTable.selectionMode}"
+				sortMode="#{dataTable.sortMode}"
 				rowStyleClass="#{dataTable.getStyleClassByRecord(record,rowIndex)}" 
 				editable="#{dataTable.editable}" editMode="#{dataTable.editMode}"  
 				stickyHeader="#{dataTable.stickyHeader}" stickyTopAt="#{dataTable.stickyTopAt}"
