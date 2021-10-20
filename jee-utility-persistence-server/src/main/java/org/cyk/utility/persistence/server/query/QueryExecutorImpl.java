@@ -171,6 +171,8 @@ public class QueryExecutorImpl extends AbstractObject implements QueryExecutor,S
 				strings.add(query.getValue());
 			if(MapHelper.isNotEmpty(parameters))
 				strings.add(parameters.toString());
+			if(MapHelper.isNotEmpty(sortOrders))
+				strings.add(sortOrders.toString());
 			if(firstTupleIndex != null)
 				strings.add("Page("+firstTupleIndex+","+numberOfTuples+")");
 			if(MapHelper.isNotEmpty(hints))
