@@ -50,6 +50,7 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 	private Boolean isResultProcessable;
 	private Filter filter,filterBackup;
 	private Map<String,SortOrder> sortOrders;
+	private Map<String,Integer> sortIndexes;
 	private Integer firstTupleIndex;
 	private Integer numberOfTuples;
 	private Collection<Object> objects;
@@ -571,6 +572,7 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 		private ArrayList<String> resultsFieldsNames;
 		private Filter.Dto filter;
 		private LinkedHashMap<String,SortOrder> sortOrders;
+		private LinkedHashMap<String,Byte> sortIndexes;
 		private Integer firstTupleIndex;
 		private Integer numberOfTuples;
 		private Boolean isResultCachable;
@@ -584,6 +586,12 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 			if(sortOrders == null && Boolean.TRUE.equals(injectIfNull))
 				sortOrders = new LinkedHashMap<String,SortOrder>();
 			return sortOrders;
+		}
+		
+		public LinkedHashMap<String,Byte> getSortIndexes(Boolean injectIfNull) {
+			if(sortIndexes == null && Boolean.TRUE.equals(injectIfNull))
+				sortIndexes = new LinkedHashMap<String,Byte>();
+			return sortIndexes;
 		}
 		
 		public Collection<String> getFlags(Boolean injectIfNull) {
@@ -741,6 +749,7 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 					destination.setQuery(new Query().setIdentifier(source.getQueryIdentifier()));
 				if(Boolean.TRUE.equals(source.getLoggableAsInfo()))
 					destination.setLoggingLevel(java.util.logging.Level.INFO);
+				((QueryExecutorArguments)destination).setSortOrders(((Dto)source).getSortOrders());
 			}
 			
 			public Filter.Dto getFilterDto(Filter filter) {
