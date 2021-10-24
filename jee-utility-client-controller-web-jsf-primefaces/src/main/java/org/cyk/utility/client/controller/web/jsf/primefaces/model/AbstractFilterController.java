@@ -4,11 +4,13 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.computation.SortOrder;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.identifier.resource.ParameterName;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
@@ -40,7 +42,8 @@ public abstract class AbstractFilterController extends AbstractObject implements
 
 	protected Dialog dialog;
 	protected CommandButton showDialogCommandButton;
-	protected Map<String,Boolean> ignorables;	
+	protected Map<String,Boolean> ignorables;
+	protected Map<String,SortOrder> sortOrders;
 	protected Redirector.Arguments onSelectRedirectorArguments;	
 	protected CommandButton filterCommandButton;
 	protected Layout layout;
@@ -52,6 +55,19 @@ public abstract class AbstractFilterController extends AbstractObject implements
 	protected Listener listener;
 	
 	public AbstractFilterController initialize() {
+		return this;
+	}
+	
+	public Map<String,SortOrder> getSortOrders(Boolean injectIfNull) {
+		if(sortOrders == null && Boolean.TRUE.equals(injectIfNull))
+			sortOrders = new LinkedHashMap<>();
+		return sortOrders;
+	}
+	
+	public AbstractFilterController order(String fieldName,SortOrder sortOrder) {
+		if(StringHelper.isBlank(fieldName) || sortOrder == null)
+			return this;
+		getSortOrders(Boolean.TRUE).put(fieldName, sortOrder);
 		return this;
 	}
 	

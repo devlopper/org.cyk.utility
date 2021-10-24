@@ -294,6 +294,9 @@ public class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDataModel<EN
 					orderOne(lazyDataModel, arguments);
 				else if(CollectionHelper.isNotEmpty(lazyDataModel.get__multiSortMeta__()))
 					orderMany(lazyDataModel, arguments);
+				else if(filterController != null && MapHelper.isNotEmpty(filterController.getSortOrders()))
+					arguments.getRepresentationArguments(Boolean.TRUE).getQueryExecutorArguments(Boolean.TRUE).getSortOrders(Boolean.TRUE)
+					.putAll(filterController.getSortOrders());
 			}
 			
 			protected void orderOne(LazyDataModel<T> lazyDataModel,Arguments<T> arguments) {
