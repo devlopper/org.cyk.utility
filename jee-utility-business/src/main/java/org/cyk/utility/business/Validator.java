@@ -54,6 +54,13 @@ public interface Validator {
 			return validate(klass, new Arguments<T>().setEntities(entities).setActionIdentifier(actionIdentifier));
 		}
 		
+		public static void validateIdentifiers(Collection<String> providedIdentifiers,Collection<String> systemIdentifiers,ThrowablesMessages throwablesMessages) {
+			if(CollectionHelper.isEmpty(providedIdentifiers))
+				return;
+			providedIdentifiers.forEach(identifier -> {
+				throwablesMessages.addIfTrue(String.format("L'identifiant %s n'existe pas", identifier), !Boolean.TRUE.equals(CollectionHelper.contains(systemIdentifiers, identifier)));
+			});
+		}
 	}
 
 	/**/

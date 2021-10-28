@@ -84,13 +84,13 @@ public interface CaseStringBuilder {
 		private Collection<When> whens;
 		
 		@Override
-		public Case add(Collection<String> orders) {
-			return (Case) super.add(orders);
+		public Case add(Collection<String> strings) {
+			return (Case) super.add(strings);
 		}
 		
 		@Override
-		public Case add(String... orders) {
-			return (Case) super.add(orders);
+		public Case add(String... strings) {
+			return (Case) super.add(strings);
 		}
 		
 		public Collection<When> getWhens(Boolean injectIfNull) {
@@ -121,13 +121,13 @@ public interface CaseStringBuilder {
 		public static class When extends org.cyk.utility.__kernel__.string.List implements Serializable {
 			
 			@Override
-			public When add(Collection<String> orders) {
-				return (When) super.add(orders);
+			public When add(Collection<String> whens) {
+				return (When) super.add(whens);
 			}
 			
 			@Override
-			public When add(String... orders) {
-				return (When) super.add(orders);
+			public When add(String... whens) {
+				return (When) super.add(whens);
 			}
 			
 			public static When instantiateIfConditionThenResult(String condition,String result) {
