@@ -65,8 +65,11 @@ public abstract class AbstractSpecificPersistenceImpl<ENTITY> implements Specifi
 	
 	@Override
 	public ENTITY readOne(String identifier) {
+		if(StringHelper.isBlank(identifier))
+			return null;
 		QueryExecutorArguments queryExecutorArguments = new QueryExecutorArguments();
 		queryExecutorArguments.setQuery(new Query().setIdentifier(queryIdentifierReadDynamicOne));
+		queryExecutorArguments.addFilterFieldsValues(getParameterNameIdentifier(),identifier);
 		configure(queryExecutorArguments);
 		return readOne(queryExecutorArguments);
 	}

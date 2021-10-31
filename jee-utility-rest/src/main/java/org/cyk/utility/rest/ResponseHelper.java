@@ -1,8 +1,10 @@
 package org.cyk.utility.rest;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.json.bind.JsonbBuilder;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
@@ -14,6 +16,26 @@ import org.cyk.utility.__kernel__.string.StringHelper;
 
 public interface ResponseHelper {
 
+	static <T> T getEntity(Class<T> klass,Response response) {
+		return response.readEntity(klass);
+	}
+	
+	static Long getEntityAsLong(Response response) {
+		return getEntity(Long.class, response);
+	}
+	
+	static <T> T getEntityFromJson(Class<T> klass,Response response) {
+		return JsonbBuilder.create().fromJson(response.readEntity(String.class), klass);
+	}
+	
+	static <T> Collection<T> getEntityAsCollectionFromJson(Class<T> klass,Response response) {
+		return JsonbBuilder.create().fromJson(response.readEntity(String.class), new ArrayList<T>(){}.getClass().getGenericSuperclass());
+	}
+	
+	static <T> List<T> getEntityAsListFromJson(Class<T> klass,Response response) {
+		return (List<T>) getEntityAsCollectionFromJson(klass,response);
+	}
+	
 	static Family getFamily(Response response) {
 		return response == null ? null : Family.familyOf(response.getStatus());
 	}

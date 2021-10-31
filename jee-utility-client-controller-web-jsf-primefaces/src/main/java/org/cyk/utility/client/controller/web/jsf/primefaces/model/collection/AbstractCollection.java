@@ -483,33 +483,36 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 				if(collection.elementClass == null) {
 					
 				}else {
-					LazyDataModel<Object> value = (LazyDataModel<Object>) MapHelper.readByKey(arguments, FIELD_LAZY_DATA_MODEL);
-					if(value == null) {
-						/*Class<?> lazyzDataModelClass = (Class<?>) MapHelper.readByKey(arguments, FIELD_LAZY_DATA_MODEL_CLASS);
-						if(lazyzDataModelClass == null)
-							lazyzDataModelClass = LazyDataModel.class;
-						*/
-						value = new LazyDataModel<Object>((Class<Object>) collection.elementClass);	
-					}	
-					
-					String persistenceEntityClassName = ClassHelper.buildName(collection.elementClass.getPackageName(), collection.elementClass.getSimpleName()
-							, new NamingModel().client().controller().entities(), new NamingModel().server().persistence().entities());						
-					Class<?> persistenceEntityClass = ClassHelper.getByName(persistenceEntityClassName);
-					if(Boolean.TRUE.equals(filterable)) {											
-						if(StringHelper.isBlank(value.getReadQueryIdentifier()))
-							value.setReadQueryIdentifier(QueryHelper.getIdentifierReadByFiltersLike(persistenceEntityClass));
-						if(StringHelper.isBlank(value.getCountQueryIdentifier()))
-							value.setCountQueryIdentifier(QueryHelper.getIdentifierCountByFiltersLike(persistenceEntityClass));																	
-					}else {
-						if(StringHelper.isBlank(value.getReadQueryIdentifier()))
-							value.setReadQueryIdentifier(QueryHelper.getIdentifierReadAll(persistenceEntityClass));
-						if(StringHelper.isBlank(value.getCountQueryIdentifier()))
-							value.setCountQueryIdentifier(QueryHelper.getIdentifierCountAll(persistenceEntityClass));												
-					}
-					if(value.getEntityFieldsNames() == null)
-						value.setEntityFieldsNames((Collection<String>) MapHelper.readByKey(arguments, FIELD_ENTITY_FIELDS_NAMES));	
-					collection.value = value;	
-				}				
+					if(MapHelper.readByKey(arguments, FIELD_LAZY_DATA_MODEL) == null) {
+						LazyDataModel<Object> value = (LazyDataModel<Object>) MapHelper.readByKey(arguments, FIELD_LAZY_DATA_MODEL);
+						if(value == null) {
+							/*Class<?> lazyzDataModelClass = (Class<?>) MapHelper.readByKey(arguments, FIELD_LAZY_DATA_MODEL_CLASS);
+							if(lazyzDataModelClass == null)
+								lazyzDataModelClass = LazyDataModel.class;
+							*/
+							value = new LazyDataModel<Object>((Class<Object>) collection.elementClass);	
+						}	
+						
+						String persistenceEntityClassName = ClassHelper.buildName(collection.elementClass.getPackageName(), collection.elementClass.getSimpleName()
+								, new NamingModel().client().controller().entities(), new NamingModel().server().persistence().entities());						
+						Class<?> persistenceEntityClass = ClassHelper.getByName(persistenceEntityClassName);
+						if(Boolean.TRUE.equals(filterable)) {											
+							if(StringHelper.isBlank(value.getReadQueryIdentifier()))
+								value.setReadQueryIdentifier(QueryHelper.getIdentifierReadByFiltersLike(persistenceEntityClass));
+							if(StringHelper.isBlank(value.getCountQueryIdentifier()))
+								value.setCountQueryIdentifier(QueryHelper.getIdentifierCountByFiltersLike(persistenceEntityClass));																	
+						}else {
+							if(StringHelper.isBlank(value.getReadQueryIdentifier()))
+								value.setReadQueryIdentifier(QueryHelper.getIdentifierReadAll(persistenceEntityClass));
+							if(StringHelper.isBlank(value.getCountQueryIdentifier()))
+								value.setCountQueryIdentifier(QueryHelper.getIdentifierCountAll(persistenceEntityClass));												
+						}
+						if(value.getEntityFieldsNames() == null)
+							value.setEntityFieldsNames((Collection<String>) MapHelper.readByKey(arguments, FIELD_ENTITY_FIELDS_NAMES));	
+						collection.value = value;	
+					}else
+						collection.value = MapHelper.readByKey(arguments, FIELD_LAZY_DATA_MODEL);
+				}
 			}else {
 				
 			}
