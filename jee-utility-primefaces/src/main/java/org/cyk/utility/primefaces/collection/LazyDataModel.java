@@ -10,10 +10,13 @@ import java.util.logging.Level;
 import javax.ws.rs.core.Response;
 
 import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.rest.ResponseHelper;
+import org.cyk.utility.service.SpecificService;
+import org.cyk.utility.service.client.SpecificClient;
 import org.primefaces.model.SortMeta;
 import org.primefaces.model.SortOrder;
 
@@ -43,11 +46,22 @@ public abstract class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDat
 	private Response __response__;
 	private Listener<ENTITY> __listener__;
 	
-	public LazyDataModel(Class<ENTITY> entityClass) {
-		this.entityClass = entityClass;
+	@SuppressWarnings("unchecked")
+	public LazyDataModel() {
+		this.entityClass = (Class<ENTITY>) ClassHelper.getParameterAt(getClass(), 0);
 	}
 	
-	protected abstract Response serve(Map<String, Object> filters,LinkedHashMap<String,SortOrder> sortOrders,int first, int pageSize);
+	protected Object getService() {
+		return SpecificClient.getService(entityClass);
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected Response serve(Map<String, Object> filters,LinkedHashMap<String,SortOrder> sortOrders,int firstTupleIndex, int numberOfTuples) {
+		Object service = getService();
+		if(service instanceof SpecificService)
+			return ((SpecificService<ENTITY>)service).get(null, null, Boolean.TRUE, Boolean.TRUE, firstTupleIndex, numberOfTuples);
+		throw new RuntimeException(String.format("Service of type %s not yet handled", service.getClass()));
+	}
 	
 	protected void load(Map<String, Object> filters,LinkedHashMap<String,SortOrder> sortOrders,int first, int pageSize) {
 		__response__ = serve(filters, null, first, pageSize);
@@ -56,40 +70,10 @@ public abstract class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDat
 		setRowCount(__count__);
 	}
 	
-	protected abstract List<ENTITY> getList(Response response);
-	/*
-	@SuppressWarnings("unchecked")
-	protected List<ENTITY> __load__(int first, int pageSize,Map<String, Object> filters) {
-		long timestamp = System.currentTimeMillis();
-		list = null;
-		__first__ = first;
-		__pageSize__ = pageSize;
-		__filters__ = filters;
-		__listener__ = listener;
-		if(__listener__ == null) {
-			__listener__ = listener;
-			if(__listener__ == null)
-				__listener__ = (Listener<ENTITY>) Listener.AbstractImpl.DefaultImpl.INSTANCE;
-		}
-		list = __listener__.read(this);
-		__response__ = __listener__.getResponse(this);
-		if(CollectionHelper.isEmpty(list))
-			__count__ = 0;
-		else {
-			if(Boolean.TRUE.equals(isCountEqualsListSize))
-				__count__ = list.size();
-			else
-				__count__ = __listener__.getCount(this);
-		}
-		setRowCount(__count__);
-		long duration = System.currentTimeMillis() - timestamp;
-		if(Boolean.TRUE.equals(LOGGABLE)) {
-			LogHelper.log(String.format("Page(%s,%s) , duration=%s", first,pageSize,duration), LOG_LEVEL,getClass());
-		}
-		map = null;
-		return list;
+	protected List<ENTITY> getList(Response response) {
+		return ResponseHelper.getEntityAsListFromJson(entityClass, response);
 	}
-	*/
+	
 	@Override
 	public List<ENTITY> load(int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, Object> filters) {
 		long timestamp = System.currentTimeMillis();

@@ -1,6 +1,7 @@
 package org.cyk.utility.rest;
 
-import java.util.ArrayList;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.List;
 
@@ -29,7 +30,23 @@ public interface ResponseHelper {
 	}
 	
 	static <T> Collection<T> getEntityAsCollectionFromJson(Class<T> klass,Response response) {
-		return JsonbBuilder.create().fromJson(response.readEntity(String.class), new ArrayList<T>(){}.getClass().getGenericSuperclass());
+		ParameterizedType type = new ParameterizedType() {
+			@Override
+			public Type getRawType() {
+				return Collection.class;
+			}
+			
+			@Override
+			public Type getOwnerType() {
+				return null;
+			}
+			
+			@Override
+			public Type[] getActualTypeArguments() {
+				return new Type[] {klass};
+			}
+		};
+		return JsonbBuilder.create().fromJson(response.readEntity(String.class), type);
 	}
 	
 	static <T> List<T> getEntityAsListFromJson(Class<T> klass,Response response) {

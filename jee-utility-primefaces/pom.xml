@@ -62,6 +62,12 @@
 			<artifactId>jee-utility-rest</artifactId>
 			<version>0.1.0</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.cyk.jee.utility.service.client</groupId>
+			<artifactId>jee-utility-service-client</artifactId>
+			<version>0.1.0</version>
+		</dependency>
 	</dependencies>
 
 	<repositories>
