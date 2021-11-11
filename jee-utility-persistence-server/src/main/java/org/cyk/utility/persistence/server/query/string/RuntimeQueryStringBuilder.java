@@ -69,7 +69,7 @@ public interface RuntimeQueryStringBuilder {
 					,QueryType.READ_MANY.equals(arguments.getQuery().getType()) 
 						? (builderArguments.getOrder() != null ? null : getDefaultSortOrders(arguments)) 
 						: null
-				);		
+				);
 		}
 		
 		protected Collection<String> getDefaultProjections(QueryExecutorArguments arguments) {

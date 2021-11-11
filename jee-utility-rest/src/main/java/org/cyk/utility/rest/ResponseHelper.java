@@ -46,7 +46,10 @@ public interface ResponseHelper {
 				return new Type[] {klass};
 			}
 		};
-		return JsonbBuilder.create().fromJson(response.readEntity(String.class), type);
+		String string = response.readEntity(String.class);
+		if(StringHelper.isBlank(string))
+			return null;
+		return JsonbBuilder.create().fromJson(string, type);
 	}
 	
 	static <T> List<T> getEntityAsListFromJson(Class<T> klass,Response response) {

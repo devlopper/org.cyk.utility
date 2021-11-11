@@ -50,7 +50,9 @@ public interface ManyBasedExecutor extends Executor {
 		}
 		
 		protected String getReadQueryIdentifier(Class<?> klass, QueryExecutorArguments arguments) {
-			return null;
+			if(arguments == null)
+				return null;
+			return arguments.getQueryIdentifier();
 		}
 		
 		protected <T> Collection<T> __read__(Class<T> klass, QueryExecutorArguments arguments) {
@@ -83,7 +85,9 @@ public interface ManyBasedExecutor extends Executor {
 		}
 		
 		protected String getCountQueryIdentifier(Class<?> klass,QueryExecutorArguments arguments) {
-			return null;
+			if(arguments == null)
+				return null;
+			return arguments.getQueryIdentifier();
 		}
 		
 		protected Long __count__(Class<?> klass,QueryExecutorArguments arguments) {

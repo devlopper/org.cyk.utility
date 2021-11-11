@@ -209,7 +209,7 @@ public abstract class AbstractFilterController extends AbstractObject implements
 				if(CollectionHelper.isNotEmpty(inputsChoicesOne)) {
 					for(AbstractInputChoiceOne input : inputsChoicesOne) {
 						if(Boolean.TRUE.equals(isInputValueNotNull(input)) && Boolean.TRUE.equals(isSelectRedirectorArgumentsParameter(input.getChoiceClass(), input)))
-							onSelectRedirectorArguments.addParameters(Map.of(buildParameterName(input),CollectionHelper.listOf(Boolean.TRUE,buildParameterValue(input))));
+							getOnSelectRedirectorArguments(Boolean.TRUE).addParameters(Map.of(buildParameterName(input),CollectionHelper.listOf(Boolean.TRUE,buildParameterValue(input))));
 					}
 				}
 				
@@ -217,7 +217,7 @@ public abstract class AbstractFilterController extends AbstractObject implements
 				if(CollectionHelper.isNotEmpty(autoCompletes)) {
 					for(AutoComplete input : autoCompletes) {
 						if(Boolean.TRUE.equals(isInputValueNotNull(input)) && Boolean.TRUE.equals(isSelectRedirectorArgumentsParameter(input.getEntityClass(), input)))
-							onSelectRedirectorArguments.addParameters(Map.of(buildParameterName(input),CollectionHelper.listOf(Boolean.TRUE,buildParameterValue(input))));
+							getOnSelectRedirectorArguments(Boolean.TRUE).addParameters(Map.of(buildParameterName(input),CollectionHelper.listOf(Boolean.TRUE,buildParameterValue(input))));
 					}
 				}
 				
@@ -225,10 +225,9 @@ public abstract class AbstractFilterController extends AbstractObject implements
 				if(CollectionHelper.isNotEmpty(inputTexts)) {
 					for(InputText input : inputTexts) {
 						if(Boolean.TRUE.equals(isInputValueNotBlank(input)) && Boolean.TRUE.equals(isSelectRedirectorArgumentsParameter(String.class, input)))
-							onSelectRedirectorArguments.addParameters(Map.of(buildParameterName(input),CollectionHelper.listOf(Boolean.TRUE,buildParameterValue(input))));
+							getOnSelectRedirectorArguments(Boolean.TRUE).addParameters(Map.of(buildParameterName(input),CollectionHelper.listOf(Boolean.TRUE,buildParameterValue(input))));
 					}
 				}
-				
 				Redirector.getInstance().redirect(onSelectRedirectorArguments);		
 				return super.__runExecuteFunction__(action);
 			}

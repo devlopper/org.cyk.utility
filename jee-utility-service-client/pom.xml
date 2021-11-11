@@ -2,13 +2,13 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<parent>
 		<groupId>org.cyk.pom.jee.utility.service.client</groupId>
 		<artifactId>pom-jee-utility-service-client</artifactId>
 		<version>pom.jee.utility.service.client.0.1.0</version>
 	</parent>
-	
+
 	<groupId>org.cyk.jee.utility.service.client</groupId>
 	<artifactId>jee-utility-service-client</artifactId>
 	<version>0.1.0</version>
@@ -16,7 +16,7 @@
 
 	<name>jee-utility-service-client</name>
 	<url>http://maven.apache.org</url>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.cyk.jee.utility.service</groupId>
@@ -33,8 +33,20 @@
 			<artifactId>jee-utility-rest</artifactId>
 			<version>0.1.0</version>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>org.eclipse.microprofile.config</groupId>
+			<artifactId>microprofile-config-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.microprofile.rest.client</groupId>
+			<artifactId>microprofile-rest-client-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
 		<!-- Test -->
-		
+
 	</dependencies>
 </project>

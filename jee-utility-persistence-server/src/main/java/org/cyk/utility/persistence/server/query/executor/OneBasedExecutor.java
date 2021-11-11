@@ -34,7 +34,9 @@ public interface OneBasedExecutor extends Executor {
 		}
 		
 		protected String getReadQueryIdentifier(Class<?> klass, QueryExecutorArguments arguments) {
-			return null;
+			if(arguments == null)
+				return null;
+			return arguments.getQueryIdentifier();
 		}
 		
 		protected <T> T __read__(Class<T> klass, QueryExecutorArguments arguments) {

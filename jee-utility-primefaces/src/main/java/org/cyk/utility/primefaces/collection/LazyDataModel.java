@@ -1,22 +1,28 @@
 package org.cyk.utility.primefaces.collection;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
+import javax.json.bind.JsonbBuilder;
 import javax.ws.rs.core.Response;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
+import org.cyk.utility.persistence.query.Filter;
 import org.cyk.utility.rest.ResponseHelper;
+import org.cyk.utility.service.FilterFormat;
 import org.cyk.utility.service.SpecificService;
-import org.cyk.utility.service.client.SpecificClient;
+import org.cyk.utility.service.client.SpecificServiceGetter;
 import org.primefaces.model.SortMeta;
 import org.primefaces.model.SortOrder;
 
@@ -52,27 +58,49 @@ public abstract class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDat
 	}
 	
 	protected Object getService() {
-		return SpecificClient.getService(entityClass);
+		return DependencyInjection.inject(SpecificServiceGetter.class).get(entityClass);
 	}
 	
 	@SuppressWarnings("unchecked")
 	protected Response serve(Map<String, Object> filters,LinkedHashMap<String,SortOrder> sortOrders,int firstTupleIndex, int numberOfTuples) {
 		Object service = getService();
+		Filter.Dto filter = getFilter(filters, sortOrders, firstTupleIndex, numberOfTuples);
+		String filterAsJson = filter == null ? null : JsonbBuilder.create().toJson(filter);
+		List<String> projections = getProjections(filters, sortOrders, firstTupleIndex, numberOfTuples);
 		if(service instanceof SpecificService)
-			return ((SpecificService<ENTITY>)service).get(null, null, Boolean.TRUE, Boolean.TRUE, firstTupleIndex, numberOfTuples);
+			return ((SpecificService<ENTITY>)service).get(filterAsJson,FilterFormat.JSON, projections, Boolean.TRUE, Boolean.TRUE, firstTupleIndex, numberOfTuples);
 		throw new RuntimeException(String.format("Service of type %s not yet handled", service.getClass()));
+	}
+	
+	protected List<String> getProjections(Map<String, Object> filters,LinkedHashMap<String,SortOrder> sortOrders,int firstTupleIndex, int numberOfTuples) {
+		return null;
+	}
+	
+	protected Filter.Dto getFilter(Map<String, Object> filters,LinkedHashMap<String,SortOrder> sortOrders,int firstTupleIndex, int numberOfTuples) {
+		return null;
 	}
 	
 	protected void load(Map<String, Object> filters,LinkedHashMap<String,SortOrder> sortOrders,int first, int pageSize) {
 		__response__ = serve(filters, null, first, pageSize);
 		__list__ = getList(__response__);
-		__count__ = NumberHelper.getInteger(ResponseHelper.getHeaderXTotalCount(__response__),0);
+		if(CollectionHelper.isEmpty(__list__)) {
+			__count__ = 0;
+		}else {
+			__count__ = NumberHelper.getInteger(ResponseHelper.getHeaderXTotalCount(__response__),0);
+			process(__list__);
+		}
 		setRowCount(__count__);
 	}
 	
 	protected List<ENTITY> getList(Response response) {
 		return ResponseHelper.getEntityAsListFromJson(entityClass, response);
 	}
+	
+	protected void process(Collection<ENTITY> list) {
+		list.forEach(entity -> process(entity));
+	}
+	
+	protected void process(ENTITY entity) {}
 	
 	@Override
 	public List<ENTITY> load(int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, Object> filters) {

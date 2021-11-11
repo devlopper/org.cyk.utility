@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +38,7 @@ import lombok.experimental.Accessors;
 @Getter @Setter @Accessors(chain=true)
 public class QueryExecutorArguments extends AbstractObject implements Serializable {
 	private Query query;
+	private String queryIdentifier;
 	private Collection<Projection> projections;
 	private Collection<String> processableTransientFieldsNames;
 	private Collection<String> resultsFieldsNames;
@@ -448,7 +450,7 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 		if(CollectionHelper.isNotEmpty(projections)) {
 			for(Projection projection : projections) {
 				java.lang.reflect.Field field = FieldHelper.getByName(query.getTupleClass(), projection.getFieldName());
-				if(field == null)
+				/*if(field == null)
 					continue;
 				if(field.getAnnotation(Transient.class) == null) {
 					if(tuplePersistedFieldsNames == null)
@@ -457,6 +459,16 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 				}else {
 					if(tupleTransientFieldsNames == null)
 						tupleTransientFieldsNames = new ArrayList<>();
+					tupleTransientFieldsNames.add(projection.getFieldName());
+				}*/
+				
+				if(field != null && field.getAnnotation(Transient.class) == null) {
+					if(tuplePersistedFieldsNames == null)
+						tuplePersistedFieldsNames = new LinkedHashSet<>();
+					tuplePersistedFieldsNames.add(projection.getFieldName());
+				}else {
+					if(tupleTransientFieldsNames == null)
+						tupleTransientFieldsNames = new LinkedHashSet<>();
 					tupleTransientFieldsNames.add(projection.getFieldName());
 				}
 			}

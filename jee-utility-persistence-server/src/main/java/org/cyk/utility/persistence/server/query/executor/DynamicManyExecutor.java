@@ -3,6 +3,7 @@ package org.cyk.utility.persistence.server.query.executor;
 import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.Helper;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.persistence.query.QueryIdentifierBuilder;
@@ -14,12 +15,18 @@ public interface DynamicManyExecutor extends ManyBasedExecutor {
 		
 		@Override
 		protected String getReadQueryIdentifier(Class<?> klass, QueryExecutorArguments arguments) {
-			return QueryIdentifierBuilder.getInstance().build(klass, QueryName.READ_DYNAMIC);
+			String identifier = super.getReadQueryIdentifier(klass, arguments);
+			if(StringHelper.isBlank(identifier))
+				identifier = QueryIdentifierBuilder.getInstance().build(klass, QueryName.READ_DYNAMIC);
+			return identifier;
 		}
 		
 		@Override
 		protected String getCountQueryIdentifier(Class<?> klass,QueryExecutorArguments arguments) {
-			return QueryIdentifierBuilder.getInstance().build(klass, QueryName.COUNT_DYNAMIC);
+			String identifier = super.getCountQueryIdentifier(klass, arguments);
+			if(StringHelper.isBlank(identifier))
+				identifier = QueryIdentifierBuilder.getInstance().build(klass, QueryName.COUNT_DYNAMIC);
+			return identifier;
 		}
 		
 	}

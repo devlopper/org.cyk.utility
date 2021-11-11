@@ -12,6 +12,7 @@ import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.persistence.SpecificPersistence;
 import org.cyk.utility.persistence.query.Query;
 import org.cyk.utility.persistence.query.QueryExecutorArguments;
+import org.cyk.utility.persistence.server.query.RuntimeQueryBuilderImpl;
 import org.cyk.utility.persistence.server.query.executor.DynamicManyExecutor;
 import org.cyk.utility.persistence.server.query.executor.DynamicOneExecutor;
 import org.eclipse.microprofile.config.ConfigProvider;
@@ -36,12 +37,13 @@ public abstract class AbstractSpecificPersistenceImpl<ENTITY> implements Specifi
 		queriesIdentifiers.add(queryIdentifierReadDynamic = getQueryIdentifierFromConfiguration(String.format("%s.query.identifier.read.dynamic", entityClass.getSimpleName().toLowerCase())));
 		queriesIdentifiers.add(queryIdentifierReadDynamicOne = getQueryIdentifierFromConfiguration(String.format("%s.query.identifier.read.dynamic.one", entityClass.getSimpleName().toLowerCase())));
 		queriesIdentifiers.add(queryIdentifierCountDynamic = getQueryIdentifierFromConfiguration(String.format("%s.query.identifier.count.dynamic", entityClass.getSimpleName().toLowerCase())));
+		RuntimeQueryBuilderImpl.BUILDABLES.addAll(queriesIdentifiers);
 	}
 	
 	@Override
 	public Collection<ENTITY> readMany(QueryExecutorArguments arguments) {
 		if(arguments.getQuery().getIdentifier().equals(queryIdentifierReadDynamic))
-			return CollectionHelper.cast(entityClass, DynamicManyExecutor.getInstance().read(entityImplClass,arguments.setQuery(null)));
+			return CollectionHelper.cast(entityClass, DynamicManyExecutor.getInstance().read(entityImplClass,arguments.setQueryIdentifier(arguments.getQuery().getIdentifier()).setQuery(null)));
 		throw new RuntimeException("Not yet handled : "+arguments);
 	}
 	
@@ -59,7 +61,7 @@ public abstract class AbstractSpecificPersistenceImpl<ENTITY> implements Specifi
 	@Override
 	public ENTITY readOne(QueryExecutorArguments arguments) {
 		if(arguments.getQuery().getIdentifier().equals(queryIdentifierReadDynamicOne))
-			return (ENTITY) DynamicOneExecutor.getInstance().read(entityImplClass,arguments.setQuery(null));
+			return (ENTITY) DynamicOneExecutor.getInstance().read(entityImplClass,arguments.setQueryIdentifier(arguments.getQuery().getIdentifier()).setQuery(null));
 		throw new RuntimeException("Not yet handled : "+arguments);
 	}
 	
@@ -77,7 +79,7 @@ public abstract class AbstractSpecificPersistenceImpl<ENTITY> implements Specifi
 	@Override
 	public Long count(QueryExecutorArguments arguments) {
 		if(arguments.getQuery().getIdentifier().equals(queryIdentifierCountDynamic))
-			return DynamicManyExecutor.getInstance().count(entityImplClass,arguments.setQuery(null));
+			return DynamicManyExecutor.getInstance().count(entityImplClass,arguments.setQueryIdentifier(arguments.getQuery().getIdentifier()).setQuery(null));
 		throw new RuntimeException("Not yet handled : "+arguments);
 	}
 	

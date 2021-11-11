@@ -2,11 +2,13 @@ package org.cyk.utility.service.server;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.configuration.ClassIdentifierGetter;
 import org.cyk.utility.__kernel__.enumeration.Action;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
@@ -15,6 +17,7 @@ import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.business.Result;
 import org.cyk.utility.business.TransactionResult;
 import org.cyk.utility.rest.ResponseBuilder;
+import org.cyk.utility.service.FilterFormat;
 import org.cyk.utility.service.SpecificService;
 import org.eclipse.microprofile.config.ConfigProvider;
 
@@ -43,46 +46,47 @@ public abstract class AbstractSpecificServiceImpl<SERVICE_ENTITY,SERVICE_ENTITY_
 	}
 	
 	@Override
-	public Response get(String filterAsString,List<String> projections,Boolean countable,Boolean pageable,Integer firstTupleIndex,Integer numberOfTuples) {
-		return execute(__get__(filterAsString, projections, countable, pageable, firstTupleIndex, numberOfTuples));
+	public Response get(String filter,FilterFormat filterFormat,List<String> projections,Boolean countable,Boolean pageable,Integer firstTupleIndex,Integer numberOfTuples) {
+		return execute(__get__(filter,filterFormat, mapProjections(projections), countable, pageable, firstTupleIndex, numberOfTuples));
 	}
 	
 	protected EntityReaderRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL> instantiateEntityReaderRequest() {
 		return new EntityReaderRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL>(serviceEntityImplClass);
 	}
 	
-	protected EntityReaderRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL> __get__(String filterAsString,List<String> projections,Boolean countable,Boolean pageable,Integer firstTupleIndex,Integer numberOfTuples) {
-		EntityReaderRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL> request = instantiateEntityReaderRequest().projections(projections).filter(filterAsString)
+	protected EntityReaderRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL> __get__(String filter,FilterFormat filterFormat,List<String> projections,Boolean countable,Boolean pageable,Integer firstTupleIndex,Integer numberOfTuples) {
+		EntityReaderRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL> request = instantiateEntityReaderRequest().projections(projections).filter(filter,filterFormat)
 				.count(ValueHelper.defaultToIfNull(countable, Boolean.TRUE)).page(pageable,firstTupleIndex, numberOfTuples);
 		if(Boolean.TRUE.equals(isResponseHeadersCORSEnabled))
 			request.enableResponseHeadersCORS();
 		return request;
 	}
 	
-	protected EntityReaderRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL> __getOne__(String identifier,List<String> projections) {
+	protected EntityReaderRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL> __getByIdentifier__(String identifier,List<String> projections) {
 		EntityReaderRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL> request = new EntityReaderRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL>(serviceEntityImplClass)
 				.filterByIdentifier(identifier).projections(projections);
+		request.getResponseBuilderArguments().setIsThrowNotFoundIfBlank(Boolean.TRUE);
 		if(Boolean.TRUE.equals(isResponseHeadersCORSEnabled))
 			request.enableResponseHeadersCORS();
 		return request;
 	}
 	
 	@Override
-	public Response getOne(String identifier,List<String> projections) {
-		return execute(__getOne__(identifier, projections));
+	public Response getByIdentifier(String identifier,List<String> projections) {
+		return execute(__getByIdentifier__(identifier, mapProjections(projections)));
 	}
 	
-	public EntityCounterRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL> __count__(String filterAsString) {
+	public EntityCounterRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL> __count__(String filter,FilterFormat filterFormat) {
 		EntityCounterRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL> request = new EntityCounterRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL>(serviceEntityImplClass)
-				.filter(filterAsString);
+				.filter(filter,filterFormat);
 		if(Boolean.TRUE.equals(isResponseHeadersCORSEnabled))
 			request.enableResponseHeadersCORS();
 		return request;
 	}
 	
 	@Override
-	public Response count(String filterAsString) {
-		return execute(__count__(filterAsString));
+	public Response count(String filter,FilterFormat filterFormat) {
+		return execute(__count__(filter,filterFormat));
 	}
 	
 	protected static void processTransactionResult(TransactionResult transactionResult,ResponseBuilder.Arguments responseBuilderArguments) {
@@ -98,6 +102,18 @@ public abstract class AbstractSpecificServiceImpl<SERVICE_ENTITY,SERVICE_ENTITY_
 		if(result == null || responseBuilderArguments == null)
 			return;
 		
+	}
+	
+	/**/
+	
+	public List<String> mapProjections(List<String> projections) {
+		if(CollectionHelper.isEmpty(projections))
+			return projections;
+		return projections.stream().map(projection -> {
+			if(PROJECTIONS_MAPS.containsKey(serviceEntityImplClass) && PROJECTIONS_MAPS.get(serviceEntityImplClass).containsKey(projection))
+				return PROJECTIONS_MAPS.get(serviceEntityImplClass).get(projection);			
+			return projection;
+		}).collect(Collectors.toList());
 	}
 	
 	/**/

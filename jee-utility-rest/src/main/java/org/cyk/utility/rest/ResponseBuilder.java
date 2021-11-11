@@ -90,9 +90,12 @@ public interface ResponseBuilder {
 		protected Status __buildStatus__(Arguments arguments) {
 			Response.Status status = arguments.getStatus();
 			if(status == null) {
-				if(arguments.getRuntimeException() == null)
-					status = Response.Status.OK;
-				else
+				if(arguments.getRuntimeException() == null) {
+					if(Boolean.TRUE.equals(arguments.isThrowNotFoundIfBlank) && arguments.entity == null && CollectionHelper.isEmpty(arguments.entities))
+						status = Response.Status.NOT_FOUND;
+					else
+						status = Response.Status.OK;
+				}else
 					status = Response.Status.BAD_REQUEST;
 			}
 			return status;
@@ -127,7 +130,7 @@ public interface ResponseBuilder {
 		private Map<String,Object> headers;
 		private Long xTotalCount;
 		private Long processingStartTime,processingEndTime,processingDuration;
-		private Boolean isCollection;
+		private Boolean isCollection,isThrowNotFoundIfBlank;
 		
 		public Arguments(RuntimeException.Dto runtimeException,Response.Status status) {
 			this.runtimeException = runtimeException;

@@ -2,12 +2,16 @@ package org.cyk.utility.service.server;
 
 import java.io.Serializable;
 
+import javax.json.bind.JsonbBuilder;
+
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.persistence.SpecificPersistence;
+import org.cyk.utility.persistence.query.Filter;
 import org.cyk.utility.persistence.query.Query;
 import org.cyk.utility.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.persistence.server.SpecificPersistenceGetter;
+import org.cyk.utility.service.FilterFormat;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -40,10 +44,24 @@ public abstract class AbstractEntityRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTIT
 		return this;
 	}
 	
-	public AbstractEntityRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> filter(String string) {
-		if(StringHelper.isNotBlank(string))
-			getQueryExecutorArguments(Boolean.TRUE).addFilterFieldsValues(persistence.getParameterNameFilterAsString(),string);
+	public AbstractEntityRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> filter(String string,FilterFormat format) {
+		if(StringHelper.isBlank(string))
+			return this;
+		if(format == null)
+			format = FilterFormat.PLAIN;
+		getQueryExecutorArguments(Boolean.TRUE).setFilter(null);
+		if(FilterFormat.PLAIN.equals(format))
+			getQueryExecutorArguments().addFilterFieldsValues(persistence.getParameterNameFilterAsString(),string);
+		else if(FilterFormat.JSON.equals(format)) {
+			Filter.Dto dto = JsonbBuilder.create().fromJson(string, Filter.Dto.class);
+			getQueryExecutorArguments().setFilter(DependencyInjection.inject(Filter.Dto.Mapper.class).getDestination(dto));
+		}else
+			throw new RuntimeException(String.format("Filter string format %s not yet handled", format));
 		return this;
+	}
+	
+	public AbstractEntityRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> filter(String string) {
+		return filter(string, FilterFormat.PLAIN);
 	}
 	
 	public AbstractEntityRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> filterByIdentifier(String identifier) {

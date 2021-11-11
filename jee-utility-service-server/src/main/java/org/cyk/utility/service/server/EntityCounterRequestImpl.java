@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.persistence.query.EntityCounter;
+import org.cyk.utility.service.FilterFormat;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -33,6 +34,11 @@ public class EntityCounterRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> extends
 	@Override
 	public EntityCounterRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> filter(String string) {
 		return (EntityCounterRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY>) super.filter(string);
+	}
+	
+	@Override
+	public EntityCounterRequestImpl<SERVICE_ENTITY, PERSISTENCE_ENTITY> filter(String string, FilterFormat format) {
+		return (EntityCounterRequestImpl<SERVICE_ENTITY, PERSISTENCE_ENTITY>) super.filter(string, format);
 	}
 	
 	protected Long countPersistenceEntities() {

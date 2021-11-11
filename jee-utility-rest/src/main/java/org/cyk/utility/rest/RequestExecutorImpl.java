@@ -16,6 +16,7 @@ public class RequestExecutorImpl implements RequestExecutor,Serializable {
 			ResponseBuilder.Arguments responseBuilderArguments = request.execute();
 			return ResponseBuilder.getInstance().build(responseBuilderArguments);
 		} catch (Exception exception) {
+			exception.printStackTrace();
 			return ResponseBuilder.getInstance().build(exception);
 		}
 	}

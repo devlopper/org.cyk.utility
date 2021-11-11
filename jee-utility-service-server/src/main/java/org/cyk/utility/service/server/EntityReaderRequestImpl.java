@@ -12,6 +12,7 @@ import org.cyk.utility.persistence.query.EntityReader;
 import org.cyk.utility.persistence.query.Query;
 import org.cyk.utility.persistence.query.QueryGetter;
 import org.cyk.utility.rest.ResponseHelper;
+import org.cyk.utility.service.FilterFormat;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -31,8 +32,15 @@ public class EntityReaderRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> extends 
 	}
 	
 	public EntityReaderRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> page(Boolean pageable,Integer firstTupleIndex,Integer numberOfTuples) {
-		if(pageable == null || Boolean.TRUE.equals(pageable))
+		if(pageable == null)
+			pageable = Boolean.TRUE;
+		if(pageable) {
+			if(firstTupleIndex == null)
+				firstTupleIndex = 0;
+			if(numberOfTuples == null)
+				numberOfTuples = 25;
 			getQueryExecutorArguments(Boolean.TRUE).setFirstTupleIndex(firstTupleIndex).setNumberOfTuples(numberOfTuples);
+		}
 		return this;
 	}
 	
@@ -66,6 +74,11 @@ public class EntityReaderRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> extends 
 	@Override
 	public EntityReaderRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> filter(String string) {
 		return (EntityReaderRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY>) super.filter(string);
+	}
+	
+	@Override
+	public EntityReaderRequestImpl<SERVICE_ENTITY, PERSISTENCE_ENTITY> filter(String string, FilterFormat format) {
+		return (EntityReaderRequestImpl<SERVICE_ENTITY, PERSISTENCE_ENTITY>) super.filter(string, format);
 	}
 	
 	@Override

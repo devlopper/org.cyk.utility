@@ -76,6 +76,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	protected ControllerEntity<Object> controllerEntity;
 	protected CommandButton saveCommandButton;
 	protected Map<String,UIComponent> cellsBindings;
+	protected AbstractFilterController filterController;
 	
 	//protected AbstractFilterController filterController;
 	
@@ -100,6 +101,8 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	}
 	
 	public AbstractFilterController getFilterController() {
+		if(filterController != null)
+			return filterController;
 		if(!(value instanceof LazyDataModel<?>))
 			return null;
 		LazyDataModel.Listener<?> listener = ((LazyDataModel<?>)value).getListener();
