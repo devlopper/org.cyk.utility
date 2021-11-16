@@ -5,7 +5,6 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.List;
 
-import javax.json.bind.JsonbBuilder;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
@@ -26,7 +25,8 @@ public interface ResponseHelper {
 	}
 	
 	static <T> T getEntityFromJson(Class<T> klass,Response response) {
-		return JsonbBuilder.create().fromJson(response.readEntity(String.class), klass);
+		//return new com.google.gson.Gson().fromJson(response.readEntity(String.class), klass);
+		return javax.json.bind.JsonbBuilder.create().fromJson(response.readEntity(String.class), klass);
 	}
 	
 	static <T> Collection<T> getEntityAsCollectionFromJson(Class<T> klass,Response response) {
@@ -49,7 +49,8 @@ public interface ResponseHelper {
 		String string = response.readEntity(String.class);
 		if(StringHelper.isBlank(string))
 			return null;
-		return JsonbBuilder.create().fromJson(string, type);
+		//return new com.google.gson.Gson().fromJson(string, type);
+		return javax.json.bind.JsonbBuilder.create().fromJson(string, type);
 	}
 	
 	static <T> List<T> getEntityAsListFromJson(Class<T> klass,Response response) {

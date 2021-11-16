@@ -14,6 +14,7 @@ public interface GenericController extends Controller {
 	<T> Collection<T> getByParentIdentifier(Class<T> klass,String name,String value);
 	
 	<T> T getByIdentifier(Class<T> klass,String identifier,GetArguments arguments);
+	<T> T getByIdentifier(Class<T> klass,String identifier);
 	
 	public static abstract class AbstractImpl extends Controller.AbstractImpl implements GenericController,Serializable{
 		
@@ -54,5 +55,9 @@ public interface GenericController extends Controller {
 			return ResponseHelper.getEntityFromJson(klass,specificServiceGetter.get(klass).getByIdentifier(identifier , arguments == null ? null : arguments.getProjections()));
 		}
 		
+		@Override
+		public <T> T getByIdentifier(Class<T> klass, String identifier) {
+			return getByIdentifier(klass, identifier, null);
+		}
 	}
 }

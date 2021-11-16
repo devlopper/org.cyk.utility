@@ -24,6 +24,11 @@ public class Projection extends AbstractObject implements Serializable {
 		this.fieldName = fieldName;
 	}
 	
+	@Override
+	public String toString() {
+		return fieldName;
+	}
+	
 	/**/
 	
 	@XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor

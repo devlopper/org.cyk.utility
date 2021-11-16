@@ -12,6 +12,7 @@ public interface SpecificController<T> extends Controller {
 	Collection<T> getByParentIdentifier(String name,String value);
 	
 	T getByIdentifier(String identifier,GetArguments arguments);
+	T getByIdentifier(String identifier);
 	
 	public static abstract class AbstractImpl<T> extends Controller.AbstractImpl implements SpecificController<T>,Serializable {
 	
@@ -31,6 +32,11 @@ public interface SpecificController<T> extends Controller {
 		@Override
 		public T getByIdentifier(String identifier, GetArguments arguments) {
 			return genericController.getByIdentifier(getEntityClass(), identifier, arguments);
+		}
+		
+		@Override
+		public T getByIdentifier(String identifier) {
+			return genericController.getByIdentifier(getEntityClass(), identifier);
 		}
 		
 		@Override
