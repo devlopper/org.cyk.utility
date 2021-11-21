@@ -14,6 +14,7 @@ public interface SpecificPersistence<ENTITY> {
 	String getQueryIdentifierReadDynamicOne();
 	ENTITY readOne(QueryExecutorArguments arguments);
 	ENTITY readOne(String identifier);
+	ENTITY readOne(String identifier,Collection<String> projections);
 	
 	String getQueryIdentifierCountDynamic();
 	Long count(QueryExecutorArguments arguments);

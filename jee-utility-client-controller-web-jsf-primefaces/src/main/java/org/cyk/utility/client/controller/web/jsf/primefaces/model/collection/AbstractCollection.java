@@ -77,6 +77,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	protected CommandButton saveCommandButton;
 	protected Map<String,UIComponent> cellsBindings;
 	protected AbstractFilterController filterController;
+	protected String entityIdentifierParameterName;
 	
 	//protected AbstractFilterController filterController;
 	
@@ -386,7 +387,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 					Map<String,List<String>> parameters = new HashMap<>();
 					if(actionFinal != null)
 						parameters.put(ParameterName.ACTION_IDENTIFIER.getValue(),List.of(actionFinal.name()));
-					parameters.put(ParameterName.ENTITY_IDENTIFIER.getValue(),List.of((String)FieldHelper.readSystemIdentifier(action.readArgument())));
+					parameters.put(StringHelper.isBlank(entityIdentifierParameterName) ? ParameterName.ENTITY_IDENTIFIER.getValue() : entityIdentifierParameterName,List.of((String)FieldHelper.readSystemIdentifier(action.readArgument())));
 					if(MapHelper.isNotEmpty(action.get__parameters__()))
 						parameters.putAll(action.get__parameters__());
 					Redirector.getInstance().redirect(vOutcome, parameters);			
@@ -456,7 +457,10 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 			if(StringHelper.isBlank(collection.sortMode))
 				collection.sortMode = "single";
 			
-			if(collection.controllerEntity == null) {
+			Boolean controllerEntityBuildable = (Boolean) MapHelper.readByKey(arguments, FIELD_CONTROLLER_ENTITY_BUILDABLE);
+			if(controllerEntityBuildable == null)
+				controllerEntityBuildable = Boolean.TRUE;
+			if(collection.controllerEntity == null && Boolean.TRUE.equals(controllerEntityBuildable)) {
 				if(collection.elementClass != null && !Grid.Row.class.equals(collection.elementClass))
 					collection.controllerEntity = (ControllerEntity<Object>) __inject__(ControllerLayer.class).injectInterfaceClassFromEntityClass(collection.elementClass);
 			}
@@ -601,6 +605,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 		public static final String FIELD_RECORD_ACTIONS = "recordActions";
 		public static final String FIELD_ACTIONS = "actions";
 		public static final String FIELD_RECORD_MENU_NULLABLE = "recordMenuNullable";
+		public static final String FIELD_CONTROLLER_ENTITY_BUILDABLE = "controllerEntityBuildable";
 	}
 
 	/**/

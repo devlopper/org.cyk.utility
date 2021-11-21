@@ -19,7 +19,6 @@ public interface SpecificClient<ENTITY> extends Client {
 		String clientClassName = SpecificClient.formatClientClassName(StringUtils.substringBefore(klass.getName(),".server."), klass);
 		if(StringHelper.isBlank(clientClassName))
 			throw new RuntimeException(String.format("Client class name not found for %s", klass));
-		System.out.println("SpecificClient.getService() ::: "+clientClassName);
 		Object service = MethodHelper.executeStatic(ClassHelper.getByName(clientClassName), "getProxy");
 		if(service == null)
 			throw new RuntimeException(String.format("Service is required for %s", klass));

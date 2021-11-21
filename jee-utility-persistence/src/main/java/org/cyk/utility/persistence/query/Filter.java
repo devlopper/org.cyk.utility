@@ -12,6 +12,7 @@ import javax.json.bind.JsonbBuilder;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
@@ -377,6 +378,13 @@ public class Filter extends AbstractObject implements Serializable {
 			map.put(field.getName(), field.getValue());
 		});
 		return map;
+	}
+	
+	/**/
+	
+	public static Filter instantiateFromJson(String string) {
+		Filter.Dto dto = JsonbBuilder.create().fromJson(string, Filter.Dto.class);
+		return DependencyInjection.inject(Filter.Dto.Mapper.class).getDestination(dto);
 	}
 	
 	/**/

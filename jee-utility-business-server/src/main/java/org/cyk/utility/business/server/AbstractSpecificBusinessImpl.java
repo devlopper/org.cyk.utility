@@ -14,6 +14,7 @@ import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.throwable.ThrowablesMessages;
 import org.cyk.utility.business.SpecificBusiness;
 import org.cyk.utility.business.TransactionResult;
+import org.cyk.utility.business.ValidatorImpl;
 import org.cyk.utility.persistence.query.QueryExecutorArguments;
 
 public abstract class AbstractSpecificBusinessImpl<ENTITY> extends AbstractObject implements SpecificBusiness<ENTITY>,Serializable {
@@ -74,5 +75,11 @@ public abstract class AbstractSpecificBusinessImpl<ENTITY> extends AbstractObjec
 		if(entityClass == null)
 			entityClass = (Class<ENTITY>) ClassHelper.getParameterAt(getClass(), 0);
 		return entityClass;
+	}
+	
+	/**/
+	
+	public static void throwIfNotEmpty(ThrowablesMessages throwablesMessages) {
+		ValidatorImpl.throwIfNotEmpty(throwablesMessages);	
 	}
 }
