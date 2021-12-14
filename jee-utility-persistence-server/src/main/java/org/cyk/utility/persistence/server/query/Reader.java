@@ -2,6 +2,8 @@ package org.cyk.utility.persistence.server.query;
 
 import java.io.Serializable;
 
+import javax.persistence.EntityManager;
+
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
@@ -14,6 +16,10 @@ import org.cyk.utility.persistence.query.QueryIdentifierBuilder;
 import org.cyk.utility.persistence.query.QueryManager;
 import org.cyk.utility.persistence.server.query.string.QueryStringBuilder;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
 public interface Reader<ENTITY,IDENTIFIER,RESULT> {
 
 	/**/
@@ -22,6 +28,7 @@ public interface Reader<ENTITY,IDENTIFIER,RESULT> {
 		
 		//protected Boolean namedQueryRegistered;
 		protected String queryIdentifier;
+		@Getter @Setter @Accessors(chain=true) protected EntityManager entityManager;
 		
 		protected void registerNamedQuery() {			
 			//if(Boolean.TRUE.equals(namedQueryRegistered))
@@ -71,11 +78,13 @@ public interface Reader<ENTITY,IDENTIFIER,RESULT> {
 			javax.persistence.Query query;
 			if(StringHelper.isBlank(queryIdentifier) && Boolean.TRUE.equals(isRegisterable()))
 				registerNamedQuery();
-			if(StringHelper.isBlank(queryIdentifier)) {
-				query = EntityManagerGetter.getInstance().get().createQuery(getQueryValue());			
-			}else {
-				query = EntityManagerGetter.getInstance().get().createNamedQuery(queryIdentifier);
-			}
+			if(entityManager == null)
+				entityManager = EntityManagerGetter.getInstance().get();
+			if(StringHelper.isBlank(queryIdentifier))
+				query = entityManager.createQuery(getQueryValue());			
+			else
+				query = entityManager.createNamedQuery(queryIdentifier);
+			entityManager = null;
 			return query;
 		}
 		
