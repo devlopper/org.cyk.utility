@@ -11,6 +11,7 @@ public interface SpecificController<T> extends Controller {
 	Collection<T> get();
 	Collection<T> getByParentIdentifier(String name,String value);
 	
+	T getOne(GetArguments arguments);
 	T getByIdentifier(String identifier,GetArguments arguments);
 	T getByIdentifier(String identifier);
 	
@@ -27,6 +28,11 @@ public interface SpecificController<T> extends Controller {
 		@Override
 		public Collection<T> get() {
 			return genericController.get(getEntityClass(),null);
+		}
+		
+		@Override
+		public T getOne(GetArguments arguments) {
+			return genericController.getOne(getEntityClass(), arguments);
 		}
 		
 		@Override

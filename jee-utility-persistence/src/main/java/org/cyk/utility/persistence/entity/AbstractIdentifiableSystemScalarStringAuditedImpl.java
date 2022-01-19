@@ -36,6 +36,7 @@ public abstract class AbstractIdentifiableSystemScalarStringAuditedImpl extends 
 	@Transient protected Integer __auditRevision__;
 	@Transient protected Long __auditWhenAsTimestamp__;
 	@Transient protected String __auditWhenAsString__;
+	@Transient protected String __audit__;
 	
 	public static final String FIELD___AUDIT_WHO__ = "__auditWho__";
 	public static final String FIELD___AUDIT_WHAT__ = "__auditWhat__";
@@ -43,4 +44,5 @@ public abstract class AbstractIdentifiableSystemScalarStringAuditedImpl extends 
 	public static final String FIELD___AUDIT_WHEN__ = "__auditWhen__";
 	public static final String FIELD___AUDIT_WHEN_AS_TIMESTAMP__ = "__auditWhenAsTimestamp__";
 	public static final String FIELD___AUDIT_WHEN_AS_STRING__ = "__auditWhenAsString__";
+	public static final String FIELD___AUDIT__ = "__audit__";
 }

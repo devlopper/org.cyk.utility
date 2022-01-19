@@ -816,6 +816,7 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 		@Deprecated public static final String FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER_OUTCOME = "openViewInDialogArgumentsGetterOutcome";
 		@Deprecated public static final String FIELD_OPEN_VIEW_IN_DIALOG_ARGUMENTS_GETTER_PARAMETERS = "openViewInDialogArgumentsGetterParameters";
 		
+		public static final String FIELD_ARGUMENT_SYSTEM_IDENTIFIER_FIELD_NAME = "argumentSystemIdentifierFieldName";
 		public static final String FIELD_INPUTS = "inputs";
 		//public static final String FIELD_DIALOG = "dialog";
 		public static final String FIELD_COLLECTIONABLE = "collectionable";

@@ -105,16 +105,26 @@ public interface ArraysReaderByIdentifiers<ENTITY,IDENTIFIER> extends Reader<ENT
 		
 		@Override
 		public void set(Collection<ENTITY> entities,Collection<Object[]> arrays) {
-			if(CollectionHelper.isEmpty(entities) || CollectionHelper.isEmpty(arrays))
+			if(CollectionHelper.isEmpty(entities))
 				return;
+			if(CollectionHelper.isEmpty(arrays)) {
+				entities.forEach(entity -> {
+					processWhenHasNoEntityArray(entity);
+				});
+				return;
+			}
 			for(ENTITY entity : entities) {
+				Boolean hasEntityArray = null;
 				for(Object[] array : arrays) {
 					if(isEntityArray(entity, array)) {
+						hasEntityArray = Boolean.TRUE;
 						__set__(entity, array);
 						if(Boolean.TRUE.equals(isEntityHasOnlyArray(entity)))
 							break;
 					}
 				}
+				if(!Boolean.TRUE.equals(hasEntityArray))
+					processWhenHasNoEntityArray(entity);
 			}
 		}
 		
@@ -124,6 +134,10 @@ public interface ArraysReaderByIdentifiers<ENTITY,IDENTIFIER> extends Reader<ENT
 		
 		protected Boolean isEntityHasOnlyArray(ENTITY entity) {
 			return Boolean.TRUE;
+		}
+		
+		protected void processWhenHasNoEntityArray(ENTITY entity) {
+		
 		}
 		
 		@Override
@@ -197,6 +211,24 @@ public interface ArraysReaderByIdentifiers<ENTITY,IDENTIFIER> extends Reader<ENT
 			if(ArrayHelper.isEmpty(array) || NumberHelper.isLessThanZero(index))
 				return null;
 			return (Long) array[index];
+		}
+		
+		protected static Integer getAsInteger(Object[] array,Integer index) {
+			if(ArrayHelper.isEmpty(array) || NumberHelper.isLessThanZero(index))
+				return null;
+			return (Integer) array[index];
+		}
+		
+		protected static Short getAsShort(Object[] array,Integer index) {
+			if(ArrayHelper.isEmpty(array) || NumberHelper.isLessThanZero(index))
+				return null;
+			return (Short) array[index];
+		}
+		
+		protected static Boolean getAsBoolean(Object[] array,Integer index) {
+			if(ArrayHelper.isEmpty(array) || NumberHelper.isLessThanZero(index))
+				return null;
+			return (Boolean) array[index];
 		}
 		
 		protected static String formatLocalDateTime(Object[] array,Integer index) {

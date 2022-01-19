@@ -42,6 +42,8 @@ public abstract class AbstractSpecificPersistenceImpl<ENTITY> implements Specifi
 	
 	@Override
 	public Collection<ENTITY> readMany(QueryExecutorArguments arguments) {
+		if(arguments.getQuery() == null)
+			arguments.setQuery(new Query().setIdentifier(queryIdentifierReadDynamic));
 		if(arguments.getQuery().getIdentifier().equals(queryIdentifierReadDynamic))
 			return CollectionHelper.cast(entityClass, DynamicManyExecutor.getInstance().read(entityImplClass,arguments.setQueryIdentifier(arguments.getQuery().getIdentifier()).setQuery(null)));
 		throw new RuntimeException("Not yet handled : "+arguments);
@@ -59,7 +61,19 @@ public abstract class AbstractSpecificPersistenceImpl<ENTITY> implements Specifi
 	}
 	
 	@Override
+	public Collection<ENTITY> readManyByIdentifiers(Collection<String> identifiers, Collection<String> projections) {
+		return readMany(new QueryExecutorArguments().addProjectionsFromStrings(projections).addFilterFieldsValues(getParameterNameIdentifiers(),identifiers));
+	}
+	
+	@Override
+	public Collection<ENTITY> readManyByIdentifiers(Collection<String> identifiers) {
+		return readManyByIdentifiers(identifiers, null);
+	}
+	
+	@Override
 	public ENTITY readOne(QueryExecutorArguments arguments) {
+		if(arguments.getQuery() == null)
+			arguments.setQuery(new Query().setIdentifier(queryIdentifierReadDynamicOne));
 		if(arguments.getQuery().getIdentifier().equals(queryIdentifierReadDynamicOne))
 			return (ENTITY) DynamicOneExecutor.getInstance().read(entityImplClass,arguments.setQueryIdentifier(arguments.getQuery().getIdentifier()).setQuery(null));
 		throw new RuntimeException("Not yet handled : "+arguments);
@@ -129,6 +143,11 @@ public abstract class AbstractSpecificPersistenceImpl<ENTITY> implements Specifi
 	@Override
 	public String getParameterNameIdentifier() {
 		return PARAMETER_NAME_IDENTIFIER;
+	}
+	
+	@Override
+	public String getParameterNameIdentifiers() {
+		return PARAMETER_NAME_IDENTIFIERS;
 	}
 	
 	protected static String getQueryIdentifierFromConfiguration(String propertyName) {

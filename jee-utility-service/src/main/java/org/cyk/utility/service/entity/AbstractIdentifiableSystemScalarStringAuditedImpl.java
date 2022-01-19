@@ -19,9 +19,9 @@ public abstract class AbstractIdentifiableSystemScalarStringAuditedImpl extends 
 	
 	protected String identifier;
 
-	// Audit
-	protected String __auditWho__;	
-	protected String __auditWhat__;	
+	protected String __audit__;
+	protected String __auditWho__;
+	protected String __auditWhat__;
 	protected String __auditFunctionality__;
 	protected Long __auditWhenAsTimestamp__;
 	protected String __auditWhenAsString__;

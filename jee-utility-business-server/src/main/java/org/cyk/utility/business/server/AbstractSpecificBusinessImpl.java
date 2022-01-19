@@ -1,6 +1,7 @@
 package org.cyk.utility.business.server;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -11,6 +12,7 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.enumeration.Action;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
+import org.cyk.utility.__kernel__.object.marker.AuditableWhoDoneWhatWhen;
 import org.cyk.utility.__kernel__.throwable.ThrowablesMessages;
 import org.cyk.utility.business.SpecificBusiness;
 import org.cyk.utility.business.TransactionResult;
@@ -81,5 +83,12 @@ public abstract class AbstractSpecificBusinessImpl<ENTITY> extends AbstractObjec
 	
 	public static void throwIfNotEmpty(ThrowablesMessages throwablesMessages) {
 		ValidatorImpl.throwIfNotEmpty(throwablesMessages);	
+	}
+	
+	public static void audit(AuditableWhoDoneWhatWhen instance,String functionality,String who,LocalDateTime when) {
+		instance.set__auditFunctionality__(functionality);
+		instance.set__auditWhat__(null);// It will be deduced
+		instance.set__auditWhen__(when);
+		instance.set__auditWho__(who);
 	}
 }

@@ -90,46 +90,14 @@ public interface EntityLifeCycleListener {
 			if(!(object instanceof AuditableWhoDoneWhatWhen))
 				return;
 			AuditableWhoDoneWhatWhen instance = (AuditableWhoDoneWhatWhen) object;
-			setAuditableWhoDoneWhatWhenIfBlank(
-					instance
-					, instance.get__auditWho__() //instance.set__auditWho__(ValueHelper.defaultToIfBlank(SessionHelper.getUserName(),DEFAULT_USER_NAME)); //TODO how to get principal in back end ?
-					, instance.get__auditFunctionality__()
-					, event.getValue()
-					, LocalDateTime.now()
-				);
-		}
-		
-		public static void setAuditableWhoDoneWhatWhenIfBlank(java.lang.Object object,String who,String functionality,String what,LocalDateTime when) {
-			if(!(object instanceof AuditableWhoDoneWhatWhen))
-				return;
-			AuditableWhoDoneWhatWhen instance = (AuditableWhoDoneWhatWhen) object;
-			//instance.set__auditWho__(ValueHelper.defaultToIfBlank(SessionHelper.getUserName(),DEFAULT_USER_NAME)); //TODO how to get principal in back end ?			
-			//if(StringHelper.isBlank(instance.get__auditWho__())) {
-				if(StringHelper.isBlank(who))
-					who = DEFAULT_USER_NAME;
-				instance.set__auditWho__(who);
-			//}
-			
-			/*
-			if(StringHelper.isBlank(instance.get__auditWhat__())) {
-				if(StringHelper.isBlank(what))
-					what = DEFAULT_ACTION;
-				instance.set__auditWhat__(what);
-			}
-			*/
-					
-			instance.set__auditWhat__(what);
-			//if(StringHelper.isBlank(instance.get__auditFunctionality__())) {
-				if(StringHelper.isBlank(functionality))
-					functionality = DEFAULT_FUNCTIONALITY;
-				instance.set__auditFunctionality__(functionality);
-			//}
-			
-			//if(instance.get__auditWhen__() == null) {
-				if(when == null)
-					when = LocalDateTime.now();
-				instance.set__auditWhen__(when);
-			//}
+			if(StringHelper.isBlank(instance.get__auditWho__()))
+				instance.set__auditWho__(DEFAULT_USER_NAME);
+			if(StringHelper.isBlank(instance.get__auditWhat__()))
+				instance.set__auditWhat__(event.getValue());
+			if(StringHelper.isBlank(instance.get__auditFunctionality__()))
+				instance.set__auditFunctionality__(DEFAULT_FUNCTIONALITY);
+			if(instance.get__auditWhen__()==null)
+				instance.set__auditWhen__(LocalDateTime.now());
 		}
 	}
 	

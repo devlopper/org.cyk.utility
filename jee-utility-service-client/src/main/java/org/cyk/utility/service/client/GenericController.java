@@ -3,6 +3,7 @@ package org.cyk.utility.service.client;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.persistence.query.Filter;
 import org.cyk.utility.rest.ResponseHelper;
@@ -13,6 +14,7 @@ public interface GenericController extends Controller {
 	<T> Collection<T> get(Class<T> klass);
 	<T> Collection<T> getByParentIdentifier(Class<T> klass,String name,String value);
 	
+	<T> T getOne(Class<T> klass,GetArguments arguments);
 	<T> T getByIdentifier(Class<T> klass,String identifier,GetArguments arguments);
 	<T> T getByIdentifier(Class<T> klass,String identifier);
 	
@@ -44,6 +46,13 @@ public interface GenericController extends Controller {
 			if(StringHelper.isBlank(name))
 				throw new RuntimeException("Parent identifier parameter name is required");
 			return get(klass, new GetArguments().setFilter(new Filter.Dto().addField(name,value)));
+		}
+		
+		@Override
+		public <T> T getOne(Class<T> klass, GetArguments arguments) {
+			if(klass == null)
+				throw new RuntimeException("Class is required");
+			return CollectionHelper.getFirst(get(klass, arguments));
 		}
 		
 		@Override

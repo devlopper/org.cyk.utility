@@ -13,6 +13,7 @@ import org.cyk.utility.__kernel__.configuration.ClassIdentifierGetter;
 import org.cyk.utility.__kernel__.enumeration.Action;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.business.Result;
 import org.cyk.utility.business.TransactionResult;
@@ -114,6 +115,10 @@ public abstract class AbstractSpecificServiceImpl<SERVICE_ENTITY,SERVICE_ENTITY_
 				return PROJECTIONS_MAPS.get(serviceEntityImplClass).get(projection);			
 			return projection;
 		}).collect(Collectors.toList());
+	}
+	
+	protected Response buildResponseOk(Result result) {
+		return Response.ok(StringHelper.concatenate(result.getMessages(), "<br/>")).build();
 	}
 	
 	/**/

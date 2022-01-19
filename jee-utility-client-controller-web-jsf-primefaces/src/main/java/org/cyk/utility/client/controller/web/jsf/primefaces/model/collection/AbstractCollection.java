@@ -377,17 +377,25 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 		if(ContextMenu.class.equals(recordMenuClass)) {
 			//TODO is it the best way ?
 			String vOutcome = outcome;
-			Map<Object,Object> map = MapHelper.instantiate(objects);
+			final Map<Object,Object> map = MapHelper.instantiate(objects);
 			final Action actionFinal = action;
 			addRecordMenuItemByArgumentsExecuteFunction((String)map.get(MenuItem.FIELD_VALUE), (String)map.get(MenuItem.FIELD_ICON), new MenuItem.Listener.AbstractImpl() {
 				@Override
 				protected Object __runExecuteFunction__(AbstractAction action) {
-					if(action == null || action.readArgument() == null)
+					if(action == null)
+						return null;
+					Object argument = action.readArgument();
+					if(argument == null)
 						return null;
 					Map<String,List<String>> parameters = new HashMap<>();
 					if(actionFinal != null)
 						parameters.put(ParameterName.ACTION_IDENTIFIER.getValue(),List.of(actionFinal.name()));
-					parameters.put(StringHelper.isBlank(entityIdentifierParameterName) ? ParameterName.ENTITY_IDENTIFIER.getValue() : entityIdentifierParameterName,List.of((String)FieldHelper.readSystemIdentifier(action.readArgument())));
+					String argumentSystemIdentifierFieldName = (String) map.get(MenuItem.ConfiguratorImpl.FIELD_ARGUMENT_SYSTEM_IDENTIFIER_FIELD_NAME);
+					Object identifier = StringHelper.isBlank(argumentSystemIdentifierFieldName) ? FieldHelper.readSystemIdentifier(argument): FieldHelper.read(argument, argumentSystemIdentifierFieldName);
+					String identifierAsString = identifier == null ? null : identifier.toString();
+					if(StringHelper.isBlank(identifierAsString))
+						throw new java.lang.RuntimeException("Argument identifier is required to navigate to "+vOutcome);
+					parameters.put(StringHelper.isBlank(entityIdentifierParameterName) ? ParameterName.ENTITY_IDENTIFIER.getValue() : entityIdentifierParameterName,List.of(identifierAsString));
 					if(MapHelper.isNotEmpty(action.get__parameters__()))
 						parameters.putAll(action.get__parameters__());
 					Redirector.getInstance().redirect(vOutcome, parameters);			

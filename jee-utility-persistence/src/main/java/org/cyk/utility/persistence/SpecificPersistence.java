@@ -11,6 +11,9 @@ public interface SpecificPersistence<ENTITY> {
 	Collection<ENTITY> readMany(QueryExecutorArguments arguments);
 	Collection<ENTITY> readMany(String filterAsString,Integer firstTupleIndex,Integer numberOfTuples);
 	
+	Collection<ENTITY> readManyByIdentifiers(Collection<String> identifiers,Collection<String> projections);
+	Collection<ENTITY> readManyByIdentifiers(Collection<String> identifiers);
+	
 	String getQueryIdentifierReadDynamicOne();
 	ENTITY readOne(QueryExecutorArguments arguments);
 	ENTITY readOne(String identifier);
@@ -30,10 +33,12 @@ public interface SpecificPersistence<ENTITY> {
 	String getParameterNameFilterAsString();
 	
 	String getParameterNameIdentifier();
+	String getParameterNameIdentifiers();
 	
 	/**/
 	
 	String PARAMETER_NAME_FILTER_AS_STRING = "filter_as_string";
 	
 	String PARAMETER_NAME_IDENTIFIER = "identifier";
+	String PARAMETER_NAME_IDENTIFIERS = "identifiers";
 }
