@@ -225,10 +225,28 @@ public interface ArraysReaderByIdentifiers<ENTITY,IDENTIFIER> extends Reader<ENT
 			return (Short) array[index];
 		}
 		
+		protected static Byte getAsByte(Object[] array,Integer index) {
+			if(ArrayHelper.isEmpty(array) || NumberHelper.isLessThanZero(index))
+				return null;
+			return (Byte) array[index];
+		}
+		
 		protected static Boolean getAsBoolean(Object[] array,Integer index) {
 			if(ArrayHelper.isEmpty(array) || NumberHelper.isLessThanZero(index))
 				return null;
 			return (Boolean) array[index];
+		}
+		
+		protected static LocalDateTime getAsLocalDateTime(Object[] array,Integer index) {
+			if(ArrayHelper.isEmpty(array) || NumberHelper.isLessThanZero(index))
+				return null;
+			return (LocalDateTime) array[index];
+		}
+		
+		protected static LocalDate getAsLocalDate(Object[] array,Integer index) {
+			if(ArrayHelper.isEmpty(array) || NumberHelper.isLessThanZero(index))
+				return null;
+			return (LocalDate) array[index];
 		}
 		
 		protected static String formatLocalDateTime(Object[] array,Integer index) {

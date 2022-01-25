@@ -5,6 +5,7 @@ import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 
 import org.cyk.utility.__kernel__.array.ArrayHelper;
@@ -322,6 +323,17 @@ public interface NumberHelper {
 		return format(number, "0",LocaleGetter.getInstance().get());
 	}
 
+	static List<Integer> getProportions(Integer number,Integer proportion) {
+		if(isLessThanOrEqualZero(number) || isLessThanOrEqualZero(proportion))
+			return null;
+		List<Integer> collection = new ArrayList<>();
+		do {
+			collection.add(number >= proportion ? proportion : number);			
+			number = number - proportion;
+		}while(number > 0);
+		return collection;
+	}
+	
 	/**/
 	
 	BigDecimal BIG_DECIMAL_100 = new BigDecimal(100);

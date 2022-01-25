@@ -99,6 +99,8 @@ public abstract class AbstractSpecificPersistenceImpl<ENTITY> implements Specifi
 	
 	@Override
 	public Long count(QueryExecutorArguments arguments) {
+		if(arguments.getQuery() == null)
+			arguments.setQuery(new Query().setIdentifier(queryIdentifierCountDynamic));
 		if(arguments.getQuery().getIdentifier().equals(queryIdentifierCountDynamic))
 			return DynamicManyExecutor.getInstance().count(entityImplClass,arguments.setQueryIdentifier(arguments.getQuery().getIdentifier()).setQuery(null));
 		throw new RuntimeException("Not yet handled : "+arguments);
