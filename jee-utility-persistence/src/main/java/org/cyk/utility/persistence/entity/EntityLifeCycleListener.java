@@ -17,6 +17,7 @@ public interface EntityLifeCycleListener {
 	void listen(java.lang.Object object,Event event,When when);
 	
 	public static abstract class AbstractImpl implements EntityLifeCycleListener,Serializable {
+		public static String SYSTEM_USER_NAME = "SYSTEM";
 		public static String DEFAULT_USER_NAME = "UNKNOWN";
 		public static String DEFAULT_ACTION = "UNKNOWN";
 		public static String DEFAULT_FUNCTIONALITY = "UNKNOWN";

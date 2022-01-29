@@ -32,7 +32,7 @@ public abstract class AbstractSelectionController<T> implements Serializable {
 	protected Boolean isMultiple;
 	protected Dialog dialog;
 	protected CommandButton showDialogCommandButton;
-	
+	protected String entityParameterName;
 	protected AutoComplete autoComplete;
 	protected Redirector.Arguments onSelectRedirectorArguments;
 	
@@ -77,9 +77,12 @@ public abstract class AbstractSelectionController<T> implements Serializable {
 				,CommandButton.FIELD_USER_INTERFACE_ACTION,UserInterfaceAction.SHOW_DIALOG,CommandButton.FIELD___DIALOG__,dialog);		
 	}
 	
+	protected Object[] getAutoCompleteArguments() {
+		return new Object[] {AutoComplete.FIELD_ENTITY_CLASS,klass,AutoComplete.FIELD_MULTIPLE,getIsMultiple(),AutoComplete.FIELD_PLACEHOLDER,"Veuillez saisir une partie du code ou du libellé"};
+	}
+	
 	protected void buildAutoComplete() {
-		autoComplete = AutoComplete.build(AutoComplete.FIELD_ENTITY_CLASS,klass,AutoComplete.FIELD_MULTIPLE,getIsMultiple()
-				,AutoComplete.FIELD_PLACEHOLDER,"Veuillez saisir une partie du code ou du libellé");
+		autoComplete = AutoComplete.build(getAutoCompleteArguments());
 		
 		autoComplete.enableAjaxItemSelect();
 		autoComplete.getAjaxes().get("itemSelect").setListener(new Ajax.Listener.AbstractImpl() {
@@ -91,7 +94,7 @@ public abstract class AbstractSelectionController<T> implements Serializable {
 					@SuppressWarnings("unchecked")
 					T choice = (T) FieldHelper.read(action.get__argument__(), "source.value");
 					if(choice != null && onSelectRedirectorArguments != null) {
-						onSelectRedirectorArguments.addParameters(Map.of(ParameterName.stringify(klass),List.of((String)FieldHelper.readSystemIdentifier(choice))));
+						onSelectRedirectorArguments.addParameters(Map.of(StringHelper.isBlank(entityParameterName) ? ParameterName.stringify(klass) : entityParameterName,List.of((String)FieldHelper.readSystemIdentifier(choice))));
 						Redirector.getInstance().redirect(onSelectRedirectorArguments);				
 					}
 				}				

@@ -371,7 +371,10 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 				}
 			}else {
 				if(autoComplete.controllerEntity == null) {
-					if(autoComplete.entityClass != null) {
+					Boolean controllerEntityBuildable = (Boolean) MapHelper.readByKey(arguments, FIELD_CONTROLLER_ENTITY_BUILDABLE);
+					if(controllerEntityBuildable == null)
+						controllerEntityBuildable = Boolean.TRUE;
+					if(autoComplete.entityClass != null && controllerEntityBuildable) {
 						autoComplete.controllerEntity = __inject__(ControllerLayer.class).injectInterfaceClassFromEntityClass(autoComplete.entityClass);
 						
 						String persistenceEntityClassName = ClassHelper.buildName(autoComplete.entityClass.getPackageName(), autoComplete.entityClass.getSimpleName()
@@ -452,6 +455,8 @@ public class AutoComplete extends AbstractInput<Object> implements Serializable 
 		/**/
 		
 		private static final String SCRIPT_FILTER = "PF('%s').filter()";
+		
+		public static final String FIELD_CONTROLLER_ENTITY_BUILDABLE = "controllerEntityBuildable";
 	}
 	
 	public static AutoComplete build(Map<Object, Object> arguments) {

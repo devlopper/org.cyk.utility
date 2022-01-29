@@ -7,10 +7,13 @@ import java.util.Collection;
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowablesMessages;
 import org.cyk.utility.__kernel__.value.Value;
+import org.cyk.utility.persistence.SpecificPersistence;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -60,6 +63,24 @@ public interface Validator {
 			providedIdentifiers.forEach(identifier -> {
 				throwablesMessages.addIfTrue(String.format("L'identifiant %s n'existe pas", identifier), !Boolean.TRUE.equals(CollectionHelper.contains(systemIdentifiers, identifier)));
 			});
+		}
+	
+		public static void validateIdentifier(String identifier,String name,ThrowablesMessages throwablesMessages) {
+			if(StringHelper.isNotBlank(identifier))
+				return;
+			throwablesMessages.add(String.format("L'identifiant de %s est requis",name));
+		}
+		
+		public static <T> T validateExistenceAndReturn(Class<T> klass,String identifier,Collection<String> projections,SpecificPersistence<T> persistence,String name,ThrowablesMessages throwablesMessages) {
+			T instance = StringHelper.isBlank(identifier) ? null : persistence.readOne(identifier,projections);
+			if(instance == null)
+				throwablesMessages.add(String.format("%s identifiée par %s n'existe pas",name, identifier));
+			return instance;
+		}
+		
+		public static <T> T validateExistenceAndReturn(Class<T> klass,String identifier,Collection<String> projections,SpecificPersistence<T> persistence,ThrowablesMessages throwablesMessages) {
+			String name = (String) FieldHelper.readStatic(klass, "NAME");
+			return validateExistenceAndReturn(klass, identifier,projections, persistence,name, throwablesMessages);
 		}
 	}
 
