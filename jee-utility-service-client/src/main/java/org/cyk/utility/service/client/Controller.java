@@ -7,12 +7,15 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.json.bind.JsonbBuilder;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.persistence.query.Filter;
+import org.cyk.utility.rest.ResponseHelper;
 import org.cyk.utility.service.FilterFormat;
 
 import lombok.Getter;
@@ -26,6 +29,13 @@ public interface Controller {
 		@Inject
 		protected SpecificServiceGetter specificServiceGetter;
 		
+		protected Response serve(Service service) {
+			try {
+				return service.execute();
+			} catch (WebApplicationException exception) {
+				throw new RuntimeException(ResponseHelper.getEntity(String.class, exception.getResponse()));
+			}
+		}
 	}
 	
 	@Getter @Setter @Accessors(chain=true)
@@ -71,5 +81,9 @@ public interface Controller {
 				return this;
 			return projections(CollectionHelper.listOf(Boolean.TRUE,projections));
 		}
+	}
+
+	public static interface Service {
+		Response execute();
 	}
 }
