@@ -15,7 +15,9 @@ import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
+import org.cyk.utility.__kernel__.object.marker.AuditableWhoDoneWhatWhen;
 import org.cyk.utility.__kernel__.time.TimeHelper;
+import org.cyk.utility.persistence.entity.AbstractIdentifiableSystemScalarStringAuditedImpl;
 import org.cyk.utility.persistence.query.Querier;
 import org.cyk.utility.persistence.server.query.string.QueryStringBuilder;
 
@@ -260,6 +262,39 @@ public interface ArraysReaderByIdentifiers<ENTITY,IDENTIFIER> extends Reader<ENT
 				return null;
 			return TimeHelper.formatLocalDate((LocalDate) array[index],"dd/MM/yyyy");
 		}
+		
+		protected static void addAuditProjectionsFromTuple(QueryStringBuilder.Arguments arguments,String variableName) {
+			arguments.getProjection(Boolean.TRUE).addFromTuple(variableName,AbstractIdentifiableSystemScalarStringAuditedImpl.FIELD___AUDIT_WHO__,AbstractIdentifiableSystemScalarStringAuditedImpl.FIELD___AUDIT_FUNCTIONALITY__
+					,AbstractIdentifiableSystemScalarStringAuditedImpl.FIELD___AUDIT_WHAT__,AbstractIdentifiableSystemScalarStringAuditedImpl.FIELD___AUDIT_WHEN__);
+		}
+		
+		protected static void addAuditProjectionsFromTuple(QueryStringBuilder.Arguments arguments) {
+			addAuditProjectionsFromTuple(arguments, "t");
+		}
+		
+		protected static void __setAudits__(AuditableWhoDoneWhatWhen audited, Object[] array,Integer index) {
+			audited.set__auditWho__(getAsString(array, index++));
+			audited.set__auditFunctionality__(getAsString(array, index++));
+			audited.set__auditWhat__(getAsString(array, index++));
+			audited.set__auditWhen__((LocalDateTime) array[index++]);
+		}
+		
+		protected static void __setAuditsAsStrings__(AuditableWhoDoneWhatWhen audited, Object[] array) {
+			audited.set__auditWhenAsString__(TimeHelper.formatLocalDateTime(audited.get__auditWhen__()));
+			audited.set__auditWhen__(null);
+		}
+		
+		protected static void __setAudit__(AuditableWhoDoneWhatWhen audited, Object[] array) {
+			audited.set__audit__(String.format(FORMAT, audited.get__auditFunctionality__(),audited.get__auditWho__(),audited.get__auditWhenAsString__()));
+			audited.set__auditWho__(null);
+			audited.set__auditFunctionality__(null);
+			audited.set__auditWhat__(null);
+			audited.set__auditWhen__(null);
+		}
+		
+		public static final String FORMAT = "%s par %s le %s";
+		
+		/**/
 		
 		/**/
 		

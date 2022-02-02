@@ -58,6 +58,11 @@ public interface Language {
 		return formatParameterOrVariable(name, Boolean.TRUE);
 	}
 	
+	static String formatSum(String string) {
+		return String.format(SUM, string);
+	}
+	
+	String SUM = "SUM(%s)";
 	String PARENTHESIS = "(%s)";
 	String PARAMETER_OR_VARIABLE = "%s%s";
 	String COLON = ":";

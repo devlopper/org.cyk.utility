@@ -22,5 +22,13 @@ public interface AuditableWhoDoneWhatWhen {
 	String get__auditWhenAsString__();
 	AuditableWhoDoneWhatWhen set__auditWhenAsString__(String whenAsString);
 	
+	default String get__audit__() {
+		return null;
+	}
+	
+	default AuditableWhoDoneWhatWhen set__audit__(String audit) {
+		return null;
+	}
+	
 	String FIELD___AUDIT_RECORDS__ = "__auditRecords__";
 }
