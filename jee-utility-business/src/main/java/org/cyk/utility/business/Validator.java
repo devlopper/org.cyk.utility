@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.persistence.EntityManager;
+
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
@@ -14,6 +16,7 @@ import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowablesMessages;
 import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.persistence.SpecificPersistence;
+import org.cyk.utility.persistence.query.QueryExecutorArguments;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -71,16 +74,24 @@ public interface Validator {
 			throwablesMessages.add(String.format("L'identifiant de %s est requis",name));
 		}
 		
-		public static <T> T validateExistenceAndReturn(Class<T> klass,String identifier,Collection<String> projections,SpecificPersistence<T> persistence,String name,ThrowablesMessages throwablesMessages) {
-			T instance = StringHelper.isBlank(identifier) ? null : persistence.readOne(identifier,projections);
+		public static <T> T validateExistenceAndReturn(Class<T> klass,String identifier,Collection<String> projections,SpecificPersistence<T> persistence,String name,ThrowablesMessages throwablesMessages,EntityManager entityManager) {
+			T instance = StringHelper.isBlank(identifier) ? null : persistence.readOne(new QueryExecutorArguments().addProjectionsFromStrings(projections).addFilterField(persistence.getParameterNameIdentifier(), identifier).setEntityManager(entityManager));
 			if(instance == null)
 				throwablesMessages.add(String.format("%s identifiée par %s n'existe pas",name, identifier));
 			return instance;
 		}
 		
-		public static <T> T validateExistenceAndReturn(Class<T> klass,String identifier,Collection<String> projections,SpecificPersistence<T> persistence,ThrowablesMessages throwablesMessages) {
+		public static <T> T validateExistenceAndReturn(Class<T> klass,String identifier,Collection<String> projections,SpecificPersistence<T> persistence,String name,ThrowablesMessages throwablesMessages) {
+			return validateExistenceAndReturn(klass, identifier, projections, persistence, name, throwablesMessages, null);
+		}
+		
+		public static <T> T validateExistenceAndReturn(Class<T> klass,String identifier,Collection<String> projections,SpecificPersistence<T> persistence,ThrowablesMessages throwablesMessages,EntityManager entityManager) {
 			String name = (String) FieldHelper.readStatic(klass, "NAME");
-			return validateExistenceAndReturn(klass, identifier,projections, persistence,name, throwablesMessages);
+			return validateExistenceAndReturn(klass, identifier,projections, persistence,name, throwablesMessages,entityManager);
+		}
+		
+		public static <T> T validateExistenceAndReturn(Class<T> klass,String identifier,Collection<String> projections,SpecificPersistence<T> persistence,ThrowablesMessages throwablesMessages) {
+			return validateExistenceAndReturn(klass, identifier, projections, persistence, throwablesMessages, null);
 		}
 	}
 
