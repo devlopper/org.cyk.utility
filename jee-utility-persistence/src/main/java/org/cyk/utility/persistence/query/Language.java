@@ -62,6 +62,12 @@ public interface Language {
 		return String.format(SUM, string);
 	}
 	
+	static String formatOperatorEqual(Boolean isEqual) {
+		if(isEqual == null)
+			return null;
+		return isEqual ? ArithmeticOperator.EQ.getSymbol() : ArithmeticOperator.NEQ.getSymbol();
+	}
+	
 	String SUM = "SUM(%s)";
 	String PARENTHESIS = "(%s)";
 	String PARAMETER_OR_VARIABLE = "%s%s";

@@ -75,7 +75,13 @@ public interface Validator {
 		}
 		
 		public static <T> T validateExistenceAndReturn(Class<T> klass,String identifier,Collection<String> projections,SpecificPersistence<T> persistence,String name,ThrowablesMessages throwablesMessages,EntityManager entityManager) {
-			T instance = StringHelper.isBlank(identifier) ? null : persistence.readOne(new QueryExecutorArguments().addProjectionsFromStrings(projections).addFilterField(persistence.getParameterNameIdentifier(), identifier).setEntityManager(entityManager));
+			T instance = null;
+			if(StringHelper.isNotBlank(identifier)) {
+				if(persistence == null)
+					instance = entityManager == null ? null : entityManager.find(klass, identifier);
+				else
+					instance = persistence.readOne(new QueryExecutorArguments().addProjectionsFromStrings(projections).addFilterField(persistence.getParameterNameIdentifier(), identifier).setEntityManager(entityManager));
+			}
 			if(instance == null)
 				throwablesMessages.add(String.format("%s identifiée par %s n'existe pas",name, identifier));
 			return instance;
