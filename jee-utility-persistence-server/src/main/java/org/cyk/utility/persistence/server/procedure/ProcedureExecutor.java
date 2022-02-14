@@ -1,6 +1,7 @@
 package org.cyk.utility.persistence.server.procedure;
 
 import java.io.Serializable;
+import java.util.logging.Level;
 
 import javax.persistence.EntityManager;
 import javax.persistence.StoredProcedureQuery;
@@ -14,6 +15,7 @@ import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.time.TimeHelper;
 import org.cyk.utility.__kernel__.value.Value;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.persistence.EntityManagerGetter;
 
 public interface ProcedureExecutor {
@@ -41,14 +43,14 @@ public interface ProcedureExecutor {
 					storedProcedureQuery.setParameter(key, value);
 				});
 			}
-			LogHelper.logFine(String.format("Exécution de la procédure stockée %s en cours...", name), getClass());
+			LogHelper.log(String.format("Exécution de la procédure stockée %s en cours...", name),ValueHelper.defaultToIfNull(arguments.getLogLevel(), Level.FINE), getClass());
 			if(arguments.getEntityManager() == null)
 				entityManager.getTransaction().begin();
 			Long t = System.currentTimeMillis();
 			Boolean result = storedProcedureQuery.execute();
 			if(arguments.getEntityManager() == null)
 				entityManager.getTransaction().commit();
-			LogHelper.logFine(String.format("Procédure stockée %s exécutée en %s", name,TimeHelper.formatDuration(System.currentTimeMillis() - t)), getClass());
+			LogHelper.log(String.format("Procédure stockée %s exécutée en %s", name,TimeHelper.formatDuration(System.currentTimeMillis() - t)),ValueHelper.defaultToIfNull(arguments.getLogLevel(), Level.FINE), getClass());
 			releaseConnection(storedProcedureQuery, name);
 			return result;
 		}

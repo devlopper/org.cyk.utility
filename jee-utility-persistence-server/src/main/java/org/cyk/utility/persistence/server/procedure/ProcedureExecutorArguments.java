@@ -3,6 +3,7 @@ package org.cyk.utility.persistence.server.procedure;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 import javax.persistence.EntityManager;
 
@@ -20,4 +21,5 @@ public class ProcedureExecutorArguments extends AbstractObject implements Serial
 	private String name;
 	private Map<String,Object> parameters = new HashMap<>();
 	private EntityManager entityManager;
+	private Level logLevel;
 }
