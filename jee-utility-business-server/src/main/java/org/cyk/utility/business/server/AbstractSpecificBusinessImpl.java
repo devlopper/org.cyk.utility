@@ -3,8 +3,12 @@ package org.cyk.utility.business.server;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import org.cyk.utility.__kernel__.array.ArrayHelper;
@@ -71,6 +75,53 @@ public abstract class AbstractSpecificBusinessImpl<ENTITY> extends AbstractObjec
 		throw new RuntimeException("Delete not yet implemented");
 	}
 
+	protected void createBatch(Collection<ENTITY> entities,EntityManager entityManager,Boolean isUserTransaction,Level logLevel) {
+		processBatch(entities, entityManager, isUserTransaction, Action.CREATE, logLevel);
+	}
+	
+	protected void updateBatch(Collection<ENTITY> entities,EntityManager entityManager,Boolean isUserTransaction,Level logLevel) {
+		processBatch(entities, entityManager, isUserTransaction, Action.UPDATE, logLevel);
+	}
+	
+	protected void deleteBatch(Collection<ENTITY> entities,EntityManager entityManager,Boolean isUserTransaction,Level logLevel) {
+		processBatch(entities, entityManager, isUserTransaction, Action.DELETE, logLevel);
+	}
+	
+	protected void processBatch(Collection<ENTITY> entities,EntityManager entityManager,Boolean isUserTransaction,Action action,Level logLevel) {
+		//LogHelper.log(String.format("Traitement du lot %s/%s | %s",batchIndex,batchsCount,CollectionHelper.getSize(entities)),ValueHelper.defaultToIfNull(logLevel, Level.FINE), getClass());
+		if(Boolean.TRUE.equals(isUserTransaction))
+			entityManager.getTransaction().begin();
+		
+		for(ENTITY entity : entities)
+			if(Action.CREATE.equals(action))
+				entityManager.persist(entity);
+			else if(Action.UPDATE.equals(action))
+				entityManager.merge(entity);
+			else if(Action.DELETE.equals(action))
+				entityManager.remove(entity);
+		
+		if(Boolean.TRUE.equals(isUserTransaction))
+			entityManager.getTransaction().commit();
+		else
+			entityManager.flush();
+		entityManager.clear();
+		entities.clear();
+		entities = null;
+		System.gc();
+	}
+	
+	protected void shutdownExecutorService(ExecutorService executorService,Long timeout,TimeUnit timeoutUnit) {
+		//Recommended by Oracle to shutdown
+		executorService.shutdown();
+		try {
+		    if (!executorService.awaitTermination(timeout, timeoutUnit)) {
+		        executorService.shutdownNow();
+		    } 
+		} catch (InterruptedException e) {
+		    executorService.shutdownNow();
+		}
+	}
+	
 	/**/
 	
 	protected Class<ENTITY> getEntityClass() {

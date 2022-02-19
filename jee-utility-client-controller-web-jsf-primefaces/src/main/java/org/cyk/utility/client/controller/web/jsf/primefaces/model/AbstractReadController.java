@@ -21,6 +21,7 @@ import lombok.experimental.Accessors;
 public abstract class AbstractReadController extends AbstractObject implements Serializable {
 
 	protected Layout layout;
+	protected Integer labelWidth = 2;
 	
 	public void initialize() {
 		layout = buildLayout();
@@ -41,16 +42,16 @@ public abstract class AbstractReadController extends AbstractObject implements S
 		return null;
 	}
 	
-	public static void addLabelValue(Collection<Map<Object,Object>> cellsMaps,String label,String value) {
+	protected void addLabelValue(Collection<Map<Object,Object>> cellsMaps,String label,String value) {
 		OutputText valueOutputText = OutputText.buildFromValue(StringHelper.isBlank(value) ? "---" : value);
 		valueOutputText.setEscape(Boolean.FALSE);
 		addLabelControl(cellsMaps, label, valueOutputText);
 	}
 	
-	public static void addLabelControl(Collection<Map<Object,Object>> cellsMaps,String label,Object control) {
+	protected void addLabelControl(Collection<Map<Object,Object>> cellsMaps,String label,Object control) {
 		cellsMaps.add(MapHelper.instantiate(Cell.FIELD_CONTROL,OutputText.buildFromValue(label+StringUtils.repeat("&nbsp;",2)+":"+StringUtils.repeat("&nbsp;",2))
-				.setEscape(Boolean.FALSE),Cell.FIELD_WIDTH));
-		cellsMaps.add(MapHelper.instantiate(Cell.FIELD_CONTROL,control,Cell.FIELD_WIDTH));
+				.setEscape(Boolean.FALSE),Cell.FIELD_WIDTH,labelWidth));
+		cellsMaps.add(MapHelper.instantiate(Cell.FIELD_CONTROL,control,Cell.FIELD_WIDTH,12 - labelWidth));
 	}
 	
 }
