@@ -43,6 +43,7 @@ public abstract class AbstractFilterController extends AbstractObject implements
 	protected Dialog dialog;
 	protected CommandButton showDialogCommandButton;
 	protected Map<String,Boolean> ignorables;
+	protected Map<BooleanProperty,Map<String,Boolean>> booleanProperties;
 	protected Map<String,SortOrder> sortOrders;
 	protected Redirector.Arguments onSelectRedirectorArguments;	
 	protected CommandButton filterCommandButton;
@@ -69,6 +70,50 @@ public abstract class AbstractFilterController extends AbstractObject implements
 			return this;
 		getSortOrders(Boolean.TRUE).put(fieldName, sortOrder);
 		return this;
+	}
+	
+	public Map<BooleanProperty,Map<String,Boolean>> getBooleanProperties(Boolean injectIfNull) {
+		if(booleanProperties == null && Boolean.TRUE.equals(injectIfNull))
+			booleanProperties = new HashMap<>();
+		return booleanProperties;
+	}
+	
+	public AbstractFilterController setBooleanProperty(BooleanProperty property,Collection<String> fieldNames) {
+		if(property == null || CollectionHelper.isEmpty(fieldNames))
+			return this;
+		Map<String,Boolean> map = getBooleanProperties(Boolean.TRUE).get(property);
+		if(map == null)
+			booleanProperties.put(property, map = new HashMap<>());
+		for(String fieldName : fieldNames)
+			map.put(fieldName, Boolean.TRUE);
+		return this;
+	}
+	
+	public AbstractFilterController setBooleanProperty(BooleanProperty property,String...fieldNames) {
+		if(ArrayHelper.isEmpty(fieldNames))
+			return this;
+		return setBooleanProperty(property,CollectionHelper.listOf(fieldNames));
+	}
+	
+	public AbstractFilterController setReadOnlyByFieldsNames(Collection<String> fieldsNames) {
+		if(CollectionHelper.isEmpty(fieldsNames))
+			return this;
+		return setBooleanProperty(BooleanProperty.READ_ONLY, fieldsNames);
+	}
+	
+	public AbstractFilterController setReadOnlyByFieldsNames(String...fieldsNames) {
+		if(ArrayHelper.isEmpty(fieldsNames))
+			return this;
+		return setReadOnlyByFieldsNames(CollectionHelper.listOf(fieldsNames));
+	}
+	
+	public Boolean isBooleanPropertyTrue(BooleanProperty property,String fieldName) {
+		if(booleanProperties == null || booleanProperties.isEmpty() || StringHelper.isBlank(fieldName))
+			return Boolean.FALSE;
+		Map<String,Boolean> map = booleanProperties.get(property);
+		if(map == null || map.isEmpty())
+			return Boolean.FALSE;
+		return map.get(fieldName);
 	}
 	
 	public Map<String,Boolean> getIgnorables(Boolean injectIfNull) {
@@ -144,6 +189,7 @@ public abstract class AbstractFilterController extends AbstractObject implements
 			return;
 		String string = getInputTextInitialValue(fieldName);
 		AbstractInput<?> input = buildInput(fieldName, string);
+		processInput(fieldName, string, input);
 		FieldHelper.write(this, fieldName, input);
 	}
 	
@@ -163,6 +209,7 @@ public abstract class AbstractFilterController extends AbstractObject implements
 			return;
 		Object instance = getInputSelectOneInitialValue(fieldName, klass);
 		AbstractInput<?> input = buildInput(fieldName, instance);
+		processInput(fieldName, instance, input);
 		FieldHelper.write(this, fieldName, input);
 	}
 	
@@ -173,6 +220,11 @@ public abstract class AbstractFilterController extends AbstractObject implements
 	/**/
 	
 	protected abstract AbstractInput<?> buildInput(String fieldName,Object value);
+	
+	protected void processInput(String fieldName,Object value,AbstractInput<?> input) {
+		if(Boolean.TRUE.equals(isBooleanPropertyTrue(BooleanProperty.READ_ONLY, fieldName)))
+			input.setReadOnly(Boolean.TRUE);
+	}
 	
 	protected List<AbstractInput<?>> getInputs() {
 		Collection<Field> staticsFields = FieldHelper.filter(getClass(), "^FIELD_", null);
@@ -303,6 +355,12 @@ public abstract class AbstractFilterController extends AbstractObject implements
 	
 	/**/
 	
+	public static enum BooleanProperty {
+		IGNORABLE
+		,READ_ONLY
+		;
+	}
+	
 	public static enum RenderType {
 		INLINE
 		,DIALOG
@@ -316,4 +374,6 @@ public abstract class AbstractFilterController extends AbstractObject implements
 		void listenBeforeBuildLayoutCells(AbstractFilterController filterController,Collection<Map<Object,Object>> cellsMaps);
 		void listenAfterBuildLayoutCells(AbstractFilterController filterController,Collection<Map<Object,Object>> cellsMaps);
 	}
+	
+	/**/
 }

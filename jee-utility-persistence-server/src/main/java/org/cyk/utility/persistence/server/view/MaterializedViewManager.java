@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
 
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
@@ -37,7 +36,7 @@ public interface MaterializedViewManager {
 		
 		private ProcedureExecutor procedureExecutor;
 		
-		@Override @Transactional
+		@Override
 		public void actualize(Class<?> klass,EntityManager entityManager) {
 			ProcedureExecutorArguments arguments = new ProcedureExecutorArguments();
 			arguments.setName(getActualizeProcedureName());
@@ -47,7 +46,7 @@ public interface MaterializedViewManager {
 			getProcedureExecutor().execute(arguments);
 		}
 		
-		@Override @Transactional
+		@Override
 		public void actualize(Class<?> klass) {
 			actualize(klass, __inject__(EntityManager.class));
 		}
