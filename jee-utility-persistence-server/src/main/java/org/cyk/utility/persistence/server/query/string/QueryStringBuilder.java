@@ -68,6 +68,8 @@ public interface QueryStringBuilder {
 			
 			GroupStringBuilder.Group group = arguments.group;
 			
+			HavingStringBuilder.Predicate having = arguments.having;
+			
 			OrderStringBuilder.Order order = arguments.order;
 			
 			return jpql(
@@ -75,7 +77,8 @@ public interface QueryStringBuilder {
 					,FromStringBuilder.getInstance().build(tuple)
 					,predicate == null ? null : WhereStringBuilder.getInstance().build(predicate)
 					,group == null ? null : GroupStringBuilder.getInstance().build(group)
-					,order == null ? null : OrderStringBuilder.getInstance().build(order)					
+					,order == null ? null : OrderStringBuilder.getInstance().build(order)
+					,having == null ? null : HavingStringBuilder.getInstance().build(having)
 					);
 		}
 		
@@ -114,6 +117,7 @@ public interface QueryStringBuilder {
 		/**/
 		
 		private WhereStringBuilder.Predicate predicate;
+		private HavingStringBuilder.Predicate having;
 		
 		private Class<?> tupleClass;
 		
@@ -170,6 +174,12 @@ public interface QueryStringBuilder {
 			if(group == null && Boolean.TRUE.equals(injectIfNull))
 				group = new GroupStringBuilder.Group();
 			return group;			
+		}
+		
+		public HavingStringBuilder.Predicate getHaving(Boolean injectIfNull) {
+			if(having == null && Boolean.TRUE.equals(injectIfNull))
+				having = new HavingStringBuilder.Predicate();
+			return having;			
 		}
 	}
 	

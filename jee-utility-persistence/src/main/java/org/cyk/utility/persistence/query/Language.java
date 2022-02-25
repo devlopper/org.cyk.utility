@@ -68,6 +68,12 @@ public interface Language {
 		return isEqual ? ArithmeticOperator.EQ.getSymbol() : ArithmeticOperator.NEQ.getSymbol();
 	}
 	
+	static String formatOperatorLessThan(Boolean isLessThan) {
+		if(isLessThan == null)
+			return null;
+		return isLessThan ? ArithmeticOperator.LT.getSymbol() : ArithmeticOperator.GTE.getSymbol();
+	}
+	
 	String SUM = "SUM(%s)";
 	String PARENTHESIS = "(%s)";
 	String PARAMETER_OR_VARIABLE = "%s%s";

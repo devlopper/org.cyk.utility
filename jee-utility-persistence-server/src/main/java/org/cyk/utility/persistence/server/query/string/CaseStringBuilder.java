@@ -10,6 +10,7 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.Value;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.persistence.server.query.string.CaseStringBuilder.Case.When;
 
 import lombok.Getter;
@@ -111,8 +112,20 @@ public interface CaseStringBuilder {
 			return this;
 		}
 		
+		public static Case instantiateWhenFieldIsNullThenZeroElseField(String fieldName,String zero) {
+			return new Case().when(String.format("%s IS NULL",fieldName),ValueHelper.defaultToIfBlank(zero, "0")).else_(fieldName);
+		}
+		
 		public static Case instantiateWhenFieldIsNullThenZeroElseField(String fieldName) {
-			return new Case().when(String.format("%s IS NULL",fieldName),"0").else_(fieldName);
+			return instantiateWhenFieldIsNullThenZeroElseField(fieldName, "0");
+		}
+		
+		public static String instantiateWhenFieldIsNullThenZeroElseFieldAndBuild(String fieldName,String zero) {
+			return CaseStringBuilder.getInstance().build(instantiateWhenFieldIsNullThenZeroElseField(fieldName,zero));
+		}
+		
+		public static String instantiateWhenFieldIsNullThenZeroElseFieldAndBuild(String fieldName) {
+			return CaseStringBuilder.getInstance().build(instantiateWhenFieldIsNullThenZeroElseField(fieldName));
 		}
 		
 		/**/

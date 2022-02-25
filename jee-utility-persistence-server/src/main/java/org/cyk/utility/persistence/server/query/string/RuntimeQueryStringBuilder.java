@@ -95,9 +95,17 @@ public interface RuntimeQueryStringBuilder {
 		
 		protected void setProjection(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments) {
 			if(QueryType.COUNT.equals(arguments.getQuery().getType()))
-				builderArguments.getProjection(Boolean.TRUE).add("COUNT(t.identifier)");
+				builderArguments.getProjection(Boolean.TRUE).add(getProjectionCount(arguments));
 			else
 				builderArguments.getProjection(Boolean.TRUE).addFromQueryProjections("t", arguments.getProjections());
+		}
+		
+		protected String getProjectionCount(QueryExecutorArguments arguments) {
+			return String.format("COUNT(%st.identifier)",Boolean.TRUE.equals(isGroupedByIdentifier(arguments)) ? "DISTINCT " : "");
+		}
+		
+		protected Boolean isGroupedByIdentifier(QueryExecutorArguments arguments) {
+			return null;
 		}
 		
 		protected void setTuple(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments) {
