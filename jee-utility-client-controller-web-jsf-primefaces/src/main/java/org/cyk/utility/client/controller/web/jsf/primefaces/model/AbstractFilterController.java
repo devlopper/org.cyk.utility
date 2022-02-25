@@ -45,7 +45,8 @@ public abstract class AbstractFilterController extends AbstractObject implements
 	protected Map<String,Boolean> ignorables;
 	protected Map<BooleanProperty,Map<String,Boolean>> booleanProperties;
 	protected Map<String,SortOrder> sortOrders;
-	protected Redirector.Arguments onSelectRedirectorArguments;	
+	protected Redirector.Arguments onSelectRedirectorArguments;
+	protected String parameterTabIdentifier;
 	protected CommandButton filterCommandButton;
 	protected Layout layout;
 	protected String layoutIdentifier = RandomHelper.getAlphabetic(4);
@@ -351,6 +352,23 @@ public abstract class AbstractFilterController extends AbstractObject implements
 	
 	public Map<String, List<String>> asMap() {
 		throw new RuntimeException(getClass().getSimpleName()+" as map not yet implemented");
+	}
+	
+	protected void addParameter(Map<String, List<String>> map,String name,Object value) {
+		if(StringHelper.isBlank(name) || value == null)
+			return;
+		String string = null;
+		if(!(value instanceof String)) {
+			if(value.getClass().getPackageName().contains("java."))
+				string = value.toString();
+			else
+				string = (String) FieldHelper.readSystemIdentifier(value);
+		}
+		if(StringHelper.isBlank(string)) {
+			LogHelper.logWarning(String.format("cannot compute parameter %s from %s", name,value), getClass());
+			return;
+		}
+		map.put(name, List.of(string));
 	}
 	
 	/**/
