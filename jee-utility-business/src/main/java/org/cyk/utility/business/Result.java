@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import org.cyk.utility.__kernel__.array.ArrayHelper;
@@ -15,6 +16,7 @@ import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.__kernel__.time.TimeHelper;
+import org.eclipse.microprofile.config.ConfigProvider;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -33,6 +35,7 @@ public class Result extends AbstractObject implements Serializable {
 	private Map<Class<?>,Map<Action,Integer>> countsMap;
 	private Object value;
 	private Collection<String> messages;
+	private Level logLevel;
 	
 	public Result open() {
 		startingTime = System.currentTimeMillis();
@@ -121,6 +124,8 @@ public class Result extends AbstractObject implements Serializable {
 	}
 	
 	public Result log(Class<?> klass) {
+		if(logLevel == null)
+			logLevel = getLogLevel();
 		if(duration == null)
 			throw new RuntimeException(String.format("business function result <<%s>> must be closed before logging", name));
 		if(CollectionHelper.isNotEmpty(messages))
@@ -139,8 +144,18 @@ public class Result extends AbstractObject implements Serializable {
 			});
 		}
 		if(CollectionHelper.isNotEmpty(collection))
-			LogHelper.logInfo(String.format("Objects counts : %s.", collection), klass);
-		LogHelper.logInfo(String.format("%s processed in %s.", name,TimeHelper.formatDuration(duration)), klass);
+			LogHelper.logInfo(String.format("Objects counts : %s.", collection), klass);		
+		LogHelper.log(String.format("%s processed in %s.", name,TimeHelper.formatDuration(duration)),logLevel, klass);
 		return this;
 	}
+	
+	public static Level getLogLevel(Level valueIfNull) {
+		return Level.parse(ConfigProvider.getConfig().getOptionalValue(LOG_LEVEL_PROPERTY_NAME, String.class).orElse(valueIfNull == null ? "INFO" : valueIfNull.getName()));
+	}
+	
+	public static Level getLogLevel() {
+		return getLogLevel(Level.INFO);
+	}
+	
+	public static final String LOG_LEVEL_PROPERTY_NAME = Result.class.getName()+".log.level";
 }
