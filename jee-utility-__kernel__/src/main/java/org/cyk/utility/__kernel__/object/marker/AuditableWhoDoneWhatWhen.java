@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 
 public interface AuditableWhoDoneWhatWhen {
 
+	String get__auditIdentifier__();
+	AuditableWhoDoneWhatWhen set__auditIdentifier__(String identifier);
+	
 	String get__auditWho__();
 	AuditableWhoDoneWhatWhen set__auditWho__(String who);
 	

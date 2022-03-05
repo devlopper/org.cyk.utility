@@ -20,6 +20,7 @@ import org.cyk.utility.__kernel__.instance.InstanceHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.mapping.MapperGetter;
 import org.cyk.utility.__kernel__.number.NumberHelper;
+import org.cyk.utility.__kernel__.time.TimeHelper;
 
 public interface ValueConverter {
 
@@ -45,6 +46,8 @@ public interface ValueConverter {
 		}
 		
 		if(Date.class.equals(klass)) {
+			if(value instanceof Long)
+				return (T) new Date((Long) value);
 			/*if(value instanceof LocalDate)
 				return (T) Date.from( ((LocalDate)value).toInstant(ZoneOffset.UTC));
 			else if(value instanceof LocalTime)
@@ -54,12 +57,16 @@ public interface ValueConverter {
 		}
 		
 		if(LocalDate.class.equals(klass)) {
+			if(value instanceof Long)
+				return (T) TimeHelper.getLocalDateFromMilliseconds((Long)value);
 			if(value instanceof Date) {
 				return (T) LocalDate.ofInstant(((Date)value).toInstant(),ZoneId.systemDefault());
 			}
 		}
 		
 		if(LocalTime.class.equals(klass)) {
+			if(value instanceof Long)
+				return (T) TimeHelper.getLocalDateTimeFromMilliseconds((Long)value);
 			if(value instanceof Date) {
 				return (T) LocalTime.ofInstant(((Date)value).toInstant(),ZoneId.systemDefault());
 			}
@@ -96,6 +103,30 @@ public interface ValueConverter {
 		if(value == null)
 			return null;
 		return convert(value, Integer.class);
+	}
+	
+	default Long convertToLong(Object value)  {
+		if(value == null)
+			return null;
+		return convert(value, Long.class);
+	}
+	
+	default Date convertToDate(Object value)  {
+		if(value == null)
+			return null;
+		return convert(value, Date.class);
+	}
+	
+	default LocalDate convertToLocalDate(Object value)  {
+		if(value == null)
+			return null;
+		return convert(value, LocalDate.class);
+	}
+	
+	default LocalDateTime convertToLocalDateTime(Object value)  {
+		if(value == null)
+			return null;
+		return convert(value, LocalDateTime.class);
 	}
 	
 	default Object convert(Field sourceField,Object sourceFieldValue,Field destinationField) {

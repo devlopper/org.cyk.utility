@@ -3,6 +3,7 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -19,7 +20,9 @@ import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.random.RandomHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.time.TimeHelper;
 import org.cyk.utility.__kernel__.user.interface_.UserInterfaceAction;
+import org.cyk.utility.__kernel__.value.ValueConverter;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.client.controller.web.WebController;
 import org.cyk.utility.client.controller.web.jsf.Redirector;
@@ -27,6 +30,7 @@ import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.Comman
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.AbstractInput;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.AbstractInputChoiceOne;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.AutoComplete;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.Calendar;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.InputText;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.layout.Cell;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.layout.Layout;
@@ -202,6 +206,29 @@ public abstract class AbstractFilterController extends AbstractObject implements
 		}
 		return WebController.getInstance().getRequestParameter(parameterName);
 	}
+	
+	protected void buildInputCalendar(String fieldName) {
+		if(StringHelper.isBlank(fieldName))
+			return;
+		if(!Boolean.TRUE.equals(isBuildable(fieldName)))
+			return;
+		Date date = getInputCalendarInitialValue(fieldName);
+		AbstractInput<?> input = buildInput(fieldName, date);
+		processInput(fieldName, date, input);
+		FieldHelper.write(this, fieldName, input);
+	}
+	
+	protected Date getInputCalendarInitialValue(String fieldName) {
+		String parameterName =  buildParameterName(fieldName);
+		if(StringHelper.isBlank(parameterName)) {
+			LogHelper.logSevere(String.format("Request parameter name has not been defined for field named <<%s>>", fieldName), getClass());
+			return null;
+		}
+		Long timestamp = ValueConverter.getInstance().convertToLong(WebController.getInstance().getRequestParameter(parameterName));
+		if(timestamp == null)
+			return null;
+		return TimeHelper.getDateFromMilliseconds(timestamp);
+	}
 		
 	protected void buildInputSelectOne(String fieldName,Class<?> klass) {
 		if(StringHelper.isBlank(fieldName))
@@ -281,6 +308,14 @@ public abstract class AbstractFilterController extends AbstractObject implements
 							getOnSelectRedirectorArguments(Boolean.TRUE).addParameters(Map.of(buildParameterName(input),CollectionHelper.listOf(Boolean.TRUE,buildParameterValue(input))));
 					}
 				}
+				
+				Collection<Calendar> calendars = CollectionHelper.filterByInstanceOf(Calendar.class, getInputs());
+				if(CollectionHelper.isNotEmpty(calendars)) {
+					for(Calendar input : calendars) {
+						if(Boolean.TRUE.equals(isInputValueNotBlank(input)) && Boolean.TRUE.equals(isSelectRedirectorArgumentsParameter(Date.class, input)))
+							getOnSelectRedirectorArguments(Boolean.TRUE).addParameters(Map.of(buildParameterName(input),CollectionHelper.listOf(Boolean.TRUE,buildParameterValue(input))));
+					}
+				}
 				Redirector.getInstance().redirect(onSelectRedirectorArguments);		
 				return super.__runExecuteFunction__(action);
 			}
@@ -296,6 +331,8 @@ public abstract class AbstractFilterController extends AbstractObject implements
 	}
 	
 	protected Boolean isSelectRedirectorArgumentsParameter(Class<?> klass,AbstractInput<?> input) {
+		if(input == null || input.getValue() == null)
+			return null;
 		return Boolean.TRUE;
 	}
 	
@@ -316,12 +353,19 @@ public abstract class AbstractFilterController extends AbstractObject implements
 	}
 	
 	protected String buildParameterValue(AbstractInput<?> input) {
-		if(input instanceof AbstractInputChoiceOne)
+		if(input == null || input.getValue() == null)
+			return null;
+		if(input instanceof AbstractInputChoiceOne) {
+			if(input.getValue() instanceof Boolean)
+				return input.getValue().toString();
 			return StringHelper.get(FieldHelper.readSystemIdentifier(input.getValue()));
+		}
 		if(input instanceof AutoComplete)
 			return StringHelper.get(FieldHelper.readSystemIdentifier(input.getValue()));
 		if(input instanceof InputText)
 			return (String)input.getValue();
+		if(input instanceof Calendar)
+			return StringHelper.get(((Date)input.getValue()).getTime());
 		return null;
 	}
 	

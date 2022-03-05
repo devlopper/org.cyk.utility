@@ -21,6 +21,9 @@ import lombok.experimental.Accessors;
 public abstract class AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableAuditedImpl 
 	extends AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl implements AuditableWhoDoneWhatWhen,Serializable {
 
+	@Column(name="audit_event_identifier")
+	protected String __auditIdentifier__;
+	
 	@Column(name="audit_event_who")
 	protected String __auditWho__;
 	
@@ -38,6 +41,7 @@ public abstract class AbstractIdentifiableSystemScalarStringIdentifiableBusiness
 	@Transient protected String __auditWhenAsString__;
 	@Transient protected String __audit__;
 	
+	public static final String FIELD___AUDIT_IDENTIFIER__ = "__auditIdentifier__";
 	public static final String FIELD___AUDIT_WHO__ = "__auditWho__";
 	public static final String FIELD___AUDIT_WHAT__ = "__auditWhat__";
 	public static final String FIELD___AUDIT_FUNCTIONALITY__ = "__auditFunctionality__";

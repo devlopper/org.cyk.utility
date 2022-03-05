@@ -1,6 +1,8 @@
 package org.cyk.utility.__kernel__.time;
 
+import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -16,6 +18,24 @@ import org.cyk.utility.__kernel__.value.ValueHelper;
 
 public interface TimeHelper {
 
+	static LocalDateTime getLocalDateTimeFromMilliseconds(Long milliseconds) {
+		if(milliseconds == null)
+			return null;
+		return Instant.ofEpochMilli(milliseconds).atZone(ZoneId.systemDefault()).toLocalDateTime();
+	}
+	
+	static LocalDate getLocalDateFromMilliseconds(Long milliseconds) {
+		if(milliseconds == null)
+			return null;
+		return Instant.ofEpochMilli(milliseconds).atZone(ZoneId.systemDefault()).toLocalDate();
+	}
+	
+	static Date getDateFromMilliseconds(Long milliseconds) {
+		if(milliseconds == null)
+			return null;
+		return new Date(milliseconds);
+	}
+	
 	static LocalDateTime parseLocalDateTimeFromDate(Date date) {
 		if(date == null)
 			return null;
@@ -82,6 +102,18 @@ public interface TimeHelper {
 		if(localDate == null)
 			return null;
 		return formatLocalDate(localDate, "dd/MM/yyyy");
+	}
+	
+	static String formatDate(Date date,String pattern) {
+		if(date == null)
+			return null;
+		return new SimpleDateFormat(pattern,Locale.FRENCH).format(date);
+	}
+	
+	static String formatDate(Date date) {
+		if(date == null)
+			return null;
+		return formatDate(date, "dd/MM/yyyy");
 	}
 	
 	static String formatDuration(Long numberOfMilliseconds) {

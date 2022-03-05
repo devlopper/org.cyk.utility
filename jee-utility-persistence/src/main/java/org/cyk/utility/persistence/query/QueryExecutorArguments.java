@@ -1,6 +1,7 @@
 package org.cyk.utility.persistence.query;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -361,6 +362,13 @@ public class QueryExecutorArguments extends AbstractObject implements Serializab
 	
 	public Boolean getFilterFieldValueAsBoolean(Boolean valueIfNull,String...paths) {
 		return ValueHelper.defaultToIfNull(ValueConverter.getInstance().convertToBoolean(getFilterFieldValue(paths)),valueIfNull);
+	}
+	
+	public LocalDate getFilterFieldValueAsLocalDate(LocalDate valueIfNull,String...paths) {
+		Object value = getFilterFieldValue(paths);
+		if(value instanceof String)
+			value = NumberHelper.getLong(value);
+		return ValueHelper.defaultToIfNull(ValueConverter.getInstance().convert(value,LocalDate.class),valueIfNull);
 	}
 	
 	public Field getFilterField(Collection<String> paths) {

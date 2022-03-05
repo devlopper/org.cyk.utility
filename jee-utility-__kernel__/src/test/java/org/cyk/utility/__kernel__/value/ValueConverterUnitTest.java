@@ -3,6 +3,7 @@ package org.cyk.utility.__kernel__.value;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.cyk.utility.__kernel__.value.ValueHelper.convert;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
@@ -34,6 +35,13 @@ public class ValueConverterUnitTest extends AbstractWeldUnitTest {
 	protected void __listenBefore__() {
 		super.__listenBefore__();
 		InstanceGetterImpl.clear();
+	}
+	
+	@Test
+	public void convert_long_to_localDate() {
+		LocalDate localDate = convert(Date.from(LocalDateTime.of(2020,05,10,11,30).toInstant(ZoneOffset.UTC)).getTime(), LocalDate.class);
+		assertThat(localDate).isNotNull();
+		assertThat(localDate.getYear()).isEqualTo(2020);
 	}
 	
 	@Test
@@ -168,7 +176,7 @@ public class ValueConverterUnitTest extends AbstractWeldUnitTest {
 		assertThat(value).isInstanceOf(Collection.class);
 		@SuppressWarnings("unchecked")
 		Collection<PersistenceEntityType> persistenceEntityTypes = (Collection<PersistenceEntityType>) value;
-		System.out.println(persistenceEntityTypes.getClass());
+		//System.out.println(persistenceEntityTypes.getClass());
 		PersistenceEntityType persistenceEntityType = persistenceEntityTypes.iterator().next();
 		assertThat(persistenceEntityType.getIdentifier()).isEqualTo("i01");
 		assertThat(persistenceEntityType.getCode()).isEqualTo("c01");
@@ -176,7 +184,7 @@ public class ValueConverterUnitTest extends AbstractWeldUnitTest {
 		assertThat(persistenceEntityType.getInteger()).isEqualTo(159);
 	}
 	
-	@Test
+	//@Test
 	public void convert_representationEmbeddable_to_persistenceEmbeddable() {
 		RepresentationEmbbedable representation = new RepresentationEmbbedable().setString("i01");
 		PersistenceEmbbedable persistence = convert(representation, PersistenceEmbbedable.class);

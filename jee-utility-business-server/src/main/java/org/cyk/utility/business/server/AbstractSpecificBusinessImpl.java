@@ -3,6 +3,7 @@ package org.cyk.utility.business.server;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -122,6 +123,10 @@ public abstract class AbstractSpecificBusinessImpl<ENTITY> extends AbstractObjec
 		}
 	}
 	
+	protected String generateAuditIdentifier() {
+		return generateAuditIdentifier(getEntityClass());
+	}
+	
 	/**/
 	
 	protected Class<ENTITY> getEntityClass() {
@@ -136,10 +141,17 @@ public abstract class AbstractSpecificBusinessImpl<ENTITY> extends AbstractObjec
 		ValidatorImpl.throwIfNotEmpty(throwablesMessages);	
 	}
 	
-	public static void audit(AuditableWhoDoneWhatWhen instance,String functionality,String who,LocalDateTime when) {
+	public static void audit(AuditableWhoDoneWhatWhen instance,String identifier,String functionality,String who,LocalDateTime when) {
+		instance.set__auditIdentifier__(identifier);
 		instance.set__auditFunctionality__(functionality);
 		instance.set__auditWhat__(null);// It will be deduced
 		instance.set__auditWhen__(when);
 		instance.set__auditWho__(who);
 	}
+	
+	public static String generateAuditIdentifier(Class<?> klass) {
+		return String.format(AUDIT_IDENTIFIER_FORMAT, System.currentTimeMillis(),UUID.randomUUID().toString());
+	}
+	
+	private static final String AUDIT_IDENTIFIER_FORMAT = "%s-%s";
 }
