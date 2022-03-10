@@ -26,6 +26,8 @@ public interface Validator {
 
 	<T> ThrowablesMessages validate(Class<T> klass,Arguments<T> arguments);
 	<T> ThrowablesMessages validate(Class<T> klass,Collection<T> entities,Object actionIdentifier);
+
+	void validateAuditWho(String auditWho,ThrowablesMessages throwablesMessages);
 	
 	public static abstract class AbstractImpl extends AbstractObject implements Validator,Serializable {
 		
@@ -58,6 +60,15 @@ public interface Validator {
 		@Override
 		public <T> ThrowablesMessages validate(Class<T> klass, Collection<T> entities, Object actionIdentifier) {
 			return validate(klass, new Arguments<T>().setEntities(entities).setActionIdentifier(actionIdentifier));
+		}
+		
+		@Override
+		public void validateAuditWho(String auditWho, ThrowablesMessages throwablesMessages) {
+			throwablesMessages.addIfTrue(getValidateAuditWhoMessage(), StringHelper.isBlank(auditWho));
+		}
+		
+		protected String getValidateAuditWhoMessage() {
+			return "Le nom d'utilisateur est requis";
 		}
 		
 		public static void validateIdentifiers(Collection<String> providedIdentifiers,Collection<String> systemIdentifiers,ThrowablesMessages throwablesMessages) {

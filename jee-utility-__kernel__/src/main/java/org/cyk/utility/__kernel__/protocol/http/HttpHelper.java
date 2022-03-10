@@ -8,11 +8,11 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandler;
 import java.net.http.HttpResponse.BodyHandlers;
 
+import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 
 public interface HttpHelper {
 
-	@SuppressWarnings("unchecked")
 	static <T> HttpResponse<T> get(HttpHelperGetParameter parameter,Class<T> bodyType,HttpClient client) {
 		if(parameter.getUri() == null)
 			return null;
@@ -25,7 +25,11 @@ public interface HttpHelper {
 		if(bodyHandler == null) {
 			if(String.class.equals(bodyType))
 				bodyHandler = (BodyHandler<T>) BodyHandlers.ofString();
+			if(byte[].class.equals(bodyType))
+				bodyHandler = (BodyHandler<T>) BodyHandlers.ofByteArray();
 		}
+		if(bodyHandler == null)
+			LogHelper.logWarning(String.format("No http response body handler found for %s", bodyType), HttpHelper.class);
 		try {
 			return client.send(request, bodyHandler);
 		} catch (Exception exception) {

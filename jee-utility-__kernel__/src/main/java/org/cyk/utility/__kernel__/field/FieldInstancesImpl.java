@@ -7,8 +7,6 @@ import java.util.List;
 import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.collection.AbstractCollectionInstanceImpl;
-import org.cyk.utility.__kernel__.field.FieldHelper;
-import org.cyk.utility.__kernel__.field.FieldInstance;
 import org.cyk.utility.__kernel__.string.StringHelper;
 
 

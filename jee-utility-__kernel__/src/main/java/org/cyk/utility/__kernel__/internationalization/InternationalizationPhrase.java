@@ -3,9 +3,6 @@ package org.cyk.utility.__kernel__.internationalization;
 import java.io.Serializable;
 import java.util.Locale;
 
-import org.cyk.utility.__kernel__.internationalization.InternationalizationKeyStringType;
-import org.cyk.utility.__kernel__.internationalization.InternationalizationString;
-import org.cyk.utility.__kernel__.internationalization.InternationalizationStrings;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.__kernel__.string.Case;
 

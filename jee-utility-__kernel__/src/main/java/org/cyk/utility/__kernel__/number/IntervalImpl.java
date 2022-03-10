@@ -6,7 +6,6 @@ import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.constant.ConstantString;
-import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 
 @Dependent
