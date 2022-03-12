@@ -172,7 +172,7 @@ public interface RuntimeQueryStringBuilder {
 		
 		/**/
 		
-		protected static Boolean addIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
+		public static Boolean addIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
 				,String path,String variable,String fieldName) {
 			if(arguments == null || arguments.getFilter() == null)
 				return null;
@@ -187,17 +187,17 @@ public interface RuntimeQueryStringBuilder {
 			return null;
 		}
 		
-		protected static Boolean addIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
+		public static Boolean addIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
 				,String path,String variable) {
 			return addIfFilterHasFieldWithPath(arguments, builderArguments, predicate, filter, path, variable, path);
 		}
 		
-		protected static Boolean addIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
+		public static Boolean addIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
 				,String path) {
 			return addIfFilterHasFieldWithPath(arguments, builderArguments, predicate, filter, path, "t", path);
 		}
 		
-		protected static Boolean addLikeIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
+		public static Boolean addLikeIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
 				,String path,String variable,String fieldName) {
 			Field field = arguments.getFilterField(path);
 			if(field == null)
@@ -213,17 +213,17 @@ public interface RuntimeQueryStringBuilder {
 			return Boolean.TRUE;
 		}
 		
-		protected static Boolean addLikeIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
+		public static Boolean addLikeIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
 				,String path,String variable) {
 			return addLikeIfFilterHasFieldWithPath(arguments, builderArguments, predicate, filter, path, variable, path);
 		}
 		
-		protected static Boolean addLikeIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
+		public static Boolean addLikeIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
 				,String path) {
 			return addLikeIfFilterHasFieldWithPath(arguments, builderArguments, predicate, filter, path, "t");
 		}
 		
-		protected static Boolean addEqualsIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
+		public static Boolean addEqualsIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
 				,String path,String variable,String fieldName) {
 			Field field = arguments.getFilterField(path);
 			if(field == null)
@@ -235,17 +235,17 @@ public interface RuntimeQueryStringBuilder {
 			return Boolean.TRUE;
 		}
 		
-		protected static void addEqualsIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
+		public static void addEqualsIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
 				,String path,String variable) {
 			addEqualsIfFilterHasFieldWithPath(arguments, builderArguments, predicate, filter, path, variable, path);
 		}
 		
-		protected static Boolean addEqualsIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
+		public static Boolean addEqualsIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
 				,String path) {
 			return addEqualsIfFilterHasFieldWithPath(arguments, builderArguments, predicate, filter, path, "t", path);
 		}
 		
-		protected static void addIsFalseOrNullIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
+		public static void addIsFalseOrNullIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
 				,String path,String variable,String fieldName) {
 			if(arguments.getFilter().hasFieldWithPath(path)) {
 				//filter.addFieldEquals(path, arguments);
@@ -253,7 +253,7 @@ public interface RuntimeQueryStringBuilder {
 			}
 		}
 		
-		protected static void addIsTrueIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
+		public static void addIsTrueIfFilterHasFieldWithPath(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments,Predicate predicate,Filter filter
 				,String path,String variable,String fieldName) {
 			if(arguments.getFilter().hasFieldWithPath(path)) {
 				//filter.addFieldEquals(path, arguments);

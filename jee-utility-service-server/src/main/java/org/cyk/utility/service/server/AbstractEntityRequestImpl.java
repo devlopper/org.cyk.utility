@@ -23,7 +23,6 @@ public abstract class AbstractEntityRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTIT
 	protected SpecificPersistence<?> persistence;
 	protected QueryExecutorArguments queryExecutorArguments;
 	
-	@SuppressWarnings("unchecked")
 	public AbstractEntityRequestImpl(Class<SERVICE_ENTITY> serviceEntityClass) {
 		this.serviceEntityClass = serviceEntityClass;
 		this.persistenceEntityClass = (Class<PERSISTENCE_ENTITY>) DependencyInjection.inject(PersistenceEntityClassGetter.class).get(this.serviceEntityClass);

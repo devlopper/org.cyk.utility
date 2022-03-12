@@ -31,7 +31,6 @@ public abstract class AbstractSpecificServiceImpl<SERVICE_ENTITY,SERVICE_ENTITY_
 	protected Class<PERSISTENCE_ENTITY_IMPL> persistenceEntityImplClass;
 	protected Boolean isResponseHeadersCORSEnabled;
 	
-	@SuppressWarnings("unchecked")
 	public AbstractSpecificServiceImpl() {
 		this.serviceEntityClass = (Class<SERVICE_ENTITY>) ClassHelper.getParameterAt(getClass(), 0);
 		this.serviceEntityImplClass = (Class<SERVICE_ENTITY_IMPL>) ClassHelper.getParameterAt(getClass(), 1);
@@ -118,7 +117,8 @@ public abstract class AbstractSpecificServiceImpl<SERVICE_ENTITY,SERVICE_ENTITY_
 	}
 	
 	protected Response buildResponseOk(Result result) {
-		return Response.ok(StringHelper.concatenate(result.getMessages(), "<br/>")).build();
+		Object entity = result.getValue() == null ? StringHelper.concatenate(result.getMessages(), "<br/>") : result.getValue();
+		return Response.ok(entity).build();
 	}
 	
 	/**/
