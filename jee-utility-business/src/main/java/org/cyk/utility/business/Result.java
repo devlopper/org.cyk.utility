@@ -154,7 +154,7 @@ public class Result extends AbstractObject implements Serializable {
 	}
 	
 	public static Level getLogLevel() {
-		return getLogLevel(Level.INFO);
+		return getLogLevel(Level.FINE);
 	}
 	
 	public static final String LOG_LEVEL_PROPERTY_NAME = Result.class.getName()+".log.level";
