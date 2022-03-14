@@ -184,10 +184,11 @@ public abstract class AbstractSpecificBusinessImpl<ENTITY> extends AbstractObjec
 				ExecutorService executorService = instantiateExecutorService();
 				Integer[] countIndex = {0};
 				batches.forEach(batch -> {
-					LogHelper.log(String.format("\tProcessing batch %s/%s(%s) started",countIndex[0]+1, batches.size(),batch.size()), Result.getLogLevel(), getClass());
-					executorService.execute(() -> {
-						__process__(batch,batches.size(),countIndex[0],EntityManagerGetter.getInstance().get());
-						//LogHelper.log(String.format("\tProcessing batch %s/%s done",countIndex[0]+1, batches.size()), Result.getLogLevel(), getClass());
+					Integer index = countIndex[0];
+					LogHelper.log(String.format("\tProcessing batch %s/%s(%s) started",index+1, batches.size(),batch.size()), Result.getLogLevel(), getClass());
+					executorService.execute(() -> {				
+						__process__(batch,batches.size(),index,EntityManagerGetter.getInstance().get());
+						LogHelper.log(String.format("\tProcessing batch %s/%s(%s) done",index+1, batches.size(),batch.size()), Result.getLogLevel(), getClass());
 					});
 					countIndex[0]++;
 				});	
