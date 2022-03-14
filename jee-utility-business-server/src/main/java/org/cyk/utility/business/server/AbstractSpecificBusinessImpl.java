@@ -3,8 +3,10 @@ package org.cyk.utility.business.server;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -16,12 +18,15 @@ import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.enumeration.Action;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.object.marker.AuditableWhoDoneWhatWhen;
 import org.cyk.utility.__kernel__.throwable.ThrowablesMessages;
+import org.cyk.utility.business.Result;
 import org.cyk.utility.business.SpecificBusiness;
 import org.cyk.utility.business.TransactionResult;
 import org.cyk.utility.business.ValidatorImpl;
+import org.cyk.utility.persistence.EntityManagerGetter;
 import org.cyk.utility.persistence.query.QueryExecutorArguments;
 
 public abstract class AbstractSpecificBusinessImpl<ENTITY> extends AbstractObject implements SpecificBusiness<ENTITY>,Serializable {
@@ -111,7 +116,7 @@ public abstract class AbstractSpecificBusinessImpl<ENTITY> extends AbstractObjec
 		System.gc();
 	}
 	
-	protected void shutdownExecutorService(ExecutorService executorService,Long timeout,TimeUnit timeoutUnit) {
+	protected static void shutdownExecutorService(ExecutorService executorService,Long timeout,TimeUnit timeoutUnit) {
 		//Recommended by Oracle to shutdown
 		executorService.shutdown();
 		try {
@@ -154,4 +159,66 @@ public abstract class AbstractSpecificBusinessImpl<ENTITY> extends AbstractObjec
 	}
 	
 	private static final String AUDIT_IDENTIFIER_FORMAT = "%s-%s";
+
+	/**/
+	
+	public static interface BatchProcessor<T> {
+		
+		void process(List<T> list);
+		
+		/**/
+		
+		public static abstract class AbstractImpl<T> extends AbstractObject implements BatchProcessor<T>,Serializable{
+			
+			@Override
+			public void process(List<T> list) {
+				LogHelper.log(getName(), Result.getLogLevel(), getClass());
+				LogHelper.log(String.format("\tList size : %s", CollectionHelper.getSize(list)), Result.getLogLevel(), getClass());
+				if(CollectionHelper.isEmpty(list))
+					return;
+				List<List<T>> batches = CollectionHelper.getBatches(list, getSize());
+				LogHelper.log(String.format("\tBatch size : %s | Batches count : %s", getSize(),CollectionHelper.getSize(batches)), Result.getLogLevel(), getClass());
+				if(CollectionHelper.isEmpty(batches))
+					return;
+				LogHelper.log(String.format("\tExecutor service(Thread count:%s|Timeout:%s)", getExecutorThreadCount(),getExecutorTimeoutDuration()+" "+getExecutorTimeoutUnit()), Result.getLogLevel(), getClass());
+				ExecutorService executorService = instantiateExecutorService();
+				Integer[] countIndex = {0};
+				batches.forEach(batch -> {
+					LogHelper.log(String.format("\tProcessing batch %s/%s(%s) started",countIndex[0]+1, batches.size(),batch.size()), Result.getLogLevel(), getClass());
+					executorService.execute(() -> {
+						__process__(batch,batches.size(),countIndex[0],EntityManagerGetter.getInstance().get());
+						//LogHelper.log(String.format("\tProcessing batch %s/%s done",countIndex[0]+1, batches.size()), Result.getLogLevel(), getClass());
+					});
+					countIndex[0]++;
+				});	
+				shutdownExecutorService(executorService, getExecutorTimeoutDuration(), getExecutorTimeoutUnit());
+			}
+			
+			protected abstract void __process__(List<T> list,Integer batchsCount,Integer batchIndex,EntityManager entityManager);
+			
+			protected String getName() {
+				return "Batch processing...";
+			}
+			
+			protected Integer getSize() {
+				return 2;
+			}
+			
+			protected ExecutorService instantiateExecutorService() {
+				return Executors.newFixedThreadPool(getExecutorThreadCount());
+			}
+			
+			protected Integer getExecutorThreadCount() {
+				return 1;
+			}
+			
+			protected Long getExecutorTimeoutDuration() {
+				return 1l;
+			}
+			
+			protected TimeUnit getExecutorTimeoutUnit() {
+				return TimeUnit.MINUTES;
+			}
+		}
+	}
 }
