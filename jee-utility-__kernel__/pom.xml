@@ -182,14 +182,14 @@
 			<version>1.4.197</version>
 			<scope>test</scope>
 		</dependency>
-		
+		<!--
 		<dependency>
 			<groupId>com.oracle</groupId>
 			<artifactId>ojdbc6</artifactId>
 			<version>11.2.0.4</version>
 			<scope>test</scope>
 		</dependency>
-		
+		-->
 		<dependency>
 			<groupId>org.bgee.log4jdbc-log4j2</groupId>
 			<artifactId>log4jdbc-log4j2-jdbc4.1</artifactId>
