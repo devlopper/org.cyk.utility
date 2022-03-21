@@ -36,6 +36,7 @@ public class Result extends AbstractObject implements Serializable {
 	private Object value;
 	private Collection<String> messages;
 	private Level logLevel;
+	private Map<Object,Object> map;
 	
 	public Result open() {
 		startingTime = System.currentTimeMillis();
@@ -48,6 +49,23 @@ public class Result extends AbstractObject implements Serializable {
 		stoppingTime = System.currentTimeMillis();
 		duration = stoppingTime - startingTime;
 		return this;
+	}
+	
+	public Map<Object,Object> getMap(Boolean injectIfNull) {
+		if(map == null && Boolean.TRUE.equals(injectIfNull))
+			map = new HashMap<>();
+		return map;
+	}
+	
+	public Result map(Object key,Object value) {
+		getMap(Boolean.TRUE).put(key, value);
+		return this;
+	}
+	
+	public Object getMapValueByKey(Object key) {
+		if(map == null)
+			return null;
+		return map.get(key);
 	}
 	
 	public Map<Class<?>,Map<Action,Integer>> getCountsMap(Boolean injectIfNull) {
