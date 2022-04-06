@@ -43,9 +43,14 @@ public abstract class AbstractReadController extends AbstractObject implements S
 	}
 	
 	protected void addLabelValue(Collection<Map<Object,Object>> cellsMaps,String label,String value) {
+		OutputText valueOutputText = buildValueOutputText(value);
+		addLabelControl(cellsMaps, label, valueOutputText);
+	}
+	
+	protected OutputText buildValueOutputText(String value) {
 		OutputText valueOutputText = OutputText.buildFromValue(StringHelper.isBlank(value) ? "---" : value);
 		valueOutputText.setEscape(Boolean.FALSE);
-		addLabelControl(cellsMaps, label, valueOutputText);
+		return valueOutputText;
 	}
 	
 	protected void addLabelControl(Collection<Map<Object,Object>> cellsMaps,String label,Object control) {

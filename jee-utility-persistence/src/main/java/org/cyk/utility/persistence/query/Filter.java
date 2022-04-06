@@ -383,6 +383,8 @@ public class Filter extends AbstractObject implements Serializable {
 	/**/
 	
 	public static Filter instantiateFromJson(String string) {
+		if(StringHelper.isBlank(string))
+			return null;
 		Filter.Dto dto = JsonbBuilder.create().fromJson(string, Filter.Dto.class);
 		return DependencyInjection.inject(Filter.Dto.Mapper.class).getDestination(dto);
 	}
