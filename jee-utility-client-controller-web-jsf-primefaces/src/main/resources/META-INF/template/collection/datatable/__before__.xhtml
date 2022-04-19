@@ -39,5 +39,45 @@
 			</ui:fragment>
 		</ui:insert>
 		
+		<ui:insert name="beforeDataTable_remoteCommends">
+			
+			<ui:fragment rendered="#{dataTable.remoteCommands.size()>0}">
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.getRemoteCommandAt(0))}">
+		    		<ui:param name="remoteCommand" value="#{dataTable.getRemoteCommandAt(0)}"/>     			  
+		    	</ui:decorate>
+			</ui:fragment>
+			
+			<ui:fragment rendered="#{dataTable.remoteCommands.size()>1}">
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.getRemoteCommandAt(1))}">
+		    		<ui:param name="remoteCommand" value="#{dataTable.getRemoteCommandAt(1)}"/>     			  
+		    	</ui:decorate>
+			</ui:fragment>
+			
+			<ui:fragment rendered="#{dataTable.remoteCommands.size()>2}">
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.getRemoteCommandAt(2))}">
+		    		<ui:param name="remoteCommand" value="#{dataTable.getRemoteCommandAt(2)}"/>     			  
+		    	</ui:decorate>
+			</ui:fragment>
+			
+			<ui:fragment rendered="#{dataTable.remoteCommands.size()>3}">
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.getRemoteCommandAt(3))}">
+		    		<ui:param name="remoteCommand" value="#{dataTable.getRemoteCommandAt(3)}"/>     			  
+		    	</ui:decorate>
+			</ui:fragment>
+			
+			<ui:fragment rendered="#{dataTable.remoteCommands.size()>4}">
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.getRemoteCommandAt(4))}">
+		    		<ui:param name="remoteCommand" value="#{dataTable.getRemoteCommandAt(4)}"/>     			  
+		    	</ui:decorate>
+			</ui:fragment>
+			
+	    	<!--	
+			<ui:repeat var="vRemoteCommand" value="#{dataTable.remoteCommands}">
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(remoteCommand)}">
+	    			<ui:param name="remoteCommand" value="#{vRemoteCommand}"/>     			  
+	    		</ui:decorate>
+			</ui:repeat>
+			-->
+		</ui:insert>
 	</ui:insert>
 </ui:composition>

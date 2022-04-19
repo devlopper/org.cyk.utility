@@ -50,6 +50,11 @@ public abstract class AbstractSpecificServiceImpl<SERVICE_ENTITY,SERVICE_ENTITY_
 		return execute(__get__(filter,filterFormat, mapProjections(projections), countable, pageable, firstTupleIndex, numberOfTuples));
 	}
 	
+	@Override
+	public Response getUsingPost(String filter, FilterFormat filterFormat, List<String> projections, Boolean countable,Boolean pageable, Integer firstTupleIndex, Integer numberOfTuples) {
+		return execute(__get__(filter,filterFormat, mapProjections(projections), countable, pageable, firstTupleIndex, numberOfTuples));
+	}
+	
 	protected EntityReaderRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL> instantiateEntityReaderRequest() {
 		return new EntityReaderRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL>(serviceEntityImplClass);
 	}

@@ -9,8 +9,17 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
+	<ui:param name="outputText" value="#{dataTable.getCellOutputTextByRecordByColumn(record,rowIndex,column,columnIndex)}"/>
 	<ui:param name="cellValue" value="#{dataTable.getCellValueByRecordByColumn(record,rowIndex,column,columnIndex)}"/>
+	<!--
 	<h:outputText value="#{cellValue}" />
+	-->
+	<h:outputText 
+		id="#{identifier == null ? userInterfaceController.randomIdentifier : identifier}" 
+		styleClass="#{outputText.styleClass}" widgetVar="#{outputText.widgetVar}" value="#{cellValue}" title="#{cellValue}" escape="#{outputText.escape}"  style="#{outputText.style}"
+	/>
+	
+	
 	
 	<!--
 	<c:set var="cellValueClassSimpleName" value="#{cellValue.class.simpleName}"/>

@@ -40,6 +40,7 @@ public interface SpecificServiceGetter {
 		}
 		
 		protected RestClientBuilder getClientBuilder(URI uniformResourceIdentifier,Class<?> klass) {
+			//LogHelper.logInfo(String.format("Rest client builder created for uri <<%s>>", uniformResourceIdentifier), getClass());
 			return RestClientBuilder.newBuilder().baseUri(uniformResourceIdentifier).register(new ClientRequestFilter());
 		}
 		

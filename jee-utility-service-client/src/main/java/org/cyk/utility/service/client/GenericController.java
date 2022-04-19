@@ -3,10 +3,13 @@ package org.cyk.utility.service.client;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.ws.rs.core.Response;
+
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.persistence.query.Filter;
 import org.cyk.utility.rest.ResponseHelper;
+import org.cyk.utility.service.SpecificService;
 
 public interface GenericController extends Controller {
 
@@ -24,14 +27,28 @@ public interface GenericController extends Controller {
 		public <T> Collection<T> get(Class<T> klass, GetArguments arguments) {
 			if(klass == null)
 				throw new RuntimeException("Class is required");
-			return ResponseHelper.getEntityAsListFromJson(klass,specificServiceGetter.get(klass).get(
-					arguments == null ? null : arguments.buildFilterAsString()
-					,arguments == null ? null : arguments.buildFilterFormat()
-					,arguments == null ? null : arguments.getProjections()
-					,arguments == null ? null : arguments.getCountable()
-					,arguments == null ? null : arguments.getPageable()
-					,arguments == null ? null : arguments.getFirstTupleIndex()
-					,arguments == null ? null : arguments.getNumberOfTuples()));
+			SpecificService<?> service = specificServiceGetter.get(klass);
+			Response response;
+			Boolean postable = arguments != null && Boolean.TRUE.equals(arguments.getPostable());
+			if(Boolean.TRUE.equals(postable))
+				response = service.getUsingPost(
+						arguments == null ? null : arguments.buildFilterAsString()
+								,arguments == null ? null : arguments.buildFilterFormat()
+								,arguments == null ? null : arguments.getProjections()
+								,arguments == null ? null : arguments.getCountable()
+								,arguments == null ? null : arguments.getPageable()
+								,arguments == null ? null : arguments.getFirstTupleIndex()
+								,arguments == null ? null : arguments.getNumberOfTuples());
+			else
+				response = service.get(
+						arguments == null ? null : arguments.buildFilterAsString()
+								,arguments == null ? null : arguments.buildFilterFormat()
+								,arguments == null ? null : arguments.getProjections()
+								,arguments == null ? null : arguments.getCountable()
+								,arguments == null ? null : arguments.getPageable()
+								,arguments == null ? null : arguments.getFirstTupleIndex()
+								,arguments == null ? null : arguments.getNumberOfTuples());
+			return ResponseHelper.getEntityAsListFromJson(klass,response);
 		}
 		
 		@Override

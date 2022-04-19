@@ -54,9 +54,16 @@ public abstract class AbstractReadController extends AbstractObject implements S
 	}
 	
 	protected void addLabelControl(Collection<Map<Object,Object>> cellsMaps,String label,Object control) {
-		cellsMaps.add(MapHelper.instantiate(Cell.FIELD_CONTROL,OutputText.buildFromValue(label+StringUtils.repeat("&nbsp;",2)+":"+StringUtils.repeat("&nbsp;",2))
-				.setEscape(Boolean.FALSE),Cell.FIELD_WIDTH,labelWidth));
-		cellsMaps.add(MapHelper.instantiate(Cell.FIELD_CONTROL,control,Cell.FIELD_WIDTH,12 - labelWidth));
+		//cellsMaps.add(MapHelper.instantiate(Cell.FIELD_CONTROL,OutputText.buildFromValue(label+StringUtils.repeat("&nbsp;",2)+":"+StringUtils.repeat("&nbsp;",2))
+		//		.setEscape(Boolean.FALSE),Cell.FIELD_WIDTH,labelWidth));
+		//cellsMaps.add(MapHelper.instantiate(Cell.FIELD_CONTROL,control,Cell.FIELD_WIDTH,12 - labelWidth));
+		addLabelControlUsingMap(cellsMaps, label, MapHelper.instantiate(Cell.FIELD_CONTROL,control));
 	}
 	
+	protected void addLabelControlUsingMap(Collection<Map<Object,Object>> cellsMaps,String label,Map<Object,Object> map) {
+		cellsMaps.add(MapHelper.instantiate(Cell.FIELD_CONTROL,OutputText.buildFromValue(label+StringUtils.repeat("&nbsp;",2)+":"+StringUtils.repeat("&nbsp;",2))
+				.setEscape(Boolean.FALSE),Cell.FIELD_WIDTH,labelWidth));
+		map.put(Cell.FIELD_WIDTH,12 - labelWidth);
+		cellsMaps.add(map);
+	}
 }

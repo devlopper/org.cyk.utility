@@ -48,6 +48,7 @@ public interface Controller {
 		private Boolean pageable;
 		private Integer firstTupleIndex;
 		private Integer numberOfTuples;
+		private Boolean postable;
 		
 		public String buildFilterAsString() {
 			if(StringHelper.isBlank(filterAsString) && filter != null)

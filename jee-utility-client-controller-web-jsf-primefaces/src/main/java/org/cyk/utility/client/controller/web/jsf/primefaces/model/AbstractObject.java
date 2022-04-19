@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.CardinalPoint;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
@@ -119,6 +120,20 @@ public class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractOb
 			return null;
 		Event event = Event.valueOf(string);
 		return getEventScript(event);
+	}
+	
+	public AbstractObject addEventScipts(Event event,Collection<String> scripts) {
+		if(event == null || CollectionHelper.isEmpty(scripts))
+			return this;
+		String string = StringUtils.stripToEmpty(getEventScript(event));
+		setEventScript(event, string+StringHelper.concatenate(scripts, ";"));
+		return this;
+	}
+	
+	public AbstractObject addEventScipts(Event event,String...scripts) {
+		if(event == null || ArrayHelper.isEmpty(scripts))
+			return this;
+		return addEventScipts(event, CollectionHelper.listOf(Boolean.TRUE,scripts));
 	}
 	
 	/* Style */

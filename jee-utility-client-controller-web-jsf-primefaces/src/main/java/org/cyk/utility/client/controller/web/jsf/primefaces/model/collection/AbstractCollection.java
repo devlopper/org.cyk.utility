@@ -38,6 +38,7 @@ import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObject
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.ajax.Ajax;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.AbstractCommand;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.RemoteCommand;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.layout.Layout;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.AbstractMenu;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.ContextMenu;
@@ -78,6 +79,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	protected Map<String,UIComponent> cellsBindings;
 	protected AbstractFilterController filterController;
 	protected String entityIdentifierParameterName;
+	protected List<RemoteCommand> remoteCommands;
 	
 	//protected AbstractFilterController filterController;
 	
@@ -91,6 +93,31 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	public List<?> getSelectionAsList() {
 		return (List<?>) selection;
 	}*/
+	
+	public Collection<RemoteCommand> getRemoteCommands(Boolean instantiateIfNull) {
+		if(remoteCommands == null && Boolean.TRUE.equals(instantiateIfNull))
+			remoteCommands = new ArrayList<>();
+		return remoteCommands;
+	}
+	
+	public AbstractCollection addRemoteCommands(Collection<RemoteCommand> remoteCommands) {
+		if(CollectionHelper.isEmpty(remoteCommands))
+			return this;
+		getRemoteCommands(Boolean.TRUE).addAll(remoteCommands);
+		return this;
+	}
+	
+	public AbstractCollection addRemoteCommands(RemoteCommand...remoteCommands) {
+		if(ArrayHelper.isEmpty(remoteCommands))
+			return this;
+		return addRemoteCommands(CollectionHelper.listOf(Boolean.TRUE, remoteCommands));
+	}
+	
+	public RemoteCommand getRemoteCommandAt(Integer index) {
+		if(remoteCommands == null || index == null || index >= remoteCommands.size())
+			return null;
+		return remoteCommands.get(index);
+	}
 	
 	@SuppressWarnings("unchecked")
 	public <T> List<T> getList(Class<T> klass) {

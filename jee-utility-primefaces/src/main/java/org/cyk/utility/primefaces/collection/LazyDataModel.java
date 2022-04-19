@@ -42,13 +42,14 @@ public abstract class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDat
 	
 	//private Boolean loggableAsInfo = ValueConverter.getInstance().convertToBoolean(WebController.getInstance().getRequestParameter(ParameterName.LOGGABLE_AS_INFO));
 	
-	private int __first__,__pageSize__;
-	private List<ENTITY> __list__;
+	protected int __first__,__pageSize__;
+	protected List<ENTITY> __list__;
 	private Integer __count__;
 	private String __sortField__,__entityFieldsNamesAsString__;
-	private SortOrder __sortOrder__;
-	private List<SortMeta> __multiSortMeta__;
-	private Map<String, Object> __filters__;
+	protected SortOrder __sortOrder__;
+	protected List<SortMeta> __multiSortMeta__;
+	protected Map<String, Object> __filters__;
+	protected LinkedHashMap<String,SortOrder> __sortOrders__;
 	private Response __response__;
 	private Listener<ENTITY> __listener__;
 	
@@ -63,6 +64,10 @@ public abstract class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDat
 	
 	@SuppressWarnings("unchecked")
 	protected Response serve(Map<String, Object> filters,LinkedHashMap<String,SortOrder> sortOrders,int firstTupleIndex, int numberOfTuples) {
+		__filters__ = filters;
+		__sortOrders__ = sortOrders;
+		__first__ = firstTupleIndex;
+		__pageSize__ = numberOfTuples;
 		Object service = getService();
 		Filter.Dto filter = getFilter(filters, sortOrders, firstTupleIndex, numberOfTuples);
 		String filterAsJson = filter == null ? null : JsonbBuilder.create().toJson(filter);

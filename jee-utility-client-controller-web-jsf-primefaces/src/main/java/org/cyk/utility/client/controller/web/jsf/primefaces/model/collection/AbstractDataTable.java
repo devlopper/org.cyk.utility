@@ -20,6 +20,7 @@ import org.cyk.utility.__kernel__.object.Builder;
 import org.cyk.utility.__kernel__.object.__static__.controller.AbstractDataIdentifiableSystemStringAuditedImpl;
 import org.cyk.utility.__kernel__.object.__static__.controller.AbstractDataIdentifiableSystemStringIdentifiableBusinessStringImpl;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.random.RandomHelper;
 import org.cyk.utility.__kernel__.string.Case;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.RuntimeException;
@@ -31,6 +32,7 @@ import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.Comman
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.ContextMenu;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.MenuButton;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.MenuItem;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.output.OutputText;
 import org.primefaces.component.api.DynamicColumn;
 import org.primefaces.event.CellEditEvent;
 
@@ -203,6 +205,18 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 		if(record == null || recordIndex == null || column == null || columnIndex == null)
 			return null;
 		return ((Listener)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).getCellValueByRecordByColumn(record, recordIndex, column, columnIndex);
+	}
+	
+	public Object getCellValueControlIdentifierByRecordByColumn(Object record,Integer recordIndex,Column column,Integer columnIndex) {
+		if(record == null || recordIndex == null || column == null || columnIndex == null)
+			return null;
+		return ((Listener)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).getCellValueControlIdentifierByRecordByColumn(record, recordIndex, column, columnIndex);
+	}
+	
+	public OutputText getCellOutputTextByRecordByColumn(Object record,Integer recordIndex,Column column,Integer columnIndex) {
+		if(record == null || recordIndex == null || column == null || columnIndex == null)
+			return null;
+		return ((Listener)(listener == null ? Listener.AbstractImpl.DefaultImpl.INSTANCE : listener)).getCellOutputTextByRecordByColumn(record, recordIndex, column, columnIndex);
 	}
 	
 	public Object getCellBindingKeyByRecordByColumn(Object record,Integer recordIndex,Column column,Integer columnIndex) {
@@ -442,7 +456,9 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 	/**/
 	
 	public static interface Listener extends AbstractCollection.Listener {
+		String getCellValueControlIdentifierByRecordByColumn(Object record,Integer recordIndex,Column column,Integer columnIndex);
 		Object getCellValueByRecordByColumn(Object record,Integer recordIndex,Column column,Integer columnIndex);
+		OutputText getCellOutputTextByRecordByColumn(Object record,Integer recordIndex,Column column,Integer columnIndex);
 		Object getCellBindingKeyByRecordByColumn(Object record,Integer recordIndex,Column column,Integer columnIndex);
 		Object getRowKeyByRecord(Object record,Integer recordIndex);
 		String getStyleClassByRecord(Object record,Integer recordIndex);
@@ -464,6 +480,11 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 			protected Boolean isAuditRecord;
 			
 			@Override
+			public String getCellValueControlIdentifierByRecordByColumn(Object record, Integer recordIndex,Column column, Integer columnIndex) {
+				return RandomHelper.getAlphabetic(10);
+			}
+			
+			@Override
 			public Object getCellValueByRecordByColumn(Object record, Integer recordIndex, Column column,Integer columnIndex) {
 				if(record == null || column == null || StringHelper.isBlank(column.getFieldName()))
 					return null;
@@ -473,6 +494,11 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 						value = NumberHelper.format((Number) value);
 				}
 				return value;
+			}
+			
+			@Override
+			public OutputText getCellOutputTextByRecordByColumn(Object record, Integer recordIndex,Column column, Integer columnIndex) {
+				return null;
 			}
 			
 			@Override
