@@ -94,6 +94,29 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 		return (List<?>) selection;
 	}*/
 	
+	public RemoteCommand getRemoteCommandByName(String name) {
+		if(CollectionHelper.isEmpty(remoteCommands))
+			return null;
+		for(RemoteCommand remoteCommand : remoteCommands)
+			if(remoteCommand.getName().equals(name))
+				return remoteCommand;
+		return null;
+	}
+	
+	public RemoteCommand instantiateRemoteCommand(String name,AbstractAction.Listener listener,Collection<org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObject> updatableComponents,Collection<String> updatableStyleClasses) {
+		RemoteCommand remoteCommand = RemoteCommand.build(RemoteCommand.FIELD_NAME,name);
+		remoteCommand.setListener(listener);
+		if(CollectionHelper.isNotEmpty(updatableComponents) || CollectionHelper.isNotEmpty(updatableStyleClasses)) {
+			remoteCommand.setUpdate(null);
+			if(CollectionHelper.isNotEmpty(updatableComponents))
+				remoteCommand.addUpdatablesUsingStyleClass(updatableComponents);
+			if(CollectionHelper.isNotEmpty(updatableStyleClasses))
+				remoteCommand.addUpdates(updatableStyleClasses.stream().map(styleClass -> String.format("@(.%s)",styleClass)).collect(Collectors.joining(",")));
+		}
+		addRemoteCommands(remoteCommand);
+		return remoteCommand;
+	}
+	
 	public Collection<RemoteCommand> getRemoteCommands(Boolean instantiateIfNull) {
 		if(remoteCommands == null && Boolean.TRUE.equals(instantiateIfNull))
 			remoteCommands = new ArrayList<>();

@@ -14,13 +14,14 @@
 		<ui:param name="outputText" value="#{column.footerOutputText}"/>
 	</ui:decorate>
 	-->
-	
+	<!--
 	<ui:param name="identifier" value="#{identifier == null ? (empty column.footerOutputText.identifier ? userInterfaceController.randomIdentifier : column.footerOutputText.identifier) : identifier}"/>
-	
+	-->
 	<ui:fragment rendered="#{not empty column.footerOutputText.identifier}">
 		<h:outputText 
 			id="#{identifier}" 
-			value="#{column.footerOutputText.value}" 
+			value="#{column.footerOutputText.value}"
+			title="#{column.footerOutputText.title}"
 			styleClass="#{column.footerOutputText.styleClass}" 
 			style="#{column.footerOutputText.style}"/>
 	</ui:fragment>

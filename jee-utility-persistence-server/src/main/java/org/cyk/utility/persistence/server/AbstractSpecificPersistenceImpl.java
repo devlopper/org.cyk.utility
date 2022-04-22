@@ -98,6 +98,25 @@ public abstract class AbstractSpecificPersistenceImpl<ENTITY> implements Specifi
 	}
 	
 	@Override
+	public ENTITY readDefault(QueryExecutorArguments arguments) {
+		if(arguments == null)
+			arguments = new QueryExecutorArguments();
+		if(arguments.getFilterField(getParameterNameDefaultValue()) == null)
+			arguments.addFilterFieldsValues(getParameterNameDefaultValue(),Boolean.TRUE);
+		return readOne(arguments);
+	}
+	
+	@Override
+	public ENTITY readDefault(Collection<String> projections) {
+		return readDefault(new QueryExecutorArguments().addProjectionsFromStrings(projections));
+	}
+	
+	@Override
+	public ENTITY readDefault() {
+		return readDefault(new QueryExecutorArguments());
+	}
+	
+	@Override
 	public Long count(QueryExecutorArguments arguments) {
 		if(arguments.getQuery() == null)
 			arguments.setQuery(new Query().setIdentifier(queryIdentifierCountDynamic));
@@ -150,6 +169,16 @@ public abstract class AbstractSpecificPersistenceImpl<ENTITY> implements Specifi
 	@Override
 	public String getParameterNameIdentifiers() {
 		return PARAMETER_NAME_IDENTIFIERS;
+	}
+	
+	@Override
+	public String getParameterNameDefaultValue() {
+		return PARAMETER_NAME_DEFAULT_VALUE;
+	}
+	
+	@Override
+	public String getParameterNameDefaultValues() {
+		return PARAMETER_NAME_DEFAULT_VALUES;
 	}
 	
 	protected static String getQueryIdentifierFromConfiguration(String propertyName) {

@@ -9,6 +9,8 @@ public interface SpecificController<T> extends Controller {
 
 	Collection<T> get(GetArguments arguments);
 	Collection<T> get();
+	Collection<T> getByParentIdentifier(String name,String value,Integer firstTupleIndex,Integer numberOfTuples);
+	Collection<T> getByParentIdentifier(String name,String value,Boolean pageable);
 	Collection<T> getByParentIdentifier(String name,String value);
 	
 	T getOne(GetArguments arguments);
@@ -27,7 +29,7 @@ public interface SpecificController<T> extends Controller {
 		
 		@Override
 		public Collection<T> get() {
-			return genericController.get(getEntityClass(),null);
+			return genericController.get(getEntityClass());
 		}
 		
 		@Override
@@ -48,6 +50,16 @@ public interface SpecificController<T> extends Controller {
 		@Override
 		public Collection<T> getByParentIdentifier(String name,String value) {
 			return genericController.getByParentIdentifier(getEntityClass(), name, value);
+		}
+		
+		@Override
+		public Collection<T> getByParentIdentifier(String name, String value, Integer firstTupleIndex,Integer numberOfTuples) {
+			return genericController.getByParentIdentifier(getEntityClass(),name, value, firstTupleIndex, numberOfTuples);
+		}
+		
+		@Override
+		public Collection<T> getByParentIdentifier(String name, String value, Boolean pageable) {
+			return genericController.getByParentIdentifier(getEntityClass(),name, value, pageable);
 		}
 	
 		protected abstract Class<T> getEntityClass();

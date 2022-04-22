@@ -19,6 +19,10 @@ public interface SpecificPersistence<ENTITY> {
 	ENTITY readOne(String identifier);
 	ENTITY readOne(String identifier,Collection<String> projections);
 	
+	ENTITY readDefault(QueryExecutorArguments arguments);
+	ENTITY readDefault(Collection<String> projections);
+	ENTITY readDefault();
+	
 	String getQueryIdentifierCountDynamic();
 	Long count(QueryExecutorArguments arguments);
 	Long count(String filterAsString);
@@ -35,10 +39,16 @@ public interface SpecificPersistence<ENTITY> {
 	String getParameterNameIdentifier();
 	String getParameterNameIdentifiers();
 	
+	String getParameterNameDefaultValue();
+	String getParameterNameDefaultValues();
+	
 	/**/
 	
 	String PARAMETER_NAME_FILTER_AS_STRING = "filter_as_string";
 	
 	String PARAMETER_NAME_IDENTIFIER = "identifier";
 	String PARAMETER_NAME_IDENTIFIERS = "identifiers";
+	
+	String PARAMETER_NAME_DEFAULT_VALUE = "default_value";
+	String PARAMETER_NAME_DEFAULT_VALUES = "default_values";
 }

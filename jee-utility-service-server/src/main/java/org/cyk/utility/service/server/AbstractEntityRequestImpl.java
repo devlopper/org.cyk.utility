@@ -41,25 +41,31 @@ public abstract class AbstractEntityRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTIT
 		return this;
 	}
 	
-	public AbstractEntityRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> filter(String string,FilterFormat format) {
-		if(StringHelper.isBlank(string))
-			return this;
-		if(format == null)
-			format = FilterFormat.PLAIN;
-		getQueryExecutorArguments(Boolean.TRUE).setFilter(null);
-		if(FilterFormat.PLAIN.equals(format))
-			getQueryExecutorArguments().addFilterFieldsValues(persistence.getParameterNameFilterAsString(),string);
-		else if(FilterFormat.JSON.equals(format))
-			getQueryExecutorArguments().setFilter(Filter.instantiateFromJson(string));
-		else
-			throw new RuntimeException(String.format("Filter string format %s not yet handled", format));
+	public AbstractEntityRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> filter(String string,FilterFormat format,Boolean defaultable) {
+		if(StringHelper.isNotBlank(string)) {
+			if(format == null)
+				format = FilterFormat.PLAIN;
+			getQueryExecutorArguments(Boolean.TRUE).setFilter(null);
+			if(FilterFormat.PLAIN.equals(format))
+				getQueryExecutorArguments().addFilterFieldsValues(persistence.getParameterNameFilterAsString(),string);
+			else if(FilterFormat.JSON.equals(format))
+				getQueryExecutorArguments().setFilter(Filter.instantiateFromJson(string));
+			else
+				throw new RuntimeException(String.format("Filter string format %s not yet handled", format));
+		}
+
+		if(defaultable != null) {
+			if(getQueryExecutorArguments(Boolean.TRUE).getFilter() == null)
+				getQueryExecutorArguments().setFilter(new Filter());
+			getQueryExecutorArguments().getFilter().addField(persistence.getParameterNameDefaultValue(), defaultable);
+		}
 		return this;
 	}
 	
 	public AbstractEntityRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> filter(String string) {
-		return filter(string, FilterFormat.PLAIN);
+		return filter(string, FilterFormat.PLAIN,null);
 	}
-	
+
 	public AbstractEntityRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> filterByIdentifier(String identifier) {
 		if(StringHelper.isNotBlank(identifier)) {
 			getQueryExecutorArguments(Boolean.TRUE).addFilterFieldsValues(persistence.getParameterNameIdentifier(),identifier);

@@ -9,7 +9,16 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
+	<h:outputText 
+		id="#{identifier}" 
+		value="#{column.headerOutputText.value}"
+		title="#{column.headerOutputText.title}"
+		styleClass="#{column.headerOutputText.styleClass}" 
+		style="#{column.headerOutputText.style}"/>
+	
+	<!--
 	<h:outputText value="#{column.headerText}" />
+	-->
 	<!--
 	<ui:decorate template="/command/commandbutton/default.xhtml">
  		<ui:param name="commandButton" value="#{column.removeCommandButton}"/>

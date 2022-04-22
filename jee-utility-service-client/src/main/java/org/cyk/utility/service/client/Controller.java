@@ -43,12 +43,16 @@ public interface Controller {
 		private Filter.Dto filter;
 		private String filterAsString;
 		private FilterFormat filterFormat;
+		private Boolean defaultable;
 		private List<String> projections;
 		private Boolean countable;
 		private Boolean pageable;
 		private Integer firstTupleIndex;
 		private Integer numberOfTuples;
 		private Boolean postable;
+		private Boolean identifierBlankable;
+		//private Boolean defaultIfIdentifierIsBlank;
+		//private Listener listener;
 		
 		public String buildFilterAsString() {
 			if(StringHelper.isBlank(filterAsString) && filter != null)
@@ -82,6 +86,16 @@ public interface Controller {
 				return this;
 			return projections(CollectionHelper.listOf(Boolean.TRUE,projections));
 		}
+		
+		public void listenIdentifierIsBlank() {
+			/*if(filter == null)
+				filter = new Filter.Dto();
+			filter.addField(SpecificPersistence.PARAMETER_NAME_DEFAULT_VALUE, Boolean.TRUE);*/
+			throw new RuntimeException("Listen identifier is blank must be implemented");
+		}
+		
+		/**/
+		
 	}
 
 	public static interface Service {

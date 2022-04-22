@@ -46,21 +46,21 @@ public abstract class AbstractSpecificServiceImpl<SERVICE_ENTITY,SERVICE_ENTITY_
 	}
 	
 	@Override
-	public Response get(String filter,FilterFormat filterFormat,List<String> projections,Boolean countable,Boolean pageable,Integer firstTupleIndex,Integer numberOfTuples) {
-		return execute(__get__(filter,filterFormat, mapProjections(projections), countable, pageable, firstTupleIndex, numberOfTuples));
+	public Response get(String filter,FilterFormat filterFormat,Boolean defaultable,List<String> projections,Boolean countable,Boolean pageable,Integer firstTupleIndex,Integer numberOfTuples) {
+		return execute(__get__(filter,filterFormat,defaultable, mapProjections(projections), countable, pageable, firstTupleIndex, numberOfTuples));
 	}
 	
 	@Override
-	public Response getUsingPost(String filter, FilterFormat filterFormat, List<String> projections, Boolean countable,Boolean pageable, Integer firstTupleIndex, Integer numberOfTuples) {
-		return execute(__get__(filter,filterFormat, mapProjections(projections), countable, pageable, firstTupleIndex, numberOfTuples));
+	public Response getUsingPost(String filter, FilterFormat filterFormat,Boolean defaultable, List<String> projections, Boolean countable,Boolean pageable, Integer firstTupleIndex, Integer numberOfTuples) {
+		return execute(__get__(filter,filterFormat,defaultable, mapProjections(projections), countable, pageable, firstTupleIndex, numberOfTuples));
 	}
 	
 	protected EntityReaderRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL> instantiateEntityReaderRequest() {
 		return new EntityReaderRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL>(serviceEntityImplClass);
 	}
 	
-	protected EntityReaderRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL> __get__(String filter,FilterFormat filterFormat,List<String> projections,Boolean countable,Boolean pageable,Integer firstTupleIndex,Integer numberOfTuples) {
-		EntityReaderRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL> request = instantiateEntityReaderRequest().projections(projections).filter(filter,filterFormat)
+	protected EntityReaderRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL> __get__(String filter,FilterFormat filterFormat,Boolean defaultable,List<String> projections,Boolean countable,Boolean pageable,Integer firstTupleIndex,Integer numberOfTuples) {
+		EntityReaderRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL> request = instantiateEntityReaderRequest().projections(projections).filter(filter,filterFormat,defaultable)
 				.count(ValueHelper.defaultToIfNull(countable, Boolean.TRUE)).page(pageable,firstTupleIndex, numberOfTuples);
 		if(Boolean.TRUE.equals(isResponseHeadersCORSEnabled))
 			request.enableResponseHeadersCORS();
@@ -81,17 +81,17 @@ public abstract class AbstractSpecificServiceImpl<SERVICE_ENTITY,SERVICE_ENTITY_
 		return execute(__getByIdentifier__(identifier, mapProjections(projections)));
 	}
 	
-	public EntityCounterRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL> __count__(String filter,FilterFormat filterFormat) {
+	public EntityCounterRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL> __count__(String filter,FilterFormat filterFormat,Boolean defaultable) {
 		EntityCounterRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL> request = new EntityCounterRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL>(serviceEntityImplClass)
-				.filter(filter,filterFormat);
+				.filter(filter,filterFormat,defaultable);
 		if(Boolean.TRUE.equals(isResponseHeadersCORSEnabled))
 			request.enableResponseHeadersCORS();
 		return request;
 	}
 	
 	@Override
-	public Response count(String filter,FilterFormat filterFormat) {
-		return execute(__count__(filter,filterFormat));
+	public Response count(String filter,FilterFormat filterFormat,Boolean defaultable) {
+		return execute(__count__(filter,filterFormat,defaultable));
 	}
 	
 	protected static void processTransactionResult(TransactionResult transactionResult,ResponseBuilder.Arguments responseBuilderArguments) {

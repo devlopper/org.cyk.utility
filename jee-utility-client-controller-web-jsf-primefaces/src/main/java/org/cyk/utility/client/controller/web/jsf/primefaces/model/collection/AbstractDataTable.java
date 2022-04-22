@@ -28,7 +28,9 @@ import org.cyk.utility.__kernel__.user.interface_.UserInterfaceAction;
 import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.client.controller.web.jsf.primefaces.PrimefacesHelper;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractAction;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.Event;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.RemoteCommand;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.ContextMenu;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.MenuButton;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.MenuItem;
@@ -48,10 +50,17 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 	protected Collection<Column> columnsAfterRowIndex,selectedColumnsAfterRowIndex;
 	protected Boolean stickyHeader,areColumnsChoosable,isRowAddable,isColumnAddable,isLastColumnRemovable;
 	protected CommandButton addRowCommandButton,removeRowCommandButton,addColumnCommandButton,removeLastColumnCommandButton;
-	protected String stickyTopAt,columnFieldNameFormat,rowTooltipStyleClass;
+	protected String stickyTopAt,columnFieldNameFormat,rowTooltipStyleClass,headerStyleClassAsIdentifier,footerStyleClassAsIdentifier;
 	protected Grid dataGrid;
 	protected RowToggler rowToggler;
 	/**/
+	
+	public RemoteCommand instantiateRemoteCommandWithFooterUpdate(String name,AbstractAction.Listener listener,Collection<org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractObject> updatableComponents) {
+		RemoteCommand remoteCommand = instantiateRemoteCommand(name,listener, updatableComponents, List.of(footerStyleClassAsIdentifier));
+		getAjaxes().get("page").addEventScipts(Event.COMPLETE, remoteCommand.getName()+"()");
+		getAjaxes().get("filter").addEventScipts(Event.COMPLETE, remoteCommand.getName()+"()");
+		return remoteCommand;
+	}
 	
 	public AbstractDataTable enableCommandButtonAddRow() {
 		enableCommandButtonAddRow(null);
@@ -382,6 +391,12 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 				}
 			}
 			
+			if(StringHelper.isBlank(dataTable.headerStyleClassAsIdentifier))
+				dataTable.headerStyleClassAsIdentifier = dataTable.identifier+"_header";
+			
+			if(StringHelper.isBlank(dataTable.footerStyleClassAsIdentifier))
+				dataTable.footerStyleClassAsIdentifier = dataTable.identifier+"_footer";
+			
 			if(dataTable.getDataGrid() == null) {				
 				Collection<String> columnsFieldsNames = (Collection<String>) MapHelper.readByKey(arguments, FIELD_COLUMNS_FIELDS_NAMES);
 				if(columnsFieldsNames == null && Boolean.TRUE.equals(MapHelper.readByKey(arguments, FIELD_COLUMNS_FIELDS_NAMES_COMPUTABLE))) {
@@ -424,7 +439,8 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 			}
 			
 			if(StringHelper.isBlank(dataTable.rowTooltipStyleClass))
-				dataTable.rowTooltipStyleClass = dataTable.identifier+"_row_tooltip";			
+				dataTable.rowTooltipStyleClass = dataTable.identifier+"_row_tooltip";
+			
 			dataTable.addStyleClasses(dataTable.rowTooltipStyleClass);
 			
 			if(StringHelper.isBlank(dataTable.selectionMode) && dataTable.selectionAsCollection != null) {			
@@ -578,6 +594,7 @@ public abstract class AbstractDataTable extends AbstractCollection implements Se
 				}else if(AbstractDataIdentifiableSystemStringAuditedImpl.FIELD___AUDIT_WHO__.equals(fieldName)) {
 					map.put(Column.FIELD_HEADER_TEXT, "Opérateur");		
 				}
+				map.put(Column.ConfiguratorImpl.FIELD_FOOTER_STYLE_CLASS, dataTable.getFooterStyleClassAsIdentifier());
 				return map;
 			}
 			

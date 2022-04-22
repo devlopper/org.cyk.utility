@@ -37,10 +37,10 @@ public class EntityCounterRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> extends
 	}
 	
 	@Override
-	public EntityCounterRequestImpl<SERVICE_ENTITY, PERSISTENCE_ENTITY> filter(String string, FilterFormat format) {
-		return (EntityCounterRequestImpl<SERVICE_ENTITY, PERSISTENCE_ENTITY>) super.filter(string, format);
+	public EntityCounterRequestImpl<SERVICE_ENTITY, PERSISTENCE_ENTITY> filter(String string, FilterFormat format,Boolean defaultable) {
+		return (EntityCounterRequestImpl<SERVICE_ENTITY, PERSISTENCE_ENTITY>) super.filter(string, format,defaultable);
 	}
-	
+
 	protected Long countPersistenceEntities() {
 		return EntityCounter.getInstance().count(persistenceEntityClass,queryExecutorArguments);
 	}

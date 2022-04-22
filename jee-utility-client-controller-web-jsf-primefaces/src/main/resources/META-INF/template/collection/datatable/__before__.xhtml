@@ -11,8 +11,13 @@
 	
 	<ui:insert name="beforeDataTable">
 		<ui:insert name="beforeDataTable_footersUpdator">
+			<p:remoteCommand name="update_#{dataTable.identifier}_footers" update="@(.#{dataTable.footerStyleClassAsIdentifier})" global="false" value="update datatable footers" 
+				partialSubmit="true" process="@none" immediate="true" />
+			
+			<!--	
 			<p:remoteCommand name="update_#{dataTable.identifier}_footers" update=":form:#{dataTable.identifier}" global="false" value="update datatable footers" 
 				partialSubmit="true" process="@none" immediate="true" />
+			-->	
 		</ui:insert>
 		
 		<ui:insert name="beforeDataTable_title">

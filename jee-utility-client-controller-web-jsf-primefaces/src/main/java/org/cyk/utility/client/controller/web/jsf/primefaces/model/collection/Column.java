@@ -35,7 +35,7 @@ public class Column extends AbstractObject implements Serializable {
 	private Boolean visible = Boolean.TRUE,inputable,sortable;
 	private Object filterValue;
 	private Integer index;
-	private OutputText footerOutputText;
+	private OutputText headerOutputText,footerOutputText;
 	private CellEditor cellEditor;
 	private CommandButton removeCommandButton;
 	
@@ -49,6 +49,7 @@ public class Column extends AbstractObject implements Serializable {
 	public static final String FIELD_FILTER_INPUT_TYPE = "filterInputType";
 	public static final String FIELD_INDEX = "index";
 	public static final String FIELD_HEADER_TEXT = "headerText";
+	public static final String FIELD_HEADER_OUTPUT_TEXT = "headerOutputText";
 	public static final String FIELD_FOOTER_TEXT = "footerText";
 	public static final String FIELD_FOOTER_OUTPUT_TEXT = "footerOutputText";
 	public static final String FIELD_FOOTER_STYLE = "footerStyle";
@@ -114,11 +115,14 @@ public class Column extends AbstractObject implements Serializable {
 			super.configure(column, arguments);			
 			if(column.field == null) {		
 				column.field = column.fieldName;
-			}			
+			}
 			if(column.headerText == null) {				
 				if(StringHelper.isNotBlank(column.fieldName)) {
 					column.headerText = InternationalizationHelper.buildString(InternationalizationHelper.buildKey(column.fieldName),null,null,Case.FIRST_CHARACTER_UPPER);	
 				}				
+			}
+			if(column.headerOutputText == null && StringHelper.isNotBlank(column.headerText)) {
+				column.headerOutputText = OutputText.buildFromValue(column.headerText);
 			}
 			if(column.sortable == null)
 				column.sortable = StringHelper.isNotBlank(column.sortBy);
@@ -150,6 +154,12 @@ public class Column extends AbstractObject implements Serializable {
 					column.footerOutputText = OutputText.build();
 			}
 			
+			if(column.footerOutputText != null) {
+				String footerStyleClass = (String) MapHelper.readByKey(arguments, FIELD_FOOTER_STYLE_CLASS);
+				if(StringHelper.isNotBlank(footerStyleClass))
+					column.footerOutputText.addStyleClasses(footerStyleClass);
+			}
+
 			if(column.filterInputType == null && column.filterInputSelectItems != null)
 				column.filterInputType = FilterInputType.SELECT_ONE_MENU;
 		}
@@ -168,6 +178,7 @@ public class Column extends AbstractObject implements Serializable {
 		public static final String FIELD_EDITABLE = "editable";
 		public static final String FIELD_SHOW_FOOTER = "showFooter";
 		public static final String FIELD_FOOTER_OUTPUT_TEXT_VALUE = "footerOutputTextValue";
+		public static final String FIELD_FOOTER_STYLE_CLASS = "footerStyleClass";
 	}
 	
 	public static interface FooterValueBuilder {

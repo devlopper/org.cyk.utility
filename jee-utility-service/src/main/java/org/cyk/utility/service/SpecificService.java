@@ -35,6 +35,9 @@ public interface SpecificService<ENTITY> extends Service {
 			,@Parameter(name = PARAMETER_NAME_FILTER_FORMAT,description = PARAMETER_NAME_FILTER_FORMAT_DESCRIPTION_FRENCH)
 			@QueryParam(PARAMETER_NAME_FILTER_FORMAT) FilterFormat filterFormat
 			
+			,@Parameter(name = PARAMETER_NAME_DEFAULTABLE,description = PARAMETER_NAME_DEFAULTABLE_DESCRIPTION_FRENCH)
+			@QueryParam(PARAMETER_NAME_DEFAULTABLE) Boolean defaultable
+			
 			,@Parameter(name = PARAMETER_NAME_PROJECTIONS,description = PARAMETER_NAME_PROJECTIONS_DESCRIPTION_FRENCH)
 			@QueryParam(PARAMETER_NAME_PROJECTIONS) List<String> projections
 			
@@ -52,7 +55,7 @@ public interface SpecificService<ENTITY> extends Service {
 			);
 	
 	@POST
-	@Path("doing-get")
+	@Path("get")
 	@Produces({MediaType.APPLICATION_JSON})
 	@Operation(description = "Obtenir une liste")
 	@APIResponses(value = {
@@ -65,6 +68,9 @@ public interface SpecificService<ENTITY> extends Service {
 			
 			,@Parameter(name = PARAMETER_NAME_FILTER_FORMAT,description = PARAMETER_NAME_FILTER_FORMAT_DESCRIPTION_FRENCH)
 			@FormParam(PARAMETER_NAME_FILTER_FORMAT) FilterFormat filterFormat
+			
+			,@Parameter(name = PARAMETER_NAME_DEFAULTABLE,description = PARAMETER_NAME_DEFAULTABLE_DESCRIPTION_FRENCH)
+			@QueryParam(PARAMETER_NAME_DEFAULTABLE) Boolean defaultable
 			
 			,@Parameter(name = PARAMETER_NAME_PROJECTIONS,description = PARAMETER_NAME_PROJECTIONS_DESCRIPTION_FRENCH)
 			@FormParam(PARAMETER_NAME_PROJECTIONS) List<String> projections
@@ -96,7 +102,7 @@ public interface SpecificService<ENTITY> extends Service {
 			, @Parameter(name = PARAMETER_NAME_PROJECTIONS,description = PARAMETER_NAME_PROJECTIONS_DESCRIPTION_FRENCH)
 			@QueryParam(PARAMETER_NAME_PROJECTIONS) List<String> projections
 			);
-	
+
 	@GET
 	@Path("nombre")
 	@Produces({MediaType.TEXT_PLAIN})
@@ -111,5 +117,8 @@ public interface SpecificService<ENTITY> extends Service {
 			
 			,@Parameter(name = PARAMETER_NAME_FILTER_FORMAT,description = PARAMETER_NAME_FILTER_FORMAT_DESCRIPTION_FRENCH)
 			@QueryParam(PARAMETER_NAME_FILTER_FORMAT) FilterFormat filterFormat
+			
+			,@Parameter(name = PARAMETER_NAME_DEFAULTABLE,description = PARAMETER_NAME_DEFAULTABLE_DESCRIPTION_FRENCH)
+			@QueryParam(PARAMETER_NAME_DEFAULTABLE) Boolean defaultable
 			);
 }
