@@ -23,6 +23,10 @@ public interface SpecificPersistence<ENTITY> {
 	ENTITY readDefault(Collection<String> projections);
 	ENTITY readDefault();
 	
+	Collection<ENTITY> readDefaults(QueryExecutorArguments arguments);
+	Collection<ENTITY> readDefaults(Collection<String> projections);
+	Collection<ENTITY> readDefaults();
+	
 	String getQueryIdentifierCountDynamic();
 	Long count(QueryExecutorArguments arguments);
 	Long count(String filterAsString);

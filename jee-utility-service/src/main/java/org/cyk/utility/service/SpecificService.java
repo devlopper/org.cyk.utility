@@ -102,7 +102,7 @@ public interface SpecificService<ENTITY> extends Service {
 			, @Parameter(name = PARAMETER_NAME_PROJECTIONS,description = PARAMETER_NAME_PROJECTIONS_DESCRIPTION_FRENCH)
 			@QueryParam(PARAMETER_NAME_PROJECTIONS) List<String> projections
 			);
-
+	
 	@GET
 	@Path("nombre")
 	@Produces({MediaType.TEXT_PLAIN})

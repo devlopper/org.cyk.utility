@@ -13,9 +13,18 @@ public interface SpecificController<T> extends Controller {
 	Collection<T> getByParentIdentifier(String name,String value,Boolean pageable);
 	Collection<T> getByParentIdentifier(String name,String value);
 	
+	Collection<T> getDefaults(GetArguments arguments);
+	Collection<T> getDefaults();
+	
 	T getOne(GetArguments arguments);
 	T getByIdentifier(String identifier,GetArguments arguments);
 	T getByIdentifier(String identifier);
+	
+	T getDefault(GetArguments arguments);
+	T getDefault();
+	
+	T getByIdentifierOrDefaultIfIdentifierIsBlank(String identifier,GetArguments arguments);
+	T getByIdentifierOrDefaultIfIdentifierIsBlank(String identifier);
 	
 	public static abstract class AbstractImpl<T> extends Controller.AbstractImpl implements SpecificController<T>,Serializable {
 	
@@ -48,6 +57,16 @@ public interface SpecificController<T> extends Controller {
 		}
 		
 		@Override
+		public T getDefault(GetArguments arguments) {
+			return genericController.getDefault(getEntityClass(), arguments);
+		}
+		
+		@Override
+		public T getDefault() {
+			return genericController.getDefault(getEntityClass());
+		}
+		
+		@Override
 		public Collection<T> getByParentIdentifier(String name,String value) {
 			return genericController.getByParentIdentifier(getEntityClass(), name, value);
 		}
@@ -61,7 +80,27 @@ public interface SpecificController<T> extends Controller {
 		public Collection<T> getByParentIdentifier(String name, String value, Boolean pageable) {
 			return genericController.getByParentIdentifier(getEntityClass(),name, value, pageable);
 		}
+		
+		@Override
+		public Collection<T> getDefaults(GetArguments arguments) {
+			return genericController.getDefaults(getEntityClass(), arguments);
+		}
+		
+		@Override
+		public Collection<T> getDefaults() {
+			return genericController.getDefaults(getEntityClass());
+		}
 	
+		@Override
+		public T getByIdentifierOrDefaultIfIdentifierIsBlank(String identifier, GetArguments arguments) {
+			return genericController.getByIdentifierOrDefaultIfIdentifierIsBlank(getEntityClass(), identifier, arguments);
+		}
+		
+		@Override
+		public T getByIdentifierOrDefaultIfIdentifierIsBlank(String identifier) {
+			return genericController.getByIdentifierOrDefaultIfIdentifierIsBlank(getEntityClass(), identifier);
+		}
+		
 		protected abstract Class<T> getEntityClass();
 	}
 }

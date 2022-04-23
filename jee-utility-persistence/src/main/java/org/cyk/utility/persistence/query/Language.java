@@ -62,6 +62,12 @@ public interface Language {
 		return String.format(SUM, string);
 	}
 	
+	static String formatOperatorIn(Boolean isIn) {
+		if(isIn == null)
+			return null;
+		return isIn ? ArithmeticOperator.IN.getSymbol() : ArithmeticOperator.NOT_IN.getSymbol();
+	}
+	
 	static String formatOperatorEqual(Boolean isEqual) {
 		if(isEqual == null)
 			return null;

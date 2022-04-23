@@ -78,8 +78,8 @@ public class EntityReaderRequestImpl<SERVICE_ENTITY,PERSISTENCE_ENTITY> extends 
 	
 	@Override
 	public EntityReaderRequestImpl<SERVICE_ENTITY, PERSISTENCE_ENTITY> filter(String string, FilterFormat format,Boolean defaultable) {
-		if(Boolean.TRUE.equals(defaultable))
-			collect(Boolean.FALSE);//Get it from filter
+		//if(Boolean.TRUE.equals(defaultable))
+		//	collect(Boolean.FALSE);//Get it from filter
 		return (EntityReaderRequestImpl<SERVICE_ENTITY, PERSISTENCE_ENTITY>) super.filter(string, format,defaultable);
 	}
 	

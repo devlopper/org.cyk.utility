@@ -117,6 +117,25 @@ public abstract class AbstractSpecificPersistenceImpl<ENTITY> implements Specifi
 	}
 	
 	@Override
+	public Collection<ENTITY> readDefaults(QueryExecutorArguments arguments) {
+		if(arguments == null)
+			arguments = new QueryExecutorArguments();
+		if(arguments.getFilterField(getParameterNameDefaultValue()) == null)
+			arguments.addFilterFieldsValues(getParameterNameDefaultValue(),Boolean.TRUE);
+		return readMany(arguments);
+	}
+	
+	@Override
+	public Collection<ENTITY> readDefaults(Collection<String> projections) {
+		return readDefaults(new QueryExecutorArguments().addProjectionsFromStrings(projections));
+	}
+	
+	@Override
+	public Collection<ENTITY> readDefaults() {
+		return readDefaults(new QueryExecutorArguments());
+	}
+	
+	@Override
 	public Long count(QueryExecutorArguments arguments) {
 		if(arguments.getQuery() == null)
 			arguments.setQuery(new Query().setIdentifier(queryIdentifierCountDynamic));

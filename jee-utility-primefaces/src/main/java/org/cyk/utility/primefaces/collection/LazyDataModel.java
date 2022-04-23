@@ -73,7 +73,7 @@ public abstract class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDat
 		String filterAsJson = filter == null ? null : JsonbBuilder.create().toJson(filter);
 		List<String> projections = getProjections(filters, sortOrders, firstTupleIndex, numberOfTuples);
 		if(service instanceof SpecificService)
-			return ((SpecificService<ENTITY>)service).get(filterAsJson,FilterFormat.JSON, projections, Boolean.TRUE, Boolean.TRUE, firstTupleIndex, numberOfTuples);
+			return ((SpecificService<ENTITY>)service).get(filterAsJson,FilterFormat.JSON,null, projections, Boolean.TRUE, Boolean.TRUE, firstTupleIndex, numberOfTuples);
 		throw new RuntimeException(String.format("Service of type %s not yet handled", service.getClass()));
 	}
 	

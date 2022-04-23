@@ -2,7 +2,6 @@ package org.cyk.utility.service.client;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.List;
 
 import javax.ws.rs.core.Response;
 
@@ -20,12 +19,18 @@ public interface GenericController extends Controller {
 	<T> Collection<T> getByParentIdentifier(Class<T> klass,String name,String value,Boolean pageable);
 	<T> Collection<T> getByParentIdentifier(Class<T> klass,String name,String value);
 	
+	<T> Collection<T> getDefaults(Class<T> klass,GetArguments arguments);
+	<T> Collection<T> getDefaults(Class<T> klass);
+	
 	<T> T getOne(Class<T> klass,GetArguments arguments);
 	<T> T getByIdentifier(Class<T> klass,String identifier,GetArguments arguments);
 	<T> T getByIdentifier(Class<T> klass,String identifier);
 	
 	<T> T getDefault(Class<T> klass,GetArguments arguments);
 	<T> T getDefault(Class<T> klass);
+	
+	<T> T getByIdentifierOrDefaultIfIdentifierIsBlank(Class<T> klass,String identifier,GetArguments arguments);
+	<T> T getByIdentifierOrDefaultIfIdentifierIsBlank(Class<T> klass,String identifier);
 	
 	public static abstract class AbstractImpl extends Controller.AbstractImpl implements GenericController,Serializable{
 		
@@ -87,6 +92,19 @@ public interface GenericController extends Controller {
 		}
 		
 		@Override
+		public <T> Collection<T> getDefaults(Class<T> klass, GetArguments arguments) {
+			if(klass == null)
+				throw new RuntimeException("Class is required");
+			return ResponseHelper.getEntityAsListFromJson(klass, specificServiceGetter.get(klass).get(null, null, Boolean.TRUE, arguments == null ? null : arguments.getProjections(), arguments == null ? null : arguments.getCountable()
+					, arguments == null ? null : arguments.getPageable(), arguments == null ? null : arguments.getFirstTupleIndex(), arguments == null ? null : arguments.getNumberOfTuples()));
+		}
+		
+		@Override
+		public <T> Collection<T> getDefaults(Class<T> klass) {
+			return getDefaults(klass, null);
+		}
+		
+		@Override
 		public <T> T getOne(Class<T> klass, GetArguments arguments) {
 			if(klass == null)
 				throw new RuntimeException("Class is required");
@@ -108,10 +126,7 @@ public interface GenericController extends Controller {
 		
 		@Override
 		public <T> T getDefault(Class<T> klass, GetArguments arguments) {
-			if(klass == null)
-				throw new RuntimeException("Class is required");
-			List<T> list = ResponseHelper.getEntityAsListFromJson(klass, specificServiceGetter.get(klass).get(null, null, Boolean.TRUE, arguments == null ? null : arguments.getProjections(), Boolean.FALSE, Boolean.TRUE, 0, 1));
-			return CollectionHelper.getFirst(list);
+			return CollectionHelper.getFirst(getDefaults(klass, arguments));
 		}
 		
 		@Override
@@ -122,6 +137,18 @@ public interface GenericController extends Controller {
 		@Override
 		public <T> T getByIdentifier(Class<T> klass, String identifier) {
 			return getByIdentifier(klass, identifier, null);
+		}
+		
+		@Override
+		public <T> T getByIdentifierOrDefaultIfIdentifierIsBlank(Class<T> klass, String identifier, GetArguments arguments) {
+			if(StringHelper.isBlank(identifier))
+				return getDefault(klass, arguments);
+			return getByIdentifier(klass, identifier, arguments);
+		}
+		
+		@Override
+		public <T> T getByIdentifierOrDefaultIfIdentifierIsBlank(Class<T> klass, String identifier) {
+			return getByIdentifierOrDefaultIfIdentifierIsBlank(klass, identifier, null);
 		}
 	}
 }
