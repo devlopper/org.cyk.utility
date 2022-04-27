@@ -3,7 +3,9 @@ package org.cyk.utility.service.client;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.json.bind.JsonbBuilder;
@@ -13,7 +15,9 @@ import javax.ws.rs.core.Response;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
+import org.cyk.utility.__kernel__.session.SessionHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
+import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.persistence.query.Filter;
 import org.cyk.utility.rest.ResponseHelper;
 import org.cyk.utility.service.FilterFormat;
@@ -96,6 +100,51 @@ public interface Controller {
 		
 		/**/
 		
+		public static GetArguments process(Class<?> klass,GetArguments arguments) {
+			if(klass == null)
+				return arguments;
+			if(Boolean.TRUE.equals(isProcessableByUser(arguments, klass)))
+				arguments = addFilterField(arguments,PARAMETER_NAME_USER_NAME, PARAMETER_VALUE_USER_NAME == null ? SessionHelper.getUserName() : PARAMETER_VALUE_USER_NAME);
+			return arguments;
+		}
+		
+		public static GetArguments addFilterField(GetArguments arguments,String path,Object value) {
+			if(StringHelper.isBlank(path) || ValueHelper.isBlank(value))
+				return null;
+			if(arguments == null)
+				arguments = new GetArguments();
+			if(arguments.getFilter() == null)
+				arguments.setFilter(new Filter.Dto());
+			arguments.getFilter().addField(path, value);
+			return arguments;
+		}
+		
+		protected static Boolean isProcessableByUser(GetArguments arguments,Class<?> klass) {
+			if(LISTENER == null)
+				return PROCESSABLE_BY_USER.contains(klass);
+			return LISTENER.isProcessableByUser(arguments, klass);
+		}
+		
+		/**/
+		
+		public static String PARAMETER_NAME_USER_NAME = "username";
+		public static String PARAMETER_VALUE_USER_NAME;
+		public static final Set<Class<?>> PROCESSABLE_BY_USER = new HashSet<>();
+		
+		/**/
+		
+		public static interface Listener {
+			Boolean isProcessableByUser(GetArguments arguments,Class<?> klass);
+			
+			public abstract class AbstractImpl implements Listener {
+				@Override
+				public Boolean isProcessableByUser(GetArguments arguments, Class<?> klass) {
+					return PROCESSABLE_BY_USER.contains(klass);
+				}
+			}
+		}
+		
+		public static Listener LISTENER;
 	}
 
 	public static interface Service {

@@ -44,7 +44,8 @@ public interface SpecificPersistence<ENTITY> {
 	String getParameterNameIdentifiers();
 	
 	String getParameterNameDefaultValue();
-	String getParameterNameDefaultValues();
+	
+	String getParameterNameUsername();
 	
 	/**/
 	
@@ -54,5 +55,6 @@ public interface SpecificPersistence<ENTITY> {
 	String PARAMETER_NAME_IDENTIFIERS = "identifiers";
 	
 	String PARAMETER_NAME_DEFAULT_VALUE = "default_value";
-	String PARAMETER_NAME_DEFAULT_VALUES = "default_values";
+	
+	String PARAMETER_NAME_USERNAME = "username";
 }

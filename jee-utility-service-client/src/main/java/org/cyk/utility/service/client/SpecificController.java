@@ -28,8 +28,7 @@ public interface SpecificController<T> extends Controller {
 	
 	public static abstract class AbstractImpl<T> extends Controller.AbstractImpl implements SpecificController<T>,Serializable {
 	
-		@Inject
-		protected GenericController genericController;
+		@Inject protected GenericController genericController;
 		
 		@Override
 		public Collection<T> get(GetArguments arguments) {

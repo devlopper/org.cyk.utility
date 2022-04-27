@@ -99,6 +99,13 @@ public interface SpecificService<ENTITY> extends Service {
 	Response getByIdentifier(
 			@Parameter(name = PARAMETER_NAME_IDENTIFIER,description = PARAMETER_NAME_IDENTIFIER_DESCRIPTION_FRENCH)
 			@PathParam(PARAMETER_NAME_IDENTIFIER) String identifier
+			
+			,@Parameter(name = PARAMETER_NAME_FILTER,description = PARAMETER_NAME_FILTER_DESCRIPTION_FRENCH)
+			@QueryParam(PARAMETER_NAME_FILTER) String filter
+			
+			,@Parameter(name = PARAMETER_NAME_FILTER_FORMAT,description = PARAMETER_NAME_FILTER_FORMAT_DESCRIPTION_FRENCH)
+			@QueryParam(PARAMETER_NAME_FILTER_FORMAT) FilterFormat filterFormat
+			
 			, @Parameter(name = PARAMETER_NAME_PROJECTIONS,description = PARAMETER_NAME_PROJECTIONS_DESCRIPTION_FRENCH)
 			@QueryParam(PARAMETER_NAME_PROJECTIONS) List<String> projections
 			);

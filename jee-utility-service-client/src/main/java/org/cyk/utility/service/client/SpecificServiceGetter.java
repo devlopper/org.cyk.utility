@@ -8,9 +8,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
-import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.service.SpecificService;
-import org.eclipse.microprofile.config.ConfigProvider;
 import org.eclipse.microprofile.rest.client.RestClientBuilder;
 
 public interface SpecificServiceGetter {
@@ -34,7 +32,7 @@ public interface SpecificServiceGetter {
 					throw new RuntimeException(String.format("Service interface not found for %s",klass));
 				MAP.put(klass, serviceInterface);
 			}
-			URI uri = getUniformResourceIdentifier();
+			URI uri = ServiceGetter.AbstractImpl.getUniformResourceIdentifier();
 			return buildClient(uri, serviceInterface,getClientBuilder(uri, serviceInterface));
 			//return (SpecificService<?>) RestClientBuilder.newBuilder().baseUri(getUniformResourceIdentifier()).build(serviceInterface);
 		}
@@ -47,34 +45,6 @@ public interface SpecificServiceGetter {
 		protected SpecificService<?> buildClient(URI uniformResourceIdentifier,Class<?> klass,RestClientBuilder builder) {
 			return (SpecificService<?>) builder.build(klass);
 		}
-		
-		protected String getSystemIdentifier() {
-			return ConfigProvider.getConfig().getOptionalValue(SYSTEM_IDENTIFIER_PROPERTY, String.class).orElseThrow();
-		}
-		
-		protected String getUniformResourceIdentifierAsString(String systemIdentifier) {
-			if(StringHelper.isBlank(systemIdentifier))
-				throw new RuntimeException("System identifier is required");
-			String value = ConfigProvider.getConfig().getOptionalValue(String.format(SYSTEM_UNIFORM_RESOURCE_IDENTIFIER_PROPERTY_FORMAT, systemIdentifier), String.class)
-					.orElseThrow();
-			if(StringHelper.isBlank(value))
-				throw new RuntimeException("Uniform resource identifier is required");
-			return value;
-		}
-		
-		protected URI getUniformResourceIdentifier(String systemIdentifier) {
-			String string = getUniformResourceIdentifierAsString(systemIdentifier);
-			if(StringHelper.isBlank(string))
-				throw new RuntimeException("Uniform resource identifier is required");
-			return URI.create(string);
-		}
-		
-		protected URI getUniformResourceIdentifier() {
-			return getUniformResourceIdentifier(getSystemIdentifier());
-		}
-		
-		private static final String SYSTEM_UNIFORM_RESOURCE_IDENTIFIER_PROPERTY_FORMAT = "%s.server.client.rest.uri";
-		private static final String SYSTEM_IDENTIFIER_PROPERTY = "system.identifier";
 		
 		private static final Map<Class<?>,Class<?>> MAP = new HashMap<>();
 	}

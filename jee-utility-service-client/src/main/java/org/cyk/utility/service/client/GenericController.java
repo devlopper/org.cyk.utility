@@ -39,6 +39,7 @@ public interface GenericController extends Controller {
 			if(klass == null)
 				throw new RuntimeException("Class is required");
 			SpecificService<?> service = specificServiceGetter.get(klass);
+			arguments = GetArguments.process(klass,arguments);
 			Response response;
 			Boolean postable = arguments != null && Boolean.TRUE.equals(arguments.getPostable());
 			if(Boolean.TRUE.equals(postable))
@@ -95,8 +96,10 @@ public interface GenericController extends Controller {
 		public <T> Collection<T> getDefaults(Class<T> klass, GetArguments arguments) {
 			if(klass == null)
 				throw new RuntimeException("Class is required");
-			return ResponseHelper.getEntityAsListFromJson(klass, specificServiceGetter.get(klass).get(null, null, Boolean.TRUE, arguments == null ? null : arguments.getProjections(), arguments == null ? null : arguments.getCountable()
-					, arguments == null ? null : arguments.getPageable(), arguments == null ? null : arguments.getFirstTupleIndex(), arguments == null ? null : arguments.getNumberOfTuples()));
+			if(arguments == null)
+				arguments = new GetArguments();
+			arguments.setDefaultable(Boolean.TRUE);
+			return get(klass, arguments);
 		}
 		
 		@Override
@@ -115,8 +118,10 @@ public interface GenericController extends Controller {
 		public <T> T getByIdentifier(Class<T> klass, String identifier, GetArguments arguments) {
 			if(klass == null)
 				throw new RuntimeException("Class is required");
+			arguments = GetArguments.process(klass,arguments);
 			if(StringHelper.isNotBlank(identifier))
-				return ResponseHelper.getEntityFromJson(klass,specificServiceGetter.get(klass).getByIdentifier(identifier , arguments == null ? null : arguments.getProjections()));
+				return ResponseHelper.getEntityFromJson(klass,specificServiceGetter.get(klass).getByIdentifier(identifier , arguments == null ? null : arguments.buildFilterAsString(), arguments == null ? null : arguments.buildFilterFormat()
+						, arguments == null ? null : arguments.getProjections()));
 			if(arguments != null && Boolean.TRUE.equals(arguments.getIdentifierBlankable())) {
 				arguments.listenIdentifierIsBlank();
 				return getOne(klass, arguments);

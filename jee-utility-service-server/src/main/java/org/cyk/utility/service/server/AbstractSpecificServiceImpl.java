@@ -67,9 +67,9 @@ public abstract class AbstractSpecificServiceImpl<SERVICE_ENTITY,SERVICE_ENTITY_
 		return request;
 	}
 	
-	protected EntityReaderRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL> __getByIdentifier__(String identifier,List<String> projections) {
+	protected EntityReaderRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL> __getByIdentifier__(String identifier,String filter, FilterFormat filterFormat,List<String> projections) {
 		EntityReaderRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL> request = new EntityReaderRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL>(serviceEntityImplClass)
-				.filterByIdentifier(identifier).projections(projections);
+				.filter(filter, filterFormat, null).filterByIdentifier(identifier).projections(projections);
 		request.getResponseBuilderArguments().setIsThrowNotFoundIfBlank(Boolean.TRUE);
 		if(Boolean.TRUE.equals(isResponseHeadersCORSEnabled))
 			request.enableResponseHeadersCORS();
@@ -77,8 +77,8 @@ public abstract class AbstractSpecificServiceImpl<SERVICE_ENTITY,SERVICE_ENTITY_
 	}
 	
 	@Override
-	public Response getByIdentifier(String identifier,List<String> projections) {
-		return execute(__getByIdentifier__(identifier, mapProjections(projections)));
+	public Response getByIdentifier(String identifier,String filter, FilterFormat filterFormat,List<String> projections) {
+		return execute(__getByIdentifier__(identifier,filter,filterFormat, mapProjections(projections)));
 	}
 	
 	public EntityCounterRequestImpl<SERVICE_ENTITY_IMPL,PERSISTENCE_ENTITY_IMPL> __count__(String filter,FilterFormat filterFormat,Boolean defaultable) {
