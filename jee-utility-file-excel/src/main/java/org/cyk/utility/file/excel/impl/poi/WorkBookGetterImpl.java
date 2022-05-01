@@ -1,0 +1,25 @@
+package org.cyk.utility.file.excel.impl.poi;
+
+import java.io.InputStream;
+import java.io.Serializable;
+
+import javax.enterprise.context.Dependent;
+
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.cyk.utility.file.excel.AbstractWorkBookGetterImpl;
+import org.cyk.utility.file.excel.WorkBook;
+
+@Dependent
+public class WorkBookGetterImpl extends AbstractWorkBookGetterImpl implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@Override
+	protected WorkBook __get__(InputStream inputStream) {
+		try {
+			return new WorkBook((WorkbookFactory.create(inputStream)));
+		} catch (Exception exception) {
+			throw new RuntimeException(exception);
+		}
+	}
+
+}
