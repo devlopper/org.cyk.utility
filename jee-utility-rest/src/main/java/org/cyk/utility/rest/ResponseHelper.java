@@ -10,6 +10,9 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Response.Status.Family;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.cyk.utility.__kernel__.array.ArrayHelper;
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
@@ -139,6 +142,24 @@ public interface ResponseHelper {
 	
 	static Collection<String> getHeaderEntitiesBusinessIdentifiers(Response response) {
 		return getHeaderAndDisjoin(response, HEADER_ENTITY_IDENTIFIER_BUSINESS);
+	}
+	
+	static Boolean hasHeaderAny(Response response,Collection<String> names) {
+		if(response == null || CollectionHelper.isEmpty(names))
+			return Boolean.FALSE;
+		return CollectionUtils.containsAny(response.getHeaders().keySet(),names);
+	}
+	
+	static Boolean hasHeaderAny(Response response,String...names) {
+		if(response == null || ArrayHelper.isEmpty(names))
+			return Boolean.FALSE;
+		return hasHeaderAny(response, CollectionHelper.listOf(Boolean.TRUE, names));
+	}
+	
+	public static String concatenate(Collection<String> strings) {
+		if(CollectionHelper.isEmpty(strings))
+			return null;
+		return StringHelper.concatenate(strings, "<br/>");
 	}
 	
 	/**/

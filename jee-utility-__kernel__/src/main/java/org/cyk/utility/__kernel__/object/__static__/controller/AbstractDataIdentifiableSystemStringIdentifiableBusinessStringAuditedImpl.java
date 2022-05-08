@@ -22,12 +22,18 @@ public abstract class AbstractDataIdentifiableSystemStringIdentifiableBusinessSt
 	protected String code;
 	
 	// Audit
-	protected String __auditWho__;	
+	protected String __auditIdentifier__;
+	protected String __auditWho__;
 	protected String __auditWhat__;	
 	protected String __auditFunctionality__;
 	protected LocalDateTime __auditWhen__;
 	protected Long __auditWhenAsTimestamp__;
 	protected String __auditWhenAsString__;
+	
+	public AuditableWhoDoneWhatWhen set__auditIdentifier__(String identifier) {
+		this.__auditIdentifier__ = identifier;
+		return this;
+	}
 	
 	public AuditableWhoDoneWhatWhen set__auditWhenAsString__(String whenAsString) {
 		this.__auditWhenAsString__ = whenAsString;

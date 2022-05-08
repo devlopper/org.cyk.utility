@@ -22,6 +22,7 @@ public abstract class AbstractIdentifiableSystemScalarStringIdentifiableBusiness
 	extends AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl implements AuditableWhoDoneWhatWhen,Serializable {
 
 	//@Column(name="audit_event_identifier")
+	@Transient
 	protected String __auditIdentifier__;
 	
 	@Column(name="audit_event_who")

@@ -13,7 +13,9 @@
 		<ui:define name="input">
 			<p:fileUpload
 				id="#{fileUpload.identifier}"
-				fileUploadListener="#{fileUpload.listenUpload}" 
+				fileUploadListener="#{fileUpload.listenUpload}"
+				auto="#{fileUpload.auto}"
+				
 		    	label="#{fileUpload.label}" 
 		    	multiple="#{fileUpload.multiple}" 
 		    	mode="#{fileUpload.mode}" 
@@ -25,7 +27,9 @@
 		    	oncomplete="#{fileUpload.ajaxes.onComplete}"
 		    	uploadLabel="#{fileUpload.uploadLabel}" 
 		    	cancelLabel="#{fileUpload.cancelLabel}" 
-		    	update="#{fileUpload.update}"				
+		    	update="#{fileUpload.update}"
+		    	
+		    	onstart="#{fileUpload.onStart}"
 			>
 			
 			</p:fileUpload>

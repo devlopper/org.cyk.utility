@@ -17,7 +17,7 @@ import lombok.Setter;
 public class FileUpload extends AbstractInput<org.primefaces.component.fileupload.FileUpload> implements Serializable {
 
 	private String label,allowTypes,mode,invalidSizeMessage,fileLimitMessage,uploadLabel,cancelLabel,update;
-	private Boolean multiple;
+	private Boolean multiple,auto;
 	private Integer sizeLimit,fileLimit;			
 	
 	/**/
@@ -30,6 +30,7 @@ public class FileUpload extends AbstractInput<org.primefaces.component.fileuploa
 	/**/
 	
 	public static final String FIELD_LABEL = "label";
+	public static final String FIELD_AUTO = "auto";
 	public static final String FIELD_ALLOW_TYPES = "allowTypes";
 	public static final String FIELD_MODE = "mode";
 	public static final String FIELD_INVALID_SIZE_MESSAGE = "invalidSizeMessage";
@@ -49,6 +50,8 @@ public class FileUpload extends AbstractInput<org.primefaces.component.fileuploa
 			super.configure(fileUpload, arguments);
 			if(fileUpload.label == null)
 				fileUpload.label = "Sélectionner un fichier";
+			if(fileUpload.auto == null)
+				fileUpload.auto = Boolean.FALSE;
 			if(fileUpload.allowTypes == null)
 				fileUpload.allowTypes = "/(\\.|\\/)(pdf|jpg|jpeg|bmp|gif|png)$/";
 			if(fileUpload.mode == null)

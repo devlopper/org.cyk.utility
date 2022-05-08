@@ -16,12 +16,35 @@
 
 	<name>jee-utility-file-excel</name>
 	<url>http://maven.apache.org</url>
-
+	
+	<properties>
+		<org.apache.poi.poi.version>3.17</org.apache.poi.poi.version>
+		<org.apache.poi.poi-ooxml.version>3.17</org.apache.poi.poi-ooxml.version>
+	</properties>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.cyk.jee.utility.file</groupId>
 			<artifactId>jee-utility-file</artifactId>
 			<version>0.1.0</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>${org.apache.poi.poi.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>${org.apache.poi.poi-ooxml.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>stax</groupId>
+					<artifactId>stax-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- Test -->

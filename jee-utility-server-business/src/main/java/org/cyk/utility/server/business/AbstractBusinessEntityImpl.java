@@ -12,7 +12,6 @@ import javax.transaction.Transactional;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.collection.CollectionInstance;
 import org.cyk.utility.__kernel__.field.FieldHelper;
-import org.cyk.utility.__kernel__.file.microsoft.excel.SheetReader;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
@@ -65,11 +64,11 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 		return this;
 	}
 	
-	@Override //TODO
+	/*@Override //TODO
 	public BusinessEntity<ENTITY> saveFromFileExcelSheet(SheetReader sheetReader,MapInstanceIntegerToString columnIndexFieldNameMap, Properties properties) {
 		//saveFromArray(fileExcelSheetDataArrayReader.execute().getOutput(), columnIndexFieldNameMap, properties);
 		return this;
-	}
+	}*/
 	
 	//TODO : an idea is to transform excel content to json format and transform it java object
 	@Override

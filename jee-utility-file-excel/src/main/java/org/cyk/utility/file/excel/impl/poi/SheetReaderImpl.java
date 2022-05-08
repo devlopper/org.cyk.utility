@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import javax.enterprise.context.Dependent;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
@@ -17,7 +17,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.file.excel.AbstractSheetReaderImpl;
 
-@Dependent
+@ApplicationScoped
 public class SheetReaderImpl extends AbstractSheetReaderImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 

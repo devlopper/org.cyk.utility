@@ -12,28 +12,34 @@ public abstract class AbstractWorkBookGetterImpl extends AbstractObject implemen
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public WorkBook get(InputStream inputStream) {
-		if(inputStream == null)
+	public WorkBook get(Arguments arguments) {
+		if(arguments == null)
 			return null;
+		InputStream inputStream = arguments.getInputStream();
+		if(inputStream == null && arguments.getBytes() != null && arguments.getBytes().length > 0)
+			inputStream = new ByteArrayInputStream(arguments.getBytes());
+		if(inputStream == null && StringHelper.isNotBlank(arguments.getFileName()))
+			try {
+				inputStream = new FileInputStream(arguments.getFileName());
+			} catch (Exception exception) {
+				throw new RuntimeException(exception);
+			}
 		return __get__(inputStream);
+	}
+	
+	@Override
+	public WorkBook get(InputStream inputStream) {
+		return get(new Arguments().setInputStream(inputStream));
 	}
 	
 	protected abstract WorkBook __get__(InputStream inputStream);
 	
 	@Override
 	public WorkBook get(byte[] bytes) {
-		if(bytes == null || bytes.length == 0)
-			return null;
-		return __get__(new ByteArrayInputStream(bytes));
+		return get(new Arguments().setBytes(bytes));
 	}
 	
 	public WorkBook get(String fileName) {
-		if(StringHelper.isBlank(fileName))
-			return null;
-		try {
-			return __get__(new FileInputStream(fileName));
-		} catch (Exception exception) {
-			throw new RuntimeException(exception);
-		}
+		return get(new Arguments().setFileName(fileName));
 	}
 }

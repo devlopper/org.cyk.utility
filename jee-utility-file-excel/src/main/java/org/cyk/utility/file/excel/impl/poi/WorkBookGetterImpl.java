@@ -3,13 +3,13 @@ package org.cyk.utility.file.excel.impl.poi;
 import java.io.InputStream;
 import java.io.Serializable;
 
-import javax.enterprise.context.Dependent;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.cyk.utility.file.excel.AbstractWorkBookGetterImpl;
 import org.cyk.utility.file.excel.WorkBook;
 
-@Dependent
+@ApplicationScoped
 public class WorkBookGetterImpl extends AbstractWorkBookGetterImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -22,6 +22,7 @@ public abstract class AbstractIdentifiableSystemScalarStringAuditedImpl extends 
 	private static final long serialVersionUID = 1L;
 	
 	//@Column(name="audit_event_identifier")
+	@Transient
 	protected String __auditIdentifier__;
 	
 	@Column(name="audit_event_who")

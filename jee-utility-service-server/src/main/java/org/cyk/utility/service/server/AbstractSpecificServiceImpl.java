@@ -1,12 +1,14 @@
 package org.cyk.utility.service.server;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.configuration.ClassIdentifierGetter;
@@ -121,10 +123,23 @@ public abstract class AbstractSpecificServiceImpl<SERVICE_ENTITY,SERVICE_ENTITY_
 		}).collect(Collectors.toList());
 	}
 	
-	protected Response buildResponseOk(Result result) {
-		Object entity = result.getValue() == null ? StringHelper.concatenate(result.getMessages(), "<br/>") : result.getValue();
-		return Response.ok(entity).build();
+	protected Response buildResponseOk(Result result,ResponseBuilderListener listener) {
+		ResponseBuilderListener __listener__ = listener == null ? ResponseBuilderListener.AbstractImpl.DefaultImpl.INSTANCE : listener;
+		javax.ws.rs.core.Response.ResponseBuilder responseBuilder = Response.status(__listener__.buildStatus(result));
+		//Object entity = __listener__.buildEntity(responseBuilder, result, __listener__); //result.getValue() == null ? StringHelper.concatenate(result.getMessages(), "<br/>") : result.getValue();
+		responseBuilder.entity(__listener__.buildEntity(responseBuilder, result, __listener__));
+		//javax.ws.rs.core.Response.ResponseBuilder responseBuilder = Response.ok(entity);
+		if(result.getMap() != null)
+			result.getMap().entrySet().stream().filter(entry -> entry.getKey() != null && entry.getValue() != null).forEach(entry -> {
+				__listener__.buildHeader(responseBuilder,entry.getKey(), entry.getValue());
+			});
+		return responseBuilder.build();
 	}
+	
+	protected Response buildResponseOk(Result result) {
+		return buildResponseOk(result, null);
+	}
+	
 	
 	/**/
 	
@@ -171,6 +186,44 @@ public abstract class AbstractSpecificServiceImpl<SERVICE_ENTITY,SERVICE_ENTITY_
 			}
 			
 			protected abstract Result execute();
+		}
+	}
+
+	public static interface ResponseBuilderListener{
+		Response.Status buildStatus(Result result);
+		void buildHeader(javax.ws.rs.core.Response.ResponseBuilder builder,Object key,Object value);
+		Object buildEntity(javax.ws.rs.core.Response.ResponseBuilder builder,Result result,Object value);
+		
+		public static abstract class AbstractImpl implements ResponseBuilderListener,Serializable{
+			@Override
+			public Status buildStatus(Result result) {
+				return Response.Status.OK;
+			}
+			@Override
+			public void buildHeader(javax.ws.rs.core.Response.ResponseBuilder builder, Object key, Object value) {
+				builder.header(buildHeaderName(key), buildHeaderValue(value));
+			}
+			
+			protected String buildHeaderName(Object value) {
+				if(value instanceof Class)
+					return ((Class<?>)value).getSimpleName();
+				return value.toString();
+			}
+			
+			protected String buildHeaderValue(Object value) {
+				if(value instanceof Collection)
+					return StringHelper.concatenate((Collection<String>) value, ",");
+				return value.toString();
+			}
+			
+			@Override
+			public Object buildEntity(javax.ws.rs.core.Response.ResponseBuilder builder,Result result, Object value) {
+				return result.getValue() == null ? StringHelper.concatenate(result.getMessages(), "<br/>") : result.getValue();
+			}
+			
+			public static class DefaultImpl extends AbstractImpl implements Serializable{
+				public static DefaultImpl INSTANCE = new DefaultImpl();
+			}
 		}
 	}
 	
