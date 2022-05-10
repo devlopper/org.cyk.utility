@@ -1,11 +1,14 @@
 package org.cyk.utility.persistence.server.view;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
 
+import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.persistence.server.procedure.ProcedureExecutor;
 import org.cyk.utility.persistence.server.procedure.ProcedureExecutorArguments;
@@ -25,8 +28,13 @@ public interface MaterializedViewManager {
 	ProcedureExecutor getProcedureExecutor();
 	MaterializedViewManager setProcedureExecutor(ProcedureExecutor procedureExecutor);
 	
+	Collection<Class<?>> getViewsClasses(); 
+	MaterializedViewManager setViewsClasses(Collection<Class<?>> classes);
+	
 	void actualize(Class<?> klass,EntityManager entityManager);
 	void actualize(Class<?> klass);
+	
+	void actualizeAll();
 	
 	@Getter @Setter @Accessors(chain=true)
 	public static abstract class AbstractImpl extends AbstractObject implements MaterializedViewManager,Serializable{
@@ -34,7 +42,9 @@ public interface MaterializedViewManager {
 		protected String actualizeProcedureName = STORED_PROCEDURE_QUERY_PROCEDURE_NAME;
 		protected String actualizeParameterNameTable = STORED_PROCEDURE_QUERY_PARAMETER_NAME_TABLE;
 		
-		private ProcedureExecutor procedureExecutor;
+		protected ProcedureExecutor procedureExecutor;
+		
+		protected Collection<Class<?>> viewsClasses;
 		
 		@Override
 		public void actualize(Class<?> klass,EntityManager entityManager) {
@@ -49,6 +59,19 @@ public interface MaterializedViewManager {
 		@Override
 		public void actualize(Class<?> klass) {
 			actualize(klass, __inject__(EntityManager.class));
+		}
+		
+		@Override
+		public void actualizeAll() {
+			if(CollectionHelper.isEmpty(viewsClasses))
+				return;
+			for(Class<?> klass : viewsClasses)
+				try {
+					actualize(klass);
+				} catch (Exception exception) {
+					LogHelper.logSevere(String.format("Exception while actualizing <<%s>> : %s", klass.getName(),exception), getClass());
+					LogHelper.log(exception, getClass());
+				}
 		}
 		
 		protected String getTableName(Class<?> klass) {
