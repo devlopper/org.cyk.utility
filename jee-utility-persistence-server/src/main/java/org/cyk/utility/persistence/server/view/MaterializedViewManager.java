@@ -80,8 +80,8 @@ public interface MaterializedViewManager {
 		
 		/**/
 		
-		public static final String STORED_PROCEDURE_QUERY_PROCEDURE_NAME = "PA_ACTUALISER_VM";
-		public static final String STORED_PROCEDURE_QUERY_PARAMETER_NAME_TABLE = "NOM_TABLE";
+		public static final String STORED_PROCEDURE_QUERY_PROCEDURE_NAME = "AP_ACTUALIZE_MV";// "PA_ACTUALISER_VM";
+		public static final String STORED_PROCEDURE_QUERY_PARAMETER_NAME_TABLE = "P_TABLE_NAME"; //"NOM_TABLE";
 		public static final String TABLE_NAME = "TABLE_NAME";
 	}
 }
