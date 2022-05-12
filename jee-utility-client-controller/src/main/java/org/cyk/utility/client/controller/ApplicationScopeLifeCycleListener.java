@@ -22,13 +22,23 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 
 	@Override
 	public void __initialize__(Object object) {
-		__setQualifierClassTo__(Controller.class, InstanceGetter.class,SystemActionFieldsGetter.class,SystemActionFieldsNamesGetter.class);
-		__initializeApplication__(object);		
-		__inject__(org.cyk.utility.ApplicationScopeLifeCycleListener.class).initialize(null);
-		ParameterName.WINDOW_RENDER_TYPE_CLASS.setType(WindowRenderType.class);
-		ParameterName.addClasses(WindowRenderTypeNormal.class,WindowRenderTypeDialog.class);
+		initialize();
 	}
 	
+	public static void initialize() {
+		initialize(ApplicationScopeLifeCycleListener.class, new Runnable() {
+			@Override
+			public void run() {
+				__setQualifierClassTo__(Controller.class, InstanceGetter.class,SystemActionFieldsGetter.class,SystemActionFieldsNamesGetter.class);
+				//__initializeApplication__(object);		
+				org.cyk.utility.ApplicationScopeLifeCycleListener.initialize();
+				ParameterName.WINDOW_RENDER_TYPE_CLASS.setType(WindowRenderType.class);
+				ParameterName.addClasses(WindowRenderTypeNormal.class,WindowRenderTypeDialog.class);
+			}
+		});
+	}
+	
+	@Deprecated
 	protected void __initializeApplication__(Object object) {
 		SystemNodeClient systemClient = __inject__(SystemNodeClient.class);
 		if(StringHelper.isBlank(systemClient.getName()))

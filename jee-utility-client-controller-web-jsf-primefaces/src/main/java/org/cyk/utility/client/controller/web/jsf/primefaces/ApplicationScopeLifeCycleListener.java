@@ -6,7 +6,7 @@ import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.AbstractApplicationScopeLifeCycleListener;
 import org.cyk.utility.__kernel__.ObjectLifeCycleListener;
-import org.cyk.utility.__kernel__.function.FunctionRunnableMap;
+import org.cyk.utility.__kernel__.function.FunctionRunnableMapImpl;
 import org.cyk.utility.bean.PropertyValueGetter;
 import org.cyk.utility.client.controller.command.CommandFunction;
 import org.cyk.utility.client.controller.component.ComponentRoleStyleClassGetterImpl;
@@ -30,22 +30,32 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 
 	@Override
 	public void __initialize__(Object object) {
-		__inject__(FunctionRunnableMap.class).set(MessageRenderImpl.class, MessageRenderFunctionRunnableImpl.class,LEVEL);
-		__inject__(FunctionRunnableMap.class).set(StyleClassBuilderWidthImpl.class, StyleClassBuilderWidthCssPrimefacesGridFunctionRunnableImpl.class,LEVEL);
-		__inject__(FunctionRunnableMap.class).set(LayoutWidthGetterImpl.class, LayoutWidthGetterFunctionRunnableImpl.class,LEVEL);
-		__inject__(FunctionRunnableMap.class).set(ComponentRoleStyleClassGetterImpl.class, ComponentRoleStyleClassGetterFunctionRunnableImpl.class,LEVEL);
-		//__inject__(FunctionRunnableMap.class).set(ComponentTargetModelBuilderImpl.class, ComponentTargetModelBuilderFunctionRunnableImpl.class,LEVEL);
-		__inject__(FunctionRunnableMap.class).set(NavigationIdentifierToUrlStringMapperImpl.class, NavigationIdentifierToUrlStringMapperFunctionRunnableImpl.class,LEVEL);
-		//__inject__(FunctionRunnableMap.class).set(RequestPropertyValueGetterImpl.class, RequestPropertyValueGetterFunctionRunnableImpl.class,LEVEL);
-		__inject__(FunctionRunnableMap.class).set(RequestParameterValueGetterImpl.class, RequestParameterValueGetterFunctionRunnableImpl.class,LEVEL);
-		__inject__(FunctionRunnableMap.class).set(GridBuilderCommandableBuilderProcessorImpl.class, GridBuilderCommandableBuilderProcessorFunctionRunnableImpl.class,LEVEL);
-		//__inject__(FunctionRunnableMap.class).set(CommandFunctionImpl.class, CommandFunctionFunctionRunnableImpl.class,LEVEL);
-		__inject__(FunctionRunnableMap.class).set(NavigationRedirectorImpl.class, NavigationRedirectorFunctionRunnableImpl.class,LEVEL);
+		initialize();
+	}
+	
+	public static void initialize() {
+		initialize(ApplicationScopeLifeCycleListener.class, new Runnable() {
+			@Override
+			public void run() {
+				FunctionRunnableMapImpl.__set__(MessageRenderImpl.class, MessageRenderFunctionRunnableImpl.class,LEVEL);
+				FunctionRunnableMapImpl.__set__(StyleClassBuilderWidthImpl.class, StyleClassBuilderWidthCssPrimefacesGridFunctionRunnableImpl.class,LEVEL);
+				FunctionRunnableMapImpl.__set__(LayoutWidthGetterImpl.class, LayoutWidthGetterFunctionRunnableImpl.class,LEVEL);
+				FunctionRunnableMapImpl.__set__(ComponentRoleStyleClassGetterImpl.class, ComponentRoleStyleClassGetterFunctionRunnableImpl.class,LEVEL);
+				//FunctionRunnableMapImpl.__set__(ComponentTargetModelBuilderImpl.class, ComponentTargetModelBuilderFunctionRunnableImpl.class,LEVEL);
+				FunctionRunnableMapImpl.__set__(NavigationIdentifierToUrlStringMapperImpl.class, NavigationIdentifierToUrlStringMapperFunctionRunnableImpl.class,LEVEL);
+				//FunctionRunnableMapImpl.__set__(RequestPropertyValueGetterImpl.class, RequestPropertyValueGetterFunctionRunnableImpl.class,LEVEL);
+				FunctionRunnableMapImpl.__set__(RequestParameterValueGetterImpl.class, RequestParameterValueGetterFunctionRunnableImpl.class,LEVEL);
+				FunctionRunnableMapImpl.__set__(GridBuilderCommandableBuilderProcessorImpl.class, GridBuilderCommandableBuilderProcessorFunctionRunnableImpl.class,LEVEL);
+				//FunctionRunnableMapImpl.__set__(CommandFunctionImpl.class, CommandFunctionFunctionRunnableImpl.class,LEVEL);
+				FunctionRunnableMapImpl.__set__(NavigationRedirectorImpl.class, NavigationRedirectorFunctionRunnableImpl.class,LEVEL);
+				
+				org.cyk.utility.client.controller.web.jsf.ApplicationScopeLifeCycleListener.initialize();
+				
+				__setQualifierClassTo__(Primefaces.class,ObjectLifeCycleListener.class, CommandFunction.class,EventBuilder.class,ComponentTargetModelBuilder.class
+						,PropertyValueGetter.class,ThemeColorGetter.class,Redirector.class);
+			}
+		});
 		
-		__inject__(org.cyk.utility.client.controller.web.jsf.ApplicationScopeLifeCycleListener.class).initialize(null);
-		
-		__setQualifierClassTo__(Primefaces.class,ObjectLifeCycleListener.class, CommandFunction.class,EventBuilder.class,ComponentTargetModelBuilder.class
-				,PropertyValueGetter.class,ThemeColorGetter.class,Redirector.class);
 	}
 	
 	@Override

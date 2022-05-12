@@ -16,7 +16,16 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 	@Override
 	public void __initialize__(Object object) {
 		__setQualifierClassTo__(Web.class,RequestPrincipalGetter.class,ThemeColorGetter.class);
-		__inject__(org.cyk.utility.client.controller.ApplicationScopeLifeCycleListener.class).initialize(null);
+		initialize();
+	}
+	
+	public static void initialize() {
+		initialize(ApplicationScopeLifeCycleListener.class, new Runnable() {
+			@Override
+			public void run() {
+				org.cyk.utility.client.controller.ApplicationScopeLifeCycleListener.initialize();
+			}
+		});
 	}
 	
 	@Override

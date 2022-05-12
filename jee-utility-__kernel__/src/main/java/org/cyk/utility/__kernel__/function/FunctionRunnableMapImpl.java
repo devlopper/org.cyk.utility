@@ -10,21 +10,25 @@ import javax.enterprise.context.ApplicationScoped;
 public class FunctionRunnableMapImpl implements FunctionRunnableMap,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private Map<Class<?>,Class<? extends FunctionRunnable<?>>> map;
-	private Map<Class<? extends FunctionRunnable<?>>,Integer> levelMap;
+	private static final Map<Class<?>,Class<? extends FunctionRunnable<?>>> MAP = new HashMap<>();
+	private static final Map<Class<? extends FunctionRunnable<?>>,Integer> LEVEL_MAP = new HashMap<>();
+	
+	public static void __set__(Class<?> aClass, Class<? extends FunctionRunnable<?>> functionRunnableClass,Integer level,Boolean overwrite) {
+		Class<? extends FunctionRunnable<?>> currentFunctionRunnableClass = MAP.get(aClass);
+		Integer currentFunctionRunnableClassLevel = LEVEL_MAP.get(currentFunctionRunnableClass);
+		if(currentFunctionRunnableClass==null || currentFunctionRunnableClassLevel == null || (level!=null && level > currentFunctionRunnableClassLevel) || Boolean.TRUE.equals(overwrite)) {
+			MAP.put(aClass, functionRunnableClass);
+			LEVEL_MAP.put(functionRunnableClass,level);
+		}
+	}
+	
+	public static void __set__(Class<?> aClass, Class<? extends FunctionRunnable<?>> functionRunnableClass,Integer level) {
+		__set__(aClass, functionRunnableClass, level, null);
+	}
 	
 	@Override
 	public FunctionRunnableMap set(Class<?> aClass, Class<? extends FunctionRunnable<?>> functionRunnableClass,Integer level,Boolean overwrite) {
-		Class<? extends FunctionRunnable<?>> currentFunctionRunnableClass = get(aClass);
-		Integer currentFunctionRunnableClassLevel = levelMap == null ? null : levelMap.get(currentFunctionRunnableClass);
-		if(currentFunctionRunnableClass==null || currentFunctionRunnableClassLevel == null || (level!=null && level > currentFunctionRunnableClassLevel) || Boolean.TRUE.equals(overwrite)) {
-			if(map == null)
-				map = new HashMap<>();
-			map.put(aClass, functionRunnableClass);
-			if(levelMap == null)
-				levelMap = new HashMap<>();
-			levelMap.put(functionRunnableClass,level);
-		}
+		__set__(aClass, functionRunnableClass, level, overwrite);
 		return this;
 	}
 	
@@ -40,10 +44,7 @@ public class FunctionRunnableMapImpl implements FunctionRunnableMap,Serializable
 
 	@Override
 	public Class<? extends FunctionRunnable<?>> get(Class<?> aClass) {
-		Class<? extends FunctionRunnable<?>> functionRunnableClass = null;
-		if(map != null)
-			functionRunnableClass = map.get(aClass);
-		return functionRunnableClass;
+		return MAP.get(aClass);
 	}
 
 }

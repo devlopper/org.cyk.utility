@@ -10,7 +10,11 @@ public class ApplicationScopeLifeCycleListener extends org.cyk.utility.__kernel_
 
 	@Override
 	public void __initialize__(Object object) {
-		__inject__(org.cyk.utility.server.persistence.ApplicationScopeLifeCycleListener.class).initialize(null);
+		initialize();
+	}
+	
+	public static void initialize() {
+		org.cyk.utility.server.persistence.ApplicationScopeLifeCycleListener.initialize();
 	}
 	
 	@Override

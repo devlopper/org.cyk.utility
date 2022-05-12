@@ -26,7 +26,7 @@ public abstract class AbstractApplicationScopeLifeCycleListener extends Abstract
 			DESTROYED.remove(getClass());
 		}
 	}
- 
+	
 	public abstract void __initialize__(Object object);
 	
     public void destroy(@Observes @BeforeDestroyed(ApplicationScoped.class) Object object) {
@@ -41,6 +41,28 @@ public abstract class AbstractApplicationScopeLifeCycleListener extends Abstract
     public abstract void __destroy__(Object object);
 	
     /**/
+    
+    public static void initialize(Class<?> klass,Runnable runnable) {
+		if(klass == null || isInitialized(klass))
+			return;
+		runnable.run();
+	}
+    
+    public static Boolean isInitialized(Class<?> klass) {
+		return INITIALIZED.contains(klass);
+	}
+	
+	public static Boolean isNotInitialized(Class<?> klass) {
+		return !INITIALIZED.contains(klass);
+	}
+	
+	public static Boolean isDestroyed(Class<?> klass) {
+		return DESTROYED.contains(klass);
+	}
+	
+	public static Boolean isNotDestroyed(Class<?> klass) {
+		return !DESTROYED.contains(klass);
+	}
     
     protected static void __setQualifiersClasses__(Class<?> clazz,Collection<Class<?>> qualifiersClasses) {
 		DependencyInjection.setQualifiersClasses(clazz, qualifiersClasses);	

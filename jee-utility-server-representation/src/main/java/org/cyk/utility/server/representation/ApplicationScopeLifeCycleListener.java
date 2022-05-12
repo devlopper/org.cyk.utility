@@ -12,7 +12,11 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 
 	@Override
 	public void __initialize__(Object object) {
-		__inject__(org.cyk.utility.server.business.ApplicationScopeLifeCycleListener.class).initialize(null);
+		initialize();
+	}
+	
+	public static void initialize() {
+		org.cyk.utility.server.business.ApplicationScopeLifeCycleListener.initialize();
 	}
 	
 	@Override
