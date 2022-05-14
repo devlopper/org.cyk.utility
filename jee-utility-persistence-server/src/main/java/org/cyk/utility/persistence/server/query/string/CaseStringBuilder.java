@@ -112,6 +112,8 @@ public interface CaseStringBuilder {
 			return this;
 		}
 		
+		// Is null
+		
 		public static Case instantiateWhenFieldIsNullThenZeroElseField(String fieldName,String zero) {
 			return new Case().when(String.format("%s IS NULL",fieldName),ValueHelper.defaultToIfBlank(zero, "0")).else_(fieldName);
 		}
@@ -126,6 +128,44 @@ public interface CaseStringBuilder {
 		
 		public static String instantiateWhenFieldIsNullThenZeroElseFieldAndBuild(String fieldName) {
 			return CaseStringBuilder.getInstance().build(instantiateWhenFieldIsNullThenZeroElseField(fieldName));
+		}
+		
+		// Is less than zero
+		
+		public static Case instantiateWhenIsNotGreaterThanOrEqualZeroThenZero(String projection,String zero) {
+			zero = ValueHelper.defaultToIfBlank(zero, "0");
+			return new Case().when(String.format("%s < %s",projection,zero),projection).else_(zero);
+		}
+		
+		public static Case instantiateWhenIsNotGreaterThanOrEqualZeroThenZero(String projection) {
+			return instantiateWhenIsNotGreaterThanOrEqualZeroThenZero(projection, "0");
+		}
+		
+		public static String instantiateWhenIsNotGreaterThanOrEqualZeroThenZeroAndBuild(String projection,String zero) {
+			return CaseStringBuilder.getInstance().build(instantiateWhenIsNotGreaterThanOrEqualZeroThenZero(projection,zero));
+		}
+		
+		public static String instantiateWhenIsNotGreaterThanOrEqualZeroThenZeroAndBuild(String projection) {
+			return CaseStringBuilder.getInstance().build(instantiateWhenIsNotGreaterThanOrEqualZeroThenZero(projection));
+		}
+		
+		// Is greater than zero
+		
+		public static Case instantiateWhenIsNotLessThanOrEqualZeroThenZero(String projection,String zero) {
+			zero = ValueHelper.defaultToIfBlank(zero, "0");
+			return new Case().when(String.format("%s > %s",projection,zero),projection).else_(zero);
+		}
+		
+		public static Case instantiateWhenIsNotLessThanOrEqualZeroThenZero(String projection) {
+			return instantiateWhenIsNotLessThanOrEqualZeroThenZero(projection, "0");
+		}
+		
+		public static String instantiateWhenIsNotLessThanOrEqualZeroThenZeroAndBuild(String projection,String zero) {
+			return CaseStringBuilder.getInstance().build(instantiateWhenIsNotLessThanOrEqualZeroThenZero(projection,zero));
+		}
+		
+		public static String instantiateWhenIsNotLessThanOrEqualZeroThenZeroAndBuild(String projection) {
+			return CaseStringBuilder.getInstance().build(instantiateWhenIsNotLessThanOrEqualZeroThenZero(projection));
 		}
 		
 		/**/
