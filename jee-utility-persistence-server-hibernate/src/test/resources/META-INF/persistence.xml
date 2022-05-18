@@ -6,6 +6,7 @@
 	<persistence-unit name="default" transaction-type="RESOURCE_LOCAL">
 		<class>org.cyk.utility.persistence.server.hibernate.DataType</class>
 		<class>org.cyk.utility.persistence.server.hibernate.DataAudited</class>
+		<class>org.cyk.utility.persistence.server.hibernate.LongRunActualizationDataType</class>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		
 		<properties>

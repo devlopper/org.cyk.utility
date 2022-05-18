@@ -1,20 +1,17 @@
 package org.cyk.utility.client.controller.web.jsf;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.session.SessionHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.user.interface_.UserInterfaceEvent;
+import org.cyk.utility.__kernel__.user.interface_.message.MessageRenderer;
+import org.cyk.utility.__kernel__.user.interface_.message.RenderType;
+import org.cyk.utility.__kernel__.user.interface_.message.Severity;
 import org.cyk.utility.__kernel__.variable.VariableName;
-import org.cyk.utility.client.controller.message.MessageRender;
-import org.cyk.utility.client.controller.message.MessageRenderTypeDialog;
-import org.cyk.utility.notification.NotificationBuilder;
-import org.cyk.utility.notification.NotificationSeverity;
-import org.cyk.utility.notification.NotificationSeverityError;
-import org.cyk.utility.notification.NotificationSeverityInformation;
-import org.cyk.utility.notification.NotificationSeverityWarning;
 
 public abstract class AbstractUserInterfaceEventListenerImpl extends org.cyk.utility.__kernel__.user.interface_.AbstractUserInterfaceEventListenerImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -24,15 +21,15 @@ public abstract class AbstractUserInterfaceEventListenerImpl extends org.cyk.uti
 		if(event == null)
 			return;
 		String message;
-		NotificationSeverity severity;
+		Severity severity = null;
 		switch(event) {
 		case IDLE:
 			message = "Vous êtes inactif.vous risquez de perdre votre session.";
-			severity = __inject__(NotificationSeverityWarning.class);
+			severity = Severity.WARNING;
 			break;
 		case ACTIVATE:
 			message = "Vous êtes de retour.";
-			severity = __inject__(NotificationSeverityInformation.class);
+			severity = Severity.INFORMATION;
 			break;
 		case LOGOUT:
 			String username = SessionHelper.getUserName();
@@ -42,16 +39,9 @@ public abstract class AbstractUserInterfaceEventListenerImpl extends org.cyk.uti
 			return;
 		default:
 			message = "Quel évènement ?";
-			severity = __inject__(NotificationSeverityError.class);
+			severity = Severity.ERROR;
 		}
-		MessageRender messageRender = __inject__(MessageRender.class);
-		messageRender.addNotificationBuilders(__inject__(NotificationBuilder.class)
-				.setSummary("Notification")
-				.setDetails(message)
-				.setSeverity(severity)
-				);
-		messageRender.addTypes(__inject__(MessageRenderTypeDialog.class));
-		messageRender.execute();
+		__inject__(MessageRenderer.class).render("Notification", message, severity, List.of(RenderType.GROWL));
 	}
 	
 	protected void listenLogoutRedirect(String username) {
