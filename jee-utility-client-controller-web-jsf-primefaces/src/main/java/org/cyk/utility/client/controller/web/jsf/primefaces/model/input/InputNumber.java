@@ -36,6 +36,11 @@ public class InputNumber extends AbstractInput<Number> implements Serializable {
 		if(StringHelper.isNotBlank(inputStyle))
 			component.setInputStyle(inputStyle);
 		
+		if(disabled != null)
+			component.setDisabled(disabled);
+		if(readOnly != null)
+			component.setReadonly(readOnly);
+		
 		if(decimalPlaces != null)
 			component.setDecimalPlaces(decimalPlaces.toString());
 		if(minValue != null)
