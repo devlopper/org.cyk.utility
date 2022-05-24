@@ -9,15 +9,21 @@ import javax.ws.rs.core.Response;
 public class RequestExecutorImpl implements RequestExecutor,Serializable {
 
 	@Override
-	public Response execute(Request request) {
+	public Response execute(Request request,Boolean isThrowableHandlable) {
 		if(request == null)
-			throw new RuntimeException("Request is required");		
-		try {
-			ResponseBuilder.Arguments responseBuilderArguments = request.execute();
-			return ResponseBuilder.getInstance().build(responseBuilderArguments);
-		} catch (Exception exception) {
-			exception.printStackTrace();
-			return ResponseBuilder.getInstance().build(exception);
-		}
+			throw new RuntimeException("Request is required");	
+		if(Boolean.TRUE.equals(isThrowableHandlable))
+			try {
+				return ResponseBuilder.getInstance().build(request.execute());
+			} catch (Exception exception) {
+				exception.printStackTrace();
+				return ResponseBuilder.getInstance().build(exception);
+			}
+		return ResponseBuilder.getInstance().build(request.execute());
+	}
+	
+	@Override
+	public Response execute(Request request) {
+		return execute(request, Boolean.TRUE);
 	}
 }

@@ -2,6 +2,7 @@ package org.cyk.utility.rest;
 
 public interface RequestExecutor {
 
+	javax.ws.rs.core.Response execute(Request request,Boolean isThrowableHandlable);
 	javax.ws.rs.core.Response execute(Request request);
 	
 	/**/

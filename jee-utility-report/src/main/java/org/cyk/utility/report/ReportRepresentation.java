@@ -60,7 +60,7 @@ public interface ReportRepresentation extends org.cyk.utility.__kernel__.represe
 				return Response.status(Status.BAD_REQUEST).entity("Report identifier is required").build();
 			Map<Object, Object> parameters = StringHelper.isBlank(parametersNamesValuesAsJson) ? null : new Gson().fromJson(parametersNamesValuesAsJson, new TypeToken<Map<String, String>>() {}.getType());
 			FileType __fileType__ = ValueHelper.defaultToIfNull(EnumerationHelper.getByName(FileType.class, fileType, Boolean.FALSE),FileType.PDF);
-			ByteArrayOutputStream byteArrayOutputStream = ReportGetter.getInstance().get(identifier,parameters,__fileType__);
+			ByteArrayOutputStream byteArrayOutputStream = __inject__(ReportGetter.class).get(identifier,parameters,__fileType__);
 			if(byteArrayOutputStream == null)
 				return Response.status(Status.NOT_FOUND).build();
 			byte[] bytes = byteArrayOutputStream.toByteArray();

@@ -10,8 +10,9 @@ import javax.ws.rs.core.Response;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.rest.RequestExecutor;
+import org.cyk.utility.service.Service;
 
-public abstract class AbstractServiceImpl implements Serializable {
+public abstract class AbstractServiceImpl implements Service,Serializable {
 
 	@Inject protected RequestExecutor requestExecutor;
 	

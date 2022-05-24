@@ -2,6 +2,8 @@ package org.cyk.utility.report.jasper.server;
 
 import java.io.Serializable;
 
+import javax.inject.Inject;
+
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
@@ -25,10 +27,12 @@ public interface JasperserverRestClientGetter {
 		
 		private static JasperserverRestClient CLIENT;
 		
+		@Inject private RestClientConfigurationGetter restClientConfigurationGetter;
+		
 		@Override
 		public JasperserverRestClient get(Arguments arguments) {
 			if(CLIENT == null) {
-				CLIENT = new JasperserverRestClient(RestClientConfigurationGetter.getInstance().get());
+				CLIENT = new JasperserverRestClient(restClientConfigurationGetter.get());
 				LogHelper.logInfo("Jasper server rest client has been instantiated", getClass());
 			}
 			return CLIENT;

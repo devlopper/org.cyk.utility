@@ -3,6 +3,8 @@ package org.cyk.utility.report.jasper.server;
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 
+import javax.enterprise.context.ApplicationScoped;
+
 import org.cyk.utility.report.ReportBuilder;
 import org.cyk.utility.report.Template;
 
@@ -22,6 +24,7 @@ import net.sf.jasperreports.export.SimpleTextReportConfiguration;
 import net.sf.jasperreports.export.SimpleWriterExporterOutput;
 import net.sf.jasperreports.export.TextReportConfiguration;
 
+@ApplicationScoped
 public class ReportBuilderImpl extends ReportBuilder.AbstractImpl implements Serializable {
 
 	@Override

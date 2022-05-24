@@ -2,6 +2,8 @@ package org.cyk.utility.report.jasper.server;
 
 import java.io.Serializable;
 
+import javax.inject.Inject;
+
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.configuration.ConfigurationHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
@@ -24,10 +26,12 @@ public interface SessionGetter {
 		
 		public static Session SESSION;
 		
+		@Inject private JasperserverRestClientGetter jasperserverRestClientGetter;
+		
 		@Override
 		public Session get(String username, String password) {
 			if(SESSION == null) {
-				JasperserverRestClient client = JasperserverRestClientGetter.getInstance().get();
+				JasperserverRestClient client = jasperserverRestClientGetter.get();
 				SESSION = client.authenticate(username, password);
 				LogHelper.logInfo(String.format("Jasper server session has been instantiated with username %s ",username), getClass());
 			}

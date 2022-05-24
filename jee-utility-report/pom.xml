@@ -23,12 +23,19 @@
 			<artifactId>jee-utility-__kernel__</artifactId>
 			<version>0.1.0</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.eclipse.microprofile.openapi</groupId>
 			<artifactId>microprofile-openapi-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
+<!--
+		<dependency>
+			<groupId>org.cyk.jee.utility.service</groupId>
+			<artifactId>jee-utility-service</artifactId>
+			<version>0.1.0</version>
+		</dependency>
+		-->
 	</dependencies>
 
 </project>

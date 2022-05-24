@@ -7,6 +7,9 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+
 import org.apache.commons.io.IOUtils;
 import org.cyk.utility.__kernel__.file.FileType;
 import org.cyk.utility.__kernel__.log.LogHelper;
@@ -22,14 +25,17 @@ import com.jaspersoft.jasperserver.jaxrs.client.core.exceptions.AuthenticationFa
 import com.jaspersoft.jasperserver.jaxrs.client.core.exceptions.ResourceNotFoundException;
 import com.jaspersoft.jasperserver.jaxrs.client.core.operationresult.OperationResult;
 
+@ApplicationScoped
 public class ReportGetterImpl extends ReportGetter.AbstractImpl implements Serializable {
 
+	@Inject private SessionGetter sessionGetter;
+	
 	@Override
 	protected ByteArrayOutputStream __getFromServer__(String filePath,Map<Object,Object> parameters,FileType fileType) {
 		Session session = null;
 		OperationResult<InputStream> result = null;
 		do {
-			session = SessionGetter.getInstance().get();
+			session = sessionGetter.get();
 			if(session == null)
 				throw new RuntimeException("Session is null");			
 			try {			

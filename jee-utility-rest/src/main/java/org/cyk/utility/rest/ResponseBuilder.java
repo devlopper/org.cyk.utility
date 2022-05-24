@@ -67,6 +67,8 @@ public interface ResponseBuilder {
 		public Response build(Arguments arguments) {
 			if(arguments == null)
 				throw new IllegalArgumentException("arguments are required");
+			if(arguments.response != null)
+				return arguments.response;
 			javax.ws.rs.core.Response.ResponseBuilder responseBuilder = Response.status(__buildStatus__(arguments));
 			responseBuilder.entity(__buildEntity__(arguments));
 			if(arguments.processingStartTime != null && arguments.processingEndTime == null)
@@ -122,6 +124,7 @@ public interface ResponseBuilder {
 	
 	@Getter @Setter @Accessors(chain=true) @NoArgsConstructor
 	public static class Arguments extends AbstractObject implements Serializable {
+		private Response response;
 		private Response.Status status;
 		private Object entity;
 		private RuntimeException.Dto runtimeException;

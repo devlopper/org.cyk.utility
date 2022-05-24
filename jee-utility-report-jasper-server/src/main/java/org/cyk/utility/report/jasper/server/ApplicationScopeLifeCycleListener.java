@@ -2,6 +2,7 @@ package org.cyk.utility.report.jasper.server;
 import java.io.Serializable;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 import org.cyk.utility.__kernel__.AbstractApplicationScopeLifeCycleListener;
 import org.cyk.utility.__kernel__.log.LogHelper;
@@ -10,6 +11,8 @@ import org.cyk.utility.__kernel__.variable.VariableHelper;
 @ApplicationScoped
 public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeLifeCycleListener implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	@Inject private SessionGetter sessionGetter;
 
 	@Override
 	public void __initialize__(Object object) {
@@ -19,6 +22,6 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 
 	@Override
 	public void __destroy__(Object object) {
-		SessionGetter.getInstance().logout();
+		sessionGetter.logout();
 	}	
 }

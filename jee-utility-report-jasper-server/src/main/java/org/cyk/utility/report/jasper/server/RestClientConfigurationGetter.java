@@ -2,6 +2,8 @@ package org.cyk.utility.report.jasper.server;
 
 import java.io.Serializable;
 
+import javax.inject.Inject;
+
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.value.Value;
@@ -14,11 +16,13 @@ public interface RestClientConfigurationGetter {
 	
 	public static abstract class AbstractImpl extends AbstractObject implements RestClientConfigurationGetter,Serializable {
 		
+		@Inject private RestClientConfigurationBuilder restClientConfigurationBuilder;
+		
 		@Override
 		public RestClientConfiguration get() {
 			if(Boolean.TRUE.equals(VALUE.isHasBeenSet()))
 				return (RestClientConfiguration) VALUE.get();
-			VALUE.set(RestClientConfigurationBuilder.getInstance().build());
+			VALUE.set(restClientConfigurationBuilder.build());
 			return (RestClientConfiguration) VALUE.get();
 		}
 	}
