@@ -11,7 +11,7 @@
 	
 	<groupId>org.cyk.jee.utility.report.jasper.client</groupId>
 	<artifactId>jee-utility-report-jasper-client</artifactId>
-	<version>0.1.0</version>
+	<version>1.0.0</version>
 	<packaging>jar</packaging>
 
 	<name>jee-utility-report-jasper-client</name>
@@ -21,7 +21,7 @@
 		<dependency>
 			<groupId>org.cyk.jee.utility.report.jasper</groupId>
 			<artifactId>jee-utility-report-jasper</artifactId>
-			<version>0.1.0</version>
+			<version>1.0.0</version>
 		</dependency>
 		
 		<dependency>

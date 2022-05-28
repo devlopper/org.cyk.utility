@@ -17,21 +17,22 @@ import org.cyk.utility.__kernel__.file.FileHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.report.GenericReportService;
-//import org.cyk.utility.rest.RequestExecutor;
-//import org.cyk.utility.service.server.AbstractServiceImpl;
-//import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.cyk.utility.rest.RequestExecutor;
+import org.cyk.utility.service.server.AbstractServiceImpl;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 @ApplicationScoped
-public class GenericReportServiceImpl /*extends AbstractServiceImpl implements GenericReportService,Serializable*/ {
-	/*
+public class GenericReportServiceImpl extends AbstractServiceImpl implements GenericReportService,Serializable {
+	
 	@Inject @RestClient private JasperServerClient jasperServer;
 	private String sessionIdentifier;
+	@Inject private Configuration configuration;
 	
 	@Override
-	public Response get(String identifier, String fileType,Boolean isContentInline, String parametersAsJson) {
+	public Response get(String identifier, String parametersAsJson,String fileType, Boolean isContentInline) {
 		if(StringHelper.isBlank(identifier))
 			return Response.status(Status.BAD_REQUEST).entity("Report identifier is required").build();
 		Map<String, String> map = new HashMap<String, String>();
@@ -49,9 +50,16 @@ public class GenericReportServiceImpl /*extends AbstractServiceImpl implements G
 			public void set(String identifier) {
 				JasperServerClient.setSessionIdentifier(map,identifier);
 			}
+			
+			@Override
+			public String get() {
+				return sessionIdentifier;
+			}
 		});
 		ResponseBuilder responseBuilder = Response.ok(response.getEntity());	
 		responseBuilder.header(HttpHeaders.CONTENT_TYPE, FileHelper.getMimeTypeByExtension(fileType));
+		if(isContentInline == null)
+			isContentInline = configuration.defaultIsContentInline();
 	    responseBuilder.header(HttpHeaders.CONTENT_DISPOSITION, (isContentInline == null || isContentInline ? ConstantString.INLINE : ConstantString.ATTACHMENT)+"; "+ConstantString.FILENAME+"=file_"+System.currentTimeMillis()+"."+fileType);
 		return responseBuilder.build();
 	}
@@ -76,7 +84,7 @@ public class GenericReportServiceImpl /*extends AbstractServiceImpl implements G
 			return sessionIdentifier;
 		Integer count = 0;
 		do {
-			Response response = jasperServer.login("jasperadmin", "jasperadmin");
+			Response response = jasperServer.login(configuration.credentials().user(), configuration.credentials().pass());
 			if(response.getStatus() == Response.Status.OK.getStatusCode()) {
 				sessionIdentifier = JasperServerClient.getJSESSIONID(response);
 				LogHelper.logWarning(String.format("Session identifier has been got %s",sessionIdentifier), getClass());
@@ -88,7 +96,7 @@ public class GenericReportServiceImpl /*extends AbstractServiceImpl implements G
 		return null;
 	}
 	
-	public static interface SessionIdentificationListener {
-		void set(String identifier);
-	}*/
+	public static String buildReportParameterConfigurationPropertyName(String domain,String reportIdentifier,String parameterName) {
+		return String.format("%s.%s,%s",domain, reportIdentifier,parameterName);
+	}
 }

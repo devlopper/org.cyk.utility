@@ -14,5 +14,6 @@ public interface GenericReportService extends ReportService {
 	
 	@POST
 	@Path("/")
-	Response get(@QueryParam("identifier") String identifier,@QueryParam("file-type") String fileType,@QueryParam("is-content-inline") Boolean isContentInline,@QueryParam("parameters-as-json") String parametersAsJson);
+	Response get(@QueryParam(PARAMETER_IDENTIFIER) String identifier,@QueryParam(PARAMETER_PARAMETERS_AS_JSON) String parametersAsJson,@QueryParam(PARAMETER_FILE_TYPE) String fileType
+			,@QueryParam(PARAMETER_IS_CONTENT_INLINE) Boolean isContentInline);
 }

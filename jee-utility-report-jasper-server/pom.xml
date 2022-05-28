@@ -4,40 +4,49 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.cyk.pom.jee.utility.report.jasper.server</groupId>
-		<artifactId>pom-jee-utility-report-jasper-server</artifactId>
-		<version>pom.jee.utility.report.jasper.server.0.1.0</version>
+		<groupId>org.cyk.pom.jee</groupId>
+		<artifactId>pom-jee</artifactId>
+		<version>pom.jee.0.1.0</version>
 	</parent>
 
 	<groupId>org.cyk.jee.utility.report.jasper.server</groupId>
 	<artifactId>jee-utility-report-jasper-server</artifactId>
-	<version>0.1.0</version>
+	<version>1.0.0</version>
 	<packaging>jar</packaging>
 
 	<name>jee-utility-report-jasper-server</name>
 	<url>http://maven.apache.org</url>
 
-	<properties>
-		<!--
-		<net.sf.jasper.report.version>6.19.1</net.sf.jasper.report.version>
-		-->
-		<!--
-		<com.jaspersoft.jrs-rest-java-client.version>8.0.0</com.jaspersoft.jrs-rest-java-client.version>
-		-->
-
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.cyk.jee.utility.report.jasper</groupId>
 			<artifactId>jee-utility-report-jasper</artifactId>
-			<version>0.1.0</version>
+			<version>1.0.0</version>
 		</dependency>
-<!--
+		
 		<dependency>
 			<groupId>org.cyk.jee.utility.service.server</groupId>
 			<artifactId>jee-utility-service-server</artifactId>
 			<version>0.1.0</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>io.smallrye.config</groupId>
+		    <artifactId>smallrye-config</artifactId>
+		    <version>2.10.0</version>
+		    <scope>provided</scope>
+		</dependency>		
+		
+		<dependency>
+			<groupId>org.eclipse.microprofile.config</groupId>
+			<artifactId>microprofile-config-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.eclipse.microprofile.openapi</groupId>
+			<artifactId>microprofile-openapi-api</artifactId>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -45,22 +54,5 @@
 			<artifactId>microprofile-rest-client-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		-->
 	</dependencies>
-
-	<repositories>
-
-		<repository>
-			<id>jaspersoft-clients-snapshots</id>
-			<name>Jaspersoft clients snapshots</name>
-			<url>https://jaspersoft.jfrog.io/jaspersoft/jaspersoft-clients-releases</url>
-		</repository>
-
-		<repository>
-			<id>jaspersoft-clients-snapshots1</id>
-			<name>Jaspersoft clients snapshots1</name>
-			<url>https://jaspersoft.jfrog.io/ui/native/jrs-ce-releases</url>
-		</repository>
-
-	</repositories>
 </project>

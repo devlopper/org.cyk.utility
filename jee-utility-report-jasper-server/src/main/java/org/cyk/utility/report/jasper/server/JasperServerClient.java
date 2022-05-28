@@ -13,10 +13,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
 import org.apache.commons.lang3.StringUtils;
-//import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+import org.cyk.utility.__kernel__.value.ValueHelper;
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
-//@Path("/")
-//@RegisterRestClient(configKey = JasperServerClient.CONFIG_KEY)
+@Path("/")
+@RegisterRestClient(configKey = JasperServerClient.CONFIG_KEY)
 public interface JasperServerClient {
 	String CONFIG_KEY = "jasper";
 	String PATH_REST= "/rest_v2/";
@@ -50,14 +51,14 @@ public interface JasperServerClient {
 		return requestContext.getMethod().equals(HttpMethod.POST) && requestContext.getUri().getPath().endsWith(GET_REPORT_PATH) && requestContext.getEntity() instanceof Map;
 	}
 
-	static void prepareGetReportRequest(ClientRequestContext requestContext) {
+	static void prepareGetReportRequest(ClientRequestContext requestContext,Configuration configuration) {
 		UriBuilder uriBuilder = UriBuilder.fromUri(requestContext.getUri());
 		requestContext.setMethod(HttpMethod.GET);
 
 		Map<String, String> map = (Map<String, String>) requestContext.getEntity();
 
 		if (map.containsKey(QUERY_PARAMETER_REPORT_IDENTIFIER))
-			uriBuilder.path(map.remove(QUERY_PARAMETER_REPORT_IDENTIFIER)+ (map.containsKey(QUERY_PARAMETER_FILE_TYPE) ? "." + map.remove(QUERY_PARAMETER_FILE_TYPE) : ""));
+			uriBuilder.path(map.remove(QUERY_PARAMETER_REPORT_IDENTIFIER)+"."+ValueHelper.defaultToIfBlank(map.remove(QUERY_PARAMETER_FILE_TYPE),configuration.defaultFileType()));
 
 		if (map.containsKey(QUERY_PARAMETER_SESSION_IDENTIFIER))
 			requestContext.getHeaders().put(HEARDER_COOKIE,List.of(String.format("$Version=0; JSESSIONID=%s; $Path=/jasperserver",map.remove(QUERY_PARAMETER_SESSION_IDENTIFIER))));

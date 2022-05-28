@@ -34,4 +34,9 @@ public abstract class AbstractServiceImpl implements Service,Serializable {
 			return;
 		setProjections(klass, MapHelper.instantiateStringString(fieldsNames));
 	}
+	
+	public static interface SessionIdentificationListener {
+		void set(String identifier);
+		String get();
+	}
 }
