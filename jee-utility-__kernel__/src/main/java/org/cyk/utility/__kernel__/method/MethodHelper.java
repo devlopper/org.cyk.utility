@@ -67,4 +67,33 @@ public interface MethodHelper {
 			throw new RuntimeException(exception);
 		}
 	}
+	
+	static Object execute(Object object,String name) {
+		ThrowableHelper.throwIllegalArgumentExceptionIfNull("object", object);
+		ThrowableHelper.throwIllegalArgumentExceptionIfBlank("name", name);
+		try {
+			return MethodUtils.invokeMethod(object, name);
+		} catch (Exception exception) {
+			exception.printStackTrace();
+			throw new RuntimeException(exception);
+		}
+	}
+	
+	static void executeByNames(Collection<String> names,Object object) {
+		ThrowableHelper.throwIllegalArgumentExceptionIfBlank("names", names);
+		ThrowableHelper.throwIllegalArgumentExceptionIfNull("object", object);
+		names.forEach(name -> {
+			try {
+				MethodUtils.invokeMethod(object, name);
+			} catch (Exception exception) {
+				throw new RuntimeException(exception);
+			}
+		});		
+	}
+	
+	static void executeByNames(Object object,String...names) {
+		ThrowableHelper.throwIllegalArgumentExceptionIfBlank("names", names);
+		ThrowableHelper.throwIllegalArgumentExceptionIfNull("object", object);
+		executeByNames(CollectionHelper.listOf(Boolean.TRUE, names), object);
+	}
 }

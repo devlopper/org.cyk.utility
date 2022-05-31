@@ -13,7 +13,7 @@ public class VeryLongRunActualizationDataType extends AbstractIdentifiableSystem
 	public static final String TABLE_NAME = "T3";
 	
 	public static void actualize() {
-		TimeHelper.pause(1000l * 3);
+		TimeHelper.pause(1000l * 5);
 		AP_ACTUALIZE_MV_CALL_COUNT++;
 	}
 }

@@ -40,13 +40,17 @@ public interface MaterializedViewProcedureExecutor {
 	void execute(EntityManager entityManager,Class<?>...classes);
 	void executeAsynchronously(Class<?>...classes);
 	
+	Boolean areExecutionsRunning(Collection<Class<?>> classes,Boolean loggable);
+	Boolean areExecutionsRunning(Boolean loggable,Class<?>...classes);
+	
 	@Getter @Setter @Accessors(chain=true)
 	public static class Arguments implements Serializable{
-		private EntityManager entityManager;
-		private Collection<Class<?>> classes;
-		private Boolean isAsynchronous;
-		private Long delay;
-		private java.util.logging.Level logLevel;
+		protected EntityManager entityManager;
+		protected Collection<Class<?>> classes;
+		protected Boolean isAsynchronous;
+		protected Long delay;
+		protected Boolean blockableIfRunning;
+		protected java.util.logging.Level logLevel;
 		
 		public Collection<Class<?>> getClasses(Boolean instantiateIfNull) {
 			if(classes == null && Boolean.TRUE.equals(instantiateIfNull))
@@ -77,26 +81,30 @@ public interface MaterializedViewProcedureExecutor {
 		public void execute(Arguments arguments) {
 			if(arguments == null || Boolean.TRUE.equals(CollectionHelper.isEmpty(arguments.classes)))
 				return;
-			__execute__(arguments.classes, arguments.entityManager, arguments.isAsynchronous,arguments.delay,arguments.logLevel);
+			__execute__(arguments.classes, arguments.entityManager, arguments.isAsynchronous,arguments.delay,arguments.blockableIfRunning,arguments.logLevel);
 		}
 		
-		protected void __execute__(Collection<Class<?>> classes,EntityManager entityManager,Boolean isAsynchronous,Long delay,java.util.logging.Level logLevel) {
+		protected void __execute__(Collection<Class<?>> classes,EntityManager entityManager,Boolean isAsynchronous,Long delay,Boolean blockableIfRunning,java.util.logging.Level logLevel) {
 			if(Boolean.TRUE.equals(CollectionHelper.isEmpty(classes)))
 				return;
 			if(delay != null && delay > 0)
 				TimeHelper.pause(delay);
 			for(Class<?> klass : classes)
-				__execute__(klass, entityManager, isAsynchronous,null,logLevel);
+				__execute__(klass, entityManager, isAsynchronous,null,blockableIfRunning,logLevel);
 		}
 		
-		protected void __execute__(Class<?> klass,EntityManager entityManager,Boolean isAsynchronous,Long delay,java.util.logging.Level logLevel) {
+		protected void __execute__(Class<?> klass,EntityManager entityManager,Boolean isAsynchronous,Long delay,Boolean blockableIfRunning,java.util.logging.Level logLevel) {
 			if(klass == null)
 				return;
-			synchronized(MaterializedViewProcedureExecutor.class) {
-				if(RUNNING.contains(klass)) {
-					LogHelper.logWarning(String.format("Procedure <<%s>> is already running for <<%s>>",getProcedureName(), klass), getClass());
-					return;
+			if(Boolean.TRUE.equals(blockableIfRunning)) {
+				while(Boolean.TRUE.equals(areExecutionsRunning(Boolean.FALSE, klass))) {
+					LogHelper.logInfo(String.format("Waiting completion of procedure <<%s>> for <<%s>> before returning",getProcedureName(), klass), getClass());
+					TimeHelper.pause(1000l * 30);
 				}
+				return;
+			}else if(Boolean.TRUE.equals(areExecutionsRunning(Boolean.TRUE, klass)))
+				return;
+			synchronized(MaterializedViewProcedureExecutor.class) {	
 				RUNNING.add(klass);
 			}
 			Exception[] exceptions = {null};
@@ -118,7 +126,9 @@ public interface MaterializedViewProcedureExecutor {
 						LogHelper.logSevere(String.format("Exception while running procedure <<%s>> on <<%s>> : %s", getProcedureName(),klass.getName(),exception), getClass());
 						LogHelper.log(exception, getClass());
 					} finally {
-						RUNNING.remove(klass);
+						synchronized(MaterializedViewProcedureExecutor.class) {
+							RUNNING.remove(klass);
+						}
 					}
 				}
 			};
@@ -134,31 +144,49 @@ public interface MaterializedViewProcedureExecutor {
 		
 		@Override
 		public void execute(Collection<Class<?>> classes, EntityManager entityManager) {
-			__execute__(classes, entityManager, null, null, null);
+			__execute__(classes, entityManager, null, null,null, null);
 		}
 		
 		@Override
 		public void execute(Collection<Class<?>> classes) {
-			__execute__(classes, null, null, null, null);
+			__execute__(classes, null, null, null,null, null);
 		}
 		
 		@Override
 		public void executeAsynchronously(Collection<Class<?>> classes) {
-			__execute__(classes, null, Boolean.TRUE, null, null);
+			__execute__(classes, null, Boolean.TRUE, null,null, null);
 		}
 		
 		@Override
 		public void execute(EntityManager entityManager, Class<?>... classes) {
-			__execute__(CollectionHelper.listOf(Boolean.TRUE, classes), entityManager, null, null, null);
+			__execute__(CollectionHelper.listOf(Boolean.TRUE, classes), entityManager, null, null,null, null);
 		}
 		
 		@Override
 		public void executeAsynchronously(Class<?>... classes) {
-			__execute__(CollectionHelper.listOf(Boolean.TRUE, classes), null, Boolean.TRUE, null, null);
+			__execute__(CollectionHelper.listOf(Boolean.TRUE, classes), null, Boolean.TRUE, null,null, null);
 		}
 		
 		protected String getTableName(Class<?> klass) {
 			return (String) FieldHelper.readStatic(klass, "TABLE_NAME");
+		}
+		
+		@Override
+		public Boolean areExecutionsRunning(Collection<Class<?>> classes,Boolean loggable) {
+			if(CollectionHelper.isEmpty(classes))
+				return null;
+			synchronized(MaterializedViewProcedureExecutor.class) {
+				if(RUNNING.containsAll(classes)) {
+					LogHelper.logWarning(String.format("Procedure <<%s>> is already running for <<%s>>",getProcedureName(), classes), getClass());
+					return Boolean.TRUE;
+				}
+				return Boolean.FALSE;
+			}
+		}
+		
+		@Override
+		public Boolean areExecutionsRunning(Boolean loggable,Class<?>... classes) {
+			return areExecutionsRunning(CollectionHelper.listOf(Boolean.TRUE, classes),loggable);
 		}
 	}
 }

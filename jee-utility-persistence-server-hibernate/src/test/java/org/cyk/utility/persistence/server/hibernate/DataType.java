@@ -7,6 +7,7 @@ import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureParameter;
 
 import org.cyk.utility.__kernel__.object.__static__.persistence.AbstractIdentifiableSystemScalarStringIdentifiableBusinessStringNamableImpl;
+import org.cyk.utility.__kernel__.time.TimeHelper;
 import org.cyk.utility.persistence.server.view.MaterializedViewManager;
 
 @Entity
@@ -35,6 +36,7 @@ public class DataType extends AbstractIdentifiableSystemScalarStringIdentifiable
 			LongRunActualizationDataType.actualize();
 		else if(VeryLongRunActualizationDataType.TABLE_NAME.equals(tableName))
 			VeryLongRunActualizationDataType.actualize();
+		TimeHelper.pause(1000l * 1);
 		return null;
 	}
 

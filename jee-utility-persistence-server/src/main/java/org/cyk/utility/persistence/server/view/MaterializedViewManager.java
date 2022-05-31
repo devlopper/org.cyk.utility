@@ -1,7 +1,6 @@
 package org.cyk.utility.persistence.server.view;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
@@ -45,28 +44,8 @@ public interface MaterializedViewManager {
 	void actualizeAllAsynchronously();
 	
 	@Getter @Setter @Accessors(chain=true)
-	public static class ActualizeArguments implements Serializable{
-		private EntityManager entityManager;
-		private Collection<Class<?>> classes;
-		private Boolean isAsynchronous;
-		private Long delay;
-		private java.util.logging.Level logLevel;
+	public static class ActualizeArguments extends MaterializedViewProcedureExecutor.Arguments implements Serializable{
 		
-		public Collection<Class<?>> getClasses(Boolean instantiateIfNull) {
-			if(classes == null && Boolean.TRUE.equals(instantiateIfNull))
-				classes = new ArrayList<>();
-			return classes;
-		}
-		
-		public ActualizeArguments addClasses(Collection<Class<?>> classes) {
-			if(CollectionHelper.isNotEmpty(classes))
-				getClasses(Boolean.TRUE).addAll(classes);
-			return this;
-		}
-		
-		public ActualizeArguments addClasses(Class<?>...classes) {
-			return addClasses(CollectionHelper.listOf(Boolean.TRUE, classes));
-		}
 	}
 	
 	@Getter @Setter @Accessors(chain=true)
