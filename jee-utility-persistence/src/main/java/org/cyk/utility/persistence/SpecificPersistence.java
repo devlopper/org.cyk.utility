@@ -3,6 +3,7 @@ package org.cyk.utility.persistence;
 import java.util.Collection;
 import java.util.Set;
 
+import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.persistence.query.QueryExecutorArguments;
 
 public interface SpecificPersistence<ENTITY> {
@@ -47,6 +48,8 @@ public interface SpecificPersistence<ENTITY> {
 	
 	String getParameterNameUsername();
 	
+	String getParameterNameSearch();
+	
 	/**/
 	
 	String PARAMETER_NAME_FILTER_AS_STRING = "filter_as_string";
@@ -57,4 +60,6 @@ public interface SpecificPersistence<ENTITY> {
 	String PARAMETER_NAME_DEFAULT_VALUE = "default_value";
 	
 	String PARAMETER_NAME_USERNAME = "username";
+	
+	Value PARAMETER_NAME_SEARCH = new Value().set("search");
 }
