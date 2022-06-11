@@ -23,8 +23,9 @@ public abstract class AbstractReadController extends AbstractObject implements S
 	protected Layout layout;
 	protected Integer labelWidth = 2;
 	
-	public void initialize() {
+	public AbstractReadController initialize() {
 		layout = buildLayout();
+		return this;
 	}
 	
 	protected Layout buildLayout() {

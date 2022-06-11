@@ -44,6 +44,12 @@ import lombok.experimental.Accessors;
 @Getter @Setter @Accessors(chain=true)
 public abstract class AbstractFilterController extends AbstractObject implements Serializable {
 
+	private static final String SELECT_ONE_SUFFIX = "SelectOne";
+	private static final String TEXT_SUFFIX = "InputText";
+	private static final String INITIAL_SUFFIX = "Initial";
+	
+	protected Map<String,String> inputsFieldsNamesIntialsFieldsNamesMap;
+	
 	protected Dialog dialog;
 	protected CommandButton showDialogCommandButton;
 	protected Map<String,Boolean> ignorables;
@@ -60,9 +66,75 @@ public abstract class AbstractFilterController extends AbstractObject implements
 	protected Boolean isUsedForLoggedUser;
 	protected Listener listener;
 	
+	protected Map<String,String> getInputsFieldsNamesIntialsFieldsNamesMap(Boolean createIfNull) {
+		if(inputsFieldsNamesIntialsFieldsNamesMap == null && Boolean.TRUE.equals(createIfNull))
+			inputsFieldsNamesIntialsFieldsNamesMap = new HashMap<>();
+		return inputsFieldsNamesIntialsFieldsNamesMap;
+	}
+	
+	public void addInputTextByBaseFieldName(String fieldName) {
+		getInputsFieldsNamesIntialsFieldsNamesMap(Boolean.TRUE).put(fieldName+TEXT_SUFFIX, fieldName+INITIAL_SUFFIX);
+	}
+	
+	public void addInputSelectOneByBaseFieldName(String fieldName) {
+		getInputsFieldsNamesIntialsFieldsNamesMap(Boolean.TRUE).put(fieldName+SELECT_ONE_SUFFIX, fieldName+INITIAL_SUFFIX);
+	}
+	
+	protected Boolean isFieldNameOfInputText(String fieldName) {
+		return fieldName.endsWith(TEXT_SUFFIX);
+	}
+	
+	protected Boolean isFieldNameOfInputSelectOne(String fieldName) {
+		return fieldName.endsWith(SELECT_ONE_SUFFIX);
+	}
+	
+	protected Boolean isInputText(String fieldName) {
+		return isFieldNameOfInputText(fieldName) && inputsFieldsNamesIntialsFieldsNamesMap != null && inputsFieldsNamesIntialsFieldsNamesMap.containsKey(fieldName);
+	}
+	
+	protected Boolean isInputSelectOne(String fieldName) {
+		return isFieldNameOfInputSelectOne(fieldName) && inputsFieldsNamesIntialsFieldsNamesMap != null && inputsFieldsNamesIntialsFieldsNamesMap.containsKey(fieldName);
+	}
+	
+	protected Object getControllerByInputFieldName(String fieldName) {
+		Object controller = __getControllerByInputFieldName__(fieldName);
+		if(controller == null)
+			throw new RuntimeException(String.format("Controller of field %s is required", fieldName));
+		return controller;
+	}
+	
+	protected Object __getControllerByInputFieldName__(String fieldName) {
+		return null;
+	}
+	
+	protected Object getByIdentifier(Object controller,String fieldName,String identifier) {
+		throw new RuntimeException(String.format("get %s by identifier %s using controller %s not yet implemented", fieldName,identifier,controller));
+	}
+	
 	public AbstractFilterController initialize() {
+		__addInputsByBasedOnFieldsNames__();
+		if(inputsFieldsNamesIntialsFieldsNamesMap != null) {
+			inputsFieldsNamesIntialsFieldsNamesMap.entrySet().forEach(entry -> {
+				Object initial = FieldHelper.read(this, entry.getValue());
+				if(initial == null) {
+					if(isInputSelectOne(entry.getKey()) && !ClassHelper.isBelongsToJavaPackages(getInputValueTypeByFieldName(entry.getKey())))
+						FieldHelper.write(this, entry.getValue(), getByIdentifier(getControllerByInputFieldName(entry.getKey()), entry.getValue(),WebController.getInstance().getRequestParameter(buildParameterName(entry.getKey()))));
+					else
+						FieldHelper.write(this, entry.getValue(), WebController.getInstance().getRequestParameter(buildParameterName(entry.getKey())));
+				}
+			});
+		}
+		__initialize__();
 		return this;
 	}
+	
+	protected Class<?> getInputValueTypeByFieldName(String fieldName) {
+		return (Class<?>) FieldHelper.getType(getClass(), inputsFieldsNamesIntialsFieldsNamesMap.get(fieldName));
+	}
+	
+	public void __addInputsByBasedOnFieldsNames__() {}
+	
+	public void __initialize__() {}
 	
 	public Map<String,SortOrder> getSortOrders(Boolean injectIfNull) {
 		if(sortOrders == null && Boolean.TRUE.equals(injectIfNull))
@@ -183,9 +255,30 @@ public abstract class AbstractFilterController extends AbstractObject implements
 				,CommandButton.FIELD_USER_INTERFACE_ACTION,UserInterfaceAction.SHOW_DIALOG,CommandButton.FIELD___DIALOG__,dialog);		
 	}
 	
-	protected abstract void buildInputs();
-	
 	/* Build Input */
+	
+	protected void buildInputs() {
+		if(inputsFieldsNamesIntialsFieldsNamesMap != null)
+			inputsFieldsNamesIntialsFieldsNamesMap.entrySet().forEach(entry -> {
+				if(isInputSelectOne(entry.getKey()))
+					buildInputSelectOne(entry.getKey(),(Class<?>)FieldHelper.getType(getClass(), entry.getValue()));
+				else if(isInputText(entry.getKey()))
+					buildInputText(entry.getKey());
+			});
+		__buildInputs__();
+		enableValueChangeListeners();
+		selectByValueSystemIdentifier();
+	}
+	
+	protected void __buildInputs__() {}
+	
+	protected void enableValueChangeListeners() {
+		
+	}
+	
+	protected void selectByValueSystemIdentifier() {
+		
+	}
 	
 	protected void buildInputText(String fieldName) {
 		if(StringHelper.isBlank(fieldName))
@@ -199,6 +292,8 @@ public abstract class AbstractFilterController extends AbstractObject implements
 	}
 	
 	protected String getInputTextInitialValue(String fieldName) {
+		if(isInputText(fieldName))
+			return (String) FieldHelper.read(this, inputsFieldsNamesIntialsFieldsNamesMap.get(fieldName));
 		String parameterName =  buildParameterName(fieldName);
 		if(StringHelper.isBlank(parameterName)) {
 			LogHelper.logSevere(String.format("Request parameter name has not been defined for field named <<%s>>", fieldName), getClass());
@@ -242,6 +337,8 @@ public abstract class AbstractFilterController extends AbstractObject implements
 	}
 	
 	protected Object getInputSelectOneInitialValue(String fieldName,Class<?> klass) {
+		if(isInputSelectOne(fieldName))
+			return FieldHelper.read(this, inputsFieldsNamesIntialsFieldsNamesMap.get(fieldName));
 		return WebController.getInstance().getRequestParameterEntityAsParentBySystemIdentifier(klass, null);
 	}
 	
@@ -395,8 +492,24 @@ public abstract class AbstractFilterController extends AbstractObject implements
 	}
 	
 	public Map<String, List<String>> asMap() {
-		throw new RuntimeException(getClass().getSimpleName()+" as map not yet implemented");
+		Map<String, List<String>> map = new HashMap<>();
+		if(inputsFieldsNamesIntialsFieldsNamesMap != null)
+			inputsFieldsNamesIntialsFieldsNamesMap.entrySet().forEach(entry -> {
+				if(isInputSelectOne(entry.getKey())) {
+					Object value = FieldHelper.read(this, entry.getValue());
+					if(value != null)
+						map.put(buildParameterName(entry.getKey()), List.of((String)FieldHelper.readSystemIdentifier(value)));
+				}else if(isInputText(entry.getKey())) {
+					Object value = FieldHelper.read(this, entry.getValue());
+					if(value != null)
+						map.put(buildParameterName(entry.getKey()), List.of(value.toString()));
+				}
+			});
+		__asMap__(map);
+		return map;
 	}
+	
+	public void __asMap__(Map<String, List<String>> map) {}
 	
 	protected void addParameter(Map<String, List<String>> map,String name,Object value) {
 		if(StringHelper.isBlank(name) || value == null)
