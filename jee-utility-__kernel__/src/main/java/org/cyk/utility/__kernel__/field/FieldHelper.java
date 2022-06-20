@@ -1217,6 +1217,20 @@ public interface FieldHelper {
 	
 	/**/
 	
+	static void copyStringFromStrings(Object object,String stringFieldName,String stringsFieldName) {
+		Collection<String> strings = (Collection<String>) FieldHelper.read(object, stringsFieldName);
+		if(CollectionHelper.isEmpty(strings))
+			return;
+		FieldHelper.write(object, stringFieldName, strings.stream().filter(x -> x !=null).collect(Collectors.joining(",")));
+		FieldHelper.write(object, stringsFieldName, null);
+	}
+	
+	static void copyStringFromStrings(Object object,String stringFieldName) {
+		copyStringFromStrings(object,stringFieldName, stringFieldName+"s");
+	}
+	
+	/**/
+	
 	Map<Class<?>,List<Field>> CLASS_FIELDS_MAP = new HashMap<>();
 	Map<Class<?>,Collection<Field>> PERSISTABLES_SINGLE_VALUE_ASSOCIATION_MAP = new HashMap<>();
 	Map<Class<?>,Collection<Field>> PERSISTABLES_LAZYLLY_FETCHABLE_MAP = new HashMap<>();

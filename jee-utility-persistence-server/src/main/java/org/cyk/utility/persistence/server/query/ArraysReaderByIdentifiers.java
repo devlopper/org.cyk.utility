@@ -125,7 +125,9 @@ public interface ArraysReaderByIdentifiers<ENTITY,IDENTIFIER> extends Reader<ENT
 							break;
 					}
 				}
-				if(!Boolean.TRUE.equals(hasEntityArray))
+				if(Boolean.TRUE.equals(hasEntityArray))
+					listenAfterArraySet(entity);
+				else
 					processWhenHasNoEntityArray(entity);
 			}
 		}
@@ -140,6 +142,10 @@ public interface ArraysReaderByIdentifiers<ENTITY,IDENTIFIER> extends Reader<ENT
 		
 		protected void processWhenHasNoEntityArray(ENTITY entity) {
 		
+		}
+		
+		protected void listenAfterArraySet(ENTITY entity) {
+			
 		}
 		
 		@Override

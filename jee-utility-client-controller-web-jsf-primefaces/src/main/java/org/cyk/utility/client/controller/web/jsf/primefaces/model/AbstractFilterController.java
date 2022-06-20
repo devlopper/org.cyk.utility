@@ -44,6 +44,7 @@ import lombok.experimental.Accessors;
 @Getter @Setter @Accessors(chain=true)
 public abstract class AbstractFilterController extends AbstractObject implements Serializable {
 
+	private static final String AUTO_COMPLETE_SUFFIX = "AutoComplete";
 	private static final String SELECT_ONE_SUFFIX = "SelectOne";
 	private static final String TEXT_SUFFIX = "InputText";
 	private static final String INITIAL_SUFFIX = "Initial";
@@ -80,6 +81,10 @@ public abstract class AbstractFilterController extends AbstractObject implements
 		getInputsFieldsNamesIntialsFieldsNamesMap(Boolean.TRUE).put(fieldName+SELECT_ONE_SUFFIX, fieldName+INITIAL_SUFFIX);
 	}
 	
+	public void addInputAutoCompleteByBaseFieldName(String fieldName) {
+		getInputsFieldsNamesIntialsFieldsNamesMap(Boolean.TRUE).put(fieldName+AUTO_COMPLETE_SUFFIX, fieldName+INITIAL_SUFFIX);
+	}
+	
 	protected Boolean isFieldNameOfInputText(String fieldName) {
 		return fieldName.endsWith(TEXT_SUFFIX);
 	}
@@ -88,12 +93,20 @@ public abstract class AbstractFilterController extends AbstractObject implements
 		return fieldName.endsWith(SELECT_ONE_SUFFIX);
 	}
 	
+	protected Boolean isFieldNameOfInputAutoComplete(String fieldName) {
+		return fieldName.endsWith(AUTO_COMPLETE_SUFFIX);
+	}
+	
 	protected Boolean isInputText(String fieldName) {
 		return isFieldNameOfInputText(fieldName) && inputsFieldsNamesIntialsFieldsNamesMap != null && inputsFieldsNamesIntialsFieldsNamesMap.containsKey(fieldName);
 	}
 	
 	protected Boolean isInputSelectOne(String fieldName) {
 		return isFieldNameOfInputSelectOne(fieldName) && inputsFieldsNamesIntialsFieldsNamesMap != null && inputsFieldsNamesIntialsFieldsNamesMap.containsKey(fieldName);
+	}
+	
+	protected Boolean isInputAutoComplete(String fieldName) {
+		return isFieldNameOfInputAutoComplete(fieldName) && inputsFieldsNamesIntialsFieldsNamesMap != null && inputsFieldsNamesIntialsFieldsNamesMap.containsKey(fieldName);
 	}
 	
 	protected Object getControllerByInputFieldName(String fieldName) {
@@ -117,10 +130,14 @@ public abstract class AbstractFilterController extends AbstractObject implements
 			inputsFieldsNamesIntialsFieldsNamesMap.entrySet().forEach(entry -> {
 				Object initial = FieldHelper.read(this, entry.getValue());
 				if(initial == null) {
-					if(isInputSelectOne(entry.getKey()) && !ClassHelper.isBelongsToJavaPackages(getInputValueTypeByFieldName(entry.getKey())))
+					Class<?> inputValueType = getInputValueTypeByFieldName(entry.getKey());
+					if(ClassHelper.isBelongsToJavaPackages(inputValueType)) {
+						Object value = WebController.getInstance().getRequestParameter(buildParameterName(entry.getKey()));
+						if(Boolean.class.equals(inputValueType))
+							value = ValueConverter.getInstance().convertToBoolean(value);
+						FieldHelper.write(this, entry.getValue(), value);
+					}else
 						FieldHelper.write(this, entry.getValue(), getByIdentifier(getControllerByInputFieldName(entry.getKey()), entry.getValue(),WebController.getInstance().getRequestParameter(buildParameterName(entry.getKey()))));
-					else
-						FieldHelper.write(this, entry.getValue(), WebController.getInstance().getRequestParameter(buildParameterName(entry.getKey())));
 				}
 			});
 		}
@@ -233,8 +250,6 @@ public abstract class AbstractFilterController extends AbstractObject implements
 		buildInputs();
 		buildFilterCommandButton();
 		buildLayout();
-		if(layout != null)
-			((Panel)layout.getContainer()).setCollapsed(Boolean.TRUE);
 		return this;
 	}
 	
@@ -260,7 +275,7 @@ public abstract class AbstractFilterController extends AbstractObject implements
 	protected void buildInputs() {
 		if(inputsFieldsNamesIntialsFieldsNamesMap != null)
 			inputsFieldsNamesIntialsFieldsNamesMap.entrySet().forEach(entry -> {
-				if(isInputSelectOne(entry.getKey()))
+				if(isInputSelectOne(entry.getKey()) || isInputAutoComplete(entry.getKey()))
 					buildInputSelectOne(entry.getKey(),(Class<?>)FieldHelper.getType(getClass(), entry.getValue()));
 				else if(isInputText(entry.getKey()))
 					buildInputText(entry.getKey());
@@ -337,7 +352,7 @@ public abstract class AbstractFilterController extends AbstractObject implements
 	}
 	
 	protected Object getInputSelectOneInitialValue(String fieldName,Class<?> klass) {
-		if(isInputSelectOne(fieldName))
+		if(isInputSelectOne(fieldName) || isInputAutoComplete(fieldName))
 			return FieldHelper.read(this, inputsFieldsNamesIntialsFieldsNamesMap.get(fieldName));
 		return WebController.getInstance().getRequestParameterEntityAsParentBySystemIdentifier(klass, null);
 	}
@@ -471,7 +486,9 @@ public abstract class AbstractFilterController extends AbstractObject implements
 		if(CollectionHelper.isEmpty(cellsMaps))
 			return;
 		layout = Layout.build(Layout.FIELD_IDENTIFIER,layoutIdentifier,Layout.FIELD_CELL_WIDTH_UNIT,Cell.WidthUnit.FLEX,Layout.ConfiguratorImpl.FIELD_CELLS_MAPS,cellsMaps
-				,Layout.FIELD_CONTAINER,Panel.build(Panel.FIELD_HEADER,"Filtre",Panel.FIELD_TOGGLEABLE,Boolean.TRUE));
+				,Layout.FIELD_CONTAINER,Panel.build(Panel.FIELD_HEADER,"Filtre",Panel.FIELD_TOGGLEABLE,Boolean.TRUE,Panel.FIELD_COLLAPSED,Boolean.TRUE));
+		//if(layout != null)
+		//	((Panel)layout.getContainer()).setCollapsed(Boolean.TRUE);
 	}
 	
 	protected Collection<Map<Object,Object>> buildLayoutCells() {
@@ -495,15 +512,14 @@ public abstract class AbstractFilterController extends AbstractObject implements
 		Map<String, List<String>> map = new HashMap<>();
 		if(inputsFieldsNamesIntialsFieldsNamesMap != null)
 			inputsFieldsNamesIntialsFieldsNamesMap.entrySet().forEach(entry -> {
-				if(isInputSelectOne(entry.getKey())) {
-					Object value = FieldHelper.read(this, entry.getValue());
-					if(value != null)
-						map.put(buildParameterName(entry.getKey()), List.of((String)FieldHelper.readSystemIdentifier(value)));
-				}else if(isInputText(entry.getKey())) {
-					Object value = FieldHelper.read(this, entry.getValue());
-					if(value != null)
-						map.put(buildParameterName(entry.getKey()), List.of(value.toString()));
-				}
+				Object value = FieldHelper.read(this, entry.getValue());
+				if(value == null)
+					return;
+				String parameterName = buildParameterName(entry.getKey());
+				if(isInputSelectOne(entry.getKey()) || isInputAutoComplete(entry.getKey()))
+					map.put(parameterName, List.of((String)FieldHelper.readSystemIdentifier(value)));
+				else if(isInputText(entry.getKey()))
+					map.put(parameterName, List.of(value.toString()));
 			});
 		__asMap__(map);
 		return map;
