@@ -90,7 +90,11 @@ public interface MaterializedViewProcedureExecutor {
 			if(delay != null && delay > 0)
 				TimeHelper.pause(delay);
 			for(Class<?> klass : classes)
-				__execute__(klass, entityManager, isAsynchronous,null,blockableIfRunning,logLevel);
+				try {
+					__execute__(klass, entityManager, isAsynchronous,null,blockableIfRunning,logLevel);
+				} catch (Exception exception) {
+					LogHelper.logSevere(String.format("ERROR while %s(%s) : ",procedureName,klass.getSimpleName(), exception.toString()), getClass());
+				}
 		}
 		
 		protected void __execute__(Class<?> klass,EntityManager entityManager,Boolean isAsynchronous,Long delay,Boolean blockableIfRunning,java.util.logging.Level logLevel) {

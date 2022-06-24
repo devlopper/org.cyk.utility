@@ -13,6 +13,7 @@ import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
+import org.cyk.utility.__kernel__.random.RandomHelper;
 import org.cyk.utility.__kernel__.security.SecurityHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
@@ -44,6 +45,8 @@ public interface SessionManager {
 	
 	void destroy(String username,HttpServletRequest request);
 	void destroy(String username);
+	
+	String generateIdentifier(Class<?> klass);
 	
 	public static abstract class AbstractImpl extends AbstractObject implements SessionManager,Serializable {
 		
@@ -193,6 +196,11 @@ public interface SessionManager {
 		@Override
 		public void destroy(String username) {
 			destroy(username, __inject__(HttpServletRequest.class));
+		}
+	
+		@Override
+		public String generateIdentifier(Class<?> klass) {
+			return (klass == null ? "" : klass.getSimpleName()+"_")+System.currentTimeMillis()+"_"+RandomHelper.getAlphanumeric(10);
 		}
 	}
 	

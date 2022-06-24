@@ -430,6 +430,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 			final Map<Object,Object> map = MapHelper.instantiate(objects);
 			final Action actionFinal = action;
 			addRecordMenuItemByArgumentsExecuteFunction((String)map.get(MenuItem.FIELD_VALUE), (String)map.get(MenuItem.FIELD_ICON), new MenuItem.Listener.AbstractImpl() {
+				@SuppressWarnings("unchecked")
 				@Override
 				protected Object __runExecuteFunction__(AbstractAction action) {
 					if(action == null)
@@ -446,6 +447,15 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 					if(StringHelper.isBlank(identifierAsString))
 						throw new java.lang.RuntimeException("Argument identifier is required to navigate to "+vOutcome);
 					parameters.put(StringHelper.isBlank(entityIdentifierParameterName) ? ParameterName.ENTITY_IDENTIFIER.getValue() : entityIdentifierParameterName,List.of(identifierAsString));
+					/*if(MapHelper.isEmpty(action.get__parameters__())) {
+						if(map.get(MenuItem.FIELD___PARAMETERS__) != null)
+							parameters.putAll((Map<? extends String, ? extends List<String>>) map.get(MenuItem.FIELD___PARAMETERS__));
+					}else
+						parameters.putAll(action.get__parameters__());
+					*/
+					if(map.get(MenuItem.FIELD_PARAMETERS) != null)
+						parameters.putAll((Map<? extends String, ? extends List<String>>) map.get(MenuItem.FIELD_PARAMETERS));
+					
 					if(MapHelper.isNotEmpty(action.get__parameters__()))
 						parameters.putAll(action.get__parameters__());
 					Redirector.getInstance().redirect(vOutcome, parameters);			
