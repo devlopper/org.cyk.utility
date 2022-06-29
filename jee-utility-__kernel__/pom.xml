@@ -27,7 +27,7 @@
 		<com.google.zxing.core.version>${com.google.zxing.version}</com.google.zxing.core.version>
 		<com.google.zxing.javase.version>${com.google.zxing.version}</com.google.zxing.javase.version>
 
-		<org.apache.poi.poi.version>3.17</org.apache.poi.poi.version>
+		<org.apache.poi.poi.version>4.1.1</org.apache.poi.poi.version>
 		<org.apache.poi.poi-ooxml.version>3.17</org.apache.poi.poi-ooxml.version>
 		
 		<net.sf.barcode4j.barcode4j.version>2.1</net.sf.barcode4j.barcode4j.version>
