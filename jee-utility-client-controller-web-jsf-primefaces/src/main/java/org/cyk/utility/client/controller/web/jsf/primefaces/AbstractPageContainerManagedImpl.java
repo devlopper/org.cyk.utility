@@ -2,10 +2,12 @@ package org.cyk.utility.client.controller.web.jsf.primefaces;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.cyk.utility.__kernel__.identifier.resource.UniformResourceIdentifierHelper;
+import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.session.SessionManager;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.user.interface_.message.MessageRenderer;
@@ -14,6 +16,11 @@ import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.window.WindowBuilder;
 import org.cyk.utility.client.controller.event.EventBuilder;
 import org.cyk.utility.client.controller.event.EventName;
+import org.cyk.utility.client.controller.web.WebController;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.AbstractFilterController;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.collection.DataTable;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.Button;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.menu.MenuItem;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.panel.OutputPanel;
 import org.cyk.utility.client.controller.web.jsf.primefaces.tag.BlockUI;
 
@@ -89,4 +96,36 @@ public abstract class AbstractPageContainerManagedImpl extends org.cyk.utility.c
 	protected static final PrimefacesHelper __injectPrimefacesHelper__() {
 		return __inject__(PrimefacesHelper.class);
 	}
+	
+	public static void addDataTableRecordMenuItemByArgumentsNavigateToViewWithFilterController(Class<?> pageClass,DataTable dataTable,AbstractFilterController filterController,String menuItemOutcome,String menuItemValue,String menuItemIcon) {
+		String filterControllerSessionIdentifier = SessionManager.getInstance().generateIdentifier(pageClass);
+		SessionManager.getInstance().writeAttribute(filterControllerSessionIdentifier, filterController);
+		dataTable.addRecordMenuItemByArgumentsNavigateToView(null,menuItemOutcome,MenuItem.FIELD_PARAMETERS,Map.of(AbstractFilterController.SESSION_IDENTIFIER_REQUEST_PARAMETER_NAME
+				,List.of(filterControllerSessionIdentifier)), MenuItem.FIELD_VALUE,menuItemValue,MenuItem.FIELD_ICON,menuItemIcon);
+	}
+	
+	public static void addDataTableRecordMenuItemDetailsByArgumentsNavigateToViewWithFilterController(Class<?> pageClass,DataTable dataTable,AbstractFilterController filterController,String menuItemOutcome) {
+		addDataTableRecordMenuItemByArgumentsNavigateToViewWithFilterController(pageClass, dataTable, filterController, menuItemOutcome, "Détails", "fa fa-eye");
+	}
+	
+	public static Button buildBackButtonWithFilterController(String buttonOutcome,String buttonValue,String buttonIcon) {
+		return Button.build(Button.FIELD_VALUE,buttonValue,Button.FIELD_ICON,buttonIcon,Button.FIELD_OUTCOME,buttonOutcome
+				,Button.FIELD_PARAMETERS,Map.of(AbstractFilterController.SESSION_IDENTIFIER_REQUEST_PARAMETER_NAME,WebController.getInstance().getRequestParameter(AbstractFilterController.SESSION_IDENTIFIER_REQUEST_PARAMETER_NAME)));
+	}
+	
+	public static Button buildBackButtonWithFilterController(String buttonOutcome) {
+		return buildBackButtonWithFilterController(buttonOutcome, BACK_BUTTON_VALUE, BACK_BUTTON_ICON);
+	}
+	
+	public static <FILTER_CONTROLLER extends AbstractFilterController> FILTER_CONTROLLER getFilterControllerFromSessionOrInstantiateIfNull(Class<FILTER_CONTROLLER> filterControllerClass,FILTER_CONTROLLER filterController) {
+		return AbstractFilterController.getFromSessionOrInstantiateIfNull(filterControllerClass, filterController);
+	}
+	
+	public static <FILTER_CONTROLLER extends AbstractFilterController> FILTER_CONTROLLER getFilterControllerFromSessionOrInstantiateIfNull(Class<FILTER_CONTROLLER> filterControllerClass) {
+		return getFilterControllerFromSessionOrInstantiateIfNull(filterControllerClass, null);
+	}
+	
+	public static String BACK_BUTTON_VALUE = "Retour à la liste";
+	public static String BACK_BUTTON_ICON = "fa fa-arrow-left";
+	//private static final String FILTER_CONTROLLER_SESSION_IDENTIFIER_REQUEST_PARAMETER_NAME = "fc_sid";
 }

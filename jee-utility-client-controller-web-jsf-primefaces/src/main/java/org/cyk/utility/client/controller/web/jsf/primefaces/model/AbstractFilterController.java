@@ -19,6 +19,7 @@ import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.random.RandomHelper;
+import org.cyk.utility.__kernel__.session.SessionManager;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.time.TimeHelper;
 import org.cyk.utility.__kernel__.user.interface_.UserInterfaceAction;
@@ -567,4 +568,21 @@ public abstract class AbstractFilterController extends AbstractObject implements
 	}
 	
 	/**/
+	
+	@SuppressWarnings("unchecked")
+	public static <FILTER_CONTROLLER extends AbstractFilterController> FILTER_CONTROLLER getFromSessionOrInstantiateIfNull(Class<FILTER_CONTROLLER> filterControllerClass,FILTER_CONTROLLER filterController) {
+		if(filterController != null)
+			return filterController;
+		String identifier = WebController.getInstance().getRequestParameter(SESSION_IDENTIFIER_REQUEST_PARAMETER_NAME);
+		if(StringHelper.isNotBlank(identifier)) {
+			filterController = (FILTER_CONTROLLER) SessionManager.getInstance().readAttribute(identifier);
+			if(filterController != null)
+				SessionManager.getInstance().writeAttribute(identifier, null);// To free up object
+		}
+		if(filterController == null)
+			filterController = ClassHelper.instanciate(filterControllerClass); 
+		return filterController;
+	}
+	
+	public static final String SESSION_IDENTIFIER_REQUEST_PARAMETER_NAME = "fc_sid";
 }

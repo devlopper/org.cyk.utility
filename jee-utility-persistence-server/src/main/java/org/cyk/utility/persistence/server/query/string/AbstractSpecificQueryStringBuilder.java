@@ -11,6 +11,7 @@ import javax.annotation.PostConstruct;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
+import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.persistence.SpecificPersistence;
@@ -19,28 +20,35 @@ import org.cyk.utility.persistence.entity.AbstractIdentifiableSystemScalarString
 import org.cyk.utility.persistence.entity.IdentifiableSystemScalarStringIdentifiableBusinessString;
 import org.cyk.utility.persistence.entity.IdentifiableSystemScalarStringIdentifiableBusinessStringNamable;
 import org.cyk.utility.persistence.query.Filter;
+import org.cyk.utility.persistence.query.Language;
 import org.cyk.utility.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.persistence.server.query.string.QueryStringBuilder.Arguments;
 
 public abstract class AbstractSpecificQueryStringBuilder<T> implements Serializable {
 	
 	protected String searchPredicate;
+	protected String defaultValuePredicate;
 	
 	@PostConstruct
 	public void postConstruct() {
 		searchPredicate = buildSearchPredicate();
+		defaultValuePredicate = buildDefaultValuePredicate();
 	}
 	
 	protected Class<T> getPeristenceClass() {
 		return (Class<T>) ClassHelper.getParameterAt(getClass(), 0);
 	}
 	
-	String buildSearchPredicate() {
+	protected String buildSearchPredicate() {
 		if(CollectionHelper.isEmpty(getSearchPredicateFieldsNames()) || StringHelper.isBlank(getPersistence().getParameterNameSearch()))
 			return null;
 		return parenthesis(or(
 				getSearchPredicateFieldsNames().stream().map(fieldName -> LikeStringBuilder.getInstance().build("t",fieldName, getPersistence().getParameterNameSearch())).collect(Collectors.toList())
 		));
+	}
+	
+	protected String buildDefaultValuePredicate() {
+		return null;
 	}
 	
 	protected Collection<String> getSearchPredicateFieldsNames() {
@@ -59,6 +67,7 @@ public abstract class AbstractSpecificQueryStringBuilder<T> implements Serializa
 	
 	public void populatePredicates(QueryExecutorArguments queryExecutorArguments, Arguments arguments, WhereStringBuilder.Predicate predicate,Filter filter) {
 		populatePredicatesSearch(queryExecutorArguments, arguments, predicate, filter);
+		populatePredicatesDefaultValue(queryExecutorArguments, arguments, predicate, filter);
 	}
 	
 	public void populatePredicatesSearch(QueryExecutorArguments queryExecutorArguments, Arguments arguments, WhereStringBuilder.Predicate predicate,Filter filter) {
@@ -66,6 +75,19 @@ public abstract class AbstractSpecificQueryStringBuilder<T> implements Serializa
 			predicate.add(searchPredicate);
 			String search = ValueHelper.defaultToIfBlank((String) queryExecutorArguments.getFilterFieldValue(getPersistence().getParameterNameSearch()),"");
 			filter.addField(getPersistence().getParameterNameSearch(), LikeStringValueBuilder.getInstance().build(search, null, null));
+		}
+	}
+	
+	public void populatePredicatesDefaultValue(QueryExecutorArguments queryExecutorArguments, Arguments arguments, WhereStringBuilder.Predicate predicate,Filter filter) {
+		if(queryExecutorArguments.getFilterField(getPersistence().getParameterNameDefaultValue()) != null) {
+			if(StringHelper.isBlank(defaultValuePredicate)) {
+				LogHelper.logWarning("Default value predicate not yet defined", getClass());
+				return;
+			}
+			Boolean defaultValue = queryExecutorArguments.getFilterFieldValueAsBoolean(null,getPersistence().getParameterNameDefaultValue());
+			if(defaultValue == null)
+				return;
+			predicate.add(defaultValue ? defaultValuePredicate : Language.Where.not(defaultValuePredicate));
 		}
 	}
 	

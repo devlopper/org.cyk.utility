@@ -22,4 +22,5 @@ public class ProcedureExecutorArguments extends AbstractObject implements Serial
 	private Map<String,Object> parameters = new HashMap<>();
 	private EntityManager entityManager;
 	private Level logLevel;
+	private Boolean transactionable;
 }

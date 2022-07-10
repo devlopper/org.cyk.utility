@@ -120,6 +120,7 @@ public interface MaterializedViewProcedureExecutor {
 					arguments.setParameters(Map.of(getParameterNameTable(),getTableName(klass)));
 					arguments.setEntityManager(entityManager);
 					arguments.setLogLevel(logLevel);
+					arguments.setTransactionable(Boolean.FALSE);
 					ProcedureExecutor procedureExecutor = procedureExecutorGetter.getProcedureExecutor();
 					if(procedureExecutor == null)
 						throw new RuntimeException(String.format("Procedure executor is required to execute procedure <<%s>> on <<%s>>", getProcedureName(),klass.getName()));

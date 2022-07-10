@@ -234,7 +234,6 @@ public class NumberHelperUnitTest extends AbstractWeldUnitTest {
 	//@Test
 	public void format_1000(){
 		String string = NumberHelper.format(1000);
-		System.out.println("NumberHelperUnitTest.format_1000() : "+string);
 		assertThat(string).isEqualTo("1 000");
 	}
 	

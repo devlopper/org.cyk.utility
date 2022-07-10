@@ -37,6 +37,7 @@ public interface ProcedureExecutor {
 				name = arguments.getKlass().getSimpleName()+"."+arguments.getProcedureName().getValue();
 			ThrowableHelper.throwIllegalArgumentExceptionIfBlank("procedure name", name);
 			EntityManager entityManager = arguments.getEntityManager() == null ? EntityManagerGetter.getInstance().get() : arguments.getEntityManager();
+			Boolean transactionable = arguments.getEntityManager() == null && (arguments.getTransactionable() == null || arguments.getTransactionable());
 			StoredProcedureQuery storedProcedureQuery = entityManager.createNamedStoredProcedureQuery(name);
 			if(MapHelper.isNotEmpty(arguments.getParameters())) {
 				arguments.getParameters().forEach( (key,value) -> {
@@ -44,12 +45,28 @@ public interface ProcedureExecutor {
 				});
 			}
 			LogHelper.log(String.format("Exécution de la procédure stockée %s en cours...", name),ValueHelper.defaultToIfNull(arguments.getLogLevel(), Level.FINE), getClass());
-			if(arguments.getEntityManager() == null)
-				entityManager.getTransaction().begin();
+			Boolean transactionStarted = null;
+			if(transactionable)
+				try {
+					entityManager.getTransaction().begin();
+					transactionStarted = Boolean.TRUE;
+				} catch (Exception exception) {
+					LogHelper.logSevere(String.format("Error while starting transaction %s%s - %s", name,MapHelper.isEmpty(arguments.getParameters()) ? "" : arguments.getParameters(),exception.getMessage()), getClass());
+				}
 			Long t = System.currentTimeMillis();
-			Boolean result = storedProcedureQuery.execute();
-			if(arguments.getEntityManager() == null)
-				entityManager.getTransaction().commit();
+			Boolean result = null;
+			try {
+				result = storedProcedureQuery.execute();
+			} catch (Exception exception) {
+				LogHelper.logSevere(String.format("Error while executing %s%s - %s", name,MapHelper.isEmpty(arguments.getParameters()) ? "" : arguments.getParameters(),exception.getMessage()), getClass());
+			}
+			if(transactionable && Boolean.TRUE.equals(transactionStarted))
+				try {
+					entityManager.getTransaction().commit();
+				} catch (Exception exception) {
+					LogHelper.logSevere(String.format("Error while commiting transaction %s%s - %s", name,MapHelper.isEmpty(arguments.getParameters()) ? "" : arguments.getParameters(),exception.getMessage()), getClass());
+					entityManager.getTransaction().rollback();
+				}
 			LogHelper.log(String.format("Procédure stockée %s exécutée en %s", name,TimeHelper.formatDuration(System.currentTimeMillis() - t)),ValueHelper.defaultToIfNull(arguments.getLogLevel(), Level.FINE), getClass());
 			releaseConnection(storedProcedureQuery, name);
 			return result;
