@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:weld="http://jboss.org/schema/weld/beans" 
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee 
+		http://xmlns.jcp.org/xml/ns/javaee/beans_1_1.xsd"
+	bean-discovery-mode="all">
+
+	<weld:scan>
+		<weld:exclude name="org.omnifaces.cdi.contextparam.ContextParamProducer" />
+		<weld:exclude name="org.omnifaces.cdi.cookie.RequestCookieProducer" />
+	</weld:scan>
+
+</beans> 

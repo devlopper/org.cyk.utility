@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<facelet-taglib
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd"
+    version="2.0"
+>
+    <namespace>http://primefaces.jsf.web.utility.cyk.org</namespace>
+	
+	<tag>
+        <tag-name>blockUI</tag-name>
+        <source>tag/blockui/blockUI.xhtml</source>
+        <attribute>
+        	<description>block user interface</description>
+            <name>value</name>
+            <required>true</required>
+            <type>org.cyk.utility.client.controller.web.jsf.primefaces.tag.BlockUI</type>
+        </attribute>
+        
+    </tag>
+    
+    <tag>
+        <tag-name>pickList</tag-name>
+        <source>tag/picklist/pickList.xhtml</source>
+        <attribute>
+        	<description>select many from pick list</description>
+            <name>value</name>
+            <required>true</required>
+            <type>org.cyk.utility.client.controller.web.jsf.primefaces.tag.PickList</type>
+        </attribute>
+        
+    </tag>
+	
+	<tag>
+        <tag-name>tree</tag-name>
+        <source>tag/tree/tree.xhtml</source>
+        <attribute>
+        	<description>tree</description>
+            <name>value</name>
+            <required>true</required>
+            <type>org.cyk.utility.client.controller.web.jsf.primefaces.tag.Tree</type>
+        </attribute>
+        
+    </tag>
+	
+	<!-- Input -->
+	
+	<tag>
+        <tag-name>inputTree</tag-name>
+        <source>tag/input/tree/inputTree.xhtml</source>
+        <attribute>
+        	<description>input tree</description>
+            <name>value</name>
+            <required>true</required>
+            <type>org.cyk.utility.client.controller.web.jsf.primefaces.tag.InputTree</type>
+        </attribute>
+        
+    </tag>
+	
+    <tag>
+        <tag-name>inputText</tag-name>
+        <source>tag/input/text/oneline/text.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>inputTextarea</tag-name>
+        <source>tag/input/text/manyline/textArea.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>inputEditor</tag-name>
+        <source>tag/input/text/editor/editor.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>inputFile</tag-name>
+        <source>tag/input/file/fileUpload.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>inputDate</tag-name>
+        <source>tag/input/date/calendar.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>inputDateTime</tag-name>
+        <source>tag/input/date/calendar.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>inputNumber</tag-name>
+        <source>tag/input/number/inputNumber.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>selectBooleanCheckbox</tag-name>
+        <source>tag/input/boolean/selectBooleanCheckbox.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>selectBooleanButton</tag-name>
+        <source>tag/input/boolean/selectBooleanButton.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>selectOneMenu</tag-name>
+        <source>tag/input/choice/one/selectOneMenu.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>autoComplete</tag-name>
+        <source>tag/input/choice/autoComplete.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>selectOneRadio</tag-name>
+        <source>tag/input/choice/one/selectOneRadio.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>selectManyCheckbox</tag-name>
+        <source>tag/input/choice/many/selectManyCheckbox.xhtml</source>
+    </tag>
+    
+    <!-- Output -->
+    
+    <tag>
+        <tag-name>outputLabel</tag-name>
+        <source>tag/output/text/label.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>outputText</tag-name>
+        <source>tag/output/text/text.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>outputLink</tag-name>
+        <source>tag/output/text/link.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>outputFile</tag-name>
+        <source>tag/output/file/file.xhtml</source>
+    </tag>
+    
+    <!-- Message -->
+    
+    <tag>
+        <tag-name>message</tag-name>
+        <source>tag/output/text/message.xhtml</source>
+    </tag>
+    
+    <!-- Layout -->
+    
+    <tag>
+        <tag-name>layoutGridFlexible</tag-name>
+        <source>tag/layout/flexible/grid.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>layoutGridFlexibleCell</tag-name>
+        <source>tag/layout/flexible/cell.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>layoutGridResponsive</tag-name>
+        <source>tag/layout/responsive/grid.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>layoutGridResponsiveCell</tag-name>
+        <source>tag/layout/responsive/cell.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>layout</tag-name>
+        <source>tag/layout/layout.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>layoutItem</tag-name>
+        <source>tag/layout/item.xhtml</source>
+    </tag>
+    
+    <!-- Container -->
+    
+    <tag>
+        <tag-name>container</tag-name>
+        <source>tag/container/container.xhtml</source>
+    </tag>
+    
+    <!-- View -->
+    
+    <tag>
+        <tag-name>view</tag-name>
+        <source>tag/view/view.xhtml</source>
+    </tag>
+    
+    <!-- Form -->
+    
+    <tag>
+        <tag-name>formLayout</tag-name>
+        <source>tag/form/layout.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>form</tag-name>
+        <source>tag/form/form.xhtml</source>
+    </tag>
+    
+    <!-- Commandable -->
+    
+    <tag>
+        <tag-name>commandable</tag-name>
+        <source>tag/command/commandable.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>commandableButton</tag-name>
+        <source>tag/command/commandableButton.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>commandableLink</tag-name>
+        <source>tag/command/commandableLink.xhtml</source>
+    </tag>
+    <!--
+    <tag>
+        <tag-name>commandButton</tag-name>
+        <source>tag/command/commandButton.xhtml</source>
+    </tag>
+    -->
+    <!-- Misc -->
+    
+    <tag>
+        <tag-name>components</tag-name>
+        <source>tag/component/components.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>visibleComponents</tag-name>
+        <source>tag/component/components.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>insert</tag-name>
+        <source>tag/insert/insert.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>page</tag-name>
+        <source>tag/page/page.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>contractMetadata</tag-name>
+        <source>tag/contract/contractMetadata.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>contractHead</tag-name>
+        <source>tag/contract/contractHead.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>contractHeadJavascript</tag-name>
+        <source>tag/contract/contractHeadJavascript.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>contractHeadCascadeStyleSheet</tag-name>
+        <source>tag/contract/contractHeadCascadeStyleSheet.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>contractBody</tag-name>
+        <source>tag/contract/contractBody.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>contractBodyMessages</tag-name>
+        <source>tag/contract/contractBodyMessages.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>contractBodyWithTheme</tag-name>
+        <source>tag/contract/contractBodyWithTheme.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>contractBodyWithThemeBeforeFormTag</tag-name>
+        <source>tag/contract/contractBodyWithThemeBeforeFormTag.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>contractBodyWithThemeInsideFormTag</tag-name>
+        <source>tag/contract/contractBodyWithThemeInsideFormTag.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>contractBodyWithThemeInsideFormTagBodyFirst</tag-name>
+        <source>tag/contract/contractBodyWithThemeInsideFormTagBodyFirst.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>contractBodyWithThemeAfterFormTag</tag-name>
+        <source>tag/contract/contractBodyWithThemeAfterFormTag.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>contractBodyWithoutTheme</tag-name>
+        <source>tag/contract/contractBodyWithoutTheme.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>contractBodyAjaxStatus</tag-name>
+        <source>tag/contract/contractBodyAjaxStatus.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>contractBodyConfirmDialog</tag-name>
+        <source>tag/contract/contractBodyConfirmDialog.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>menu</tag-name>
+        <source>tag/menu/menu.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>menuBar</tag-name>
+        <source>tag/menu/menuBar.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>menuPanel</tag-name>
+        <source>tag/menu/menuPanel.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>menuContext</tag-name>
+        <source>tag/menu/menuContext.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>grid</tag-name>
+        <source>tag/grid/grid.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>cell</tag-name>
+        <source>tag/cell/cell.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>dialog</tag-name>
+        <source>tag/dialog/dialog.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>ajax</tag-name>
+        <source>tag/ajax/ajax.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>ajaxs</tag-name>
+        <source>tag/ajax/ajaxs.xhtml</source>
+    </tag>
+    
+    <!-- Hierarchy -->
+    <!-- Organigram -->
+    <tag>
+        <tag-name>organigramNode</tag-name>
+        <source>tag/hierarchy/organigram/node.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>organigram</tag-name>
+        <source>tag/hierarchy/organigram/organigram.xhtml</source>
+    </tag>
+    
+    <!-- File -->
+    <tag>
+        <tag-name>file</tag-name>
+        <source>tag/file/file.xhtml</source>
+    </tag>
+    
+    <!-- Image -->
+    <tag>
+        <tag-name>image</tag-name>
+        <source>tag/image/graphicImage.xhtml</source>
+    </tag>
+    
+    <!-- Link -->
+    <tag>
+        <tag-name>link</tag-name>
+        <source>tag/link/link.xhtml</source>
+    </tag>
+    
+    <!-- Text -->
+    <tag>
+        <tag-name>text</tag-name>
+        <source>tag/text/text.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>script</tag-name>
+        <source>tag/script/script.xhtml</source>
+    </tag>
+</facelet-taglib>

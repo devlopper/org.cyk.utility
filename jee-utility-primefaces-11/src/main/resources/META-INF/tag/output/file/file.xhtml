@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core" 
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<ui:decorate template="/template.xhtml">
+		<ui:define name="valueIsNotNull">
+			<!-- it does not have a file -->
+			<c:if test="#{value.file == null}">
+				NO FILE TO RENDER
+			</c:if>
+			
+			<!-- it has a file -->
+			<c:if test="#{value.file != null}">
+				<c:if test="#{value.file.isEmbedded or not empty value.file.value.path}">
+					<cyk:file value="#{value.file}" />
+				</c:if>	
+				
+				
+				<c:if test="#{not value.file.isEmbedded}">
+					<!-- to reduce network data traffic we will use a link and an icon to represent the file -->
+					<!-- it has a link. this way we make the file accessible to the user by clicking on it -->
+					<c:if test="#{value.link != null}">
+						<cyk:link value="#{value.link}"/>
+					</c:if>	
+					
+					<!-- if link render only text then we need a visual representation of the file : thumbnail as image -->
+					<c:if test="#{value.thumbnail != null}">
+						<cyk:image value="#{value.thumbnail}" />
+					</c:if>
+				</c:if>	
+				
+				
+			</c:if>
+						
+		</ui:define>
+	</ui:decorate>	
+
+</ui:composition>

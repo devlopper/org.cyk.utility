@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<h:outputText 
+		id="#{identifier}" 
+		value="#{column.headerOutputText.value}"
+		title="#{column.headerOutputText.title}"
+		styleClass="#{column.headerOutputText.styleClass}" 
+		style="#{column.headerOutputText.style}"/>
+	
+	<!--
+	<h:outputText value="#{column.headerText}" />
+	-->
+	<!--
+	<ui:decorate template="/command/commandbutton/default.xhtml">
+ 		<ui:param name="commandButton" value="#{column.removeCommandButton}"/>
+ 		<ui:param name="actionArgument" value="#{column}"/>
+ 	</ui:decorate>
+	-->
+	
+	<p:commandButton action="#{column.removeCommandButton.action(column)}" update="#{column.removeCommandButton.update}"
+		process="#{column.removeCommandButton.process}" title="#{column.removeCommandButton.title}" icon="#{column.removeCommandButton.icon}"
+		rendered="#{column.removeCommandButton!=null and column.removeCommandButton.rendered}"/>
+	
+</ui:composition>

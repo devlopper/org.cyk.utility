@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<ui:param name="isSelectionModeNotEmpty" value="#{not empty column.selectionMode}"/>
+	
+	<c:if test="#{isSelectionModeNotEmpty}">
+		<p:column id="#{column.identifier}" selectionMode="#{column.selectionMode}" width="#{column.width}">
+			<f:facet name="header">
+				<ui:insert name="columnHeader">
+					<h:outputText value="#{column.headerText}" />
+				</ui:insert>
+			</f:facet>
+			
+			<ui:insert name="columnBody">
+				<h:outputText value="body" />
+	 		</ui:insert>
+	 		
+	 		<f:facet name="footer">
+				<ui:insert name="columnFooter">
+					
+				</ui:insert>
+			</f:facet>
+	 	</p:column>	 		
+	</c:if>
+	
+	<c:if test="#{not isSelectionModeNotEmpty}">
+		<p:column id="#{column.identifier}" width="#{column.width}" rendered="#{column.rendered}">
+			<f:facet name="header">				
+				<ui:insert name="columnHeader">					
+					<h:outputText value="#{column.header}" />
+				</ui:insert>				
+			</f:facet>
+			
+			<ui:insert name="columnBody">
+				<h:outputText value="body" />
+	 		</ui:insert>
+	 		
+	 		<f:facet name="footer">
+				<ui:insert name="columnFooter">
+					
+				</ui:insert>
+			</f:facet>
+			
+	 	</p:column>
+	</c:if>
+ 	
+</ui:composition>

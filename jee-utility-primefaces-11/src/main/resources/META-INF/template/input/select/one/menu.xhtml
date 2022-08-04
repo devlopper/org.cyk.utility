@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<p:selectOneMenu 
+		id="#{selectableInputId}" 
+		value="#{selection.value}" 
+		converter="#{objectConverter}" 
+		filter="true" 
+		filterMatchMode="contains"
+		required="#{required}"
+		requiredMessage="#{empty requiredMessage ? 'valeur obligatoire' : requiredMessage}"
+	>
+		<f:selectItem itemLabel="#{selection.message}" />
+		<f:selectItems value="#{selection.choices}" var="item" itemLabel="#{item}" itemValue="#{item}"/>
+		<p:ajax listener="#{selection.listenSelect}" update="#{ajaxUpdate}" disabled="#{ajaxDisabled == null ? empty ajaxUpdate : ajaxDisabled}"
+			oncomplete="#{ajaxOncomplete}"/>
+	</p:selectOneMenu>
+  			
+</ui:composition>

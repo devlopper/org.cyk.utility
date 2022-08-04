@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<div class="p-grid">
+		<div class="p-col-12 cyk-font-weight-bold">	
+			<c:if test="#{graphicImage.labelOutputText != null}">
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(graphicImage.labelOutputText)}">
+			    	<ui:param name="outputText" value="#{graphicImage.labelOutputText}"/>   			
+			    </ui:decorate>
+			</c:if>
+		</div>
+		
+		<!-- Image -->
+		<div class="p-col-12 cyk-padding-2 cyk-image-window">
+			<c:if test="#{not empty graphicImage.url}">
+				<p:graphicImage
+					url="#{graphicImage.url}"
+					stream="false"
+					
+					alt="#{graphicImage.alt}"
+					cache="#{graphicImage.cache}"
+					height="#{graphicImage.height}"
+					rendered="#{graphicImage.rendered}"		
+					title="#{graphicImage.title}"		
+					width="#{graphicImage.width}"		
+					styleClass="#{graphicImage.styleClass}"
+					style="#{graphicImage.style}"
+				>
+				
+				</p:graphicImage>
+			</c:if>
+			
+			<!-- based on value -->
+			<c:if test="#{empty graphicImage.url and empty graphicImage.library}">
+				<p:graphicImage
+					value="#{graphicImage.value}"
+					stream="#{graphicImage.stream}"
+					
+					alt="#{graphicImage.alt}"
+					cache="#{graphicImage.cache}"
+					height="#{graphicImage.height}"
+					rendered="#{graphicImage.rendered}"		
+					title="#{graphicImage.title}"		
+					width="#{graphicImage.width}"		
+					styleClass="#{graphicImage.styleClass}"
+					style="#{graphicImage.style}"
+				>
+				
+				</p:graphicImage>
+			</c:if>
+			
+			<!-- based on library -->
+			<c:if test="#{not empty graphicImage.library}">
+				<p:graphicImage
+					library="#{graphicImage.library}"
+					name="#{graphicImage.name}"
+					
+					alt="#{graphicImage.alt}"
+					cache="#{graphicImage.cache}"
+					height="#{graphicImage.height}"
+					rendered="#{graphicImage.rendered}"		
+					title="#{graphicImage.title}"		
+					width="#{graphicImage.width}"		
+					styleClass="#{graphicImage.styleClass}"
+					style="#{graphicImage.style}"
+				>
+				
+				</p:graphicImage>
+			</c:if>
+		</div>
+		
+		<!-- Commands -->
+		<div class="p-col-12 cyk-padding-0">
+			<!--
+			<c:if test="#{graphicImage.createCommandButton != null}">
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(graphicImage.createCommandButton)}">
+			    	<ui:param name="commandButton" value="#{graphicImage.createCommandButton}"/>   			
+			    </ui:decorate>
+			</c:if>
+			-->
+			<c:if test="#{graphicImage.readButton != null}">
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(graphicImage.readButton)}">
+			    	<ui:param name="button" value="#{graphicImage.readButton}"/>   			
+			    </ui:decorate>
+			</c:if>
+			
+			<c:if test="#{graphicImage.readCommandButton != null}">
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(graphicImage.readCommandButton)}">
+			    	<ui:param name="commandButton" value="#{graphicImage.readCommandButton}"/>   			
+			    </ui:decorate>
+			</c:if>
+			
+			<c:if test="#{graphicImage.updateCommandButton != null}">
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(graphicImage.updateCommandButton)}">
+			    	<ui:param name="commandButton" value="#{graphicImage.updateCommandButton}"/>   			
+			    </ui:decorate>
+			</c:if>
+				
+		    <c:if test="#{graphicImage.deleteCommandButton != null}">
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(graphicImage.deleteCommandButton)}">
+			    	<ui:param name="commandButton" value="#{graphicImage.deleteCommandButton}"/>   			
+			    </ui:decorate>
+			</c:if>
+		</div>
+	</div>
+</ui:composition>

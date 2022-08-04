@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<cyk:dialog value="#{__page__.window.dialog}">
+ 		<ui:define name="dialogContent">
+ 			<h:inputHidden id="#{componentHelper.globalMessagesOwnerDialogComponentIdentifier}" />
+   			<!--
+   			<p:scrollPanel style="min-width:400px;max-width:800px;min-height:100px;max-height:500px;">
+   			-->
+   				<p:messages id="#{componentHelper.globalMessagesTargetDialogComponentIdentifier}ID" for="#{componentHelper.globalMessagesOwnerDialogComponentIdentifier}" />
+   			<!--
+   			</p:scrollPanel>
+   			-->
+ 		</ui:define>
+ 	</cyk:dialog>
+	
+	<!--
+	<p:dialog id="#{componentHelper.globalMessagesTargetDialogComponentIdentifier}" header="Messages" modal="true" appendTo="@(body)" visible="#{facesContext.getMessages(componentHelper.globalMessagesOwnerDialogComponentClientIdentifier).hasNext()}">
+	    <h:inputHidden id="#{componentHelper.globalMessagesOwnerDialogComponentIdentifier}" />
+	    DIALOG : #{__page__.window.dialog}
+   		<p:scrollPanel style="max-width:700px;max-height:500px">
+   			<p:messages id="#{componentHelper.globalMessagesTargetDialogComponentIdentifier}ID" for="#{componentHelper.globalMessagesOwnerDialogComponentIdentifier}" />
+   		</p:scrollPanel>
+   		<p:separator/>
+   		<p:outputPanel>
+   			<p:button value="OK" />
+   		</p:outputPanel>
+	</p:dialog>
+	-->
+
+</ui:composition>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<ui:decorate template="/input/default.xhtml">
+		<!--
+		<ui:define name="message">
+			<ui:decorate template="#{primefacesHelper.getModelTemplate(selectOneRadio.message)}">
+				<ui:param name="message" value="#{selectOneRadio.message}"/>
+			</ui:decorate>
+		</ui:define>
+		-->
+		<ui:param name="__input__" value="#{selectOneRadio}"/>
+		<ui:define name="input">
+			<p:selectOneRadio
+				id="#{selectOneRadio.identifier}"
+				value="#{selectOneRadio.value}"
+				columns="#{selectOneRadio.columns}"
+				converter="#{selectOneRadio.converter}"
+				converterMessage="#{selectOneRadio.converterMessage}"
+				disabled="#{selectOneRadio.disabled}"
+				layout="#{selectOneRadio.layout}"
+				required="#{selectOneRadio.required}"
+				requiredMessage="#{selectOneRadio.requiredMessage}"
+				rendered="#{selectOneRadio.rendered}"
+				
+				unselectable="#{selectOneRadio.unselectable}"
+					
+				widgetVar="#{selectOneRadio.widgetVar}"
+				
+				styleClass="#{selectOneRadio.styleClass}"
+				style="#{selectOneRadio.style}"
+			>
+				<ui:include src="../__selectItems__.xhtml">
+					<ui:param name="selectItems" value="#{selectOneRadio}"/>
+				</ui:include>
+			
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(selectOneRadio.ajaxes.get('change'))}">
+					<ui:param name="ajax" value="#{selectOneRadio.ajaxes.get('change')}"/>
+				</ui:decorate>
+				
+				<!--
+				<ui:param name="ajax" value="#{selectOneRadio.ajaxes.get('change')}"/>
+				
+				<p:ajax event="change" listener="#{selectOneRadio.ajaxes.get('change').listen}" update="#{selectOneRadio.ajaxes.get('change').update}"/>
+				
+				<p:ajax 
+					event="#{ajax.event}" 
+					listener="#{ajax.listen}" 
+					partialSubmit="#{ajax.partialSubmit}" 		
+					disabled="#{ajax.disabled}"
+					
+					global="#{ajax.global}"
+					
+					update="#{ajax.update}"
+					
+					onstart="#{ajax.onStart}"
+					oncomplete="#{ajax.onComplete}"
+				/>
+				-->
+			</p:selectOneRadio>
+			
+			<ui:decorate template="#{primefacesHelper.getModelTemplate(selectOneRadio.blockUI)}">
+		 		<ui:param name="blockUI" value="#{selectOneRadio.blockUI}"/>
+		 	</ui:decorate>
+		</ui:define>
+	</ui:decorate>
+</ui:composition>

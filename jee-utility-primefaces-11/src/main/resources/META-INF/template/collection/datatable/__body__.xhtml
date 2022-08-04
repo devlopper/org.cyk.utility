@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<ui:include src="__header__.xhtml"/>
+ 		
+ 	<ui:insert name="columns">
+ 		<ui:insert name="columnRowIndex">
+ 			<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.orderNumberColumn)}">
+ 				<ui:param name="column" value="#{dataTable.orderNumberColumn}"/>
+ 				<ui:define name="columnHeader">
+ 					<!-- Align # to right of check box -->
+		 			<div style="float: left !important;">
+			 			<h:outputText value="#" />
+			 		</div>
+ 				</ui:define>
+ 				<ui:define name="columnBody">
+ 					<!-- Align order number to right of check box -->
+		 			<div style="float: left !important;">
+			 			<h:outputText value="#{rowIndex+1}" />
+			 		</div>
+			 		<ui:insert name="rowTooltip">
+			 			<p:tooltip for="@(.#{dataTable.rowTooltipStyleClass} tr[role=row][data-ri=#{rowIndex}])" value="#{dataTable.getTooltipByRecord(record,rowIndex)}" 
+			 				position="top" rendered="#{not empty dataTable.getTooltipByRecord(record,rowIndex)}" escape="false"/>
+			 		</ui:insert>
+			 		<ui:insert name="rowToggler">
+			 			<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.rowToggler)}">
+    						<ui:param name="rowToggler" value="#{dataTable.rowToggler}"/> 
+    					</ui:decorate>
+			 		</ui:insert>
+ 				</ui:define>
+ 				
+ 				<ui:define name="columnFooter">
+ 					<ui:insert name="columnFooterOrderNumber">
+ 						<ui:fragment rendered="#{dataTable.isRowAddable}">
+	 						<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.addRowCommandButton)}">
+								<ui:param name="commandButton" value="#{dataTable.addRowCommandButton}"/>
+							</ui:decorate>	
+						</ui:fragment>
+ 					</ui:insert>
+ 				</ui:define>
+ 			</ui:decorate>
+	 	</ui:insert>
+	 		
+	 	<ui:insert name="columnsAfterRowIndex">
+	 		<ui:decorate template="__columns__.xhtml">
+				<ui:define name="columnsBody">		 				
+					<ui:decorate template="__columns__header.xhtml" />				
+					<ui:decorate template="__columns__filter.xhtml" />
+					<ui:insert name="collectionColumnsAfterRowIndexBodies">
+						<ui:decorate template="__columns__bodies.xhtml" />
+					</ui:insert>
+					<ui:decorate template="__columns__footer.xhtml" />
+				</ui:define>
+	 		</ui:decorate>
+	 	</ui:insert>
+	 	
+	 	<ui:insert name="columnMenu">
+	 		<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.menuColumn)}">
+ 				<ui:param name="column" value="#{dataTable.menuColumn}"/>
+ 				<ui:define name="columnHeader">
+ 					<ui:insert name="columnMenuHeader">
+ 						<!-- Nothing -->
+ 					</ui:insert>						
+ 				</ui:define>
+ 				<ui:define name="columnBody">
+ 					<ui:insert name="columnMenuCommands">
+ 						<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.removeRowCommandButton)}">
+ 							<ui:param name="commandButton" value="#{dataTable.removeRowCommandButton}"/>
+ 							<ui:param name="actionArgument" value="#{record}"/>
+ 						</ui:decorate>
+ 						<!-- Commands in menu button in order to occupy less space -->
+ 						<ui:fragment rendered="#{dataTable.recordMenu.class.simpleName eq 'MenuButton'}">
+	 						<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.recordMenu)}">
+	    						<ui:param name="menuButton" value="#{dataTable.recordMenu}"/>
+	    						<ui:param name="actionArgument" value="#{record}"/>
+	    					</ui:decorate>
+    					</ui:fragment>
+ 					</ui:insert>	 						
+ 				</ui:define>
+ 			</ui:decorate>
+	 	</ui:insert> 			 		
+ 	</ui:insert>
+		
+	<p:rowExpansion rendered="#{dataTable.rowToggler.rendered}">
+		<ui:insert name="rowExpansion">
+			
+		</ui:insert>
+	</p:rowExpansion>
+	
+	<ui:decorate template="__ajaxes__.xhtml" />	
+	
+</ui:composition>

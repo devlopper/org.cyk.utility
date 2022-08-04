@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<ui:insert name="beforeDataTable">
+		<ui:insert name="beforeDataTable_footersUpdator">
+			<p:remoteCommand name="update_#{dataTable.identifier}_footers" update="@(.#{dataTable.footerStyleClassAsIdentifier})" global="false" value="update datatable footers" 
+				partialSubmit="true" process="@none" immediate="true" />
+			
+			<!--	
+			<p:remoteCommand name="update_#{dataTable.identifier}_footers" update=":form:#{dataTable.identifier}" global="false" value="update datatable footers" 
+				partialSubmit="true" process="@none" immediate="true" />
+			-->	
+		</ui:insert>
+		
+		<ui:insert name="beforeDataTable_title">
+			<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.title)}">
+	 			<ui:param name="outputText" value="#{dataTable.title}"/>
+	 		</ui:decorate>
+		</ui:insert>
+		
+		<ui:insert name="beforeDataTable_filterController">
+			<ui:fragment rendered="#{dataTable.filterController.renderType == null or dataTable.filterController.renderType.name() eq 'INLINE'}">
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.filterController.layout)}">
+	 				<ui:param name="layout" value="#{dataTable.filterController.layout}"/>
+	 			</ui:decorate>
+	 			<p:separator/>
+			</ui:fragment>
+		</ui:insert>
+		
+		<ui:insert name="beforeDataTable_afterFilterController_layout">
+			<ui:fragment rendered="#{dataTable.afterFilterControllerLayout != null}">
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.afterFilterControllerLayout)}">
+	 				<ui:param name="layout" value="#{dataTable.afterFilterControllerLayout}"/>
+	 			</ui:decorate>
+	 			<p:separator/>
+			</ui:fragment>
+		</ui:insert>
+		
+		<ui:insert name="beforeDataTable_remoteCommends">
+			
+			<ui:fragment rendered="#{dataTable.remoteCommands.size()>0}">
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.getRemoteCommandAt(0))}">
+		    		<ui:param name="remoteCommand" value="#{dataTable.getRemoteCommandAt(0)}"/>     			  
+		    	</ui:decorate>
+			</ui:fragment>
+			
+			<ui:fragment rendered="#{dataTable.remoteCommands.size()>1}">
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.getRemoteCommandAt(1))}">
+		    		<ui:param name="remoteCommand" value="#{dataTable.getRemoteCommandAt(1)}"/>     			  
+		    	</ui:decorate>
+			</ui:fragment>
+			
+			<ui:fragment rendered="#{dataTable.remoteCommands.size()>2}">
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.getRemoteCommandAt(2))}">
+		    		<ui:param name="remoteCommand" value="#{dataTable.getRemoteCommandAt(2)}"/>     			  
+		    	</ui:decorate>
+			</ui:fragment>
+			
+			<ui:fragment rendered="#{dataTable.remoteCommands.size()>3}">
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.getRemoteCommandAt(3))}">
+		    		<ui:param name="remoteCommand" value="#{dataTable.getRemoteCommandAt(3)}"/>     			  
+		    	</ui:decorate>
+			</ui:fragment>
+			
+			<ui:fragment rendered="#{dataTable.remoteCommands.size()>4}">
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(dataTable.getRemoteCommandAt(4))}">
+		    		<ui:param name="remoteCommand" value="#{dataTable.getRemoteCommandAt(4)}"/>     			  
+		    	</ui:decorate>
+			</ui:fragment>
+			
+	    	<!--	
+			<ui:repeat var="vRemoteCommand" value="#{dataTable.remoteCommands}">
+				<ui:decorate template="#{primefacesHelper.getModelTemplate(remoteCommand)}">
+	    			<ui:param name="remoteCommand" value="#{vRemoteCommand}"/>     			  
+	    		</ui:decorate>
+			</ui:repeat>
+			-->
+		</ui:insert>
+	</ui:insert>
+</ui:composition>

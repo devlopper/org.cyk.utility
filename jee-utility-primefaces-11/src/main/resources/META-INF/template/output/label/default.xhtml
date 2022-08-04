@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<!-- 
+		id has been removed in order to support multiple use of component in view
+		id="#{outputLabel.identifier}"
+	 -->
+	
+	<p:outputLabel		
+		value="#{outputLabel.value}"
+		rendered="#{outputLabel.rendered}"
+		widgetVar="#{outputLabel.widgetVar}"
+		for="#{outputLabel.for_}"
+		title="#{outputLabel.title}"
+		styleClass="#{outputLabel.styleClass}"
+		style="#{outputLabel.style}"
+	>
+	
+	</p:outputLabel>
+</ui:composition>

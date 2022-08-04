@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<c:if test="#{empty button.outcome}">
+		<c:if test="#{empty button.value}">
+			<p:button
+				id="#{button.identifier}"
+				icon="#{button.icon}"
+				title="#{button.title}"
+				rendered="#{button.rendered}"			
+				disabled="#{button.disabled}"
+				href="#"
+				onclick="#{button.onClick}"
+			/>
+		</c:if>
+		<c:if test="#{not empty button.value}">
+			<p:button
+				value="#{button.value}"
+				
+				id="#{button.identifier}"				
+				icon="#{button.icon}"
+				title="#{button.title}"
+				rendered="#{button.rendered}"				
+				disabled="#{button.disabled}"
+				href="#"
+				onclick="#{button.onClick}"
+			/>
+		</c:if>
+			
+	</c:if>
+	
+	<c:if test="#{not empty button.outcome}">
+		<p:button
+			id="#{button.identifier}"
+			value="#{button.value}"
+			outcome="#{button.outcome}"
+			icon="#{button.icon}"
+			title="#{button.title}"
+			rendered="#{button.rendered}"
+			
+			disabled="#{button.disabled}"
+			onclick="#{button.onClick}"
+		>
+			<c:forEach items="#{button.parameters}" var="parameter">
+				<f:param name="#{parameter.key}" value="#{parameter.value}"/>
+			</c:forEach>
+			
+		</p:button>
+	</c:if>
+</ui:composition>

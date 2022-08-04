@@ -1,0 +1,10 @@
+.cyk_component_window_application_name {
+	font-size: 22px !important;
+	color: white !important;
+	font-weight: bold !important;
+	text-transform: uppercase;
+}
+
+.panel_grid_no_border {
+	border: none;
+}

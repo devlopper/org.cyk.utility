@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<ui:decorate template="/template.xhtml">
+		<ui:define name="valueIsNotNull">
+   			<p:selectOneRadio
+   				id="#{value.identifier}"
+   				value="#{value.value}"
+				required="#{value.properties.required}"
+				styleClass="#{value.properties.styleClass}"
+				style="#{value.properties.style}"
+				converter="#{value.properties.converter}"
+   			>
+   				<f:selectItems
+   					var="item" 
+   					value="#{value.choices.get()}"
+   					itemLabel="#{item.label}"
+   					itemValue="#{item.value}"
+   					itemDescription="#{item.description}"
+   					itemDisabled="#{item.disabled}"
+   					itemLabelEscaped="#{item.escape}"
+   				/>
+   			</p:selectOneRadio>
+		</ui:define>
+	</ui:decorate>	
+	
+	
+		
+</ui:composition>

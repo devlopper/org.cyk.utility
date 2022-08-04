@@ -1,0 +1,113 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pa="http://primefaces.org/atlantis"
+    xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+    
+    <div class="topbar" >
+        <div class="logo">
+           <p:graphicImage 
+           		url="#{request.contextPath}/javax.faces.resource/#{__page__.window.theme.logo.properties.name}.jsf?ln=#{__page__.window.theme.logo.properties.library}&amp;con=#{__page__.window.theme.logo.properties.contracts}"
+           		style="width: 40px; margin-top: 4px" />
+        </div>
+        
+        <div style="position: absolute; left: 60px; top: 8px; z-index: 1;">
+            <cyk:outputText value="#{__page__.window.getOutputStringText('applicationName')}" />
+        </div>
+        
+        <a id="topbar-menu-button" href="#">
+            <i class="fa fa-bars"/>
+        </a>
+        
+        <ul class="topbar-menu fadeInDown animated">
+            <li class="profile-item">
+                <a href="#" style="text-decoration: none !important">                                     
+                    <div class="profile-image">                        
+                        <div class="user-icon">
+                        	<i class="fa fa-user"/>
+                        </div>
+                    </div>
+                    <div class="profile-info">
+                        <span class="topbar-item-name profile-name">NAMES</span>
+                        <span class="topbar-item-name profile-role">ROLES </span>
+                    </div>
+                </a>
+                
+                <ul class="animated">
+                    <li role="menuitem">                        
+                        <a>
+                            <i class="fa fa-fw fa-key"/>
+                            <span>Connected User Account Options 1</span>
+                        </a>
+                    </li>
+         			
+         			<li role="menuitem">                        
+                        <a>
+                            <span>Connected User Account Options 2</span>
+                        </a>
+                    </li>
+         				
+                    <li role="menuitem">
+                    	<h:form>
+                    		<h:commandLink ><i class="fa fa-fw fa-sign-out"></i>Déconnexion</h:commandLink>
+                    	</h:form>                                                                       
+                    </li>
+                </ul>
+            </li>
+            
+            <li>
+                <a href="#">
+                	<i class="fa fa-th"/>
+                </a>    
+                
+                <ul class="animated">                    
+                    <li style="margin-left: 13px">                       
+                        <strong>OTHER APPLICATIONS</strong>
+                    </li>
+                    <li role="menuitem">                                                             
+                    	<p:link>
+                        	<i class="fa fa-users"/>
+                        	App 1
+                        </p:link>
+                    </li>
+                    <li role="menuitem">                                                             
+                    	<p:link>
+                        	<i class="fa fa-windows"/>
+                        	App 2
+                        </p:link>
+                    </li>
+                    <li role="menuitem">                                                             
+                    	<p:link>
+                        	<i class="fa fa-linux"/>
+                        	App 3
+                        </p:link>
+                    </li>
+                </ul>
+            </li>
+            
+            <li>
+                <a href="#">
+                    <i class="topbar-icon material-icons animated swing fa fa-fw fa-envelope-o" style="font-size: 22px"></i>
+                    <span class="topbar-badge animated rubberBand">5</span>
+                    <span class="topbar-item-name">Messages</span>
+                </a>
+                <ul class="animated">
+                    <li role="menuitem">
+                        <a href="#" class="topbar-message">
+                            <span>Message 1</span>
+                        </a>
+                    </li>
+                    <li role="menuitem">
+                        <a href="#" class="topbar-message">
+                            <span>Message 2</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>           
+        </ul>
+    </div>
+
+</ui:composition>

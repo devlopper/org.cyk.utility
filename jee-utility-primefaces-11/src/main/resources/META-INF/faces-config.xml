@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
+	version="2.2">
+
+	<application>
+		<action-listener>org.primefaces.application.DialogActionListener</action-listener>
+		<navigation-handler>org.primefaces.application.DialogNavigationHandler</navigation-handler>
+		<view-handler>org.primefaces.application.DialogViewHandler</view-handler>
+	</application>
+	
+	<factory>
+    	<exception-handler-factory>org.omnifaces.exceptionhandler.FullAjaxExceptionHandlerFactory</exception-handler-factory>
+	</factory>
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		
+		<navigation-case>
+			<from-outcome>indexView</from-outcome>
+			<to-view-id>/private/index.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>controlPanelIndexView</from-outcome>
+			<to-view-id>/private/__controlpanel__/index.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>logoutView</from-outcome>
+			<to-view-id>/private/security/logout.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>__entity__ListView</from-outcome>
+			<to-view-id>/private/__entity__/list.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>__entity__TreeView</from-outcome>
+			<to-view-id>/private/__entity__/tree.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>__entity__ReadView</from-outcome>
+			<to-view-id>/private/__entity__/read.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>__entity__ViewView</from-outcome>
+			<to-view-id>/private/__entity__/view.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>__entity__EditView</from-outcome>
+			<to-view-id>/private/__entity__/edit.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>__entity__SelectView</from-outcome>
+			<to-view-id>/private/__entity__/select.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>__entity__ProcessView</from-outcome>
+			<to-view-id>/private/__entity__/process.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>__internal__MetricsSystemView</from-outcome>
+			<to-view-id>/private/__internal__/metrics/system.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>__file__GetFunction</from-outcome>
+			<to-view-id>/private/__file__/</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+	</navigation-rule>
+	
+</faces-config>

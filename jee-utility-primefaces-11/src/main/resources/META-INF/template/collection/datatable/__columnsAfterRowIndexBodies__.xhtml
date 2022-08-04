@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<ui:param name="outputText" value="#{dataTable.getCellOutputTextByRecordByColumn(record,rowIndex,column,columnIndex)}"/>
+	<ui:param name="cellValue" value="#{dataTable.getCellValueByRecordByColumn(record,rowIndex,column,columnIndex)}"/>
+	<!--
+	<h:outputText value="#{cellValue}" />
+	-->
+	<h:outputText 
+		id="#{identifier == null ? userInterfaceController.randomIdentifier : identifier}" 
+		styleClass="#{outputText.styleClass}" widgetVar="#{outputText.widgetVar}" value="#{cellValue}" title="#{cellValue}" escape="#{outputText.escape}"  style="#{outputText.style}"
+	/>
+
+
+
+	<!--
+	<c:set var="cellValueClassSimpleName" value="#{cellValue.class.simpleName}"/>
+	
+	<ui:fragment rendered="#{cellValueClassSimpleName eq 'String'}">
+		<h:outputText value="#{cellValue}" />
+	</ui:fragment>
+	
+	<ui:fragment rendered="#{cellValueClassSimpleName eq 'AutoComplete'}">
+		<p:autoComplete binding="#{dataTable.cellsBindings[dataTable.getCellBindingKeyByRecordByColumn(record,rowIndex,column,columnIndex)]}" />
+	</ui:fragment>
+	-->
+	<!--
+	<c:if test="#{cellValueClassSimpleName eq 'String'}">
+		<c:set var="processed" value="true"/>
+		<h:outputText value="#{cellValue}" />
+	</c:if>
+	
+	<c:if test="#{cellValueClassSimpleName eq 'AutoComplete'}">
+		<c:set var="processed" value="true"/>
+		<ui:decorate template="#{primefacesHelper.getModelTemplate(cellValue)}">
+	    	<ui:param name="autoComplete" value="#{cellValue}"/>
+	    </ui:decorate>
+	</c:if>
+	-->
+</ui:composition>

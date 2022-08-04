@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<p:dataTable id="#{dataTable.identifier}" value="#{dataTable.value}" var="record" rowIndexVar="rowIndex">
+ 		<f:facet name="header">
+ 			<h:outputText value="#{dataTable.title}" />
+ 		</f:facet>
+ 		<ui:insert name="rowIndexColumn">
+ 			<p:column width="60">
+	 			<h:outputText value="#{rowIndex+1}" />
+	 			<f:facet name="footer">
+	 				<p:commandButton title="Ajouter" icon="fa fa-plus" action="#{dataTable.openDialogForAdd}" update=":form:#{dataTable.dialogOutputPanelIdentifier}"/>
+	 			</f:facet>
+	 		</p:column>
+ 		</ui:insert>
+	 		
+ 		<ui:insert name="middleColumns"/>
+ 		
+ 		<ui:insert name="removeCommandColumn">
+ 			<p:column width="60">
+ 				<p:commandButton title="Retirer" icon="fa fa-minus" action="#{dataTable.remove(record)}" update=":form:#{dataTable.identifier}"/>
+ 			</p:column>
+ 		</ui:insert> 		
+ 	</p:dataTable>
+ 	
+ 	<p:outputPanel id="#{dataTable.dialogOutputPanelIdentifier}">
+   		<p:dialog id="#{dataTable.dialog.identifier}" header="#{dataTable.dialog.title}" modal="true" widgetVar="#{dataTable.dialog.widgetVar}" fitViewport="true" 
+			styleClass="cyk-dialog" closeOnEscape="true" draggable="false" dynamic="true" resizable="false">		
+			<ui:insert name="dialogContent">
+				<h1><h:outputText value="Dialog Content" /></h1>
+			</ui:insert>				
+	 		<p:separator/>		
+	 		<cyk:commandable value="#{dataTable.dialog.commandable}" />
+	  	</p:dialog>
+	</p:outputPanel>
+	
+</ui:composition>

@@ -71,6 +71,8 @@ public interface InputBuilder {
 					input = AutoComplete.build(arguments);
 				else if(SelectManyCheckbox.class.equals(inputClass))
 					input = SelectManyCheckbox.build(arguments);
+				else if(SelectManyPickList.class.equals(inputClass))
+					input = SelectManyPickList.build(arguments);
 				else if(SelectOneRadio.class.equals(inputClass))
 					input = SelectOneRadio.build(arguments);
 				else if(SelectOneCombo.class.equals(inputClass))

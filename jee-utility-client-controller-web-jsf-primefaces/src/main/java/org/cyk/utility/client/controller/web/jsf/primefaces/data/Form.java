@@ -207,15 +207,8 @@ public class Form extends AbstractObject implements Serializable {
 				return null;
 			form.inputs = new HashMap<>();
 			Collection<Map<Object,Object>> cells = new ArrayList<>();
-			inputs.forEach(new Consumer<AbstractInput<?>>() {
-				@Override
-				public void accept(AbstractInput<?> input) {
-					if(input.getOutputLabel() != null)
-						cells.add(listener.getInputLabelCellArguments(form, input, input.getOutputLabel()));
-					cells.add(listener.getInputCellArguments(form, input));
-					form.inputs.put(input.getField().getName(), input);//TODO nested wont work. use path instead
-				}
-			});
+			__getLayoutCellsArgumentsMapsInputs__(form, inputs, listener, cells);
+			
 			if(Boolean.TRUE.equals(form.isSubmitButtonShowable())) {
 				Map<Object,Object> submitCommandArguments = listener.getCommandButtonArguments(form, inputs);
 				if(form.container instanceof Dialog) {
@@ -229,7 +222,20 @@ public class Form extends AbstractObject implements Serializable {
 				}
 			}
 			return cells;
-		}	
+		}
+		
+		protected Collection<Map<Object,Object>> __getLayoutCellsArgumentsMapsInputs__(Form form,Collection<AbstractInput<?>> inputs,Listener listener,Collection<Map<Object,Object>> cells) {
+			inputs.forEach(new Consumer<AbstractInput<?>>() {
+				@Override
+				public void accept(AbstractInput<?> input) {
+					if(input.getOutputLabel() != null)
+						cells.add(listener.getInputLabelCellArguments(form, input, input.getOutputLabel()));
+					cells.add(listener.getInputCellArguments(form, input));
+					form.inputs.put(input.getField().getName(), input);//TODO nested wont work. use path instead
+				}
+			});
+			return cells;
+		}
 		
 		@Override
 		protected Class<Form> __getClass__() {

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<cc:interface componentType="org.cyk.utility.client.controller.web.jsf.compositecomponent.Command">
+		<cc:attribute name="value" required="true" />
+		<cc:attribute name="executeParameter" required="false" />
+	</cc:interface>
+
+	<cc:implementation>
+		<p:commandButton 
+			id="#{cc.id}CommandButton"
+			action="#{cc.value.function.execute}" 
+			ajax="#{cc.value.properties.ajax}"
+			icon="#{cc.value.properties.icon}"
+			process="#{cc.value.properties.process}"
+			rendered="#{cc.value.properties.rendered}"
+			disabled="#{cc.value.properties.disabled}"
+			type="#{cc.value.properties.type}"
+			title="#{cc.value.properties.title}"
+			update="#{cc.value.properties.update}"
+			value="#{cc.value.properties.value}" 
+			oncomplete="#{cc.value.properties.onComplete}"
+			onclick="#{cc.value.properties.onClick}"
+			immediate="#{cc.value.properties.immediate}"
+			widgetVar="#{cc.value.properties.widgetVar}"
+			styleClass="#{cc.value.properties.styleClass}"
+			style="#{cc.value.properties.style}" 
+			global="#{cc.value.properties.global}"
+		>	
+			<!--
+			<p:confirm header="#{uiManager.text('confirmation')}" message="#{uiManager.text('command.serve.confirmation.question')}" icon="ui-icon-alert" 
+				disabled="#{not cc.value.action.isConfirmable}"/>
+			
+			<f:param name="#{viewHelper.parameterNameInputValueIsNotRequired}" value="#{cc.value.properties.inputValueIsNotRequired}" />
+			-->
+		</p:commandButton>
+	</cc:implementation>
+
+</ui:composition>

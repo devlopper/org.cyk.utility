@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<ui:include src="../__before__.xhtml"/>
+	<pe:sheet 
+		id="#{dataTable.identifier}" 
+		value="#{dataTable.value}" var="row" rowKey="#{dataTable.rowKey}"   
+		widgetVar="#{dataTable.widgetVar}" 	
+	>
+		<ui:include src="../__header__.xhtml"/>
+		<ui:insert name="columns">
+			<ui:insert name="columnsAfterRowIndex">			
+				<c:forEach items="#{dataTable.columnsAfterRowIndex}" var="column">
+					<ui:include src="__column__.xhtml"/>
+				</c:forEach>
+			</ui:insert>
+		</ui:insert>
+		<!-- Listeners -->
+ 		<ui:decorate template="/ajax/default.xhtml">
+	 		<ui:param name="ajax" value="#{dataTable.ajaxes.get('change')}"/>
+	 	</ui:decorate>
+	</pe:sheet>
+	<ui:include src="../__after__.xhtml"/>
+</ui:composition>

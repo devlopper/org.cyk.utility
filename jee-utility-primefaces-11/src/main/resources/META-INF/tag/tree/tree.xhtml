@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<ui:decorate template="/template.xhtml">
+		<ui:define name="valueIsNotNull">
+			<p:outputPanel id="outputPanel">
+				<ui:fragment rendered="#{value.selectable}">
+					<p:panelGrid styleClass="tree-panelGrid" columns="2" columnClasses="columnAvailable,columnSelection">
+		    			<p:fieldset legend="#{value.rootLabel}">
+		    				<p:tree id="tree1" value="#{value.root}" var="node" dynamic="true">
+				    			<p:treeNode styleClass="node">
+				    				<p:panelGrid styleClass="pg" columns="2" columnClasses="column-left,column-right">
+					            		<h:outputText value="#{node.name}"/>
+					            		<p:commandButton styleClass="add-remove-button" icon="fa fa-arrow-right" title="Ajouter" action="#{value.selectOne(node)}" update="tree1,:form:tree2" />
+					        		</p:panelGrid>
+					        	</p:treeNode>	
+					        	<!--
+					        	<p:ajax event="expand" listener="#{value.listenExpand}" />
+					        	-->
+					        	<p:ajax event="expand" listener="#{value.listenExpand}" global="false" 
+			        				onstart="PF('#{value.rootBlockUI.properties.widgetVar}').show();" 
+			        				oncomplete="PF('#{value.rootBlockUI.properties.widgetVar}').hide();"/>
+				    		</p:tree>
+				    		<cyk:blockUI value="#{value.rootBlockUI}" />
+		    			</p:fieldset>
+		    			<p:fieldset id="fieldset2" legend="#{value.selectionLabel}">
+		    				<p:tree id="tree2" value="#{value.selection}" var="node" dynamic="true">
+				    			<p:treeNode styleClass="node">
+				    				<p:panelGrid styleClass="pg" columns="2" columnClasses="column-left,column-right">
+				    					<h:outputText value="#{node.name}"/>
+					            		<p:commandButton styleClass="add-remove-button" icon="fa fa-arrow-left" title="Supprimer" action="#{value.deselectOne(node)}" update=":form:tree1,tree2" />	
+				    				</p:panelGrid>				            	
+					        	</p:treeNode>	
+					        	<p:ajax event="expand" listener="#{value.listenExpand}" />
+				    		</p:tree>
+		    			</p:fieldset>
+		    		</p:panelGrid>
+		    			    		
+		    		<style>
+		    			.tree-panelGrid {
+		    				width: 100%;
+		    			}
+		    			
+		    			.columnAvailable {
+		    				vertical-align: top;
+		    			}
+		    			
+		    			.columnSelection {
+		    				vertical-align: top;
+		    			}
+		    			
+		    			.ui-tree {
+		    				width: 100%;
+		    			}
+		    			
+		    			.ui-tree-container {
+		    			
+		    			}
+		    			
+		    			.column-left {
+		    				
+		    			}
+		    			
+		    			.column-right {
+		    				
+		    			}
+		    			
+		    			
+		    		</style>		
+				</ui:fragment>
+				
+				<ui:fragment rendered="#{not value.selectable}">
+					<p:tree id="tree" value="#{value.root}" var="node" dynamic="true">
+		    			<p:treeNode>
+			            	<h:outputText value="#{node.name}"/>
+			        	</p:treeNode>	
+			        	<!--
+			        	<cyk:ajax value="#{value.properties.expanded}" />	
+			        	-->
+			        	<p:ajax event="expand" listener="#{value.listenExpand}" global="false" 
+			        		onstart="PF('#{value.rootBlockUI.properties.widgetVar}').show();" 
+			        		oncomplete="PF('#{value.rootBlockUI.properties.widgetVar}').hide();"/>
+			        		
+		    		</p:tree>
+		    		<cyk:blockUI value="#{value.rootBlockUI}" />	
+				</ui:fragment>
+			</p:outputPanel>
+			<p:remoteCommand id="initialise" autoRun="true" action="#{value.initialise}" update="outputPanel" />
+	    	<cyk:blockUI value="#{value.blockUI}" />
+		</ui:define>
+	</ui:decorate>	
+
+</ui:composition>

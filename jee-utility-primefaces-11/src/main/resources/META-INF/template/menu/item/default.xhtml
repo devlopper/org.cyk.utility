@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<c:set var="isHasOutcome" value="#{not empty menuitem.outcome}"/>
+	<c:set var="confirmTemplate" value="#{primefacesHelper.getModelTemplate(menuitem.confirm)}"/>
+	<c:set var="dialogReturnTemplate" value="#{primefacesHelper.getModelTemplate(menuitem.ajaxes.get('dialogReturn'))}"/>
+	
+	<c:if test="#{isHasOutcome}">
+		<p:menuitem
+			id="#{menuitem == null ? userInterfaceController.randomIdentifier : menuitem.identifier}"
+			icon="#{menuitem.icon}"
+			update="#{menuitem.update}"
+			value="#{menuitem.value}"
+			global="#{menuitem.global}"
+			outcome="#{menuitem.outcome}"
+		>
+			<c:forEach items="#{menuitem.parameters}" var="parameter">
+				<c:forEach items="#{parameter.value}" var="value">
+					<f:param name="#{parameter.key}" value="#{value}"/>
+				</c:forEach>				
+			</c:forEach>
+			<f:param name="#{menuitem.__actionArgumentIdentifierParameterName__}" value="#{actionArgument.identifier}"/>
+			<ui:decorate template="#{dialogReturnTemplate}">
+				<ui:param name="ajax" value="#{menuitem.ajaxes.get('dialogReturn')}"/>
+			</ui:decorate>
+		</p:menuitem>
+	</c:if>
+	
+	<c:if test="#{not isHasOutcome}">
+		<p:menuitem
+			id="#{menuitem == null ? userInterfaceController.randomIdentifier : menuitem.identifier}"
+			action="#{menuitem.act(actionArgument)}"
+			icon="#{menuitem.icon}"
+			update="#{menuitem.update}"
+			value="#{menuitem.value}"
+			global="#{menuitem.global}"
+		>
+			<ui:decorate template="#{confirmTemplate}">
+		    	<ui:param name="confirm" value="#{menuitem.confirm}"/>
+		    </ui:decorate>
+		    <ui:decorate template="#{dialogReturnTemplate}">
+				<ui:param name="ajax" value="#{menuitem.ajaxes.get('dialogReturn')}"/>
+			</ui:decorate>
+		</p:menuitem>
+	</c:if>
+</ui:composition>

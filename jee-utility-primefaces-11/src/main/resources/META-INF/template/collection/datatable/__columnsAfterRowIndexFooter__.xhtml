@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<!--
+	<ui:decorate template="#{primefacesHelper.getModelTemplate(column.footerOutputText)}">
+		<ui:param name="outputText" value="#{column.footerOutputText}"/>
+	</ui:decorate>
+	-->
+	<!--
+	<ui:param name="identifier" value="#{identifier == null ? (empty column.footerOutputText.identifier ? userInterfaceController.randomIdentifier : column.footerOutputText.identifier) : identifier}"/>
+	-->
+	<ui:fragment rendered="#{not empty column.footerOutputText.identifier}">
+		<h:outputText 
+			id="#{identifier}" 
+			value="#{column.footerOutputText.value}"
+			title="#{column.footerOutputText.title}"
+			styleClass="#{column.footerOutputText.styleClass}" 
+			style="#{column.footerOutputText.style}"/>
+	</ui:fragment>
+	
+	<!--
+	<h:outputText value="#{column.footerText}" styleClass="#{column.footerStyleClass}" style="#{column.footerStyle}"/>
+	-->
+</ui:composition>

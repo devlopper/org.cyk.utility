@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<ui:insert name="cellControlBuilderRemoteCommand">
+		<c:if test="#{cell.controlBuilderRemoteCommand != null}">
+			<ui:decorate template="#{primefacesHelper.getModelTemplate(cell.controlBuilderRemoteCommand)}">
+				<ui:param name="remoteCommand" value="#{cell.controlBuilderRemoteCommand}"/>   			
+			</ui:decorate>
+		</c:if>
+	</ui:insert>
+	
+	<ui:insert name="cellControl">
+		<ui:include src="__cellControl__.xhtml"/>
+	</ui:insert>
+</ui:composition>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<ui:decorate template="/input/default.xhtml">
+		<ui:param name="__input__" value="#{selectBooleanButton}"/>		
+		<ui:define name="input">
+			<p:selectBooleanButton
+				id="#{selectBooleanButton.identifier}"
+				offLabel="#{selectBooleanButton.offLabel}"
+				onLabel="#{selectBooleanButton.onLabel}"
+				disabled="#{selectBooleanButton.disabled}"
+				offIcon="#{selectBooleanButton.offIcon}"
+				onIcon="#{selectBooleanButton.onIcon}"
+				rendered="#{selectBooleanButton.rendered}"
+				required="#{selectBooleanButton.required}"
+				requiredMessage="#{selectBooleanButton.requiredMessage}"
+				value="#{selectBooleanButton.value}"
+				widgetVar="#{selectBooleanButton.widgetVar}"
+				styleClass="#{selectBooleanButton.styleClass}"
+				style="#{selectBooleanButton.style}"
+			>
+			
+			</p:selectBooleanButton>
+		</ui:define>
+	</ui:decorate>
+</ui:composition>

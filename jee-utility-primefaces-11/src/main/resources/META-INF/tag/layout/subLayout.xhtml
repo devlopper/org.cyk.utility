@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<ui:decorate template="/template.xhtml">
+		<ui:define name="valueIsNotNull">
+			<c:set var="items" value="#{value.getChildren()}" />
+			<div
+				class="#{value.properties.clazz}"
+			>
+				<ui:insert name="content">
+					<c:forEach items="#{items}" var="indexItem" varStatus="status">
+						<cyk:layoutItem value="#{indexItem}" >
+							<ui:define name="content">
+								<c:choose>
+									<c:when test="#{indexItem.layout == null}">
+										<h:outputText value="ITEM #{status.count}" title="#{indexItem.properties.clazz}" />
+									</c:when>
+									
+									<c:when test="#{indexItem.layout != null}">
+										<!--
+										<cyk:layout value="#{indexItem.layout}" />
+										-->
+									</c:when>
+									
+									<c:otherwise>
+										NO CELL FOUND for #{indexItem}
+									</c:otherwise>
+								</c:choose>
+							</ui:define>
+						</cyk:layoutItem>
+					</c:forEach>
+				</ui:insert>
+			</div>
+		</ui:define>
+	</ui:decorate>	
+	
+	<!--
+	<div
+		class="#{value.properties.clazz}"
+	>
+		<ui:insert name="content">
+		
+			<c:forEach
+				items="#{value.getChildren()}" var="child" varStatus="status"
+			>
+				<cyk:layoutItem value="#{child}">		
+		    		<ui:define name="content">
+		    			<c:choose>
+		    				<c:when test="#{child.layout == null}">
+								<h:outputText value="ITEM #{status.count}" title="#{child.properties.clazz}" />
+							</c:when>
+							<c:when test="#{child.layout != null}">
+								SUB : #{child.layout}
+								<cyk:layout value="#{child.layout}" />
+							</c:when>
+		    			</c:choose>
+		    		</ui:define>
+		    	</cyk:layoutItem>
+			</c:forEach>
+			
+			
+		</ui:insert>
+	</div>
+	-->
+</ui:composition>

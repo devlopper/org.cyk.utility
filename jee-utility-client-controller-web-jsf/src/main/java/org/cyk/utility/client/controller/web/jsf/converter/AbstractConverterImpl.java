@@ -35,7 +35,6 @@ public abstract class AbstractConverterImpl<T> extends AbstractObject implements
 		return string;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public T getAsObject(FacesContext context, UIComponent component, String string) {
 		if(StringHelper.isBlank(string))

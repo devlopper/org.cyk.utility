@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<p:pickList
+		id="#{selectManyPickList.identifier}"
+		value="#{selectManyPickList.value}" 
+		var="choice" 
+		itemValue="#{selectManyPickList.getChoiceValue(choice)}" 
+		itemLabel="#{selectManyPickList.getChoiceLabel(choice)}"
+		
+		required="#{selectManyPickList.required}"
+		requiredMessage="#{selectManyPickList.requiredMessage}"
+		rendered="#{selectManyPickList.rendered}"
+		
+		widgetVar="#{selectManyPickList.widgetVar}"
+		
+		disabled="#{selectManyPickList.disabled}"
+		
+		styleClass="#{selectManyPickList.styleClass}"
+		style="#{selectManyPickList.style}"
+		
+		converter="#{selectManyPickList.converter}"
+		
+		filterMatchMode="#{selectManyPickList.filterMatchMode}"
+		labelDisplay="#{selectManyPickList.labelDisplay}"
+		orientation="#{selectManyPickList.orientation}"
+		responsive="#{selectManyPickList.responsive}"
+		showCheckbox="#{selectManyPickList.showCheckbox}"
+		
+		showSourceControls="#{selectManyPickList.showSourceControls}"
+		showSourceFilter="#{selectManyPickList.showSourceFilter}"
+		
+		showTargetControls="#{selectManyPickList.showTargetControls}"
+		showTargetFilter="#{selectManyPickList.showTargetFilter}"
+	>
+	
+	</p:pickList>			
+</ui:composition>

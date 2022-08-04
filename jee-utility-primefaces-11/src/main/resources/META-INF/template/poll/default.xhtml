@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<p:poll
+		id="#{poll.identifier}"
+		async="#{poll.async}"
+		autoStart="#{poll.autoStart}"
+		delay="#{poll.delay}"
+		global="#{poll.global}"
+		interval="#{poll.interval}"
+		intervalType="#{poll.intervalType}"
+		listener="#{poll.action}"
+		stop="#{poll.stop}"
+		update="#{poll.update}"
+		widgetVar="#{poll.widgetVar}"
+		rendered="#{poll.rendered}"
+		process="#{poll.process}"
+		
+		onstart="#{poll.onStart}"
+		oncomplete="#{poll.onComplete}"
+	/>
+</ui:composition>

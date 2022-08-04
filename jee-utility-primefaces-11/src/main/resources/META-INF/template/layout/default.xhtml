@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<c:if test="#{layout.container == null}">
+		<ui:include src="__layout__.xhtml"/>
+	</c:if>
+	
+	<c:if test="#{layout.container.class.simpleName eq 'Panel'}">
+		<ui:decorate template="#{primefacesHelper.getModelTemplate(layout.container)}">
+			<ui:param name="panel" value="#{layout.container}"/>
+			<ui:define name="panelBody">			
+				<ui:include src="__layout__.xhtml"/>			
+			</ui:define>
+		</ui:decorate>
+	</c:if>
+		
+</ui:composition>

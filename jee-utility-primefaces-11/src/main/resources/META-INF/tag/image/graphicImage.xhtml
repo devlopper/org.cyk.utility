@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core" 
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<ui:decorate template="/template.xhtml">
+		<ui:define name="valueIsNotNull">
+		
+			<!-- Streamed -->
+			<c:if test="#{not value.file.isEmbedded}">
+				<!-- Rendering based on library and name -->
+				<c:if test="#{empty value.file.properties.uniformResourceLocator}">
+					<p:graphicImage 
+						library="#{value.theme.identifier}"
+						name="#{value.file.value.getPathAndNameAndExtension()}"
+						
+						alt="#{value.properties.alt}"
+						width="#{value.properties.width}"
+						height="#{value.properties.height}"
+						title="#{value.properties.title}"
+					/>
+					<c:set var="rendered" value="true" />	
+				</c:if>
+				
+				<!-- Rendering based on url -->
+				<c:if test="#{not empty value.file.properties.uniformResourceLocator}">
+					<p:graphicImage 
+						url="#{value.file.properties.uniformResourceLocator}"
+						
+						alt="#{value.properties.alt}"
+						width="#{value.properties.width}"
+						height="#{value.properties.height}"
+						title="#{value.properties.title}"
+					/>
+					<c:set var="rendered" value="true" />	
+				</c:if>				
+			</c:if>
+			
+			<!-- Embedded -->
+			<c:if test="#{value.file.isEmbedded}">
+				<p:graphicImage 
+					value="#{value.file.properties.value}"
+					stream="false"
+					
+					alt="#{value.properties.alt}"
+					width="#{value.properties.width}"
+					height="#{value.properties.height}"
+					title="#{value.properties.title}"
+				/>
+				<c:set var="rendered" value="true" />
+			</c:if>
+			
+			<c:if test="#{not rendered}">
+				CANNOT RENDER IMAGE
+			</c:if>
+		</ui:define>
+	</ui:decorate>	
+			
+</ui:composition>

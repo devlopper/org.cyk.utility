@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<!-- 
+		id has been removed in order to support multiple use of component in view
+		id="#{outputLabel.identifier}"
+	 -->
+	
+	<ui:decorate template="/input/default.xhtml">
+		<!--
+		<ui:define name="message">
+			<ui:decorate template="#{primefacesHelper.getModelTemplate(autoComplete.message)}">
+				<ui:param name="message" value="#{autoComplete.message}"/>
+			</ui:decorate>
+		</ui:define>
+		-->
+		<ui:param name="__input__" value="#{autoComplete}"/>
+		<ui:define name="input">
+			<p:autoComplete
+				id="#{autoComplete.identifier}"
+				value="#{autoComplete.value}" 
+				multiple="#{autoComplete.multiple}"
+				placeholder="#{autoComplete.placeholder}"
+				var="item" 
+				itemValue="#{autoComplete.readItemValue(item)}" 
+				itemLabel="#{autoComplete.readItemLabel(item)}"
+				converter="#{autoComplete.converter}"
+				completeMethod="#{autoComplete.complete}"
+				maxResults="#{autoComplete.maxResults}" 
+				queryDelay="#{autoComplete.queryDelay}" 
+				emptyMessage="#{autoComplete.emptyMessage}"
+				widgetVar="#{autoComplete.widgetVar}"
+				rendered="#{autoComplete.rendered}"
+				required="#{autoComplete.required}"
+				validator="#{autoComplete.validate}"
+				
+				dropdown="#{autoComplete.dropdown}"
+				dropdownMode="#{autoComplete.dropdownMode}"
+				
+				onchange="#{autoComplete.onChange}"
+				
+				disabled="#{autoComplete.disabled}"
+				readonly="#{autoComplete.readOnly}"
+			>			
+				<ui:decorate template="/ajax/default.xhtml">
+					<ui:param name="ajax" value="#{autoComplete.ajaxes.get('query')}"/>
+				</ui:decorate>
+				<ui:decorate template="/ajax/default.xhtml">
+					<ui:param name="ajax" value="#{autoComplete.ajaxes.get('itemSelect')}"/>
+				</ui:decorate>
+				<ui:decorate template="/ajax/default.xhtml">
+					<ui:param name="ajax" value="#{autoComplete.ajaxes.get('itemUnselect')}"/>
+				</ui:decorate>
+				<ui:decorate template="/ajax/default.xhtml">
+					<ui:param name="ajax" value="#{autoComplete.ajaxes.get('moreText')}"/>
+				</ui:decorate>
+			</p:autoComplete>	
+		</ui:define>
+	</ui:decorate>
+	
+	<ui:decorate template="/blockui/default.xhtml">
+ 		<ui:param name="blockUI" value="#{autoComplete.blockUI}"/>
+ 	</ui:decorate>			
+</ui:composition>

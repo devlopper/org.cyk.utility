@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	
+	<ui:decorate template="/template.xhtml">
+		<ui:define name="valueIsNotNull">
+			<!-- outcome="#{value.properties.outcome}" -->
+			<p:link
+				id="#{value.identifier}"
+				value="#{value.text.properties.value}"
+				
+				dir="#{value.properties.dir}"
+				escape="#{value.properties.escape}"
+				rendered="#{value.properties.rendered}"
+				title="#{value.properties.title}"
+				href="#{value.properties.href}"
+				onclick="#{value.properties.onClick}"
+				
+				styleClass="#{value.properties.styleClass}"
+				style="#{value.properties.style}"
+			>
+				
+			</p:link>
+		</ui:define>
+	</ui:decorate>	
+
+</ui:composition>
