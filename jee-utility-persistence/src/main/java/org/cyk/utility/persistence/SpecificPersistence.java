@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Set;
 
 import org.cyk.utility.__kernel__.value.Value;
+import org.cyk.utility.persistence.query.Filter;
 import org.cyk.utility.persistence.query.QueryExecutorArguments;
 
 public interface SpecificPersistence<ENTITY> {
@@ -14,6 +15,9 @@ public interface SpecificPersistence<ENTITY> {
 	
 	Collection<ENTITY> readManyByIdentifiers(Collection<String> identifiers,Collection<String> projections);
 	Collection<ENTITY> readManyByIdentifiers(Collection<String> identifiers);
+	
+	Collection<Object> readIdentifiersByFilter(Filter filter);
+	Collection<String> readIdentifiersAsStringsByFilter(Filter filter);
 	
 	String getQueryIdentifierReadDynamicOne();
 	ENTITY readOne(QueryExecutorArguments arguments);

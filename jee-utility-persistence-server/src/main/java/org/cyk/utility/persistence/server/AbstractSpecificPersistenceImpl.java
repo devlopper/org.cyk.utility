@@ -3,13 +3,16 @@ package org.cyk.utility.persistence.server;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.persistence.SpecificPersistence;
+import org.cyk.utility.persistence.query.Filter;
 import org.cyk.utility.persistence.query.Query;
 import org.cyk.utility.persistence.query.QueryExecutorArguments;
 import org.cyk.utility.persistence.server.query.RuntimeQueryBuilderImpl;
@@ -68,6 +71,23 @@ public abstract class AbstractSpecificPersistenceImpl<ENTITY> implements Specifi
 	@Override
 	public Collection<ENTITY> readManyByIdentifiers(Collection<String> identifiers) {
 		return readManyByIdentifiers(identifiers, null);
+	}
+	
+	@Override
+	public Collection<Object> readIdentifiersByFilter(Filter filter) {
+		if(filter == null)
+			return null;
+		return FieldHelper.readSystemIdentifiers(readMany(new QueryExecutorArguments().addProjectionsFromStrings(FieldHelper.getSystemIdentifier(entityImplClass).getName()).setFilter(filter)));
+	}
+	
+	@Override
+	public Collection<String> readIdentifiersAsStringsByFilter(Filter filter) {
+		if(filter == null)
+			return null;
+		Collection<Object> objects = readIdentifiersByFilter(filter);
+		if(CollectionHelper.isEmpty(objects))
+			return null;
+		return objects.stream().filter(object -> object != null).map(object -> object.toString()).collect(Collectors.toList());
 	}
 	
 	@Override

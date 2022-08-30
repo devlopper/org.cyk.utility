@@ -57,6 +57,16 @@ public class Filter extends AbstractObject implements Serializable {
 		return clone;
 	}
 	
+	public Boolean isEmpty() {
+		return CollectionHelper.isEmpty(fields) && StringHelper.isBlank(value);
+	}
+	
+	public static Boolean isEmpty(Filter filter) {
+		if(filter == null)
+			return Boolean.TRUE;
+		return filter.isEmpty();
+	}
+	
 	public Collection<Field> getFields(Boolean injectIfNull) {
 		if(fields == null && Boolean.TRUE.equals(injectIfNull))
 			fields = new ArrayList<>();

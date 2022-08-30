@@ -91,11 +91,15 @@ public abstract class AbstractSpecificQueryStringBuilder<T> implements Serializa
 		}
 	}
 	
-	protected static void populatePredicatesExists(QueryExecutorArguments queryExecutorArguments, Arguments arguments, WhereStringBuilder.Predicate predicate,Filter filter,String parameterName,String query) {
+	protected static void populatePredicatesExists(QueryExecutorArguments queryExecutorArguments, Arguments arguments, WhereStringBuilder.Predicate predicate,Filter filter,String parameterName,String query,Boolean negate) {
 		if(queryExecutorArguments.getFilterFieldValue(parameterName) == null)
 			return;
-		predicate.add(String.format("EXISTS(%s)",query));
+		predicate.add(String.format("%sEXISTS(%s)",negate == null || Boolean.FALSE.equals(negate) ? "" : "NOT ",query));
 		filter.addField(parameterName, queryExecutorArguments.getFilterFieldValue(parameterName));
+	}
+	
+	protected static void populatePredicatesExists(QueryExecutorArguments queryExecutorArguments, Arguments arguments, WhereStringBuilder.Predicate predicate,Filter filter,String parameterName,String query) {
+		populatePredicatesExists(queryExecutorArguments, arguments, predicate, filter, parameterName, query, null);
 	}
 	
 	protected static void populatePredicatesIsNull(QueryExecutorArguments queryExecutorArguments, Arguments arguments, WhereStringBuilder.Predicate predicate,Filter filter,String fieldName,String parameterName,Boolean negate) {

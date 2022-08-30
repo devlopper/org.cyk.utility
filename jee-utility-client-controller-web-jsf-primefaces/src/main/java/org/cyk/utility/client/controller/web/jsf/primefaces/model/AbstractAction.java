@@ -68,6 +68,7 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 	protected String __actionArgumentIdentifierParameterName__;
 	protected Boolean __isWindowContainerRenderedAsDialog__;
 	protected Boolean __loggableAsInfo__;
+	protected Boolean __isDialogClosableAutomatically__ = Boolean.TRUE;
 	protected Boolean __runnable__;
 	protected AbstractCollection __collection__;
 	protected Dialog __dialog__;
@@ -273,18 +274,18 @@ public abstract class AbstractAction extends AbstractObjectAjaxable implements S
 			}
 			
 			protected void runExecuteFunction(AbstractAction action) {
-				logAsInfo(action, "executing function starts");
+				//logAsInfo(action, "executing function starts");
 				Object object = __runExecuteFunction__(action);
-				if(Boolean.TRUE.equals(action.get__isWindowContainerRenderedAsDialog__())) {
+				if(Boolean.TRUE.equals(action.get__isWindowContainerRenderedAsDialog__()) && Boolean.TRUE.equals(action.get__isDialogClosableAutomatically__())) {
 					PrimeFaces.current().dialog().closeDynamic(object);
-					logAsInfo(action, "dynamic dialog has been closed with object "+object);
+					//logAsInfo(action, "dynamic dialog has been closed with object "+object);
 				}else {
 					if(object instanceof String) {
 						MessageRenderer.getInstance().render((String)object,RenderType.GROWL);
 					}
 						
 				}
-				logAsInfo(action, "function executed");
+				//logAsInfo(action, "function executed");
 			}
 			
 			protected Object __runExecuteFunction__(AbstractAction action) {

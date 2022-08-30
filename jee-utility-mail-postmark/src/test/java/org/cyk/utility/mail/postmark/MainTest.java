@@ -10,9 +10,9 @@ import com.wildbit.java.postmark.client.exception.PostmarkException;
 
 public class MainTest {
 
-	public static void main(String[] args) throws PostmarkException, IOException {		
-		ApiClient client = Postmark.getApiClient("33e65919-b008-4072-8712-074cb8dbaa37");
-		Message message = new Message("no-reply@sigobe.dgbf.ci", "kycdev@gmail.com", "Hello from Postmark!", "Hello message body");
+	public static void main(String[] args) throws PostmarkException, IOException {	
+		ApiClient client = Postmark.getApiClient("fa2f17e3-b4ef-492e-87c5-37793f9105ca");
+		Message message = new Message("votre-bulletin-de-solde@sigobe.dgbf.ci", "c.komenan@budget.gouv.ci", "Hello from Postmark!", "Hello message body");
 		MessageResponse response = client.deliverMessage(message);
 		System.out.println(response.getErrorCode());
 		System.out.println("DONE");

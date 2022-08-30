@@ -42,6 +42,11 @@ public interface CollectionHelper {
 		return cast(klass, result);
 	}
 	
+	static <T> void addNullAtFirstIfSizeGreaterThanZero(Collection<T> collection) {
+		if(getSize(collection) > 0)
+			addElementAt(collection, 0, null);
+	}
+	
 	static <T> void addNullAtFirstIfSizeGreaterThanOne(Collection<T> collection) {
 		if(getSize(collection) > 1)
 			addElementAt(collection, 0, null);

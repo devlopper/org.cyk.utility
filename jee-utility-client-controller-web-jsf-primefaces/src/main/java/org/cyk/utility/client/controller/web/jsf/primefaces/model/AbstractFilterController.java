@@ -27,6 +27,7 @@ import org.cyk.utility.__kernel__.value.ValueConverter;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.client.controller.web.WebController;
 import org.cyk.utility.client.controller.web.jsf.Redirector;
+import org.cyk.utility.client.controller.web.jsf.primefaces.model.collection.AbstractCollection;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.command.CommandButton;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.AbstractInput;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.input.AbstractInputChoiceOne;
@@ -37,6 +38,7 @@ import org.cyk.utility.client.controller.web.jsf.primefaces.model.layout.Cell;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.layout.Layout;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.panel.Dialog;
 import org.cyk.utility.client.controller.web.jsf.primefaces.model.panel.Panel;
+import org.omnifaces.util.Ajax;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -57,6 +59,7 @@ public abstract class AbstractFilterController extends AbstractObject implements
 	protected Map<String,Boolean> ignorables;
 	protected Map<BooleanProperty,Map<String,Boolean>> booleanProperties;
 	protected Map<String,SortOrder> sortOrders;
+	protected Boolean redirectable;
 	protected Redirector.Arguments onSelectRedirectorArguments;
 	protected String parameterTabIdentifier;
 	protected CommandButton filterCommandButton;
@@ -65,8 +68,12 @@ public abstract class AbstractFilterController extends AbstractObject implements
 	protected RenderType renderType;
 	protected Boolean isNotBuildable;
 	protected Class<?> pageClass;
+	protected Object page;
 	protected Boolean isUsedForLoggedUser;
 	protected Listener listener;
+	protected Boolean isLayoutContainerCollapsed = Boolean.TRUE;
+	protected Boolean isInitialValue;
+	protected AbstractCollection collection;
 	
 	protected Map<String,String> getInputsFieldsNamesIntialsFieldsNamesMap(Boolean createIfNull) {
 		if(inputsFieldsNamesIntialsFieldsNamesMap == null && Boolean.TRUE.equals(createIfNull))
@@ -126,6 +133,20 @@ public abstract class AbstractFilterController extends AbstractObject implements
 	}
 	
 	public AbstractFilterController initialize() {
+		if(redirectable == null) {
+			String redirectableAsString = WebController.getInstance().getRequestParameter(REQUEST_PARAMETER_NAME_REDIRECTABLE);
+			if(StringHelper.isNotBlank(redirectableAsString))
+				redirectable = ValueHelper.convertToBoolean(redirectableAsString);
+			if(redirectable == null)
+				redirectable = Boolean.TRUE;
+		}
+		
+		if(isInitialValue == null && Boolean.TRUE.equals(redirectable))
+			isInitialValue = Boolean.TRUE;
+		
+		if(isInitialValue == null && !Boolean.TRUE.equals(redirectable))
+			isInitialValue = Boolean.FALSE;
+		
 		__addInputsByBasedOnFieldsNames__();
 		if(inputsFieldsNamesIntialsFieldsNamesMap != null) {
 			inputsFieldsNamesIntialsFieldsNamesMap.entrySet().forEach(entry -> {
@@ -398,41 +419,46 @@ public abstract class AbstractFilterController extends AbstractObject implements
 				,new AbstractAction.Listener.AbstractImpl() {
 			@Override
 			protected Object __runExecuteFunction__(AbstractAction action) {
-				Collection<AbstractInputChoiceOne> inputsChoicesOne = CollectionHelper.filterByInstanceOf(AbstractInputChoiceOne.class, getInputs());
-				if(CollectionHelper.isNotEmpty(inputsChoicesOne)) {
-					for(AbstractInputChoiceOne input : inputsChoicesOne) {
-						if(Boolean.TRUE.equals(isInputValueNotNull(input)) && Boolean.TRUE.equals(isSelectRedirectorArgumentsParameter(input.getChoiceClass(), input)))
-							getOnSelectRedirectorArguments(Boolean.TRUE).addParameters(Map.of(buildParameterName(input),CollectionHelper.listOf(Boolean.TRUE,buildParameterValue(input))));
+				if(Boolean.TRUE.equals(redirectable)) {
+					Collection<AbstractInputChoiceOne> inputsChoicesOne = CollectionHelper.filterByInstanceOf(AbstractInputChoiceOne.class, getInputs());
+					if(CollectionHelper.isNotEmpty(inputsChoicesOne)) {
+						for(AbstractInputChoiceOne input : inputsChoicesOne) {
+							if(Boolean.TRUE.equals(isInputValueNotNull(input)) && Boolean.TRUE.equals(isSelectRedirectorArgumentsParameter(input.getChoiceClass(), input)))
+								getOnSelectRedirectorArguments(Boolean.TRUE).addParameters(Map.of(buildParameterName(input),CollectionHelper.listOf(Boolean.TRUE,buildParameterValue(input))));
+						}
 					}
-				}
-				
-				Collection<AutoComplete> autoCompletes = CollectionHelper.filterByInstanceOf(AutoComplete.class, getInputs());
-				if(CollectionHelper.isNotEmpty(autoCompletes)) {
-					for(AutoComplete input : autoCompletes) {
-						if(Boolean.TRUE.equals(isInputValueNotNull(input)) && Boolean.TRUE.equals(isSelectRedirectorArgumentsParameter(input.getEntityClass(), input)))
-							getOnSelectRedirectorArguments(Boolean.TRUE).addParameters(Map.of(buildParameterName(input),CollectionHelper.listOf(Boolean.TRUE,buildParameterValue(input))));
+					
+					Collection<AutoComplete> autoCompletes = CollectionHelper.filterByInstanceOf(AutoComplete.class, getInputs());
+					if(CollectionHelper.isNotEmpty(autoCompletes)) {
+						for(AutoComplete input : autoCompletes) {
+							if(Boolean.TRUE.equals(isInputValueNotNull(input)) && Boolean.TRUE.equals(isSelectRedirectorArgumentsParameter(input.getEntityClass(), input)))
+								getOnSelectRedirectorArguments(Boolean.TRUE).addParameters(Map.of(buildParameterName(input),CollectionHelper.listOf(Boolean.TRUE,buildParameterValue(input))));
+						}
 					}
-				}
-				
-				Collection<InputText> inputTexts = CollectionHelper.filterByInstanceOf(InputText.class, getInputs());
-				if(CollectionHelper.isNotEmpty(inputTexts)) {
-					for(InputText input : inputTexts) {
-						if(Boolean.TRUE.equals(isInputValueNotBlank(input)) && Boolean.TRUE.equals(isSelectRedirectorArgumentsParameter(String.class, input)))
-							getOnSelectRedirectorArguments(Boolean.TRUE).addParameters(Map.of(buildParameterName(input),CollectionHelper.listOf(Boolean.TRUE,buildParameterValue(input))));
+					
+					Collection<InputText> inputTexts = CollectionHelper.filterByInstanceOf(InputText.class, getInputs());
+					if(CollectionHelper.isNotEmpty(inputTexts)) {
+						for(InputText input : inputTexts) {
+							if(Boolean.TRUE.equals(isInputValueNotBlank(input)) && Boolean.TRUE.equals(isSelectRedirectorArgumentsParameter(String.class, input)))
+								getOnSelectRedirectorArguments(Boolean.TRUE).addParameters(Map.of(buildParameterName(input),CollectionHelper.listOf(Boolean.TRUE,buildParameterValue(input))));
+						}
 					}
-				}
-				
-				Collection<Calendar> calendars = CollectionHelper.filterByInstanceOf(Calendar.class, getInputs());
-				if(CollectionHelper.isNotEmpty(calendars)) {
-					for(Calendar input : calendars) {
-						if(Boolean.TRUE.equals(isInputValueNotBlank(input)) && Boolean.TRUE.equals(isSelectRedirectorArgumentsParameter(Date.class, input)))
-							getOnSelectRedirectorArguments(Boolean.TRUE).addParameters(Map.of(buildParameterName(input),CollectionHelper.listOf(Boolean.TRUE,buildParameterValue(input))));
+					
+					Collection<Calendar> calendars = CollectionHelper.filterByInstanceOf(Calendar.class, getInputs());
+					if(CollectionHelper.isNotEmpty(calendars)) {
+						for(Calendar input : calendars) {
+							if(Boolean.TRUE.equals(isInputValueNotBlank(input)) && Boolean.TRUE.equals(isSelectRedirectorArgumentsParameter(Date.class, input)))
+								getOnSelectRedirectorArguments(Boolean.TRUE).addParameters(Map.of(buildParameterName(input),CollectionHelper.listOf(Boolean.TRUE,buildParameterValue(input))));
+						}
 					}
+					Redirector.getInstance().redirect(onSelectRedirectorArguments);
+				}else {
+					Ajax.oncomplete(String.format("PF('%s').filter();",AbstractFilterController.this.collection.getWidgetVar()));
 				}
-				Redirector.getInstance().redirect(onSelectRedirectorArguments);		
 				return super.__runExecuteFunction__(action);
 			}
 		});
+		filterCommandButton.set__isDialogClosableAutomatically__(redirectable);
 	}
 	
 	protected Boolean isInputValueNotNull(AbstractInput<?> input) {
@@ -487,9 +513,7 @@ public abstract class AbstractFilterController extends AbstractObject implements
 		if(CollectionHelper.isEmpty(cellsMaps))
 			return;
 		layout = Layout.build(Layout.FIELD_IDENTIFIER,layoutIdentifier,Layout.FIELD_CELL_WIDTH_UNIT,Cell.WidthUnit.FLEX,Layout.ConfiguratorImpl.FIELD_CELLS_MAPS,cellsMaps
-				,Layout.FIELD_CONTAINER,Panel.build(Panel.FIELD_HEADER,"Filtre",Panel.FIELD_TOGGLEABLE,Boolean.TRUE,Panel.FIELD_COLLAPSED,Boolean.TRUE));
-		//if(layout != null)
-		//	((Panel)layout.getContainer()).setCollapsed(Boolean.TRUE);
+				,Layout.FIELD_CONTAINER,Panel.build(Panel.FIELD_HEADER,"Filtre",Panel.FIELD_TOGGLEABLE,Boolean.TRUE,Panel.FIELD_COLLAPSED,isLayoutContainerCollapsed == null ? Boolean.TRUE : isLayoutContainerCollapsed));
 	}
 	
 	protected Collection<Map<Object,Object>> buildLayoutCells() {
@@ -517,10 +541,12 @@ public abstract class AbstractFilterController extends AbstractObject implements
 				if(value == null)
 					return;
 				String parameterName = buildParameterName(entry.getKey());
-				if(isInputSelectOne(entry.getKey()) || isInputAutoComplete(entry.getKey()))
-					map.put(parameterName, List.of((String)FieldHelper.readSystemIdentifier(value)));
-				else if(isInputText(entry.getKey()))
+				if(ClassHelper.isBelongsToJavaPackages(value.getClass()))
 					map.put(parameterName, List.of(value.toString()));
+				else if(isInputSelectOne(entry.getKey()) || isInputAutoComplete(entry.getKey()))
+					map.put(parameterName, List.of((String)FieldHelper.readSystemIdentifier(value)));
+				//else if(isInputText(entry.getKey()))
+				//	map.put(parameterName, List.of(value.toString()));
 			});
 		__asMap__(map);
 		return map;
@@ -585,4 +611,5 @@ public abstract class AbstractFilterController extends AbstractObject implements
 	}
 	
 	public static final String SESSION_IDENTIFIER_REQUEST_PARAMETER_NAME = "fc_sid";
+	public static final String REQUEST_PARAMETER_NAME_REDIRECTABLE = "fc_rpn_redirectable";
 }
