@@ -206,7 +206,15 @@ public interface ArraysReaderByIdentifiers<ENTITY,IDENTIFIER> extends Reader<ENT
 		protected Collection<String> instantiateQueryStringBuilderArgumentsPredicates() {
 			return CollectionHelper.listOf("t.identifier IN :"+Querier.PARAMETER_NAME_IDENTIFIERS);
 		}
+		/*
+		protected static void instantiateQueryStringBuilderArgumentsAudits(QueryStringBuilder.Arguments arguments,String variableName,String identifierFieldName,String auditWhoFieldName,String auditFunctionalityFieldName,String auditWhatFieldName,String auditWhenFieldName) {
+			arguments.getProjection(Boolean.TRUE).addFromTuple(variableName,identifierFieldName,auditWhoFieldName,auditFunctionalityFieldName,auditWhatFieldName,auditWhenFieldName);
+		}
 		
+		protected static void instantiateQueryStringBuilderArgumentsAudits(QueryStringBuilder.Arguments arguments) {
+			instantiateQueryStringBuilderArgumentsAudits(arguments, "t","identifier","__auditWho__","__auditFunctionality__","__auditWhat__","__auditWhen__");
+		}
+		*/
 		/**/
 		
 		protected static String getAsString(Object[] array,Integer index) {

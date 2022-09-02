@@ -21,6 +21,7 @@ public abstract class AbstractIdentifiableSystemScalarStringIdentifiableBusiness
 	protected String code;
 	
 	// Audit
+	protected String __audit__;
 	protected String __auditWho__;	
 	protected String __auditWhat__;	
 	protected String __auditFunctionality__;	
