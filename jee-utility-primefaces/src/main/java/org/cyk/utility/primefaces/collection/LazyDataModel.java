@@ -90,6 +90,7 @@ public abstract class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDat
 		__list__ = getList(__response__);
 		if(CollectionHelper.isEmpty(__list__)) {
 			__count__ = 0;
+			processWhenListIsEmpty();
 		}else {
 			__count__ = NumberHelper.getInteger(ResponseHelper.getHeaderXTotalCount(__response__),0);
 			process(__list__);
@@ -99,6 +100,10 @@ public abstract class LazyDataModel<ENTITY> extends org.primefaces.model.LazyDat
 	
 	protected List<ENTITY> getList(Response response) {
 		return ResponseHelper.getEntityAsListFromJson(entityClass, response);
+	}
+	
+	protected void processWhenListIsEmpty() {
+		
 	}
 	
 	protected void process(Collection<ENTITY> list) {
