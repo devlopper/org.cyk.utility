@@ -115,6 +115,10 @@ public abstract class AbstractSpecificQueryStringBuilder<T> implements Serializa
 		populatePredicatesIsNull(queryExecutorArguments, arguments, predicate, filter, fieldName, parameterName, null);
 	}
 	
+	protected static void populatePredicatesEquals(QueryExecutorArguments queryExecutorArguments, Arguments arguments, WhereStringBuilder.Predicate predicate,Filter filter,String fieldName,String parameterName) {
+		RuntimeQueryStringBuilderImpl.addEqualsIfFilterHasFieldWithPath(queryExecutorArguments, arguments, predicate, filter, parameterName, "t", fieldName);
+	}
+	
 	/**/
 	
 	public void setOrder(QueryExecutorArguments queryExecutorArguments, Arguments arguments) {

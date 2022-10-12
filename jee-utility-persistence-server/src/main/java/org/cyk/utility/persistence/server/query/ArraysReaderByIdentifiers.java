@@ -14,8 +14,10 @@ import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
+import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.number.NumberHelper;
 import org.cyk.utility.__kernel__.object.marker.AuditableWhoDoneWhatWhen;
+import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.time.TimeHelper;
 import org.cyk.utility.persistence.entity.AbstractIdentifiableSystemScalarStringAuditedImpl;
 import org.cyk.utility.persistence.query.Querier;
@@ -67,6 +69,15 @@ public interface ArraysReaderByIdentifiers<ENTITY,IDENTIFIER> extends Reader<ENT
 		
 		protected void setQueryParameters(Query query,Collection<IDENTIFIER> identifiers,Map<String,Object> parameters) {
 			query.setParameter("identifiers", processIdentifiers(identifiers));
+		}
+		
+		protected void setQueryParameter(Query query, Collection<String> identifiers, Map<String, Object> parameters,String name,String label) {
+			if(StringHelper.isBlank(name))
+				return;
+			String value = (String) MapHelper.readByKey(parameters, name);
+			if(StringHelper.isBlank(value))
+				throw new RuntimeException(label+" is required");
+			query.setParameter(name, value);
 		}
 		
 		@Override
