@@ -71,7 +71,7 @@ public interface ArraysReaderByIdentifiers<ENTITY,IDENTIFIER> extends Reader<ENT
 			query.setParameter("identifiers", processIdentifiers(identifiers));
 		}
 		
-		protected void setQueryParameter(Query query, Collection<String> identifiers, Map<String, Object> parameters,String name,String label) {
+		public static void setQueryParameter(Query query, Collection<String> identifiers, Map<String, Object> parameters,String name,String label) {
 			if(StringHelper.isBlank(name))
 				return;
 			String value = (String) MapHelper.readByKey(parameters, name);
@@ -310,14 +310,19 @@ public interface ArraysReaderByIdentifiers<ENTITY,IDENTIFIER> extends Reader<ENT
 		}
 		
 		protected static void __setAudit__(AuditableWhoDoneWhatWhen audited, Object[] array) {
-			audited.set__audit__(String.format(FORMAT, audited.get__auditFunctionality__(),audited.get__auditWho__(),audited.get__auditWhenAsString__()));
+			audited.set__audit__(String.format(AUDIT_FORMAT, audited.get__auditFunctionality__(),audited.get__auditWho__(),audited.get__auditWhenAsString__()));
 			audited.set__auditWho__(null);
 			audited.set__auditFunctionality__(null);
 			audited.set__auditWhat__(null);
 			audited.set__auditWhen__(null);
 		}
 		
-		public static final String FORMAT = "%s par %s le %s";
+		protected static void addJoin(QueryStringBuilder.Arguments arguments,Class<?> entityClass,String variable,String joinedIdentifierFieldName) {
+			arguments.getTuple(Boolean.TRUE).addJoins(String.format("LEFT JOIN %1$s %2$s ON %2$s.%3$s = t.%4$s", FieldHelper.readStatic(entityClass, "ENTITY_NAME"),variable
+					,FieldHelper.readStatic(entityClass, "FIELD_IDENTIFIER"),joinedIdentifierFieldName));
+		}
+		
+		public static final String AUDIT_FORMAT = "%s par %s le %s";
 		
 		/**/
 		

@@ -1,6 +1,7 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -97,15 +98,22 @@ public abstract class AbstractPageContainerManagedImpl extends org.cyk.utility.c
 		return __inject__(PrimefacesHelper.class);
 	}
 	
-	public static void addDataTableRecordMenuItemByArgumentsNavigateToViewWithFilterController(Class<?> pageClass,DataTable dataTable,AbstractFilterController filterController,String menuItemOutcome,String menuItemValue,String menuItemIcon) {
+	public static void addDataTableRecordMenuItemByArgumentsNavigateToViewWithFilterController(Class<?> pageClass,DataTable dataTable,AbstractFilterController filterController,String menuItemOutcome,String menuItemValue,String menuItemIcon
+			,Map<String,List<String>> parameters) {
 		String filterControllerSessionIdentifier = SessionManager.getInstance().generateIdentifier(pageClass);
 		SessionManager.getInstance().writeAttribute(filterControllerSessionIdentifier, filterController);
-		dataTable.addRecordMenuItemByArgumentsNavigateToView(null,menuItemOutcome,MenuItem.FIELD_PARAMETERS,Map.of(AbstractFilterController.SESSION_IDENTIFIER_REQUEST_PARAMETER_NAME
-				,List.of(filterControllerSessionIdentifier)), MenuItem.FIELD_VALUE,menuItemValue,MenuItem.FIELD_ICON,menuItemIcon);
+		if(parameters == null)
+			parameters = new HashMap<String, List<String>>();
+		parameters.put(AbstractFilterController.SESSION_IDENTIFIER_REQUEST_PARAMETER_NAME, List.of(filterControllerSessionIdentifier));
+		dataTable.addRecordMenuItemByArgumentsNavigateToView(null,menuItemOutcome,MenuItem.FIELD_PARAMETERS,parameters, MenuItem.FIELD_VALUE,menuItemValue,MenuItem.FIELD_ICON,menuItemIcon);
+	}
+	
+	public static void addDataTableRecordMenuItemDetailsByArgumentsNavigateToViewWithFilterController(Class<?> pageClass,DataTable dataTable,AbstractFilterController filterController,String menuItemOutcome,Map<String,List<String>> parameters) {
+		addDataTableRecordMenuItemByArgumentsNavigateToViewWithFilterController(pageClass, dataTable, filterController, menuItemOutcome, "Détails", "fa fa-eye",parameters);
 	}
 	
 	public static void addDataTableRecordMenuItemDetailsByArgumentsNavigateToViewWithFilterController(Class<?> pageClass,DataTable dataTable,AbstractFilterController filterController,String menuItemOutcome) {
-		addDataTableRecordMenuItemByArgumentsNavigateToViewWithFilterController(pageClass, dataTable, filterController, menuItemOutcome, "Détails", "fa fa-eye");
+		addDataTableRecordMenuItemDetailsByArgumentsNavigateToViewWithFilterController(pageClass, dataTable, filterController, menuItemOutcome, null);
 	}
 	
 	public static Button buildBackButtonWithFilterController(String buttonOutcome,String buttonValue,String buttonIcon) {

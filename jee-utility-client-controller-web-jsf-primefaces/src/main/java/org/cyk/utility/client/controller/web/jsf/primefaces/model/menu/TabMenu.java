@@ -6,6 +6,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.array.ArrayHelper;
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
 import org.cyk.utility.__kernel__.map.MapHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
@@ -30,7 +34,7 @@ public class TabMenu extends AbstractMenu implements Serializable {
 	private Tab selected;
 	
 	/**/
-
+	
 	/**/
 	
 	public static final String FIELD_ACTIVE_INDEX = "activeIndex";
@@ -158,18 +162,35 @@ public class TabMenu extends AbstractMenu implements Serializable {
 		public static interface MenuItemBuilder {
 			MenuItem build(TabMenu tabMenu,Tab tab);
 			
+			Boolean getRequestParametersAddable();
+			MenuItemBuilder setRequestParametersAddable(Boolean requestParametersAddable);
+			
+			@Getter @Setter
 			public static abstract class AbstractImpl extends AbstractObject implements MenuItemBuilder,Serializable {
+				
+				protected Boolean requestParametersAddable;
 				
 				@Override
 				public MenuItem build(TabMenu tabMenu,Tab tab) {
 					if(tab == null)
 						return null;
 					MenuItem item = new MenuItem().setValue(tab.getName()).addParameter(TabMenu.Tab.PARAMETER_NAME, tab.getParameterValue());
+					if(Boolean.TRUE.equals(requestParametersAddable)) {
+						HttpServletRequest request = DependencyInjection.inject(HttpServletRequest.class);
+						if(request.getParameterMap() != null) {
+							request.getParameterMap().entrySet().stream().filter(entry -> ArrayHelper.isNotEmpty(entry.getValue())).forEach( entry -> {
+								for(String value : entry.getValue())
+									item.addParameter(entry.getKey(), value);
+							});
+						}
+					}
 					process(tabMenu,tab,item);
 					return item;
 				}
 				
-				protected void process(TabMenu tabMenu,Tab tab,MenuItem item) {};
+				protected void process(TabMenu tabMenu,Tab tab,MenuItem item) {
+					
+				}
 				
 				public static class DefaultImpl extends AbstractImpl implements Serializable {
 					

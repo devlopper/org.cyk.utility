@@ -368,6 +368,15 @@ public class Filter extends AbstractObject implements Serializable {
 	
 	/**/
 	
+	public static final Map<String,String> FIELD_NAME_MAP = new HashMap<>();
+	public static void mapFieldsNames(Filter filter) {
+		if(FIELD_NAME_MAP.isEmpty() || filter == null || CollectionHelper.isEmpty(filter.getFields()))
+			return;
+		for(Field field : filter.getFields())
+			if(FIELD_NAME_MAP.containsKey(field.getName()))
+				field.setName(FIELD_NAME_MAP.get(field.getName()));
+	}
+	
 	/**/
 	
 	public Map<Object,Object> generateMap() {
@@ -396,7 +405,9 @@ public class Filter extends AbstractObject implements Serializable {
 		if(StringHelper.isBlank(string))
 			return null;
 		Filter.Dto dto = JsonbBuilder.create().fromJson(string, Filter.Dto.class);
-		return DependencyInjection.inject(Filter.Dto.Mapper.class).getDestination(dto);
+		Filter filter = DependencyInjection.inject(Filter.Dto.Mapper.class).getDestination(dto);
+		mapFieldsNames(filter);
+		return filter;
 	}
 	
 	/**/
