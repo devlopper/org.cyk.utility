@@ -54,6 +54,7 @@ public interface SpecificPersistence<ENTITY> {
 	
 	String getParameterNameSearch();
 	
+	String getParameterNameOrdered();
 	/**/
 	
 	String PARAMETER_NAME_FILTER_AS_STRING = "filter_as_string";
@@ -66,4 +67,6 @@ public interface SpecificPersistence<ENTITY> {
 	String PARAMETER_NAME_USERNAME = "username";
 	
 	Value PARAMETER_NAME_SEARCH = new Value().set("search");
+	
+	Value PARAMETER_NAME_ORDERED = new Value().set("ordered");
 }

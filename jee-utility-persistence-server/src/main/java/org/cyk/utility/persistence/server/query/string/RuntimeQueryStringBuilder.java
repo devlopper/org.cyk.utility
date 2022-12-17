@@ -22,6 +22,7 @@ import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.value.Value;
 import org.cyk.utility.__kernel__.value.ValueHelper;
+import org.cyk.utility.persistence.SpecificPersistence;
 import org.cyk.utility.persistence.query.Field;
 import org.cyk.utility.persistence.query.Filter;
 import org.cyk.utility.persistence.query.Querier;
@@ -57,6 +58,13 @@ public interface RuntimeQueryStringBuilder {
 				setTuple(arguments, builderArguments);
 				setPredicate(arguments, builderArguments);
 				setGroup(arguments, builderArguments);
+				
+				//Remove all processed keys
+				if(arguments.getSortOrders() != null && arguments.getSortOrders().containsKey(SpecificPersistence.PARAMETER_NAME_ORDERED.get())) {
+					Map<String,SortOrder> map = new LinkedHashMap<String, SortOrder>(arguments.getSortOrders());
+					map.remove(SpecificPersistence.PARAMETER_NAME_ORDERED.get());
+					arguments.setSortOrders(map);
+				}
 				
 				return QueryStringBuilder.getInstance().build(builderArguments);
 			}else

@@ -78,6 +78,7 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	protected CommandButton saveCommandButton;
 	protected Map<String,UIComponent> cellsBindings;
 	protected AbstractFilterController filterController;
+	protected Boolean isFilterControllerGettable=Boolean.TRUE;
 	protected String entityIdentifierParameterName;
 	protected List<RemoteCommand> remoteCommands;
 	
@@ -152,6 +153,8 @@ public abstract class AbstractCollection extends AbstractObjectAjaxable implemen
 	}
 	
 	public AbstractFilterController getFilterController() {
+		if(!Boolean.TRUE.equals(isFilterControllerGettable))
+			return null;
 		if(filterController != null)
 			return filterController;
 		if(!(value instanceof LazyDataModel<?>))

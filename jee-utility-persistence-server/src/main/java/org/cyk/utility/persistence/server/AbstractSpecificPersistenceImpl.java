@@ -225,6 +225,11 @@ public abstract class AbstractSpecificPersistenceImpl<ENTITY> implements Specifi
 		return (String) PARAMETER_NAME_SEARCH.get();
 	}
 	
+	@Override
+	public String getParameterNameOrdered() {
+		return (String) PARAMETER_NAME_ORDERED.get();
+	}
+	
 	protected static String getQueryIdentifierFromConfiguration(String propertyName) {
 		return ConfigProvider.getConfig().getOptionalValue(propertyName, String.class).orElse(propertyName);
 	}

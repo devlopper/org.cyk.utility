@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
 import org.cyk.utility.__kernel__.collection.CollectionHelper;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.klass.ClassHelper;
 import org.cyk.utility.__kernel__.log.LogHelper;
 import org.cyk.utility.__kernel__.string.StringHelper;
@@ -28,6 +29,7 @@ public abstract class AbstractSpecificQueryStringBuilder<T> implements Serializa
 	
 	protected String searchPredicate;
 	protected String defaultValuePredicate;
+	protected Class<?> persistenceImplClass;
 	
 	@PostConstruct
 	public void postConstruct() {
@@ -121,7 +123,35 @@ public abstract class AbstractSpecificQueryStringBuilder<T> implements Serializa
 	
 	/**/
 	
+	public void setTuple(QueryExecutorArguments queryExecutorArguments, Arguments arguments) {
+		if(persistenceImplClass != null)
+			arguments.getTuple(Boolean.TRUE).add(persistenceImplClass);
+	}
+	
+	/**/
+	
 	public void setOrder(QueryExecutorArguments queryExecutorArguments, Arguments arguments) {
-		
+		if(getPersistence().getQueryIdentifierReadDynamic().equals(queryExecutorArguments.getQuery().getIdentifier()))
+			setOrderWhenReadDynamic(queryExecutorArguments, arguments);
+	}
+	
+	public void setOrderWhenReadDynamic(QueryExecutorArguments queryExecutorArguments, Arguments arguments) {
+		if(arguments.getOrder() == null || CollectionHelper.isEmpty(arguments.getOrder().getStrings())) {
+			if(Boolean.TRUE.equals(isOrdered(queryExecutorArguments)))
+				setOrderWhenOrdered(queryExecutorArguments,arguments);
+			else
+				setOrderWhenNotOrdered(queryExecutorArguments,arguments);
+		}
+	}
+	
+	protected void setOrderWhenOrdered(QueryExecutorArguments queryExecutorArguments, Arguments arguments) {}
+
+	protected void setOrderWhenNotOrdered(QueryExecutorArguments queryExecutorArguments, Arguments arguments) {
+		if(persistenceImplClass != null)
+			arguments.getOrder(Boolean.TRUE).asc("t", FieldHelper.getSystemIdentifier(persistenceImplClass).getName());
+	}
+	
+	protected Boolean isOrdered(QueryExecutorArguments queryExecutorArguments) {
+		return queryExecutorArguments.getSortOrders() != null && queryExecutorArguments.getSortOrders().containsKey(getPersistence().getParameterNameOrdered());
 	}
 }

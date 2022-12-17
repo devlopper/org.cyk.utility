@@ -419,7 +419,7 @@ public abstract class AbstractFilterController extends AbstractObject implements
 				,new AbstractAction.Listener.AbstractImpl() {
 			@Override
 			protected Object __runExecuteFunction__(AbstractAction action) {
-				if(Boolean.TRUE.equals(redirectable)) {
+				if(redirectable == null || redirectable) {
 					Collection<AbstractInputChoiceOne> inputsChoicesOne = CollectionHelper.filterByInstanceOf(AbstractInputChoiceOne.class, getInputs());
 					if(CollectionHelper.isNotEmpty(inputsChoicesOne)) {
 						for(AbstractInputChoiceOne input : inputsChoicesOne) {
@@ -458,7 +458,7 @@ public abstract class AbstractFilterController extends AbstractObject implements
 				return super.__runExecuteFunction__(action);
 			}
 		});
-		filterCommandButton.set__isDialogClosableAutomatically__(redirectable);
+		filterCommandButton.set__isDialogClosableAutomatically__(redirectable == null || redirectable);
 	}
 	
 	protected Boolean isInputValueNotNull(AbstractInput<?> input) {

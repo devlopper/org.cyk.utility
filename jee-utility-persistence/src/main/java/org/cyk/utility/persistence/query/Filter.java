@@ -26,6 +26,7 @@ import org.cyk.utility.__kernel__.mapping.MappingHelper;
 import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.value.Value;
+import org.cyk.utility.__kernel__.value.ValueConverter;
 import org.cyk.utility.__kernel__.value.ValueHelper;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 
@@ -137,6 +138,10 @@ public class Filter extends AbstractObject implements Serializable {
 		if(ArrayHelper.isEmpty(paths))
 			return null;
 		return getFieldValue(CollectionHelper.listOf(paths));
+	}
+	
+	public Boolean getFieldValueAsBoolean(Boolean valueIfNull,String...paths) {
+		return ValueHelper.defaultToIfNull(ValueConverter.getInstance().convertToBoolean(getFieldValue(paths)),valueIfNull);
 	}
 	
 	@Deprecated

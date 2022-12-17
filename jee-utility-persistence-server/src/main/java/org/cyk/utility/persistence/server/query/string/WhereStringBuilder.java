@@ -28,9 +28,9 @@ public interface WhereStringBuilder {
 		@Override
 		public String build(Predicate predicate) {
 			if(predicate == null)
-				throw new RuntimeException("Where predicate is required");
+				throw new RuntimeException("Where predicate cannot be null");
 			if(CollectionHelper.isEmpty(predicate.getStrings()))
-				throw new RuntimeException("Where predicate is required");
+				throw new RuntimeException("Where predicate cannot contain empty strings");
 			Collection<String> predicates = predicate.getStrings();
 			String string = __build__(predicates,predicate.getSeparator());
 			return string;

@@ -48,7 +48,7 @@ public interface QueryStringBuilder {
 			return jpql(
 					UpdateStringBuilder.getInstance().build(tuple)
 					,SetsStringBuilder.getInstance().build(setsArguments)
-					,predicate == null ? null : WhereStringBuilder.getInstance().build(predicate)
+					,buildWhere(predicate)
 					);
 		}
 		
@@ -75,11 +75,15 @@ public interface QueryStringBuilder {
 			return jpql(
 					SelectStringBuilder.getInstance().build(projection)
 					,FromStringBuilder.getInstance().build(tuple)
-					,predicate == null ? null : WhereStringBuilder.getInstance().build(predicate)
+					,buildWhere(predicate)
 					,group == null ? null : GroupStringBuilder.getInstance().build(group)
 					,order == null ? null : OrderStringBuilder.getInstance().build(order)
 					,having == null ? null : HavingStringBuilder.getInstance().build(having)
 					);
+		}
+		
+		private String buildWhere(WhereStringBuilder.Predicate predicate) {
+			return predicate == null /*|| CollectionHelper.isEmpty(predicate.getStrings())*/ ? null : WhereStringBuilder.getInstance().build(predicate);
 		}
 		
 		@Override
