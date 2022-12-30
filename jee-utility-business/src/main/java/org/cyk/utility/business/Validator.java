@@ -15,10 +15,14 @@ import org.cyk.utility.__kernel__.string.StringHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowableHelper;
 import org.cyk.utility.__kernel__.throwable.ThrowablesMessages;
 import org.cyk.utility.__kernel__.value.Value;
+import org.cyk.utility.persistence.PersistenceHelper;
 import org.cyk.utility.persistence.SpecificPersistence;
 import org.cyk.utility.persistence.query.QueryExecutorArguments;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
@@ -28,6 +32,121 @@ public interface Validator {
 	<T> ThrowablesMessages validate(Class<T> klass,Collection<T> entities,Object actionIdentifier);
 
 	void validateAuditWho(String auditWho,ThrowablesMessages throwablesMessages);
+
+	@Getter @Setter @AllArgsConstructor
+	static class Base {
+		protected String name;
+		protected ThrowablesMessages throwablesMessages;
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	static class Identifier extends Base {
+		private String identifier;
+		
+		public Identifier(String name, ThrowablesMessages throwablesMessages) {
+			super(name, throwablesMessages);
+		}
+		
+		public void validate() {
+			if(StringHelper.isNotBlank(identifier))
+				return;
+			throwablesMessages.add(String.format("L'identifiant de %s est requis",name));
+		}
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	static class Identifiers extends Base {
+		private Collection<String> identifiers;
+		
+		public Identifiers(String name, ThrowablesMessages throwablesMessages) {
+			super(name, throwablesMessages);
+		}
+		
+		public void validate() {
+			if(CollectionHelper.isNotEmpty(identifiers))
+				return;
+			throwablesMessages.add(String.format("Les identifiants des %s sont requis",name));
+		}
+	}
+	
+	@Getter @Setter @Accessors(chain=true) @RequiredArgsConstructor
+	static class Existence<T> {
+		protected @NonNull Class<T> klass;
+		protected @NonNull String name;
+		protected @NonNull ThrowablesMessages throwablesMessages;
+		protected SpecificPersistence<T> persistence;
+		protected EntityManager entityManager;
+		protected QueryExecutorArguments queryExecutorArguments;
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	static class IdentifierExistence<T> extends Existence<T> {
+
+		private String identifier;
+		
+		public IdentifierExistence(@NonNull Class<T> klass, @NonNull String name, @NonNull ThrowablesMessages throwablesMessages,String identifier) {
+			super(klass, name, throwablesMessages);
+			this.identifier = identifier;
+		}
+		
+		public IdentifierExistence<T> buildQueryExecutorArguments() {
+			if(queryExecutorArguments == null)
+				queryExecutorArguments = new QueryExecutorArguments().addProjectionsFromStrings("identifier").addFilterField(persistence.getParameterNameIdentifier(), identifier).setEntityManager(entityManager);
+			return this;
+		}
+		
+		public T validate() {
+			T instance = null;
+			if(StringHelper.isNotBlank(identifier)) {
+				if(persistence == null)
+					instance = entityManager == null ? null : entityManager.find(klass, identifier);
+				else {
+					buildQueryExecutorArguments();
+					instance = persistence.readOne(queryExecutorArguments);
+				}
+			}
+			if(instance == null)
+				throwablesMessages.add(String.format("%s identifiée par %s n'existe pas",name, identifier));
+			return instance;
+		}
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	static class IdentifiersExistence<T> extends Existence<T> {
+
+		private Collection<String> identifiers;
+		private Class<?> entityImplClass;
+		
+		public IdentifiersExistence(@NonNull Class<T> klass, @NonNull String name, @NonNull ThrowablesMessages throwablesMessages,Collection<String> identifiers) {
+			super(klass, name, throwablesMessages);
+			this.identifiers = identifiers;
+		}
+		
+		public IdentifiersExistence<T> buildQueryExecutorArguments() {
+			if(queryExecutorArguments == null)
+				queryExecutorArguments = new QueryExecutorArguments().addProjectionsFromStrings("identifier").addFilterField(persistence.getParameterNameIdentifiers(), identifiers).setEntityManager(entityManager);
+			return this;
+		}
+		
+		public Collection<T> validate() {
+			Collection<T> instances = null;
+			if(CollectionHelper.isNotEmpty(identifiers)) {
+				if(persistence == null) {
+					if(entityImplClass == null)
+						throw new RuntimeException("Entity persistence implementation is required");
+					instances = entityManager == null ? null : entityManager.createNamedQuery(String.format("SELECT t FROM %s",PersistenceHelper.getEntityName(entityImplClass))).getResultList();
+				}else {
+					if(persistence == null)
+						throw new RuntimeException("Persistence is required");
+					buildQueryExecutorArguments();
+					instances = persistence.readMany(queryExecutorArguments);
+				}
+			}
+			if(CollectionHelper.getSize(identifiers) != CollectionHelper.getSize(instances))
+				throwablesMessages.add(String.format("Certains éléments identifiés n'existent pas"));
+			return instances;
+		}
+	}
 	
 	public static abstract class AbstractImpl extends AbstractObject implements Validator,Serializable {
 		
@@ -70,7 +189,7 @@ public interface Validator {
 		protected String getValidateAuditWhoMessage() {
 			return "Le nom d'utilisateur est requis";
 		}
-		
+			
 		public static void validateIdentifiers(Collection<String> providedIdentifiers,Collection<String> systemIdentifiers,ThrowablesMessages throwablesMessages) {
 			if(CollectionHelper.isEmpty(providedIdentifiers))
 				return;
