@@ -121,6 +121,17 @@ public abstract class AbstractSpecificQueryStringBuilder<T> implements Serializa
 		RuntimeQueryStringBuilderImpl.addEqualsIfFilterHasFieldWithPath(queryExecutorArguments, arguments, predicate, filter, parameterName, "t", fieldName);
 	}
 	
+	protected static void populatePredicatesIn(QueryExecutorArguments queryExecutorArguments, Arguments arguments, WhereStringBuilder.Predicate predicate,Filter filter,String fieldName,String parameterName,Boolean negate) {
+		if(queryExecutorArguments.getFilterFieldValue(parameterName) == null)
+			return;
+		predicate.add(String.format("t.%s %sIN :%s",fieldName,negate == null || Boolean.FALSE.equals(negate) ? "" : "NOT ",parameterName));
+		filter.addField(parameterName, queryExecutorArguments.getFilterFieldValue(parameterName));
+	}
+	
+	protected static void populatePredicatesIn(QueryExecutorArguments queryExecutorArguments, Arguments arguments, WhereStringBuilder.Predicate predicate,Filter filter,String fieldName,String parameterName) {
+		populatePredicatesIn(queryExecutorArguments, arguments, predicate, filter, fieldName, parameterName, null);
+	}
+	
 	/**/
 	
 	public void setTuple(QueryExecutorArguments queryExecutorArguments, Arguments arguments) {

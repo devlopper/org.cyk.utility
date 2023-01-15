@@ -1001,6 +1001,26 @@ public interface FieldHelper {
 		writeMany(object, fields, value);
 	}
 	
+	static Boolean isOverridable(Object object,String fieldName,Object value,Boolean overridable) {
+		if(overridable == null) {
+			Object instance = object;
+			for(String index : fieldName.split("\\.")) {
+				instance = read(instance, index);
+				if(instance == null) {
+					overridable = Boolean.TRUE;
+					break;
+				}
+			}
+		}
+		return Boolean.TRUE.equals(overridable);
+	}
+	
+	static void override(Object object,String fieldName,Object value,Boolean overridable) {
+		if(overridable != null && !overridable && FieldHelper.read(object, fieldName) != null)
+			return;
+		FieldHelper.write(object,fieldName,value);
+	}
+	
 	/**
 	 * write null value to given fields of object
 	 * @param object

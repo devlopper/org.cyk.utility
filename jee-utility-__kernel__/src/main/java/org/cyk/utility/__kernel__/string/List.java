@@ -47,4 +47,10 @@ public class List implements Serializable {
 			return this;
 		return add(CollectionHelper.listOf(strings));
 	}
+	
+	/**/
+	
+	public static Boolean isEmpty(List list) {
+		return list == null || CollectionHelper.isEmpty(list.getStrings());
+	}
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.cyk.utility.__kernel__.Helper;
 import org.cyk.utility.__kernel__.array.ArrayHelper;
@@ -121,10 +122,13 @@ public interface RuntimeQueryStringBuilder {
 		}
 		
 		protected void setPredicate(QueryExecutorArguments arguments,QueryStringBuilder.Arguments builderArguments) {
-			if(CollectionHelper.isNotEmpty(getPredicateFilterFields(arguments))) {
+			Collection<Field> fields = getPredicateFilterFields(arguments);
+			if(CollectionHelper.isNotEmpty(fields)) {
 				Predicate predicate = new Predicate().setSeparatorAsAnd();
 				Filter filter = new Filter();
 				populatePredicate(arguments,builderArguments, predicate,filter);
+				if(Predicate.isEmpty(predicate))
+					throw new RuntimeException(String.format("Some fields do not have generate predicate. <<%s>>",fields.stream().map(f -> f.getName()).collect(Collectors.joining(","))));
 				arguments.setFilter(filter);
 				builderArguments.setPredicate(predicate);
 			}			

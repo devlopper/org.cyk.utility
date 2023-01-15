@@ -134,7 +134,8 @@ public interface Validator {
 				if(persistence == null) {
 					if(entityImplClass == null)
 						throw new RuntimeException("Entity persistence implementation is required");
-					instances = entityManager == null ? null : entityManager.createNamedQuery(String.format("SELECT t FROM %s",PersistenceHelper.getEntityName(entityImplClass))).getResultList();
+					instances = entityManager == null ? null : entityManager.createQuery(String.format("SELECT t FROM %s t WHERE t.identifier IN :identifiers",PersistenceHelper.getEntityName(entityImplClass)))
+							.setParameter("identifiers", identifiers).getResultList();
 				}else {
 					if(persistence == null)
 						throw new RuntimeException("Persistence is required");
