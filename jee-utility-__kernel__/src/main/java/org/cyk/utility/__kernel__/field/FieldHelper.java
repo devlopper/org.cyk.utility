@@ -1007,10 +1007,23 @@ public interface FieldHelper {
 			for(String index : fieldName.split("\\.")) {
 				instance = read(instance, index);
 				if(instance == null) {
-					overridable = Boolean.TRUE;
+					overridable = value != null;
 					break;
 				}
 			}
+			if(overridable == null && instance == null && value == null)
+				overridable = Boolean.FALSE;
+		}else if(overridable) {
+			Object instance = object;
+			for(String index : fieldName.split("\\.")) {
+				if(instance == null)
+					continue;
+				instance = read(instance, index);
+			}
+			if(instance == null && value == null)
+				overridable = Boolean.FALSE;
+			else if(instance != null && value != null && instance.equals(value))
+				overridable = Boolean.FALSE;
 		}
 		return Boolean.TRUE.equals(overridable);
 	}

@@ -37,6 +37,7 @@ public class Result extends AbstractObject implements Serializable {
 	private Collection<String> messages;
 	private Level logLevel;
 	private Map<Object,Object> map;
+	private String auditWho;
 	
 	public Result open() {
 		startingTime = System.currentTimeMillis();
@@ -123,6 +124,12 @@ public class Result extends AbstractObject implements Serializable {
 		if(ArrayHelper.isEmpty(messages))
 			return this;
 		return addMessages(CollectionHelper.listOf(messages));
+	}
+	
+	public Result closeBuildNameFromMessageAndAuditWhoAndAddMessage(String message) {
+		close().setName(String.format("%s par %s",message,auditWho)).log(getClass());
+		addMessages(message);
+		return this;
 	}
 	
 	public String buildMessage() {

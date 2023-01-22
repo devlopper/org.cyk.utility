@@ -40,6 +40,7 @@ import lombok.experimental.Accessors;
 public class QueryExecutorArguments extends AbstractObject implements Serializable {
 	private Query query;
 	private String queryIdentifier;
+	private Boolean isProjectAll;
 	private Collection<Projection> projections;
 	private Collection<String> processableTransientFieldsNames;
 	private Collection<String> resultsFieldsNames;
