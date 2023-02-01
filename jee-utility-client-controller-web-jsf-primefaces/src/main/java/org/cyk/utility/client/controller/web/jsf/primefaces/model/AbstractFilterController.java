@@ -540,6 +540,8 @@ public abstract class AbstractFilterController extends AbstractObject implements
 				Object value = FieldHelper.read(this, entry.getValue());
 				if(value == null)
 					return;
+				if(!Boolean.TRUE.equals(isAddableIntoMap(entry.getKey())))
+					return;
 				String parameterName = buildParameterName(entry.getKey());
 				if(ClassHelper.isBelongsToJavaPackages(value.getClass()))
 					map.put(parameterName, List.of(value.toString()));
@@ -550,6 +552,10 @@ public abstract class AbstractFilterController extends AbstractObject implements
 			});
 		__asMap__(map);
 		return map;
+	}
+	
+	protected Boolean isAddableIntoMap(String fieldName) {
+		return Boolean.TRUE;
 	}
 	
 	public void __asMap__(Map<String, List<String>> map) {}
