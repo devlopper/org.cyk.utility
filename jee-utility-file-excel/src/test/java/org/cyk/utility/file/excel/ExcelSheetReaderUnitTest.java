@@ -2,6 +2,8 @@ package org.cyk.utility.file.excel;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.io.File;
+
 import javax.inject.Inject;
 
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
@@ -43,5 +45,16 @@ public class ExcelSheetReaderUnitTest extends AbstractWeldUnitTest {
 		String[][] array = sheetReader.read(new SheetReader.Arguments().setNumberOfColumns(5).setSheetGetterArguments(new SheetGetter.Arguments()
 				.setWorkBookGetterArguments(new WorkBookGetter.Arguments().setInputStream(getClass().getResourceAsStream("Section 105 CESEC OK.xls")))));
 		assertThat(array[3][0]).isEqualTo("BUDGET 2020 - RATTACHEMENT DES ACTIVITES AUX UNITES ADMINISTRATIVES");
+	}
+	
+	//@Test
+	public void all_250000() throws Exception {
+		File file = new File("src/test/resources/org/cyk/utility/file/excel/chargements_all01.xlsx");
+		String[][] arrays = sheetReader.read(new SheetReader.Arguments().setNumberOfColumns(2).setSheetGetterArguments(new SheetGetter.Arguments()
+				.setWorkBookGetterArguments(new WorkBookGetter.Arguments()
+						.setFile(file)
+						//.setInputStream(getClass().getResourceAsStream("chargements_all01.xlsx"))
+						)));
+		assertThat(arrays.length).isEqualTo(257699);
 	}
 }

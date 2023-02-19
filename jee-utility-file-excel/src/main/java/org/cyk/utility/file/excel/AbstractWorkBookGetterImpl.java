@@ -1,6 +1,7 @@
 package org.cyk.utility.file.excel;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -15,6 +16,8 @@ public abstract class AbstractWorkBookGetterImpl extends AbstractObject implemen
 	public WorkBook get(Arguments arguments) {
 		if(arguments == null)
 			return null;
+		if(arguments.getFile() != null)
+			return __get__(arguments.getFile());
 		InputStream inputStream = arguments.getInputStream();
 		if(inputStream == null && arguments.getBytes() != null && arguments.getBytes().length > 0)
 			inputStream = new ByteArrayInputStream(arguments.getBytes());
@@ -33,10 +36,16 @@ public abstract class AbstractWorkBookGetterImpl extends AbstractObject implemen
 	}
 	
 	protected abstract WorkBook __get__(InputStream inputStream);
+	protected abstract WorkBook __get__(File file);
 	
 	@Override
 	public WorkBook get(byte[] bytes) {
 		return get(new Arguments().setBytes(bytes));
+	}
+	
+	@Override
+	public WorkBook get(File file) {
+		return get(new Arguments().setFile(file));
 	}
 	
 	public WorkBook get(String fileName) {

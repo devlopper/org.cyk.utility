@@ -1,5 +1,6 @@
 package org.cyk.utility.file.excel;
 
+import java.io.File;
 import java.io.InputStream;
 
 import org.cyk.utility.__kernel__.Helper;
@@ -15,6 +16,7 @@ public interface WorkBookGetter {
 	
 	WorkBook get(InputStream inputStream);
 	WorkBook get(byte[] bytes);
+	WorkBook get(File file);
 	WorkBook get(String fileName);
 	
 	/**/
@@ -23,6 +25,7 @@ public interface WorkBookGetter {
 	public static class Arguments {
 		private InputStream inputStream;
 		private byte[] bytes;
+		private File file;
 		private String fileName;
 	}
 	
