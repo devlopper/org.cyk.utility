@@ -61,7 +61,7 @@ public interface GenericFieldExecutor extends FieldBasedExecutor {
 				return null;
 			Long count = EntityManagerGetter.getInstance().get().createQuery(String.format("SELECT COUNT(t.identifier) FROM %s t WHERE t.%s IN :values"
 					,PersistenceHelper.getEntityName(klass),fieldName),Long.class).setParameter("values", values).getSingleResult();
-			return NumberHelper.compare(count, values.size(), ComparisonOperator.EQ);
+			return NumberHelper.compare(count, values.size(), ComparisonOperator.GTE);
 		}
 		
 		@Override
