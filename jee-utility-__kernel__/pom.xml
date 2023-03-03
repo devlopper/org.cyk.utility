@@ -260,12 +260,4 @@
 			</build>
 		</profile>
 	</profiles>
-	<!--
-	<repositories>
-		<repository>
-			<id>repository.devkoms.com</id>
-			<url>ftp://devkoms.com/repository/</url>
-		</repository>
-	</repositories>
-	-->
 </project>
